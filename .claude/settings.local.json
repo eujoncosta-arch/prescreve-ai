@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(node --version)",
+      "PowerShell(npm --version)",
+      "mcp__55ef90bc-4ad6-47b4-a6ac-f4c159a58578__deploy_to_vercel",
+      "WebFetch(domain:eurofarma.com.br)",
+      "mcp__Claude_in_Chrome__javascript_tool",
+      "mcp__Claude_in_Chrome__browser_batch",
+      "mcp__Claude_in_Chrome__read_network_requests",
+      "mcp__Claude_in_Chrome__navigate",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(npx vercel *)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "mcp__Claude_in_Chrome__get_page_text",
+      "mcp__55ef90bc-4ad6-47b4-a6ac-f4c159a58578__list_deployments",
+      "mcp__55ef90bc-4ad6-47b4-a6ac-f4c159a58578__get_project",
+      "PowerShell(Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass)",
+      "PowerShell(& \"C:\\\\Users\\\\Jonathan Costa\\\\Desktop\\\\Bulas medicamentos Eurofarma\\\\download_bulas.ps1\")",
+      "Bash(gh auth *)"
+    ]
+  }
+}
