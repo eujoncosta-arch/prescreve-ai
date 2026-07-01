@@ -4,7 +4,7 @@
 // ============================================================
 
 export type DoseUnit = 'mg' | 'mcg' | 'g' | 'mL' | 'UI' | 'mg/kg' | 'mcg/kg' | 'mg/m²' | 'UI/kg' | 'gotas' | 'mg/dia' | 'mg/kg/dia';
-export type Via = 'VO' | 'IV' | 'IM' | 'SC' | 'Inalatório' | 'Tópico' | 'Retal' | 'Sublingual';
+export type Via = 'VO' | 'IV' | 'IM' | 'SC' | 'Inalatório' | 'Tópico' | 'Retal' | 'Sublingual' | 'spray nasal';
 
 export type DrugCategory =
   | 'cardiovascular' | 'antihipertensivo' | 'antidiabético' | 'respiratory'
@@ -1596,6 +1596,104 @@ export const PHARMA_DB: QuickDrug[] = [
   },
 
   // ══════════════════════════════════════════════════════════
+  // ANALGÉSICO — CETOROLACO (VORIC®)
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'cetorolaco',
+    molecula: 'Cetorolaco de Trometamol',
+    nome_generico: 'Cetorolaco de Trometamol',
+    sinonimos: ['voric', 'cetorolaco', 'ketorolac', 'aine', 'analgesico', 'dor aguda', 'dor pós-operatória'],
+    categoria: 'analgesico',
+    classe: 'AINE — Inibidor COX não seletivo (potente analgésico)',
+    indicacoes_principais: ['Dor aguda moderada a intensa de curta duração', 'Dor pós-operatória', 'Cólica renal', 'Dor musculoesquelética aguda'],
+    dose_adulto: {
+      habitual: '10', min: '10', max: '40', unidade: 'mg', via: 'VO',
+      frequencias: ['4x/dia', '6x/dia'],
+      instrucoes: '10 mg a cada 4–6h. Máximo 40 mg/dia VO. Uso máximo: 5 dias.',
+    },
+    ajuste_renal: {
+      normal: '10 mg até 4x/dia', tfg_60_30: 'Reduzir dose', tfg_30_15: 'Evitar', tfg_lt_15: 'Contraindicado', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Evitar', child_c: 'Contraindicado' },
+    contraindicacoes_rapidas: ['Uso > 5 dias', 'Úlcera péptica ativa', 'IR/IH grave', 'Gestação 3º trimestre', 'Alergia a AINEs'],
+    interacoes_importantes: [
+      { com: 'Anticoagulantes', severidade: 'grave', descricao: 'Alto risco hemorrágico' },
+      { com: 'Outros AINEs', severidade: 'grave', descricao: 'Não combinar — toxicidade aditiva' },
+    ],
+    alertas_especiais: ['⚠ USO MÁXIMO 5 DIAS — risco GI e renal com uso prolongado', 'Potente analgésico — alternativa a opioides em dor aguda'],
+    uso_gestante: 'risco', uso_lactante: 'avaliar',
+    marcas: [
+      { nome: 'Voric®', laboratorio: 'Eurofarma', concentracoes: ['10 mg'], formas: ['Comprimido'], lab_id: 'eurofarma', produto_id: 'euro-voric', verificado: true },
+    ],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // ANTI-INFLAMATÓRIO — MELOXICAM
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'meloxicam',
+    molecula: 'Meloxicam',
+    nome_generico: 'Meloxicam',
+    sinonimos: ['meloxicam', 'mobic', 'movatec', 'aine', 'cox-2', 'artrite', 'artrose'],
+    categoria: 'antiinflamatorio',
+    classe: 'AINE — Inibidor COX preferencial (COX-2 > COX-1)',
+    indicacoes_principais: ['Osteoartrite', 'Artrite Reumatoide', 'Espondilite Anquilosante', 'Dor musculoesquelética aguda'],
+    dose_adulto: {
+      habitual: '15', min: '7.5', max: '15', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia'],
+      instrucoes: '7,5–15 mg 1x/dia com refeição. Iniciar com menor dose eficaz.',
+    },
+    ajuste_renal: {
+      normal: '15 mg/dia', tfg_60_30: 'Cautela — 7,5 mg/dia', tfg_30_15: 'Evitar', tfg_lt_15: 'Contraindicado', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Evitar', child_c: 'Contraindicado' },
+    contraindicacoes_rapidas: ['Úlcera péptica ativa', 'IRC grave', 'Alergia a AINEs', 'Gestação 3º trimestre'],
+    interacoes_importantes: [
+      { com: 'Anticoagulantes', severidade: 'moderada', descricao: 'Aumenta risco hemorrágico' },
+      { com: 'Anti-hipertensivos', severidade: 'moderada', descricao: 'Reduz efeito anti-hipertensivo' },
+    ],
+    alertas_especiais: ['Menor risco GI que AINEs não seletivos (COX-2 preferencial, não exclusivo)', 'Preferir dose mínima eficaz pelo menor tempo possível'],
+    uso_gestante: 'risco', uso_lactante: 'risco',
+    marcas: [],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // CORTICÓIDE — PREDNISOLONA / PREDNISONA
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'prednisolona',
+    molecula: 'Prednisolona',
+    nome_generico: 'Prednisolona',
+    sinonimos: ['preni', 'prednisolona', 'corticoide', 'corticosteroide', 'anti-inflamatorio', 'imunossupressor'],
+    categoria: 'imunossupressor',
+    classe: 'Corticosteroide Sistêmico — Glicocorticoide',
+    indicacoes_principais: ['Asma aguda', 'DPOC exacerbado', 'Doenças autoimunes', 'Reações alérgicas graves', 'Artrite Reumatoide (ponte)'],
+    dose_adulto: {
+      habitual: '20', min: '5', max: '60', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia', '2x/dia'],
+      instrucoes: 'Dose altamente variável conforme indicação. Asma: 40–60 mg/dia por 5–7 dias. Tomar pela manhã com alimento.',
+    },
+    ajuste_renal: {
+      normal: 'Dose habitual', tfg_60_30: 'Sem ajuste formal', tfg_30_15: 'Sem ajuste formal', tfg_lt_15: 'Cautela', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Preferir prednisolona à prednisona (IH)', child_c: 'Usar prednisolona — prednisona requer conversão hepática' },
+    contraindicacoes_rapidas: ['Infecção sistêmica não tratada', 'Varicela/herpes-zóster ativo', 'Hipersensibilidade'],
+    interacoes_importantes: [
+      { com: 'AINEs', severidade: 'moderada', descricao: 'Risco GI aditivo — evitar combinação sem proteção' },
+      { com: 'Antidiabéticos', severidade: 'moderada', descricao: 'Hiperglicemia — monitorar glicemia' },
+      { com: 'Inibidores CYP3A4', severidade: 'moderada', descricao: 'Aumentam nível do corticoide' },
+    ],
+    alertas_especiais: ['Retirada gradual em uso > 2 semanas (supressão adrenal)', 'Monitorar PA, glicemia, densidade óssea em uso prolongado', 'Preni® 20 mg + 40 mg (reg. 1.0043.1283)'],
+    uso_gestante: 'avaliar', uso_lactante: 'avaliar',
+    marcas: [
+      { nome: 'Preni®', laboratorio: 'Eurofarma', concentracoes: ['20 mg', '40 mg'], formas: ['Comprimido'], lab_id: 'eurofarma', produto_id: 'euro-prednisolona-20', verificado: true },
+    ],
+  },
+
+  // ══════════════════════════════════════════════════════════
   // PSIQUIATRIA/ALERGIA — HIDROXIZINA
   // ══════════════════════════════════════════════════════════
 
@@ -1663,6 +1761,175 @@ export const PHARMA_DB: QuickDrug[] = [
   },
 
   // ══════════════════════════════════════════════════════════
+  // PSIQUIATRIA — VENLAFAXINA
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'venlafaxina',
+    molecula: 'Cloridrato de Venlafaxina',
+    nome_generico: 'Cloridrato de Venlafaxina',
+    sinonimos: ['effexor', 'venlafaxina', 'irsn', 'antidepressivo', 'ansiedade generalizada', 'tdm'],
+    categoria: 'psiquiatria',
+    classe: 'IRSN — Inibidor da Recaptação de Serotonina e Noradrenalina',
+    indicacoes_principais: ['Transtorno Depressivo Maior (TDM)', 'Transtorno de Ansiedade Generalizada (TAG)', 'Transtorno de Pânico', 'Fobia Social', 'Dor neuropática (off-label)'],
+    dose_adulto: {
+      habitual: '75', min: '37.5', max: '225', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia', '2x/dia'],
+      instrucoes: 'Iniciar 37,5–75 mg/dia. Aumentar 75 mg a cada 4 semanas conforme resposta. Tomar com alimento.',
+    },
+    ajuste_renal: {
+      normal: 'Dose habitual', tfg_60_30: 'Reduzir 25–50%', tfg_30_15: 'Reduzir 50%', tfg_lt_15: 'Evitar', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Reduzir 50%', child_b: 'Reduzir 50%', child_c: 'Evitar' },
+    contraindicacoes_rapidas: ['IMAOs (14 dias de intervalo)', 'Hipersensibilidade'],
+    interacoes_importantes: [
+      { com: 'IMAOs', severidade: 'grave', descricao: 'Síndrome serotoninérgica — contraindicado' },
+      { com: 'Tramadol/triptanos', severidade: 'moderada', descricao: 'Risco de síndrome serotoninérgica' },
+    ],
+    alertas_especiais: ['Monitorar PA (pode elevar diastólica em doses altas ≥ 225 mg)', 'Retirada gradual — síndrome de descontinuação', 'Caixa preta FDA: risco suicída em < 24 anos'],
+    uso_gestante: 'risco', uso_lactante: 'risco',
+    marcas: [],
+  },
+
+  {
+    id: 'paroxetina',
+    molecula: 'Cloridrato de Paroxetina',
+    nome_generico: 'Cloridrato de Paroxetina',
+    sinonimos: ['pondera', 'pondera xr', 'paroxetina', 'isrs', 'antidepressivo', 'ansiedade', 'toc', 'tdm'],
+    categoria: 'psiquiatria',
+    classe: 'ISRS — Inibidor Seletivo da Recaptação de Serotonina',
+    indicacoes_principais: ['Transtorno Depressivo Maior', 'Transtorno de Pânico', 'TOC', 'Fobia Social', 'TEPT', 'TAG'],
+    dose_adulto: {
+      habitual: '20', min: '10', max: '60', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia'],
+      instrucoes: 'Iniciar 10–20 mg/dia. Aumentar 10 mg a cada 2 semanas. Tomar pela manhã com alimento.',
+    },
+    ajuste_renal: {
+      normal: 'Dose habitual', tfg_60_30: 'Iniciar com dose baixa', tfg_30_15: '10 mg/dia máximo', tfg_lt_15: '10 mg/dia', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Iniciar com dose baixa', child_b: '10 mg/dia máximo', child_c: 'Evitar' },
+    contraindicacoes_rapidas: ['IMAOs (14 dias)', 'Tioridazina', 'Pimozida', 'Gestação (Cat. D — especialmente 3º trim.)'],
+    interacoes_importantes: [
+      { com: 'IMAOs', severidade: 'grave', descricao: 'Síndrome serotoninérgica' },
+      { com: 'Tamoxifeno', severidade: 'grave', descricao: 'Inibidor CYP2D6 potente — reduz eficácia do tamoxifeno' },
+    ],
+    alertas_especiais: ['Maior potencial de descontinuação entre os ISRS (meia-vida curta)', 'Efeitos anticolinérgicos maiores que outros ISRS', 'Pondera XR® 12,5/25 mg — formulação de liberação prolongada'],
+    uso_gestante: 'risco', uso_lactante: 'risco',
+    marcas: [
+      { nome: 'Pondera®', laboratorio: 'Eurofarma', concentracoes: ['20 mg'], formas: ['Comprimido'], lab_id: 'eurofarma', produto_id: 'euro-paroxetina-20', verificado: true },
+      { nome: 'Pondera XR®', laboratorio: 'Eurofarma', concentracoes: ['12,5 mg', '25 mg'], formas: ['Comprimido LP'], lab_id: 'eurofarma', produto_id: 'euro-pondera-xr', verificado: true },
+    ],
+  },
+
+  {
+    id: 'bupropiona',
+    molecula: 'Cloridrato de Bupropiona',
+    nome_generico: 'Cloridrato de Bupropiona',
+    sinonimos: ['bupropiona', 'wellbutrin', 'zyban', 'antidepressivo', 'tdm', 'tabagismo', 'tdah'],
+    categoria: 'psiquiatria',
+    classe: 'IRND — Inibidor da Recaptação de Noradrenalina e Dopamina',
+    indicacoes_principais: ['Transtorno Depressivo Maior', 'Cessação do tabagismo', 'TDAH (off-label adultos)', 'Depressão com hipersônia/fadiga'],
+    dose_adulto: {
+      habitual: '150', min: '150', max: '300', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia', '2x/dia'],
+      instrucoes: 'Iniciar 150 mg/dia por 3 dias, depois 150 mg 2x/dia (intervalo ≥ 8h). Comprimido SR. Não partir/mastigar.',
+    },
+    ajuste_renal: {
+      normal: 'Dose habitual', tfg_60_30: 'Cautela', tfg_30_15: '150 mg/dia máximo', tfg_lt_15: '150 mg/dia', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: '150 mg/dia', child_b: '150 mg a cada 2 dias', child_c: 'Contraindicado' },
+    contraindicacoes_rapidas: ['Epilepsia ou limiar convulsivo baixo', 'Bulimia/anorexia nervosa (risco convulsão)', 'IMAOs (14 dias)', 'Abstinência abrupta de benzodiazepínico/álcool'],
+    interacoes_importantes: [
+      { com: 'IMAOs', severidade: 'grave', descricao: 'Contraindicado — risco de crise hipertensiva' },
+      { com: 'Tamoxifeno', severidade: 'moderada', descricao: 'Inibidor CYP2D6 moderado' },
+    ],
+    alertas_especiais: ['Risco de convulsão dose-dependente (raro com doses corretas)', 'Não causa disfunção sexual — vantagem sobre ISRS/IRSN', 'Pode auxiliar em perda de peso'],
+    uso_gestante: 'avaliar', uso_lactante: 'risco',
+    marcas: [],
+  },
+
+  {
+    id: 'nortriptilina',
+    molecula: 'Cloridrato de Nortriptilina',
+    nome_generico: 'Cloridrato de Nortriptilina',
+    sinonimos: ['nortriptilina', 'pamelor', 'antidepressivo', 'antidepressivo triclico', 'dor neuropatica', 'enxaqueca'],
+    categoria: 'psiquiatria',
+    classe: 'Antidepressivo Tricíclico (ATC) — Amina Secundária',
+    indicacoes_principais: ['Transtorno Depressivo Maior', 'Dor neuropática', 'Profilaxia de enxaqueca', 'Incontinência urinária (off-label)'],
+    dose_adulto: {
+      habitual: '50', min: '25', max: '150', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia', '2x/dia'],
+      instrucoes: 'Iniciar 25 mg/dia. Aumentar 25 mg a cada 1–2 semanas. Tomar à noite (sedação).',
+    },
+    ajuste_renal: {
+      normal: 'Dose habitual', tfg_60_30: 'Cautela', tfg_30_15: 'Dose reduzida', tfg_lt_15: 'Evitar', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Iniciar com dose baixa', child_b: 'Evitar', child_c: 'Contraindicado' },
+    contraindicacoes_rapidas: ['IAM recente', 'Bloqueio AV', 'Glaucoma de ângulo fechado', 'Retenção urinária', 'IMAOs'],
+    interacoes_importantes: [
+      { com: 'IMAOs', severidade: 'grave', descricao: 'Crise hipertensiva — contraindicado' },
+      { com: 'QT-prolongadores', severidade: 'grave', descricao: 'Risco de torsades' },
+    ],
+    alertas_especiais: ['ECG antes de iniciar (prolongamento QT)', 'Menos sedativo e anticolinérgico que amitriptilina', 'Idosos: critérios Beers — preferir outros antidepressivos'],
+    uso_gestante: 'risco', uso_lactante: 'risco',
+    marcas: [],
+  },
+
+  {
+    id: 'litio',
+    molecula: 'Carbonato de Lítio',
+    nome_generico: 'Carbonato de Lítio',
+    sinonimos: ['litio', 'carbolitium', 'lítio', 'estabilizador humor', 'bipolar', 'tab'],
+    categoria: 'psiquiatria',
+    classe: 'Estabilizador do Humor — Sal de Lítio',
+    indicacoes_principais: ['Transtorno Afetivo Bipolar (TAB) — manutenção', 'Episódio maníaco agudo', 'Prevenção de recaídas no TAB', 'Potencialização de antidepressivos'],
+    dose_adulto: {
+      habitual: '900', min: '600', max: '1800', unidade: 'mg/dia', via: 'VO',
+      frequencias: ['2x/dia', '3x/dia'],
+      instrucoes: 'Dose guiada por litemia. Nível terapêutico: 0,6–1,2 mEq/L (manutenção). Tomar com alimento.',
+    },
+    ajuste_renal: {
+      normal: 'Litemia 0,6–1,2 mEq/L', tfg_60_30: 'Reduzir dose — litemia semanal', tfg_30_15: 'Evitar', tfg_lt_15: 'Contraindicado', dialisavel: true,
+    },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste (excreção renal)' },
+    contraindicacoes_rapidas: ['IR grave', 'Gestação 1º trimestre (anomalia de Ebstein)', 'Doença de Addison', 'Síndrome do nó sinusal'],
+    interacoes_importantes: [
+      { com: 'AINEs/tiazídicos', severidade: 'grave', descricao: 'Elevam litemia — risco de toxicidade' },
+      { com: 'IECA/BRA', severidade: 'grave', descricao: 'Reduzem clearance renal do lítio' },
+    ],
+    alertas_especiais: ['🚨 Índice terapêutico estreito — monitorar litemia regularmente', 'Sinais de toxicidade: tremores grosseiros, confusão, ataxia, vômitos', 'Hidratação adequada obrigatória — evitar dieta hipossódica', 'Cat. D na gestação'],
+    uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
+    marcas: [],
+  },
+
+  {
+    id: 'metilfenidato',
+    molecula: 'Cloridrato de Metilfenidato',
+    nome_generico: 'Cloridrato de Metilfenidato',
+    sinonimos: ['ritalina', 'concerta', 'metilfenidato', 'tdah', 'add', 'estimulante', 'psicoestimulante'],
+    categoria: 'psiquiatria',
+    classe: 'Psicoestimulante — Inibidor da Recaptação de Dopamina e Noradrenalina',
+    indicacoes_principais: ['TDAH (Transtorno de Déficit de Atenção e Hiperatividade)', 'Narcolepsia (off-label)'],
+    dose_adulto: {
+      habitual: '20', min: '10', max: '60', unidade: 'mg', via: 'VO',
+      frequencias: ['2x/dia', '3x/dia'],
+      instrucoes: 'Iniciar 5–10 mg 2x/dia (café da manhã e almoço). Não tomar após 18h. Liberação prolongada: 1x/dia pela manhã.',
+    },
+    ajuste_renal: {
+      normal: 'Dose habitual', tfg_60_30: 'Cautela', tfg_30_15: 'Cautela', tfg_lt_15: 'Evitar', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Cautela', child_c: 'Evitar' },
+    contraindicacoes_rapidas: ['Ansiedade/agitação grave', 'Glaucoma', 'Tiques/Tourette (relativo)', 'IMAOs (14 dias)', 'Hipertireoidismo não controlado'],
+    interacoes_importantes: [
+      { com: 'IMAOs', severidade: 'grave', descricao: 'Crise hipertensiva — contraindicado' },
+      { com: 'Antihipertensivos', severidade: 'moderada', descricao: 'Pode antagonizar efeito anti-hipertensivo' },
+    ],
+    alertas_especiais: ['⚠ RECEITA ESPECIAL AMARELA (lista A3 — psicotrópico)', 'Monitorar FC, PA e crescimento em crianças', 'Potencial de abuso — avaliar antes de prescrever'],
+    uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
+    marcas: [],
+  },
+
+  // ══════════════════════════════════════════════════════════
   // DOR — TRAMADOL
   // ══════════════════════════════════════════════════════════
 
@@ -1695,6 +1962,350 @@ export const PHARMA_DB: QuickDrug[] = [
       { nome: 'Gésico®', laboratorio: 'Eurofarma', concentracoes: ['50 mg', '100 mg LP'], formas: ['Comprimido', 'Comprimido LP'], lab_id: 'eurofarma', produto_id: 'euro-gesico', verificado: true },
       { nome: 'Gésico Duo®', laboratorio: 'Eurofarma', concentracoes: ['37,5 mg + 325 mg'], formas: ['Comprimido'], lab_id: 'eurofarma', produto_id: 'euro-gesico-duo', verificado: true },
     ],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // CARDIOVASCULAR — METOPROLOL
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'metoprolol',
+    molecula: 'Succinato de Metoprolol',
+    nome_generico: 'Succinato de Metoprolol',
+    sinonimos: ['selozok', 'metoprolol', 'betabloqueador', 'hipertensão', 'ic', 'angina', 'arritmia'],
+    categoria: 'antihipertensivo',
+    classe: 'Betabloqueador Cardiosseletivo (β1) — Ação Prolongada',
+    indicacoes_principais: ['Hipertensão Arterial', 'Insuficiência Cardíaca (FE reduzida)', 'Angina Estável', 'Pós-IAM', 'Taquiarritmias supraventriculares'],
+    dose_adulto: {
+      habitual: '50', min: '25', max: '200', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia'],
+      instrucoes: 'Succinato (LP): 1x/dia. Iniciar com dose baixa e titular. Tomar com ou sem alimento.',
+    },
+    ajuste_renal: {
+      normal: 'Sem ajuste necessário', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (excreção hepática)', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Reduzir dose', child_b: 'Reduzir significativamente', child_c: 'Contraindicado' },
+    contraindicacoes_rapidas: ['Bradicardia sintomática (FC < 50)', 'BAV 2º/3º grau', 'Asma grave ativa', 'IC descompensada aguda', 'Choque cardiogênico'],
+    interacoes_importantes: [
+      { com: 'Verapamil/diltiazem', severidade: 'grave', descricao: 'Bradicardia e bloqueio AV combinados' },
+      { com: 'Clonidina', severidade: 'moderada', descricao: 'Hipertensão rebote na retirada da clonidina' },
+    ],
+    alertas_especiais: ['Não suspender abruptamente (angina de rebote/IAM)', 'Preferir succinato (LP) ao tartarato para IC e dose única diária', 'Pode mascarar hipoglicemia em diabéticos insulino-dependentes'],
+    uso_gestante: 'avaliar', uso_lactante: 'avaliar',
+    marcas: [],
+  },
+
+  {
+    id: 'irbesartana',
+    molecula: 'Irbesartana',
+    nome_generico: 'Irbesartana',
+    sinonimos: ['aprovel', 'irbesartana', 'bra', 'sartana', 'hipertensão', 'nefropatia diabetica'],
+    categoria: 'antihipertensivo',
+    classe: 'BRA — Bloqueador do Receptor de Angiotensina II (AT1)',
+    indicacoes_principais: ['Hipertensão Arterial', 'Nefropatia diabética (DM2 + HAS)', 'Proteinúria'],
+    dose_adulto: {
+      habitual: '150', min: '75', max: '300', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia'],
+      instrucoes: '150 mg/dia. Pode aumentar para 300 mg/dia conforme resposta.',
+    },
+    ajuste_renal: {
+      normal: 'Sem ajuste', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Cautela', tfg_lt_15: 'Cautela — monitorar K+', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Evitar' },
+    contraindicacoes_rapidas: ['Gestação 2º/3º trimestre', 'Hiperpotassemia', 'Uso concomitante de alisquireno em DM'],
+    interacoes_importantes: [
+      { com: 'IECA (duplo bloqueio)', severidade: 'grave', descricao: 'Hipotensão, hiperpotassemia, IRA — evitar' },
+      { com: 'AINEs', severidade: 'moderada', descricao: 'Reduzem efeito anti-hipertensivo e aumentam risco renal' },
+    ],
+    alertas_especiais: ['Não usar em gestação (fetotóxico)', 'Monitorar K+ e creatinina especialmente em IRC'],
+    uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
+    marcas: [],
+  },
+
+  {
+    id: 'doxazosina',
+    molecula: 'Mesilato de Doxazosina',
+    nome_generico: 'Mesilato de Doxazosina',
+    sinonimos: ['duomo', 'doxazosina', 'alfa-bloqueador', 'hiperplasia prostática', 'hbp', 'hipertensão'],
+    categoria: 'antihipertensivo',
+    classe: 'Alfa-1 Bloqueador Seletivo',
+    indicacoes_principais: ['Hiperplasia Prostática Benigna (HPB)', 'Hipertensão Arterial (2ª linha)'],
+    dose_adulto: {
+      habitual: '4', min: '1', max: '8', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia'],
+      instrucoes: 'HPB: iniciar 1 mg/dia à noite. Dobrar dose a cada 1–2 semanas até 4 mg/dia. Tomar à noite para minimizar hipotensão postural.',
+    },
+    ajuste_renal: {
+      normal: 'Sem ajuste', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Cautela', tfg_lt_15: 'Cautela', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Evitar', child_c: 'Contraindicado' },
+    contraindicacoes_rapidas: ['Hipotensão postural sintomática', 'Hipersensibilidade a quinazolinonas'],
+    interacoes_importantes: [
+      { com: 'Inibidores PDE5 (sildenafila/tadalafila)', severidade: 'grave', descricao: 'Hipotensão grave — separar temporalmente' },
+      { com: 'Anti-hipertensivos', severidade: 'moderada', descricao: 'Hipotensão aditiva' },
+    ],
+    alertas_especiais: ['Síndrome do Íris Flácido Intraoperatória (SIFI) — avisar oftalmologista antes de cirurgia de catarata', 'Duomo® monocomponente (doxazosina); Duomo HP® = doxazosina + finasterida'],
+    uso_gestante: 'risco', uso_lactante: 'risco',
+    marcas: [
+      { nome: 'Duomo®', laboratorio: 'Eurofarma', concentracoes: ['2 mg', '4 mg'], formas: ['Comprimido'], lab_id: 'eurofarma', produto_id: 'euro-duomo', verificado: true },
+    ],
+  },
+
+  {
+    id: 'tadalafila',
+    molecula: 'Tadalafila',
+    nome_generico: 'Tadalafila',
+    sinonimos: ['cialis', 'tadalafila', 'pde5', 'disfunção erétil', 'hbp', 'hipertensão pulmonar'],
+    categoria: 'outro',
+    classe: 'Inibidor da PDE5 — Vasodilatador',
+    indicacoes_principais: ['Disfunção Erétil', 'Hiperplasia Prostática Benigna (HPB)', 'Hipertensão Arterial Pulmonar (HAP)'],
+    dose_adulto: {
+      habitual: '10', min: '2.5', max: '20', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia', 'uso sob demanda'],
+      instrucoes: 'DE sob demanda: 10 mg antes da atividade (máx 20 mg). DE diário: 2,5–5 mg/dia. HPB: 5 mg/dia.',
+    },
+    ajuste_renal: {
+      normal: 'Dose habitual', tfg_60_30: 'Não ultrapassar 10 mg/dose', tfg_30_15: '5 mg dose única máxima', tfg_lt_15: 'Contraindicado', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Não ultrapassar 10 mg', child_b: 'Não recomendado', child_c: 'Contraindicado' },
+    contraindicacoes_rapidas: ['Nitratos (qualquer forma — hipotensão grave)', 'Alfabloqueadores (cautela — hipotensão)', 'Riociguate'],
+    interacoes_importantes: [
+      { com: 'Nitratos (nitroglicerina, isossorbida)', severidade: 'grave', descricao: 'Hipotensão grave potencialmente fatal — CONTRAINDICADO' },
+      { com: 'Inibidores CYP3A4 (cetoconazol, ritonavir)', severidade: 'moderada', descricao: 'Aumentam nível de tadalafila — reduzir dose' },
+    ],
+    alertas_especiais: ['⚠ Contraindicado com nitratos — risco de vida', 'Meia-vida longa (~17h) — menos urgência vs sildenafila (4h)', 'Pode causar lombalgia/mialgia (diferencial vs sildenafila)'],
+    uso_gestante: 'avaliar', uso_lactante: 'avaliar',
+    marcas: [],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // GASTROENTEROLOGIA — ESOMEPRAZOL E DOMPERIDONA
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'esomeprazol',
+    molecula: 'Esomeprazol Magnésico',
+    nome_generico: 'Esomeprazol Magnésico',
+    sinonimos: ['esio', 'esomeprazol', 'nexium', 'ibb', 'inibidor bomba protónica', 'drge', 'ulcera', 'refluxo'],
+    categoria: 'gastroenterologia',
+    classe: 'Inibidor da Bomba de Prótons (IBP)',
+    indicacoes_principais: ['DRGE', 'Úlcera Péptica (H. pylori — erradicação)', 'Esofagite erosiva', 'Prevenção de úlcera por AINEs', 'Síndrome de Zollinger-Ellison'],
+    dose_adulto: {
+      habitual: '40', min: '20', max: '40', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia'],
+      instrucoes: 'Tomar 30–60 min antes da refeição principal. DRGE: 20–40 mg/dia por 4–8 semanas.',
+    },
+    ajuste_renal: {
+      normal: 'Sem ajuste', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Cautela', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: '20 mg máximo', child_c: '20 mg máximo' },
+    contraindicacoes_rapidas: ['Hipersensibilidade a benzimidazóis', 'Uso com nelfinavir/rilpivirina'],
+    interacoes_importantes: [
+      { com: 'Clopidogrel', severidade: 'moderada', descricao: 'IBP reduzem ativação via CYP2C19 — preferir pantoprazol em coronariopatas' },
+    ],
+    alertas_especiais: ['Uso prolongado > 1 ano: risco de hipomagnesemia, deficiência B12, fraturas por osteoporose', 'Preferir S-enantiômero do omeprazol — metabolismo mais previsível'],
+    uso_gestante: 'avaliar', uso_lactante: 'avaliar',
+    marcas: [
+      { nome: 'Ésio®', laboratorio: 'Eurofarma', concentracoes: ['20 mg', '40 mg'], formas: ['Comprimido'], lab_id: 'eurofarma', produto_id: 'euro-esio', verificado: true },
+    ],
+  },
+
+  {
+    id: 'domperidona',
+    molecula: 'Domperidona',
+    nome_generico: 'Domperidona',
+    sinonimos: ['domperidona', 'motilium', 'procinético', 'naúsea', 'vomito', 'gastroparesia', 'refluxo'],
+    categoria: 'gastroenterologia',
+    classe: 'Procinético — Antagonista Dopaminérgico D2 Periférico',
+    indicacoes_principais: ['Náuseas e vômitos', 'Gastroparesia', 'Dispepsia funcional', 'Refluxo gastroesofágico (adjuvante)'],
+    dose_adulto: {
+      habitual: '10', min: '10', max: '30', unidade: 'mg', via: 'VO',
+      frequencias: ['3x/dia'],
+      instrucoes: '10 mg 3x/dia, 15–30 min antes das refeições. Duração máxima recomendada: 7 dias (risco QT).',
+    },
+    ajuste_renal: {
+      normal: 'Dose habitual', tfg_60_30: 'Reduzir frequência para 2x/dia', tfg_30_15: '1x/dia', tfg_lt_15: 'Evitar', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Evitar', child_c: 'Contraindicado' },
+    contraindicacoes_rapidas: ['QT prolongado', 'Prolactinoma', 'Hemorragia GI/perfuração', 'Uso com inibidores CYP3A4 fortes'],
+    interacoes_importantes: [
+      { com: 'Antifúngicos azólicos (cetoconazol)', severidade: 'grave', descricao: 'Prolongamento QT — contraindicado' },
+      { com: 'Eritromicina/claritromicina', severidade: 'grave', descricao: 'Risco QT aditivo' },
+    ],
+    alertas_especiais: ['⚠ Risco de prolongamento QT — ANVISA recomenda uso pelo menor tempo possível', 'Preferir metoclopramida para uso agudo hospitalar (acessa SNC)', 'Não usar com inibidores CYP3A4 fortes'],
+    uso_gestante: 'risco', uso_lactante: 'risco',
+    marcas: [],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // NEUROLOGIA — MEMANTINA, DONEPEZILA, LEVETIRACETAM
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'memantina',
+    molecula: 'Cloridrato de Memantina',
+    nome_generico: 'Cloridrato de Memantina',
+    sinonimos: ['memantina', 'ebixa', 'alzheimer', 'demência', 'antagonista nmda'],
+    categoria: 'neurologico',
+    classe: 'Antagonista do Receptor NMDA — Antidemencial',
+    indicacoes_principais: ['Doença de Alzheimer moderada a grave', 'Demência Vascular moderada a grave'],
+    dose_adulto: {
+      habitual: '20', min: '5', max: '20', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia', '2x/dia'],
+      instrucoes: 'Titular: sem 1: 5 mg/dia; sem 2: 10 mg/dia; sem 3: 15 mg/dia; sem 4+: 20 mg/dia (1x/dia ou 10 mg 2x/dia).',
+    },
+    ajuste_renal: {
+      normal: '20 mg/dia', tfg_60_30: '10 mg/dia máximo', tfg_30_15: '5 mg 2x/dia', tfg_lt_15: 'Contraindicado', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Não recomendado' },
+    contraindicacoes_rapidas: ['TFG < 5 mL/min', 'Hipersensibilidade'],
+    interacoes_importantes: [
+      { com: 'Amantadina/quetamina', severidade: 'moderada', descricao: 'Risco de psicose por antagonismo NMDA aditivo' },
+    ],
+    alertas_especiais: ['Frequentemente combinado com donepezila (sinérgico)', 'Benefício modesto — avaliar junto com família/cuidadores'],
+    uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
+    marcas: [],
+  },
+
+  {
+    id: 'donepezila',
+    molecula: 'Cloridrato de Donepezila',
+    nome_generico: 'Cloridrato de Donepezila',
+    sinonimos: ['aricept', 'donepezila', 'alzheimer', 'demência', 'inibidor colinesterase'],
+    categoria: 'neurologico',
+    classe: 'Inibidor da Acetilcolinesterase — Antidemencial',
+    indicacoes_principais: ['Doença de Alzheimer leve, moderada e grave', 'Demência na Doença de Parkinson'],
+    dose_adulto: {
+      habitual: '10', min: '5', max: '10', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia'],
+      instrucoes: 'Iniciar 5 mg/dia por 4–6 semanas, depois 10 mg/dia. Tomar à noite (reduz insônia).',
+    },
+    ajuste_renal: {
+      normal: 'Sem ajuste', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Cautela', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Cautela', child_c: 'Não recomendado' },
+    contraindicacoes_rapidas: ['Hipersensibilidade a piperidinas', 'Bradicardia sintomática', 'Úlcera péptica ativa'],
+    interacoes_importantes: [
+      { com: 'Anticolinérgicos', severidade: 'moderada', descricao: 'Antagonismo farmacológico — evitar combinação' },
+      { com: 'Betabloqueadores/antiarrítmicos', severidade: 'moderada', descricao: 'Risco de bradicardia' },
+    ],
+    alertas_especiais: ['Efeitos colinérgicos: náuseas, diarreia, cãibras, bradicardia', 'Não modifica a progressão da doença — melhora sintomática'],
+    uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
+    marcas: [],
+  },
+
+  {
+    id: 'levetiracetam',
+    molecula: 'Levetiracetam',
+    nome_generico: 'Levetiracetam',
+    sinonimos: ['keppra', 'levetiracetam', 'anticonvulsivante', 'epilepsia', 'convulsão', 'dae'],
+    categoria: 'neurologico',
+    classe: 'Anticonvulsivante — Ligante da Proteína SV2A da Vesícula Sináptica',
+    indicacoes_principais: ['Epilepsia focal (com ou sem generalização)', 'Epilepsia mioclônica juvenil', 'Crises tônico-clônicas generalizadas'],
+    dose_adulto: {
+      habitual: '1000', min: '500', max: '3000', unidade: 'mg/dia', via: 'VO',
+      frequencias: ['2x/dia'],
+      instrucoes: 'Iniciar 500 mg 2x/dia. Aumentar 500 mg/dose a cada 2 semanas conforme resposta.',
+    },
+    ajuste_renal: {
+      normal: '500–1500 mg 2x/dia', tfg_60_30: '250–750 mg 2x/dia', tfg_30_15: '250–500 mg 2x/dia', tfg_lt_15: '500–1000 mg/dia', dialisavel: true,
+    },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Cautela (IH + IR frequentemente coexistem)' },
+    contraindicacoes_rapidas: ['Hipersensibilidade'],
+    interacoes_importantes: [],
+    alertas_especiais: ['Pouquíssimas interações medicamentosas — vantagem em politerapia', 'Efeito adverso principal: irritabilidade/alterações de humor (10–15%)', 'Monitorar humor especialmente em pacientes com histórico psiquiátrico'],
+    uso_gestante: 'risco', uso_lactante: 'risco',
+    marcas: [],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // RESPIRATÓRIO — MOMETASONA NASAL (VENTUS®)
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'mometasona-nasal',
+    molecula: 'Furoato de Mometasona',
+    nome_generico: 'Furoato de Mometasona',
+    sinonimos: ['ventus', 'nasonex', 'mometasona', 'corticoide nasal', 'rinite', 'spray nasal', 'polipo nasal'],
+    categoria: 'respiratory',
+    classe: 'Corticosteroide Nasal Tópico',
+    indicacoes_principais: ['Rinite alérgica sazonal e perene', 'Profilaxia de rinite alérgica', 'Pólipos nasais', 'Rinossinusite aguda (adjuvante)'],
+    dose_adulto: {
+      habitual: '200', min: '100', max: '400', unidade: 'mcg', via: 'spray nasal',
+      frequencias: ['1x/dia'],
+      instrucoes: '2 jatos em cada narina 1x/dia (200 mcg/dia). Profilaxia: iniciar 2–4 semanas antes da temporada.',
+    },
+    ajuste_renal: {
+      normal: 'Sem ajuste', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Cautela' },
+    contraindicacoes_rapidas: ['< 2 anos', 'Cirurgia nasal recente (até cicatrização)', 'Hipersensibilidade'],
+    interacoes_importantes: [
+      { com: 'Inibidores CYP3A4 fortes (cetoconazol)', severidade: 'moderada', descricao: 'Pode aumentar exposição sistêmica ao corticoide' },
+    ],
+    alertas_especiais: ['Mínima biodisponibilidade sistêmica (< 1%) — seguro em uso prolongado', 'Monitorar velocidade de crescimento em crianças no uso crônico'],
+    uso_gestante: 'avaliar', uso_lactante: 'avaliar',
+    marcas: [
+      { nome: 'Ventus®', laboratorio: 'Eurofarma', concentracoes: ['50 mcg/jato'], formas: ['Spray nasal'], lab_id: 'eurofarma', produto_id: 'euro-ventus', verificado: true },
+    ],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // DIABETES — GLICAZIDA E GLIBENCLAMIDA
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'glicazida',
+    molecula: 'Glicazida',
+    nome_generico: 'Glicazida',
+    sinonimos: ['diamicron', 'glicazida', 'sulfonilureia', 'antidiabético', 'dm2', 'hipoglicemiante'],
+    categoria: 'antidiabético',
+    classe: 'Sulfonilureia de 2ª Geração',
+    indicacoes_principais: ['Diabetes Mellitus tipo 2 (DM2)'],
+    dose_adulto: {
+      habitual: '60', min: '30', max: '120', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia'],
+      instrucoes: 'MR: 30–120 mg/dia com o café da manhã. Iniciar 30 mg/dia e ajustar a cada 4 semanas.',
+    },
+    ajuste_renal: {
+      normal: 'Sem ajuste', tfg_60_30: 'Cautela — monitorar glicemia', tfg_30_15: 'Evitar', tfg_lt_15: 'Contraindicado', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Evitar', child_c: 'Contraindicado' },
+    contraindicacoes_rapidas: ['DM1', 'Cetoacidose diabética', 'IR/IH grave', 'Gestação', 'Alergia a sulfonamidas'],
+    interacoes_importantes: [
+      { com: 'Fluconazol/miconazol', severidade: 'grave', descricao: 'Hipoglicemia grave — inibem metabolismo da glicazida' },
+      { com: 'AINEs/salicilatos', severidade: 'moderada', descricao: 'Potencializam hipoglicemia' },
+    ],
+    alertas_especiais: ['Hipoglicemia: principal risco — orientar paciente sobre sinais e tratamento', 'MR (liberação modificada) permite dose única diária — melhor adesão', 'Segura no idoso (menor risco de hipoglicemia que glibenclamida)'],
+    uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
+    marcas: [],
+  },
+
+  {
+    id: 'glibenclamida',
+    molecula: 'Glibenclamida',
+    nome_generico: 'Glibenclamida',
+    sinonimos: ['daonil', 'glibenclamida', 'sulfonilureia', 'antidiabético', 'dm2', 'hipoglicemiante'],
+    categoria: 'antidiabético',
+    classe: 'Sulfonilureia de 2ª Geração',
+    indicacoes_principais: ['Diabetes Mellitus tipo 2 (DM2)'],
+    dose_adulto: {
+      habitual: '5', min: '2.5', max: '20', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia', '2x/dia'],
+      instrucoes: 'Iniciar 2,5–5 mg/dia com refeição. Aumentar 2,5 mg a cada 1–2 semanas. Máx: 20 mg/dia.',
+    },
+    ajuste_renal: {
+      normal: 'Sem ajuste', tfg_60_30: 'Evitar', tfg_30_15: 'Contraindicado', tfg_lt_15: 'Contraindicado', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Evitar', child_c: 'Contraindicado' },
+    contraindicacoes_rapidas: ['DM1', 'IR (TFG < 60)', 'Idosos > 65 anos (critérios Beers)', 'Cetoacidose', 'Gestação'],
+    interacoes_importantes: [
+      { com: 'Fluconazol', severidade: 'grave', descricao: 'Hipoglicemia grave' },
+      { com: 'Álcool', severidade: 'moderada', descricao: 'Potencializa hipoglicemia e efeito antabuse (raro)' },
+    ],
+    alertas_especiais: ['⚠ Critérios Beers: EVITAR em idosos — hipoglicemia prolongada grave', 'Mecanismo: fecha canal K+-ATP → insulinossecretagogo independente de glicose', 'Preferir glicazida MR ou glimepirida no idoso'],
+    uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
+    marcas: [],
   },
 
   // ══════════════════════════════════════════════════════════
