@@ -12,8 +12,9 @@ import {
 import {
   calcCrCl, calcBSA, calcIMC, calcWeightDose, convertDose,
   getAdjustmentForCrCl, checkBeersCriteria,
-  type PatientParams, type CrClResult,
+  type PatientParams, type CrClResult, type FullDoseResult,
 } from '@/lib/dose-calculator';
+import { DoseCalcCard } from '@/components/modules/DoseCalcCard';
 import { runSafetyCheck, SEVERITY_CONFIG, type QuickSafetyAlert } from '@/lib/safety-rules';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -219,6 +220,45 @@ export default function PrescricaoRapida() {
     setCustomDose('');
     setCalcResult([]);
   }, [selectedDrug, selectedBrand, selectedConcentration, customDose]);
+
+  // ── Apply dose calc result → add to Rx ───────────────────
+  const applyDoseCalc = useCallback((result: FullDoseResult) => {
+    if (!selectedDrug) return;
+    const brand = selectedBrand ?? selectedDrug.marcas[0];
+    const freqMap: Record<number, string> = {
+      1: '1x/dia', 2: '2x/dia (12/12h)', 3: '3x/dia (8/8h)', 4: '4x/dia (6/6h)',
+    };
+    const doseTexto = result.volume_por_tomada !== undefined
+      ? `${result.volume_por_tomada} mL (${result.dose_por_tomada} ${result.dose_unidade})`
+      : `${result.dose_por_tomada} ${result.dose_unidade}`;
+    const item: RxItem = {
+      ...BLANK_ITEM,
+      id: Date.now().toString(),
+      molecula: selectedDrug.molecula,
+      nome_comercial: brand?.nome ?? selectedDrug.molecula,
+      laboratorio: brand?.laboratorio ?? '',
+      concentracao: selectedConcentration,
+      forma_farmaceutica: brand?.formas?.[0] ?? 'Comprimido',
+      produto_id: brand?.produto_id,
+      bula_profissional: brand?.bula_profissional,
+      bula_paciente: brand?.bula_paciente,
+      dose: doseTexto,
+      via: selectedDrug.dose_adulto.via,
+      frequencia: freqMap[result.tomadas_dia] ?? `${result.tomadas_dia}x/dia`,
+      duracao: result.population.usar_dose_pediatrica ? '7 dias' : '30 dias',
+      instrucoes: result.ajuste_renal_texto
+        ? `Ajuste renal: ${result.ajuste_renal_texto}`
+        : '',
+      uso_continuo: false,
+      tipo_receita: selectedDrug.alertas_especiais.some(a => a.includes('RECEITA ESPECIAL')) ? 'especial_branca' : 'simples',
+    };
+    setRxItems(prev => [...prev, item]);
+    toast.success(`${selectedDrug.molecula} adicionado — dose calculada automaticamente`);
+    setSelectedDrug(null);
+    setSearchQuery('');
+    setCustomDose('');
+    setCalcResult([]);
+  }, [selectedDrug, selectedBrand, selectedConcentration]);
 
   // ── Remove item ───────────────────────────────────────────
   const removeItem = (id: string) => {
@@ -657,23 +697,30 @@ export default function PrescricaoRapida() {
                     </div>
                   )}
 
-                  {/* Cálculo pediátrico se disponível */}
-                  {calcResult.length > 0 && (
-                    <div className="p-2.5 bg-green-50 border border-green-100 rounded-lg">
-                      <p className="text-xs font-semibold text-green-800 mb-1.5">
-                        <Calculator className="w-3 h-3 inline mr-1" />
-                        Cálculo Automático (mg/kg)
+                  {/* Card de cálculo automático (sempre que idade + peso disponíveis) */}
+                  {patient.peso && patient.idade ? (
+                    <DoseCalcCard
+                      drug={selectedDrug}
+                      concentracaoSelecionada={selectedConcentration || (selectedDrug.dose_adulto.habitual + ' ' + selectedDrug.dose_adulto.unidade)}
+                      idadeAnos={Number(patient.idade)}
+                      pesoKg={Number(patient.peso)}
+                      crcl={crclResult?.crcl}
+                      childPugh={patient.child_pugh || undefined}
+                      gestante={patient.gestante}
+                      lactante={patient.lactante}
+                      onApply={applyDoseCalc}
+                    />
+                  ) : (
+                    <>
+                      <Button onClick={addToRx} className="w-full bg-violet-600 hover:bg-violet-700 gap-2 h-9">
+                        <Plus className="w-4 h-4" />
+                        Adicionar à prescrição
+                      </Button>
+                      <p className="text-[10px] text-center text-slate-400">
+                        💡 Preencha <strong>idade</strong> e <strong>peso</strong> para cálculo automático de dose
                       </p>
-                      {calcResult.map((step, i) => (
-                        <p key={i} className="text-xs text-green-700 font-mono">{step}</p>
-                      ))}
-                    </div>
+                    </>
                   )}
-
-                  <Button onClick={addToRx} className="w-full bg-violet-600 hover:bg-violet-700 gap-2 h-9">
-                    <Plus className="w-4 h-4" />
-                    Adicionar à prescrição
-                  </Button>
                 </CardContent>
               </Card>
             )}

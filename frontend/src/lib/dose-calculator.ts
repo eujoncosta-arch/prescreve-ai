@@ -282,21 +282,245 @@ export function idadeEmMeses(anos: number, meses?: number): number {
 
 // ─── ALERTAS GERIÁTRICOS (CRITÉRIOS BEERS) ───────────────────
 
-const BEERS_DRUGS = [
-  'Glibenclamida',
-  'Alprazolam',
-  'Amitriptilina',
-  'Dipirona',
-];
+const BEERS_DRUGS: Record<string, string> = {
+  'Glibenclamida': '⚠ Beers: Alto risco de hipoglicemia prolongada em idosos. Preferir glicazida ou sitagliptina.',
+  'Alprazolam': '⚠ Beers: Benzodiazepínicos aumentam risco de sedação, quedas e fraturas em idosos.',
+  'Clonazepam': '⚠ Beers: Benzodiazepínico — risco de sedação, quedas e fraturas em idosos.',
+  'Diazepam': '⚠ Beers: Benzodiazepínico de longa duração — evitar em idosos (meia-vida prolongada).',
+  'Amitriptilina': '⚠ Beers: Anticolinérgico — confusão, retenção urinária, constipação, hipotensão em idosos.',
+  'Nortriptilina': '⚠ Beers: Tricíclico anticolinérgico — risco aumentado em idosos.',
+  'Dipirona': '⚠ Cautela em idosos: risco de agranulocitose aumentado com comorbidades.',
+  'Hidroxizina': '⚠ Beers: Anti-histamínico de 1ª geração — sedação excessiva, anticolinérgico, risco de quedas em idosos.',
+  'Tramadol': '⚠ Beers: Risco de hipoglicemia, convulsão e síndrome serotoninérgica maior em idosos.',
+  'Metoclopramida': '⚠ Beers: Risco de efeitos extrapiramidais e tardive dyskinesia em idosos.',
+  'Domperidona': '⚠ Beers: Risco cardíaco (QT) aumentado em idosos — usar com cautela.',
+};
 
 export function checkBeersCriteria(molecula: string): string | null {
-  const match = BEERS_DRUGS.find(d => molecula.toLowerCase().includes(d.toLowerCase()));
-  if (!match) return null;
-  const msgs: Record<string, string> = {
-    'Glibenclamida': '⚠ Critérios de Beers: Alto risco de hipoglicemia prolongada em idosos. Preferir glicazida ou sitagliptina.',
-    'Alprazolam': '⚠ Critérios de Beers: Benzodiazepínicos aumentam risco de sedação excessiva, quedas e fraturas em idosos.',
-    'Amitriptilina': '⚠ Critérios de Beers: Anticolinérgico — risco de confusão, retenção urinária, constipação em idosos.',
-    'Dipirona': '⚠ Cautela em idosos: risco de agranulocitose aumentado com comorbidades.',
+  const mol = molecula.toLowerCase();
+  const match = Object.keys(BEERS_DRUGS).find(d => mol.includes(d.toLowerCase()));
+  return match ? BEERS_DRUGS[match] : null;
+}
+
+// ─── CLASSIFICAÇÃO POPULACIONAL ───────────────────────────────
+
+export type PatientPopulation = 'neonato' | 'lactente' | 'pre_escolar' | 'escolar' | 'adolescente' | 'adulto' | 'geriatrico';
+
+export interface PopulationProfile {
+  population: PatientPopulation;
+  label: string;
+  usar_dose_pediatrica: boolean;
+  usar_dose_por_kg: boolean;
+  alerta_beers: boolean;
+}
+
+export function classifyPopulation(idadeAnos: number): PopulationProfile {
+  if (idadeAnos < 0.083) return { population: 'neonato', label: 'Neonato (< 28 dias)', usar_dose_pediatrica: true, usar_dose_por_kg: true, alerta_beers: false };
+  if (idadeAnos < 2)     return { population: 'lactente', label: `Lactente (${Math.round(idadeAnos * 12)} meses)`, usar_dose_pediatrica: true, usar_dose_por_kg: true, alerta_beers: false };
+  if (idadeAnos < 6)     return { population: 'pre_escolar', label: `Pré-escolar (${idadeAnos} anos)`, usar_dose_pediatrica: true, usar_dose_por_kg: true, alerta_beers: false };
+  if (idadeAnos < 12)    return { population: 'escolar', label: `Escolar (${idadeAnos} anos)`, usar_dose_pediatrica: true, usar_dose_por_kg: true, alerta_beers: false };
+  if (idadeAnos < 18)    return { population: 'adolescente', label: `Adolescente (${idadeAnos} anos)`, usar_dose_pediatrica: false, usar_dose_por_kg: false, alerta_beers: false };
+  if (idadeAnos >= 65)   return { population: 'geriatrico', label: `Adulto idoso (${idadeAnos} anos)`, usar_dose_pediatrica: false, usar_dose_por_kg: false, alerta_beers: true };
+  return { population: 'adulto', label: `Adulto (${idadeAnos} anos)`, usar_dose_pediatrica: false, usar_dose_por_kg: false, alerta_beers: false };
+}
+
+// ─── PARSER DE CONCENTRAÇÃO ───────────────────────────────────
+
+export interface ParsedConcentration {
+  tipo: 'solido' | 'liquido' | 'inalatorio' | 'desconhecido';
+  mg_por_unidade: number;   // mg por comprimido/cápsula OU mg/mL se líquido
+  mg_por_mL?: number;       // somente líquidos
+  unidade_texto: string;    // "comprimido", "mL", "jato", etc.
+  texto_original: string;
+}
+
+export function parseConcentration(texto: string): ParsedConcentration {
+  const t = texto.toLowerCase().trim();
+
+  // Suspensão/solução: "250 mg/5 mL", "20 mg/mL", "1 mg/mL xarope"
+  const liquidoSlash = t.match(/(\d+[\.,]?\d*)\s*mg\s*\/\s*(\d+[\.,]?\d*)\s*mL/i);
+  if (liquidoSlash) {
+    const mgTotal = parseFloat(liquidoSlash[1].replace(',', '.'));
+    const mlTotal = parseFloat(liquidoSlash[2].replace(',', '.'));
+    const mgPorMl = mgTotal / mlTotal;
+    return { tipo: 'liquido', mg_por_unidade: mgPorMl, mg_por_mL: mgPorMl, unidade_texto: 'mL', texto_original: texto };
+  }
+
+  // Solução direta: "20 mg/mL"
+  const liquidoDireto = t.match(/(\d+[\.,]?\d*)\s*mg\s*\/\s*mL/i);
+  if (liquidoDireto) {
+    const mgPorMl = parseFloat(liquidoDireto[1].replace(',', '.'));
+    return { tipo: 'liquido', mg_por_unidade: mgPorMl, mg_por_mL: mgPorMl, unidade_texto: 'mL', texto_original: texto };
+  }
+
+  // mcg/jato (inalatório nasal/pulmonar)
+  const inalatorio = t.match(/(\d+[\.,]?\d*)\s*mcg/i);
+  if (inalatorio && (t.includes('jato') || t.includes('spray') || t.includes('mcg'))) {
+    const mcg = parseFloat(inalatorio[1].replace(',', '.'));
+    return { tipo: 'inalatorio', mg_por_unidade: mcg / 1000, unidade_texto: 'jato', texto_original: texto };
+  }
+
+  // Sólido simples: "50 mg", "500 mg"
+  const solido = t.match(/(\d+[\.,]?\d*)\s*mg/i);
+  if (solido) {
+    const mg = parseFloat(solido[1].replace(',', '.'));
+    return { tipo: 'solido', mg_por_unidade: mg, unidade_texto: 'comprimido', texto_original: texto };
+  }
+
+  return { tipo: 'desconhecido', mg_por_unidade: 0, unidade_texto: '', texto_original: texto };
+}
+
+// ─── MOTOR UNIVERSAL DE DOSE ──────────────────────────────────
+
+export interface FullDoseInput {
+  molecula: string;
+  dose_adulto: { habitual: string; min?: string; max: string; unidade: string; via: string; frequencias: string[]; instrucoes?: string };
+  dose_pediatrica?: { calculo: string; dose_por_kg: number; unidade: string; frequencia_divisoes: number; max_dose_dia: number; max_dose_dia_unidade: string; faixa_etaria: string; observacao?: string };
+  ajuste_renal?: { normal: string; tfg_60_30: string; tfg_30_15: string; tfg_lt_15: string; dialisavel: boolean };
+  ajuste_hepatico?: { child_a: string; child_b: string; child_c: string };
+  alertas_especiais: string[];
+  uso_gestante: string;
+  uso_lactante: string;
+}
+
+export interface FullDoseResult {
+  population: PopulationProfile;
+  dose_por_tomada: number;
+  dose_unidade: string;
+  volume_por_tomada?: number;      // mL, se líquido
+  frequencia: string;
+  tomadas_dia: number;
+  dose_total_dia: number;
+  posologia_sugerida: string;
+  passo_a_passo: string[];
+  alertas: string[];
+  ajuste_renal_texto?: string;
+  ajuste_hepatico_texto?: string;
+  limitado_por_dose_max: boolean;
+  fonte: 'pediatrica_mg_kg' | 'adulto_fixo' | 'adulto_mg_kg' | 'bsa';
+}
+
+export function calcFullDose(
+  drug: FullDoseInput,
+  idadeAnos: number,
+  pesoKg: number,
+  concentracaoSelecionada: string,
+  crcl?: number,
+  childPugh?: 'A' | 'B' | 'C' | '',
+  gestante?: boolean,
+  lactante?: boolean,
+): FullDoseResult {
+  const profile = classifyPopulation(idadeAnos);
+  const conc = parseConcentration(concentracaoSelecionada);
+  const alertas: string[] = [];
+  const passos: string[] = [];
+
+  passos.push(`Paciente: ${profile.label} | Peso: ${pesoKg} kg`);
+  passos.push(`Medicamento: ${drug.molecula} — ${concentracaoSelecionada}`);
+
+  // Alertas gestante/lactante
+  if (gestante && (drug.uso_gestante === 'contraindicado' || drug.uso_gestante === 'risco')) {
+    alertas.push(`🚨 GESTAÇÃO: ${drug.uso_gestante === 'contraindicado' ? 'CONTRAINDICADO' : 'Risco potencial — avaliar'}`);
+  }
+  if (lactante && (drug.uso_lactante === 'contraindicado' || drug.uso_lactante === 'risco')) {
+    alertas.push(`🍼 LACTAÇÃO: ${drug.uso_lactante === 'contraindicado' ? 'CONTRAINDICADO' : 'Risco — avaliar'}`);
+  }
+
+  // Alertas especiais relevantes
+  drug.alertas_especiais.filter(a => a.startsWith('⚠') || a.startsWith('🚨')).forEach(a => alertas.push(a));
+
+  // Ajuste renal
+  let ajusteRenalTexto: string | undefined;
+  if (crcl !== undefined && drug.ajuste_renal) {
+    if (crcl < 15) ajusteRenalTexto = `TFG < 15: ${drug.ajuste_renal.tfg_lt_15}`;
+    else if (crcl < 30) ajusteRenalTexto = `TFG 15–30: ${drug.ajuste_renal.tfg_30_15}`;
+    else if (crcl < 60) ajusteRenalTexto = `TFG 30–60: ${drug.ajuste_renal.tfg_60_30}`;
+    else ajusteRenalTexto = `TFG ≥ 60: ${drug.ajuste_renal.normal}`;
+    if (crcl < 60) alertas.push(`⚠ Ajuste renal necessário: ${ajusteRenalTexto}`);
+  }
+
+  // Ajuste hepático
+  let ajusteHepaticoTexto: string | undefined;
+  if (childPugh && drug.ajuste_hepatico) {
+    const textos: Record<string, string> = { A: drug.ajuste_hepatico.child_a, B: drug.ajuste_hepatico.child_b, C: drug.ajuste_hepatico.child_c };
+    ajusteHepaticoTexto = `Child-Pugh ${childPugh}: ${textos[childPugh]}`;
+    if (childPugh !== 'A') alertas.push(`⚠ Ajuste hepático: ${ajusteHepaticoTexto}`);
+  }
+
+  // Cálculo de dose
+  let dosePorTomada: number;
+  let doseUnidade: string;
+  let tomadas: number;
+  let doseTotalDia: number;
+  let limitado = false;
+  let fonte: FullDoseResult['fonte'];
+
+  if (profile.usar_dose_pediatrica && drug.dose_pediatrica) {
+    // Dose pediátrica mg/kg
+    const ped = drug.dose_pediatrica;
+    const calculada = ped.dose_por_kg * pesoKg;
+    const maxDia = ped.max_dose_dia;
+    doseTotalDia = Math.min(calculada, maxDia);
+    limitado = calculada > maxDia;
+    tomadas = ped.frequencia_divisoes;
+    dosePorTomada = Math.round((doseTotalDia / tomadas) * 10) / 10;
+    doseUnidade = ped.unidade;
+    fonte = 'pediatrica_mg_kg';
+
+    passos.push(`Dose pediátrica: ${ped.dose_por_kg} ${ped.unidade}/kg/dia`);
+    passos.push(`Dose calculada: ${ped.dose_por_kg} × ${pesoKg} kg = ${calculada.toFixed(1)} ${ped.unidade}/dia`);
+    if (limitado) {
+      passos.push(`⚠ Excede dose máxima (${maxDia} ${ped.max_dose_dia_unidade}) → usando ${maxDia} ${ped.unidade}/dia`);
+      alertas.push(`⚠ Dose máxima aplicada: ${maxDia} ${ped.max_dose_dia_unidade}`);
+    } else {
+      passos.push(`✓ Dentro da dose máxima (${maxDia} ${ped.max_dose_dia_unidade})`);
+    }
+    const freqLabel = tomadas === 1 ? '1x/dia' : tomadas === 2 ? '12/12h' : tomadas === 3 ? '8/8h' : tomadas === 4 ? '6/6h' : `${tomadas}x/dia`;
+    passos.push(`Divisão: ${doseTotalDia.toFixed(1)} ÷ ${tomadas} tomadas = ${dosePorTomada} ${doseUnidade}/dose (${freqLabel})`);
+  } else {
+    // Dose adulto
+    dosePorTomada = parseFloat(drug.dose_adulto.habitual) || 0;
+    doseUnidade = drug.dose_adulto.unidade;
+    tomadas = drug.dose_adulto.frequencias[0]?.includes('2x') ? 2 : drug.dose_adulto.frequencias[0]?.includes('3x') ? 3 : drug.dose_adulto.frequencias[0]?.includes('4x') ? 4 : 1;
+    doseTotalDia = dosePorTomada * tomadas;
+    fonte = 'adulto_fixo';
+    passos.push(`Dose adulto habitual: ${dosePorTomada} ${doseUnidade} — ${drug.dose_adulto.frequencias[0] ?? '1x/dia'}`);
+    passos.push(`Máximo: ${drug.dose_adulto.max} ${doseUnidade}`);
+  }
+
+  // Conversão para volume (se líquido)
+  let volumePorTomada: number | undefined;
+  if (conc.tipo === 'liquido' && conc.mg_por_mL && dosePorTomada > 0) {
+    volumePorTomada = Math.round((dosePorTomada / conc.mg_por_mL) * 10) / 10;
+    passos.push(`Volume: ${dosePorTomada} mg ÷ ${conc.mg_por_mL} mg/mL = ${volumePorTomada} mL por dose`);
+  }
+
+  // Posologia sugerida
+  const freqText = tomadas === 1 ? '1x/dia' : tomadas === 2 ? 'a cada 12 horas' : tomadas === 3 ? 'a cada 8 horas' : tomadas === 4 ? 'a cada 6 horas' : `${tomadas}x/dia`;
+  const viaText = drug.dose_adulto.via;
+  let posologia: string;
+  if (volumePorTomada !== undefined) {
+    posologia = `${volumePorTomada} mL ${viaText} ${freqText} (= ${dosePorTomada} ${doseUnidade}/dose)`;
+  } else {
+    posologia = `${dosePorTomada} ${doseUnidade} ${viaText} ${freqText}`;
+  }
+
+  passos.push(`→ POSOLOGIA: ${posologia}`);
+
+  return {
+    population: profile,
+    dose_por_tomada: dosePorTomada,
+    dose_unidade: doseUnidade,
+    volume_por_tomada: volumePorTomada,
+    frequencia: freqText,
+    tomadas_dia: tomadas,
+    dose_total_dia: Math.round(doseTotalDia * 10) / 10,
+    posologia_sugerida: posologia,
+    passo_a_passo: passos,
+    alertas,
+    ajuste_renal_texto: ajusteRenalTexto,
+    ajuste_hepatico_texto: ajusteHepaticoTexto,
+    limitado_por_dose_max: limitado,
+    fonte,
   };
-  return msgs[match] ?? null;
 }
