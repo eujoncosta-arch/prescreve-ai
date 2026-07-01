@@ -464,37 +464,67 @@ export function calcFullDose(
   let limitado = false;
   let fonte: FullDoseResult['fonte'];
 
-  if (profile.usar_dose_pediatrica && drug.dose_pediatrica) {
-    // Dose pediátrica mg/kg
+  // Helper: converte max_dose_dia para mg absoluto conforme a unidade declarada
+  function maxAbsoluto(ped: { max_dose_dia: number; max_dose_dia_unidade: string }): number {
+    return ped.max_dose_dia_unidade.includes('/kg') ? ped.max_dose_dia * pesoKg : ped.max_dose_dia;
+  }
+
+  const usarPediatrica = profile.usar_dose_pediatrica && drug.dose_pediatrica && drug.dose_pediatrica.dose_por_kg > 0;
+
+  if (usarPediatrica && drug.dose_pediatrica) {
     const ped = drug.dose_pediatrica;
-    const calculada = ped.dose_por_kg * pesoKg;
-    const maxDia = ped.max_dose_dia;
-    doseTotalDia = Math.min(calculada, maxDia);
-    limitado = calculada > maxDia;
-    tomadas = ped.frequencia_divisoes;
-    dosePorTomada = Math.round((doseTotalDia / tomadas) * 10) / 10;
+    const maxDiaAbs = maxAbsoluto(ped);
     doseUnidade = ped.unidade;
+    tomadas = ped.frequencia_divisoes;
     fonte = 'pediatrica_mg_kg';
 
-    passos.push(`Dose pediátrica: ${ped.dose_por_kg} ${ped.unidade}/kg/dia`);
-    passos.push(`Dose calculada: ${ped.dose_por_kg} × ${pesoKg} kg = ${calculada.toFixed(1)} ${ped.unidade}/dia`);
-    if (limitado) {
-      passos.push(`⚠ Excede dose máxima (${maxDia} ${ped.max_dose_dia_unidade}) → usando ${maxDia} ${ped.unidade}/dia`);
-      alertas.push(`⚠ Dose máxima aplicada: ${maxDia} ${ped.max_dose_dia_unidade}`);
+    if (ped.calculo === 'mg/kg/dose') {
+      // dose_por_kg é POR DOSE, não por dia
+      const dosePorDoseCalc = Math.round(ped.dose_por_kg * pesoKg * 10) / 10;
+      const totalDiaCalc = dosePorDoseCalc * tomadas;
+      limitado = totalDiaCalc > maxDiaAbs;
+      dosePorTomada = limitado ? Math.round((maxDiaAbs / tomadas) * 10) / 10 : dosePorDoseCalc;
+      doseTotalDia = Math.round(Math.min(totalDiaCalc, maxDiaAbs) * 10) / 10;
+
+      passos.push(`Dose pediátrica: ${ped.dose_por_kg} ${ped.unidade}/kg/dose`);
+      passos.push(`Dose calculada: ${ped.dose_por_kg} × ${pesoKg} kg = ${dosePorDoseCalc.toFixed(1)} ${ped.unidade}/dose`);
     } else {
-      passos.push(`✓ Dentro da dose máxima (${maxDia} ${ped.max_dose_dia_unidade})`);
+      // mg/kg/dia (padrão)
+      const calculada = Math.round(ped.dose_por_kg * pesoKg * 10) / 10;
+      limitado = calculada > maxDiaAbs;
+      doseTotalDia = Math.round(Math.min(calculada, maxDiaAbs) * 10) / 10;
+      dosePorTomada = Math.round((doseTotalDia / tomadas) * 10) / 10;
+
+      passos.push(`Dose pediátrica: ${ped.dose_por_kg} ${ped.unidade}/kg/dia`);
+      passos.push(`Dose calculada: ${ped.dose_por_kg} × ${pesoKg} kg = ${calculada.toFixed(1)} ${ped.unidade}/dia`);
+    }
+
+    if (limitado) {
+      passos.push(`⚠ Excede dose máxima (${ped.max_dose_dia} ${ped.max_dose_dia_unidade}) → usando ${doseTotalDia} ${ped.unidade}/dia`);
+      alertas.push(`⚠ Dose máxima aplicada: ${ped.max_dose_dia} ${ped.max_dose_dia_unidade}`);
+    } else {
+      passos.push(`✓ Dentro da dose máxima (${ped.max_dose_dia} ${ped.max_dose_dia_unidade})`);
     }
     const freqLabel = tomadas === 1 ? '1x/dia' : tomadas === 2 ? '12/12h' : tomadas === 3 ? '8/8h' : tomadas === 4 ? '6/6h' : `${tomadas}x/dia`;
     passos.push(`Divisão: ${doseTotalDia.toFixed(1)} ÷ ${tomadas} tomadas = ${dosePorTomada} ${doseUnidade}/dose (${freqLabel})`);
+
+    // Nota pediátrica extra (faixa etária / observações)
+    if (drug.dose_pediatrica?.faixa_etaria) {
+      passos.push(`ℹ ${drug.dose_pediatrica.faixa_etaria}`);
+    }
   } else {
-    // Dose adulto
+    // Dose adulto (inclui pediátrico sem dose_por_kg, ex: dose fixa por faixa / jatos)
     dosePorTomada = parseFloat(drug.dose_adulto.habitual) || 0;
     doseUnidade = drug.dose_adulto.unidade;
     tomadas = drug.dose_adulto.frequencias[0]?.includes('2x') ? 2 : drug.dose_adulto.frequencias[0]?.includes('3x') ? 3 : drug.dose_adulto.frequencias[0]?.includes('4x') ? 4 : 1;
     doseTotalDia = dosePorTomada * tomadas;
     fonte = 'adulto_fixo';
-    passos.push(`Dose adulto habitual: ${dosePorTomada} ${doseUnidade} — ${drug.dose_adulto.frequencias[0] ?? '1x/dia'}`);
+    passos.push(`Dose habitual: ${dosePorTomada} ${doseUnidade} — ${drug.dose_adulto.frequencias[0] ?? '1x/dia'}`);
     passos.push(`Máximo: ${drug.dose_adulto.max} ${doseUnidade}`);
+    // Mostrar faixa pediátrica como nota quando há dados mas não são por kg
+    if (profile.usar_dose_pediatrica && drug.dose_pediatrica?.faixa_etaria) {
+      passos.push(`ℹ Posologia pediátrica (dose fixa/faixa): ${drug.dose_pediatrica.faixa_etaria}`);
+    }
   }
 
   // Conversão para volume (se líquido)
