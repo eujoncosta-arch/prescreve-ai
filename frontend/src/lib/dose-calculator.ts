@@ -337,7 +337,16 @@ export interface ParsedConcentration {
 export function parseConcentration(texto: string): ParsedConcentration {
   const t = texto.toLowerCase().trim();
 
-  // Suspensão/solução: "250 mg/5 mL", "20 mg/mL", "1 mg/mL xarope"
+  // Combinação "400/57 mg/5 mL" — usa o PRIMEIRO número (componente principal)
+  const liquidoCombinacao = t.match(/^(\d+[\.,]?\d*)\/(\d+[\.,]?\d*)\s*mg\s*\/\s*(\d+[\.,]?\d*)\s*mL/i);
+  if (liquidoCombinacao) {
+    const mgPrincipal = parseFloat(liquidoCombinacao[1].replace(',', '.'));
+    const mlTotal = parseFloat(liquidoCombinacao[3].replace(',', '.'));
+    const mgPorMl = mgPrincipal / mlTotal;
+    return { tipo: 'liquido', mg_por_unidade: mgPorMl, mg_por_mL: mgPorMl, unidade_texto: 'mL', texto_original: texto };
+  }
+
+  // Suspensão/solução simples: "250 mg/5 mL"
   const liquidoSlash = t.match(/(\d+[\.,]?\d*)\s*mg\s*\/\s*(\d+[\.,]?\d*)\s*mL/i);
   if (liquidoSlash) {
     const mgTotal = parseFloat(liquidoSlash[1].replace(',', '.'));
