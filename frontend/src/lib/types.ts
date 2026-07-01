@@ -311,9 +311,13 @@ export interface AppSettings {
 // ============================================================
 export type FormFarmaceutica =
   | 'comprimido' | 'capsula' | 'solucao_oral' | 'suspensao_oral'
-  | 'injetavel' | 'inalatorio' | 'creme' | 'pomada' | 'gel'
-  | 'supositorio' | 'adesivo' | 'spray' | 'gotas'
-  | 'comprimido_liberacao_modificada' | 'capsula_liberacao_prolongada';
+  | 'injetavel' | 'solucao_injetavel' | 'suspensao_injetavel' | 'inalatorio'
+  | 'creme' | 'pomada' | 'gel' | 'supositorio' | 'adesivo' | 'spray'
+  | 'gotas' | 'xarope' | 'capsula_mole'
+  | 'comprimido_liberacao_modificada' | 'comprimido_liberacao_prolongada'
+  | 'comprimido_orodispersivel' | 'comprimido_sublingual' | 'comprimido_gastrorresistente'
+  | 'capsula_liberacao_prolongada' | 'capsula_liberacao_retardada'
+  | 'granulado_sache';
 
 export interface LabInfo {
   id: string;

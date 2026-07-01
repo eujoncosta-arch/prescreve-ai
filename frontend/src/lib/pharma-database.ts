@@ -3,7 +3,7 @@
 // Otimizado para busca instantânea e cálculo de doses
 // ============================================================
 
-export type DoseUnit = 'mg' | 'mcg' | 'g' | 'mL' | 'UI' | 'mg/kg' | 'mcg/kg' | 'mg/m²' | 'UI/kg' | 'gotas';
+export type DoseUnit = 'mg' | 'mcg' | 'g' | 'mL' | 'UI' | 'mg/kg' | 'mcg/kg' | 'mg/m²' | 'UI/kg' | 'gotas' | 'mg/dia' | 'mg/kg/dia';
 export type Via = 'VO' | 'IV' | 'IM' | 'SC' | 'Inalatório' | 'Tópico' | 'Retal' | 'Sublingual';
 
 export type DrugCategory =
@@ -1059,6 +1059,907 @@ export const PHARMA_DB: QuickDrug[] = [
     marcas: [
       { nome: 'Novalgina', laboratorio: 'Sanofi', concentracoes: ['500 mg', '500 mg/mL gotas'], formas: ['Comprimido', 'Gotas'] },
       { nome: 'Dipirona Eurofarma', laboratorio: 'Eurofarma', concentracoes: ['500 mg', '500 mg/mL'], formas: ['Comprimido', 'Gotas', 'Solução injetável'], lab_id: 'eurofarma' },
+    ],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // DIABETES — iSGLT2 / GLP-1 / Sulfonilureia 3ª Geração
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'dapagliflozina',
+    molecula: 'Dapagliflozina',
+    nome_generico: 'Dapagliflozina',
+    sinonimos: ['glif', 'dapa', 'sglt2', 'forxiga', 'isglt2', 'glifozina'],
+    categoria: 'antidiabético',
+    classe: 'iSGLT2',
+    indicacoes_principais: ['DM2', 'IC-FEr (NYHA II-IV)', 'DRC com proteinúria'],
+    dose_adulto: {
+      habitual: '10', max: '10', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia'],
+      instrucoes: 'Independente de refeições. Não iniciar em TFG < 25 mL/min (DM2).',
+    },
+    ajuste_renal: {
+      normal: '10 mg/dia', tfg_60_30: '10 mg/dia (efeito glicêmico reduzido)', tfg_30_15: 'Apenas para IC/DRC (não para DM2)', tfg_lt_15: 'Evitar', dialisavel: false,
+    },
+    contraindicacoes_rapidas: ['DM1', 'Cetoacidose diabética', 'TFG < 25 mL/min (indicação DM2)'],
+    interacoes_importantes: [
+      { com: 'Insulina', severidade: 'moderada', descricao: 'Risco de hipoglicemia — reduzir insulina ao iniciar' },
+      { com: 'Diuréticos', severidade: 'leve', descricao: 'Depleção de volume — monitorar PA e hidratação' },
+    ],
+    alertas_especiais: ['Suspender 3 dias antes de cirurgia (cetoacidose euglicêmica)', 'Infecções genitais fúngicas (frequente)', 'Poliúria'],
+    uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
+    marcas: [
+      { nome: 'Glif®', laboratorio: 'Eurofarma', concentracoes: ['10 mg'], formas: ['Comprimido revestido'], lab_id: 'eurofarma', produto_id: 'euro-glif', verificado: true },
+      { nome: 'Forxiga', laboratorio: 'AstraZeneca', concentracoes: ['10 mg'], formas: ['Comprimido'] },
+    ],
+  },
+
+  {
+    id: 'semaglutida',
+    molecula: 'Semaglutida',
+    nome_generico: 'Semaglutida',
+    sinonimos: ['extensior', 'ozempic', 'wegovy', 'glp1', 'ar-glp1', 'semaglutide'],
+    categoria: 'antidiabético',
+    classe: 'AR-GLP-1',
+    indicacoes_principais: ['DM2', 'Obesidade (IMC ≥ 30 ou ≥ 27 + comorbidade)', 'Prevenção CV'],
+    dose_adulto: {
+      habitual: '0.5', min: '0.25', max: '2', unidade: 'mg', via: 'SC',
+      frequencias: ['1x/semana'],
+      instrucoes: 'Titular: 0,25 mg/semana × 4 sem → 0,5 mg × 4 sem → 1 mg (DM2) ou até 2,4 mg (obesidade).',
+    },
+    ajuste_renal: {
+      normal: 'Titular normalmente', tfg_60_30: 'Sem ajuste (dados disponíveis)', tfg_30_15: 'Cautela (dados limitados)', tfg_lt_15: 'Não recomendado', dialisavel: false,
+    },
+    contraindicacoes_rapidas: ['NEM tipo 2', 'Histórico de carcinoma medular de tireoide (pessoal ou familiar)', 'Gravidez'],
+    interacoes_importantes: [
+      { com: 'Insulina', severidade: 'moderada', descricao: 'Hipoglicemia — reduzir insulina ao iniciar' },
+    ],
+    alertas_especiais: ['Retenção especial ANVISA', 'Pancreatite: suspender se dor abdominal intensa', 'Náuseas comuns no início (transitórias)'],
+    uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
+    marcas: [
+      { nome: 'Extensior®', laboratorio: 'Eurofarma', concentracoes: ['0,25 mg/dose', '0,5 mg/dose', '1 mg/dose'], formas: ['Solução injetável SC'], lab_id: 'eurofarma', produto_id: 'euro-extensior', verificado: true },
+      { nome: 'Ozempic', laboratorio: 'Novo Nordisk', concentracoes: ['0,25 mg/dose', '0,5 mg/dose', '1 mg/dose'], formas: ['Solução injetável SC'] },
+    ],
+  },
+
+  {
+    id: 'glimepirida',
+    molecula: 'Glimepirida',
+    nome_generico: 'Glimepirida',
+    sinonimos: ['betes', 'amaryl', 'sulfonilureia', 'glimepiride'],
+    categoria: 'antidiabético',
+    classe: 'Sulfonilureia',
+    indicacoes_principais: ['DM2'],
+    dose_adulto: {
+      habitual: '2', min: '1', max: '8', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia'],
+      instrucoes: 'Tomar ao café da manhã. Titular a cada 1–2 semanas.',
+    },
+    ajuste_renal: {
+      normal: '1–8 mg/dia', tfg_60_30: 'Cautela', tfg_30_15: 'Evitar', tfg_lt_15: 'Contraindicado', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Evitar', child_c: 'Contraindicado' },
+    contraindicacoes_rapidas: ['DM1', 'Cetoacidose', 'IR/IH grave', 'Hipersensibilidade a sulfonamidas'],
+    interacoes_importantes: [
+      { com: 'Fluconazol', severidade: 'grave', descricao: 'Potencializa hipoglicemia (inibição CYP2C9)' },
+      { com: 'Beta-bloqueadores', severidade: 'moderada', descricao: 'Mascara sintomas de hipoglicemia (exceto sudorese)' },
+    ],
+    alertas_especiais: ['Menor risco de hipoglicemia que glibenclamida', 'Preferida em idosos (vs glibenclamida)'],
+    uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
+    marcas: [
+      { nome: 'Betes®', laboratorio: 'Eurofarma', concentracoes: ['2 mg', '4 mg'], formas: ['Comprimido'], lab_id: 'eurofarma', produto_id: 'euro-betes', verificado: true },
+      { nome: 'Amaryl', laboratorio: 'Sanofi', concentracoes: ['1 mg', '2 mg', '4 mg'], formas: ['Comprimido'] },
+    ],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // SAÚDE MENTAL — Novos
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'duloxetina',
+    molecula: 'Duloxetina',
+    nome_generico: 'Cloridrato de Duloxetina',
+    sinonimos: ['dep', 'cymbalta', 'irsn', 'duloxetine'],
+    categoria: 'psiquiatria',
+    classe: 'IRSN',
+    indicacoes_principais: ['Transtorno Depressivo Maior', 'TAG', 'Neuropatia diabética dolorosa', 'Fibromialgia', 'Dor musculoesquelética crônica'],
+    dose_adulto: {
+      habitual: '60', min: '30', max: '120', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia'],
+      instrucoes: 'Não abrir cápsula. Iniciar com 30 mg/dia por 1 semana.',
+    },
+    ajuste_renal: {
+      normal: '60 mg/dia', tfg_60_30: 'Cautela', tfg_30_15: 'Evitar', tfg_lt_15: 'Contraindicado', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Evitar', child_c: 'Contraindicado' },
+    contraindicacoes_rapidas: ['IMAOs (washout 14 dias)', 'IH grave', 'ClCr < 30 mL/min', 'HAS não controlada'],
+    interacoes_importantes: [
+      { com: 'IMAOs', severidade: 'contraindicado', descricao: 'Síndrome serotoninérgica grave' },
+      { com: 'Paroxetina/Fluoxetina', severidade: 'moderada', descricao: 'Inibidores CYP2D6 — aumentam nível de duloxetina' },
+      { com: 'AINE/Aspirina', severidade: 'moderada', descricao: 'Sangramento aumentado' },
+    ],
+    alertas_especiais: ['Aumenta PA — monitorar', 'Síndrome de descontinuação (não suspender abruptamente)', 'Ideação suicida (< 25 anos — monitorar primeiras semanas)'],
+    uso_gestante: 'avaliar', uso_lactante: 'risco',
+    marcas: [
+      { nome: 'Dep®', laboratorio: 'Eurofarma', concentracoes: ['30 mg', '60 mg'], formas: ['Cápsula lib. retardada'], lab_id: 'eurofarma', produto_id: 'euro-dep', verificado: true },
+      { nome: 'Cymbalta', laboratorio: 'Lilly', concentracoes: ['30 mg', '60 mg'], formas: ['Cápsula'] },
+    ],
+  },
+
+  {
+    id: 'vortioxetina',
+    molecula: 'Vortioxetina',
+    nome_generico: 'Bromidrato de Vortioxetina',
+    sinonimos: ['vod', 'brintellix', 'vortioxetine', 'multimodal', 'antidepressivo multimodal'],
+    categoria: 'psiquiatria',
+    classe: 'Antidepressivo Multimodal',
+    indicacoes_principais: ['Transtorno Depressivo Maior (TDM)'],
+    dose_adulto: {
+      habitual: '10', min: '5', max: '20', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia'],
+      instrucoes: 'Qualquer horário, independente de refeição. Titulação conforme tolerância.',
+    },
+    ajuste_renal: {
+      normal: '5–20 mg/dia', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste (dados limitados)', tfg_lt_15: 'Cautela', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Evitar (dados insuficientes)' },
+    contraindicacoes_rapidas: ['IMAOs (washout 14 dias)', 'Menores de 18 anos', 'Hipersensibilidade'],
+    interacoes_importantes: [
+      { com: 'IMAOs', severidade: 'contraindicado', descricao: 'Síndrome serotoninérgica grave' },
+      { com: 'Paroxetina/Fluoxetina', severidade: 'moderada', descricao: 'Inibidores CYP2D6 — aumentam nível; reduzir vortioxetina 50%' },
+      { com: 'Rifampicina', severidade: 'moderada', descricao: 'Indutor CYP — aumentar vortioxetina até 3×' },
+    ],
+    alertas_especiais: ['Retenção especial ANVISA', 'Mecanismo único: inibe recaptação 5-HT + modula receptores 5-HT1A/1B/3/7 e 5-HT1D', 'Melhora da função cognitiva (memória, concentração)'],
+    uso_gestante: 'avaliar', uso_lactante: 'risco',
+    marcas: [
+      { nome: 'Vod®', laboratorio: 'Eurofarma', concentracoes: ['5 mg', '10 mg', '15 mg', '20 mg'], formas: ['Comprimido'], lab_id: 'eurofarma', produto_id: 'euro-vod', verificado: true },
+      { nome: 'Brintellix', laboratorio: 'Lundbeck/Takeda', concentracoes: ['5 mg', '10 mg', '15 mg', '20 mg'], formas: ['Comprimido'] },
+    ],
+  },
+
+  {
+    id: 'risperidona',
+    molecula: 'Risperidona',
+    nome_generico: 'Risperidona',
+    sinonimos: ['riss', 'risperdal', 'antipsicótico', 'atípico', 'risperidone'],
+    categoria: 'psiquiatria',
+    classe: 'Antipsicótico Atípico',
+    indicacoes_principais: ['Esquizofrenia', 'Transtorno Bipolar (mania aguda)', 'TEA (irritabilidade)', 'Depressão com psicose (adjuvante)'],
+    dose_adulto: {
+      habitual: '4', min: '1', max: '16', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia', '2x/dia'],
+      instrucoes: 'Iniciar com 2 mg/dia; titular 1–2 mg a cada 2 semanas. Dose usual esquizofrenia: 4–8 mg/dia.',
+    },
+    ajuste_renal: {
+      normal: '4–8 mg/dia', tfg_60_30: 'Iniciar 0,5 mg 2x/dia', tfg_30_15: 'Iniciar 0,5 mg 2x/dia; titular lentamente', tfg_lt_15: 'Evitar', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela; dose inicial 0,5 mg 2x/dia', child_c: 'Evitar' },
+    contraindicacoes_rapidas: ['Hipersensibilidade', 'Demência com psicose (Black Box — AVC/morte)'],
+    interacoes_importantes: [
+      { com: 'Paroxetina/Fluoxetina', severidade: 'moderada', descricao: 'CYP2D6 — aumentam nível de risperidona' },
+      { com: 'Carbamazepina', severidade: 'moderada', descricao: 'Reduz nível de risperidona (indução CYP3A4)' },
+      { com: 'QT-prolongadores', severidade: 'moderada', descricao: 'Risco de prolongamento QT' },
+    ],
+    alertas_especiais: ['Retenção especial ANVISA', 'Síndrome metabólica: monitorar peso, glicose, lipídios', 'Hiperprolactinemia (amenorreia, galactorreia, disfunção sexual)', '⚠ BEERS: alto risco em idosos com demência'],
+    uso_gestante: 'avaliar', uso_lactante: 'risco',
+    marcas: [
+      { nome: 'Riss®', laboratorio: 'Eurofarma', concentracoes: ['1 mg', '2 mg', '3 mg'], formas: ['Comprimido'], lab_id: 'eurofarma', produto_id: 'euro-riss', verificado: true },
+      { nome: 'Risperdal', laboratorio: 'Janssen', concentracoes: ['1 mg', '2 mg', '3 mg'], formas: ['Comprimido'] },
+      { nome: 'Risperidona EMS', laboratorio: 'EMS', concentracoes: ['1 mg', '2 mg', '3 mg'], formas: ['Comprimido'] },
+    ],
+  },
+
+  {
+    id: 'zolpidem',
+    molecula: 'Zolpidem',
+    nome_generico: 'Hemitartarato de Zolpidem',
+    sinonimos: ['turno', 'stilnox', 'zolpidem', 'hipnotico', 'insonia'],
+    categoria: 'psiquiatria',
+    classe: 'Hipnótico Não-Benzodiazepínico',
+    indicacoes_principais: ['Insônia (curto prazo — máximo 4 semanas)'],
+    dose_adulto: {
+      habitual: '10', min: '5', max: '10', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/noite'],
+      instrucoes: 'Imediatamente antes de deitar. Mulheres e idosos: 5 mg. Retenção especial ANVISA.',
+    },
+    ajuste_renal: {
+      normal: '10 mg (homens); 5 mg (mulheres/idosos)', tfg_60_30: 'Sem ajuste formal; monitorar', tfg_30_15: 'Cautela', tfg_lt_15: 'Evitar', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: '5 mg', child_b: '5 mg', child_c: 'Contraindicado' },
+    contraindicacoes_rapidas: ['Apneia do sono grave não tratada', 'Miastenia gravis', 'IH grave', 'Hipersensibilidade'],
+    interacoes_importantes: [
+      { com: 'Álcool', severidade: 'grave', descricao: 'Depressão grave do SNC — CONTRAINDICADO combinar' },
+      { com: 'Cetoconazol', severidade: 'moderada', descricao: 'CYP3A4 — aumenta nível de zolpidem' },
+    ],
+    alertas_especiais: ['Retenção especial ANVISA', 'Comportamentos complexos do sono (sonambulismo, comer dormindo, dirigir dormindo)', '⚠ BEERS: risco em idosos (quedas, confusão)', 'Uso máximo: 4 semanas'],
+    uso_gestante: 'avaliar', uso_lactante: 'risco',
+    marcas: [
+      { nome: 'Turno®', laboratorio: 'Eurofarma', concentracoes: ['10 mg'], formas: ['Comprimido revestido'], lab_id: 'eurofarma', produto_id: 'euro-turno', verificado: true },
+      { nome: 'Turno SL®', laboratorio: 'Eurofarma', concentracoes: ['5 mg'], formas: ['Comprimido sublingual'], lab_id: 'eurofarma', produto_id: 'euro-turno-sl', verificado: true },
+      { nome: 'Turno XR®', laboratorio: 'Eurofarma', concentracoes: ['6,25 mg', '12,5 mg'], formas: ['Comprimido lib. prolongada'], lab_id: 'eurofarma', produto_id: 'euro-turno-xr', verificado: true },
+      { nome: 'Stilnox', laboratorio: 'Sanofi', concentracoes: ['10 mg'], formas: ['Comprimido'] },
+    ],
+  },
+
+  {
+    id: 'eszopiclona',
+    molecula: 'Eszopiclona',
+    nome_generico: 'Eszopiclona',
+    sinonimos: ['prysma', 'lunesta', 'eszopiclone', 'hipnotico', 'insonia'],
+    categoria: 'psiquiatria',
+    classe: 'Hipnótico Não-Benzodiazepínico',
+    indicacoes_principais: ['Insônia (iniciação e manutenção do sono)'],
+    dose_adulto: {
+      habitual: '2', min: '1', max: '3', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/noite'],
+      instrucoes: 'Imediatamente antes de deitar. CI: > 65 anos e < 18 anos. Retenção especial ANVISA.',
+    },
+    ajuste_renal: {
+      normal: '1–3 mg', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Cautela', tfg_lt_15: 'Cautela', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: '1 mg', child_b: '1 mg', child_c: 'Contraindicado' },
+    contraindicacoes_rapidas: ['> 65 anos', '< 18 anos', 'IH grave', 'Apneia do sono grave', 'Miastenia gravis'],
+    interacoes_importantes: [
+      { com: 'Álcool', severidade: 'grave', descricao: 'Depressão grave do SNC' },
+      { com: 'Cetoconazol', severidade: 'moderada', descricao: 'Inibidor CYP3A4 — aumenta eszopiclona' },
+    ],
+    alertas_especiais: ['Retenção especial ANVISA', 'Paladar metálico amargo (característico)', 'Comportamentos complexos do sono', 'Tolerância em uso prolongado (> 3–6 meses)'],
+    uso_gestante: 'avaliar', uso_lactante: 'risco',
+    marcas: [
+      { nome: 'Prysma®', laboratorio: 'Eurofarma', concentracoes: ['1 mg', '2 mg', '3 mg'], formas: ['Comprimido'], lab_id: 'eurofarma', produto_id: 'euro-prysma', verificado: true },
+    ],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // ANALGÉSICOS / ANTI-INFLAMATÓRIOS — Novos
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'celecoxibe',
+    molecula: 'Celecoxibe',
+    nome_generico: 'Celecoxibe',
+    sinonimos: ['coques', 'celebra', 'cox2', 'coxibe', 'celecoxib'],
+    categoria: 'antiinflamatorio',
+    classe: 'AINE — Coxibe (seletivo COX-2)',
+    indicacoes_principais: ['Artrite Reumatoide', 'Osteoartrite', 'Espondilite anquilosante', 'Dor aguda'],
+    dose_adulto: {
+      habitual: '200', min: '100', max: '400', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia', '2x/dia'],
+    },
+    ajuste_renal: {
+      normal: '200–400 mg/dia', tfg_60_30: 'Cautela', tfg_30_15: 'Evitar', tfg_lt_15: 'Contraindicado', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Reduzir 50%', child_c: 'Contraindicado' },
+    contraindicacoes_rapidas: ['Alergia a sulfonamidas', 'Pós-CRM imediato', 'IR/IH grave', 'Gestação 3º trimestre'],
+    interacoes_importantes: [
+      { com: 'Varfarina', severidade: 'moderada', descricao: 'Aumenta INR — monitorar' },
+      { com: 'Fluconazol', severidade: 'moderada', descricao: 'Inibidor CYP2C9 — aumenta celecoxibe significativamente' },
+    ],
+    alertas_especiais: ['Menor risco GI que AINEs não-seletivos', 'Mesmo risco CV que AINEs (usar com cautela em coronariopatas)', 'Cautela: alergia a sulfonamidas'],
+    uso_gestante: 'contraindicado', uso_lactante: 'risco',
+    marcas: [
+      { nome: 'Coques®', laboratorio: 'Eurofarma', concentracoes: ['200 mg'], formas: ['Cápsula'], lab_id: 'eurofarma', produto_id: 'euro-coques', verificado: true },
+      { nome: 'Celebra', laboratorio: 'Pfizer', concentracoes: ['100 mg', '200 mg'], formas: ['Cápsula'] },
+    ],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // NEUROLÓGICO — Novos
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'topiramato',
+    molecula: 'Topiramato',
+    nome_generico: 'Topiramato',
+    sinonimos: ['amato', 'topamax', 'anticonvulsivante', 'epilepsia', 'enxaqueca'],
+    categoria: 'neurologico',
+    classe: 'Anticonvulsivante',
+    indicacoes_principais: ['Epilepsia focal', 'Epilepsia generalizada', 'Profilaxia de enxaqueca'],
+    dose_adulto: {
+      habitual: '100', min: '25', max: '400', unidade: 'mg', via: 'VO',
+      frequencias: ['2x/dia'],
+      instrucoes: 'Titular lentamente: 25–50 mg/semana. Pode ser tomado com ou sem alimentos.',
+    },
+    ajuste_renal: {
+      normal: '100–400 mg/dia', tfg_60_30: 'Reduzir 50%', tfg_30_15: 'Reduzir 50%', tfg_lt_15: 'Evitar', dialisavel: true,
+    },
+    ajuste_hepatico: { child_a: 'Sem ajuste formal', child_b: 'Cautela', child_c: 'Cautela extrema' },
+    contraindicacoes_rapidas: ['Gravidez (Cat. D — fenda palatina)', 'Hipersensibilidade', 'Litíase renal recorrente com hipercalciúria'],
+    interacoes_importantes: [
+      { com: 'Valproato', severidade: 'moderada', descricao: 'Hiperamonemia — monitorar amônia sérica' },
+      { com: 'Anticoncepcionais orais', severidade: 'moderada', descricao: 'Reduz eficácia — usar método adicional' },
+      { com: 'Carbamazepina', severidade: 'moderada', descricao: 'Reduz nível de topiramato (indução CYP3A4)' },
+    ],
+    alertas_especiais: ['Cat. D — CONTRAINDICADO na gravidez (fenda palatina, labioschisis)', 'Hipertermia/hipoidrose (cautela em crianças e no verão)', 'Glaucoma agudo de ângulo fechado (descontinuar imediatamente)', 'Nefrolitíase — hidratação', 'Perda de peso (pode ser desejada ou indesejada)'],
+    uso_gestante: 'contraindicado', uso_lactante: 'risco',
+    marcas: [
+      { nome: 'Amato®', laboratorio: 'Eurofarma', concentracoes: ['25 mg', '50 mg', '100 mg'], formas: ['Comprimido'], lab_id: 'eurofarma', produto_id: 'euro-amato', verificado: true },
+      { nome: 'Topamax', laboratorio: 'Janssen', concentracoes: ['25 mg', '50 mg', '100 mg', '200 mg'], formas: ['Comprimido'] },
+    ],
+  },
+
+  {
+    id: 'pramipexol',
+    molecula: 'Pramipexol',
+    nome_generico: 'Dicloridrato de Pramipexol',
+    sinonimos: ['pisa', 'mirapex', 'pramipexole', 'parkinson', 'spi', 'agonista dopaminergico'],
+    categoria: 'neurologico',
+    classe: 'Agonista Dopaminérgico D2/D3',
+    indicacoes_principais: ['Doença de Parkinson', 'Síndrome das Pernas Inquietas (SPI)'],
+    dose_adulto: {
+      habitual: '1.5', min: '0.375', max: '4.5', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia'],
+      instrucoes: 'LP: 1x/dia qualquer horário. Titular: aumentar 0,75 mg/semana a cada 5–7 dias.',
+    },
+    ajuste_renal: {
+      normal: '0,375–4,5 mg/dia', tfg_60_30: 'Titular mais lentamente', tfg_30_15: 'Máx 2,25 mg/dia', tfg_lt_15: 'Contraindicado', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Cautela' },
+    contraindicacoes_rapidas: ['Hipersensibilidade', 'ClCr < 20 mL/min'],
+    interacoes_importantes: [
+      { com: 'Metoclopramida', severidade: 'grave', descricao: 'Antagonismo dopaminérgico — reduz efeito; usar domperidona se necessário' },
+      { com: 'Levodopa', severidade: 'leve', descricao: 'Efeito aditivo — possível potencialização; monitorar discinesias' },
+    ],
+    alertas_especiais: ['Retenção especial ANVISA', 'Controle de impulsos (jogo, hipersexualidade, compulsão): alertar paciente e familiar', 'Sonolência súbita (não dirigir até confirmar tolerância)', 'Augmentation na SPI (aumentar necessidade de dose com tempo)'],
+    uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
+    marcas: [
+      { nome: 'Pisa®', laboratorio: 'Eurofarma', concentracoes: ['0,375 mg', '0,75 mg', '1,5 mg'], formas: ['Comprimido lib. prolongada'], lab_id: 'eurofarma', produto_id: 'euro-pisa', verificado: true },
+      { nome: 'Mirapex ER', laboratorio: 'Boehringer', concentracoes: ['0,375 mg', '0,75 mg', '1,5 mg', '3 mg'], formas: ['Comprimido lib. prolongada'] },
+    ],
+  },
+
+  {
+    id: 'betaistina',
+    molecula: 'Betaistina',
+    nome_generico: 'Dicloridrato de Betaistina',
+    sinonimos: ['betina', 'serc', 'betahistine', 'vertigem', 'meniere'],
+    categoria: 'neurologico',
+    classe: 'Antivertiginoso — Análogo da Histamina',
+    indicacoes_principais: ['Doença de Ménière', 'Vertigem vestibular'],
+    dose_adulto: {
+      habitual: '24', min: '16', max: '48', unidade: 'mg', via: 'VO',
+      frequencias: ['2x/dia', '3x/dia'],
+      instrucoes: 'Tomar às refeições. Efeito máximo em 2–4 semanas.',
+    },
+    ajuste_renal: {
+      normal: '16–48 mg/dia', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Cautela', tfg_lt_15: 'Cautela', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Evitar' },
+    contraindicacoes_rapidas: ['Feocromocitoma', 'Hipersensibilidade'],
+    interacoes_importantes: [],
+    alertas_especiais: ['Asma: cautela (pode potencializar broncoespasmo)', 'Úlcera péptica ativa: cautela'],
+    uso_gestante: 'avaliar', uso_lactante: 'avaliar',
+    marcas: [
+      { nome: 'Betina®', laboratorio: 'Eurofarma', concentracoes: ['16 mg', '24 mg'], formas: ['Comprimido'], lab_id: 'eurofarma', produto_id: 'euro-betina', verificado: true },
+      { nome: 'Serc', laboratorio: 'Abbott', concentracoes: ['8 mg', '16 mg', '24 mg'], formas: ['Comprimido'] },
+    ],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // CARDIOVASCULAR — Novos
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'enoxaparina',
+    molecula: 'Enoxaparina',
+    nome_generico: 'Enoxaparina Sódica',
+    sinonimos: ['versa', 'clexane', 'hbpm', 'anticoagulante', 'enoxaparin', 'heparina baixo peso'],
+    categoria: 'cardiovascular',
+    classe: 'Anticoagulante — HBPM',
+    indicacoes_principais: ['Profilaxia de TVP (cirurgia, internação)', 'Tratamento de TVP/TEP', 'SCA (UA/IAMSST)', 'Anticoagulação na gestação'],
+    dose_adulto: {
+      habitual: '40', min: '20', max: '80', unidade: 'mg', via: 'SC',
+      frequencias: ['1x/dia (profilaxia)', '12/12h (tratamento)'],
+      instrucoes: 'Profilaxia: 40 mg SC 1x/dia. Tratamento: 1 mg/kg SC 12/12h.',
+    },
+    ajuste_renal: {
+      normal: '40 mg/dia (profilaxia) ou 1 mg/kg 12/12h (tratamento)', tfg_60_30: 'Monitorar anti-Xa', tfg_30_15: 'Reduzir: profilaxia 20 mg/dia; tratamento 1 mg/kg 1x/dia', tfg_lt_15: 'Evitar ou usar apenas com monitoração anti-Xa', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Cautela', child_c: 'Evitar (trombocitopenia, sangramento)' },
+    contraindicacoes_rapidas: ['Sangramento ativo maior', 'HIT (trombocitopenia induzida por heparina)', 'Hipersensibilidade'],
+    interacoes_importantes: [
+      { com: 'Varfarina', severidade: 'moderada', descricao: 'Sangramento aditivo — monitorar durante transição' },
+      { com: 'AINE/Aspirina', severidade: 'moderada', descricao: 'Risco hemorrágico aumentado' },
+    ],
+    alertas_especiais: ['Monitorar plaquetas (HIT entre 5–10 dias)', 'Preferida na gravidez (não atravessa placenta)', 'Anti-Xa em obesos, IR, gestantes'],
+    uso_gestante: 'seguro', uso_lactante: 'seguro',
+    marcas: [
+      { nome: 'Versa®', laboratorio: 'Eurofarma', concentracoes: ['20 mg', '40 mg', '60 mg', '80 mg'], formas: ['Solução injetável SC'], lab_id: 'eurofarma', produto_id: 'euro-versa', verificado: true },
+      { nome: 'Clexane', laboratorio: 'Sanofi', concentracoes: ['20 mg', '40 mg', '60 mg', '80 mg', '100 mg'], formas: ['Solução injetável'] },
+    ],
+  },
+
+  {
+    id: 'aas',
+    molecula: 'Ácido Acetilsalicílico',
+    nome_generico: 'Ácido Acetilsalicílico (AAS)',
+    sinonimos: ['saliprevi', 'aspirina', 'aas', 'aspirin', 'antiagregante'],
+    categoria: 'cardiovascular',
+    classe: 'Antiagregante Plaquetário — Inibidor COX Irreversível',
+    indicacoes_principais: ['Prevenção CV secundária (IAM, AVC, Angina)', 'SCA', 'Prevenção primária em alto risco (selecionado)'],
+    dose_adulto: {
+      habitual: '100', min: '75', max: '325', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia'],
+      instrucoes: 'Dose baixa (100 mg) para antiagregação. Preferir formulação entérica para proteção gástrica.',
+    },
+    ajuste_renal: {
+      normal: '100 mg/dia', tfg_60_30: 'Sem ajuste (cautela — maior risco sangramento)', tfg_30_15: 'Evitar doses analgésicas', tfg_lt_15: 'Evitar doses analgésicas', dialisavel: true,
+    },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Evitar (sangramento GI)', child_c: 'Contraindicado' },
+    contraindicacoes_rapidas: ['Sangramento ativo', 'Úlcera péptica ativa', 'Alergia a AINEs', '< 16 anos (Síndrome de Reye)', 'Gestação 3º trimestre'],
+    interacoes_importantes: [
+      { com: 'Ibuprofeno', severidade: 'moderada', descricao: 'Ibuprofeno bloqueia sítio da COX — tomar AAS 2h antes de ibuprofeno' },
+      { com: 'Varfarina', severidade: 'grave', descricao: 'Sangramento aumentado — monitorar INR e sinais de sangramento' },
+      { com: 'Clopidogrel', severidade: 'moderada', descricao: 'Dupla antiagregação: indicada em SCA/stent; risco GI — associar IBP' },
+    ],
+    alertas_especiais: ['Resistência em ~25% dos pacientes', 'Suspender 7 dias antes de cirurgia eletiva (exceto CV)', 'Associar IBP em risco GI alto (idosos, úlcera prévia, dupla antiagregação)'],
+    uso_gestante: 'risco', uso_lactante: 'risco',
+    marcas: [
+      { nome: 'Saliprevi®', laboratorio: 'Eurofarma', concentracoes: ['100 mg'], formas: ['Comprimido gastrorresistente'], lab_id: 'eurofarma', produto_id: 'euro-saliprevi', verificado: true },
+      { nome: 'AAS Bayer', laboratorio: 'Bayer', concentracoes: ['100 mg'], formas: ['Comprimido gastrorresistente'] },
+    ],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // INFECTOLOGIA — Novos
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'valaciclovir',
+    molecula: 'Valaciclovir',
+    nome_generico: 'Cloridrato de Valaciclovir',
+    sinonimos: ['vilaxy', 'valtrex', 'valacyclovir', 'herpes', 'zoster', 'hsv'],
+    categoria: 'antibiotico',
+    classe: 'Antiviral — Pró-fármaco do Aciclovir',
+    indicacoes_principais: ['Herpes zoster', 'HSV genital (1º episódio e recorrências)', 'Herpes labial', 'Supressão de HSV recorrente'],
+    dose_adulto: {
+      habitual: '1000', min: '500', max: '3000', unidade: 'mg', via: 'VO',
+      frequencias: ['2x/dia', '3x/dia'],
+      instrucoes: 'Zoster: 1 g 3x/dia × 7 dias. HSV genital 1º ep.: 1 g 2x/dia × 10 dias. Supressão: 500 mg 1x/dia.',
+    },
+    ajuste_renal: {
+      normal: '1 g 3x/dia (zoster)', tfg_60_30: '1 g 12/12h', tfg_30_15: '1 g 1x/dia', tfg_lt_15: '500 mg 1x/dia', dialisavel: true,
+    },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Dados insuficientes' },
+    contraindicacoes_rapidas: ['Hipersensibilidade a valaciclovir/aciclovir', '< 12 anos'],
+    interacoes_importantes: [
+      { com: 'Probenecida/Cimetidina', severidade: 'leve', descricao: 'Redução da eliminação renal — aumentam nível' },
+    ],
+    alertas_especiais: ['Ajuste obrigatório em IR (encefalopatia em doses altas)', 'Micrangiopatia trombótica em imunossuprimidos (TTP/SHU — raro)', 'Hidratação adequada'],
+    uso_gestante: 'avaliar', uso_lactante: 'avaliar',
+    marcas: [
+      { nome: 'Vilaxy®', laboratorio: 'Eurofarma', concentracoes: ['500 mg'], formas: ['Comprimido revestido'], lab_id: 'eurofarma', produto_id: 'euro-vilaxy', verificado: true },
+      { nome: 'Valtrex', laboratorio: 'GSK', concentracoes: ['500 mg'], formas: ['Comprimido'] },
+    ],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // RESPIRATÓRIO — Anti-H1 Novos
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'fexofenadina',
+    molecula: 'Fexofenadina',
+    nome_generico: 'Cloridrato de Fexofenadina',
+    sinonimos: ['altiva', 'allegra', 'fexofenadine', 'anti-h1', 'anti-histaminico'],
+    categoria: 'respiratory',
+    classe: 'Anti-histamínico H1 de 2ª Geração',
+    indicacoes_principais: ['Rinite alérgica sazonal e perene', 'Urticária crônica idiopática'],
+    dose_adulto: {
+      habitual: '180', min: '60', max: '180', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia', '2x/dia (120 mg)'],
+      instrucoes: 'NÃO tomar com suco de laranja, toranja ou maçã (reduz absorção em 36%). Tomar com água.',
+    },
+    ajuste_renal: {
+      normal: '180 mg/dia', tfg_60_30: '60 mg 1x/dia', tfg_30_15: '60 mg 1x/dia', tfg_lt_15: '60 mg 1x/dia', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Cautela' },
+    contraindicacoes_rapidas: ['Hipersensibilidade à fexofenadina'],
+    interacoes_importantes: [
+      { com: 'Suco cítrico/maçã', severidade: 'moderada', descricao: 'Reduz absorção em 36% — evitar; tomar com água' },
+    ],
+    alertas_especiais: ['Mínima sedação — seguro para dirigir', 'Sem efeitos anticolinérgicos'],
+    uso_gestante: 'avaliar', uso_lactante: 'avaliar',
+    marcas: [
+      { nome: 'Altiva®', laboratorio: 'Eurofarma', concentracoes: ['120 mg', '180 mg'], formas: ['Comprimido revestido'], lab_id: 'eurofarma', produto_id: 'euro-altiva', verificado: true },
+      { nome: 'Allegra', laboratorio: 'Sanofi', concentracoes: ['120 mg', '180 mg'], formas: ['Comprimido'] },
+    ],
+  },
+
+  {
+    id: 'ebastina',
+    molecula: 'Ebastina',
+    nome_generico: 'Ebastina',
+    sinonimos: ['ebastel', 'kestine', 'anti-h1', 'anti-histaminico'],
+    categoria: 'respiratory',
+    classe: 'Anti-histamínico H1 de 2ª Geração',
+    indicacoes_principais: ['Rinite alérgica sazonal e perene', 'Urticária crônica'],
+    dose_adulto: {
+      habitual: '10', min: '10', max: '20', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia'],
+    },
+    ajuste_renal: {
+      normal: '10 mg/dia', tfg_60_30: 'Sem ajuste formal', tfg_30_15: 'Cautela', tfg_lt_15: 'Evitar', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Evitar', child_c: 'Contraindicado' },
+    contraindicacoes_rapidas: ['IH grave', 'QT longo congênito', 'Hipersensibilidade'],
+    interacoes_importantes: [
+      { com: 'Cetoconazol/Eritromicina', severidade: 'moderada', descricao: 'Inibidores CYP3A4 — aumentam nível de ebastina; risco QT' },
+    ],
+    alertas_especiais: ['Risco de prolongamento QT (menor que terfenadina/astemizol — já retirados)', 'Metabolismo exclusivamente hepático'],
+    uso_gestante: 'avaliar', uso_lactante: 'avaliar',
+    marcas: [
+      { nome: 'Ebastel®', laboratorio: 'Eurofarma', concentracoes: ['10 mg', '1 mg/mL xarope'], formas: ['Comprimido', 'Xarope'], lab_id: 'eurofarma', produto_id: 'euro-ebastel', verificado: true },
+    ],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // PSIQUIATRIA/ALERGIA — HIDROXIZINA
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'hidroxizina',
+    molecula: 'Hidroxizina',
+    nome_generico: 'Cloridrato de Hidroxizina',
+    sinonimos: ['pergo', 'hidroxizina', 'antihistaminico', 'ansiolítico', 'anti-histaminico', 'prurido', 'urticaria'],
+    categoria: 'psiquiatria',
+    classe: 'Anti-histamínico H1 de 1ª geração — Ansiolítico',
+    indicacoes_principais: ['Ansiedade (uso pontual)', 'Prurido alérgico', 'Urticária', 'Pré-medicação anestésica'],
+    dose_adulto: {
+      habitual: '25', min: '10', max: '100', unidade: 'mg', via: 'VO',
+      frequencias: ['2x/dia', '3x/dia', '4x/dia'],
+      instrucoes: 'Ansiedade: 12,5–25 mg 3–4x/dia. Prurido/urticária: 25 mg 3–4x/dia.',
+    },
+    ajuste_renal: {
+      normal: 'Dose habitual', tfg_60_30: 'Reduzir 50%', tfg_30_15: 'Reduzir 50%', tfg_lt_15: 'Evitar', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Reduzir intervalo', child_b: 'Reduzir dose', child_c: 'Evitar' },
+    contraindicacoes_rapidas: ['QT prolongado', 'Hipersensibilidade à cetrizina/piperazinas', 'Gestação (Cat. C)'],
+    interacoes_importantes: [
+      { com: 'Depressores do SNC/álcool', severidade: 'grave', descricao: 'Sedação aditiva — risco de depressão respiratória' },
+      { com: 'QT-prolongadores', severidade: 'grave', descricao: 'Risco de prolongamento QT sinérgico' },
+    ],
+    alertas_especiais: ['⚠ Idosos: risco de sedação excessiva, confusão, quedas (critérios Beers)', 'Efeito anticolinérgico: retenção urinária, boca seca', 'Solução oral 2 mg/mL — útil quando comprimido não é possível'],
+    uso_gestante: 'risco', uso_lactante: 'risco',
+    marcas: [
+      { nome: 'Pergo®', laboratorio: 'Eurofarma', concentracoes: ['2 mg/mL solução oral'], formas: ['Solução Oral'], lab_id: 'eurofarma', produto_id: 'euro-pergo', verificado: true },
+    ],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // DOR/ANTI-INFLAMATÓRIO — ACECLOFENACO
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'aceclofenaco',
+    molecula: 'Aceclofenaco',
+    nome_generico: 'Aceclofenaco',
+    sinonimos: ['proflam', 'aceclofenaco', 'aine', 'anti-inflamatorio', 'artrite', 'dor musculoesquelética'],
+    categoria: 'antiinflamatorio',
+    classe: 'AINE — Inibidor COX preferencial (COX-2 > COX-1)',
+    indicacoes_principais: ['Osteoartrite', 'Artrite Reumatoide', 'Espondilite Anquilosante', 'Lombalgias', 'Dor musculoesquelética aguda'],
+    dose_adulto: {
+      habitual: '100', min: '100', max: '200', unidade: 'mg', via: 'VO',
+      frequencias: ['2x/dia'],
+      instrucoes: 'Tomar com alimentos. 100 mg 2x/dia (manhã e noite).',
+    },
+    ajuste_renal: {
+      normal: '100 mg 2x/dia', tfg_60_30: 'Cautela', tfg_30_15: 'Evitar', tfg_lt_15: 'Contraindicado', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Evitar', child_c: 'Contraindicado' },
+    contraindicacoes_rapidas: ['Úlcera péptica ativa', 'IRC grave', 'IC grave', 'Alergia a AINEs', 'Gestação 3º trimestre'],
+    interacoes_importantes: [
+      { com: 'Anticoagulantes (varfarina)', severidade: 'grave', descricao: 'Aumenta risco de sangramento — monitorar INR' },
+      { com: 'Lítio', severidade: 'moderada', descricao: 'Aumenta nível sérico de lítio' },
+      { com: 'Anti-hipertensivos', severidade: 'moderada', descricao: 'Reduz efeito anti-hipertensivo' },
+    ],
+    alertas_especiais: ['Perfil GI melhor que diclofenaco (COX-2 preferencial)', 'Disponível também como creme tópico (Proflam® creme)', 'Monitorar PA, função renal e hepática'],
+    uso_gestante: 'risco', uso_lactante: 'avaliar',
+    marcas: [
+      { nome: 'Proflam®', laboratorio: 'Eurofarma', concentracoes: ['100 mg', 'Creme tópico'], formas: ['Comprimido', 'Creme'], lab_id: 'eurofarma', produto_id: 'euro-proflam', verificado: true },
+    ],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // DOR — TRAMADOL
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'tramadol',
+    molecula: 'Tramadol',
+    nome_generico: 'Cloridrato de Tramadol',
+    sinonimos: ['gesico', 'tramadol', 'opioid', 'analgesico', 'dor moderada', 'dor intensa'],
+    categoria: 'analgesico',
+    classe: 'Opioide Fraco — Agonista µ parcial + Inibidor Recaptação Serotonina/Noradrenalina',
+    indicacoes_principais: ['Dor moderada a intensa', 'Dor pós-operatória', 'Dor oncológica (escada OMS 2ª degrau)', 'Dor neuropática'],
+    dose_adulto: {
+      habitual: '50', min: '50', max: '400', unidade: 'mg/dia', via: 'VO',
+      frequencias: ['4x/dia', '6x/dia'],
+      instrucoes: '50–100 mg a cada 4–6 horas. Máximo: 400 mg/dia. LP (Gésico® 100 mg): 1 cp 12/12h.',
+    },
+    ajuste_renal: {
+      normal: '50 mg 4–6x/dia', tfg_60_30: 'Intervalo ≥ 12h', tfg_30_15: 'Evitar liberação prolongada', tfg_lt_15: 'Contraindicado', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: '50 mg a cada 12h', child_b: 'Evitar', child_c: 'Contraindicado' },
+    contraindicacoes_rapidas: ['Epilepsia não controlada', 'Uso com IMAOs (14 dias)', 'Depressão respiratória aguda', '< 12 anos'],
+    interacoes_importantes: [
+      { com: 'IMAOs/antidepressivos serotoninérgicos', severidade: 'grave', descricao: 'Síndrome serotoninérgica — risco de vida' },
+      { com: 'Benzodiazepínicos/depressores SNC', severidade: 'grave', descricao: 'Depressão respiratória aditiva' },
+      { com: 'Carbamazepina', severidade: 'moderada', descricao: 'Induz metabolismo — reduz analgesia' },
+    ],
+    alertas_especiais: ['⚠ Abaixar limiar convulsivo — cuidado em epilépticos', 'Síndrome de abstinência com retirada abrupta', 'Receita Especial Branca em 2 vias (lista C1)', 'Gésico Duo® = tramadol 37,5 mg + paracetamol 325 mg'],
+    uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
+    marcas: [
+      { nome: 'Gésico®', laboratorio: 'Eurofarma', concentracoes: ['50 mg', '100 mg LP'], formas: ['Comprimido', 'Comprimido LP'], lab_id: 'eurofarma', produto_id: 'euro-gesico', verificado: true },
+      { nome: 'Gésico Duo®', laboratorio: 'Eurofarma', concentracoes: ['37,5 mg + 325 mg'], formas: ['Comprimido'], lab_id: 'eurofarma', produto_id: 'euro-gesico-duo', verificado: true },
+    ],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // REUMATOLOGIA
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'hidroxicloroquina',
+    molecula: 'Hidroxicloroquina',
+    nome_generico: 'Sulfato de Hidroxicloroquina',
+    sinonimos: ['reuplaq', 'plaquinol', 'hidroxicloroquina', 'dmard', 'lupus', 'artrite'],
+    categoria: 'imunossupressor',
+    classe: 'DMARD Convencional — Antimalárico',
+    indicacoes_principais: ['Artrite Reumatoide (moderada)', 'Lúpus Eritematoso Sistêmico (LES)', 'Artrite Psoriásica'],
+    dose_adulto: {
+      habitual: '400', min: '200', max: '400', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia', '2x/dia'],
+      instrucoes: 'Dose máxima: 5 mg/kg de peso ideal. Tomar com alimento para reduzir dispepsia.',
+    },
+    ajuste_renal: {
+      normal: '400 mg/dia', tfg_60_30: 'Reduzir dose/frequência', tfg_30_15: 'Cautela significativa', tfg_lt_15: 'Evitar', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Evitar' },
+    contraindicacoes_rapidas: ['Retinopatia preexistente', 'Hipersensibilidade', 'QT longo congênito'],
+    interacoes_importantes: [
+      { com: 'Amiodarona/QT-prolongadores', severidade: 'grave', descricao: 'Prolongamento QT combinado — monitorar ECG' },
+      { com: 'Antidiabéticos', severidade: 'moderada', descricao: 'Potencializa hipoglicemia' },
+    ],
+    alertas_especiais: ['⚠ Oftalmoscopia antes do início e anualmente após 5 anos (retinopatia irreversível)', 'Deficiência de G6PD: hemólise', 'Cat. D — apesar de geralmente permitida no LES gestacional'],
+    uso_gestante: 'avaliar', uso_lactante: 'risco',
+    marcas: [
+      { nome: 'Reuplaq®', laboratorio: 'Eurofarma', concentracoes: ['400 mg'], formas: ['Comprimido'], lab_id: 'eurofarma', produto_id: 'euro-reuplaq', verificado: true },
+      { nome: 'Plaquinol', laboratorio: 'Sanofi', concentracoes: ['400 mg'], formas: ['Comprimido'] },
+    ],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // CARDIOVASCULAR — TRIMETAZIDINA
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'trimetazidina',
+    molecula: 'Trimetazidina',
+    nome_generico: 'Dicloridrato de Trimetazidina',
+    sinonimos: ['vascor mr', 'trimetazidina', 'angina', 'cardioprotecao', 'ischemia'],
+    categoria: 'cardiovascular',
+    classe: 'Antiisquêmico Metabólico — Inibidor Parcial da Beta-Oxidação de Ácidos Graxos',
+    indicacoes_principais: ['Angina estável (tratamento adjuvante)', 'Cardiopatia isquêmica crônica'],
+    dose_adulto: {
+      habitual: '35', min: '35', max: '70', unidade: 'mg', via: 'VO',
+      frequencias: ['2x/dia'],
+      instrucoes: 'Vascor MR® 35 mg LP: 1 cp 2x/dia (manhã e noite, com refeição).',
+    },
+    ajuste_renal: {
+      normal: '35 mg 2x/dia', tfg_60_30: 'Reduzir para 35 mg 1x/dia', tfg_30_15: 'Evitar', tfg_lt_15: 'Contraindicado', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Sem dados', child_b: 'Cautela', child_c: 'Não recomendado' },
+    contraindicacoes_rapidas: ['TFG < 30 mL/min', 'Doença de Parkinson ou sintomas parkinsonianos', 'Hipersensibilidade'],
+    interacoes_importantes: [],
+    alertas_especiais: ['Pode causar/agravar sintomas parkinsonianos e distúrbios do movimento', 'Não é antianginal de primeira linha — usar como adjuvante a betabloqueadores/nitratos', 'Uso exclusivamente VO com alimento'],
+    uso_gestante: 'avaliar', uso_lactante: 'avaliar',
+    marcas: [
+      { nome: 'Vascor MR®', laboratorio: 'Eurofarma', concentracoes: ['35 mg LP'], formas: ['Comprimido LP'], lab_id: 'eurofarma', produto_id: 'euro-vascor-mr', verificado: true },
+    ],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // DERMATOLOGIA — ISOTRETINOÍNA
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'isotretinoia',
+    molecula: 'Isotretinoína',
+    nome_generico: 'Isotretinoína',
+    sinonimos: ['amalfi', 'isotretinoina', 'acne', 'acne grave', 'retinóide'],
+    categoria: 'outro',
+    classe: 'Retinóide Sistêmico — Derivado da Vitamina A',
+    indicacoes_principais: ['Acne vulgar grave (nódulo-cística)', 'Acne moderada resistente a antibióticos', 'Rosácea grave (off-label)'],
+    dose_adulto: {
+      habitual: '0.5-1', min: '0.1', max: '1', unidade: 'mg/kg/dia', via: 'VO',
+      frequencias: ['1x/dia', '2x/dia'],
+      instrucoes: 'Dose cumulativa alvo: 120–150 mg/kg. Iniciar com 0,5 mg/kg/dia. Tomar com refeição gordurosa.',
+    },
+    ajuste_renal: {
+      normal: 'Dose habitual', tfg_60_30: 'Cautela', tfg_30_15: 'Cautela', tfg_lt_15: 'Evitar', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Cautela — monitorar TGO/TGP', child_b: 'Evitar', child_c: 'Contraindicado' },
+    contraindicacoes_rapidas: ['GESTAÇÃO (Cat. X — teratogênico grave)', 'Lactação', 'Hipervitaminose A', 'Uso concomitante de tetraciclinas (hipertensão intracraniana)'],
+    interacoes_importantes: [
+      { com: 'Tetraciclinas', severidade: 'grave', descricao: 'Pseudotumor cerebri — contraindicado combinação' },
+      { com: 'Vitamina A suplementar', severidade: 'grave', descricao: 'Hipervitaminose A aditiva' },
+    ],
+    alertas_especiais: [
+      '🚨 TERATOGÊNICO — CATEGORIA X: 2 métodos contraceptivos por 1 mês antes, durante e 1 mês após tratamento',
+      '⚠ Programa de Prevenção de Gravidez (PPG) obrigatório no Brasil — notificar ANVISA',
+      'Teste de gravidez negativo antes e durante tratamento (mensal)',
+      'Monitorar lipídios e transaminases mensalmente',
+      'Receita especial com retenção (notificação de receita)',
+    ],
+    uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
+    marcas: [
+      { nome: 'Amalfi®', laboratorio: 'Eurofarma', concentracoes: ['20 mg'], formas: ['Cápsula Mole'], lab_id: 'eurofarma', produto_id: 'euro-amalfi', verificado: true },
+    ],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // DOR — IBUPROFENO + PARACETAMOL (COMBINAÇÃO)
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'ibuprofeno-paracetamol',
+    molecula: 'Ibuprofeno + Paracetamol',
+    nome_generico: 'Ibuprofeno + Paracetamol',
+    sinonimos: ['dualgi', 'ibuprofeno paracetamol', 'combinacao analgesica', 'dor aguda'],
+    categoria: 'analgesico',
+    classe: 'AINE + Analgésico não opioide — Combinação Fixa',
+    indicacoes_principais: ['Dor aguda moderada', 'Cefaleia', 'Dor dentária', 'Dor musculoesquelética aguda', 'Dismenorreia'],
+    dose_adulto: {
+      habitual: '200+500', min: '200+500', max: '400+1000', unidade: 'mg', via: 'VO',
+      frequencias: ['3x/dia', '4x/dia'],
+      instrucoes: 'Dualgi®: 1 cp (ibuprofeno 200 mg + paracetamol 500 mg) a cada 6–8h. Máx: 3 cp/dia. Tomar com alimento.',
+    },
+    ajuste_renal: {
+      normal: 'Dose habitual', tfg_60_30: 'Reduzir dose ibuprofeno', tfg_30_15: 'Evitar ibuprofeno', tfg_lt_15: 'Contraindicado', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Cautela (paracetamol)', child_b: 'Evitar', child_c: 'Contraindicado' },
+    contraindicacoes_rapidas: ['Alergia a AINEs/paracetamol', 'Úlcera péptica ativa', 'IRC/IH grave', 'Gestação 3º trimestre'],
+    interacoes_importantes: [
+      { com: 'Anticoagulantes', severidade: 'moderada', descricao: 'Ibuprofeno aumenta risco hemorrágico' },
+      { com: 'Álcool (paracetamol)', severidade: 'grave', descricao: 'Hepatotoxicidade por paracetamol com álcool' },
+    ],
+    alertas_especiais: ['Associação sinérgica analgésica — evidência de superioridade à monoterapia', 'Não combinar com outros AINEs ou paracetamol isolado (risco de sobredose)'],
+    uso_gestante: 'risco', uso_lactante: 'avaliar',
+    marcas: [
+      { nome: 'Dualgi®', laboratorio: 'Eurofarma', concentracoes: ['200 mg + 500 mg'], formas: ['Comprimido'], lab_id: 'eurofarma', produto_id: 'euro-dualgi', verificado: true },
+    ],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // DOR — CETOPROFENO LP
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'cetoprofeno',
+    molecula: 'Cetoprofeno',
+    nome_generico: 'Cetoprofeno',
+    sinonimos: ['bicerto', 'cetoprofeno', 'aine', 'anti-inflamatorio', 'artrite', 'dor aguda'],
+    categoria: 'antiinflamatorio',
+    classe: 'AINE — Inibidor COX não seletivo (derivado do ácido propiônico)',
+    indicacoes_principais: ['Artrite Reumatoide', 'Osteoartrite', 'Espondilite Anquilosante', 'Dor aguda musculoesquelética', 'Dismenorreia'],
+    dose_adulto: {
+      habitual: '150', min: '100', max: '200', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia', '2x/dia'],
+      instrucoes: 'Bicerto® LP 150 mg: 1 cp 1x/dia (preferir LP para maior tolerabilidade GI). Tomar com alimento.',
+    },
+    ajuste_renal: {
+      normal: 'Dose habitual', tfg_60_30: 'Cautela', tfg_30_15: 'Evitar', tfg_lt_15: 'Contraindicado', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Evitar', child_c: 'Contraindicado' },
+    contraindicacoes_rapidas: ['Úlcera péptica ativa', 'Alergia a AINEs', 'IRC/IC grave', 'Gestação 3º trimestre'],
+    interacoes_importantes: [
+      { com: 'Anticoagulantes', severidade: 'grave', descricao: 'Risco hemorrágico aumentado' },
+      { com: 'Metotrexato', severidade: 'grave', descricao: 'Reduz clearance — toxicidade do MTX' },
+    ],
+    alertas_especiais: ['Formulação LP (liberação prolongada) melhora tolerabilidade GI vs formulação imediata', 'Fotossensibilidade — usar protetor solar'],
+    uso_gestante: 'risco', uso_lactante: 'risco',
+    marcas: [
+      { nome: 'Bicerto®', laboratorio: 'Eurofarma', concentracoes: ['150 mg LP'], formas: ['Comprimido LP'], lab_id: 'eurofarma', produto_id: 'euro-bicerto', verificado: true },
+    ],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // ORTOPEDIA — RISEDRONATO
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'risedronato',
+    molecula: 'Risedronato',
+    nome_generico: 'Sódio de Risedronato',
+    sinonimos: ['dorto', 'risedronato', 'osteoporose', 'bifosfonato', 'bisfosfonato'],
+    categoria: 'outro',
+    classe: 'Bifosfonato — Antirreabsortivo Ósseo',
+    indicacoes_principais: ['Osteoporose pós-menopáusica', 'Osteoporose induzida por corticóide', 'Doença de Paget óssea'],
+    dose_adulto: {
+      habitual: '150', min: '35', max: '150', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/mês'],
+      instrucoes: 'D\'Orto® 150 mg: 1 cp 1x/mês. Em jejum, 30 min antes da primeira refeição, com copo cheio d\'água. Permanecer em pé por 30 min após.',
+    },
+    ajuste_renal: {
+      normal: 'Dose habitual', tfg_60_30: 'Cautela', tfg_30_15: 'Não recomendado', tfg_lt_15: 'Contraindicado', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Sem ajuste necessário', child_b: 'Sem ajuste', child_c: 'Sem dados' },
+    contraindicacoes_rapidas: ['Hipocalcemia não corrigida', 'TFG < 30 mL/min', 'Disfagia/esofagite ativa', 'Incapacidade de permanecer sentado/em pé'],
+    interacoes_importantes: [
+      { com: 'Antiácidos/cálcio/ferro oral', severidade: 'moderada', descricao: 'Quelam risedronato — separar por ≥ 2h' },
+    ],
+    alertas_especiais: ['⚠ Osteonecroses de maxila (raro — especialmente com uso IV prolongado ou oncológico)', 'Fratura atípica de fêmur (uso prolongado > 5 anos — reavaliar benefício/risco)', 'Administração mensal melhora adesão vs semanal', 'Suplementação de cálcio e vitamina D recomendada'],
+    uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
+    marcas: [
+      { nome: 'D\'Orto®', laboratorio: 'Eurofarma', concentracoes: ['150 mg'], formas: ['Comprimido'], lab_id: 'eurofarma', produto_id: 'euro-dorto', verificado: true },
+    ],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // INFECTOLOGIA — NITAZOXANIDA
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'nitazoxanida',
+    molecula: 'Nitazoxanida',
+    nome_generico: 'Nitazoxanida',
+    sinonimos: ['azox', 'nitazoxanida', 'antiparasitario', 'giardíase', 'criptosporidiose', 'diarreia'],
+    categoria: 'antiparasitario',
+    classe: 'Antiprotozoário — Nitrotiazolil-Salicilamida',
+    indicacoes_principais: ['Giardíase', 'Criptosporidiose', 'Amebíase intestinal', 'Diarreia por Clostridioides difficile (adjuvante)'],
+    dose_adulto: {
+      habitual: '500', min: '500', max: '1000', unidade: 'mg', via: 'VO',
+      frequencias: ['2x/dia'],
+      instrucoes: '500 mg 2x/dia por 3 dias (giardíase/amebíase). Tomar com alimento.',
+    },
+    ajuste_renal: {
+      normal: '500 mg 2x/dia', tfg_60_30: 'Cautela', tfg_30_15: 'Evitar', tfg_lt_15: 'Evitar', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Evitar', child_c: 'Contraindicado' },
+    contraindicacoes_rapidas: ['Hipersensibilidade', 'IR/IH grave'],
+    interacoes_importantes: [
+      { com: 'Varfarina', severidade: 'moderada', descricao: 'Alta ligação proteica — pode deslocar varfarina; monitorar INR' },
+    ],
+    alertas_especiais: ['Coloração amarelada da urina (sem toxicidade)', 'Eficácia contra vírus influenza e outros vírus (uso off-label)'],
+    uso_gestante: 'avaliar', uso_lactante: 'avaliar',
+    marcas: [
+      { nome: 'Azox®', laboratorio: 'Eurofarma', concentracoes: ['500 mg'], formas: ['Comprimido'], lab_id: 'eurofarma', produto_id: 'euro-azox', verificado: true },
+    ],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // INFECTOLOGIA — MOXIFLOXACINO
+  // ══════════════════════════════════════════════════════════
+
+  {
+    id: 'moxifloxacino',
+    molecula: 'Moxifloxacino',
+    nome_generico: 'Cloridrato de Moxifloxacino',
+    sinonimos: ['praiva', 'moxifloxacino', 'fluoroquinolona', 'pneumonia', 'sinusite', 'antibiotico'],
+    categoria: 'antibiotico',
+    classe: 'Fluoroquinolona de 4ª Geração — Inibidor DNA Girase e Topoisomerase IV',
+    indicacoes_principais: ['Pneumonia Adquirida na Comunidade (PAC)', 'Sinusite bacteriana aguda', 'Exacerbação aguda de DPOC', 'Infecções de pele e partes moles'],
+    dose_adulto: {
+      habitual: '400', min: '400', max: '400', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia'],
+      instrucoes: '400 mg 1x/dia. PAC: 5–10 dias. Sinusite: 7 dias. DPOC: 5 dias.',
+    },
+    ajuste_renal: {
+      normal: '400 mg 1x/dia', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste (cautela)', tfg_lt_15: 'Cautela', dialisavel: false,
+    },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Evitar' },
+    contraindicacoes_rapidas: ['QT prolongado', 'Uso com outros QT-prolongadores', 'Hipocalemia/Hipomagnasemia não corrigida', '< 18 anos', 'Gestação/Lactação'],
+    interacoes_importantes: [
+      { com: 'Antiarrítmicos IA/III (amiodarona)', severidade: 'grave', descricao: 'QT sinérgico — risco de torsades de pointes' },
+      { com: 'Antiácidos com Al/Mg/Ca', severidade: 'moderada', descricao: 'Reduz absorção — separar por ≥ 4h' },
+    ],
+    alertas_especiais: ['⚠ Risco de tendinopatia/ruptura tendínea (especialmente em idosos e com corticóides)', 'Boa cobertura de pneumococo resistente e atípicos (Legionella, Mycoplasma)', 'Não cobre Pseudomonas — em PAC grave, considerar combinação'],
+    uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
+    marcas: [
+      { nome: 'PraIVA®', laboratorio: 'Eurofarma', concentracoes: ['400 mg'], formas: ['Comprimido'], lab_id: 'eurofarma', produto_id: 'euro-praiva-comp', verificado: true },
     ],
   },
 ];
