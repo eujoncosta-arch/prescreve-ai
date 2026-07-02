@@ -24,8 +24,9 @@ import {
   ShieldAlert,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { MOCK_THERAPEUTIC, MOCK_SAFETY } from '@/lib/mock-data';
+import { MOCK_SAFETY } from '@/lib/mock-data';
 import { CDS_BASE_CONHECIMENTO } from '@/lib/clinical-decision-support';
+import { getTherapeuticForCondition } from '@/lib/clinical-therapeutics';
 
 const PROB_COLORS: Record<string, string> = {
   alta: 'bg-red-100 text-red-700 border-red-200',
@@ -70,8 +71,15 @@ export function DiagnosticPanel({ onComplete }: DiagnosticPanelProps) {
     setLoading(true);
     await new Promise(r => setTimeout(r, 1000));
 
-    dispatch({ type: 'SELECT_DIAGNOSIS', payload: `${hipotese.nome} (${hipotese.cid10 ?? ''})` });
-    dispatch({ type: 'UPDATE_THERAPEUTIC', payload: { ...MOCK_THERAPEUTIC, diagnostico_selecionado: `${hipotese.nome} (${hipotese.cid10 ?? ''})` } });
+    const diagnosticoLabel = `${hipotese.nome} (${hipotese.cid10 ?? ''})`;
+    const therapeutic =
+      getTherapeuticForCondition(hipotese.id, diagnosticoLabel) ??
+      getTherapeuticForCondition(hipotese.cid10 ?? '', diagnosticoLabel);
+
+    dispatch({ type: 'SELECT_DIAGNOSIS', payload: diagnosticoLabel });
+    if (therapeutic) {
+      dispatch({ type: 'UPDATE_THERAPEUTIC', payload: therapeutic });
+    }
     dispatch({ type: 'UPDATE_SAFETY', payload: MOCK_SAFETY });
     setLoading(false);
     toast.success(`Hipótese selecionada: ${hipotese.nome}`);

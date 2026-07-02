@@ -11,7 +11,7 @@ import { BulaViewer } from './BulaViewer';
 import { PrescricaoPorMarca } from './PrescricaoPorMarca';
 import { getPrognosisForDiagnosis } from '@/lib/drug-database';
 import { getProductsByMolecule } from '@/lib/lab-catalog';
-import type { LaboratoryPreference } from '@/lib/types';
+import type { LaboratoryPreference, TherapeuticSuggestion } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -28,7 +28,13 @@ import {
   Loader2,
   ChevronDown,
   ChevronUp,
+  Stethoscope,
+  BookOpen,
+  Layers,
+  Award,
+  ChevronRight,
 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
 const ALERT_COLORS = {
@@ -91,6 +97,15 @@ export function TherapeuticPanel({ onComplete }: TherapeuticPanelProps) {
           <p className="text-sm font-semibold text-green-800">{plano.diagnostico_selecionado}</p>
         </div>
       </div>
+
+      {/* Pipeline de raciocínio terapêutico */}
+      {plano.farmacologico.length > 0 && (
+        <TherapyPipeline
+          diagnosis={plano.diagnostico_selecionado}
+          med={plano.farmacologico[0]}
+          totalMeds={plano.farmacologico.length}
+        />
+      )}
 
       {/* Alertas de segurança */}
       {seguranca && seguranca.alertas.length > 0 && (
@@ -159,6 +174,9 @@ export function TherapeuticPanel({ onComplete }: TherapeuticPanelProps) {
 
                 {isOpen && (
                   <CardContent className="space-y-4">
+                    {/* Cadeia de raciocínio por molécula */}
+                    <MoleculePipeline med={med} />
+
                     {/* Posologia */}
                     <div className="p-3 bg-blue-50 rounded-lg">
                       <p className="text-xs font-semibold text-blue-800 mb-1">Posologia</p>
@@ -402,5 +420,105 @@ export function TherapeuticPanel({ onComplete }: TherapeuticPanelProps) {
         </Button>
       </div>
     </div>
+  );
+}
+
+// ─── Pipeline geral — topo do painel ─────────────────────────
+
+const PIPE_COLORS: Record<string, string> = {
+  blue:    'bg-blue-50 border-blue-200 text-blue-700',
+  green:   'bg-green-50 border-green-200 text-green-700',
+  purple:  'bg-purple-50 border-purple-200 text-purple-700',
+  emerald: 'bg-emerald-50 border-emerald-200 text-emerald-700',
+  amber:   'bg-amber-50 border-amber-200 text-amber-700',
+  slate:   'bg-slate-50 border-slate-200 text-slate-500',
+};
+
+function PipeStep({
+  icon: Icon,
+  label,
+  value,
+  color,
+}: {
+  icon: React.ElementType;
+  label: string;
+  value: string;
+  color: keyof typeof PIPE_COLORS;
+}) {
+  return (
+    <div className={cn('flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-xs', PIPE_COLORS[color])}>
+      <Icon className="w-3 h-3 flex-shrink-0" />
+      <div className="min-w-0">
+        <p className="text-[9px] uppercase tracking-widest opacity-60 font-semibold leading-none">{label}</p>
+        <p className="font-semibold truncate max-w-[120px] leading-tight mt-0.5" title={value}>{value}</p>
+      </div>
+    </div>
+  );
+}
+
+function PipeSep() {
+  return <ChevronRight className="w-3.5 h-3.5 text-slate-300 flex-shrink-0" />;
+}
+
+function TherapyPipeline({
+  diagnosis,
+  med,
+  totalMeds,
+}: {
+  diagnosis: string;
+  med: TherapeuticSuggestion;
+  totalMeds: number;
+}) {
+  const diagName = diagnosis?.replace(/\s*\([^)]*\)\s*$/, '') ?? '';
+
+  return (
+    <div className="rounded-lg border border-violet-100 bg-violet-50 p-3">
+      <p className="text-[9px] font-bold text-violet-600 uppercase tracking-widest mb-2">
+        Cadeia de Raciocínio Terapêutico
+      </p>
+      <div className="flex items-center gap-1.5 flex-wrap">
+        <PipeStep icon={Stethoscope} label="Diagnóstico"  value={diagName}                                            color="blue"    />
+        <PipeSep />
+        <PipeStep icon={BookOpen}    label="Diretriz"     value={`${med.evidencia.sociedade} ${med.evidencia.ano}`}  color="green"   />
+        <PipeSep />
+        <PipeStep icon={Layers}      label="Classe 1ª L." value={med.classe_terapeutica}                             color="purple"  />
+        <PipeSep />
+        <PipeStep icon={Pill}        label="Molécula"     value={totalMeds > 1 ? `${med.molecula} +${totalMeds - 1}` : med.molecula} color="emerald" />
+        <PipeSep />
+        <PipeStep icon={Award}       label="Evidência"    value={`Nível ${med.evidencia.nivel_evidencia.nivel} · Grau ${med.evidencia.nivel_evidencia.grau}`} color="amber" />
+        <PipeSep />
+        <PipeStep icon={Building2}   label="Marca"        value="Opcional"                                           color="slate"   />
+      </div>
+    </div>
+  );
+}
+
+// ─── Pipeline por molécula — dentro do card expandido ────────
+
+function MoleculePipeline({ med }: { med: TherapeuticSuggestion }) {
+  return (
+    <div className="flex items-center gap-1 flex-wrap p-2.5 bg-slate-50 rounded-lg border border-slate-100">
+      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mr-1 flex-shrink-0">
+        Cadeia:
+      </span>
+      <ChainTag label={med.evidencia.diretriz} color="text-green-700 bg-green-50" />
+      <ChevronRight className="w-3 h-3 text-slate-300 flex-shrink-0" />
+      <ChainTag label={med.classe_terapeutica} color="text-purple-700 bg-purple-50" />
+      <ChevronRight className="w-3 h-3 text-slate-300 flex-shrink-0" />
+      <ChainTag label={med.molecula} color="text-blue-700 bg-blue-50 font-bold" />
+      <ChevronRight className="w-3 h-3 text-slate-300 flex-shrink-0" />
+      <ChainTag
+        label={`Evidência ${med.evidencia.nivel_evidencia.nivel} / Grau ${med.evidencia.nivel_evidencia.grau}`}
+        color="text-emerald-700 bg-emerald-50"
+      />
+    </div>
+  );
+}
+
+function ChainTag({ label, color }: { label: string; color: string }) {
+  return (
+    <span className={cn('text-[10px] px-2 py-0.5 rounded-full', color)}>
+      {label}
+    </span>
   );
 }
