@@ -27,6 +27,7 @@ import {
   UserCircle,
   Scale,
   Brain,
+  Lightbulb,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -52,8 +53,9 @@ const navGroups = [
       { href: '/biblioteca',    label: 'Farmacológica',       icon: Library,     badge: 'EURO' },
       { href: '/evidencias',    label: 'Evidências',          icon: BookOpen,    badge: null },
       { href: '/evidence',      label: 'Evidence Engine',     icon: Microscope,  badge: 'NOVO' },
-      { href: '/comparador',    label: 'Comparador',          icon: Scale,       badge: 'NOVO' },
-      { href: '/insights',      label: 'Clinical Insights',   icon: Brain,       badge: 'NOVO' },
+      { href: '/comparador',       label: 'Comparador',          icon: Scale,       badge: 'NOVO' },
+      { href: '/insights',         label: 'Clinical Insights',   icon: Brain,       badge: 'NOVO' },
+      { href: '/segunda-opiniao',  label: 'Segunda Opinião',     icon: Lightbulb,   badge: 'NOVO' },
       { href: '/governanca',    label: 'Governança',          icon: ShieldCheck, badge: null },
       { href: '/comite',        label: 'Comitê Científico',   icon: Users,       badge: 'NOVO' },
       { href: '/atualizacoes',  label: 'Guideline Updates',   icon: TrendingUp,  badge: '2025' },

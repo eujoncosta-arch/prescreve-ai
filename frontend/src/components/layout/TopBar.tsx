@@ -23,6 +23,7 @@ const ROUTE_LABELS: Record<string, string> = {
   '/evidence':            'Evidence Engine',
   '/comparador':          'Comparador Farmacológico',
   '/insights':            'Clinical Insights Engine',
+  '/segunda-opiniao':     'Second Opinion Engine',
   '/governanca':          'Governança',
   '/comite':              'Comitê Científico',
   '/atualizacoes':        'Guideline Updates',
