@@ -19,6 +19,7 @@ import {
   Zap,
   Calculator,
   ClipboardList,
+  GitBranch,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -31,6 +32,7 @@ const navGroups = [
       { href: '/prescricao-rapida', label: 'Prescrição Rápida', icon: Zap, badge: 'NOVO' },
       { href: '/calculadoras', label: 'Calculadoras Clínicas', icon: Calculator, badge: 'NOVO' },
       { href: '/protocolos', label: 'Protocolos Clínicos', icon: ClipboardList, badge: 'NOVO' },
+      { href: '/timeline', label: 'Timeline Clínica', icon: GitBranch, badge: 'NOVO' },
       { href: '/demo', label: 'Casos Demo', icon: Sparkles, badge: 'DEMO' },
       { href: '/historico', label: 'Histórico', icon: History, badge: null },
       { href: '/prescricoes', label: 'Prescrições', icon: FileText, badge: null },
