@@ -23,7 +23,8 @@ export function normMol(s: string): string {
     // Contra-íons adjetivados no final: "X Sódico", "X Potássica", "X Cálcica", "X Magnésico"
     .replace(/\s+(sódic[oa]|potássic[oa]|cálcic[oa]|magnésic[oa])\s*$/i, '')
     // Sais descritivos no final: "X de Potássio", "X de Sódio", "X de Cálcio"
-    .replace(/\s+(de|do|da)\s+[\w\s]+$/i, '')
+    // Nota: usar .+ (não [\w\s]+) pois \w não captura acentos (ã, á, etc.) em JS
+    .replace(/\s+(de|do|da)\s+.+$/i, '')
     .trim();
 }
 

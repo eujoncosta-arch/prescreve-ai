@@ -138,6 +138,17 @@ export default function PrescricaoRapida() {
     setSearchResults(results.slice(0, 8));
   }, [searchQuery, labPref]);
 
+  // ── Re-selecionar forma líquida quando idade ou peso muda (paciente pediátrico) ─
+  useEffect(() => {
+    if (!selectedDrug) return;
+    const idadeAnos = patient.idade ? Number(patient.idade) : undefined;
+    const preferred = getPreferredBrandForPatient(selectedDrug, labPref, idadeAnos);
+    setSelectedBrand(preferred);
+    if (preferred) {
+      setSelectedConcentration(getPreferredConcentration(preferred, selectedDrug, idadeAnos));
+    }
+  }, [patient.idade, labPref, selectedDrug]);
+
   // ── CrCl auto-calc ────────────────────────────────────────
   useEffect(() => {
     if (patient.idade && patient.peso && patient.creatinina && patient.sexo) {

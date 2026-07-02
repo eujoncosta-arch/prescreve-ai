@@ -102,7 +102,7 @@ function produtoToQuickBrand(p: ProdutoComercial): QuickBrand {
   return {
     nome: p.nome_comercial,
     laboratorio: 'Eurofarma',
-    concentracoes: p.apresentacoes.map((a: { concentracao: string }) => a.concentracao),
+    concentracoes: [...new Set(p.apresentacoes.map((a: { concentracao: string }) => a.concentracao))],
     formas,
     lab_id: 'eurofarma',
     produto_id: p.id,
@@ -2680,7 +2680,8 @@ export function getBrandsForLab(drug: QuickDrug, labId: string): QuickBrand[] {
   return [...preferred, ...others];
 }
 
-const FORMAS_LIQUIDAS = ['solução', 'suspensão', 'gotas', 'xarope', 'líquido', 'elixir'];
+// Inclui variantes sem acento pois produtoToQuickBrand() gera 'Solucao oral', 'Suspensao oral'
+const FORMAS_LIQUIDAS = ['solução', 'solucao', 'suspensão', 'suspensao', 'gotas', 'xarope', 'líquido', 'liquido', 'elixir'];
 
 export function isFormaLiquida(brand: QuickBrand): boolean {
   return (
