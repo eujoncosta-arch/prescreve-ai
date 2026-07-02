@@ -6,7 +6,7 @@ import {
   LayoutDashboard, FilePlus2, History, FileText, BookOpen, ShieldCheck,
   Calculator, ClipboardList, GitBranch, TrendingUp, Sparkles, Zap,
   Library, BookMarked, Settings, Stethoscope, Search, ArrowRight,
-  Pill, FlaskConical, Brain, Users, Microscope,
+  Pill, FlaskConical, Brain, Users, Microscope, Building2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -39,6 +39,8 @@ const COMMANDS: CommandItem[] = [
   { id: 'comite',         label: 'Comitê Científico',     href: '/comite',              icon: Users,           group: 'Científico',  keywords: ['comite','especialista','revisor','crm','validacao'] },
   { id: 'evidence',       label: 'Evidence Engine',       href: '/evidence',            icon: Microscope,      group: 'Científico',  keywords: ['evidence','rct','meta','estudo','sprint','ukpds','paradigm','dapa','empa','nnt','nnh'] },
   { id: 'atualizacoes',   label: 'Guideline Updates',     href: '/atualizacoes',        icon: TrendingUp,      group: 'Científico',  keywords: ['esc','ada','gold','kdigo','2025','2026'] },
+  // Institucional
+  { id: 'showcase',       label: 'Lab Showcase',          href: '/showcase',            icon: Building2,       group: 'Institucional', keywords: ['laboratorio','eurofarma','showcase','farmaceutica','marcas','moleculas','bulas'] },
   // Sistema
   { id: 'configuracoes',  label: 'Configurações',         href: '/configuracoes',       icon: Settings,        group: 'Sistema',     keywords: ['config','laboratorio','preferencia'] },
 ];

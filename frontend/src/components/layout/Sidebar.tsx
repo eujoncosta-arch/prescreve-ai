@@ -23,6 +23,7 @@ import {
   TrendingUp,
   Users,
   Microscope,
+  Building2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -54,9 +55,10 @@ const navGroups = [
     ],
   },
   {
-    label: 'Sistema',
+    label: 'Institucional',
     items: [
-      { href: '/configuracoes', label: 'Configurações', icon: Settings, badge: null },
+      { href: '/showcase',      label: 'Lab Showcase',  icon: Building2, badge: 'NOVO' },
+      { href: '/configuracoes', label: 'Configurações', icon: Settings,  badge: null },
     ],
   },
 ];
