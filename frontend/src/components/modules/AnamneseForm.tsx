@@ -15,7 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 import { Plus, Trash2, AlertTriangle, Loader2, CheckCircle } from 'lucide-react';
-import { MOCK_DIAGNOSTIC } from '@/lib/mock-data';
+import { analyzeClinical } from '@/lib/clinical-decision-support';
 
 const COMORBIDADES_COMUNS = [
   'Hipertensão Arterial', 'Diabetes Mellitus Tipo 2', 'Dislipidemia', 'Obesidade',
@@ -150,7 +150,8 @@ export function AnamneseForm({ consultationId, onComplete }: AnamneseFormProps) 
     };
 
     dispatch({ type: 'UPDATE_ANAMNESIS', payload: anamnese });
-    dispatch({ type: 'UPDATE_DIAGNOSTIC', payload: MOCK_DIAGNOSTIC });
+    const apoioClinico = analyzeClinical(anamnese);
+    dispatch({ type: 'UPDATE_DIAGNOSTIC', payload: apoioClinico });
     setLoading(false);
     toast.success('Anamnese registrada! IA analisando dados clínicos...');
     onComplete();

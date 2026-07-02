@@ -78,15 +78,28 @@ export interface Anamnesis {
   updated_at?: string;
 }
 
+export interface DiagnosticGuideline {
+  diretriz: string;
+  sociedade: string;
+  ano: number;
+  nivel_evidencia: 'A' | 'B' | 'C' | 'D';
+  grau_recomendacao: 'I' | 'IIa' | 'IIb' | 'III';
+  link?: string;
+}
+
 export interface DiagnosticHypothesis {
   id: string;
   cid10?: string;
   nome: string;
   probabilidade: 'alta' | 'media' | 'baixa';
+  grau_confianca?: number;           // 0–100 (motor CDS)
   criterios_favoraveis: string[];
   criterios_desfavoraveis: string[];
   exames_sugeridos: string[];
+  exames_faltantes?: string[];       // para confirmar/excluir este diagnóstico
+  diferenciais?: string[];           // nomes dos diferenciais relevantes
   raciocinio_clinico: string;
+  guideline?: DiagnosticGuideline;   // diretriz utilizada
 }
 
 export interface DiagnosticSupport {
