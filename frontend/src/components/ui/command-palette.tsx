@@ -6,7 +6,7 @@ import {
   LayoutDashboard, FilePlus2, History, FileText, BookOpen, ShieldCheck,
   Calculator, ClipboardList, GitBranch, TrendingUp, Sparkles, Zap,
   Library, BookMarked, Settings, Stethoscope, Search, ArrowRight,
-  Pill, FlaskConical, Brain, Users, Microscope, Building2,
+  Pill, FlaskConical, Brain, Users, Microscope, Building2, UserCircle,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -42,6 +42,7 @@ const COMMANDS: CommandItem[] = [
   // Institucional
   { id: 'showcase',       label: 'Lab Showcase',          href: '/showcase',            icon: Building2,       group: 'Institucional', keywords: ['laboratorio','eurofarma','showcase','farmaceutica','marcas','moleculas','bulas'] },
   // Sistema
+  { id: 'perfil',         label: 'Meu Perfil',            href: '/perfil',              icon: UserCircle,      group: 'Sistema',     keywords: ['perfil','especialidade','diretriz','favorito','prescricao','sbc','esc','ada','acc','kdigo','estilo'] },
   { id: 'configuracoes',  label: 'Configurações',         href: '/configuracoes',       icon: Settings,        group: 'Sistema',     keywords: ['config','laboratorio','preferencia'] },
 ];
 

@@ -24,6 +24,7 @@ import {
   Users,
   Microscope,
   Building2,
+  UserCircle,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -57,8 +58,14 @@ const navGroups = [
   {
     label: 'Institucional',
     items: [
-      { href: '/showcase',      label: 'Lab Showcase',  icon: Building2, badge: 'NOVO' },
-      { href: '/configuracoes', label: 'Configurações', icon: Settings,  badge: null },
+      { href: '/showcase',      label: 'Lab Showcase',  icon: Building2,  badge: 'NOVO' },
+    ],
+  },
+  {
+    label: 'Sistema',
+    items: [
+      { href: '/perfil',        label: 'Meu Perfil',    icon: UserCircle, badge: 'NOVO' },
+      { href: '/configuracoes', label: 'Configurações', icon: Settings,   badge: null },
     ],
   },
 ];
