@@ -49,6 +49,8 @@ export interface GuidelineVersao {
 
 // ── Evidência associada à versão ─────────────────────────────
 
+export type StatusValidacao = 'validado' | 'pendente' | 'em_revisao' | 'obsoleto';
+
 export interface EvidenciaVersao {
   tipo: 'ensaio_clinico' | 'meta_analise' | 'revisao_sistematica' | 'consenso' | 'diretriz';
   titulo: string;
@@ -56,9 +58,23 @@ export interface EvidenciaVersao {
   ano: number;
   revista?: string;
   doi?: string;
+  pmid?: string;
+  is_rct: boolean;
+  is_meta_analise: boolean;
+  n_pacientes?: number;
+  duracao_seguimento?: string;
+  desfecho_primario?: string;
+  reducao_risco_relativo?: string;
+  nnt?: number;
   nivel: NivelEvidencia;
   grau: GrauRecomendacao;
   resumo: string;
+  // Recomendação clínica rastreável
+  diagnostico?: string;
+  conduta?: string;
+  status_validacao: StatusValidacao;
+  data_revisao?: string;
+  versao_recomendacao?: string;
 }
 
 // ── Diretriz completa (cabeçalho + versões) ──────────────────
@@ -156,8 +172,32 @@ const GUIDELINES_SEED: Guideline[] = [
         revisores: ['Dr. Carlos Pereira (Cardiologista)', 'Dr. Ana Souza (Nefrologista)'],
         status_revisao: 'aprovado',
         evidencias: [
-          { tipo: 'ensaio_clinico', titulo: 'SPRINT Trial', autores: 'Wright JT Jr et al.', ano: 2015, revista: 'NEJM', doi: '10.1056/NEJMoa1511939', nivel: 'A', grau: 'I', resumo: 'Meta sistólica < 120 mmHg reduziu eventos CV em 25% vs < 140 mmHg em pacientes de alto risco' },
-          { tipo: 'meta_analise', titulo: 'Blood pressure lowering and major cardiovascular events', autores: 'Ettehad D et al.', ano: 2016, revista: 'Lancet', doi: '10.1016/S0140-6736(15)01225-8', nivel: 'A', grau: 'I', resumo: 'Cada 10 mmHg de redução sistólica reduz eventos CV em 20% e AVC em 27%' },
+          {
+            tipo: 'ensaio_clinico', titulo: 'SPRINT Trial', autores: 'Wright JT Jr et al.', ano: 2015,
+            revista: 'NEJM', doi: '10.1056/NEJMoa1511939', pmid: '26551272',
+            is_rct: true, is_meta_analise: false,
+            n_pacientes: 9361, duracao_seguimento: '3,3 anos',
+            desfecho_primario: 'Morte CV, IAM, AVC, IC, SCA',
+            reducao_risco_relativo: '25%', nnt: 61,
+            nivel: 'A', grau: 'I',
+            resumo: 'Meta sistólica < 120 mmHg reduziu eventos CV em 25% vs < 140 mmHg em pacientes de alto risco sem DM2',
+            diagnostico: 'Hipertensão Arterial Sistêmica (HAS)',
+            conduta: 'Meta pressórica < 130/80 mmHg em adultos de alto risco CV',
+            status_validacao: 'validado', data_revisao: '2024-03-01', versao_recomendacao: 'v7.0',
+          },
+          {
+            tipo: 'meta_analise', titulo: 'Blood pressure lowering and major cardiovascular events', autores: 'Ettehad D et al.', ano: 2016,
+            revista: 'Lancet', doi: '10.1016/S0140-6736(15)01225-8', pmid: '26724178',
+            is_rct: false, is_meta_analise: true,
+            n_pacientes: 344716, duracao_seguimento: 'Pool de ECRs',
+            desfecho_primario: 'Eventos cardiovasculares maiores',
+            reducao_risco_relativo: '20% a cada 10 mmHg sistólica',
+            nivel: 'A', grau: 'I',
+            resumo: 'Cada 10 mmHg de redução sistólica reduz eventos CV em 20% e AVC em 27%',
+            diagnostico: 'Hipertensão Arterial Sistêmica (HAS)',
+            conduta: 'Tratamento anti-hipertensivo reduz morbimortalidade independente do agente',
+            status_validacao: 'validado', data_revisao: '2024-03-01', versao_recomendacao: 'v7.0',
+          },
         ],
       },
       {
@@ -202,8 +242,32 @@ const GUIDELINES_SEED: Guideline[] = [
         revisores: ['Dra. Fernanda Lima (Endocrinologista)'],
         status_revisao: 'aprovado',
         evidencias: [
-          { tipo: 'ensaio_clinico', titulo: 'UKPDS 34', autores: 'UK Prospective Diabetes Study Group', ano: 1998, revista: 'Lancet', doi: '10.1016/S0140-6736(98)07037-8', nivel: 'A', grau: 'I', resumo: 'Metformina reduziu mortalidade geral e eventos CV em pacientes com DM2 e sobrepeso' },
-          { tipo: 'meta_analise', titulo: 'SGLT-2 inhibitors in heart failure', autores: 'Zannad F et al.', ano: 2020, revista: 'Lancet', doi: '10.1016/S0140-6736(20)31824-9', nivel: 'A', grau: 'I', resumo: 'SGLT-2 reduziram hospitalização por IC e morte CV em 26%' },
+          {
+            tipo: 'ensaio_clinico', titulo: 'UKPDS 34', autores: 'UK Prospective Diabetes Study Group', ano: 1998,
+            revista: 'Lancet', doi: '10.1016/S0140-6736(98)07037-8', pmid: '9742977',
+            is_rct: true, is_meta_analise: false,
+            n_pacientes: 1704, duracao_seguimento: '10,7 anos',
+            desfecho_primario: 'Qualquer desfecho relacionado ao DM2',
+            reducao_risco_relativo: '32% em desfechos relacionados ao DM2', nnt: 14,
+            nivel: 'A', grau: 'I',
+            resumo: 'Metformina reduziu mortalidade geral (36%) e eventos CV em pacientes com DM2 e sobrepeso',
+            diagnostico: 'Diabetes Mellitus tipo 2 (DM2)',
+            conduta: 'Metformina como fármaco de 1ª linha em DM2 com sobrepeso/obesidade',
+            status_validacao: 'validado', data_revisao: '2024-01-15', versao_recomendacao: 'v2024',
+          },
+          {
+            tipo: 'meta_analise', titulo: 'SGLT-2 inhibitors in heart failure', autores: 'Zannad F et al.', ano: 2020,
+            revista: 'Lancet', doi: '10.1016/S0140-6736(20)31824-9', pmid: '33186534',
+            is_rct: false, is_meta_analise: true,
+            n_pacientes: 21947, duracao_seguimento: 'Pool DAPA-HF + EMPEROR-Reduced',
+            desfecho_primario: 'Morte CV + Hospitalização por IC',
+            reducao_risco_relativo: '26%',
+            nivel: 'A', grau: 'I',
+            resumo: 'SGLT-2 reduziram hospitalização por IC e morte CV em 26% independente de DM2',
+            diagnostico: 'Diabetes Mellitus tipo 2 (DM2) + Insuficiência Cardíaca',
+            conduta: 'SGLT-2 indicado em DM2 com IC independente da FEVE',
+            status_validacao: 'validado', data_revisao: '2024-01-15', versao_recomendacao: 'v2024',
+          },
         ],
       },
     ],
@@ -235,7 +299,19 @@ const GUIDELINES_SEED: Guideline[] = [
         revisores: ['Dr. Roberto Nunes (Pneumologista)'],
         status_revisao: 'revisao_solicitada',
         evidencias: [
-          { tipo: 'ensaio_clinico', titulo: 'SYGMA 1', autores: 'O\'Byrne PM et al.', ano: 2018, revista: 'NEJM', doi: '10.1056/NEJMoa1715222', nivel: 'A', grau: 'I', resumo: 'Budesonida-formoterol SOS não inferior à budesonida diária em asma leve' },
+          {
+            tipo: 'ensaio_clinico', titulo: 'SYGMA 1', autores: "O'Byrne PM et al.", ano: 2018,
+            revista: 'NEJM', doi: '10.1056/NEJMoa1715222', pmid: '29768140',
+            is_rct: true, is_meta_analise: false,
+            n_pacientes: 3836, duracao_seguimento: '52 semanas',
+            desfecho_primario: 'Semanas com controle da asma',
+            reducao_risco_relativo: 'Não inferioridade vs. budesonida diária',
+            nivel: 'A', grau: 'I',
+            resumo: 'Budesonida-formoterol SOS não inferior à budesonida diária em asma leve (sem uso diário de ICS)',
+            diagnostico: 'Asma leve (passos 1-2 GINA)',
+            conduta: 'ICS-formoterol SOS substitui SABA como terapia de resgate na asma leve',
+            status_validacao: 'em_revisao', data_revisao: '2024-06-01', versao_recomendacao: 'v2023',
+          },
         ],
       },
     ],
@@ -267,8 +343,32 @@ const GUIDELINES_SEED: Guideline[] = [
         revisores: ['Dr. Marcos Oliveira (Cardiologista IC)'],
         status_revisao: 'aprovado',
         evidencias: [
-          { tipo: 'ensaio_clinico', titulo: 'PARADIGM-HF', autores: 'McMurray JJV et al.', ano: 2014, revista: 'NEJM', doi: '10.1056/NEJMoa1409077', nivel: 'A', grau: 'I', resumo: 'Sacubitril/valsartana reduziu morte CV e hospitalização por IC em 20% vs. enalapril' },
-          { tipo: 'ensaio_clinico', titulo: 'DAPA-HF', autores: 'McMurray JJV et al.', ano: 2019, revista: 'NEJM', doi: '10.1056/NEJMoa1911303', nivel: 'A', grau: 'I', resumo: 'Dapagliflozina reduziu morte CV + IC em 26% em ICFEr com e sem DM2' },
+          {
+            tipo: 'ensaio_clinico', titulo: 'PARADIGM-HF', autores: 'McMurray JJV et al.', ano: 2014,
+            revista: 'NEJM', doi: '10.1056/NEJMoa1409077', pmid: '25176015',
+            is_rct: true, is_meta_analise: false,
+            n_pacientes: 8442, duracao_seguimento: '27 meses',
+            desfecho_primario: 'Morte CV ou hospitalização por IC',
+            reducao_risco_relativo: '20% vs. enalapril', nnt: 21,
+            nivel: 'A', grau: 'I',
+            resumo: 'Sacubitril/valsartana reduziu morte CV e hospitalização por IC em 20% vs. enalapril — interrompido precocemente por benefício',
+            diagnostico: 'Insuficiência Cardíaca com FE reduzida (ICFEr)',
+            conduta: 'ARNI (sacubitril/valsartana) substitui IECA/BRA em ICFEr sintomático (NYHA II-IV)',
+            status_validacao: 'validado', data_revisao: '2024-01-01', versao_recomendacao: 'v2021',
+          },
+          {
+            tipo: 'ensaio_clinico', titulo: 'DAPA-HF', autores: 'McMurray JJV et al.', ano: 2019,
+            revista: 'NEJM', doi: '10.1056/NEJMoa1911303', pmid: '31535829',
+            is_rct: true, is_meta_analise: false,
+            n_pacientes: 4744, duracao_seguimento: '18,2 meses',
+            desfecho_primario: 'Piora IC + Morte CV',
+            reducao_risco_relativo: '26%', nnt: 21,
+            nivel: 'A', grau: 'I',
+            resumo: 'Dapagliflozina reduziu desfecho composto (piora IC + morte CV) em 26% em ICFEr, com e sem DM2',
+            diagnostico: 'Insuficiência Cardíaca com FE reduzida (ICFEr)',
+            conduta: 'Dapagliflozina 10 mg/dia como 4º pilar do quarteto terapêutico na ICFEr',
+            status_validacao: 'validado', data_revisao: '2024-01-01', versao_recomendacao: 'v2021',
+          },
         ],
       },
     ],
@@ -545,6 +645,13 @@ export const AUDIT_META: Record<AuditTipo, { label: string; color: string }> = {
   revisao_rejeitada:     { label: 'Revisão rejeitada',      color: 'bg-red-500'    },
   alerta_gerado:         { label: 'Alerta científico',      color: 'bg-amber-500'  },
   atualizacao_importada: { label: 'Atualização importada',  color: 'bg-purple-500' },
+};
+
+export const STATUS_VALIDACAO_META: Record<StatusValidacao, { label: string; cls: string; dot: string }> = {
+  validado:    { label: 'Validado',    cls: 'bg-green-100  text-green-700  dark:bg-green-900/30  dark:text-green-400',  dot: 'bg-green-500'  },
+  pendente:    { label: 'Pendente',    cls: 'bg-amber-100  text-amber-700  dark:bg-amber-900/30  dark:text-amber-400',  dot: 'bg-amber-400'  },
+  em_revisao:  { label: 'Em revisão', cls: 'bg-blue-100   text-blue-700   dark:bg-blue-900/30   dark:text-blue-400',   dot: 'bg-blue-500'   },
+  obsoleto:    { label: 'Obsoleto',   cls: 'bg-red-100    text-red-600    dark:bg-red-900/30    dark:text-red-400',    dot: 'bg-red-500'    },
 };
 
 export const NIVEL_EVIDENCIA_LABEL: Record<NivelEvidencia, string> = {
