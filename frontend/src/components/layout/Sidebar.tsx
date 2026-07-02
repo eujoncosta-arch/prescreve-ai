@@ -20,6 +20,7 @@ import {
   Calculator,
   ClipboardList,
   GitBranch,
+  TrendingUp,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -44,6 +45,7 @@ const navGroups = [
       { href: '/repositorio', label: 'Repositório Científico', icon: BookMarked, badge: null },
       { href: '/biblioteca', label: 'Biblioteca Farmacológica', icon: Library, badge: 'EURO' },
       { href: '/evidencias', label: 'Base de Evidências', icon: BookOpen, badge: null },
+      { href: '/atualizacoes', label: 'Guideline Updates', icon: TrendingUp, badge: '2025' },
       { href: '/governanca', label: 'Governança', icon: ShieldCheck, badge: null },
     ],
   },
