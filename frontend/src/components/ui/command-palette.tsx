@@ -6,7 +6,7 @@ import {
   LayoutDashboard, FilePlus2, History, FileText, BookOpen, ShieldCheck,
   Calculator, ClipboardList, GitBranch, TrendingUp, Sparkles, Zap,
   Library, BookMarked, Settings, Stethoscope, Search, ArrowRight,
-  Pill, FlaskConical, Brain, Users, Microscope, Building2, UserCircle,
+  Pill, FlaskConical, Brain, Users, Microscope, Building2, UserCircle, Scale,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -38,6 +38,7 @@ const COMMANDS: CommandItem[] = [
   { id: 'governanca',     label: 'Governança Científica', href: '/governanca',          icon: ShieldCheck,     group: 'Científico',  keywords: ['governanca','diretriz','auditoria'] },
   { id: 'comite',         label: 'Comitê Científico',     href: '/comite',              icon: Users,           group: 'Científico',  keywords: ['comite','especialista','revisor','crm','validacao'] },
   { id: 'evidence',       label: 'Evidence Engine',       href: '/evidence',            icon: Microscope,      group: 'Científico',  keywords: ['evidence','rct','meta','estudo','sprint','ukpds','paradigm','dapa','empa','nnt','nnh'] },
+  { id: 'comparador',     label: 'Comparador Farmacológico', href: '/comparador',        icon: Scale,           group: 'Científico',  keywords: ['comparador','comparar','molecula','zart','holmes','sglt2','glp1','estatina','bra','ieca','eficacia','custo','interacao'] },
   { id: 'atualizacoes',   label: 'Guideline Updates',     href: '/atualizacoes',        icon: TrendingUp,      group: 'Científico',  keywords: ['esc','ada','gold','kdigo','2025','2026'] },
   // Institucional
   { id: 'showcase',       label: 'Lab Showcase',          href: '/showcase',            icon: Building2,       group: 'Institucional', keywords: ['laboratorio','eurofarma','showcase','farmaceutica','marcas','moleculas','bulas'] },
