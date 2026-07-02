@@ -66,8 +66,9 @@ const navGroups = [
   {
     label: 'Sistema',
     items: [
-      { href: '/perfil',        label: 'Meu Perfil',    icon: UserCircle, badge: 'NOVO' },
-      { href: '/configuracoes', label: 'Configurações', icon: Settings,   badge: null },
+      { href: '/auditoria',     label: 'Auditoria',     icon: Shield,     badge: 'NOVO' },
+      { href: '/perfil',        label: 'Meu Perfil',    icon: UserCircle, badge: null   },
+      { href: '/configuracoes', label: 'Configurações', icon: Settings,   badge: null   },
     ],
   },
 ];

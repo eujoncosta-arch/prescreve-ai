@@ -26,6 +26,7 @@ const ROUTE_LABELS: Record<string, string> = {
   '/comite':              'Comitê Científico',
   '/atualizacoes':        'Guideline Updates',
   '/showcase':            'Laboratory Showcase',
+  '/auditoria':           'Medical Audit Engine',
   '/perfil':              'Meu Perfil',
   '/configuracoes':       'Configurações',
 };
