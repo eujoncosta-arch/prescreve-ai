@@ -225,7 +225,7 @@ export default function PrescricaoRapida() {
   }, [selectedDrug, selectedBrand, selectedConcentration, customDose]);
 
   // ── Apply dose calc result → add to Rx ───────────────────
-  const applyDoseCalc = useCallback((result: FullDoseResult) => {
+  const applyDoseCalc = useCallback((result: FullDoseResult, duracao?: string) => {
     if (!selectedDrug) return;
     const brand = selectedBrand ?? selectedDrug.marcas[0];
     const freqMap: Record<number, string> = {
@@ -248,7 +248,7 @@ export default function PrescricaoRapida() {
       dose: doseTexto,
       via: selectedDrug.dose_adulto.via,
       frequencia: freqMap[result.tomadas_dia] ?? `${result.tomadas_dia}x/dia`,
-      duracao: result.population.usar_dose_pediatrica ? '7 dias' : '30 dias',
+      duracao: duracao || (result.population.usar_dose_pediatrica ? '7 dias' : '30 dias'),
       instrucoes: result.ajuste_renal_texto
         ? `Ajuste renal: ${result.ajuste_renal_texto}`
         : '',
@@ -707,6 +707,7 @@ export default function PrescricaoRapida() {
                       concentracaoSelecionada={selectedConcentration || (selectedDrug.dose_adulto.habitual + ' ' + selectedDrug.dose_adulto.unidade)}
                       idadeAnos={Number(patient.idade)}
                       pesoKg={Number(patient.peso)}
+                      alturaM={patient.altura ? Number(patient.altura) / 100 : undefined}
                       crcl={crclResult?.crcl}
                       childPugh={patient.child_pugh || undefined}
                       gestante={patient.gestante}

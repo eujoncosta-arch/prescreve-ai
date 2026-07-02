@@ -2629,30 +2629,44 @@ export function searchDrugs(query: string, labPreference?: string): QuickDrug[] 
   if (!query || query.length < 2) return [];
   const q = query.toLowerCase().trim();
 
+  // Match apenas no início de palavras (após espaço, hífen, parêntese, + ou início de string).
+  // Evita que "astro" retorne "Gastroparesia" ou "Antagonista".
+  const esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const wordRe = new RegExp(`(?:^|[\\s\\-\\/+®,(\\[])${esc}`, 'i');
+  const wordMatch = (text: string) => wordRe.test(text);
+
   const results = PHARMA_DB.filter(drug => {
-    return (
-      drug.molecula.toLowerCase().includes(q) ||
-      drug.nome_generico.toLowerCase().includes(q) ||
-      drug.sinonimos.some(s => s.toLowerCase().includes(q)) ||
-      drug.classe.toLowerCase().includes(q) ||
-      drug.marcas.some(b =>
-        b.nome.toLowerCase().includes(q) ||
-        b.laboratorio.toLowerCase().includes(q)
-      ) ||
-      drug.indicacoes_principais.some(i => i.toLowerCase().includes(q))
-    );
+    // Molécula e nome genérico — substring livre (nomes técnicos longos)
+    if (drug.molecula.toLowerCase().includes(q)) return true;
+    if (drug.nome_generico.toLowerCase().includes(q)) return true;
+    // Sinonimos — word-start (evita falsos positivos entre sinônimos similares)
+    if (drug.sinonimos.some(s => wordMatch(s) || s.toLowerCase() === q)) return true;
+    // Classe — word-start (impede "astro" → "Antagonista")
+    if (wordMatch(drug.classe)) return true;
+    // Marcas — substring livre (nomes comerciais podem ser partes de palavras)
+    if (drug.marcas.some(b =>
+      b.nome.toLowerCase().includes(q) ||
+      b.laboratorio.toLowerCase().includes(q)
+    )) return true;
+    // Indicações — word-start (impede "astro" → "Gastroparesia")
+    if (drug.indicacoes_principais.some(i => wordMatch(i))) return true;
+    return false;
   });
 
-  // Se há preferência de laboratório, ordenar para mostrar primeiro
-  if (labPreference && labPreference !== 'sem_preferencia') {
-    return results.sort((a, b) => {
-      const aHasLab = a.marcas.some(m => m.lab_id === labPreference || m.laboratorio.toLowerCase() === labPreference);
-      const bHasLab = b.marcas.some(m => m.lab_id === labPreference || m.laboratorio.toLowerCase() === labPreference);
-      return aHasLab === bHasLab ? 0 : aHasLab ? -1 : 1;
-    });
-  }
+  // Ordenar: correspondência na molécula > marca > sinonimo > lab preference
+  const scored = results.map(drug => {
+    let score = 0;
+    if (drug.molecula.toLowerCase().startsWith(q)) score += 100;
+    else if (drug.molecula.toLowerCase().includes(q)) score += 60;
+    if (drug.marcas.some(b => b.nome.toLowerCase().startsWith(q))) score += 80;
+    if (drug.sinonimos.some(s => s.toLowerCase().startsWith(q))) score += 50;
+    if (labPreference && labPreference !== 'sem_preferencia') {
+      if (drug.marcas.some(m => m.lab_id === labPreference)) score += 30;
+    }
+    return { drug, score };
+  });
 
-  return results;
+  return scored.sort((a, b) => b.score - a.score).map(s => s.drug);
 }
 
 export function getDrugById(id: string): QuickDrug | undefined {
