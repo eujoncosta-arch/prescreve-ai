@@ -18,6 +18,7 @@ import {
   BookMarked,
   Zap,
   Calculator,
+  ClipboardList,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -29,6 +30,7 @@ const navGroups = [
       { href: '/consulta/nova', label: 'Nova Consulta', icon: FilePlus2, badge: null },
       { href: '/prescricao-rapida', label: 'Prescrição Rápida', icon: Zap, badge: 'NOVO' },
       { href: '/calculadoras', label: 'Calculadoras Clínicas', icon: Calculator, badge: 'NOVO' },
+      { href: '/protocolos', label: 'Protocolos Clínicos', icon: ClipboardList, badge: 'NOVO' },
       { href: '/demo', label: 'Casos Demo', icon: Sparkles, badge: 'DEMO' },
       { href: '/historico', label: 'Histórico', icon: History, badge: null },
       { href: '/prescricoes', label: 'Prescrições', icon: FileText, badge: null },
