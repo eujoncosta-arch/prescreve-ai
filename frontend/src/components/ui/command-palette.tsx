@@ -6,7 +6,7 @@ import {
   LayoutDashboard, FilePlus2, History, FileText, BookOpen, ShieldCheck,
   Calculator, ClipboardList, GitBranch, TrendingUp, Sparkles, Zap,
   Library, BookMarked, Settings, Stethoscope, Search, ArrowRight,
-  Pill, FlaskConical, Brain, Users,
+  Pill, FlaskConical, Brain, Users, Microscope,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -37,6 +37,7 @@ const COMMANDS: CommandItem[] = [
   { id: 'evidencias',     label: 'Base de Evidências',    href: '/evidencias',          icon: BookOpen,        group: 'Científico',  keywords: ['evidencia','estudo','ecr'] },
   { id: 'governanca',     label: 'Governança Científica', href: '/governanca',          icon: ShieldCheck,     group: 'Científico',  keywords: ['governanca','diretriz','auditoria'] },
   { id: 'comite',         label: 'Comitê Científico',     href: '/comite',              icon: Users,           group: 'Científico',  keywords: ['comite','especialista','revisor','crm','validacao'] },
+  { id: 'evidence',       label: 'Evidence Engine',       href: '/evidence',            icon: Microscope,      group: 'Científico',  keywords: ['evidence','rct','meta','estudo','sprint','ukpds','paradigm','dapa','empa','nnt','nnh'] },
   { id: 'atualizacoes',   label: 'Guideline Updates',     href: '/atualizacoes',        icon: TrendingUp,      group: 'Científico',  keywords: ['esc','ada','gold','kdigo','2025','2026'] },
   // Sistema
   { id: 'configuracoes',  label: 'Configurações',         href: '/configuracoes',       icon: Settings,        group: 'Sistema',     keywords: ['config','laboratorio','preferencia'] },

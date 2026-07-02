@@ -20,6 +20,7 @@ const ROUTE_LABELS: Record<string, string> = {
   '/repositorio':         'Repositório Científico',
   '/biblioteca':          'Biblioteca Farmacológica',
   '/evidencias':          'Base de Evidências',
+  '/evidence':            'Evidence Engine',
   '/governanca':          'Governança',
   '/comite':              'Comitê Científico',
   '/atualizacoes':        'Guideline Updates',
