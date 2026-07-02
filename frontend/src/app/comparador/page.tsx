@@ -227,7 +227,7 @@ function ComparativoRadar({ scores, nomeA, nomeB }: { scores: ComparativoScore[]
 
 // ─── Tabela comparativa detalhada ────────────────────────────
 
-type CompTab = 'visao_geral' | 'eficacia' | 'seguranca' | 'doses' | 'interacoes' | 'marcas';
+type CompTab = 'visao_geral' | 'eficacia' | 'seguranca' | 'doses' | 'interacoes' | 'marcas' | 'farmacocinetica';
 
 function TabelaComparativa({ a, b, scores }: { a: MoleculaComparavel; b: MoleculaComparavel; scores: ComparativoScore[] }) {
   const [tab, setTab] = useState<CompTab>('visao_geral');
@@ -238,7 +238,8 @@ function TabelaComparativa({ a, b, scores }: { a: MoleculaComparavel; b: Molecul
     { id: 'seguranca',   label: 'Segurança',    icon: Shield      },
     { id: 'doses',       label: 'Doses',        icon: Activity    },
     { id: 'interacoes',  label: 'Interações',   icon: Zap         },
-    { id: 'marcas',      label: 'Marcas',       icon: Star        },
+    { id: 'marcas',          label: 'Marcas',         icon: Star        },
+    { id: 'farmacocinetica', label: 'Farmacocinética', icon: Activity    },
   ];
 
   const Row = ({ label, valA, valB, highlight }: { label: string; valA: React.ReactNode; valB: React.ReactNode; highlight?: 'A' | 'B' | 'igual' }) => (
@@ -448,6 +449,61 @@ function TabelaComparativa({ a, b, scores }: { a: MoleculaComparavel; b: Molecul
             ))}
           </div>
         )}
+
+        {/* ── ABA: Farmacocinética ── */}
+        {tab === 'farmacocinetica' && (
+          <div className="space-y-0">
+            {a.farmacocinetica && b.farmacocinetica ? (
+              <>
+                <Row label="Meia-vida (t½)"
+                  highlight={scores.find(s => s.dimensao === 'meia_vida')?.vantagem}
+                  valA={<span className="font-bold text-blue-700 dark:text-blue-400">{a.farmacocinetica.meia_vida_h}h{a.farmacocinetica.meia_vida_descricao ? <span className="font-normal text-slate-500 ml-1">— {a.farmacocinetica.meia_vida_descricao}</span> : ''}</span>}
+                  valB={<span className="font-bold text-purple-700 dark:text-purple-400">{b.farmacocinetica.meia_vida_h}h{b.farmacocinetica.meia_vida_descricao ? <span className="font-normal text-slate-500 ml-1">— {b.farmacocinetica.meia_vida_descricao}</span> : ''}</span>}
+                />
+                <Row label="Biodisponibilidade" valA={a.farmacocinetica.biodisponibilidade} valB={b.farmacocinetica.biodisponibilidade} />
+                <Row label="Tmax" valA={a.farmacocinetica.tmax_h} valB={b.farmacocinetica.tmax_h} />
+                <Row label="Ligação proteica" valA={a.farmacocinetica.ligacao_proteica} valB={b.farmacocinetica.ligacao_proteica} />
+                <Row label="Pró-fármaco"
+                  valA={<span className={a.farmacocinetica.profarmaco ? 'text-amber-600 font-semibold' : ''}>{a.farmacocinetica.profarmaco ? `Sim — ${a.farmacocinetica.metabólito_ativo ?? 'metabólito ativo'}` : 'Não'}</span>}
+                  valB={<span className={b.farmacocinetica.profarmaco ? 'text-amber-600 font-semibold' : ''}>{b.farmacocinetica.profarmaco ? `Sim — ${b.farmacocinetica.metabólito_ativo ?? 'metabólito ativo'}` : 'Não'}</span>}
+                />
+                <Row label="Via de metabolismo" valA={a.farmacocinetica.via_metabolismo} valB={b.farmacocinetica.via_metabolismo} />
+                <Row label="Excreção renal"
+                  valA={<span>{a.farmacocinetica.excrecao_renal_pct}%{a.farmacocinetica.dialise_remove ? <span className="ml-1 text-red-500 font-semibold">(dialisável)</span> : <span className="ml-1 text-slate-400">(não dialisável)</span>}</span>}
+                  valB={<span>{b.farmacocinetica.excrecao_renal_pct}%{b.farmacocinetica.dialise_remove ? <span className="ml-1 text-red-500 font-semibold">(dialisável)</span> : <span className="ml-1 text-slate-400">(não dialisável)</span>}</span>}
+                />
+                <Row label="Excreção biliar" valA={`${a.farmacocinetica.excrecao_biliar_pct}%`} valB={`${b.farmacocinetica.excrecao_biliar_pct}%`} />
+                {(a.farmacocinetica.alimento_efeito || b.farmacocinetica.alimento_efeito) && (
+                  <Row label="Efeito do alimento" valA={a.farmacocinetica.alimento_efeito ?? '—'} valB={b.farmacocinetica.alimento_efeito ?? '—'} />
+                )}
+                <Row label="Onset de ação" valA={`${a.farmacocinetica.onset_acao_h}h`} valB={`${b.farmacocinetica.onset_acao_h}h`} />
+                <Row label="Pico de efeito" valA={`${a.farmacocinetica.pico_efeito_h}h`} valB={`${b.farmacocinetica.pico_efeito_h}h`} />
+                <Row label="Duração de efeito" valA={`${a.farmacocinetica.duracao_efeito_h}h`} valB={`${b.farmacocinetica.duracao_efeito_h}h`} />
+                {(a.farmacocinetica.seletividade || b.farmacocinetica.seletividade) && (
+                  <Row label="Seletividade" valA={a.farmacocinetica.seletividade ?? '—'} valB={b.farmacocinetica.seletividade ?? '—'} />
+                )}
+                <Row label="Mecanismo molecular" valA={a.farmacocinetica.mecanismo_molecular} valB={b.farmacocinetica.mecanismo_molecular} />
+                {(a.farmacocinetica.efeito_rebote || b.farmacocinetica.efeito_rebote) && (
+                  <Row label="Efeito rebote" valA={a.farmacocinetica.efeito_rebote ?? 'Ausente'} valB={b.farmacocinetica.efeito_rebote ?? 'Ausente'} />
+                )}
+                {(a.farmacocinetica.reducao_pas_mmhg || b.farmacocinetica.reducao_pas_mmhg) && (
+                  <Row label="Redução PAS" valA={a.farmacocinetica.reducao_pas_mmhg ?? '—'} valB={b.farmacocinetica.reducao_pas_mmhg ?? '—'} />
+                )}
+                {(a.farmacocinetica.reducao_ldl_pct || b.farmacocinetica.reducao_ldl_pct) && (
+                  <Row label="Redução LDL" valA={a.farmacocinetica.reducao_ldl_pct ?? '—'} valB={b.farmacocinetica.reducao_ldl_pct ?? '—'} />
+                )}
+                {(a.farmacocinetica.reducao_hba1c_pct || b.farmacocinetica.reducao_hba1c_pct) && (
+                  <Row label="Redução HbA1c" valA={a.farmacocinetica.reducao_hba1c_pct ?? '—'} valB={b.farmacocinetica.reducao_hba1c_pct ?? '—'} />
+                )}
+                {(a.farmacocinetica.reducao_pes_kg || b.farmacocinetica.reducao_pes_kg) && (
+                  <Row label="Redução de peso" valA={a.farmacocinetica.reducao_pes_kg ?? '—'} valB={b.farmacocinetica.reducao_pes_kg ?? '—'} />
+                )}
+              </>
+            ) : (
+              <p className="text-sm text-slate-400 py-4 text-center">Dados farmacocinéticos não disponíveis para esta comparação.</p>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -456,7 +512,7 @@ function TabelaComparativa({ a, b, scores }: { a: MoleculaComparavel; b: Molecul
 // ─── Quick comparisons ───────────────────────────────────────
 
 const QUICK_PAIRS: { label: string; aId: string; bId: string; desc: string }[] = [
-  { label: 'Zart vs Holmes',          aId: 'losartana',        bId: 'enalapril',           desc: 'BRA vs IECA — HAS' },
+  { label: 'Zart vs Holmes',          aId: 'losartana',        bId: 'olmesartana',         desc: 'BRA vs BRA — Losartana vs Olmesartana' },
   { label: 'SGLT-2 vs GLP-1',         aId: 'empagliflozina',   bId: 'liraglutida',         desc: 'DM2 + DCV' },
   { label: 'Metformina vs Sitagliptina', aId: 'metformina',    bId: 'sitagliptina',        desc: 'DM2 — 1ª vs 2ª linha' },
   { label: 'Carvedilol vs Sacubitril', aId: 'carvedilol',      bId: 'sacubitril_valsartana', desc: 'IC-FEr — Quarteto' },
