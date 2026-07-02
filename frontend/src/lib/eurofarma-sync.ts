@@ -6,6 +6,27 @@
 
 import type { ProdutoComercial, LabInfo } from './types';
 
+// ─── NORMALIZAÇÃO DE MOLÉCULA ─────────────────────────────────
+// Função canônica para comparar nomes de moléculas com robustez.
+// Remove prefixos salinos, sufixos de hidratação e contra-íons para
+// obter o nome base da molécula. Exportada para uso em todo o sistema.
+export function normMol(s: string): string {
+  return s
+    .toLowerCase()
+    // Prefixos salinos: "Cloridrato de X" → "X"
+    .replace(
+      /^(di-?|tri-?)?(cloridrato|dicloridrato|bromidrato|hemitartarato|mesilato|maleato|besilato|fumarato|succinato|oxalato|carbonato|bissulfato|divalproato|dipropionato|acetato|fosfato|sulfato|fosfato dissódico de)\s+(de|do|da)\s+/i,
+      '',
+    )
+    // Sufixos de hidratação: "X Tri-hidratada" → "X"
+    .replace(/\s+(tri-hidratad[ao]|di-hidratad[ao]|mono-hidratad[ao]|hidratad[ao]|an-hidro)\b.*/i, '')
+    // Contra-íons adjetivados no final: "X Sódico", "X Potássica", "X Cálcica", "X Magnésico"
+    .replace(/\s+(sódic[oa]|potássic[oa]|cálcic[oa]|magnésic[oa])\s*$/i, '')
+    // Sais descritivos no final: "X de Potássio", "X de Sódio", "X de Cálcio"
+    .replace(/\s+(de|do|da)\s+[\w\s]+$/i, '')
+    .trim();
+}
+
 // ─── TIPOS DE SYNC ────────────────────────────────────────────
 
 export type SyncState = 'idle' | 'syncing' | 'error' | 'success';
@@ -3908,20 +3929,8 @@ export function getProdutoById(id: string): ProdutoComercial | undefined {
 
 export function getProdutosByMolecula(molecula: string): ProdutoComercial[] {
   if (!molecula || molecula.trim().length < 3) return [];
-  const mol = molecula.toLowerCase().trim();
-  // Extrai o primeiro substantivo da molécula (ignora prefixos como "cloridrato de", "maleato de", etc.)
-  const stripPrefix = (s: string) => s.replace(/^(cloridrato|maleato|besilato|fumarato|succinato|oxalato|carbonato|di-hidrato|tri-hidrato|monoidrato)\s+(de|do|da)\s+/i, '').trim();
-  const molClean = stripPrefix(mol);
-  return EUROFARMA_CATALOG.filter(p => {
-    const prodMol = p.molecula.toLowerCase();
-    const prodMolClean = stripPrefix(prodMol);
-    return (
-      prodMol.includes(molClean) ||
-      molClean.includes(prodMolClean) ||
-      prodMolClean.startsWith(molClean.split(' ')[0]) ||
-      molClean.startsWith(prodMolClean.split(' ')[0])
-    );
-  });
+  const dn = normMol(molecula);
+  return EUROFARMA_CATALOG.filter(p => normMol(p.molecula) === dn);
 }
 
 export function getProdutosByClasse(classe: string): ProdutoComercial[] {

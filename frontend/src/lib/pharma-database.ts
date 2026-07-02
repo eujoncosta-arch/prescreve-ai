@@ -91,7 +91,7 @@ export interface InteractionRule {
 
 // ─── IMPORTAÇÃO DO CATÁLOGO VERIFICADO EUROFARMA ──────────────
 // A biblioteca importa os produtos oficiais e substitui as marcas hardcoded
-import { EUROFARMA_CATALOG } from './eurofarma-sync';
+import { EUROFARMA_CATALOG, normMol } from './eurofarma-sync';
 import type { ProdutoComercial } from './types';
 
 function produtoToQuickBrand(p: ProdutoComercial): QuickBrand {
@@ -2744,18 +2744,12 @@ export const CATEGORIA_LABELS: Record<DrugCategory, string> = {
   outro: 'Outro',
 };
 
-// ─── ENRIQUECIMENTO COM CATÁLOGO EUROFARMA VERIFICADO ────────
-// Substitui as marcas Eurofarma hardcoded pelos dados reais do portal oficial.
-// Usa normalização exata de molécula para evitar falsos positivos
-// (ex: "Prednisona" não deve contaminar "Prednisolona").
+// ─── ENRIQUECIMENTO COM CATÁLOGO DE LABORATÓRIOS VERIFICADOS ─
+// Substitui marcas hardcoded pelos dados reais do catálogo oficial.
+// normMol() (importada de eurofarma-sync) garante matching exato após
+// normalizar prefixos salinos e sufixos de hidratação — evita falsos
+// positivos como Prednisona → Prednisolona, Amoxicilina → Amox+Clav etc.
 (function enrichWithEurofarma() {
-  // Remove prefixos salinos e sufixos de hidratação para comparação normalizada
-  const normMol = (s: string) => s.toLowerCase()
-    .replace(/^(cloridrato|maleato|besilato|fumarato|succinato|oxalato|carbonato)\s+(de|do|da)\s+/i, '')
-    .replace(/\s+(tri-hidratad[ao]|di-hidratad[ao]|mono-hidratad[ao]|hidratad[ao]|an-hidro)\b.*/i, '')
-    .replace(/\s+(de|do|da)\s+[\w\s]+$/i, '')   // "de Potássio", "de Sódio" no final
-    .trim();
-
   for (const drug of PHARMA_DB) {
     const dn = normMol(drug.molecula);
     const verified = EUROFARMA_CATALOG.filter(p => normMol(p.molecula) === dn);
