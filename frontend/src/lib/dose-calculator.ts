@@ -383,6 +383,7 @@ export function parseConcentration(texto: string): ParsedConcentration {
 
 export interface FullDoseInput {
   molecula: string;
+  alturaM?: number;  // metros — necessário para cálculo BSA (mg/m²)
   dose_adulto: { habitual: string; min?: string; max: string; unidade: string; via: string; frequencias: string[]; instrucoes?: string };
   dose_pediatrica?: { calculo: string; dose_por_kg: number; unidade: string; frequencia_divisoes: number; max_dose_dia: number; max_dose_dia_unidade: string; faixa_etaria: string; observacao?: string };
   ajuste_renal?: { normal: string; tfg_60_30: string; tfg_30_15: string; tfg_lt_15: string; dialisavel: boolean };
@@ -397,6 +398,8 @@ export interface FullDoseResult {
   dose_por_tomada: number;
   dose_unidade: string;
   volume_por_tomada?: number;      // mL, se líquido
+  gotas_por_tomada?: number;       // 1 mL = 20 macrogotas
+  bsa_m2?: number;                 // superfície corporal, se calculada
   frequencia: string;
   tomadas_dia: number;
   dose_total_dia: number;
@@ -406,7 +409,7 @@ export interface FullDoseResult {
   ajuste_renal_texto?: string;
   ajuste_hepatico_texto?: string;
   limitado_por_dose_max: boolean;
-  fonte: 'pediatrica_mg_kg' | 'adulto_fixo' | 'adulto_mg_kg' | 'bsa';
+  fonte: 'pediatrica_mg_kg' | 'pediatrica_mg_m2' | 'pediatrica_mcg_kg' | 'pediatrica_UI_kg' | 'pediatrica_fixa' | 'adulto_fixo' | 'adulto_mg_kg' | 'bsa';
 }
 
 export function calcFullDose(
@@ -418,9 +421,11 @@ export function calcFullDose(
   childPugh?: 'A' | 'B' | 'C' | '',
   gestante?: boolean,
   lactante?: boolean,
+  alturaM?: number,  // opcional: habilita cálculo BSA para mg/m²
 ): FullDoseResult {
   const profile = classifyPopulation(idadeAnos);
   const conc = parseConcentration(concentracaoSelecionada);
+  const alturaFinal = alturaM ?? drug.alturaM;
   const alertas: string[] = [];
   const passos: string[] = [];
 
@@ -470,43 +475,92 @@ export function calcFullDose(
   }
 
   const usarPediatrica = profile.usar_dose_pediatrica && drug.dose_pediatrica && drug.dose_pediatrica.dose_por_kg > 0;
+  let bsaM2: number | undefined;
 
   if (usarPediatrica && drug.dose_pediatrica) {
     const ped = drug.dose_pediatrica;
     const maxDiaAbs = maxAbsoluto(ped);
     doseUnidade = ped.unidade;
     tomadas = ped.frequencia_divisoes;
-    fonte = 'pediatrica_mg_kg';
 
-    if (ped.calculo === 'mg/kg/dose') {
+    if (ped.calculo === 'mg/m²' || ped.calculo === 'mcg/m²') {
+      // Dose por superfície corporal — requer altura
+      if (!alturaFinal || alturaFinal <= 0) {
+        passos.push(`ℹ Cálculo ${ped.calculo}: altura necessária para calcular BSA. Informe a altura do paciente.`);
+        alertas.push(`⚠ Informe a altura para calcular dose por superfície corporal (${ped.calculo})`);
+        // fallback: usa dose adulto
+        dosePorTomada = parseFloat(drug.dose_adulto.habitual) || 0;
+        doseUnidade = drug.dose_adulto.unidade;
+        tomadas = drug.dose_adulto.frequencias[0]?.includes('2x') ? 2 : 1;
+        doseTotalDia = dosePorTomada * tomadas;
+        fonte = 'adulto_fixo';
+      } else {
+        const alturaCm = alturaFinal > 10 ? alturaFinal : alturaFinal * 100; // aceita m ou cm
+        const bsaResult = calcBSA(pesoKg, alturaCm);
+        bsaM2 = bsaResult.bsa;
+        fonte = 'pediatrica_mg_m2';
+
+        bsaResult.passo_a_passo.forEach(p => passos.push(p));
+        const doseCalc = Math.round(ped.dose_por_kg * bsaM2 * 10) / 10;
+        limitado = doseCalc > maxDiaAbs;
+        doseTotalDia = Math.round(Math.min(doseCalc, maxDiaAbs) * 10) / 10;
+        dosePorTomada = Math.round((doseTotalDia / tomadas) * 10) / 10;
+        passos.push(`Dose: ${ped.dose_por_kg} ${ped.unidade}/m² × ${bsaM2} m² = ${doseCalc.toFixed(1)} ${ped.unidade}/dia`);
+      }
+    } else if (ped.calculo === 'mcg/kg' || ped.calculo === 'mcg/kg/dia') {
+      fonte = 'pediatrica_mcg_kg';
+      const calculada = Math.round(ped.dose_por_kg * pesoKg * 10) / 10;
+      limitado = calculada > maxDiaAbs;
+      doseTotalDia = Math.round(Math.min(calculada, maxDiaAbs) * 10) / 10;
+      dosePorTomada = Math.round((doseTotalDia / tomadas) * 10) / 10;
+      passos.push(`Dose pediátrica: ${ped.dose_por_kg} ${ped.unidade}/kg/dia`);
+      passos.push(`Dose calculada: ${ped.dose_por_kg} × ${pesoKg} kg = ${calculada.toFixed(1)} ${ped.unidade}/dia`);
+    } else if (ped.calculo === 'UI/kg' || ped.calculo === 'UI/kg/dia') {
+      fonte = 'pediatrica_UI_kg';
+      const calculada = Math.round(ped.dose_por_kg * pesoKg * 10) / 10;
+      limitado = calculada > maxDiaAbs;
+      doseTotalDia = Math.round(Math.min(calculada, maxDiaAbs) * 10) / 10;
+      dosePorTomada = Math.round((doseTotalDia / tomadas) * 10) / 10;
+      passos.push(`Dose pediátrica: ${ped.dose_por_kg} UI/kg/dia`);
+      passos.push(`Dose calculada: ${ped.dose_por_kg} × ${pesoKg} kg = ${calculada.toFixed(1)} UI/dia`);
+    } else if (ped.calculo === 'dose_fixa') {
+      // Dose fixa absoluta (não por kg) — dose_por_kg é o valor absoluto da dose
+      fonte = 'pediatrica_fixa';
+      doseTotalDia = Math.round(Math.min(ped.dose_por_kg, maxDiaAbs) * 10) / 10;
+      limitado = ped.dose_por_kg > maxDiaAbs;
+      dosePorTomada = Math.round((doseTotalDia / tomadas) * 10) / 10;
+      passos.push(`Dose fixa pediátrica: ${ped.dose_por_kg} ${ped.unidade}/dia`);
+    } else if (ped.calculo === 'mg/kg/dose') {
+      fonte = 'pediatrica_mg_kg';
       // dose_por_kg é POR DOSE, não por dia
       const dosePorDoseCalc = Math.round(ped.dose_por_kg * pesoKg * 10) / 10;
       const totalDiaCalc = dosePorDoseCalc * tomadas;
       limitado = totalDiaCalc > maxDiaAbs;
       dosePorTomada = limitado ? Math.round((maxDiaAbs / tomadas) * 10) / 10 : dosePorDoseCalc;
       doseTotalDia = Math.round(Math.min(totalDiaCalc, maxDiaAbs) * 10) / 10;
-
       passos.push(`Dose pediátrica: ${ped.dose_por_kg} ${ped.unidade}/kg/dose`);
       passos.push(`Dose calculada: ${ped.dose_por_kg} × ${pesoKg} kg = ${dosePorDoseCalc.toFixed(1)} ${ped.unidade}/dose`);
     } else {
       // mg/kg/dia (padrão)
+      fonte = 'pediatrica_mg_kg';
       const calculada = Math.round(ped.dose_por_kg * pesoKg * 10) / 10;
       limitado = calculada > maxDiaAbs;
       doseTotalDia = Math.round(Math.min(calculada, maxDiaAbs) * 10) / 10;
       dosePorTomada = Math.round((doseTotalDia / tomadas) * 10) / 10;
-
       passos.push(`Dose pediátrica: ${ped.dose_por_kg} ${ped.unidade}/kg/dia`);
       passos.push(`Dose calculada: ${ped.dose_por_kg} × ${pesoKg} kg = ${calculada.toFixed(1)} ${ped.unidade}/dia`);
     }
 
-    if (limitado) {
-      passos.push(`⚠ Excede dose máxima (${ped.max_dose_dia} ${ped.max_dose_dia_unidade}) → usando ${doseTotalDia} ${ped.unidade}/dia`);
-      alertas.push(`⚠ Dose máxima aplicada: ${ped.max_dose_dia} ${ped.max_dose_dia_unidade}`);
-    } else {
-      passos.push(`✓ Dentro da dose máxima (${ped.max_dose_dia} ${ped.max_dose_dia_unidade})`);
+    if (fonte !== 'adulto_fixo') {
+      if (limitado) {
+        passos.push(`⚠ Excede dose máxima (${ped.max_dose_dia} ${ped.max_dose_dia_unidade}) → usando ${doseTotalDia} ${ped.unidade}/dia`);
+        alertas.push(`⚠ Dose máxima aplicada: ${ped.max_dose_dia} ${ped.max_dose_dia_unidade}`);
+      } else {
+        passos.push(`✓ Dentro da dose máxima (${ped.max_dose_dia} ${ped.max_dose_dia_unidade})`);
+      }
+      const freqLabel = tomadas === 1 ? '1x/dia' : tomadas === 2 ? '12/12h' : tomadas === 3 ? '8/8h' : tomadas === 4 ? '6/6h' : `${tomadas}x/dia`;
+      passos.push(`Divisão: ${doseTotalDia.toFixed(1)} ÷ ${tomadas} tomadas = ${dosePorTomada} ${doseUnidade}/dose (${freqLabel})`);
     }
-    const freqLabel = tomadas === 1 ? '1x/dia' : tomadas === 2 ? '12/12h' : tomadas === 3 ? '8/8h' : tomadas === 4 ? '6/6h' : `${tomadas}x/dia`;
-    passos.push(`Divisão: ${doseTotalDia.toFixed(1)} ÷ ${tomadas} tomadas = ${dosePorTomada} ${doseUnidade}/dose (${freqLabel})`);
 
     // Nota pediátrica extra (faixa etária / observações)
     if (drug.dose_pediatrica?.faixa_etaria) {
@@ -527,11 +581,14 @@ export function calcFullDose(
     }
   }
 
-  // Conversão para volume (se líquido)
+  // Conversão para volume (se líquido) + gotas
   let volumePorTomada: number | undefined;
+  let gotasPorTomada: number | undefined;
   if (conc.tipo === 'liquido' && conc.mg_por_mL && dosePorTomada > 0) {
     volumePorTomada = Math.round((dosePorTomada / conc.mg_por_mL) * 10) / 10;
-    passos.push(`Volume: ${dosePorTomada} mg ÷ ${conc.mg_por_mL} mg/mL = ${volumePorTomada} mL por dose`);
+    gotasPorTomada = Math.round(volumePorTomada * 20 * 10) / 10; // 1 mL = 20 macrogotas
+    passos.push(`Volume: ${dosePorTomada} ${doseUnidade} ÷ ${conc.mg_por_mL} mg/mL = ${volumePorTomada} mL por dose`);
+    passos.push(`Equivalente: ${volumePorTomada} mL × 20 = ${gotasPorTomada} gotas/dose`);
   }
 
   // Posologia sugerida
@@ -551,6 +608,8 @@ export function calcFullDose(
     dose_por_tomada: dosePorTomada,
     dose_unidade: doseUnidade,
     volume_por_tomada: volumePorTomada,
+    gotas_por_tomada: gotasPorTomada,
+    bsa_m2: bsaM2,
     frequencia: freqText,
     tomadas_dia: tomadas,
     dose_total_dia: Math.round(doseTotalDia * 10) / 10,

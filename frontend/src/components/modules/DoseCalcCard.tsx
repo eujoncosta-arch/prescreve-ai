@@ -5,7 +5,7 @@
 // Exibe cálculo transparente + posologia sugerida
 // ============================================================
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import {
   calcFullDose, classifyPopulation, parseConcentration,
   type FullDoseInput, type FullDoseResult,
@@ -14,7 +14,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Calculator, User, Pill, CheckCircle2, AlertTriangle,
-  ArrowRight, Beaker, Zap,
+  ArrowRight, Beaker, Zap, Droplets, Activity, Clock,
 } from 'lucide-react';
 
 interface DoseCalcCardProps {
@@ -22,11 +22,18 @@ interface DoseCalcCardProps {
   concentracaoSelecionada: string;
   idadeAnos: number;
   pesoKg: number;
+  alturaM?: number;
   crcl?: number;
   childPugh?: 'A' | 'B' | 'C' | '';
   gestante?: boolean;
   lactante?: boolean;
-  onApply: (result: FullDoseResult) => void;
+  evidencia?: {
+    nivel: 'A' | 'B' | 'C' | 'D';
+    diretriz?: string;
+    classe?: string;
+  };
+  duracaoDefault?: string;
+  onApply: (result: FullDoseResult, duracao: string) => void;
 }
 
 const POPULATION_COLORS: Record<string, string> = {
@@ -39,11 +46,22 @@ const POPULATION_COLORS: Record<string, string> = {
   geriatrico:  'bg-orange-100 text-orange-700 border-orange-200',
 };
 
+const EVIDENCIA_COLORS: Record<string, string> = {
+  A: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+  B: 'bg-blue-100 text-blue-800 border-blue-300',
+  C: 'bg-yellow-100 text-yellow-800 border-yellow-300',
+  D: 'bg-red-100 text-red-800 border-red-300',
+};
+
 const FONTE_LABELS: Record<string, string> = {
-  pediatrica_mg_kg: 'Cálculo mg/kg — Bula profissional',
-  adulto_fixo:      'Dose adulto — Bula profissional',
-  adulto_mg_kg:     'Dose mg/kg adulto',
-  bsa:              'Dose por superfície corporal (m²)',
+  pediatrica_mg_kg:   'Cálculo mg/kg — Bula profissional',
+  pediatrica_mg_m2:   'Cálculo mg/m² — Superfície corporal',
+  pediatrica_mcg_kg:  'Cálculo mcg/kg — Bula profissional',
+  pediatrica_UI_kg:   'Cálculo UI/kg — Bula profissional',
+  pediatrica_fixa:    'Dose fixa pediátrica — Bula profissional',
+  adulto_fixo:        'Dose adulto — Bula profissional',
+  adulto_mg_kg:       'Dose mg/kg adulto',
+  bsa:                'Dose por superfície corporal (m²)',
 };
 
 export function DoseCalcCard({
@@ -51,17 +69,23 @@ export function DoseCalcCard({
   concentracaoSelecionada,
   idadeAnos,
   pesoKg,
+  alturaM,
   crcl,
   childPugh,
   gestante,
   lactante,
+  evidencia,
+  duracaoDefault = '',
   onApply,
 }: DoseCalcCardProps) {
 
+  const [mostrarGotas, setMostrarGotas] = useState(false);
+  const [duracao, setDuracao] = useState(duracaoDefault);
+
   const result = useMemo(() => calcFullDose(
     drug, idadeAnos, pesoKg, concentracaoSelecionada,
-    crcl, childPugh, gestante, lactante,
-  ), [drug, idadeAnos, pesoKg, concentracaoSelecionada, crcl, childPugh, gestante, lactante]);
+    crcl, childPugh, gestante, lactante, alturaM,
+  ), [drug, idadeAnos, pesoKg, concentracaoSelecionada, crcl, childPugh, gestante, lactante, alturaM]);
 
   const conc = useMemo(() => parseConcentration(concentracaoSelecionada), [concentracaoSelecionada]);
 
@@ -69,6 +93,9 @@ export function DoseCalcCard({
   const hasWarning  = result.alertas.some(a => a.startsWith('⚠'));
 
   const popColor = POPULATION_COLORS[result.population.population] ?? POPULATION_COLORS['adulto'];
+
+  const hasGotas = result.gotas_por_tomada !== undefined && result.gotas_por_tomada > 0;
+  const hasBSA   = result.bsa_m2 !== undefined;
 
   return (
     <div className={`rounded-xl border-2 overflow-hidden ${hasCritical ? 'border-red-200' : hasWarning ? 'border-amber-200' : 'border-emerald-200'}`}>
@@ -81,9 +108,16 @@ export function DoseCalcCard({
             Cálculo de Dose Automático
           </span>
         </div>
-        <Badge variant="outline" className={`text-[10px] font-medium border ${popColor}`}>
-          {result.population.label}
-        </Badge>
+        <div className="flex items-center gap-1.5">
+          {evidencia && (
+            <Badge variant="outline" className={`text-[10px] font-bold border ${EVIDENCIA_COLORS[evidencia.nivel]}`}>
+              Evidência {evidencia.nivel}
+            </Badge>
+          )}
+          <Badge variant="outline" className={`text-[10px] font-medium border ${popColor}`}>
+            {result.population.label}
+          </Badge>
+        </div>
       </div>
 
       <div className="bg-white p-4 space-y-3">
@@ -97,6 +131,11 @@ export function DoseCalcCard({
             <div>
               <p className="text-[10px] text-slate-500 font-medium uppercase tracking-wide">Paciente</p>
               <p className="text-xs font-semibold text-slate-800">{idadeAnos < 1 ? `${Math.round(idadeAnos * 12)} meses` : `${idadeAnos} anos`} — {pesoKg} kg</p>
+              {hasBSA && (
+                <p className="text-[10px] text-violet-600 font-medium">
+                  SC: {result.bsa_m2!.toFixed(2)} m²
+                </p>
+              )}
               {crcl !== undefined && (
                 <p className={`text-[10px] font-medium ${crcl >= 60 ? 'text-green-600' : crcl >= 30 ? 'text-yellow-600' : 'text-red-600'}`}>
                   CrCl: {crcl} mL/min
@@ -150,6 +189,20 @@ export function DoseCalcCard({
               : <CheckCircle2 className="w-4 h-4 text-emerald-500" />
             }
             <p className="text-xs font-bold text-slate-800">Prescrição Sugerida</p>
+            {hasGotas && (
+              <button
+                type="button"
+                onClick={() => setMostrarGotas(g => !g)}
+                className={`ml-auto flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full border transition-colors ${
+                  mostrarGotas
+                    ? 'bg-blue-100 border-blue-300 text-blue-700'
+                    : 'bg-white border-slate-200 text-slate-500 hover:border-blue-300 hover:text-blue-600'
+                }`}
+              >
+                <Droplets className="w-3 h-3" />
+                Gotas
+              </button>
+            )}
           </div>
 
           <div className="space-y-1">
@@ -157,13 +210,24 @@ export function DoseCalcCard({
               <ArrowRight className="w-3.5 h-3.5 text-violet-500 flex-shrink-0" />
               <p className="text-sm font-bold text-slate-900">{result.posologia_sugerida}</p>
             </div>
-            {result.volume_por_tomada !== undefined && (
+
+            {result.volume_por_tomada !== undefined && !mostrarGotas && (
               <div className="flex items-center gap-2 pl-5">
                 <p className="text-xs text-slate-600">
                   {result.volume_por_tomada} mL por dose × {result.tomadas_dia}x/dia = {Math.round(result.volume_por_tomada * result.tomadas_dia * 10) / 10} mL/dia
                 </p>
               </div>
             )}
+
+            {mostrarGotas && hasGotas && (
+              <div className="flex items-center gap-2 pl-5">
+                <Droplets className="w-3 h-3 text-blue-500 flex-shrink-0" />
+                <p className="text-xs text-blue-700 font-semibold">
+                  {result.gotas_por_tomada} gotas por dose × {result.tomadas_dia}x/dia
+                </p>
+              </div>
+            )}
+
             <div className="flex items-center gap-2 pl-5 mt-1">
               <p className="text-[11px] text-slate-500">
                 Total diário: <strong>{result.dose_total_dia} {result.dose_unidade}</strong>
@@ -207,15 +271,39 @@ export function DoseCalcCard({
           </div>
         )}
 
+        {/* Evidência clínica */}
+        {evidencia?.diretriz && (
+          <div className="flex items-start gap-2 px-2.5 py-1.5 rounded-md bg-slate-50 border border-slate-100">
+            <Activity className="w-3 h-3 text-slate-400 mt-0.5 flex-shrink-0" />
+            <p className="text-[10px] text-slate-500">
+              <strong className="text-slate-600">Diretriz:</strong> {evidencia.diretriz}
+              {evidencia.classe && <span className="ml-1">— {evidencia.classe}</span>}
+            </p>
+          </div>
+        )}
+
+        {/* Duração do tratamento */}
+        <div className="flex items-center gap-2">
+          <Clock className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
+          <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">Duração</label>
+          <input
+            type="text"
+            value={duracao}
+            onChange={e => setDuracao(e.target.value)}
+            placeholder="ex: 7 dias, 30 dias…"
+            className="flex-1 text-xs border border-slate-200 rounded-md px-2 py-1 focus:outline-none focus:ring-1 focus:ring-emerald-400 placeholder:text-slate-300"
+          />
+        </div>
+
         {/* Fonte */}
         <p className="text-[10px] text-slate-400 text-right">
-          Fonte: {FONTE_LABELS[result.fonte]}
+          Fonte: {FONTE_LABELS[result.fonte] ?? result.fonte}
           {conc.tipo === 'liquido' && ` | Concentração: ${conc.mg_por_mL} mg/mL`}
         </p>
 
         {/* Botão aplicar */}
         <Button
-          onClick={() => onApply(result)}
+          onClick={() => onApply(result, duracao)}
           className={`w-full gap-2 h-9 text-sm font-semibold ${hasCritical ? 'bg-red-600 hover:bg-red-700' : 'bg-emerald-600 hover:bg-emerald-700'}`}
           disabled={hasCritical}
         >

@@ -195,6 +195,151 @@ export function runSafetyCheck(input: SafetyCheckInput): QuickSafetyAlert[] {
     }
   }
 
+  // ── 7. Interações críticas conhecidas (pares hardcoded de alta relevância clínica) ──
+  const CRITICAL_PAIRS: Array<{
+    mol_a: string; mol_b: string;
+    severidade: AlertSeverityFast;
+    titulo: string; descricao: string; acao: string;
+  }> = [
+    // Nefrotoxicidade triple whammy
+    {
+      mol_a: 'ieca', mol_b: 'aine',
+      severidade: 'danger',
+      titulo: 'IECA + AINE — Risco nefrotóxico',
+      descricao: 'Combinação reduz TFG e aumenta risco de IRA, especialmente em idosos ou desidratados.',
+      acao: 'Monitorar creatinina e pressão. Preferir paracetamol como analgésico.',
+    },
+    {
+      mol_a: 'bra', mol_b: 'aine',
+      severidade: 'danger',
+      titulo: 'BRA + AINE — Risco nefrotóxico',
+      descricao: 'BRA + AINE reduz TFG e aumenta potássio sérico.',
+      acao: 'Monitorar função renal e eletrólitos. Preferir paracetamol.',
+    },
+    // Hipercalemia
+    {
+      mol_a: 'ieca', mol_b: 'espironolactona',
+      severidade: 'warning',
+      titulo: 'IECA + Espironolactona — Hipercalemia',
+      descricao: 'Associação aumenta potássio. Indicada na IC-FEr com monitoramento.',
+      acao: 'Monitorar K+ e creatinina a cada 1-3 meses. Suspender se K+ > 5,5 mEq/L.',
+    },
+    // QT prolongamento
+    {
+      mol_a: 'azitromicina', mol_b: 'amiodarona',
+      severidade: 'critical',
+      titulo: 'Azitromicina + Amiodarona — QT prolongado',
+      descricao: 'Combinação prolonga intervalo QT com risco de torsades de pointes.',
+      acao: 'EVITAR combinação. Substituir azitromicina por amoxicilina ou doxiciclina.',
+    },
+    {
+      mol_a: 'azitromicina', mol_b: 'haloperidol',
+      severidade: 'danger',
+      titulo: 'Azitromicina + Haloperidol — QT prolongado',
+      descricao: 'Ambos prolongam QT — risco aditivo de arritmia.',
+      acao: 'Monitorar ECG. Preferir alternativa ao macrolídeo.',
+    },
+    {
+      mol_a: 'hidroxicloroquina', mol_b: 'azitromicina',
+      severidade: 'danger',
+      titulo: 'Hidroxicloroquina + Azitromicina — QT prolongado',
+      descricao: 'Associação de dois agentes que prolongam QT. Risco de arritmia grave.',
+      acao: 'Monitorar ECG. Considerar alternativa ao macrolídeo.',
+    },
+    // Síndrome serotoninérgica
+    {
+      mol_a: 'isrs', mol_b: 'tramadol',
+      severidade: 'danger',
+      titulo: 'ISRS + Tramadol — Síndrome serotoninérgica',
+      descricao: 'Tramadol inibe recaptação de serotonina — risco de síndrome serotoninérgica com ISRS.',
+      acao: 'Evitar associação. Preferir dipirona, paracetamol ou opioides sem atividade serotoninérgica.',
+    },
+    {
+      mol_a: 'sertralina', mol_b: 'tramadol',
+      severidade: 'danger',
+      titulo: 'Sertralina + Tramadol — Síndrome serotoninérgica',
+      descricao: 'Combinação aumenta serotonina sináptica — risco de síndrome serotoninérgica.',
+      acao: 'Evitar. Usar paracetamol ou dipirona para analgesia.',
+    },
+    {
+      mol_a: 'escitalopram', mol_b: 'tramadol',
+      severidade: 'danger',
+      titulo: 'Escitalopram + Tramadol — Síndrome serotoninérgica',
+      descricao: 'Risco de síndrome serotoninérgica por mecanismo aditivo.',
+      acao: 'Evitar. Usar analgésico sem atividade serotoninérgica.',
+    },
+    // Metformina + contraste
+    {
+      mol_a: 'metformina', mol_b: 'contraste',
+      severidade: 'warning',
+      titulo: 'Metformina + Contraste iodado — Risco de acidose lática',
+      descricao: 'Contraste iodado pode causar IRA transitória acumulando metformina e risco de acidose lática.',
+      acao: 'Suspender metformina 48h antes de procedimentos com contraste e reiniciar após confirmação de função renal normal.',
+    },
+    // Lítio + tiazídico
+    {
+      mol_a: 'litio', mol_b: 'hidroclorotiazida',
+      severidade: 'critical',
+      titulo: 'Lítio + Hidroclorotiazida — Toxicidade por lítio',
+      descricao: 'Tiazídicos reduzem excreção renal de lítio, elevando litemia a níveis tóxicos.',
+      acao: 'CONTRAINDICADO. Substituir diurético tiazídico por alternativa (furosemida com cautela).',
+    },
+    // Varfarina + AINEs
+    {
+      mol_a: 'varfarina', mol_b: 'aine',
+      severidade: 'critical',
+      titulo: 'Varfarina + AINE — Risco hemorrágico grave',
+      descricao: 'AINEs inibem plaquetas e deslocam varfarina da albumina — potencializa anticoagulação e risco GI.',
+      acao: 'EVITAR. Usar paracetamol como analgésico. Monitorar INR se necessário.',
+    },
+    // Corticoide + AINEs
+    {
+      mol_a: 'prednisolona', mol_b: 'aine',
+      severidade: 'warning',
+      titulo: 'Corticoide + AINE — Risco gastrointestinal',
+      descricao: 'Associação aumenta risco de úlcera péptica e sangramento GI.',
+      acao: 'Adicionar proteção gástrica (IBP). Evitar combinação quando possível.',
+    },
+    // Fluoroquinolona + QT
+    {
+      mol_a: 'moxifloxacino', mol_b: 'amiodarona',
+      severidade: 'critical',
+      titulo: 'Moxifloxacino + Amiodarona — QT crítico',
+      descricao: 'Moxifloxacino já prolonga QT sozinho — combinação com amiodarona é de alto risco.',
+      acao: 'CONTRAINDICADO. Substituir moxifloxacino por levofloxacino ou outro antibiótico.',
+    },
+    // Duplo bloqueio SRAA
+    {
+      mol_a: 'ieca', mol_b: 'bra',
+      severidade: 'critical',
+      titulo: 'IECA + BRA — Duplo bloqueio SRAA contraindicado',
+      descricao: 'Combinação aumenta risco de hipercalemia, hipotensão e IRA sem benefício adicional.',
+      acao: 'CONTRAINDICADO conforme diretrizes. Usar apenas um dos dois.',
+    },
+  ];
+
+  const molsLower = moleculas.map(m => m.toLowerCase());
+
+  for (const pair of CRITICAL_PAIRS) {
+    const hasA = molsLower.some(m => m.includes(pair.mol_a) || pair.mol_a.includes(m));
+    const hasB = molsLower.some(m => m.includes(pair.mol_b) || pair.mol_b.includes(m));
+    if (hasA && hasB) {
+      // Evita duplicatas com interações já encontradas pelo banco de dados
+      const dupKey = `${pair.mol_a}-${pair.mol_b}`;
+      const jaExiste = alerts.some(a => a.id.includes(pair.mol_a) || a.titulo.toLowerCase().includes(pair.mol_a));
+      if (!jaExiste) {
+        alerts.push({
+          id: `critical-pair-${dupKey}`,
+          tipo: 'interacao',
+          severidade: pair.severidade,
+          titulo: pair.titulo,
+          descricao: pair.descricao,
+          acao: pair.acao,
+        });
+      }
+    }
+  }
+
   // Ordenar por severidade
   const order: Record<AlertSeverityFast, number> = { critical: 0, danger: 1, warning: 2, info: 3 };
   return alerts.sort((a, b) => order[a.severidade] - order[b.severidade]);

@@ -3618,6 +3618,232 @@ export const CORRELACAO_TERAPEUTICA: CorrelacaoTerapeutica[] = [
       'Dieta hipossódica e evitar cafeína/álcool complementam o tratamento',
     ],
   },
+  // ─── J44 — DPOC ───────────────────────────────────────────────
+  {
+    cid10: ['J44', 'J44.0', 'J44.1', 'J44.9'],
+    diagnostico: 'Doença Pulmonar Obstrutiva Crônica (DPOC)',
+    diretrizes: [
+      { nome: 'GOLD Report 2023 — Global Strategy for COPD', sociedade: 'GOLD', ano: 2023, nivel_evidencia: 'A', grau_recomendacao: 'I', url_referencia: 'https://goldcopd.org/2023-gold-report/' },
+      { nome: 'Diretriz Brasileira para o Manejo da DPOC', sociedade: 'SBPT', ano: 2022, nivel_evidencia: 'A', grau_recomendacao: 'I' },
+    ],
+    classes: [
+      {
+        nome: 'LABA — Beta-2 Agonista de Longa Ação',
+        posicao_terapeutica: '1ª linha — controle sintomático em DPOC sintomático',
+        moleculas: [
+          { nome: 'Formoterol', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: [] },
+          { nome: 'Salmeterol', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: [] },
+        ],
+      },
+      {
+        nome: 'LAMA — Antimuscarínico de Longa Ação',
+        posicao_terapeutica: '1ª linha — preferido em DPOC com predomínio de dispneia',
+        moleculas: [
+          { nome: 'Tiotrópio', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: [] },
+        ],
+      },
+      {
+        nome: 'LABA + LAMA — Combinação Broncodilatadora',
+        posicao_terapeutica: 'Preferido em pacientes sintomáticos ou com exacerbações frequentes',
+        moleculas: [
+          { nome: 'Combinação LABA+LAMA', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: [] },
+        ],
+      },
+      {
+        nome: 'CI + LABA — Corticoide Inalatório + LABA',
+        posicao_terapeutica: 'Indicado quando eosinófilos > 300 células/µL ou exacerbações frequentes',
+        moleculas: [
+          { nome: 'Budesonida + Formoterol', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: [] },
+        ],
+      },
+      {
+        nome: 'Corticoide Sistêmico — Exacerbação',
+        posicao_terapeutica: 'Exacerbações moderadas a graves — curso curto (5–7 dias)',
+        moleculas: [
+          { nome: 'Prednisolona', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: ['euro-prednisolona-20'] },
+        ],
+      },
+      {
+        nome: 'Xantina — 3ª linha',
+        posicao_terapeutica: '3ª linha quando broncodilatadores inalatórios são insuficientes ou indisponíveis',
+        moleculas: [
+          { nome: 'Aminofilina', grau_recomendacao: 'IIb', nivel_evidencia: 'B', produtos_eurofarma: [] },
+        ],
+      },
+    ],
+    notas_clinicas: [
+      'DPOC: classificar por GOLD A/B/E (sintomas + exacerbações)',
+      'Não usar CI em monoterapia no DPOC',
+      'Vacinação influenza e pneumocócica obrigatória',
+    ],
+  },
+  // ─── N18 — Doença Renal Crônica ───────────────────────────────
+  {
+    cid10: ['N18', 'N18.1', 'N18.2', 'N18.3', 'N18.4', 'N18.5', 'N18.9'],
+    diagnostico: 'Doença Renal Crônica (DRC)',
+    diretrizes: [
+      { nome: 'KDIGO 2024 Clinical Practice Guideline for CKD', sociedade: 'KDIGO', ano: 2024, nivel_evidencia: 'A', grau_recomendacao: 'I', url_referencia: 'https://kdigo.org/guidelines/ckd/' },
+      { nome: 'Diretriz Brasileira de Doença Renal Crônica', sociedade: 'SBN', ano: 2023, nivel_evidencia: 'A', grau_recomendacao: 'I' },
+    ],
+    classes: [
+      {
+        nome: 'IECA — Inibidor da ECA',
+        posicao_terapeutica: '1ª linha em DRC com proteinúria ou DM2 — nefroprotetor',
+        moleculas: [
+          { nome: 'Enalapril', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: ['euro-enalapril-10'] },
+          { nome: 'Ramipril', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: [] },
+        ],
+      },
+      {
+        nome: 'BRA — Bloqueador do Receptor de Angiotensina',
+        posicao_terapeutica: 'Alternativa ao IECA em caso de tosse ou intolerância',
+        moleculas: [
+          { nome: 'Losartana', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: ['euro-zart-50'] },
+          { nome: 'Irbesartana', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: ['euro-irbesartana-150'] },
+        ],
+      },
+      {
+        nome: 'SGLT2 — Inibidor do SGLT2',
+        posicao_terapeutica: '1ª linha — reduz progressão da DRC independentemente do DM2',
+        moleculas: [
+          { nome: 'Dapagliflozina', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: ['euro-dapagliflozina-10'] },
+        ],
+      },
+      {
+        nome: 'Diurético de Alça',
+        posicao_terapeutica: 'Sobrecarga hídrica / hipertensão refratária na DRC avançada',
+        moleculas: [
+          { nome: 'Furosemida', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: ['euro-furosemida-40'] },
+        ],
+      },
+      {
+        nome: 'Agente Estimulador de Eritropoese (ASE)',
+        posicao_terapeutica: 'Anemia da DRC — iniciar quando Hb < 10 g/dL',
+        moleculas: [
+          { nome: 'Epoetina alfa', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: [] },
+        ],
+      },
+      {
+        nome: 'Suplemento de Ferro IV',
+        posicao_terapeutica: 'Anemia ferropriva na DRC — preferir IV em pacientes em diálise',
+        moleculas: [
+          { nome: 'Ferro sacarato IV', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: [] },
+        ],
+      },
+    ],
+    notas_clinicas: [
+      'Meta PA < 130/80 mmHg',
+      'Evitar AINEs e contraste iodado',
+      'SGLT2 reduz progressão mesmo sem DM2 (estudo DAPA-CKD)',
+    ],
+  },
+  // ─── K21 — DRGE ───────────────────────────────────────────────
+  {
+    cid10: ['K21', 'K21.0', 'K21.9'],
+    diagnostico: 'Doença do Refluxo Gastroesofágico (DRGE)',
+    diretrizes: [
+      { nome: 'Diretrizes Brasileiras de Doença do Refluxo Gastroesofágico', sociedade: 'FBG', ano: 2022, nivel_evidencia: 'A', grau_recomendacao: 'I' },
+      { nome: 'ACG Clinical Guideline — Diagnosis and Management of GERD', sociedade: 'ACG', ano: 2022, nivel_evidencia: 'A', grau_recomendacao: 'I', url_referencia: 'https://journals.lww.com/ajg/fulltext/2022/01000/acg_clinical_guideline__diagnosis_and_management.16.aspx' },
+    ],
+    classes: [
+      {
+        nome: 'IBP — Inibidor da Bomba de Prótons',
+        posicao_terapeutica: '1ª linha — supressão ácida eficaz na DRGE erosiva e não erosiva',
+        moleculas: [
+          { nome: 'Omeprazol', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: [] },
+          { nome: 'Pantoprazol', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: [] },
+          { nome: 'Esomeprazol', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: ['euro-esomeprazol-20'] },
+        ],
+      },
+      {
+        nome: 'Anti-H2 — Antagonista do Receptor H2',
+        posicao_terapeutica: 'Manutenção em DRGE leve — inferior ao IBP',
+        moleculas: [
+          { nome: 'Famotidina', grau_recomendacao: 'IIa', nivel_evidencia: 'B', produtos_eurofarma: [] },
+        ],
+      },
+      {
+        nome: 'Procinético',
+        posicao_terapeutica: 'Adjuvante em regurgitação ou dismotilidade esofágica',
+        moleculas: [
+          { nome: 'Domperidona', grau_recomendacao: 'IIb', nivel_evidencia: 'B', produtos_eurofarma: ['euro-domperidona-10'] },
+        ],
+      },
+      {
+        nome: 'Antiácido',
+        posicao_terapeutica: 'Alívio imediato de sintomas leves — não modifica doença',
+        moleculas: [
+          { nome: 'Hidróxido de alumínio/magnésio', grau_recomendacao: 'IIb', nivel_evidencia: 'C', produtos_eurofarma: [] },
+        ],
+      },
+    ],
+    notas_clinicas: [
+      'IBP: tomar 30 min antes da primeira refeição',
+      'Reavaliação em 4-8 semanas; não prolongar IBP sem indicação',
+      'Medidas comportamentais: elevar cabeceira, evitar refeições tardias, reduzir peso',
+    ],
+  },
+  // ─── M05/M06 — Artrite Reumatoide ────────────────────────────
+  {
+    cid10: ['M05', 'M06', 'M05.0', 'M05.1', 'M05.2', 'M05.3', 'M06.0', 'M06.9'],
+    diagnostico: 'Artrite Reumatoide (AR)',
+    diretrizes: [
+      { nome: 'ACR Guideline for the Treatment of Rheumatoid Arthritis', sociedade: 'ACR', ano: 2021, nivel_evidencia: 'A', grau_recomendacao: 'I', url_referencia: 'https://www.rheumatology.org/Practice-Quality/Clinical-Support/Clinical-Practice-Guidelines/Rheumatoid-Arthritis' },
+      { nome: 'Recomendações da Sociedade Brasileira de Reumatologia para AR', sociedade: 'SBR', ano: 2022, nivel_evidencia: 'A', grau_recomendacao: 'I' },
+    ],
+    classes: [
+      {
+        nome: 'DMARD Convencional — Âncora',
+        posicao_terapeutica: '1ª linha — iniciar precocemente; anchor drug da AR',
+        moleculas: [
+          { nome: 'Metotrexato', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: [] },
+        ],
+      },
+      {
+        nome: 'Antimalárico',
+        posicao_terapeutica: 'AR leve ou em combinação com MTX',
+        moleculas: [
+          { nome: 'Hidroxicloroquina', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: ['euro-hidroxicloroquina-400'] },
+        ],
+      },
+      {
+        nome: 'DMARD Biológico — Anti-TNF',
+        posicao_terapeutica: 'Falha ao MTX após 3–6 meses — escalonamento terapêutico',
+        moleculas: [
+          { nome: 'Adalimumabe', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: [] },
+          { nome: 'Etanercepte', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: [] },
+        ],
+      },
+      {
+        nome: 'JAK Inibidor',
+        posicao_terapeutica: 'Falha ao DMARD biológico ou contraindicação a biológicos',
+        moleculas: [
+          { nome: 'Baricitinibe', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: [] },
+          { nome: 'Tofacitinibe', grau_recomendacao: 'I', nivel_evidencia: 'B', produtos_eurofarma: [] },
+        ],
+      },
+      {
+        nome: 'Glicocorticoide — Ponte',
+        posicao_terapeutica: 'Controle de atividade enquanto DMARD não atinge efeito pleno — curto prazo',
+        moleculas: [
+          { nome: 'Prednisolona', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: ['euro-prednisolona-20'] },
+        ],
+      },
+      {
+        nome: 'AINE — Analgésico/Anti-inflamatório',
+        posicao_terapeutica: 'Controle sintomático de dor e rigidez — não modifica doença',
+        moleculas: [
+          { nome: 'Meloxicam', grau_recomendacao: 'IIa', nivel_evidencia: 'B', produtos_eurofarma: ['euro-meloxicam-15'] },
+          { nome: 'Celecoxibe', grau_recomendacao: 'IIa', nivel_evidencia: 'B', produtos_eurofarma: ['euro-celecoxibe-200'] },
+        ],
+      },
+    ],
+    notas_clinicas: [
+      'Metotrexato é o anchor drug da AR — usar sempre que possível',
+      'Suplementar folato 5 mg/semana com MTX',
+      'Rastreio TB, hepatites e vacinação antes de biológicos',
+    ],
+  },
 ];
 
 // ─── STATUS DE SYNC ────────────────────────────────────────────
