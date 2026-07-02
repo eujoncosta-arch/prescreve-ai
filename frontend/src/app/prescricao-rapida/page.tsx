@@ -5,7 +5,7 @@ import { AppShell } from '@/components/layout/AppShell';
 import { useApp } from '@/lib/store';
 import { LABORATORIOS } from '@/lib/utils';
 import {
-  searchDrugs, getDrugById, getBrandsForLab,
+  searchDrugs, getDrugById, getBrandsForLab, getPreferredBrandForPatient, getPreferredConcentration,
   CATEGORIA_LABELS, GESTANTE_LABELS,
   type QuickDrug, type QuickBrand,
 } from '@/lib/pharma-database';
@@ -172,10 +172,13 @@ export default function PrescricaoRapida() {
     setSearchQuery(drug.molecula);
     setSearchResults([]);
     setDrugInfoExpanded(false);
-    const brands = getBrandsForLab(drug, labPref);
-    const preferred = brands[0] ?? null;
+    const idadeAnos = patient.idade ? Number(patient.idade) : undefined;
+    const preferred = getPreferredBrandForPatient(drug, labPref, idadeAnos);
     setSelectedBrand(preferred);
-    setSelectedConcentration(preferred?.concentracoes[0] ?? drug.dose_adulto.habitual + ' ' + drug.dose_adulto.unidade);
+    const defaultConc = preferred
+      ? getPreferredConcentration(preferred, drug, idadeAnos)
+      : drug.dose_adulto.habitual + ' ' + drug.dose_adulto.unidade;
+    setSelectedConcentration(defaultConc);
     setCustomDose(drug.dose_adulto.habitual);
 
     // Auto-calc se peso disponível e tem dose pediátrica
@@ -190,7 +193,7 @@ export default function PrescricaoRapida() {
       setCalcResult(result.passo_a_passo);
       setCustomDose(String(result.dose_por_tomada));
     }
-  }, [labPref, patient.peso]);
+  }, [labPref, patient.peso, patient.idade]);
 
   // ── Add to prescription ───────────────────────────────────
   const addToRx = useCallback(() => {

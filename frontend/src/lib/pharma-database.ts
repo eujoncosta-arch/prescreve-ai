@@ -2666,6 +2666,65 @@ export function getBrandsForLab(drug: QuickDrug, labId: string): QuickBrand[] {
   return [...preferred, ...others];
 }
 
+const FORMAS_LIQUIDAS = ['solução', 'suspensão', 'gotas', 'xarope', 'líquido', 'elixir'];
+
+export function isFormaLiquida(brand: QuickBrand): boolean {
+  return (
+    brand.formas.some(f => FORMAS_LIQUIDAS.some(liq => f.toLowerCase().includes(liq))) ||
+    brand.concentracoes.some(c => /mg\/ml|mg\/gota|mg\/5\s*ml|mcg\/ml/i.test(c))
+  );
+}
+
+const CONC_LIQUIDA_RE = /\/\s*ml|\/\s*gota|mg\/5\s*ml|mcg\/ml|xarope|solução|suspensão/i;
+
+/** Retorna true se a string de concentração representa uma forma líquida */
+export function isConcLiquida(conc: string): boolean {
+  return CONC_LIQUIDA_RE.test(conc);
+}
+
+/**
+ * Retorna a concentração preferida da marca:
+ * - Para pediátricos (< 12 anos com dose_pediatrica), prefere a primeira concentração líquida
+ * - Caso contrário, retorna a primeira concentração
+ */
+export function getPreferredConcentration(
+  brand: QuickBrand,
+  drug: QuickDrug,
+  idadeAnos?: number,
+): string {
+  if (idadeAnos !== undefined && idadeAnos < 12 && drug.dose_pediatrica) {
+    const liquida = brand.concentracoes.find(isConcLiquida);
+    if (liquida) return liquida;
+  }
+  return brand.concentracoes[0] ?? '';
+}
+
+/**
+ * Retorna a marca preferida considerando:
+ * 1. Preferência de laboratório
+ * 2. Para pacientes pediátricos (< 12 anos com dose_pediatrica), preferir formas líquidas
+ */
+export function getPreferredBrandForPatient(
+  drug: QuickDrug,
+  labId: string,
+  idadeAnos?: number,
+): QuickBrand | null {
+  const brands = getBrandsForLab(drug, labId);
+  if (!brands.length) return null;
+
+  if (idadeAnos !== undefined && idadeAnos < 12 && drug.dose_pediatrica) {
+    // Padrão A: marca separada com forma líquida
+    const liquidas = brands.filter(isFormaLiquida);
+    if (liquidas.length > 0) return liquidas[0];
+    // Padrão B: marca mista com concentração líquida → retorna a mesma marca
+    // (a concentração será selecionada por getPreferredConcentration)
+    const marcaComLiquido = brands.find(b => b.concentracoes.some(isConcLiquida));
+    if (marcaComLiquido) return marcaComLiquido;
+  }
+
+  return brands[0];
+}
+
 export const CATEGORIA_LABELS: Record<DrugCategory, string> = {
   cardiovascular: 'Cardiovascular',
   antihipertensivo: 'Anti-hipertensivo',
