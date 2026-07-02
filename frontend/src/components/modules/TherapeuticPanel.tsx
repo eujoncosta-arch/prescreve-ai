@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useApp } from '@/lib/store';
 import { LABORATORIOS } from '@/lib/utils';
 import { WhyThisRecommendation } from './WhyThisRecommendation';
+import { ExplainableAI } from './ExplainableAI';
 import { EvidencePanel } from './EvidencePanel';
 import { BrandComparator } from './BrandComparator';
 import { PrognosisPanel } from './PrognosisPanel';
@@ -160,7 +161,10 @@ export function TherapeuticPanel({ onComplete }: TherapeuticPanelProps) {
                       <div>
                         <p className="text-sm font-bold text-slate-900">{med.molecula}</p>
                         <p className="text-xs text-slate-500">{med.classe_terapeutica}</p>
-                        <div className="mt-1"><WhyThisRecommendation med={med} /></div>
+                        <div className="mt-1 flex flex-wrap gap-1">
+                          <WhyThisRecommendation med={med} />
+                          <ExplainableAI med={med} />
+                        </div>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
