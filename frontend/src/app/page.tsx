@@ -4,278 +4,340 @@ import { useState, useEffect } from 'react';
 import { AppShell } from '@/components/layout/AppShell';
 import { useApp } from '@/lib/store';
 import { ClientDate } from '@/components/ui/client-date';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 import {
-  FilePlus2,
-  Users,
-  FileText,
-  AlertTriangle,
-  BookOpen,
-  Clock,
-  CheckCircle2,
-  Activity,
-  ChevronRight,
-  Stethoscope,
-  TrendingUp,
-  Shield,
-  Sparkles,
-  Building2,
-  Award,
+  FilePlus2, Users, FileText, AlertTriangle, BookOpen, Clock, CheckCircle2,
+  Activity, ChevronRight, Stethoscope, TrendingUp, Shield, Sparkles,
+  Building2, Award, Zap, Calculator, ClipboardList, GitBranch, FlaskConical,
+  Brain, ArrowUpRight, Circle,
 } from 'lucide-react';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
+
+// ─── Meta ────────────────────────────────────────────────────
 
 const STATUS_LABELS: Record<string, string> = {
-  anamnese: 'Anamnese',
-  diagnostico: 'Diagnóstico',
-  terapeutico: 'Terapêutico',
-  prescricao: 'Prescrição',
-  concluida: 'Concluída',
+  anamnese: 'Anamnese', diagnostico: 'Diagnóstico',
+  terapeutico: 'Terapêutico', prescricao: 'Prescrição', concluida: 'Concluída',
 };
 
-const STATUS_COLORS: Record<string, string> = {
-  anamnese: 'bg-yellow-100 text-yellow-700',
-  diagnostico: 'bg-blue-100 text-blue-700',
-  terapeutico: 'bg-purple-100 text-purple-700',
-  prescricao: 'bg-orange-100 text-orange-700',
-  concluida: 'bg-green-100 text-green-700',
+const STATUS_DOT: Record<string, string> = {
+  anamnese: 'bg-yellow-400', diagnostico: 'bg-blue-500',
+  terapeutico: 'bg-purple-500', prescricao: 'bg-orange-500', concluida: 'bg-green-500',
 };
 
-// Estatísticas executivas simuladas
-const EXEC_STATS = {
-  especialidades: 12,
-  diretrizes: 6,
-  moleculas: 24,
-  tempoMedio: '4,2 min',
-  economiaMedia: '8,5 min/consulta',
-  seguranca: '100%',
+const STATUS_CARD: Record<string, string> = {
+  anamnese:    'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400',
+  diagnostico: 'bg-blue-50   dark:bg-blue-900/20   text-blue-700   dark:text-blue-400',
+  terapeutico: 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400',
+  prescricao:  'bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-400',
+  concluida:   'bg-green-50  dark:bg-green-900/20  text-green-700  dark:text-green-400',
 };
+
+// ─── Page ────────────────────────────────────────────────────
 
 export default function Dashboard() {
   const { state } = useApp();
-  const [now, setNow] = useState('');
+  const [greeting, setGreeting] = useState('');
+
   useEffect(() => {
-    setNow(new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' }));
+    const h = new Date().getHours();
+    setGreeting(h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite');
   }, []);
 
-  const total = state.consultations.length;
-  const concluidas = state.consultations.filter(c => c.status === 'concluida').length;
+  const total       = state.consultations.length;
+  const concluidas  = state.consultations.filter(c => c.status === 'concluida').length;
   const emAndamento = total - concluidas;
   const prescricoes = state.consultations.filter(c => c.prescricao).length;
+  const pct         = total > 0 ? Math.round((concluidas / total) * 100) : 0;
 
   return (
     <AppShell>
-      <div className="p-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+      <div className="space-y-6 max-w-7xl mx-auto">
+
+        {/* ── Hero header ──────────────────────────────── */}
+        <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
-            <p className="text-slate-500 text-sm mt-1">
-              Bom dia, {state.settings.medico.nome} — {now}
+            <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              {greeting}, {state.settings.medico.nome.split(' ')[0]} 👋
+            </h1>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+              PRESCREVE-AI · Apoio Clínico Baseado em Evidências
             </p>
           </div>
-          <div className="flex gap-2">
-            <Link href="/demo">
-              <Button variant="outline" className="gap-2 text-sm">
-                <Sparkles className="w-4 h-4 text-blue-500" />
-                Casos Demo
-              </Button>
+          <div className="flex gap-2 flex-shrink-0">
+            <Link
+              href="/demo"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-600 dark:text-slate-300 hover:border-blue-400 hover:text-blue-600 transition-all"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
+              Demo
             </Link>
-            <Link href="/consulta/nova">
-              <Button className="bg-blue-600 hover:bg-blue-700 gap-2">
-                <FilePlus2 className="w-4 h-4" />
-                Nova Consulta
-              </Button>
+            <Link
+              href="/consulta/nova"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-all shadow-sm"
+            >
+              <FilePlus2 className="w-3.5 h-3.5" />
+              Nova Consulta
             </Link>
           </div>
         </div>
 
-        {/* KPIs principais */}
-        <div className="grid grid-cols-4 gap-4 mb-6">
-          {[
-            { label: 'Total consultas', value: total, icon: Users, color: 'blue', sub: 'registradas' },
-            { label: 'Concluídas', value: concluidas, icon: CheckCircle2, color: 'green', sub: `${total > 0 ? Math.round((concluidas/total)*100) : 0}% do total` },
-            { label: 'Em andamento', value: emAndamento, icon: Activity, color: 'yellow', sub: 'aguardando' },
-            { label: 'Prescrições', value: prescricoes, icon: FileText, color: 'purple', sub: 'emitidas' },
-          ].map(({ label, value, icon: Icon, color, sub }) => (
-            <Card key={label} className="hover:shadow-sm transition-shadow">
-              <CardContent className="pt-5 pb-5">
-                <div className="flex items-start gap-3">
-                  <div className={`w-10 h-10 bg-${color}-50 rounded-xl flex items-center justify-center flex-shrink-0`}>
-                    <Icon className={`w-5 h-5 text-${color}-600`} />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold text-slate-900">{value}</p>
-                    <p className="text-xs font-medium text-slate-600">{label}</p>
-                    <p className="text-xs text-slate-400">{sub}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+        {/* ── KPIs ─────────────────────────────────────── */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <KpiCard
+            label="Consultas"
+            value={total}
+            sub="registradas"
+            icon={Users}
+            color="blue"
+            trend={null}
+          />
+          <KpiCard
+            label="Concluídas"
+            value={concluidas}
+            sub={`${pct}% do total`}
+            icon={CheckCircle2}
+            color="green"
+            trend={pct}
+          />
+          <KpiCard
+            label="Em andamento"
+            value={emAndamento}
+            sub="aguardando"
+            icon={Activity}
+            color="amber"
+            trend={null}
+          />
+          <KpiCard
+            label="Prescrições"
+            value={prescricoes}
+            sub="emitidas"
+            icon={FileText}
+            color="purple"
+            trend={null}
+          />
         </div>
 
-        <div className="grid grid-cols-3 gap-6">
-          {/* Consultas recentes */}
-          <div className="col-span-2 space-y-4">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-3">
-                <CardTitle className="text-base font-semibold">Consultas Recentes</CardTitle>
-                <Link href="/historico" className="text-xs text-blue-600 hover:underline flex items-center gap-1">
-                  Ver todas <ChevronRight className="w-3 h-3" />
-                </Link>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  {state.consultations.slice(0, 5).map(c => (
-                    <div key={c.id} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors">
-                      <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-sm">
-                          <span className="text-xs font-bold text-white">
-                            {c.paciente_nome.charAt(0)}
-                          </span>
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold text-slate-900">{c.paciente_nome}</p>
-                          <div className="flex items-center gap-1 text-xs text-slate-400">
-                            <Clock className="w-3 h-3" />
-                            <ClientDate date={c.data} />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {c.diagnostico_selecionado && (
-                          <span className="text-xs text-slate-400 max-w-32 truncate hidden lg:block">
-                            {c.diagnostico_selecionado.split(' ')[0]}...
-                          </span>
-                        )}
-                        <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${STATUS_COLORS[c.status]}`}>
-                          {STATUS_LABELS[c.status]}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                  {state.consultations.length === 0 && (
-                    <div className="text-center py-8">
-                      <Stethoscope className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-                      <p className="text-sm text-slate-400">Nenhuma consulta ainda</p>
-                      <Link href="/consulta/nova">
-                        <Button variant="outline" size="sm" className="mt-3 gap-1">
-                          <FilePlus2 className="w-3 h-3" /> Iniciar primeira consulta
-                        </Button>
-                      </Link>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+        {/* ── Body: 3 colunas ──────────────────────────── */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
-            {/* Dashboard Executivo */}
-            <Card className="bg-gradient-to-br from-slate-900 to-slate-800 text-white border-0">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-semibold text-white flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-blue-400" />
-                  Métricas Executivas — PRESCREVE-AI
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-3 gap-4">
-                  {[
-                    { icon: Stethoscope, label: 'Especialidades', value: EXEC_STATS.especialidades, sub: 'suportadas', color: 'text-blue-400' },
-                    { icon: BookOpen, label: 'Diretrizes', value: EXEC_STATS.diretrizes, sub: 'integradas', color: 'text-green-400' },
-                    { icon: Building2, label: 'Moléculas', value: EXEC_STATS.moleculas, sub: 'no banco', color: 'text-purple-400' },
-                  ].map(({ icon: Icon, label, value, sub, color }) => (
-                    <div key={label} className="text-center">
-                      <Icon className={`w-5 h-5 mx-auto mb-1 ${color}`} />
-                      <p className="text-2xl font-bold text-white">{value}</p>
-                      <p className="text-xs text-slate-300">{label}</p>
-                      <p className="text-xs text-slate-500">{sub}</p>
+          {/* Col esq: Consultas recentes + Fluxo clínico */}
+          <div className="lg:col-span-2 space-y-5">
+
+            {/* Consultas recentes */}
+            <Section
+              title="Consultas Recentes"
+              action={{ label: 'Ver todas', href: '/historico' }}
+            >
+              {state.consultations.length === 0 ? (
+                <EmptyState
+                  icon={Stethoscope}
+                  label="Nenhuma consulta ainda"
+                  action={{ label: 'Iniciar primeira consulta', href: '/consulta/nova' }}
+                />
+              ) : (
+                <div className="divide-y divide-slate-50 dark:divide-slate-800">
+                  {state.consultations.slice(0, 6).map(c => (
+                    <div key={c.id} className="flex items-center gap-3 py-2.5 px-1 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-lg transition-colors group">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0 shadow-sm">
+                        {c.paciente_nome.charAt(0)}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate">{c.paciente_nome}</p>
+                        <div className="flex items-center gap-1.5 text-xs text-slate-400">
+                          <Clock className="w-3 h-3" />
+                          <ClientDate date={c.data} />
+                          {c.diagnostico_selecionado && (
+                            <span className="hidden sm:block truncate max-w-32">· {c.diagnostico_selecionado.split('(')[0].trim()}</span>
+                          )}
+                        </div>
+                      </div>
+                      <span className={cn('text-[10px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1', STATUS_CARD[c.status])}>
+                        <span className={cn('w-1.5 h-1.5 rounded-full', STATUS_DOT[c.status])} />
+                        {STATUS_LABELS[c.status]}
+                      </span>
                     </div>
                   ))}
                 </div>
-                <div className="mt-4 pt-4 border-t border-slate-700 grid grid-cols-3 gap-3 text-center">
-                  <div>
-                    <p className="text-sm font-bold text-emerald-400">{EXEC_STATS.tempoMedio}</p>
-                    <p className="text-xs text-slate-400">Tempo médio/consulta</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-blue-400">{EXEC_STATS.economiaMedia}</p>
-                    <p className="text-xs text-slate-400">Economia de tempo</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-green-400">{EXEC_STATS.seguranca}</p>
-                    <p className="text-xs text-slate-400">Validação segurança</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+              )}
+            </Section>
 
-          {/* Coluna lateral */}
-          <div className="space-y-4">
-            {/* Ações rápidas */}
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base font-semibold">Ações Rápidas</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
+            {/* Fluxo clínico — acesso em < 3 cliques */}
+            <Section title="Fluxo Clínico — Acesso Rápido">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {[
-                  { href: '/consulta/nova', icon: FilePlus2, label: 'Nova Consulta', color: 'text-blue-500' },
-                  { href: '/demo', icon: Sparkles, label: 'Casos Demo', color: 'text-indigo-500' },
-                  { href: '/prescricoes', icon: FileText, label: 'Prescrições', color: 'text-purple-500' },
-                  { href: '/evidencias', icon: BookOpen, label: 'Evidências', color: 'text-green-500' },
-                  { href: '/governanca', icon: Shield, label: 'Governança', color: 'text-emerald-500' },
-                  { href: '/configuracoes', icon: Award, label: 'Configurações', color: 'text-slate-500' },
-                ].map(({ href, icon: Icon, label, color }) => (
-                  <Link key={href} href={href}>
-                    <Button variant="outline" className="w-full justify-start gap-2 text-sm h-9">
-                      <Icon className={`w-4 h-4 ${color}`} />
-                      {label}
-                    </Button>
+                  { href: '/consulta/nova',     icon: Stethoscope, label: 'Nova Consulta',     sub: 'Iniciar atendimento',     color: 'blue'   },
+                  { href: '/prescricao-rapida', icon: Zap,         label: 'Prescrição Rápida', sub: 'Receita imediata',        color: 'indigo' },
+                  { href: '/calculadoras',      icon: Calculator,  label: 'Calculadoras',      sub: 'Scores validados',        color: 'purple' },
+                  { href: '/protocolos',        icon: ClipboardList,label:'Protocolos',         sub: 'HAS, DM2, asma…',        color: 'teal'   },
+                  { href: '/timeline',          icon: GitBranch,   label: 'Timeline',          sub: 'Evolução do paciente',    color: 'cyan'   },
+                  { href: '/atualizacoes',      icon: TrendingUp,  label: 'Guideline Updates', sub: 'ESC, ADA, GOLD, KDIGO',  color: 'emerald'},
+                ].map(({ href, icon: Icon, label, sub, color }) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    className="group flex items-start gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-400 dark:hover:border-blue-600 hover:shadow-sm transition-all"
+                  >
+                    <div className={`w-8 h-8 rounded-lg bg-${color}-100 dark:bg-${color}-900/30 flex items-center justify-center flex-shrink-0`}>
+                      <Icon className={`w-4 h-4 text-${color}-600 dark:text-${color}-400`} />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">{label}</p>
+                      <p className="text-[10px] text-slate-400 mt-0.5">{sub}</p>
+                    </div>
+                    <ArrowUpRight className="w-3 h-3 text-slate-300 group-hover:text-blue-400 transition-colors flex-shrink-0 mt-0.5" />
                   </Link>
                 ))}
-              </CardContent>
-            </Card>
+              </div>
+            </Section>
+          </div>
 
-            {/* Aviso PRESCREVE-AI */}
-            <Card className="border-amber-200 bg-amber-50">
-              <CardContent className="pt-4 pb-4">
-                <div className="flex items-start gap-2">
-                  <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-xs font-semibold text-amber-800">Apoio à Decisão Clínica</p>
-                    <p className="text-xs text-amber-700 mt-1 leading-relaxed">
-                      O sistema NÃO substitui o médico. O diagnóstico e a prescrição são de responsabilidade
-                      exclusiva do profissional habilitado.
-                    </p>
+          {/* Col dir: Painel executivo + base científica */}
+          <div className="space-y-5">
+
+            {/* Executive panel */}
+            <div className="rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 border border-slate-700 p-4 shadow-xl">
+              <div className="flex items-center gap-2 mb-4">
+                <TrendingUp className="w-4 h-4 text-blue-400" />
+                <p className="text-xs font-bold text-white">Métricas Executivas</p>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2 mb-4">
+                {[
+                  { icon: FlaskConical, label: 'Moléculas',    value: '24+', color: 'text-purple-400' },
+                  { icon: BookOpen,     label: 'Diretrizes',   value: '6',   color: 'text-blue-400'   },
+                  { icon: Brain,        label: 'Scores CDS',   value: '12',  color: 'text-green-400'  },
+                ].map(({ icon: Icon, label, value, color }) => (
+                  <div key={label} className="text-center p-2 rounded-xl bg-white/5">
+                    <Icon className={`w-4 h-4 mx-auto mb-1 ${color}`} />
+                    <p className="text-lg font-black text-white">{value}</p>
+                    <p className="text-[10px] text-slate-400">{label}</p>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                ))}
+              </div>
 
-            {/* Prefêrencia lab */}
-            <Card className="border-blue-200">
-              <CardContent className="pt-4 pb-4">
-                <div className="flex items-center justify-between mb-2">
-                  <p className="text-xs font-semibold text-slate-700 flex items-center gap-1">
-                    <Building2 className="w-3 h-3" /> Lab. Preferido
-                  </p>
-                  <Link href="/configuracoes" className="text-xs text-blue-600 hover:underline">
-                    Alterar
-                  </Link>
-                </div>
-                <p className="text-sm font-semibold text-slate-900 capitalize">
-                  {state.settings.preferencia_laboratorio === 'sem_preferencia'
-                    ? 'Sem preferência'
-                    : state.settings.preferencia_laboratorio.charAt(0).toUpperCase() + state.settings.preferencia_laboratorio.slice(1)}
+              <div className="space-y-2 border-t border-slate-700 pt-3">
+                {[
+                  { label: 'Tempo médio por consulta',  value: '4,2 min',         color: 'text-emerald-400' },
+                  { label: 'Economia vs. método manual', value: '8,5 min/consulta', color: 'text-blue-400'    },
+                  { label: 'Alertas de segurança',      value: '100% validados',  color: 'text-green-400'   },
+                ].map(({ label, value, color }) => (
+                  <div key={label} className="flex items-center justify-between">
+                    <p className="text-[10px] text-slate-400">{label}</p>
+                    <p className={`text-xs font-bold ${color}`}>{value}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Base científica */}
+            <Section title="Base Científica" action={{ label: 'Ver atualizações', href: '/atualizacoes' }}>
+              <div className="space-y-2">
+                {[
+                  { sigla: 'ESC 2025',   area: 'IC / Cardiologia',    status: 'Vigente',    dot: 'bg-green-500'  },
+                  { sigla: 'ADA 2026',   area: 'DM2 / Endocrinologia',status: 'Vigente',    dot: 'bg-green-500'  },
+                  { sigla: 'GOLD 2026',  area: 'DPOC / Pneumologia',  status: 'Vigente',    dot: 'bg-green-500'  },
+                  { sigla: 'KDIGO 2025', area: 'DRC / Nefrologia',    status: 'Vigente',    dot: 'bg-green-500'  },
+                  { sigla: 'GINA 2025',  area: 'Asma / Pneumologia',  status: 'Em revisão', dot: 'bg-amber-400'  },
+                  { sigla: 'DBHA-7',     area: 'HAS / Cardiologia',   status: 'Vigente',    dot: 'bg-green-500'  },
+                ].map(({ sigla, area, status, dot }) => (
+                  <div key={sigla} className="flex items-center gap-3 py-1.5">
+                    <span className={cn('w-2 h-2 rounded-full flex-shrink-0', dot)} />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-bold text-slate-800 dark:text-slate-200">{sigla}</p>
+                      <p className="text-[10px] text-slate-400 truncate">{area}</p>
+                    </div>
+                    <span className={cn(
+                      'text-[9px] font-semibold px-1.5 py-0.5 rounded-full flex-shrink-0',
+                      status === 'Vigente' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400'
+                    )}>
+                      {status}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </Section>
+
+            {/* Disclaimer */}
+            <div className="flex items-start gap-2 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl">
+              <AlertTriangle className="w-3.5 h-3.5 text-amber-500 mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="text-[11px] font-semibold text-amber-800 dark:text-amber-300">Apoio à Decisão Clínica</p>
+                <p className="text-[10px] text-amber-700 dark:text-amber-400 mt-0.5 leading-relaxed">
+                  Não substitui o médico. Diagnóstico e prescrição são responsabilidade exclusiva do profissional.
                 </p>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </AppShell>
+  );
+}
+
+// ─── Sub-components ───────────────────────────────────────────
+
+function KpiCard({ label, value, sub, icon: Icon, color, trend }: {
+  label: string; value: number; sub: string;
+  icon: React.ElementType; color: string; trend: number | null;
+}) {
+  const cfg = {
+    blue:   { bg: 'bg-blue-50   dark:bg-blue-900/20',   icon: 'text-blue-600   dark:text-blue-400',   text: 'text-blue-600'   },
+    green:  { bg: 'bg-green-50  dark:bg-green-900/20',  icon: 'text-green-600  dark:text-green-400',  text: 'text-green-600'  },
+    amber:  { bg: 'bg-amber-50  dark:bg-amber-900/20',  icon: 'text-amber-600  dark:text-amber-400',  text: 'text-amber-600'  },
+    purple: { bg: 'bg-purple-50 dark:bg-purple-900/20', icon: 'text-purple-600 dark:text-purple-400', text: 'text-purple-600' },
+  }[color] ?? { bg: '', icon: '', text: '' };
+
+  return (
+    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 flex items-center gap-3 shadow-sm hover:shadow-md transition-shadow">
+      <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0', cfg.bg)}>
+        <Icon className={cn('w-5 h-5', cfg.icon)} />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-2xl font-black text-slate-900 dark:text-white leading-none">{value}</p>
+        <p className="text-xs font-medium text-slate-600 dark:text-slate-400 mt-0.5">{label}</p>
+        <p className="text-[10px] text-slate-400 dark:text-slate-600">{sub}</p>
+      </div>
+      {trend !== null && trend > 0 && (
+        <div className={cn('text-xs font-bold flex-shrink-0', cfg.text)}>{trend}%</div>
+      )}
+    </div>
+  );
+}
+
+function Section({ title, action, children }: {
+  title: string;
+  action?: { label: string; href: string };
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-800">
+        <h2 className="text-sm font-bold text-slate-900 dark:text-white">{title}</h2>
+        {action && (
+          <Link href={action.href} className="text-xs text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-0.5">
+            {action.label} <ChevronRight className="w-3 h-3" />
+          </Link>
+        )}
+      </div>
+      <div className="p-4">{children}</div>
+    </div>
+  );
+}
+
+function EmptyState({ icon: Icon, label, action }: {
+  icon: React.ElementType; label: string;
+  action?: { label: string; href: string };
+}) {
+  return (
+    <div className="text-center py-8">
+      <Icon className="w-8 h-8 text-slate-300 dark:text-slate-700 mx-auto mb-2" />
+      <p className="text-sm text-slate-400 dark:text-slate-600">{label}</p>
+      {action && (
+        <Link href={action.href} className="inline-flex items-center gap-1 mt-3 text-xs text-blue-600 dark:text-blue-400 hover:underline">
+          <FilePlus2 className="w-3 h-3" /> {action.label}
+        </Link>
+      )}
+    </div>
   );
 }

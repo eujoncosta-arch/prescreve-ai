@@ -1,12 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { formatDateTime } from '@/lib/utils';
-
 export function ClientDate({ date }: { date: string }) {
-  const [formatted, setFormatted] = useState('');
-  useEffect(() => {
-    setFormatted(formatDateTime(date));
-  }, [date]);
-  return <>{formatted}</>;
+  if (!date) return null;
+  try {
+    return <>{new Date(date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: '2-digit' })}</>;
+  } catch {
+    return <>{date}</>;
+  }
 }
