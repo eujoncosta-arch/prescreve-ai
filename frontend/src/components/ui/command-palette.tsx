@@ -6,7 +6,7 @@ import {
   LayoutDashboard, FilePlus2, History, FileText, BookOpen, ShieldCheck,
   Calculator, ClipboardList, GitBranch, TrendingUp, Sparkles, Zap,
   Library, BookMarked, Settings, Stethoscope, Search, ArrowRight,
-  Pill, FlaskConical, Brain, Users, Microscope, Building2, UserCircle, Scale, Shield, Lightbulb,
+  Pill, FlaskConical, Brain, Users, Microscope, Building2, UserCircle, Scale, Shield, Lightbulb, Baby,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -26,6 +26,7 @@ const COMMANDS: CommandItem[] = [
   { id: 'nova-consulta',  label: 'Nova Consulta',         href: '/consulta/nova',       icon: FilePlus2,       group: 'Clínico',     keywords: ['nova','atendimento','paciente'] },
   { id: 'presc-rapida',   label: 'Prescrição Rápida',     href: '/prescricao-rapida',   icon: Zap,             group: 'Clínico',     keywords: ['rapida','prescricao','medicamento'] },
   { id: 'calculadoras',   label: 'Calculadoras Clínicas', href: '/calculadoras',        icon: Calculator,      group: 'Clínico',     keywords: ['score','curb65','cha2ds2','wells','imc','ckd'] },
+  { id: 'dosagem',        label: 'Calculadora de Dosagem', href: '/dosagem',             icon: Baby,            group: 'Clínico',     keywords: ['dosagem','dose','mg/kg','pediatria','neonato','geriatria','calcular','amoxicilina','paracetamol','dipirona','ibuprofeno','antibiotico','suspensao','gotas','posologia'] },
   { id: 'protocolos',     label: 'Protocolos Clínicos',   href: '/protocolos',          icon: ClipboardList,   group: 'Clínico',     keywords: ['protocolo','favorito','has','dm2'] },
   { id: 'timeline',       label: 'Timeline Clínica',      href: '/timeline',            icon: GitBranch,       group: 'Clínico',     keywords: ['evolucao','historico','timeline'] },
   { id: 'demo',           label: 'Casos Demo',            href: '/demo',                icon: Sparkles,        group: 'Clínico',     keywords: ['demo','caso','exemplo'] },
