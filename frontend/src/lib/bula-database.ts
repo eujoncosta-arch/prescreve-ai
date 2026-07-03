@@ -126,14 +126,14 @@ export const BULAS: Record<string, BulaCompleta> = {
 
   'euro-metformina': {
     produto_id: 'euro-metformina',
-    produto_nome: 'Metformina Eurofarma',
+    produto_nome: 'Metformina',
     molecula: 'Cloridrato de Metformina',
     data_aprovacao_anvisa: '2000-06-25',
     versao: 'v14.0 — Abr/2024',
     bula_profissional: [
       {
         titulo: '1. IDENTIFICAÇÃO DO MEDICAMENTO',
-        conteudo: 'Metformina Eurofarma (cloridrato de metformina). Comprimidos de 500 mg, 850 mg e 1000 mg. Classe terapêutica: Antidiabético — Biguanida. Laboratório: Eurofarma Laboratórios S.A.',
+        conteudo: 'Metformina (cloridrato de metformina). Comprimidos de 500 mg, 850 mg e 1000 mg. Classe terapêutica: Antidiabético — Biguanida. Laboratório: Eurofarma Laboratórios S.A.',
       },
       {
         titulo: '2. INDICAÇÕES',
@@ -158,7 +158,7 @@ export const BULAS: Record<string, BulaCompleta> = {
     ],
     bula_paciente: [
       {
-        titulo: 'Para que serve a Metformina Eurofarma?',
+        titulo: 'Para que serve a Metformina?',
         conteudo: 'É usada para controlar o nível de açúcar no sangue (glicemia) em pessoas com diabetes tipo 2, especialmente pessoas com sobrepeso. Ajuda a melhorar a forma como seu corpo usa o açúcar.',
       },
       {

@@ -322,7 +322,7 @@ export const MOLECULES_DB: MoleculaComparavel[] = [
     subclasse: 'Bloqueador do Receptor de Angiotensina II (AT1) — pró-fármaco',
     categoria: 'anti_hipertensivos',
     cids_principais: ['I10'],
-    indicacoes: ['HAS (monoterapia ou combinação)', 'HAS de difícil controle (disponível em combinação tripla: BRA+BCC+Tiazídico — Pisa®)', 'HAS moderada a grave'],
+    indicacoes: ['HAS (monoterapia ou combinação)', 'HAS moderada a grave', 'HAS com proteinúria / nefropatia diabética'],
     contraindicacoes: ['Gravidez (2º e 3º trimestre — categoria D)', 'Colestase biliar', 'Hiperpotassemia > 5,5 mEq/L', 'Estenose bilateral de artérias renais', 'Uso com Aliskiren em DM ou DRC'],
     efeitos_adversos_principais: ['Tonturas', 'Hipotensão na 1ª dose', 'Hipercalemia', 'Enteropatia espru-like (raro — diarreia crônica com atrofia de vilosidades; suspender se ocorrer)', 'Elevação de creatinina'],
     dose_inicial: '10–20 mg 1×/dia',
@@ -351,7 +351,7 @@ export const MOLECULES_DB: MoleculaComparavel[] = [
       { farmaco: 'Colesevelam', mecanismo: 'Reduz absorção de olmesartana em ~40% — separar 4h', severidade: 'moderada' },
     ],
     custo_relativo: 2,
-    custo_descricao: 'Custo baixo — genérico disponível (R$20–45/mês); combinações fixas (Pisa®) custo maior',
+    custo_descricao: 'Custo baixo — genérico disponível (R$20–45/mês); combinações fixas com BCC ou tiazídico têm custo maior',
     adesao_score: 5,
     adesao_descricao: '1×/dia, oral, sem tosse, meia-vida longa — excelente perfil de adesão; sem restrição alimentar',
     farmacocinetica: {
@@ -381,7 +381,7 @@ export const MOLECULES_DB: MoleculaComparavel[] = [
       { nome: 'Benicar', laboratorio: 'Daiichi Sankyo', concentracoes: ['20 mg', '40 mg'] },
       { nome: 'Olmesartana EMS', laboratorio: 'EMS', concentracoes: ['20 mg', '40 mg'] },
     ],
-    tags: ['olmesartana', 'holmes', 'benicar', 'bra', 'sartana', 'angiotensina', 'has', 'hipertensao', 'at1', 'insurmontavel', 'pisa'],
+    tags: ['olmesartana', 'holmes', 'benicar', 'bra', 'sartana', 'angiotensina', 'has', 'hipertensao', 'at1', 'insurmontavel'],
   },
 
   {
@@ -647,7 +647,6 @@ export const MOLECULES_DB: MoleculaComparavel[] = [
     },
     marcas: [
       { nome: 'Glifage XR', laboratorio: 'EMS', concentracoes: ['500 mg', '750 mg', '1000 mg'], destaque: true },
-      { nome: 'Metformina Eurofarma', laboratorio: 'Eurofarma', concentracoes: ['500 mg', '850 mg'] },
       { nome: 'Metformina Biolab', laboratorio: 'Biolab', concentracoes: ['500 mg', '850 mg', '1000 mg'] },
     ],
     tags: ['metformina', 'glifage', 'biguanida', 'dm2', 'diabetes', 'hba1c', '1a linha'],

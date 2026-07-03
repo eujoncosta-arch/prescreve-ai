@@ -91,7 +91,7 @@ export const DRUG_DATABASE: Record<string, MoleculeEntry[]> = {
       marcas: [
         { laboratorio: 'EMS', nome_comercial: 'Glifage', apresentacoes: ['500 mg', '850 mg', '1000 mg'] },
         { laboratorio: 'EMS', nome_comercial: 'Glifage XR', apresentacoes: ['500 mg', '750 mg', '1000 mg'] },
-        { laboratorio: 'Eurofarma', nome_comercial: 'Metformina Eurofarma', apresentacoes: ['500 mg', '850 mg'] },
+        { laboratorio: 'Eurofarma', nome_comercial: 'Metformina', apresentacoes: ['500 mg', '850 mg'] },
         { laboratorio: 'Biolab', nome_comercial: 'Metformina Biolab', apresentacoes: ['500 mg', '850 mg', '1000 mg'] },
         { laboratorio: 'Libbs', nome_comercial: 'Metformina Libbs', apresentacoes: ['850 mg', '1000 mg'] },
       ],
@@ -105,7 +105,7 @@ export const DRUG_DATABASE: Record<string, MoleculeEntry[]> = {
       apresentacoes_disponiveis: ['10 mg', '25 mg'],
       formas_farmaceuticas: ['Comprimido'],
       marcas: [
-        { laboratorio: 'Bayer', nome_comercial: 'Jardiance', apresentacoes: ['10 mg', '25 mg'] },
+        { laboratorio: 'Boehringer Ingelheim / Eli Lilly', nome_comercial: 'Jardiance', apresentacoes: ['10 mg', '25 mg'] },
         { laboratorio: 'EMS', nome_comercial: 'Empagliflozina EMS', apresentacoes: ['10 mg', '25 mg'] },
         { laboratorio: 'Torrent', nome_comercial: 'Empagliflozina Torrent', apresentacoes: ['10 mg', '25 mg'] },
       ],
@@ -186,7 +186,6 @@ export const DRUG_DATABASE: Record<string, MoleculeEntry[]> = {
       formas_farmaceuticas: ['Inalatório DPI', 'Inalatório pMDI'],
       marcas: [
         { laboratorio: 'AstraZeneca', nome_comercial: 'Symbicort', apresentacoes: ['80/4,5 mcg', '160/4,5 mcg'] },
-        { laboratorio: 'Eurofarma', nome_comercial: 'Budesonida + Formoterol Eurofarma', apresentacoes: ['80/4,5 mcg', '160/4,5 mcg'] },
         { laboratorio: 'EMS', nome_comercial: 'Alenia', apresentacoes: ['80/4,5 mcg', '160/4,5 mcg'] },
       ],
     },

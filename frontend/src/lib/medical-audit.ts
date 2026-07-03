@@ -645,7 +645,7 @@ export function seedAuditDemo(): void {
         { cid: 'E78', descricao: 'Dislipidemia mista', tipo: 'secundario', confirmado: true, data_registro: dataDe(5) },
       ],
       condutas: [
-        { descricao: 'Adicionar Empagliflozina 10 mg — DM2 + DCV (Classe I-A ADA 2024)', tipo: 'medicamentosa', cid_relacionado: 'E11', diretriz_base: 'ADA 2024', registrada_em: dataDe(5) },
+        { descricao: 'Adicionar Dapagliflozina 10 mg — DM2 + DCV (Classe I-A ADA 2024)', tipo: 'medicamentosa', cid_relacionado: 'E11', diretriz_base: 'ADA 2024', registrada_em: dataDe(5) },
         { descricao: 'Intensificar estatina — Atorvastatina 40→80 mg (LDL 98, meta < 50 mg/dL em DM+DCV)', tipo: 'medicamentosa', cid_relacionado: 'I25', diretriz_base: 'SBC 2025', registrada_em: dataDe(5) },
       ],
       prescricoes: [
@@ -653,16 +653,16 @@ export function seedAuditDemo(): void {
           id_prescricao: 'PRX-003',
           data_prescricao: dataDe(5),
           status: 'emitida',
-          hash_conteudo: hashConteudoPrescricao([{ molecula: 'Empagliflozina', concentracao: '10 mg', dose: '10 mg', via: 'Oral', frequencia: '1×/dia', indicacao_cid: 'E11' }]),
+          hash_conteudo: hashConteudoPrescricao([{ molecula: 'Dapagliflozina', concentracao: '10 mg', dose: '10 mg', via: 'Oral', frequencia: '1×/dia', indicacao_cid: 'E11' }]),
           medicamentos: [
-            { molecula: 'Empagliflozina', marca: 'Jardiance', laboratorio: 'Boehringer', concentracao: '10 mg', dose: '10 mg', via: 'Oral', frequencia: '1×/dia manhã', duracao: '30 dias', indicacao_cid: 'E11' },
+            { molecula: 'Dapagliflozina', marca: 'Glif', laboratorio: 'Eurofarma', concentracao: '10 mg', dose: '10 mg', via: 'Oral', frequencia: '1×/dia manhã', duracao: '30 dias', indicacao_cid: 'E11' },
             { molecula: 'Atorvastatina', concentracao: '80 mg', dose: '80 mg', via: 'Oral', frequencia: '1×/dia noite', duracao: '30 dias', indicacao_cid: 'I25' },
             { molecula: 'Metformina', concentracao: '1000 mg', dose: '1000 mg', via: 'Oral', frequencia: '2×/dia', duracao: '30 dias', indicacao_cid: 'E11' },
           ],
         },
       ],
       evidencias_consultadas: [
-        { estudo: 'EMPA-REG OUTCOME', tipo: 'RCT', nivel_evidencia: 'A', grau_recomendacao: 'I', fonte: 'NEJM 2015', ano: 2015, consultada_em: dataDe(5) },
+        { estudo: 'DECLARE-TIMI 58', tipo: 'RCT', nivel_evidencia: 'A', grau_recomendacao: 'I', fonte: 'NEJM 2019', ano: 2019, consultada_em: dataDe(5) },
         { estudo: 'ASCOT-LLA', tipo: 'RCT', nivel_evidencia: 'A', grau_recomendacao: 'I', fonte: 'Lancet 2003', ano: 2003, consultada_em: dataDe(5) },
       ],
       diretrizes_utilizadas: [

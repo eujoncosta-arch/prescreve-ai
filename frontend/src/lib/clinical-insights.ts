@@ -564,7 +564,7 @@ export function seedInsightsDemo(): void {
       ],
       condutas: [
         { descricao: 'Início de BRA (Losartana 50 mg)', tipo: 'medicamentosa' as const, cid_relacionado: 'I10', diretriz_base: 'SBC DBHA-7 2020', registrada_em: ts(dias) },
-        { descricao: 'Adição de SGLT-2 (Empagliflozina 10 mg) — DM2 + DCV', tipo: 'medicamentosa' as const, cid_relacionado: 'E11', diretriz_base: 'ADA 2024', registrada_em: ts(dias) },
+        { descricao: 'Adição de SGLT-2 (Dapagliflozina 10 mg) — DM2 + DCV', tipo: 'medicamentosa' as const, cid_relacionado: 'E11', diretriz_base: 'ADA 2024', registrada_em: ts(dias) },
         { descricao: 'Orientação nutricional e atividade física', tipo: 'nao_medicamentosa' as const, registrada_em: ts(dias) },
         { descricao: 'Solicitação de HbA1c e função renal', tipo: 'solicitacao_exame' as const, registrada_em: ts(dias) },
         { descricao: 'Retorno em 30 dias', tipo: 'retorno' as const, registrada_em: ts(dias) },
@@ -575,17 +575,17 @@ export function seedInsightsDemo(): void {
         status: 'emitida' as const,
         hash_conteudo: hashConteudoPrescricao([
           { molecula: 'Losartana', concentracao: '50 mg', dose: '50 mg', via: 'Oral', frequencia: '1×/dia', indicacao_cid: 'I10' },
-          { molecula: 'Empagliflozina', concentracao: '10 mg', dose: '10 mg', via: 'Oral', frequencia: '1×/dia', indicacao_cid: 'E11' },
+          { molecula: 'Dapagliflozina', concentracao: '10 mg', dose: '10 mg', via: 'Oral', frequencia: '1×/dia', indicacao_cid: 'E11' },
           { molecula: 'Metformina', concentracao: '850 mg', dose: '850 mg', via: 'Oral', frequencia: '2×/dia', indicacao_cid: 'E11' },
         ]),
         medicamentos: [
           { molecula: 'Losartana', marca: 'Zart', laboratorio: 'Eurofarma', concentracao: '50 mg', dose: '50 mg', via: 'Oral', frequencia: '1×/dia', duracao: '30 dias', indicacao_cid: 'I10' },
-          { molecula: 'Empagliflozina', marca: 'Jardiance', laboratorio: 'Boehringer', concentracao: '10 mg', dose: '10 mg', via: 'Oral', frequencia: '1×/dia', duracao: '30 dias', indicacao_cid: 'E11' },
+          { molecula: 'Dapagliflozina', marca: 'Glif', laboratorio: 'Eurofarma', concentracao: '10 mg', dose: '10 mg', via: 'Oral', frequencia: '1×/dia', duracao: '30 dias', indicacao_cid: 'E11' },
           { molecula: 'Metformina', concentracao: '850 mg', dose: '850 mg', via: 'Oral', frequencia: '2×/dia', duracao: '30 dias', indicacao_cid: 'E11' },
         ],
       }],
       evidencias_consultadas: [
-        { estudo: 'EMPA-REG OUTCOME', tipo: 'RCT' as const, nivel_evidencia: 'A' as const, grau_recomendacao: 'I' as const, fonte: 'NEJM 2015', ano: 2015, consultada_em: ts(dias) },
+        { estudo: 'DECLARE-TIMI 58', tipo: 'RCT' as const, nivel_evidencia: 'A' as const, grau_recomendacao: 'I' as const, fonte: 'NEJM 2019', ano: 2019, consultada_em: ts(dias) },
         { estudo: 'RENAAL', tipo: 'RCT' as const, nivel_evidencia: 'A' as const, grau_recomendacao: 'I' as const, fonte: 'NEJM 2001', ano: 2001, consultada_em: ts(dias) },
       ],
       diretrizes_utilizadas: [
@@ -696,7 +696,7 @@ export function seedInsightsDemo(): void {
           { molecula: 'Sacubitril/Valsartana', marca: 'Entresto', laboratorio: 'Novartis', concentracao: '49/51 mg', dose: '49/51 mg', via: 'Oral', frequencia: '2×/dia', duracao: '30 dias', indicacao_cid: 'I50.0' },
           { molecula: 'Carvedilol', concentracao: '12,5 mg', dose: '12,5 mg', via: 'Oral', frequencia: '2×/dia', duracao: '30 dias', indicacao_cid: 'I50.0' },
           { molecula: 'Espironolactona', concentracao: '25 mg', dose: '25 mg', via: 'Oral', frequencia: '1×/dia', duracao: '30 dias', indicacao_cid: 'I50.0' },
-          { molecula: 'Empagliflozina', concentracao: '10 mg', dose: '10 mg', via: 'Oral', frequencia: '1×/dia', duracao: '30 dias', indicacao_cid: 'I50.0' },
+          { molecula: 'Dapagliflozina', marca: 'Glif', laboratorio: 'Eurofarma', concentracao: '10 mg', dose: '10 mg', via: 'Oral', frequencia: '1×/dia', duracao: '30 dias', indicacao_cid: 'I50.0' },
         ],
       }],
       evidencias_consultadas: [

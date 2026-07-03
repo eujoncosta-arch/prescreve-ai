@@ -216,7 +216,7 @@ export const DEMO_DM2_THERAPEUTIC: TherapeuticPlan = {
       marcas: [
         { laboratorio: 'EMS', nome_comercial: 'Glifage', apresentacoes: ['500 mg', '850 mg', '1000 mg'] },
         { laboratorio: 'Merck', nome_comercial: 'Glucophage', apresentacoes: ['500 mg', '850 mg', '1000 mg'] },
-        { laboratorio: 'Eurofarma', nome_comercial: 'Metformina Eurofarma', apresentacoes: ['500 mg', '850 mg'] },
+        { laboratorio: 'Eurofarma', nome_comercial: 'Metformina', apresentacoes: ['500 mg', '850 mg'] },
         { laboratorio: 'Biolab', nome_comercial: 'Metformina Biolab', apresentacoes: ['500 mg', '850 mg', '1000 mg'] },
       ],
     },

@@ -550,7 +550,7 @@ export const PHARMA_DB: QuickDrug[] = [
     alertas_especiais: ['Suspender 48h antes de contraste iodado IV', 'Risco de acidose lática (raro, mas fatal)', 'Monitorar B12 anualmente'],
     uso_gestante: 'avaliar', uso_lactante: 'avaliar',
     marcas: [
-      { nome: 'Metformina Eurofarma', laboratorio: 'Eurofarma', concentracoes: ['500 mg', '850 mg', '1000 mg'], formas: ['Comprimido'], lab_id: 'eurofarma' },
+      { nome: 'Metformina', laboratorio: 'Eurofarma', concentracoes: ['500 mg', '850 mg', '1000 mg'], formas: ['Comprimido'], lab_id: 'eurofarma' },
       { nome: 'Glifage', laboratorio: 'Merck', concentracoes: ['500 mg', '850 mg', '1000 mg'], formas: ['Comprimido'] },
     ],
   },

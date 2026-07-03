@@ -559,6 +559,38 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
   },
 
   {
+    id: 'euro-lugano',
+    lab_id: 'eurofarma',
+    molecula: 'Fumarato de Formoterol Diidratado + Propionato de Fluticasona',
+    nome_comercial: 'Lugano®',
+    classe_terapeutica: 'ICS + LABA — Corticosteroide Inalatório + Beta-2 Agonista de Longa Ação',
+    cids_aprovados: ['J45', 'J44', 'J44.1'],
+    apresentacoes: [
+      { concentracao: '50/100 mcg/dose', forma_farmaceutica: 'inalatorio', embalagem: 'Frasco 120 doses', registro_anvisa: '1.0043.1401' },
+      { concentracao: '50/250 mcg/dose', forma_farmaceutica: 'inalatorio', embalagem: 'Frasco 120 doses', registro_anvisa: '1.0043.1402' },
+      { concentracao: '50/500 mcg/dose', forma_farmaceutica: 'inalatorio', embalagem: 'Frasco 120 doses', registro_anvisa: '1.0043.1403' },
+    ],
+    posologia_aprovada: 'Asma: 1-2 inalações 2x/dia (manhã e noite). Dose conforme gravidade (50/100 leve-moderada; 50/250 ou 50/500 moderada-grave). DPOC: 1-2 inalações 2x/dia da concentração adequada.',
+    contraindicacoes_bula: ['Hipersensibilidade ao formoterol ou fluticasona', 'Asma aguda / crise grave (não usar como resgate isolado)', 'Tuberculose ativa', 'Infecções respiratórias fúngicas ou virais'],
+    advertencias_principais: [
+      '⚠ LABA: NUNCA usar sem CI na asma (risco de morte)',
+      'Candidíase orofaríngea — bochechar após cada uso',
+      'Supressão adrenal com doses altas de fluticasona',
+      'Catarata e glaucoma com uso prolongado',
+      'Hipocalemia (especialmente com diuréticos)',
+      'Taquicardia / palpitações (formoterol)',
+    ],
+    interacoes_principais: ['Beta-bloqueadores (antagonismo ao formoterol)', 'Cetoconazol/itraconazol (aumentam fluticasona via CYP3A4)', 'Diuréticos tiazídicos ou de alça (hipocalemia aditiva)', 'QT-prolongadores (cautela)'],
+    uso_populacoes_especiais: { gestante: 'Categoria C — usar apenas se benefício superar risco; fluticasona preferida a doses altas de BDP na gestante', pediatrico: '≥ 4 anos (aerossol com espaçador recomendado)' },
+    data_registro: '2021-03-10',
+    data_ultima_atualizacao: '2025-10-01',
+    versao_bula: 'v2025.1',
+    fonte_regulatoria: 'ANVISA',
+    link_bula_paciente: 'https://eurofarma.com.br/produtos/bulas/patient/pt/bula-lugano.pdf',
+    link_bula_profissional: 'https://eurofarma.com.br/produtos/bulas/healthcare/pt/bula-lugano.pdf',
+  },
+
+  {
     id: 'euro-montelucaste-10',
     lab_id: 'eurofarma',
     molecula: 'Montelucaste Sódico',

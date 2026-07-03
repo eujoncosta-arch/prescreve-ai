@@ -441,7 +441,7 @@ export const EUROFARMA_PRODUCTS: ProdutoComercial[] = [
     id: 'euro-metformina',
     lab_id: 'eurofarma',
     molecula: 'Cloridrato de Metformina',
-    nome_comercial: 'Metformina Eurofarma',
+    nome_comercial: 'Metformina',
     classe_terapeutica: 'Biguanida — Antidiabético Oral',
     cids_aprovados: ['E11', 'E14'],
     apresentacoes: [
