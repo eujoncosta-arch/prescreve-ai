@@ -45,6 +45,7 @@ const COMMANDS: CommandItem[] = [
   { id: 'explicar',          label: 'Por que esta recomendação?', href: '/explicar',          icon: Microscope,      group: 'Científico',  keywords: ['explicar','racional','raciocinio','clinico','por que','hipotese','diferencial','achados','diretriz','evidencia','nnt','monitoramento','prognostico'] },
   { id: 'atualizacoes',   label: 'Guideline Updates',     href: '/atualizacoes',        icon: TrendingUp,      group: 'Científico',  keywords: ['esc','ada','gold','kdigo','2025','2026'] },
   // Institucional
+  { id: 'farmalib',       label: 'Biblioteca Enterprise',  href: '/farmalib',            icon: Building2,       group: 'Científico',  keywords: ['farmalib','biblioteca','enterprise','bula','laboratorio','eurofarma','molecula','marca','apresentacao','posologia','contraindicacao','interacao','reacao','anvisa','registro','gestacao','pediatria','geriatria','ajuste','renal','hepatico'] },
   { id: 'showcase',       label: 'Lab Showcase',          href: '/showcase',            icon: Building2,       group: 'Institucional', keywords: ['laboratorio','eurofarma','showcase','farmaceutica','marcas','moleculas','bulas'] },
   // Sistema
   { id: 'regulatorio',    label: 'Regulatory Readiness',  href: '/regulatorio',         icon: ShieldCheck,     group: 'Sistema',     keywords: ['lgpd','cfm','anvisa','iso27001','iso13485','iec62304','samd','compliance','regulatorio','logs','auditoria','criptografia','consentimento','rastreabilidade','seguranca'] },
