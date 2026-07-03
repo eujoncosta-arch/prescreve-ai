@@ -439,7 +439,7 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     id: 'euro-metformina-850',
     lab_id: 'eurofarma',
     molecula: 'Cloridrato de Metformina',
-    nome_comercial: 'Metformina Eurofarma',
+    nome_comercial: 'Metformina',
     classe_terapeutica: 'Biguanida — Antidiabético oral',
     cids_aprovados: ['E11', 'E14'],
     apresentacoes: [
@@ -3707,7 +3707,7 @@ export const CORRELACAO_TERAPEUTICA: CorrelacaoTerapeutica[] = [
         nome: 'CI + LABA — Corticoide Inalatório + LABA',
         posicao_terapeutica: 'Indicado quando eosinófilos > 300 células/µL ou exacerbações frequentes',
         moleculas: [
-          { nome: 'Budesonida + Formoterol', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: [] },
+          { nome: 'Fluticasona + Formoterol', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: ['euro-lugano'] },
         ],
       },
       {
