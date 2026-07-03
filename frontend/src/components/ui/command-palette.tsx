@@ -45,6 +45,7 @@ const COMMANDS: CommandItem[] = [
   // Institucional
   { id: 'showcase',       label: 'Lab Showcase',          href: '/showcase',            icon: Building2,       group: 'Institucional', keywords: ['laboratorio','eurofarma','showcase','farmaceutica','marcas','moleculas','bulas'] },
   // Sistema
+  { id: 'regulatorio',    label: 'Regulatory Readiness',  href: '/regulatorio',         icon: ShieldCheck,     group: 'Sistema',     keywords: ['lgpd','cfm','anvisa','iso27001','iso13485','iec62304','samd','compliance','regulatorio','logs','auditoria','criptografia','consentimento','rastreabilidade','seguranca'] },
   { id: 'auditoria',      label: 'Medical Audit Engine',  href: '/auditoria',           icon: Shield,          group: 'Sistema',     keywords: ['auditoria', 'audit', 'rastreabilidade', 'juridico', 'seguranca', 'alerta', 'prescricao', 'historico', 'exportar', 'csv', 'json', 'integridade'] },
   { id: 'perfil',         label: 'Meu Perfil',            href: '/perfil',              icon: UserCircle,      group: 'Sistema',     keywords: ['perfil','especialidade','diretriz','favorito','prescricao','sbc','esc','ada','acc','kdigo','estilo'] },
   { id: 'configuracoes',  label: 'Configurações',         href: '/configuracoes',       icon: Settings,        group: 'Sistema',     keywords: ['config','laboratorio','preferencia'] },

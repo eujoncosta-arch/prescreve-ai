@@ -29,6 +29,7 @@ const ROUTE_LABELS: Record<string, string> = {
   '/atualizacoes':        'Guideline Updates',
   '/showcase':            'Laboratory Showcase',
   '/auditoria':           'Medical Audit Engine',
+  '/regulatorio':         'Regulatory Readiness',
   '/perfil':              'Meu Perfil',
   '/configuracoes':       'Configurações',
 };

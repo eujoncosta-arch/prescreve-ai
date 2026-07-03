@@ -71,6 +71,7 @@ const navGroups = [
     label: 'Sistema',
     items: [
       { href: '/auditoria',     label: 'Auditoria',     icon: Shield,     badge: 'NOVO' },
+      { href: '/regulatorio',   label: 'Regulatório',   icon: ShieldCheck, badge: 'NOVO' },
       { href: '/perfil',        label: 'Meu Perfil',    icon: UserCircle, badge: null   },
       { href: '/configuracoes', label: 'Configurações', icon: Settings,   badge: null   },
     ],
