@@ -88,7 +88,12 @@ export interface Guideline {
   condicao: string;         // 'HAS', 'DM2' …
   status: GuidelineStatus;
   versao_atual: string;
+  ano_publicacao?: number;
+  url_oficial?: string;
+  doi_referencia?: string;
+  data_ultima_revisao?: string;
   data_proxima_revisao?: string;
+  nivel_validacao?: 'validado' | 'em_revisao' | 'pendente' | 'desatualizado';
   responsavel_interno: string;
   versoes: GuidelineVersao[];
   tags: string[];
@@ -153,7 +158,12 @@ const GUIDELINES_SEED: Guideline[] = [
     condicao: 'HAS',
     status: 'vigente',
     versao_atual: '7.0',
+    ano_publicacao: 2020,
+    url_oficial: 'https://doi.org/10.36660/abc.20201238',
+    doi_referencia: '10.36660/abc.20201238',
+    data_ultima_revisao: '2024-03-01',
     data_proxima_revisao: '2026-01-01',
+    nivel_validacao: 'validado',
     responsavel_interno: 'Comitê de Cardiologia',
     tags: ['HAS', 'hipertensão', 'anti-hipertensivo', 'meta pressórica'],
     versoes: [
@@ -223,7 +233,12 @@ const GUIDELINES_SEED: Guideline[] = [
     condicao: 'DM2',
     status: 'vigente',
     versao_atual: '2024',
+    ano_publicacao: 2024,
+    url_oficial: 'https://doi.org/10.2337/dc24-SINT',
+    doi_referencia: '10.2337/dc24-SINT',
+    data_ultima_revisao: '2024-01-25',
     data_proxima_revisao: '2025-01-01',
+    nivel_validacao: 'validado',
     responsavel_interno: 'Comitê de Endocrinologia',
     tags: ['DM2', 'diabetes', 'metformina', 'SGLT-2', 'GLP-1', 'HbA1c'],
     versoes: [
@@ -281,7 +296,11 @@ const GUIDELINES_SEED: Guideline[] = [
     condicao: 'Asma',
     status: 'em_revisao',
     versao_atual: '2023',
+    ano_publicacao: 2023,
+    url_oficial: 'https://ginasthma.org/reports/',
+    data_ultima_revisao: '2023-11-15',
     data_proxima_revisao: '2024-05-01',
+    nivel_validacao: 'em_revisao',
     responsavel_interno: 'Comitê de Pneumologia',
     tags: ['asma', 'ICS', 'formoterol', 'SMART', 'SABA', 'broncodilatador'],
     versoes: [
@@ -325,7 +344,12 @@ const GUIDELINES_SEED: Guideline[] = [
     condicao: 'ICC',
     status: 'vigente',
     versao_atual: '2021',
+    ano_publicacao: 2021,
+    url_oficial: 'https://doi.org/10.1093/eurheartj/ehab368',
+    doi_referencia: '10.1093/eurheartj/ehab368',
+    data_ultima_revisao: '2024-01-01',
     data_proxima_revisao: '2026-01-01',
+    nivel_validacao: 'validado',
     responsavel_interno: 'Comitê de Cardiologia',
     tags: ['ICC', 'IC', 'FEVE', 'betabloqueador', 'IECA', 'ARNI', 'SGLT-2'],
     versoes: [
@@ -382,7 +406,10 @@ const GUIDELINES_SEED: Guideline[] = [
     condicao: 'Dislipidemia',
     status: 'obsoleta',
     versao_atual: '5.0',
+    ano_publicacao: 2013,
+    data_ultima_revisao: '2013-04-01',
     data_proxima_revisao: '2024-06-01',
+    nivel_validacao: 'desatualizado',
     responsavel_interno: 'Comitê de Cardiologia',
     tags: ['dislipidemia', 'LDL', 'estatina', 'colesterol'],
     versoes: [
