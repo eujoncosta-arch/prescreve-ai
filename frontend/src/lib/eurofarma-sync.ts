@@ -706,7 +706,7 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     contraindicacoes_bula: ['IMAOs', 'Citalopram concomitante', 'QT longo congênito'],
     advertencias_principais: ['Prolongamento QT (evitar com outros QT-prolongadores)', 'Hiponatremia', 'Sangramento'],
     interacoes_principais: ['IMAOs', 'Pimozida', 'QT-prolongadores', 'Lítio'],
-    uso_populacoes_especiais: { idoso: 'Máximo 10 mg/dia em > 65 anos (risco QT)' },
+    uso_populacoes_especiais: { idoso: 'Máximo 10 mg/dia em > 65 anos (risco QT)', gestante: 'Categoria C — usar somente se benefício justificar risco', lactante: 'Evitar — excretado no leite materno; monitorar lactente se uso imprescindível' },
     data_registro: '2018-09-14',
     data_ultima_atualizacao: '2025-11-01',
     versao_bula: 'v2025.3',
@@ -1232,8 +1232,8 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     data_ultima_atualizacao: '2025-10-13',
     versao_bula: 'v2025.3',
     fonte_regulatoria: 'ANVISA',
-    link_bula_paciente: 'https://eurofarma.com.br/produtos/bulas/patient/pt/bula-attenze-10mg.pdf',
-    link_bula_profissional: 'https://eurofarma.com.br/produtos/bulas/healthcare/pt/bula-attenze-10mg.pdf',
+    link_bula_paciente: 'https://eurofarma.com.br/produtos/bulas/patient/pt/bula-attenze-20mg.pdf',
+    link_bula_profissional: 'https://eurofarma.com.br/produtos/bulas/healthcare/pt/bula-attenze-20mg.pdf',
   },
 
   {

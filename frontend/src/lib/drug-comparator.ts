@@ -194,7 +194,7 @@ export const MOLECULES_DB: MoleculaComparavel[] = [
     uso_idoso: 'Bem tolerado — sem ajuste; monitorar PA e função renal',
     nivel_evidencia: 'A',
     grau_recomendacao: 'I',
-    diretriz_principal: 'SBC DBHA-7 2020 · ESC/ESH 2018',
+    diretriz_principal: 'SBC DBHA-7 2021 · ESC/ESH 2023',
     eficacia: [
       { desfecho: 'Proteção renal em DM2 + proteinúria', reducao: '−25% duplicação creatinina', estudo: 'RENAAL', n_pacientes: 1513, nnt: 15, hr: '0.75', rrr: '25%' },
       { desfecho: 'Mortalidade CV em HAS + HVE', reducao: '−13% eventos CV vs atenolol', estudo: 'LIFE Trial', n_pacientes: 9193, nnt: 55 },
@@ -269,7 +269,7 @@ export const MOLECULES_DB: MoleculaComparavel[] = [
     eficacia: [
       { desfecho: 'Mortalidade em IC-FEr vs placebo', reducao: '−16% mortalidade total', estudo: 'CONSENSUS', n_pacientes: 253, nnt: 6, rrr: '40% (IC grave)' },
       { desfecho: 'Sobrevida em IC (NYHA II–III)', reducao: '−16% morte + hospitalização', estudo: 'SOLVD', n_pacientes: 2569, nnt: 22 },
-      { desfecho: 'Pós-IAM com disfunção VE', reducao: '−20% mortalidade', estudo: 'SAVE (captopril proxy)', n_pacientes: 2231 },
+      { desfecho: 'Prevenção IC em disfunção VE assintomática', reducao: '−37% desenvolvimento IC', estudo: 'SOLVD Prevention', n_pacientes: 4228, nnt: 18 },
     ],
     interacoes: [
       { farmaco: 'BRA / Aliskiren (em DM/DRC)', mecanismo: 'Duplo bloqueio SRAA — contraindicado', severidade: 'contraindicada' },
@@ -337,7 +337,7 @@ export const MOLECULES_DB: MoleculaComparavel[] = [
     uso_idoso: 'Sem ajuste de dose necessário; monitorar PA e função renal nas primeiras semanas',
     nivel_evidencia: 'A',
     grau_recomendacao: 'I',
-    diretriz_principal: 'SBC DBHA-7 2020 · ESC/ESH 2018 — BRA 1ª linha',
+    diretriz_principal: 'SBC DBHA-7 2021 · ESC/ESH 2023 — BRA 1ª linha',
     eficacia: [
       { desfecho: 'Redução de PA vs placebo (HAS leve-moderada)', reducao: '−11 a −17 mmHg PAS', estudo: 'Pool de RCTs Olmesartana', n_pacientes: 4000 },
       { desfecho: 'Não-inferioridade vs outros BRA (meta-análise)', reducao: 'Maior redução de PA vs losartana na dose equipotente', estudo: 'Sato 2019 Network Meta-analysis', n_pacientes: 56000 },
@@ -407,7 +407,7 @@ export const MOLECULES_DB: MoleculaComparavel[] = [
     uso_idoso: 'Preferível a outros BCC — menos hipotensão postural; monitorar edema',
     nivel_evidencia: 'A',
     grau_recomendacao: 'I',
-    diretriz_principal: 'SBC DBHA-7 2020 · ESC/ESH 2018',
+    diretriz_principal: 'SBC DBHA-7 2021 · ESC/ESH 2023',
     eficacia: [
       { desfecho: 'Prevenção AVC em HAS', reducao: '−35% AVC vs atenolol', estudo: 'ASCOT-BPLA', n_pacientes: 19257, nnt: 100, rrr: '35%' },
       { desfecho: 'Redução de IAM vs diurético', reducao: 'Não inferior + redução AVC', estudo: 'ALLHAT', n_pacientes: 33357 },

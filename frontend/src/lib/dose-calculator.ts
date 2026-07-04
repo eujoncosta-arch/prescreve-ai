@@ -50,7 +50,25 @@ export interface ConversionResult {
 export function calcCrCl(params: PatientParams): CrClResult | null {
   if (!params.creatinina || !params.peso || !params.idade) return null;
 
-  const { idade, sexo, peso, creatinina } = params;
+  const { idade, sexo, creatinina } = params;
+  let peso = params.peso;
+
+  // Cockcroft-Gault recomenda peso ideal (IBW) em obesos para evitar superestimativa do CrCl
+  // IBW (Devine): Homem = 50 + 2,3 × (altura_cm − 152,4) / 2,54; Mulher = 45,5 + 2,3 × (altura_cm − 152,4) / 2,54
+  let avisoObeso = '';
+  if (params.altura) {
+    const altCm = params.altura;
+    const ibw = sexo === 'M'
+      ? 50 + 2.3 * ((altCm - 152.4) / 2.54)
+      : 45.5 + 2.3 * ((altCm - 152.4) / 2.54);
+    if (params.peso > ibw * 1.2 && ibw > 0) {
+      // Paciente obeso: usar peso ajustado = IBW + 0,4 × (peso real − IBW)
+      const pesoAjustado = Math.round((ibw + 0.4 * (params.peso - ibw)) * 10) / 10;
+      peso = pesoAjustado;
+      avisoObeso = `⚠ Obesidade detectada (peso real ${params.peso} kg > IBW estimado ${Math.round(ibw)} kg). Usando peso ajustado (AdjBW = ${pesoAjustado} kg) conforme recomendação Cockcroft-Gault.`;
+    }
+  }
+
   const fatorSexo = sexo === 'F' ? 0.85 : 1.0;
   const crcl = ((140 - idade) * peso * fatorSexo) / (72 * creatinina);
   const crclRounded = Math.round(crcl * 10) / 10;
@@ -64,20 +82,23 @@ export function calcCrCl(params: PatientParams): CrClResult | null {
   else if (crcl >= 15) { ckd_stage = 'G4'; interpretacao = 'Grave redução da função renal'; }
   else { ckd_stage = 'G5'; interpretacao = 'Insuficiência renal terminal'; }
 
+  const passos = [
+    `Fórmula: CrCl = [(140 − idade) × peso × fator_sexo] / (72 × creatinina)`,
+    `Idade: ${idade} anos | Peso utilizado: ${peso} kg | Creatinina: ${creatinina} mg/dL`,
+    `Fator sexo: ${fatorSexo} (${sexo === 'F' ? 'Feminino × 0,85' : 'Masculino × 1,0'})`,
+    `Cálculo: [(140 − ${idade}) × ${peso} × ${fatorSexo}] / (72 × ${creatinina})`,
+    `= [${140 - idade} × ${peso} × ${fatorSexo}] / ${(72 * creatinina).toFixed(1)}`,
+    `= ${((140 - idade) * peso * fatorSexo).toFixed(1)} / ${(72 * creatinina).toFixed(1)}`,
+    `= ${crclRounded} mL/min → Estágio ${ckd_stage} (${interpretacao})`,
+  ];
+  if (avisoObeso) passos.unshift(avisoObeso);
+
   return {
     crcl: crclRounded,
     ckd_stage,
     interpretacao,
     formula: 'Cockcroft-Gault',
-    passo_a_passo: [
-      `Fórmula: CrCl = [(140 − idade) × peso × fator_sexo] / (72 × creatinina)`,
-      `Idade: ${idade} anos | Peso: ${peso} kg | Creatinina: ${creatinina} mg/dL`,
-      `Fator sexo: ${fatorSexo} (${sexo === 'F' ? 'Feminino × 0,85' : 'Masculino × 1,0'})`,
-      `Cálculo: [(140 − ${idade}) × ${peso} × ${fatorSexo}] / (72 × ${creatinina})`,
-      `= [${140 - idade} × ${peso} × ${fatorSexo}] / ${(72 * creatinina).toFixed(1)}`,
-      `= ${((140 - idade) * peso * fatorSexo).toFixed(1)} / ${(72 * creatinina).toFixed(1)}`,
-      `= ${crclRounded} mL/min → Estágio ${ckd_stage} (${interpretacao})`,
-    ],
+    passo_a_passo: passos,
   };
 }
 
@@ -362,11 +383,19 @@ export function parseConcentration(texto: string): ParsedConcentration {
     return { tipo: 'liquido', mg_por_unidade: mgPorMl, mg_por_mL: mgPorMl, unidade_texto: 'mL', texto_original: texto };
   }
 
-  // mcg/jato (inalatório nasal/pulmonar)
+  // mcg/jato (inalatório nasal/pulmonar) — exige 'jato' ou 'spray'; mcg sozinho é insuficiente
+  // BUG CORRIGIDO: t.includes('mcg') era sempre true após o match, classificando tablets mcg como inalatório
   const inalatorio = t.match(/(\d+[\.,]?\d*)\s*mcg/i);
-  if (inalatorio && (t.includes('jato') || t.includes('spray') || t.includes('mcg'))) {
+  if (inalatorio && (t.includes('jato') || t.includes('spray') || t.includes('/dose') || t.includes('inalacao'))) {
     const mcg = parseFloat(inalatorio[1].replace(',', '.'));
     return { tipo: 'inalatorio', mg_por_unidade: mcg / 1000, unidade_texto: 'jato', texto_original: texto };
+  }
+
+  // mcg sólido (ex: levotiroxina 50 mcg, vitamina D 1000 UI etc.) — não é inalatório
+  const solidoMcg = t.match(/(\d+[\.,]?\d*)\s*mcg/i);
+  if (solidoMcg && !t.includes('mg')) {
+    const mcg = parseFloat(solidoMcg[1].replace(',', '.'));
+    return { tipo: 'solido', mg_por_unidade: mcg / 1000, unidade_texto: 'comprimido', texto_original: texto };
   }
 
   // Sólido simples: "50 mg", "500 mg"
@@ -570,7 +599,12 @@ export function calcFullDose(
     // Dose adulto (inclui pediátrico sem dose_por_kg, ex: dose fixa por faixa / jatos)
     dosePorTomada = parseFloat(drug.dose_adulto.habitual) || 0;
     doseUnidade = drug.dose_adulto.unidade;
-    tomadas = drug.dose_adulto.frequencias[0]?.includes('2x') ? 2 : drug.dose_adulto.frequencias[0]?.includes('3x') ? 3 : drug.dose_adulto.frequencias[0]?.includes('4x') ? 4 : 1;
+    // Inferência de frequência robusta: detecta "2x", "12/12h", "12h/12h", "2 vezes"
+  const freqStr = drug.dose_adulto.frequencias[0] ?? '';
+  tomadas = freqStr.includes('4x') || freqStr.includes('6/6h') || freqStr.includes('6h') ? 4
+    : freqStr.includes('3x') || freqStr.includes('8/8h') || freqStr.includes('8h') ? 3
+    : freqStr.includes('2x') || freqStr.includes('12/12h') || freqStr.includes('12h') || freqStr.includes('2 vezes') ? 2
+    : 1;
     doseTotalDia = dosePorTomada * tomadas;
     fonte = 'adulto_fixo';
     passos.push(`Dose habitual: ${dosePorTomada} ${doseUnidade} — ${drug.dose_adulto.frequencias[0] ?? '1x/dia'}`);

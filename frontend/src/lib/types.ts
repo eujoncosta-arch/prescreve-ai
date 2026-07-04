@@ -366,6 +366,7 @@ export interface ProdutoComercial {
     hepatico?: string;
     pediatrico?: string;
     gestante?: string;
+    lactante?: string;
     idoso?: string;
   };
   data_registro: string;
