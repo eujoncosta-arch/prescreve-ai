@@ -321,8 +321,10 @@ export function runSafetyCheck(input: SafetyCheckInput): QuickSafetyAlert[] {
   const molsLower = moleculas.map(m => m.toLowerCase());
 
   for (const pair of CRITICAL_PAIRS) {
-    const hasA = molsLower.some(m => m.includes(pair.mol_a) || pair.mol_a.includes(m));
-    const hasB = molsLower.some(m => m.includes(pair.mol_b) || pair.mol_b.includes(m));
+    const hasA = molsLower.some(m => m.includes(pair.mol_a) || pair.mol_a.includes(m)) ||
+      drugs.some(d => d.classe.toLowerCase().includes(pair.mol_a));
+    const hasB = molsLower.some(m => m.includes(pair.mol_b) || pair.mol_b.includes(m)) ||
+      drugs.some(d => d.classe.toLowerCase().includes(pair.mol_b));
     if (hasA && hasB) {
       // Evita duplicatas com interações já encontradas pelo banco de dados
       const dupKey = `${pair.mol_a}-${pair.mol_b}`;

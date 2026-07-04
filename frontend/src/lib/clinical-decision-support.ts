@@ -517,7 +517,7 @@ const BASE_CLINICA: ConditionRule[] = [
 
   // ══════════════════════════════════════════════════════════
   // 6. INSUFICIÊNCIA CARDÍACA — I50
-  // Referência: I Diretriz Brasileira de IC — SBC 2018
+  // Referência: II Diretriz Brasileira de IC — SBC 2023
   // ══════════════════════════════════════════════════════════
   {
     id: 'icc',

@@ -431,7 +431,7 @@ export const MEDICAMENTOS_DOSAGEM: MedicamentoDosagem[] = [
       { id: 'ibu-comp-600', descricao: 'Comprimido 600 mg',      tipo: 'comprimido', via: 'oral', concentracao_mg: 600, unidade_dispensa: 'comprimido' },
     ],
     regras: [
-      { populacoes: ['lactente', 'pediatrico'], dose: 10, unidade: 'mg/kg', frequencia_horas: 8,  via: 'oral', dose_maxima_por_dose_mg: 400, dose_maxima_por_dia_mg: 2400, indicacao: '> 6 meses. Febre e dor.' },
+      { populacoes: ['pediatrico'], dose: 10, unidade: 'mg/kg', frequencia_horas: 8,  via: 'oral', dose_maxima_por_dose_mg: 400, dose_maxima_por_dia_mg: 2400, indicacao: '≥ 1 ano. Febre e dor. Lactentes 6–11 meses: uso possível mas requer avaliação médica individualizada — calculadora não disponível.' },
       { populacoes: ['adolescente', 'adulto'],  dose: 400, unidade: 'mg',   frequencia_horas: 8,  via: 'oral', dose_maxima_por_dia_mg: 2400, indicacao: 'Anti-inflamatório: 600–800mg 8/8h' },
       { populacoes: ['geriatrico'],             dose: 200, unidade: 'mg',   frequencia_horas: 8,  via: 'oral', dose_maxima_por_dia_mg: 1200, observacao: 'Risco aumentado de eventos GI e renais. Usar com protetor gástrico.', ajuste_renal: true },
     ],
@@ -451,7 +451,7 @@ export const MEDICAMENTOS_DOSAGEM: MedicamentoDosagem[] = [
       { id: 'dip-inj-500',  descricao: 'Solução injetável 500 mg/mL', tipo: 'injetavel', via: 'iv', concentracao_mg: 500, volume_ref_mL: 1, unidade_dispensa: 'mL' },
     ],
     regras: [
-      { populacoes: ['lactente', 'pediatrico'], dose: 15, unidade: 'mg/kg', frequencia_horas: 6, via: 'oral', dose_maxima_por_dose_mg: 1000, dose_maxima_por_dia_mg: 4000, observacao: '> 3 meses. 1 gota = 25 mg (500mg/mL, 20 gotas/mL)' },
+      { populacoes: ['lactente', 'pediatrico'], dose: 15, unidade: 'mg/kg', frequencia_horas: 6, via: 'oral', dose_maxima_por_dose_mg: 1000, dose_maxima_por_dia_mg: 4000, contraindicado_em: ['neonato'], observacao: '> 3 meses (90 dias). Contraindicado < 3 meses ou < 5 kg. 1 gota = 25 mg (500mg/mL, 20 gotas/mL)' },
       { populacoes: ['adolescente', 'adulto'],  dose: 500, unidade: 'mg',   frequencia_horas: 6, via: 'oral', dose_maxima_por_dose_mg: 1000, dose_maxima_por_dia_mg: 4000 },
       { populacoes: ['geriatrico'],             dose: 500, unidade: 'mg',   frequencia_horas: 8, via: 'oral', dose_maxima_por_dia_mg: 2000 },
       { populacoes: ['adolescente', 'adulto'],  dose: 1000, unidade: 'mg',  frequencia_horas: 8, via: 'iv', dose_maxima_por_dose_mg: 2500, dose_maxima_por_dia_mg: 5000, indicacao: 'Dor intensa hospitalar / IV lento (> 15 min)' },
@@ -522,7 +522,7 @@ export const MEDICAMENTOS_DOSAGEM: MedicamentoDosagem[] = [
     id: 'atenolol',
     nome_generico: 'Atenolol',
     classe: 'Anti-hipertensivo — Betabloqueador cardioseletivo',
-    cids: ['I10', 'I25', 'I48'],
+    cids: ['I10', 'I25'],
     formulacoes: [
       { id: 'aten-comp-25',  descricao: 'Comprimido 25 mg',  tipo: 'comprimido', via: 'oral', concentracao_mg: 25,  unidade_dispensa: 'comprimido' },
       { id: 'aten-comp-50',  descricao: 'Comprimido 50 mg',  tipo: 'comprimido', via: 'oral', concentracao_mg: 50,  unidade_dispensa: 'comprimido' },
