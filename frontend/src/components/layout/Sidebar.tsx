@@ -82,6 +82,7 @@ const navGroups = [
       { href: '/farma-analytics',          label: 'Farma Analytics',       icon: FlaskConical, badge: 'P12' },
       { href: '/qualidade-hospital',       label: 'Qualidade Hospital',    icon: Hospital,     badge: 'P12' },
       { href: '/atualizacoes-cientificas', label: 'Atualizações Cientif.', icon: Bell,         badge: 'P12' },
+      { href: '/explicabilidade',          label: 'Explainable AI 2.0',   icon: Brain,        badge: 'P14' },
     ],
   },
   {
@@ -148,6 +149,7 @@ export function Sidebar() {
                         'text-[8px] font-bold px-1.5 py-0.5 rounded flex-shrink-0',
                         badge === 'NOVO' || badge === '2025' ? 'bg-blue-600 text-white' :
                         badge === 'P12' ? 'bg-violet-600 text-white' :
+                        badge === 'P14' ? 'bg-fuchsia-600 text-white' :
                         badge === 'DEMO' ? 'bg-indigo-500 text-white' :
                         badge === 'EURO' ? 'bg-emerald-600 text-white' :
                         'bg-slate-200 text-slate-600'
@@ -175,7 +177,7 @@ export function Sidebar() {
             <p className="text-[10px] text-slate-400">CRM-SP 123456</p>
           </div>
         </Link>
-        <p className="text-center text-[9px] text-slate-300 dark:text-slate-700 mt-1.5">v3.0 · Enterprise Phase 12</p>
+        <p className="text-center text-[9px] text-slate-300 dark:text-slate-700 mt-1.5">v4.0 · Enterprise Phase 14</p>
       </div>
     </aside>
   );
