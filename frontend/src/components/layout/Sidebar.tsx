@@ -28,6 +28,15 @@ import {
   Scale,
   Brain,
   Lightbulb,
+  Globe,
+  Dna,
+  Network,
+  BarChart3,
+  Activity,
+  Clock,
+  FlaskConical,
+  Hospital,
+  Bell,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -59,6 +68,20 @@ const navGroups = [
       { href: '/governanca',    label: 'Governança',          icon: ShieldCheck, badge: null },
       { href: '/comite',        label: 'Comitê Científico',   icon: Users,       badge: 'NOVO' },
       { href: '/atualizacoes',  label: 'Guideline Updates',   icon: TrendingUp,  badge: '2025' },
+    ],
+  },
+  {
+    label: 'Inteligência',
+    items: [
+      { href: '/rwe',                      label: 'Real World Evidence',   icon: Globe,        badge: 'P12' },
+      { href: '/digital-twin',             label: 'Gêmeo Digital',         icon: Dna,          badge: 'P12' },
+      { href: '/rede-medica',              label: 'Rede Médica',           icon: Network,      badge: 'P12' },
+      { href: '/outcomes',                 label: 'Desfechos (NNT/NNH)',   icon: BarChart3,    badge: 'P12' },
+      { href: '/prognostico',              label: 'Prognose Preditiva',    icon: Activity,     badge: 'P12' },
+      { href: '/evidence-timeline',        label: 'Timeline Evidências',   icon: Clock,        badge: 'P12' },
+      { href: '/farma-analytics',          label: 'Farma Analytics',       icon: FlaskConical, badge: 'P12' },
+      { href: '/qualidade-hospital',       label: 'Qualidade Hospital',    icon: Hospital,     badge: 'P12' },
+      { href: '/atualizacoes-cientificas', label: 'Atualizações Cientif.', icon: Bell,         badge: 'P12' },
     ],
   },
   {
@@ -124,6 +147,7 @@ export function Sidebar() {
                       <span className={cn(
                         'text-[8px] font-bold px-1.5 py-0.5 rounded flex-shrink-0',
                         badge === 'NOVO' || badge === '2025' ? 'bg-blue-600 text-white' :
+                        badge === 'P12' ? 'bg-violet-600 text-white' :
                         badge === 'DEMO' ? 'bg-indigo-500 text-white' :
                         badge === 'EURO' ? 'bg-emerald-600 text-white' :
                         'bg-slate-200 text-slate-600'
@@ -151,7 +175,7 @@ export function Sidebar() {
             <p className="text-[10px] text-slate-400">CRM-SP 123456</p>
           </div>
         </Link>
-        <p className="text-center text-[9px] text-slate-300 dark:text-slate-700 mt-1.5">v2.1 · MVP Enterprise</p>
+        <p className="text-center text-[9px] text-slate-300 dark:text-slate-700 mt-1.5">v3.0 · Enterprise Phase 12</p>
       </div>
     </aside>
   );
