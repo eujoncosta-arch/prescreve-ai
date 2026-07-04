@@ -373,6 +373,7 @@ export interface ProdutoComercial {
   data_ultima_atualizacao: string;
   versao_bula: string;
   fonte_regulatoria: 'ANVISA';
+  registro_anvisa?: string;
   link_bula_profissional?: string;
   link_bula_paciente?: string;
 }
