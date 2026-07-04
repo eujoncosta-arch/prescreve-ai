@@ -645,7 +645,7 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
       { concentracao: '50 mg', forma_farmaceutica: 'comprimido', embalagem: '28 comprimidos', registro_anvisa: '1.0281.0210.001-3' },
       { concentracao: '100 mg', forma_farmaceutica: 'comprimido', embalagem: '28 comprimidos', registro_anvisa: '1.0281.0210.002-1' },
     ],
-    posologia_aprovada: 'Depressão: 50 mg 1x/dia. Dose pode ser aumentada até 400 mg/dia conforme tolerância e resposta.',
+    posologia_aprovada: 'Depressão: 50 mg 1x/dia (dose eficaz estabelecida). Dose máxima aprovada pela ANVISA: 100 mg/dia. Doses > 100 mg/dia não demonstraram benefício adicional em estudos clínicos.',
     contraindicacoes_bula: ['IMAO (washout 14 dias)', 'Hipersensibilidade'],
     advertencias_principais: ['Síndrome serotoninérgica com IMAOs', 'Aumento de PA — monitorar', 'Não suspender abruptamente (síndrome de descontinuação)', 'Ideação suicida (jovens < 25 anos — monitorar)', 'Hiponatremia (SIADH)'],
     interacoes_principais: ['IMAOs (CONTRAINDICADO)', 'Tripanos (síndrome serotoninérgica)', 'Lítio', 'Varfarina (monitorar INR)', 'AINEs/aspirina (sangramento)'],

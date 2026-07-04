@@ -238,7 +238,7 @@ export const PHARMA_DB: QuickDrug[] = [
       normal: '80–320 mg/dia', tfg_60_30: 'Sem ajuste',
       tfg_30_15: 'Cautela', tfg_lt_15: 'Evitar', dialisavel: false,
     },
-    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Máx 80 mg/dia', child_c: 'Contraindicado' },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste em hepatopatia não-biliar; cautela em obstrução biliar ou cirrose', child_c: 'Contraindicado' },
     contraindicacoes_rapidas: ['Gestação', 'Com aliskiren em DM/DRC'],
     interacoes_importantes: [
       { com: 'Enalapril', severidade: 'grave', descricao: 'Duplo bloqueio SRAA' },
@@ -246,6 +246,7 @@ export const PHARMA_DB: QuickDrug[] = [
     alertas_especiais: [],
     uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
     marcas: [
+      { nome: 'Vartaz®', laboratorio: 'Eurofarma', concentracoes: ['80 mg', '160 mg', '320 mg'], formas: ['Comprimido'], lab_id: 'eurofarma', produto_id: 'euro-valsartana-80', verificado: true },
       { nome: 'Diovan', laboratorio: 'Novartis', concentracoes: ['80 mg', '160 mg', '320 mg'], formas: ['Comprimido'] },
       { nome: 'Valsartana EMS', laboratorio: 'EMS', concentracoes: ['80 mg', '160 mg', '320 mg'], formas: ['Comprimido'] },
     ],
@@ -354,7 +355,7 @@ export const PHARMA_DB: QuickDrug[] = [
   {
     id: 'bisoprolol',
     molecula: 'Bisoprolol',
-    nome_generico: 'Fumarato de Bisoprolol',
+    nome_generico: 'Hemifumarato de Bisoprolol',
     sinonimos: ['bisoprolol', 'concor', 'bisoprol', 'betabloqueador seletivo'],
     categoria: 'cardiovascular',
     classe: 'Beta-bloqueador',
@@ -540,7 +541,7 @@ export const PHARMA_DB: QuickDrug[] = [
     },
     ajuste_renal: {
       normal: '500–3000 mg/dia', tfg_60_30: 'Reduzir, monitorar',
-      tfg_30_15: 'Máx 500 mg/dia + cautela', tfg_lt_15: 'Contraindicado', dialisavel: false,
+      tfg_30_15: 'Contraindicado (TFG < 30 — risco de acidose lática)', tfg_lt_15: 'Contraindicado', dialisavel: false,
     },
     ajuste_hepatico: { child_a: 'Contraindicado', child_b: 'Contraindicado', child_c: 'Contraindicado' },
     contraindicacoes_rapidas: ['TFG < 30', 'Insuficiência hepática', 'Acidose metabólica', 'Contraste iodado IV em 48h'],
