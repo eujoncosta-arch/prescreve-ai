@@ -83,6 +83,8 @@ const navGroups = [
       { href: '/qualidade-hospital',       label: 'Qualidade Hospital',    icon: Hospital,     badge: 'P12' },
       { href: '/atualizacoes-cientificas', label: 'Atualizações Cientif.', icon: Bell,         badge: 'P12' },
       { href: '/explicabilidade',          label: 'Explainable AI 2.0',   icon: Brain,        badge: 'P14' },
+      { href: '/validacao-clinica',         label: 'Clinical Validation',   icon: FlaskConical, badge: 'P15' },
+      { href: '/validacao-real',            label: 'Validação Real World',  icon: Globe,        badge: 'P16' },
     ],
   },
   {
@@ -150,6 +152,8 @@ export function Sidebar() {
                         badge === 'NOVO' || badge === '2025' ? 'bg-blue-600 text-white' :
                         badge === 'P12' ? 'bg-violet-600 text-white' :
                         badge === 'P14' ? 'bg-fuchsia-600 text-white' :
+                        badge === 'P15' ? 'bg-cyan-600 text-white' :
+                        badge === 'P16' ? 'bg-teal-600 text-white' :
                         badge === 'DEMO' ? 'bg-indigo-500 text-white' :
                         badge === 'EURO' ? 'bg-emerald-600 text-white' :
                         'bg-slate-200 text-slate-600'
@@ -177,7 +181,7 @@ export function Sidebar() {
             <p className="text-[10px] text-slate-400">CRM-SP 123456</p>
           </div>
         </Link>
-        <p className="text-center text-[9px] text-slate-300 dark:text-slate-700 mt-1.5">v4.0 · Enterprise Phase 14</p>
+        <p className="text-center text-[9px] text-slate-300 dark:text-slate-700 mt-1.5">v5.0 · Enterprise Phase 16</p>
       </div>
     </aside>
   );
