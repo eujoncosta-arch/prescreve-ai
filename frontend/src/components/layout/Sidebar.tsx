@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
+  Award,
   LayoutDashboard,
   FilePlus2,
   History,
@@ -37,6 +38,8 @@ import {
   FlaskConical,
   Hospital,
   Bell,
+  Share2,
+  Bot,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -85,12 +88,17 @@ const navGroups = [
       { href: '/explicabilidade',          label: 'Explainable AI 2.0',   icon: Brain,        badge: 'P14' },
       { href: '/validacao-clinica',         label: 'Clinical Validation',   icon: FlaskConical, badge: 'P15' },
       { href: '/validacao-real',            label: 'Validação Real World',  icon: Globe,        badge: 'P16' },
+      { href: '/interoperabilidade',         label: 'Interoperabilidade',    icon: Share2,       badge: 'P17' },
+      { href: '/medicina-precisao',          label: 'Precision Medicine',    icon: Dna,          badge: 'P18' },
+      { href: '/copilot',                    label: 'AI Medical Copilot',    icon: Bot,          badge: 'P19' },
+      { href: '/knowledge-graph',            label: 'Knowledge Graph',       icon: Network,      badge: 'P20' },
     ],
   },
   {
     label: 'Institucional',
     items: [
-      { href: '/showcase',      label: 'Lab Showcase',  icon: Building2,  badge: 'NOVO' },
+      { href: '/showcase',       label: 'Lab Showcase',     icon: Building2,  badge: 'NOVO' },
+      { href: '/maturity-report',label: 'Maturity Report',  icon: Award,      badge: 'P20' },
     ],
   },
   {
@@ -154,6 +162,10 @@ export function Sidebar() {
                         badge === 'P14' ? 'bg-fuchsia-600 text-white' :
                         badge === 'P15' ? 'bg-cyan-600 text-white' :
                         badge === 'P16' ? 'bg-teal-600 text-white' :
+                        badge === 'P17' ? 'bg-sky-600 text-white' :
+                        badge === 'P18' ? 'bg-violet-600 text-white' :
+                        badge === 'P19' ? 'bg-indigo-600 text-white' :
+                        badge === 'P20' ? 'bg-cyan-600 text-white' :
                         badge === 'DEMO' ? 'bg-indigo-500 text-white' :
                         badge === 'EURO' ? 'bg-emerald-600 text-white' :
                         'bg-slate-200 text-slate-600'
@@ -181,7 +193,7 @@ export function Sidebar() {
             <p className="text-[10px] text-slate-400">CRM-SP 123456</p>
           </div>
         </Link>
-        <p className="text-center text-[9px] text-slate-300 dark:text-slate-700 mt-1.5">v5.0 · Enterprise Phase 16</p>
+        <p className="text-center text-[9px] text-slate-300 dark:text-slate-700 mt-1.5">v6.0 · Enterprise Platform P20</p>
       </div>
     </aside>
   );
