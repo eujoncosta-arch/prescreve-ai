@@ -1,0 +1,528 @@
+// ============================================================
+// PRESCREVE-AI — Prisma Schema Enterprise (Phase 13)
+// PostgreSQL · Audit trail · Soft delete · LGPD compliant
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ══════════════════════════════════════════════════════════════
+// ENUMS
+// ══════════════════════════════════════════════════════════════
+
+enum Perfil {
+  MEDICO
+  ADMIN
+  LABORATORIO
+  HOSPITAL
+  AUDITOR
+}
+
+enum NivelRisco {
+  baixo
+  intermediario
+  alto
+  muito_alto
+  critico
+}
+
+enum StatusConsulta {
+  em_andamento
+  concluida
+  cancelada
+}
+
+enum StatusPrescricao {
+  rascunho
+  finalizada
+  enviada
+  dispensada
+  cancelada
+}
+
+enum NivelEvidencia {
+  A
+  B
+  C
+}
+
+enum TipoAuditoria {
+  login
+  consulta_criada
+  diagnostico_selecionado
+  prescricao_gerada
+  prescricao_enviada
+  validacao_medica
+  acesso_negado
+  dados_exportados
+  migracao
+}
+
+enum StatusValidacao {
+  pendente
+  aprovado
+  rejeitado
+  modificado
+}
+
+// ══════════════════════════════════════════════════════════════
+// USUÁRIO / AUTH
+// ══════════════════════════════════════════════════════════════
+
+model Usuario {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  senha_hash     String
+  perfil         Perfil    @default(MEDICO)
+  ativo          Boolean   @default(true)
+  mfa_secret     String?
+  mfa_ativo      Boolean   @default(false)
+  refresh_tokens RefreshToken[]
+  consultas      Consulta[]
+  validacoes     MedicalValidation[]
+  auditorias     Auditoria[]
+  criado_em      DateTime  @default(now())
+  atualizado_em  DateTime  @updatedAt
+  deletado_em    DateTime?
+
+  medico         Medico?
+  laboratorio    Laboratorio?
+  hospital       Hospital?
+
+  @@index([email])
+  @@index([perfil])
+  @@map("usuarios")
+}
+
+model RefreshToken {
+  id          String   @id @default(cuid())
+  token_hash  String   @unique
+  usuario_id  String
+  usuario     Usuario  @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  expira_em   DateTime
+  criado_em   DateTime @default(now())
+  revogado    Boolean  @default(false)
+
+  @@index([usuario_id])
+  @@map("refresh_tokens")
+}
+
+model Medico {
+  id           String    @id @default(cuid())
+  usuario_id   String    @unique
+  usuario      Usuario   @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  crm_hash     String    @unique    // CRM anonimizado djb2
+  especialidade String
+  uf           String
+  nome_social  String?
+  criado_em    DateTime  @default(now())
+  atualizado_em DateTime @updatedAt
+
+  @@index([especialidade])
+  @@map("medicos")
+}
+
+model Laboratorio {
+  id         String   @id @default(cuid())
+  usuario_id String   @unique
+  usuario    Usuario  @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  cnpj_hash  String   @unique
+  nome       String
+  criado_em  DateTime @default(now())
+
+  @@map("laboratorios")
+}
+
+model Hospital {
+  id         String   @id @default(cuid())
+  usuario_id String   @unique
+  usuario    Usuario  @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  cnpj_hash  String   @unique
+  nome       String
+  tipo       String   // publico | privado | filantropico
+  porte      String   // pequeno | medio | grande | referencia
+  criado_em  DateTime @default(now())
+
+  @@map("hospitais")
+}
+
+// ══════════════════════════════════════════════════════════════
+// CLINICAL DATABASE
+// ══════════════════════════════════════════════════════════════
+
+model Paciente {
+  id             String     @id @default(cuid())
+  hash_identidade String    @unique  // CPF hash SHA256 — LGPD
+  idade          Int
+  sexo           String     // M | F
+  peso_kg        Float?
+  altura_cm      Float?
+  comorbidades   String[]
+  criado_em      DateTime   @default(now())
+  atualizado_em  DateTime   @updatedAt
+  deletado_em    DateTime?  // soft delete
+
+  consultas      Consulta[]
+
+  @@index([hash_identidade])
+  @@map("pacientes")
+}
+
+model Consulta {
+  id              String         @id @default(cuid())
+  usuario_id      String
+  usuario         Usuario        @relation(fields: [usuario_id], references: [id])
+  paciente_id     String?
+  paciente        Paciente?      @relation(fields: [paciente_id], references: [id])
+  status          StatusConsulta @default(em_andamento)
+  anamnese        Json?
+  diagnosticos    Diagnostico[]
+  prescricoes     Prescricao[]
+  risco_scores    RiskScore[]
+  trust_scores    MedicalTrust[]
+  criado_em       DateTime       @default(now())
+  atualizado_em   DateTime       @updatedAt
+  deletado_em     DateTime?
+
+  @@index([usuario_id])
+  @@index([status])
+  @@index([criado_em])
+  @@map("consultas")
+}
+
+model Diagnostico {
+  id              String     @id @default(cuid())
+  consulta_id     String
+  consulta        Consulta   @relation(fields: [consulta_id], references: [id], onDelete: Cascade)
+  cid             String
+  descricao       String
+  confianca       Float      // 0–1
+  selecionado     Boolean    @default(false)
+  criado_em       DateTime   @default(now())
+
+  prescricoes     Prescricao[]
+  conflitos       GuidelineConflict[]
+
+  @@index([consulta_id])
+  @@index([cid])
+  @@map("diagnosticos")
+}
+
+model Prescricao {
+  id              String           @id @default(cuid())
+  consulta_id     String
+  consulta        Consulta         @relation(fields: [consulta_id], references: [id], onDelete: Cascade)
+  diagnostico_id  String?
+  diagnostico     Diagnostico?     @relation(fields: [diagnostico_id], references: [id])
+  status          StatusPrescricao @default(rascunho)
+  medicamentos    Json             // array de itens de prescrição
+  orientacoes     String?
+  validade_dias   Int              @default(30)
+  hash_integridade String
+  versao          Int              @default(1)
+  criado_em       DateTime         @default(now())
+  atualizado_em   DateTime         @updatedAt
+  deletado_em     DateTime?
+
+  validacoes      MedicalValidation[]
+  registros       RecommendationRegistry[]
+
+  @@index([consulta_id])
+  @@index([status])
+  @@map("prescricoes")
+}
+
+model Medicamento {
+  id              String   @id @default(cuid())
+  nome_generico   String
+  nome_comercial  String[]
+  principio_ativo String
+  classe          String
+  subclasse       String?
+  forma_farmaceutica String
+  concentracoes   String[]
+  dispensacao     String   // livre | tarja_vermelha | tarja_preta | especial
+  disponivel_sus  Boolean  @default(false)
+  custo_medio_brl Float?
+  criado_em       DateTime @default(now())
+  atualizado_em   DateTime @updatedAt
+
+  @@unique([nome_generico, principio_ativo])
+  @@index([principio_ativo])
+  @@index([classe])
+  @@map("medicamentos")
+}
+
+// ══════════════════════════════════════════════════════════════
+// EVIDENCE DATABASE
+// ══════════════════════════════════════════════════════════════
+
+model Diretriz {
+  id                String   @id @default(cuid())
+  sociedade         String
+  titulo            String
+  versao            String
+  ano               Int
+  cids_cobertos     String[]
+  resumo            String
+  principais_mudancas String[]
+  url_fonte         String?
+  ativa             Boolean  @default(true)
+  criado_em         DateTime @default(now())
+  atualizado_em     DateTime @updatedAt
+
+  evidencias        Evidencia[]
+  conflitos         GuidelineConflict[]
+
+  @@index([sociedade])
+  @@index([ano])
+  @@index([ativa])
+  @@map("diretrizes")
+}
+
+model Evidencia {
+  id                String         @id @default(cuid())
+  diretriz_id       String?
+  diretriz          Diretriz?      @relation(fields: [diretriz_id], references: [id])
+  cid               String
+  molecula          String
+  indicacao         String
+  tipo_estudo       String         // rct | meta_analise | rwe | registro
+  fonte             String
+  ano               Int
+  doi               String?
+  pmid              String?
+  nivel_evidencia   NivelEvidencia @default(A)
+  incidencia_trat   Float          // taxa de evento no grupo tratado
+  incidencia_ctrl   Float          // taxa de evento no controle
+  nnt               Int?
+  arr               Float?
+  rrr               Float?
+  mortalidade_trat  Float?
+  mortalidade_ctrl  Float?
+  beneficios        String[]
+  riscos            String[]
+  criado_em         DateTime       @default(now())
+  atualizado_em     DateTime       @updatedAt
+
+  @@index([cid])
+  @@index([molecula])
+  @@index([nivel_evidencia])
+  @@map("evidencias")
+}
+
+// ══════════════════════════════════════════════════════════════
+// PHARMACEUTICAL DATABASE
+// ══════════════════════════════════════════════════════════════
+
+model RWE {
+  id                     String   @id @default(cuid())
+  cid                    String
+  diagnostico            String
+  especialidade          String
+  total_casos            Int
+  periodo                String
+  populacao              String
+  idade_media            Float
+  proporcao_feminino     Float
+  taxa_sucesso           Float
+  taxa_falha             Float
+  mortalidade            Float
+  reinternacao           Float
+  eventos_adversos       Float
+  eventos_adversos_graves Float
+  medicamentos           String[]
+  guideline_utilizada    String
+  adesao_guideline       Float
+  score_evidencia        Float
+  nivel_confianca        String
+  origem                 String
+  instituicao            String?
+  hash_integridade       String
+  criado_em              DateTime @default(now())
+
+  @@index([cid])
+  @@index([origem])
+  @@map("rwe")
+}
+
+model DigitalTwin {
+  id                     String   @id @default(cuid())
+  paciente_anonimizado   String   // hash
+  diagnostico_principal  String
+  perfil                 Json     // PacienteTwin serializado
+  status                 String   @default("ativo")
+  criado_em              DateTime @default(now())
+  atualizado_em          DateTime @updatedAt
+
+  @@index([paciente_anonimizado])
+  @@map("digital_twins")
+}
+
+model Outcome {
+  id                         String         @id @default(cuid())
+  molecula                   String
+  cid                        String
+  indicacao                  String
+  fonte                      String
+  ano                        Int
+  horizonte                  String
+  arr                        Float
+  rrr                        Float
+  nnt                        Int
+  nnh                        Int?
+  arr_mortalidade            Float?
+  nnt_mortalidade            Int?
+  custo_por_desfecho_evitado Float?
+  classificacao_beneficio    String
+  nivel_evidencia            NivelEvidencia @default(A)
+  criado_em                  DateTime       @default(now())
+
+  @@unique([molecula, cid, horizonte, fonte])
+  @@index([cid])
+  @@index([molecula])
+  @@map("outcomes")
+}
+
+// ══════════════════════════════════════════════════════════════
+// VALIDATION DATABASE
+// ══════════════════════════════════════════════════════════════
+
+model RiskScore {
+  id                       String     @id @default(cuid())
+  consulta_id              String
+  consulta                 Consulta   @relation(fields: [consulta_id], references: [id], onDelete: Cascade)
+  risco_global             NivelRisco
+  score_global             Float
+  alerta_vermelho          Boolean    @default(false)
+  risco_cardiovascular     Json
+  risco_renal              Json
+  risco_hemorragico        Json
+  risco_farmacologico      Json
+  risco_interacao          Json
+  risco_terapeutico        Json
+  recomendacoes            String[]
+  criado_em                DateTime   @default(now())
+
+  @@index([consulta_id])
+  @@map("risk_scores")
+}
+
+model MedicalTrust {
+  id                String   @id @default(cuid())
+  consulta_id       String
+  consulta          Consulta @relation(fields: [consulta_id], references: [id], onDelete: Cascade)
+  molecula          String
+  score_global      Float
+  percentual        String
+  classificacao     String
+  resumo_executivo  String
+  limitacoes        String[]
+  recomendacao_uso  String
+  dimensoes         Json
+  criado_em         DateTime @default(now())
+
+  @@index([consulta_id])
+  @@map("medical_trust")
+}
+
+model GuidelineConflict {
+  id              String      @id @default(cuid())
+  diagnostico_id  String
+  diagnostico     Diagnostico @relation(fields: [diagnostico_id], references: [id], onDelete: Cascade)
+  diretriz_id     String?
+  diretriz        Diretriz?   @relation(fields: [diretriz_id], references: [id])
+  tipo_conflito   String
+  grau_conflito   String      // baixo | moderado | alto | critico
+  descricao       String
+  recomendacao    String
+  criado_em       DateTime    @default(now())
+
+  @@index([diagnostico_id])
+  @@map("guideline_conflicts")
+}
+
+model RecommendationRegistry {
+  id               String     @id @default(cuid())
+  prescricao_id    String
+  prescricao       Prescricao @relation(fields: [prescricao_id], references: [id], onDelete: Cascade)
+  molecula         String
+  cid              String
+  diretriz         String
+  nivel_evidencia  NivelEvidencia
+  classe_terapeutica String
+  dose             String?
+  via              String?
+  duracao          String?
+  justificativa    String?
+  hash_integridade String
+  versao           Int        @default(1)
+  engine_versao    String     @default("3.0.0")
+  status           String     @default("ativa")
+  criado_em        DateTime   @default(now())
+
+  @@index([prescricao_id])
+  @@index([cid])
+  @@index([molecula])
+  @@map("recommendation_registry")
+}
+
+// ══════════════════════════════════════════════════════════════
+// AUDIT DATABASE
+// ══════════════════════════════════════════════════════════════
+
+model Auditoria {
+  id                String        @id @default(cuid())
+  usuario_id        String?
+  usuario           Usuario?      @relation(fields: [usuario_id], references: [id])
+  crm_hash          String?
+  tipo              TipoAuditoria
+  acao              String
+  recurso           String?       // ex: "prescricao:abc123"
+  dados_entrada     Json?
+  dados_saida       Json?
+  ip_hash           String?       // IP anonimizado SHA256
+  user_agent_hash   String?
+  guideline_ref     String?
+  evidencia_ref     String?
+  hash_integridade  String        // SHA256 do registro completo
+  timestamp         DateTime      @default(now())
+
+  @@index([usuario_id])
+  @@index([tipo])
+  @@index([timestamp])
+  @@index([crm_hash])
+  @@map("auditoria")
+}
+
+// ══════════════════════════════════════════════════════════════
+// REAL WORLD VALIDATION
+// ══════════════════════════════════════════════════════════════
+
+model MedicalValidation {
+  id                  String          @id @default(cuid())
+  prescricao_id       String?
+  prescricao          Prescricao?     @relation(fields: [prescricao_id], references: [id])
+  validador_id        String
+  validador           Usuario         @relation(fields: [validador_id], references: [id])
+  crm_hash            String
+  especialidade       String
+  status              StatusValidacao @default(pendente)
+  concordancia_global Float?          // 0–1
+  veredicto           String?         // concordo | parcial | discordo
+  justificativa       String?
+  conduta_alternativa String?
+  tempo_revisao_seg   Int?
+  criado_em           DateTime        @default(now())
+  atualizado_em       DateTime        @updatedAt
+
+  @@index([prescricao_id])
+  @@index([validador_id])
+  @@index([status])
+  @@map("medical_validations")
+}
