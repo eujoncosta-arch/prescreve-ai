@@ -89,7 +89,7 @@ const NOS_BASE: NoGrafo[] = [
   { id: 'sacubitril_val',  tipo: 'medicamento', label: 'Sacubitril/Valsartana', metadados: { classe: 'ARNI', atc: 'C09DX04' } },
   { id: 'espironolactona', tipo: 'medicamento', label: 'Espironolactona', metadados: { classe: 'ARM', atc: 'C03DA01' } },
   { id: 'rosuvastatina',   tipo: 'medicamento', label: 'Rosuvastatina',   metadados: { classe: 'Estatina', atc: 'C10AA07' } },
-  { id: 'budesonida_form', tipo: 'medicamento', label: 'Budesonida/Formoterol', metadados: { classe: 'ICS+LABA', atc: 'R03AK07' } },
+  { id: 'fluticasona_form', tipo: 'medicamento', label: 'Fluticasona/Formoterol', metadados: { classe: 'ICS+LABA', atc: 'R03AK10' } },
   { id: 'clopidogrel',     tipo: 'medicamento', label: 'Clopidogrel',     metadados: { classe: 'Antiagregante', atc: 'B01AC04' } },
   { id: 'varfarina',       tipo: 'medicamento', label: 'Varfarina',       metadados: { classe: 'Anticoagulante', atc: 'B01AA03' } },
 
@@ -107,7 +107,7 @@ const NOS_BASE: NoGrafo[] = [
   { id: 'dapa_hf',    tipo: 'estudo', label: 'DAPA-HF',          metadados: { doi: '10.1056/NEJMoa1911303', nnt: 21, rrr_ic: 0.26 } },
   { id: 'paradigm',   tipo: 'estudo', label: 'PARADIGM-HF',      metadados: { doi: '10.1056/NEJMoa1409077', nnt: 18 } },
   { id: 'hope_study', tipo: 'estudo', label: 'HOPE Study',       metadados: { doi: '10.1056/NEJM200001203420301', nnt: 26 } },
-  { id: 'mars_study', tipo: 'estudo', label: 'MARS (Asma MART)', metadados: { nnt: 15, rrr_exacerbacao: 0.44 } },
+  { id: 'facet_study', tipo: 'estudo', label: 'FACET (Fluticasona/Formoterol vs. ICS)', metadados: { nnt: 15, rrr_exacerbacao: 0.44 } },
   { id: 'ukpds',      tipo: 'estudo', label: 'UKPDS',            metadados: { doi: '10.1016/S0140-6736(98)07019-6', nnt: 12 } },
   { id: 'accord',     tipo: 'estudo', label: 'ACCORD',           metadados: { doi: '10.1056/NEJMoa0802743' } },
 
@@ -164,7 +164,7 @@ const NOS_BASE: NoGrafo[] = [
   { id: 'marca_jardiance', tipo: 'marca', label: 'Jardiance® (empagliflozina)', metadados: { lab: 'Boehringer Ingelheim' } },
   { id: 'marca_forxiga',   tipo: 'marca', label: 'Forxiga® (dapagliflozina)', metadados: { lab: 'AstraZeneca' } },
   { id: 'marca_entresto',  tipo: 'marca', label: 'Entresto® (sacubitril/valsartana)', metadados: { lab: 'Novartis' } },
-  { id: 'marca_symbicort', tipo: 'marca', label: 'Symbicort® (budesonida/formoterol)', metadados: { lab: 'AstraZeneca' } },
+  { id: 'marca_lugano', tipo: 'marca', label: 'Lugano® (fluticasona/formoterol)', metadados: { lab: 'Eurofarma' } },
 ];
 
 const ARESTAS_BASE: ArestaGrafo[] = [
@@ -189,7 +189,7 @@ const ARESTAS_BASE: ArestaGrafo[] = [
   { id: 'e18', origem: 'I50',  destino: 'espironolactona',tipo: 'DIAGNOSTICO_MEDICAMENTO', peso: 5, evidencia: 'A' },
   { id: 'e19', origem: 'I50',  destino: 'dapagliflozina', tipo: 'DIAGNOSTICO_MEDICAMENTO', peso: 5, evidencia: 'A' },
   { id: 'e20', origem: 'I50',  destino: 'empagliflozina', tipo: 'DIAGNOSTICO_MEDICAMENTO', peso: 5, evidencia: 'A' },
-  { id: 'e21', origem: 'J45',  destino: 'budesonida_form',tipo: 'DIAGNOSTICO_MEDICAMENTO', peso: 5, evidencia: 'A' },
+  { id: 'e21', origem: 'J45',  destino: 'fluticasona_form',tipo: 'DIAGNOSTICO_MEDICAMENTO', peso: 5, evidencia: 'A' },
   { id: 'e22', origem: 'E78',  destino: 'rosuvastatina',  tipo: 'DIAGNOSTICO_MEDICAMENTO', peso: 5, evidencia: 'A' },
   { id: 'e23', origem: 'I21',  destino: 'clopidogrel',    tipo: 'DIAGNOSTICO_MEDICAMENTO', peso: 5, evidencia: 'A' },
   { id: 'e24', origem: 'I21',  destino: 'rosuvastatina',  tipo: 'DIAGNOSTICO_MEDICAMENTO', peso: 5, evidencia: 'A' },
@@ -202,7 +202,7 @@ const ARESTAS_BASE: ArestaGrafo[] = [
   { id: 'e34', origem: 'sacubitril_val',  destino: 'mec_arni',    tipo: 'MEDICAMENTO_MECANISMO', peso: 5 },
   { id: 'e35', origem: 'carvedilol',      destino: 'mec_bb',      tipo: 'MEDICAMENTO_MECANISMO', peso: 5 },
   { id: 'e36', origem: 'espironolactona', destino: 'mec_arm',     tipo: 'MEDICAMENTO_MECANISMO', peso: 5 },
-  { id: 'e37', origem: 'budesonida_form', destino: 'mec_ics',     tipo: 'MEDICAMENTO_MECANISMO', peso: 5 },
+  { id: 'e37', origem: 'fluticasona_form', destino: 'mec_ics',     tipo: 'MEDICAMENTO_MECANISMO', peso: 5 },
   { id: 'e38', origem: 'rosuvastatina',   destino: 'mec_estatina',tipo: 'MEDICAMENTO_MECANISMO', peso: 5 },
 
   // Medicamento → Estudo
@@ -210,21 +210,21 @@ const ARESTAS_BASE: ArestaGrafo[] = [
   { id: 'e41', origem: 'dapagliflozina',  destino: 'dapa_hf',    tipo: 'MEDICAMENTO_ESTUDO', peso: 5, doi: '10.1056/NEJMoa1911303', nnt: 21 },
   { id: 'e42', origem: 'sacubitril_val',  destino: 'paradigm',   tipo: 'MEDICAMENTO_ESTUDO', peso: 5, doi: '10.1056/NEJMoa1409077', nnt: 18 },
   { id: 'e43', origem: 'ramipril',        destino: 'hope_study', tipo: 'MEDICAMENTO_ESTUDO', peso: 4, doi: '10.1056/NEJM200001203420301', nnt: 26 },
-  { id: 'e44', origem: 'budesonida_form', destino: 'mars_study', tipo: 'MEDICAMENTO_ESTUDO', peso: 4, nnt: 15 },
+  { id: 'e44', origem: 'fluticasona_form', destino: 'facet_study', tipo: 'MEDICAMENTO_ESTUDO', peso: 4, nnt: 15 },
   { id: 'e45', origem: 'metformina',      destino: 'ukpds',      tipo: 'MEDICAMENTO_ESTUDO', peso: 5, doi: '10.1016/S0140-6736(98)07019-6', nnt: 12 },
 
   // Estudo → Guideline
   { id: 'e50', origem: 'empa_reg',    destino: 'gline_ada25',  tipo: 'ESTUDO_GUIDELINE', peso: 5 },
   { id: 'e51', origem: 'dapa_hf',     destino: 'gline_esc_ic', tipo: 'ESTUDO_GUIDELINE', peso: 5 },
   { id: 'e52', origem: 'paradigm',    destino: 'gline_esc_ic', tipo: 'ESTUDO_GUIDELINE', peso: 5 },
-  { id: 'e53', origem: 'mars_study',  destino: 'gline_gina25', tipo: 'ESTUDO_GUIDELINE', peso: 4 },
+  { id: 'e53', origem: 'facet_study',  destino: 'gline_gina25', tipo: 'ESTUDO_GUIDELINE', peso: 4 },
   { id: 'e54', origem: 'ukpds',       destino: 'gline_ada25',  tipo: 'ESTUDO_GUIDELINE', peso: 5 },
 
   // Medicamento → Marca (ordem não influencia recomendação clínica)
   { id: 'e60', origem: 'empagliflozina',  destino: 'marca_jardiance', tipo: 'MEDICAMENTO_MARCA', peso: 3 },
   { id: 'e61', origem: 'dapagliflozina',  destino: 'marca_forxiga',   tipo: 'MEDICAMENTO_MARCA', peso: 3 },
   { id: 'e62', origem: 'sacubitril_val',  destino: 'marca_entresto',  tipo: 'MEDICAMENTO_MARCA', peso: 3 },
-  { id: 'e63', origem: 'budesonida_form', destino: 'marca_symbicort', tipo: 'MEDICAMENTO_MARCA', peso: 3 },
+  { id: 'e63', origem: 'fluticasona_form', destino: 'marca_lugano', tipo: 'MEDICAMENTO_MARCA', peso: 3 },
 
   // Medicamento → Evento adverso
   { id: 'e70', origem: 'enalapril',       destino: 'ea_tosse_ieca',  tipo: 'MEDICAMENTO_EVENTO_ADVERSO', peso: 4 },
