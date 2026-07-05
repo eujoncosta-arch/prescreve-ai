@@ -316,6 +316,58 @@ export function runSafetyCheck(input: SafetyCheckInput): QuickSafetyAlert[] {
       descricao: 'Combinação aumenta risco de hipercalemia, hipotensão e IRA sem benefício adicional.',
       acao: 'CONTRAINDICADO conforme diretrizes. Usar apenas um dos dois.',
     },
+    // IMAO + ISRS — Síndrome serotoninérgica fatal
+    {
+      mol_a: 'imao', mol_b: 'isrs',
+      severidade: 'critical',
+      titulo: 'IMAO + ISRS — Síndrome serotoninérgica potencialmente fatal',
+      descricao: 'A combinação de inibidores da MAO com ISRS provoca acúmulo maciço de serotonina — hipertermia, rigidez, crises autonômicas e morte. Período de washout obrigatório: 14 dias após IMAO; 5 dias após ISRS (exceto fluoxetina: 5 semanas).',
+      acao: 'CONTRAINDICADO ABSOLUTO. Respeitar washout de 14 dias. Fluoxetina requer 5 semanas de washout antes de iniciar IMAO.',
+    },
+    {
+      mol_a: 'fenelzina', mol_b: 'sertralina',
+      severidade: 'critical',
+      titulo: 'IMAO + Sertralina — Síndrome serotoninérgica fatal',
+      descricao: 'Mesmo mecanismo IMAO+ISRS. Washout: 14 dias após IMAO, 5 dias após sertralina.',
+      acao: 'CONTRAINDICADO ABSOLUTO.',
+    },
+    {
+      mol_a: 'fenelzina', mol_b: 'fluoxetina',
+      severidade: 'critical',
+      titulo: 'IMAO + Fluoxetina — Síndrome serotoninérgica (washout 5 semanas)',
+      descricao: 'Fluoxetina tem meia-vida de ~5 semanas — washout prolongado obrigatório antes de IMAO.',
+      acao: 'CONTRAINDICADO. Aguardar 5 semanas após última dose de fluoxetina antes de iniciar IMAO.',
+    },
+    // Nitrato + inibidor PDE5 — hipotensão grave
+    {
+      mol_a: 'nitrato', mol_b: 'tadalafila',
+      severidade: 'critical',
+      titulo: 'Nitrato + Tadalafila — Hipotensão grave potencialmente fatal',
+      descricao: 'Sinergismo vasodilatador aditivo — queda brusca de PA com risco de síncope, IAM e morte. Tadalafila tem meia-vida de ~36h; nitrato de resgate também é contraindicado.',
+      acao: 'CONTRAINDICADO ABSOLUTO. Intervalo mínimo: 48h após tadalafila antes de nitrato. Em emergência coronariana usar nitroprussiato IV com cautela.',
+    },
+    {
+      mol_a: 'nitrato', mol_b: 'sildenafila',
+      severidade: 'critical',
+      titulo: 'Nitrato + Sildenafila — Hipotensão grave potencialmente fatal',
+      descricao: 'Mesma interação nitrato+iPDE5. Sildenafila meia-vida ~4h; contraindicado nitrato nas 24h seguintes.',
+      acao: 'CONTRAINDICADO ABSOLUTO. Intervalo mínimo: 24h após sildenafila antes de nitrato.',
+    },
+    {
+      mol_a: 'nitrato', mol_b: 'vardenafila',
+      severidade: 'critical',
+      titulo: 'Nitrato + Vardenafila — Hipotensão grave',
+      descricao: 'Mesma classe iPDE5. Contraindicado nitrato nas 24h após vardenafila.',
+      acao: 'CONTRAINDICADO ABSOLUTO. Intervalo mínimo: 24h.',
+    },
+    // ARNI + IECA
+    {
+      mol_a: 'sacubitril', mol_b: 'ieca',
+      severidade: 'critical',
+      titulo: 'ARNI (Sacubitril/Valsartana) + IECA — Angioedema fatal',
+      descricao: 'Sacubitril inibe neprilisina (que degrada bradicinina). Combinação com IECA eleva bradicinina a níveis tóxicos — angioedema de vias aéreas potencialmente fatal.',
+      acao: 'CONTRAINDICADO. Washout de 36h após IECA antes de iniciar sacubitril/valsartana. Monitorar via aérea nas primeiras 24h.',
+    },
   ];
 
   const molsLower = moleculas.map(m => m.toLowerCase());
