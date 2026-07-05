@@ -22,11 +22,12 @@ export interface SafetyCheckInput {
   lactante?: boolean;
   idoso?: boolean; // > 65 anos
   crclValue?: number;
+  potassiumLevel?: number; // K+ sérico em mEq/L — necessário para verificar risco ARM
 }
 
 export function runSafetyCheck(input: SafetyCheckInput): QuickSafetyAlert[] {
   const alerts: QuickSafetyAlert[] = [];
-  const { moleculas, gestante, lactante, idoso, crclValue } = input;
+  const { moleculas, gestante, lactante, idoso, crclValue, potassiumLevel } = input;
 
   // Busca dados das moléculas no banco
   const drugs: QuickDrug[] = moleculas
@@ -193,6 +194,54 @@ export function runSafetyCheck(input: SafetyCheckInput): QuickSafetyAlert[] {
         });
       }
     }
+  }
+
+  // ── 7a. K+ pré-requisito ARM (KDIGO 2024 / ESC 2023) ─────────
+  // Espironolactona/eplerenona exigem K+ ≤ 5,0 mEq/L antes do início
+  const ARM_MOLECULES = ['espironolactona', 'eplerenona', 'finerenona'];
+  const usaARM = moleculas.some(m => ARM_MOLECULES.some(arm => m.toLowerCase().includes(arm)));
+  if (usaARM) {
+    if (potassiumLevel === undefined) {
+      alerts.push({
+        id: 'arm-k-nao-informado',
+        tipo: 'contraind',
+        severidade: 'warning',
+        titulo: 'ARM prescrito — verificar K+ sérico antes do início',
+        descricao: 'Antagonistas do receptor mineralocorticoide (ARM) requerem K+ sérico ≤ 5,0 mEq/L antes do início (KDIGO 2024 / ESC 2023). Hipercalemia é a principal complicação.',
+        acao: 'Solicitar K+ sérico e creatinina antes de iniciar ARM. Suspender se K+ > 5,5 mEq/L.',
+      });
+    } else if (potassiumLevel > 5.0 && crclValue !== undefined && crclValue < 45) {
+      alerts.push({
+        id: 'arm-hipercalemia-tfg-baixa',
+        tipo: 'contraind',
+        severidade: 'critical',
+        titulo: `ARM CONTRAINDICADO — K+ ${potassiumLevel} mEq/L + TFG < 45 mL/min`,
+        descricao: `K+ sérico elevado (${potassiumLevel} mEq/L) associado a TFG reduzida (${crclValue} mL/min). ARM nessa combinação apresenta risco elevado de hipercalemia grave e arritmia fatal (RALES/EMPHASIS-HF excluíram TFG < 30 e K+ > 5,0).`,
+        acao: 'CONTRAINDICADO. Corrigir hipercalemia antes de iniciar ARM. Considerar patirômer ou resina de troca. Reavalie quando K+ < 5,0 mEq/L.',
+      });
+    } else if (potassiumLevel > 5.0) {
+      alerts.push({
+        id: 'arm-hipercalemia',
+        tipo: 'contraind',
+        severidade: 'danger',
+        titulo: `ARM com K+ elevado — ${potassiumLevel} mEq/L`,
+        descricao: `K+ > 5,0 mEq/L contraindica início de ARM (espironolactona/eplerenona). Risco de hipercalemia grave e arritmia ventricular.`,
+        acao: 'Suspender ou não iniciar ARM. Corrigir hipercalemia. Reavalie quando K+ ≤ 5,0 mEq/L.',
+      });
+    }
+  }
+
+  // ── 7b. Montelucaste — alerta FDA 2020 (depressão/ideação suicida) ─
+  const usaMontelucaste = moleculas.some(m => m.toLowerCase().includes('montelucaste') || m.toLowerCase().includes('montelukast'));
+  if (usaMontelucaste) {
+    alerts.push({
+      id: 'montelucaste-saude-mental',
+      tipo: 'contraind',
+      severidade: 'warning',
+      titulo: 'Montelucaste — Alerta FDA 2020: Risco neuropsiquiátrico (Black Box)',
+      descricao: 'FDA adicionou Black Box Warning em março/2020: montelucaste associado a agitação, agressividade, pesadelos, depressão, ideação suicida e suicídio consumado em adultos, adolescentes e crianças. Risco persiste mesmo após descontinuação.',
+      acao: 'Informar paciente/responsável sobre sintomas neuropsiquiátricos. Reservar montelucaste para pacientes sem resposta ou contraindicação a ICS. Descontinuar imediatamente se sintomas psiquiátricos aparecerem.',
+    });
   }
 
   // ── 7. Interações críticas conhecidas (pares hardcoded de alta relevância clínica) ──

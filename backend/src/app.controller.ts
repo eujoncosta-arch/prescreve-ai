@@ -9,4 +9,14 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+
+  @Get('health')
+  getHealth(): object {
+    return {
+      status: 'ok',
+      service: 'prescreve-ai-backend',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+    };
+  }
 }

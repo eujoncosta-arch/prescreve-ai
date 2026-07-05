@@ -110,6 +110,9 @@ const NOS_BASE: NoGrafo[] = [
   { id: 'facet_study', tipo: 'estudo', label: 'FACET (Fluticasona/Formoterol vs. ICS)', metadados: { nnt: 15, rrr_exacerbacao: 0.44 } },
   { id: 'ukpds',      tipo: 'estudo', label: 'UKPDS',            metadados: { doi: '10.1016/S0140-6736(98)07019-6', nnt: 12 } },
   { id: 'accord',     tipo: 'estudo', label: 'ACCORD',           metadados: { doi: '10.1056/NEJMoa0802743' } },
+  { id: 'sprint',     tipo: 'estudo', label: 'SPRINT',           metadados: { doi: '10.1056/NEJMoa1511939', nnt: 61, descricao: 'PA alvo < 120 mmHg vs < 140 mmHg — redução 25% MACE em HAS sem DM' } },
+  { id: 'rales',      tipo: 'estudo', label: 'RALES',            metadados: { doi: '10.1056/NEJM199909023411001', nnt: 9, descricao: 'Espironolactona em IC-FEr grave — redução 30% mortalidade' } },
+  { id: 'emphasis_hf',tipo: 'estudo', label: 'EMPHASIS-HF',      metadados: { doi: '10.1056/NEJMoa1009492', nnt: 14, descricao: 'Eplerenona em IC-FEr leve-moderada — redução 37% desfecho primário' } },
 
   // Guidelines
   { id: 'gline_esc23',  tipo: 'guideline', label: 'ESC/ESH Hypertension 2023' },
@@ -212,6 +215,9 @@ const ARESTAS_BASE: ArestaGrafo[] = [
   { id: 'e43', origem: 'ramipril',        destino: 'hope_study', tipo: 'MEDICAMENTO_ESTUDO', peso: 4, doi: '10.1056/NEJM200001203420301', nnt: 26 },
   { id: 'e44', origem: 'fluticasona_form', destino: 'facet_study', tipo: 'MEDICAMENTO_ESTUDO', peso: 4, nnt: 15 },
   { id: 'e45', origem: 'metformina',      destino: 'ukpds',      tipo: 'MEDICAMENTO_ESTUDO', peso: 5, doi: '10.1016/S0140-6736(98)07019-6', nnt: 12 },
+  { id: 'e46', origem: 'I10',             destino: 'sprint',     tipo: 'DIAGNOSTICO_MEDICAMENTO', peso: 4, doi: '10.1056/NEJMoa1511939', nnt: 61 },
+  { id: 'e47', origem: 'espironolactona', destino: 'rales',      tipo: 'MEDICAMENTO_ESTUDO', peso: 5, doi: '10.1056/NEJM199909023411001', nnt: 9 },
+  { id: 'e48', origem: 'eplerenona',      destino: 'emphasis_hf',tipo: 'MEDICAMENTO_ESTUDO', peso: 5, doi: '10.1056/NEJMoa1009492', nnt: 14 },
 
   // Estudo → Guideline
   { id: 'e50', origem: 'empa_reg',    destino: 'gline_ada25',  tipo: 'ESTUDO_GUIDELINE', peso: 5 },

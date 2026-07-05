@@ -15,6 +15,7 @@ import {
 import type { ProdutoComercial } from './types';
 import { DRUG_DATABASE, getMoleculesByCondition } from './drug-database';
 import type { MoleculeEntry } from './types';
+import { avaliarFarmacogenomica, type AvaliacaoFarmacogenomica } from './precision-medicine';
 
 // ─── OUTPUT TYPE ──────────────────────────────────────────────
 
@@ -28,6 +29,13 @@ export interface EvidenciaResolvida {
   notas_clinicas: string[];
 }
 
+// Moléculas com evidência PGx CPIC nível A/B que requerem avaliação farmacogenômica
+const PGX_MOLECULES = [
+  'clopidogrel', 'varfarina', 'warfarin', 'codeína', 'codeina',
+  'sinvastatina', 'simvastatina', 'carbamazepina', 'abacavir',
+  'metoprolol', 'omeprazol', 'omeprazole',
+];
+
 export interface ResolvedDrug {
   molecula: string;
   quick_drug: QuickDrug | null;
@@ -35,6 +43,7 @@ export interface ResolvedDrug {
   evidencia: EvidenciaResolvida | null;
   molecule_entry: MoleculeEntry | null;
   fonte: ('pharma_db' | 'eurofarma_catalog' | 'correlacao' | 'drug_db')[];
+  pgx_alerts: AvaliacaoFarmacogenomica[];
 }
 
 // ─── RESOLVER PRINCIPAL ───────────────────────────────────────
@@ -113,6 +122,14 @@ export function resolveDrug(
     if (moleculeEntry) fonte.push('drug_db');
   }
 
+  // 5. PGx — avalia farmacogenômica para moléculas com evidência CPIC
+  const needsPgx = PGX_MOLECULES.some(pgxMol =>
+    molNorm.includes(pgxMol) || pgxMol.includes(molNorm)
+  );
+  const pgxAlerts: AvaliacaoFarmacogenomica[] = needsPgx
+    ? avaliarFarmacogenomica(molecula, [])
+    : [];
+
   return {
     molecula,
     quick_drug: quickDrug,
@@ -120,6 +137,7 @@ export function resolveDrug(
     evidencia,
     molecule_entry: moleculeEntry,
     fonte,
+    pgx_alerts: pgxAlerts,
   };
 }
 

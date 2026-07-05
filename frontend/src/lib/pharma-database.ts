@@ -2622,6 +2622,129 @@ export const PHARMA_DB: QuickDrug[] = [
       { nome: 'PraIVA®', laboratorio: 'Eurofarma', concentracoes: ['400 mg'], formas: ['Comprimido'], lab_id: 'eurofarma', produto_id: 'euro-praiva-comp', verificado: true },
     ],
   },
+
+  // ─── LAMA — Anticolinérgicos de Longa Ação ────────────────────
+
+  {
+    id: 'tiotropio',
+    molecula: 'Tiotrópio',
+    nome_generico: 'Brometo de Tiotrópio',
+    sinonimos: ['tiotropio', 'tiotrópio', 'tiotropium', 'spiriva'],
+    categoria: 'respiratory',
+    classe: 'LAMA',
+    subclasse: 'Anticolinérgico inalatório de longa ação',
+    indicacoes_principais: ['DPOC — broncodilatador de manutenção (GOLD 2025 grupo B/E)', 'Asma — terapia adicional em GINA step 4–5'],
+    dose_adulto: {
+      habitual: '18 mcg (HandiHaler) ou 2,5 mcg (Respimat)',
+      max: '18 mcg/dia (HandiHaler) ou 5 mcg/dia (Respimat)',
+      unidade: 'mcg',
+      via: 'Inalatório',
+      frequencias: ['1x/dia (manhã)'],
+      instrucoes: 'Inalar cápsula perfurada pelo HandiHaler ou 2 jatos do Respimat. Técnica correta essencial.',
+    },
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Dose padrão com monitoramento', tfg_30_15: 'Monitorar efeitos anticolinérgicos', tfg_lt_15: 'Usar com cautela — clearance reduzido', dialisavel: false },
+    contraindicacoes_rapidas: ['Hipersensibilidade a tiotrópio, ipratrópio ou atropina', 'Glaucoma de ângulo fechado (precaução)', 'Retenção urinária grave (precaução)'],
+    interacoes_importantes: [
+      { com: 'ipratropio', severidade: 'moderada', descricao: 'Duplicidade de anticolinérgicos inalatórios — potencializa efeitos adversos anticolinérgicos (boca seca, retenção urinária)' },
+    ],
+    alertas_especiais: ['Boca seca em 10–15% dos pacientes', 'Não usar para broncoespasmo agudo — não é SABA', 'HBP: monitorar retenção urinária'],
+    uso_gestante: 'avaliar',
+    uso_lactante: 'avaliar',
+    marcas: [
+      { nome: 'Spiriva® Respimat', laboratorio: 'Boehringer Ingelheim', concentracoes: ['2,5 mcg/jato'], formas: ['Solução inalatória'], lab_id: 'boehringer', verificado: true },
+    ],
+  },
+
+  {
+    id: 'umeclidinio',
+    molecula: 'Umeclidínio',
+    nome_generico: 'Brometo de Umeclidínio',
+    sinonimos: ['umeclidinio', 'umeclidínio', 'umeclidinium', 'incruse'],
+    categoria: 'respiratory',
+    classe: 'LAMA',
+    subclasse: 'Anticolinérgico inalatório de longa ação',
+    indicacoes_principais: ['DPOC — broncodilatador de manutenção alternativo ao tiotrópio (GOLD 2025)'],
+    dose_adulto: {
+      habitual: '62,5 mcg',
+      max: '62,5 mcg/dia',
+      unidade: 'mcg',
+      via: 'Inalatório',
+      frequencias: ['1x/dia'],
+      instrucoes: 'Usar pelo inalador Ellipta. 1 inalação por dia, preferencialmente no mesmo horário.',
+    },
+    contraindicacoes_rapidas: ['Hipersensibilidade', 'Glaucoma de ângulo fechado agudo (precaução)', 'Retenção urinária grave (precaução)'],
+    interacoes_importantes: [
+      { com: 'tiotropio', severidade: 'moderada', descricao: 'Duplicidade de LAMA — não combinar dois anticolinérgicos inalatórios de longa ação' },
+    ],
+    alertas_especiais: ['Não substituição emergencial de SABA', 'Disponível também como combinação LABA/LAMA (Anoro® vilanterol/umeclidínio)'],
+    uso_gestante: 'avaliar',
+    uso_lactante: 'avaliar',
+    marcas: [
+      { nome: 'Incruse® Ellipta', laboratorio: 'GSK', concentracoes: ['62,5 mcg/dose'], formas: ['Pó inalatório'], lab_id: 'gsk', verificado: true },
+    ],
+  },
+
+  // ─── LABA — Beta-2 agonistas de Longa Ação ───────────────────
+
+  {
+    id: 'formoterol',
+    molecula: 'Formoterol',
+    nome_generico: 'Fumarato de Formoterol',
+    sinonimos: ['formoterol', 'formoteroldihidratado', 'foradil', 'oxis'],
+    categoria: 'respiratory',
+    classe: 'LABA',
+    subclasse: 'Beta-2 agonista inalatório de longa ação',
+    indicacoes_principais: ['Asma — broncodilatador de manutenção em combinação com ICS (GINA 2025)', 'DPOC — broncodilatador LABA (GOLD 2025)'],
+    dose_adulto: {
+      habitual: '12 mcg',
+      max: '24 mcg/dia',
+      unidade: 'mcg',
+      via: 'Inalatório',
+      frequencias: ['2x/dia (manhã e noite)'],
+      instrucoes: 'Sempre associar a corticoide inalatório na asma. Não usar LABA isolado em asma sem ICS.',
+    },
+    contraindicacoes_rapidas: ['LABA isolado em asma (risco SMART trial — obrigatório associar ICS)', 'Hipersensibilidade', 'Taquiarritmias não controladas'],
+    interacoes_importantes: [
+      { com: 'teofilina', severidade: 'moderada', descricao: 'Risco aditivo de taquicardia e hipocalemia' },
+      { com: 'beta-bloqueador', severidade: 'grave', descricao: 'Antagonismo farmacológico — beta-bloqueadores não seletivos bloqueiam efeito broncodilatador' },
+    ],
+    alertas_especiais: ['⚠ NUNCA usar LABA isolado em asma — aumenta mortalidade (FDA Black Box)', 'Monitorar K+ e glicemia em doses altas', 'Início de ação mais rápido que salmeterol (3–5 min) — pode ser usado como resgate em alguns protocolos'],
+    uso_gestante: 'avaliar',
+    uso_lactante: 'avaliar',
+    marcas: [
+      { nome: 'Oxis® Turbuhaler', laboratorio: 'AstraZeneca', concentracoes: ['6 mcg/dose', '12 mcg/dose'], formas: ['Pó inalatório'], lab_id: 'astrazeneca', verificado: true },
+    ],
+  },
+
+  {
+    id: 'salmeterol',
+    molecula: 'Salmeterol',
+    nome_generico: 'Xinafoato de Salmeterol',
+    sinonimos: ['salmeterol', 'serevent', 'xinafoato de salmeterol'],
+    categoria: 'respiratory',
+    classe: 'LABA',
+    subclasse: 'Beta-2 agonista inalatório de longa ação',
+    indicacoes_principais: ['Asma — broncodilatador de manutenção em combinação com ICS (GINA 2025)', 'DPOC — broncodilatador LABA quando tiotrópio é insuficiente'],
+    dose_adulto: {
+      habitual: '50 mcg',
+      max: '100 mcg/dia',
+      unidade: 'mcg',
+      via: 'Inalatório',
+      frequencias: ['2x/dia (manhã e noite)'],
+      instrucoes: 'Sempre associar a ICS em asma. Nunca usar isolado em asma. Início de ação mais lento (10–20 min) — não usar como resgate.',
+    },
+    contraindicacoes_rapidas: ['LABA isolado em asma (FDA Black Box Warning)', 'Hipersensibilidade', 'Taquiarritmias'],
+    interacoes_importantes: [
+      { com: 'beta-bloqueador', severidade: 'grave', descricao: 'Antagonismo farmacológico — beta-bloqueadores não seletivos bloqueiam broncodilatação' },
+      { com: 'cetoconazol', severidade: 'moderada', descricao: 'CYP3A4 — aumento da exposição ao salmeterol, risco cardiovascular' },
+    ],
+    alertas_especiais: ['⚠ FDA Black Box: LABA isolado em asma aumenta risco de morte (SMART Trial)', 'Não usar como broncodilatador de resgate — início lento', 'Disponível como combinação fixa: Salmeterol/Fluticasona (Seretide®)'],
+    uso_gestante: 'avaliar',
+    uso_lactante: 'avaliar',
+    marcas: [
+      { nome: 'Serevent® Diskus', laboratorio: 'GSK', concentracoes: ['50 mcg/dose'], formas: ['Pó inalatório'], lab_id: 'gsk', verificado: true },
+    ],
+  },
 ];
 
 // ─── FUNÇÕES DE BUSCA ─────────────────────────────────────────
