@@ -1551,7 +1551,7 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Alfa-1 Bloqueador + Inibidor da 5-Alfa-Redutase (Associação para HPB)',
     cids_aprovados: ['N40'],
     apresentacoes: [
-      { concentracao: '4mg + 5mg', forma_farmaceutica: 'comprimido', embalagem: '30 comprimidos' },
+      { concentracao: '2mg + 5mg', forma_farmaceutica: 'capsula', embalagem: '30 cápsulas' },
     ],
     posologia_aprovada: 'HPB sintomática: 1 comprimido (doxazosina 4mg + finasterida 5mg) 1x/dia. Resposta esperada em 3–6 meses para finasterida; doxazosina age mais rapidamente.',
     contraindicacoes_bula: ['Hipersensibilidade aos componentes', 'Mulheres e crianças (finasterida)', 'Hipotensão ortostática grave', 'Insuficiência hepática grave'],
