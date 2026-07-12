@@ -1075,7 +1075,7 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Corticosteroide Sistêmico',
     cids_aprovados: ['J45', 'J05', 'K50', 'L10', 'D59', 'N04'],
     apresentacoes: [
-      { concentracao: '3 mg/mL', forma_farmaceutica: 'solucao_oral', embalagem: 'Frasco 100 mL' },
+      { concentracao: '3 mg/mL', forma_farmaceutica: 'solucao_oral', embalagem: 'Frasco 60 mL' },
     ],
     posologia_aprovada: 'Pediátrico: 0,14–2 mg/kg/dia em 1–4 tomadas. Dose habitual inicial: 1 mg/kg/dia (= 0,33 mL/kg/dia). Asma: 1–2 mg/kg dose única diária. Síndrome nefrótica: 2 mg/kg/dia. Redução gradual ao desmame.',
     contraindicacoes_bula: ['Infecção sistêmica fúngica', 'Hipersensibilidade', 'Varicela/herpes-zóster ativo'],
