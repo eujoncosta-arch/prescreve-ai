@@ -820,7 +820,7 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Estabilizador do Humor',
     cids_aprovados: ['F31', 'F30', 'F33'],
     apresentacoes: [
-      { concentracao: '300 mg', forma_farmaceutica: 'comprimido', embalagem: '30 comprimidos' },
+      { concentracao: '300 mg', forma_farmaceutica: 'comprimido', embalagem: '60 comprimidos' },
     ],
     posologia_aprovada: 'Litemia terapêutica: aguda 0,8–1,2 mEq/L; manutenção 0,6–0,8 mEq/L. Dose usual: 900–1800 mg/dia em 2–3 tomadas. Ajuste rigoroso pela litemia.',
     contraindicacoes_bula: ['IR grave', 'Desidratação grave', 'Gravidez (1º trimestre — anomalia de Ebstein)', 'Disfunção cardíaca grave'],
