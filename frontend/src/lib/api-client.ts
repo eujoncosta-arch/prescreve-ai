@@ -161,7 +161,24 @@ export const authApi = {
   getToken(): string | null {
     return getAccessToken();
   },
+
+  currentUser(): CurrentUser | null {
+    return getCurrentUser();
+  },
 };
+
+/** Decodifica o usuário atual a partir do JWT armazenado (sem chamada de rede). */
+export function getCurrentUser(): CurrentUser | null {
+  const token = getAccessToken();
+  if (!token) return null;
+  if (token.startsWith('offline-')) return { id: 'offline', email: 'demo@local', perfil: 'MEDICO' };
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1])) as { sub: string; email: string; perfil: string };
+    return { id: payload.sub, email: payload.email, perfil: payload.perfil };
+  } catch {
+    return null;
+  }
+}
 
 // ══════════════════════════════════════════════════════════════
 // CONSULTA API

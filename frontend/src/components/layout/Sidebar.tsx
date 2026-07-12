@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useApp } from '@/lib/store';
 import {
   Award,
   LayoutDashboard,
@@ -122,6 +123,7 @@ const navGroups = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { state, auth } = useApp();
 
   return (
     <aside className="w-56 min-h-screen flex-shrink-0 bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800 flex flex-col">
@@ -190,17 +192,33 @@ export function Sidebar() {
         ))}
       </nav>
 
-      {/* Footer médico */}
+      {/* Footer médico + sessão */}
       <div className="p-3 border-t border-slate-100 dark:border-slate-800">
         <Link href="/configuracoes" className="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group">
           <div className="w-7 h-7 bg-gradient-to-br from-slate-700 to-slate-800 rounded-full flex items-center justify-center flex-shrink-0">
             <Shield className="w-3.5 h-3.5 text-white" />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-[11px] font-semibold text-slate-800 dark:text-slate-200 truncate group-hover:text-blue-700 dark:group-hover:text-blue-400">Dr. João Silva</p>
-            <p className="text-[10px] text-slate-400">CRM-SP 123456</p>
+            <p className="text-[11px] font-semibold text-slate-800 dark:text-slate-200 truncate group-hover:text-blue-700 dark:group-hover:text-blue-400">
+              {auth.currentUser?.email ?? state.settings.medico.nome}
+            </p>
+            <p className="text-[10px] text-slate-400">
+              {auth.currentUser ? auth.currentUser.perfil : state.settings.medico.crm}
+            </p>
           </div>
         </Link>
+        {auth.isAuthenticated ? (
+          <button
+            onClick={() => { void auth.logout(); }}
+            className="mt-1 w-full text-center text-[10px] text-slate-400 hover:text-red-500 transition-colors"
+          >
+            Sair da sessão
+          </button>
+        ) : (
+          <Link href="/login" className="mt-1 block text-center text-[10px] text-blue-500 hover:underline">
+            {auth.backendMode ? 'Entrar / Conectar ao servidor' : 'Entrar (modo demo)'}
+          </Link>
+        )}
         <p className="text-center text-[9px] text-slate-300 dark:text-slate-700 mt-1.5">v6.0 · Enterprise Platform P20</p>
       </div>
     </aside>

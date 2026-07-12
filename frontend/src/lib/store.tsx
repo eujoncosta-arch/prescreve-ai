@@ -1,8 +1,9 @@
 'use client';
 
-import React, { createContext, useContext, useReducer, type ReactNode } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, useCallback, type ReactNode } from 'react';
 import type { Consultation, Anamnesis, DiagnosticSupport, TherapeuticPlan, SafetyCheck, Prescription, AppSettings, PrognosisData, LaboratoryPreference } from './types';
 import { MOCK_CONSULTATIONS } from './mock-data';
+import { authApi, consultaApi, getCurrentUser, isBackendAvailable, type CurrentUser } from './api-client';
 
 const DEFAULT_SETTINGS: AppSettings = {
   medico: { nome: 'Dr. João Silva', crm: 'CRM-SP 123456', especialidade: 'Clínica Médica' },
@@ -19,11 +20,13 @@ interface AppState {
   settings: AppSettings;
   loading: boolean;
   error: string | null;
+  currentUser: CurrentUser | null;
 }
 
 type Action =
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_ERROR'; payload: string | null }
+  | { type: 'SET_USER'; payload: CurrentUser | null }
   | { type: 'NEW_CONSULTATION'; payload: Consultation }
   | { type: 'SET_ACTIVE_CONSULTATION'; payload: Consultation | null }
   | { type: 'UPDATE_ANAMNESIS'; payload: Anamnesis }
@@ -42,6 +45,7 @@ const initialState: AppState = {
   settings: DEFAULT_SETTINGS,
   loading: false,
   error: null,
+  currentUser: null,
 };
 
 function reducer(state: AppState, action: Action): AppState {
@@ -50,6 +54,8 @@ function reducer(state: AppState, action: Action): AppState {
       return { ...state, loading: action.payload };
     case 'SET_ERROR':
       return { ...state, error: action.payload };
+    case 'SET_USER':
+      return { ...state, currentUser: action.payload };
 
     case 'NEW_CONSULTATION':
       return {
@@ -154,16 +160,87 @@ function reducer(state: AppState, action: Action): AppState {
   }
 }
 
+export interface RegisterData {
+  email: string; senha: string; perfil: string; crm?: string; especialidade?: string; uf?: string;
+}
+
 interface AppContextType {
   state: AppState;
   dispatch: React.Dispatch<Action>;
+  auth: {
+    currentUser: CurrentUser | null;
+    isAuthenticated: boolean;
+    backendMode: boolean;
+    login: (email: string, senha: string) => Promise<void>;
+    register: (dados: RegisterData) => Promise<void>;
+    logout: () => Promise<void>;
+  };
+  /** Persiste uma consulta no backend (best-effort; no-op se offline/anônimo). */
+  sincronizarConsulta: (c: Consultation) => Promise<void>;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
-  return <AppContext.Provider value={{ state, dispatch }}>{children}</AppContext.Provider>;
+
+  // Restaura a sessão a partir do token JWT armazenado (uma vez, no cliente).
+  useEffect(() => {
+    const user = getCurrentUser();
+    if (user) dispatch({ type: 'SET_USER', payload: user });
+  }, []);
+
+  const login = useCallback(async (email: string, senha: string) => {
+    await authApi.login(email, senha);
+    dispatch({ type: 'SET_USER', payload: getCurrentUser() });
+  }, []);
+
+  const register = useCallback(async (dados: RegisterData) => {
+    await authApi.register(dados);
+    dispatch({ type: 'SET_USER', payload: getCurrentUser() });
+  }, []);
+
+  const logout = useCallback(async () => {
+    await authApi.logout();
+    dispatch({ type: 'SET_USER', payload: null });
+  }, []);
+
+  const sincronizarConsulta = useCallback(async (c: Consultation) => {
+    if (!isBackendAvailable || !authApi.isAuthenticated()) return;
+    try {
+      const res = await consultaApi.criar({ anamnese: c.anamnese ?? undefined }) as { id?: string };
+      if (c.prescricao && res?.id) {
+        await consultaApi.criarPrescricao({
+          consulta_id: res.id,
+          medicamentos: (c.prescricao.itens ?? []) as unknown as object[],
+          orientacoes: c.prescricao.orientacoes_gerais,
+        });
+      }
+    } catch {
+      // best-effort: falha de sync não interrompe o fluxo em memória
+    }
+  }, []);
+
+  // Persiste automaticamente ao concluir uma consulta (quando autenticado).
+  useEffect(() => {
+    const c = state.activeConsultation;
+    if (c && c.status === 'concluida' && authApi.isAuthenticated()) {
+      void sincronizarConsulta(c);
+    }
+  }, [state.activeConsultation, sincronizarConsulta]);
+
+  const auth = {
+    currentUser: state.currentUser,
+    isAuthenticated: !!state.currentUser,
+    backendMode: isBackendAvailable,
+    login, register, logout,
+  };
+
+  return (
+    <AppContext.Provider value={{ state, dispatch, auth, sincronizarConsulta }}>
+      {children}
+    </AppContext.Provider>
+  );
 }
 
 export function useApp() {
