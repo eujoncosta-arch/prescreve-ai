@@ -2111,7 +2111,7 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Hipnótico Não-Benzodiazepínico — Agonista do Receptor GABA-A (Z-drug)',
     cids_aprovados: ['G47.0'],
     apresentacoes: [
-      { concentracao: '10 mg', forma_farmaceutica: 'comprimido', embalagem: '10 comprimidos', registro_anvisa: '1.0043.1398' },
+      { concentracao: '10 mg', forma_farmaceutica: 'comprimido', embalagem: '20 comprimidos', registro_anvisa: '1.0043.1398' },
     ],
     posologia_aprovada: 'Insônia: 10 mg imediatamente antes de deitar (homens); 5 mg em mulheres e idosos. Uso máximo: 4 semanas. Retenção especial ANVISA.',
     contraindicacoes_bula: ['Apneia do sono grave', 'Miastenia gravis', 'IH grave', 'Hipersensibilidade'],
@@ -2386,8 +2386,8 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Anti-histamínico H1 de 2ª Geração — Não Sedante',
     cids_aprovados: ['J30', 'J31', 'L50'],
     apresentacoes: [
-      { concentracao: '120 mg', forma_farmaceutica: 'comprimido', embalagem: '20 comprimidos', registro_anvisa: '1.0043.1273' },
-      { concentracao: '180 mg', forma_farmaceutica: 'comprimido', embalagem: '20 comprimidos', registro_anvisa: '1.0043.1273' },
+      { concentracao: '120 mg', forma_farmaceutica: 'comprimido', embalagem: '10 comprimidos', registro_anvisa: '1.0043.1273' },
+      { concentracao: '180 mg', forma_farmaceutica: 'comprimido', embalagem: '10 comprimidos', registro_anvisa: '1.0043.1273' },
     ],
     posologia_aprovada: 'Rinite alérgica: 120 mg 2x/dia ou 180 mg 1x/dia. Urticária: 180 mg 1x/dia. Tomar com água (não com suco de laranja/toranja/maçã).',
     contraindicacoes_bula: ['Hipersensibilidade à fexofenadina'],
