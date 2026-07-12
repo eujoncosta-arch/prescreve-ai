@@ -697,8 +697,8 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Inibidor Seletivo da Recaptação de Serotonina (ISRS)',
     cids_aprovados: ['F32', 'F33', 'F41', 'F42', 'F43'],
     apresentacoes: [
-      { concentracao: '50 mg', forma_farmaceutica: 'comprimido', embalagem: '28 comprimidos' },
-      { concentracao: '100 mg', forma_farmaceutica: 'comprimido', embalagem: '28 comprimidos' },
+      { concentracao: '50 mg', forma_farmaceutica: 'comprimido', embalagem: '30 comprimidos' },
+      { concentracao: '100 mg', forma_farmaceutica: 'comprimido', embalagem: '30 comprimidos' },
     ],
     posologia_aprovada: 'Depressão/ansiedade: iniciar 25–50 mg/dia, aumentar gradualmente. Dose usual: 50–200 mg/dia.',
     contraindicacoes_bula: ['IMAOs', 'Pimozida'],
@@ -1317,7 +1317,7 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Inibidor da Colinesterase — Antidemencial',
     cids_aprovados: ['G30', 'F00', 'F03'],
     apresentacoes: [
-      { concentracao: '5 mg', forma_farmaceutica: 'comprimido', embalagem: '28 comprimidos', registro_anvisa: '1.0281.0290.001-8' },
+      { concentracao: '5 mg', forma_farmaceutica: 'comprimido', embalagem: '30 comprimidos', registro_anvisa: '1.0281.0290.001-8' },
     ],
     posologia_aprovada: 'Demência Alzheimer leve-moderada: iniciar 5 mg 1x/dia à noite. Após 4–6 semanas, aumentar para 10 mg/dia conforme tolerância.',
     contraindicacoes_bula: ['Hipersensibilidade à donepezila ou derivados piperidínicos'],
@@ -1340,7 +1340,7 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Inibidor da Colinesterase — Antidemencial',
     cids_aprovados: ['G30', 'F00', 'F03'],
     apresentacoes: [
-      { concentracao: '10 mg', forma_farmaceutica: 'comprimido', embalagem: '28 comprimidos' },
+      { concentracao: '10 mg', forma_farmaceutica: 'comprimido', embalagem: '30 comprimidos' },
     ],
     posologia_aprovada: 'Dose de manutenção usual: 10 mg 1x/dia à noite. Demência grave: 10 mg/dia (aprovado no Brasil).',
     contraindicacoes_bula: ['Hipersensibilidade à donepezila ou derivados piperidínicos'],
@@ -1961,8 +1961,8 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Inibidor de Recaptação de Serotonina e Noradrenalina (IRSN)',
     cids_aprovados: ['F32', 'F33', 'F41', 'G62', 'M54', 'E11'],
     apresentacoes: [
-      { concentracao: '30 mg', forma_farmaceutica: 'capsula_liberacao_retardada', embalagem: '28 cápsulas', registro_anvisa: '1.0043.1240' },
-      { concentracao: '60 mg', forma_farmaceutica: 'capsula_liberacao_retardada', embalagem: '28 cápsulas', registro_anvisa: '1.0043.1240' },
+      { concentracao: '30 mg', forma_farmaceutica: 'capsula_liberacao_retardada', embalagem: '30 cápsulas', registro_anvisa: '1.0043.1240' },
+      { concentracao: '60 mg', forma_farmaceutica: 'capsula_liberacao_retardada', embalagem: '30 cápsulas', registro_anvisa: '1.0043.1240' },
     ],
     posologia_aprovada: 'TDM/TAG: 30–60 mg 1x/dia; máx 120 mg/dia. Neuropatia diabética/fibromialgia: 60 mg 1x/dia. Não abrir a cápsula.',
     contraindicacoes_bula: ['IMAOs (washout 14 dias)', 'IH grave', 'ClCr < 30 mL/min', 'HAS não controlada', 'Hipersensibilidade'],
@@ -2730,7 +2730,7 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Progestógeno — Tratamento da Endometriose',
     cids_aprovados: ['N80', 'N80.0', 'N80.1'],
     apresentacoes: [
-      { concentracao: '2 mg', forma_farmaceutica: 'comprimido', embalagem: '28 comprimidos', registro_anvisa: '1.0043.1116' },
+      { concentracao: '2 mg', forma_farmaceutica: 'comprimido', embalagem: '30 comprimidos', registro_anvisa: '1.0043.1116' },
     ],
     posologia_aprovada: 'Endometriose: 2 mg 1x/dia continuamente (sem pausa). Suprimir menstruação, pode ocorrer spotting irregular. Cat. B.',
     contraindicacoes_bula: ['Tromboembolismo ativo', 'Neoplasia hormônio-dependente suspeita ou confirmada', 'Sangramento vaginal não diagnosticado', 'Gravidez'],
