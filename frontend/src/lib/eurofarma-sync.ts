@@ -1840,8 +1840,8 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Anti-inflamatório Não Esteroidal (AINE) — Derivado do Diclofenaco',
     cids_aprovados: ['M06', 'M15', 'M16', 'M17', 'M54', 'M79'],
     apresentacoes: [
-      { concentracao: '100 mg', forma_farmaceutica: 'comprimido', embalagem: '20 comprimidos', registro_anvisa: '1.0043.0817' },
-      { concentracao: '15 mg/g', forma_farmaceutica: 'creme', embalagem: 'Bisnaga 60 g', registro_anvisa: '1.0043.0817' },
+      { concentracao: '100 mg', forma_farmaceutica: 'comprimido', embalagem: '12 comprimidos', registro_anvisa: '1.0043.0817' },
+      { concentracao: '15 mg/g', forma_farmaceutica: 'creme', embalagem: 'Bisnaga 30 g', registro_anvisa: '1.0043.0817' },
     ],
     posologia_aprovada: 'Dor/inflamação: 100 mg 2x/dia. Uso máximo: 3 meses (oral). Creme: aplicar 2–3x/dia na região afetada.',
     contraindicacoes_bula: ['Úlcera péptica ativa', 'IH/IR grave', 'Gravidez (3º trimestre)', 'Alergia a AINEs', 'Menores de 12 anos'],
