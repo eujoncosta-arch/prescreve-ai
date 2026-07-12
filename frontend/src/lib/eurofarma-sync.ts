@@ -1605,8 +1605,10 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Inibidor da Fosfodiesterase-5 (iPDE5)',
     cids_aprovados: ['N52', 'N40', 'I27'],
     apresentacoes: [
-      { concentracao: '5 mg', forma_farmaceutica: 'comprimido', embalagem: '28 comprimidos' },
+      { concentracao: '5 mg', forma_farmaceutica: 'comprimido', embalagem: '30 comprimidos' },
       { concentracao: '10 mg', forma_farmaceutica: 'comprimido', embalagem: '4 comprimidos' },
+      { concentracao: '20 mg', forma_farmaceutica: 'comprimido', embalagem: '1 comprimido' },
+      { concentracao: '20 mg', forma_farmaceutica: 'comprimido', embalagem: '2 comprimidos' },
       { concentracao: '20 mg', forma_farmaceutica: 'comprimido', embalagem: '4 comprimidos' },
     ],
     posologia_aprovada: 'DE (uso sob demanda): 10 mg 30 min antes da atividade sexual; máx 20 mg/dia. DE (uso diário): 5 mg 1x/dia no mesmo horário. HPB: 5 mg 1x/dia. HAP: 40 mg 1x/dia.',
