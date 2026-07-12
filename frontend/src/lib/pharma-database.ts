@@ -116,6 +116,7 @@ export interface InteractionRule {
 import { EUROFARMA_CATALOG, normMol } from './eurofarma-sync';
 import type { ProdutoComercial } from './types';
 import { getAllLabProducts } from './lab-catalog';
+import { resolveLaboratory } from './governance/data-governance';
 import { EVIDENCE_DB } from './evidence-engine';
 import { PHARMA_DB_CARDIO } from './pharma-database-cardio';
 import { PHARMA_DB_ENDO } from './pharma-database-endo';
@@ -138,12 +139,16 @@ function produtoToQuickBrand(p: ProdutoComercial): QuickBrand {
     const f = a.forma_farmaceutica.replace(/_/g, ' ');
     return f.charAt(0).toUpperCase() + f.slice(1);
   }))] as string[];
+  // RM-01 (ALTO-02/03): deriva o laboratório real do produto via registro canônico
+  // RM-00, em vez de fixar 'Eurofarma' — esta função também converte produtos de
+  // outros labs no Passo 2 (enrichWithAllLabs).
+  const lab = resolveLaboratory(p.lab_id);
   return {
     nome: p.nome_comercial,
-    laboratorio: 'Eurofarma',
+    laboratorio: lab.nome,
     concentracoes: [...new Set(p.apresentacoes.map((a: { concentracao: string }) => a.concentracao))],
     formas,
-    lab_id: 'eurofarma',
+    lab_id: lab.slug || p.lab_id,
     produto_id: p.id,
     bula_paciente: p.link_bula_paciente,
     bula_profissional: p.link_bula_profissional,

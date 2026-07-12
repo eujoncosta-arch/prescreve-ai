@@ -244,8 +244,12 @@ export const LABORATORY_REGISTRY: Record<string, GovernedLaboratory> = Object.fr
 /** Resolve o laboratório canônico a partir de um `lab_id` ou nome livre. */
 export function resolveLaboratory(labIdOrName: string): GovernedLaboratory {
   const slug = toSlug(labIdOrName);
+  // RM-01 (MED-04): as chaves do registro usam '_' (novo_nordisk, eli_lilly),
+  // mas toSlug normaliza para '-'. Tenta ambas as formas antes do fallback.
+  const alt = slug.replace(/-/g, '_');
   return (
-    LABORATORY_REGISTRY[slug] ?? {
+    LABORATORY_REGISTRY[slug] ??
+    LABORATORY_REGISTRY[alt] ?? {
       laboratory_id: toLaboratoryId(slug),
       slug,
       nome: labIdOrName,
