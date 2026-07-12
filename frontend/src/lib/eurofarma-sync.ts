@@ -1663,7 +1663,7 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Corticosteroide Inalatório (CI)',
     cids_aprovados: ['J45', 'J44', 'J30'],
     apresentacoes: [
-      { concentracao: '200 mcg/dose', forma_farmaceutica: 'inalatorio', embalagem: 'Frasco 60 doses' },
+      { concentracao: '50 mcg/dose', forma_farmaceutica: 'spray', embalagem: 'Frasco 17,5 mL (120 acionamentos)' },
     ],
     posologia_aprovada: 'Asma: 200–400 mcg 1–2x/dia. Lavar a boca após inalação.',
     contraindicacoes_bula: ['Hipersensibilidade à mometasona', 'Crise aguda de asma sem broncodilatador'],
