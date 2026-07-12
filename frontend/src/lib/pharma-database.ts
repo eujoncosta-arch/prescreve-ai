@@ -751,7 +751,10 @@ export const PHARMA_DB: QuickDrug[] = [
     ajuste_renal: { normal: '10 mg/dia', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Cautela extrema' },
     contraindicacoes_rapidas: ['Hipersensibilidade'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Indutores potentes de CYP (fenobarbital, rifampicina, fenitoína, carbamazepina)', severidade: 'moderada', descricao: 'Reduzem a exposição ao montelucaste (fenobarbital ↓AUC ~40%) — monitorar controle da asma; sem ajuste de dose recomendado' },
+      { com: 'Genfibrozila', severidade: 'leve', descricao: 'Inibe CYP2C8 e aumenta a exposição ao montelucaste — atenção a efeitos adversos' },
+    ],
     alertas_especiais: ['Efeitos neuropsiquiátricos — pesadelos, depressão (raro mas notificar ANVISA)', 'Alerta FDA/ANVISA 2020'],
     uso_gestante: 'avaliar', uso_lactante: 'avaliar',
     marcas: [
@@ -1456,7 +1459,10 @@ export const PHARMA_DB: QuickDrug[] = [
     },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Evitar' },
     contraindicacoes_rapidas: ['Feocromocitoma', 'Hipersensibilidade'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Anti-histamínicos (H1)', severidade: 'moderada', descricao: 'Antagonismo mútuo — reduzem o efeito da betaistina (análogo de histamina) e vice-versa' },
+      { com: 'Inibidores da MAO (incl. MAO-B, ex.: selegilina)', severidade: 'moderada', descricao: 'Reduzem o metabolismo da betaistina, ↑ exposição e risco de efeitos adversos' },
+    ],
     alertas_especiais: ['Asma: cautela (pode potencializar broncoespasmo)', 'Úlcera péptica ativa: cautela'],
     uso_gestante: 'avaliar', uso_lactante: 'avaliar',
     marcas: [
@@ -2283,7 +2289,10 @@ export const PHARMA_DB: QuickDrug[] = [
     },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Cautela (IH + IR frequentemente coexistem)' },
     contraindicacoes_rapidas: ['Hipersensibilidade'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Carbamazepina e outros indutores enzimáticos', severidade: 'leve', descricao: 'Podem ↑clearance do levetiracetam (↓nível ~20–30% via glicuronidação) — monitorar controle de crises' },
+      { com: 'Depressores do SNC (álcool, benzodiazepínicos, opioides)', severidade: 'moderada', descricao: 'Sedação aditiva — o levetiracetam em si não induz/inibe CYP' },
+    ],
     alertas_especiais: ['Pouquíssimas interações medicamentosas — vantagem em politerapia', 'Efeito adverso principal: irritabilidade/alterações de humor (10–15%)', 'Monitorar humor especialmente em pacientes com histórico psiquiátrico'],
     uso_gestante: 'risco', uso_lactante: 'risco',
     marcas: [
@@ -2453,7 +2462,9 @@ export const PHARMA_DB: QuickDrug[] = [
     },
     ajuste_hepatico: { child_a: 'Sem dados', child_b: 'Cautela', child_c: 'Não recomendado' },
     contraindicacoes_rapidas: ['TFG < 30 mL/min', 'Doença de Parkinson ou sintomas parkinsonianos', 'Hipersensibilidade'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: '(sem interação medicamentosa relevante documentada)', severidade: 'leve', descricao: 'Bula/EMA não referem interações relevantes; uso concomitante permitido com betabloqueadores, BCC, nitratos, anticoagulantes, digitálicos e hipolipemiantes. Risco principal é contraindicação (Parkinson/distúrbios do movimento), não interação.' },
+    ],
     alertas_especiais: ['Pode causar/agravar sintomas parkinsonianos e distúrbios do movimento', 'Não é antianginal de primeira linha — usar como adjuvante a betabloqueadores/nitratos', 'Uso exclusivamente VO com alimento'],
     uso_gestante: 'avaliar', uso_lactante: 'avaliar',
     marcas: [

@@ -345,7 +345,10 @@ export const PHARMA_DB_PULMO_B: QuickDrug[] = [
     ajuste_renal: { normal: 'Sem ajuste', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Cautela', tfg_lt_15: 'Não recomendado', dialisavel: false },
     ajuste_hepatico: { child_a: 'Cautela', child_b: 'Cautela', child_c: 'Contraindicado' },
     contraindicacoes_rapidas: ['Úlcera péptica ativa', 'Hipersensibilidade'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Antitussígenos (codeína, dextrometorfano)', severidade: 'moderada', descricao: 'Antagonismo — suprimir a tosse com secreções fluidificadas causa retenção de muco, ↑risco de infecção/hipoxia. Associação não recomendada' },
+      { com: 'Anticolinérgicos/atropínicos (secantes de secreção)', severidade: 'moderada', descricao: 'Efeito oposto ao mucolítico — ressecam a secreção e anulam a ação. Associação não recomendada' },
+    ],
     alertas_especiais: [
       'Estudo PEACE (2008): carbocisteína 1500 mg/dia reduziu exacerbações agudas de DPOC em 25% vs placebo (China)',
       'Mecanismo diferente de NAC — pode haver benefício quando NAC não suficiente',

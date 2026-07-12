@@ -433,7 +433,9 @@ export const PHARMA_DB_PULMO_A: QuickDrug[] = [
     ajuste_renal: { normal: 'Sem ajuste', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
     ajuste_hepatico: { child_a: 'Cautela', child_b: 'Cautela', child_c: 'Monitorar' },
     contraindicacoes_rapidas: ['Broncoespasmo agudo', 'Hipersensibilidade'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Inibidores potentes de CYP3A4 (cetoconazol, ritonavir, itraconazol)', severidade: 'leve', descricao: 'Aumentam a exposição ao metabólito ativo (des-CIC ~3,5×), mas sem ajuste de dose necessário para o ICS inalatório; cautela com ritonavir' },
+    ],
     alertas_especiais: [
       'Menor risco de candidíase orofaríngea vs outros ICS (ativação local no pulmão)',
       'Menor biodisponibilidade sistêmica — menor risco de efeitos sistêmicos em doses altas',
