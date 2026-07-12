@@ -1,10 +1,10 @@
 import { defineConfig } from 'prisma/config';
-import { PrismaPg } from '@prisma/adapter-pg';
-import pg from 'pg';
 
+// O driver adapter (PrismaPg) é fornecido em runtime pelo PrismaService.
+// Aqui a CLI (generate/migrate) usa a URL do banco via env — sem adapter.
 export default defineConfig({
   schema: './prisma/schema.prisma',
-  adapter: new PrismaPg(new pg.Pool({
-    connectionString: process.env.DATABASE_URL ?? 'postgresql://localhost/prescreve_ai',
-  })),
+  datasource: {
+    url: process.env.DATABASE_URL,
+  },
 });
