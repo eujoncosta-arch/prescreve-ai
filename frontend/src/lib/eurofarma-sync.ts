@@ -721,8 +721,8 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Inibidor Seletivo da Recaptação de Serotonina (ISRS)',
     cids_aprovados: ['F32', 'F33', 'F41'],
     apresentacoes: [
-      { concentracao: '10 mg', forma_farmaceutica: 'comprimido', embalagem: '28 comprimidos' },
-      { concentracao: '20 mg', forma_farmaceutica: 'comprimido', embalagem: '28 comprimidos' },
+      { concentracao: '10 mg', forma_farmaceutica: 'comprimido', embalagem: '30 comprimidos' },
+      { concentracao: '20 mg', forma_farmaceutica: 'comprimido', embalagem: '30 comprimidos' },
     ],
     posologia_aprovada: 'Depressão/TAG: iniciar 10 mg/dia. Dose usual: 10–20 mg/dia. Máximo: 20 mg/dia.',
     contraindicacoes_bula: ['IMAOs', 'Citalopram concomitante', 'QT longo congênito'],
@@ -1363,7 +1363,7 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Antagonista dos Receptores NMDA — Antidemencial',
     cids_aprovados: ['G30', 'F00'],
     apresentacoes: [
-      { concentracao: '10 mg', forma_farmaceutica: 'comprimido', embalagem: '28 comprimidos', registro_anvisa: '1.0043.1040' },
+      { concentracao: '10 mg', forma_farmaceutica: 'comprimido', embalagem: '30 comprimidos', registro_anvisa: '1.0043.1040' },
     ],
     posologia_aprovada: 'Alzheimer moderada a grave: iniciar 5 mg/dia; aumentar 5 mg/semana até dose usual 10–20 mg/dia em 2 tomadas.',
     contraindicacoes_bula: ['Hipersensibilidade à memantina', 'IR grave (ClCr < 5 mL/min)'],
@@ -2061,9 +2061,9 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Antipsicótico Atípico (2ª Geração) — Antagonista D2/5-HT2A',
     cids_aprovados: ['F20', 'F25', 'F31', 'F84'],
     apresentacoes: [
-      { concentracao: '1 mg', forma_farmaceutica: 'comprimido', embalagem: '20 comprimidos', registro_anvisa: '1.0043.1002' },
-      { concentracao: '2 mg', forma_farmaceutica: 'comprimido', embalagem: '20 comprimidos', registro_anvisa: '1.0043.1002' },
-      { concentracao: '3 mg', forma_farmaceutica: 'comprimido', embalagem: '28 comprimidos', registro_anvisa: '1.0043.1002' },
+      { concentracao: '1 mg', forma_farmaceutica: 'comprimido', embalagem: '30 comprimidos', registro_anvisa: '1.0043.1002' },
+      { concentracao: '2 mg', forma_farmaceutica: 'comprimido', embalagem: '30 comprimidos', registro_anvisa: '1.0043.1002' },
+      { concentracao: '3 mg', forma_farmaceutica: 'comprimido', embalagem: '30 comprimidos', registro_anvisa: '1.0043.1002' },
     ],
     posologia_aprovada: 'Esquizofrenia: iniciar 2 mg/dia; dose usual 4–8 mg/dia (1–2 tomadas). TAB/mania: 2–3 mg 1x/dia. TEA: 0,5–3 mg/dia. Retenção especial ANVISA.',
     contraindicacoes_bula: ['Hipersensibilidade', 'Demência (risco aumentado de AVC e morte — Black Box)'],
