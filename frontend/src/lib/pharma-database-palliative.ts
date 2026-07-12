@@ -900,7 +900,9 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
       frequencias: ['Repetir q2–3 min até FR > 10 ipm e SpO₂ > 90%'],
       instrucoes: 'PALIATIVO: dose muito menor que em overdose não-tolerante. Objetivo: restaurar respiração SEM reverter analgesia por completo. Titular 0,04 mg IV q2 min. IC após bolus efetivo: 2/3 dose efetiva/hora (evitar ressedação).',
     },
-    contraindicacoes_rapidas: [],
+    contraindicacoes_rapidas: [
+      'Hipersensibilidade à naloxona ou aos componentes da fórmula',
+    ],
     interacoes_importantes: [],
     alertas_especiais: [
       '⚠ TITULAR EM PACIENTE TOLERANTE: dose usual de overdose (2 mg) pode precipitar dor intensa e síndrome de abstinência aguda',

@@ -47,6 +47,7 @@ const SALT_QUALIFIERS = [
   'besilato', 'maleato', 'cloridrato', 'dicloridrato', 'bromidrato', 'hemifumarato',
   'fumarato', 'bissulfato', 'sulfato', 'sodica', 'sodico', 'potassica', 'potassico',
   'calcica', 'calcico', 'tri-hidratada', 'trihidratada', 'di-hidratada', 'dihidratada',
+  'di-hidratado', 'dihidratado', 'diidratado', 'diidratada',
   'di-hidrato', 'dihidrato', 'monoidratado', 'monoidratada', 'mononitrato', 'dinitrato',
   'acetato', 'succinato', 'tartarato', 'hemitartarato', 'valerato', 'dipropionato',
   'fosfato', 'mesilato', 'estolato', 'trometamol', 'medoxomila',
@@ -60,7 +61,10 @@ const SALT_QUALIFIERS = [
 export function toMoleculeId(molecula: string): string {
   let s = ' ' + toSlug(molecula).replace(/-/g, ' ') + ' ';
   for (const q of SALT_QUALIFIERS) {
-    s = s.replace(new RegExp(`(^| )${q}( |$)`, 'g'), ' ');
+    // Normaliza o qualificador do mesmo modo que a string (hífen → espaço),
+    // para casar formas compostas como "di-hidratado" → "di hidratado".
+    const qn = toSlug(q).replace(/-/g, ' ');
+    s = s.replace(new RegExp(`(^| )${qn}( |$)`, 'g'), ' ');
   }
   s = s.replace(/(^| )de( |$)/g, ' ').replace(/\s+/g, ' ').trim();
   return `${ID_PREFIX.molecule}:${toSlug(s) || toSlug(molecula)}`;

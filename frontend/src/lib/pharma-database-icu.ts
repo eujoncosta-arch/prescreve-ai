@@ -423,7 +423,12 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
       frequencias: ['Infusão contínua + bolus se dor irruptiva'],
       instrucoes: 'DILUIÇÃO: 500 mcg em 100 mL SF → 5 mcg/mL. Titular pelo CPOT (≤ 2 = bem controlado). PADIS 2018: analgesia ANTES de sedação (analgesia-first).',
     },
-    contraindicacoes_rapidas: [],
+    contraindicacoes_rapidas: [
+      'Hipersensibilidade a fentanila ou outros opioides',
+      'Depressão respiratória grave sem suporte ventilatório',
+      'Uso de IMAO nos últimos 14 dias (risco de síndrome serotoninérgica)',
+      'Íleo paralítico / obstrução gastrointestinal conhecida ou suspeita',
+    ],
     interacoes_importantes: [
       { com: 'IMAO', severidade: 'grave', descricao: 'Síndrome serotoninérgica — intervalo ≥ 14 dias' },
       { com: 'BZD / propofol', severidade: 'moderada', descricao: 'Depressão respiratória aditiva — titular cuidadosamente' },
