@@ -1021,7 +1021,7 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Analgésico Opioide — Agonista μ + Inibidor de recaptação de S/NA',
     cids_aprovados: ['R52', 'G89', 'M54'],
     apresentacoes: [
-      { concentracao: '50 mg', forma_farmaceutica: 'capsula', embalagem: '20 cápsulas' },
+      { concentracao: '50 mg', forma_farmaceutica: 'capsula', embalagem: '10 cápsulas' },
       { concentracao: '100 mg', forma_farmaceutica: 'comprimido_liberacao_modificada', embalagem: '10 comprimidos' },
     ],
     posologia_aprovada: 'Dor moderada a intensa: 50–100 mg a cada 4–6h. Dose máxima: 400 mg/dia (300 mg em idosos).',
@@ -1817,7 +1817,7 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Anti-inflamatório — Inibidor Seletivo COX-2 (Coxibe)',
     cids_aprovados: ['M06', 'M15', 'M16', 'M17', 'M79'],
     apresentacoes: [
-      { concentracao: '200 mg', forma_farmaceutica: 'capsula', embalagem: '20 cápsulas', registro_anvisa: '1.0043.1223' },
+      { concentracao: '200 mg', forma_farmaceutica: 'capsula', embalagem: '10 cápsulas', registro_anvisa: '1.0043.1223' },
     ],
     posologia_aprovada: 'Artrite/dor: 100–200 mg 2x/dia. Dose máxima: 400 mg/dia. Usar a menor dose eficaz pelo menor tempo.',
     contraindicacoes_bula: ['Alergia a sulfonamidas', 'Pós-CRM', 'IAM ou AVC recente', 'IH/IR grave', 'Gravidez (3º trimestre)'],
