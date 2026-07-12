@@ -1473,7 +1473,7 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Antagonista de Leucotrienos + Anti-histamínico H1 de 3ª Geração (Associação)',
     cids_aprovados: ['J45', 'J30', 'J31'],
     apresentacoes: [
-      { concentracao: '10mg + 5mg', forma_farmaceutica: 'comprimido', embalagem: '30 comprimidos' },
+      { concentracao: '10mg + 5mg', forma_farmaceutica: 'comprimido', embalagem: '7 comprimidos' },
     ],
     posologia_aprovada: 'Asma + rinite alérgica: 1 comprimido (montelucaste 10 mg + levocetirizina 5 mg) 1x/dia à noite.',
     contraindicacoes_bula: ['Hipersensibilidade a montelucaste ou levocetirizina', 'IR grave (ClCr < 10 mL/min)', 'Hemodiálise'],
@@ -1500,7 +1500,7 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Antiemético — Antagonista Periférico da Dopamina (Procinético)',
     cids_aprovados: ['R11', 'K21', 'K31'],
     apresentacoes: [
-      { concentracao: '10 mg', forma_farmaceutica: 'comprimido', embalagem: '20 comprimidos' },
+      { concentracao: '10 mg', forma_farmaceutica: 'comprimido', embalagem: '30 comprimidos' },
       { concentracao: '1 mg/mL', forma_farmaceutica: 'suspensao_oral', embalagem: 'Frasco 100 mL' },
     ],
     posologia_aprovada: 'Náuseas/vômitos/dispepsia: 10 mg 3x/dia antes das refeições. Máximo: 30 mg/dia. Uso pelo menor tempo possível.',
@@ -2134,7 +2134,7 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Hipnótico Não-Benzodiazepínico — Via Sublingual',
     cids_aprovados: ['G47.0'],
     apresentacoes: [
-      { concentracao: '5 mg', forma_farmaceutica: 'comprimido_sublingual', embalagem: '10 comprimidos', registro_anvisa: '1.0043.1301' },
+      { concentracao: '5 mg', forma_farmaceutica: 'comprimido_sublingual', embalagem: '30 comprimidos', registro_anvisa: '1.0043.1301' },
     ],
     posologia_aprovada: 'Insônia de manutenção: 5 mg SL ao acordar durante a noite (mínimo 4h antes de levantar). Retenção especial ANVISA.',
     contraindicacoes_bula: ['Apneia do sono', 'IH grave', 'Hipersensibilidade'],
