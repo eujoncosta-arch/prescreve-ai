@@ -25,8 +25,9 @@ async function bootstrap() {
     credentials: true,
   });
 
-  // Versioning
-  app.setGlobalPrefix('');
+  // Prefixo global alinhado ao rewrite da Vercel (/api/backend/* → serviço backend).
+  // Torna as rotas alcançáveis em produção: /api/backend/health, /api/backend/auth/*, etc.
+  app.setGlobalPrefix('api/backend');
 
   const port = process.env.PORT ?? 3000;
   await app.listen(port);
