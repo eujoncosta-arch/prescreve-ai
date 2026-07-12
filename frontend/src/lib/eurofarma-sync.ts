@@ -997,8 +997,8 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Anti-inflamatório não esteroidal (AINE) — Inibidor preferencial COX-2',
     cids_aprovados: ['M06', 'M15', 'M16', 'M17', 'M79'],
     apresentacoes: [
-      { concentracao: '7,5 mg', forma_farmaceutica: 'comprimido', embalagem: '20 comprimidos' },
-      { concentracao: '15 mg', forma_farmaceutica: 'comprimido', embalagem: '20 comprimidos' },
+      { concentracao: '7,5 mg', forma_farmaceutica: 'comprimido', embalagem: '10 comprimidos' },
+      { concentracao: '15 mg', forma_farmaceutica: 'comprimido', embalagem: '10 comprimidos' },
     ],
     posologia_aprovada: 'Artrite reumatoide/osteoartrite: 7,5 mg 1x/dia; máx 15 mg/dia. Espondilite: 15 mg/dia.',
     contraindicacoes_bula: ['Úlcera péptica ativa', 'IR grave (ClCr < 15 mL/min) sem diálise', 'Hepatopatia grave', 'Gravidez (3º trimestre)', 'Alergia a AINEs/aspirina'],
