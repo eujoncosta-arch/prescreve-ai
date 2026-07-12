@@ -649,7 +649,11 @@ export const PHARMA_DB: QuickDrug[] = [
     },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Dados insuficientes' },
     contraindicacoes_rapidas: ['Hipersensibilidade', 'DM tipo 1'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Sulfonilureias (glibenclamida, gliclazida)', severidade: 'moderada', descricao: 'Risco aumentado de hipoglicemia — considerar reduzir a dose da sulfonilureia' },
+      { com: 'Insulina', severidade: 'moderada', descricao: 'Risco aumentado de hipoglicemia — considerar reduzir a dose de insulina' },
+      { com: 'Digoxina', severidade: 'leve', descricao: 'Discreto aumento das concentrações de digoxina — sem ajuste de rotina, monitorar' },
+    ],
     alertas_especiais: ['Pancreatite — risco aumentado de forma controversa', 'Infecção de VAS comum'],
     uso_gestante: 'contraindicado', uso_lactante: 'avaliar',
     marcas: [

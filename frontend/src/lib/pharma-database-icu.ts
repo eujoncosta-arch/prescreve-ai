@@ -202,7 +202,11 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
       instrucoes: 'DILUIÇÃO: 20 mg em 100 mL SG 5% → 200 mcg/mL. ATAQUE: 50 mcg/kg IV em 10 min (evitar se hipotensão). Ajustar dose em IR (ClCr < 30: máx 0,33 mcg/kg/min).',
     },
     contraindicacoes_rapidas: ['Estenose aórtica/pulmonar grave (vasodilatação piora gradiente)', 'Hipotensão grave sem vasopressor'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Vasodilatadores (nitratos, iECA, BCC)', severidade: 'moderada', descricao: 'Efeito vasodilatador aditivo — hipotensão' },
+      { com: 'Diuréticos (especialmente furosemida)', severidade: 'moderada', descricao: 'Depleção de volume potencializa hipotensão; furosemida é incompatível na mesma via (precipitação — Y-site)' },
+      { com: 'Outros inotrópicos/simpatomiméticos e digoxina', severidade: 'moderada', descricao: 'Efeito inotrópico aditivo — risco de arritmia' },
+    ],
     alertas_especiais: [
       'Hipotensão frequente (vasodilatação sistêmica e pulmonar) — associar vasopressor se necessário',
       'Taquifilaxia menor que dobutamina (mecanismo não-adrenérgico)',
@@ -392,7 +396,11 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
       'Sepse (relativa — supressão adrenal 6–24h → mortalidade ↑ em sepse — preferir ketamina)',
       'Insuficiência adrenal conhecida',
     ],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Opioides (fentanila, morfina)', severidade: 'moderada', descricao: 'Potencializam efeito hipnótico e reduzem mioclonias, mas aumentam risco de depressão respiratória' },
+      { com: 'Benzodiazepínicos / sedativos', severidade: 'moderada', descricao: 'Potencialização do efeito sedativo (depressão do SNC aditiva)' },
+      { com: 'Indutores enzimáticos (fenitoína, rifampicina)', severidade: 'leve', descricao: 'Aumentam a depuração do etomidato, podendo reduzir eficácia' },
+    ],
     alertas_especiais: [
       '⚠ SUPRESSÃO ADRENAL: dose única bloqueia síntese cortisol por 6–24h (inibição 11β-hidroxilase). Em sepse: preferir ketamina.',
       'VANTAGEM: menor hipotensão que propofol/midazolam — hemodinamicamente neutro',
@@ -920,7 +928,10 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
       instrucoes: 'TITULAR CUIDADOSAMENTE: evitar despertar abrupto e precipitação de síndrome de abstinência aguda. Em UTI: 0,04 mg q2 min até FR > 10/min (antagonismo parcial — manter analgesia). Meia-vida 60–90 min (< opioides de longa ação) — repetir ou IC.',
     },
     contraindicacoes_rapidas: ['Dependência a opioides (precipita abstinência grave) — titular cuidadosamente'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Opioides (morfina, fentanila, metadona)', severidade: 'moderada', descricao: 'Antagonismo competitivo — reverte analgesia e precipita abstinência aguda em dependentes' },
+      { com: 'Buprenorfina', severidade: 'moderada', descricao: 'Alta afinidade da buprenorfina exige doses maiores/repetidas de naloxona para reverter depressão respiratória' },
+    ],
     alertas_especiais: [
       '⚠ MEIA-VIDA CURTA: naloxona 60–90 min < maioria dos opioides → ressedação e nova depressão respiratória possível após 1h — manter monitorização',
       'IC: necessária se opioide de longa ação (metadona, morfina LP) — 2/3 da dose efetiva/hora',
@@ -955,7 +966,11 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
       'Overdose mista com TCA (remove proteção anticonvulsivante do BZD → convulsões)',
       'Controle de convulsões por BZD (epiléptico em uso de BZD para status)',
     ],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Antidepressivos tricíclicos (amitriptilina, nortriptilina)', severidade: 'contraindicado', descricao: 'Em intoxicação mista, reverter o BZD desmascara convulsões/arritmias do tricíclico (black box) — não usar' },
+      { com: 'Benzodiazepínicos (uso crônico/dependência)', severidade: 'grave', descricao: 'Precipita síndrome de abstinência e convulsões em dependentes ou em uso de BZD para epilepsia' },
+      { com: 'Proconvulsivantes (carbamazepina, fenitoína em overdose)', severidade: 'grave', descricao: 'Aumenta risco convulsivo ao antagonizar o efeito anticonvulsivante do BZD coingerido' },
+    ],
     alertas_especiais: [
       '⚠ RESSEDAÇÃO: meia-vida curta → paciente pode ressedir após 30–60 min — IC ou observação mínima 2h',
       '⚠ DEPENDÊNCIA: precipita síndrome de abstinência aguda grave (convulsões) — NÃO usar rotineiramente em usuários crônicos',

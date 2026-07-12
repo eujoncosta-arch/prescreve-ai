@@ -903,7 +903,10 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
     contraindicacoes_rapidas: [
       'Hipersensibilidade à naloxona ou aos componentes da fórmula',
     ],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Opioides (morfina, fentanila, metadona)', severidade: 'moderada', descricao: 'Antagonismo competitivo — reverte analgesia e precipita abstinência aguda em uso crônico; titular em cuidados paliativos' },
+      { com: 'Buprenorfina', severidade: 'moderada', descricao: 'Alta afinidade da buprenorfina exige doses maiores/repetidas de naloxona para reversão' },
+    ],
     alertas_especiais: [
       '⚠ TITULAR EM PACIENTE TOLERANTE: dose usual de overdose (2 mg) pode precipitar dor intensa e síndrome de abstinência aguda',
       'Meia-vida 60–90 min: < maioria dos opioides de longa ação → IC ou vigilância estrita após bolus',
