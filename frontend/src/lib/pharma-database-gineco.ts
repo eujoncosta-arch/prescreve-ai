@@ -181,7 +181,10 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
       'Osteoporose grave em adolescentes ou em risco (MEC 3)',
       'Doença cardiovascular grave com múltiplos FR (MEC 3)',
     ],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Aminoglutetimida', severidade: 'moderada', descricao: 'Deprime significativamente as concentrações séricas de medroxiprogesterona — possível perda de eficácia' },
+      { com: 'Indutores enzimáticos (rifampicina, barbitúricos, carbamazepina, fenitoína, oxcarbazepina, griseofulvina)', severidade: 'moderada', descricao: 'Podem reduzir a eficácia contraceptiva/hormonal (metabolismo por CYP3A4)' },
+    ],
     alertas_especiais: [
       'Irregularidade menstrual: spotting/amenorreia em 50% no 1º ano',
       'Retorno de fertilidade: 3–18 meses (mediana 10 meses) — informar antes',
@@ -264,7 +267,10 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
       'Doença hepática grave',
       'Sangramento uterino não investigado',
     ],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Indutores de CYP3A4 (rifampicina, carbamazepina, fenitoína, erva-de-são-joão)', severidade: 'moderada', descricao: 'Reduzem os níveis de progesterona — possível perda de eficácia' },
+      { com: 'Inibidores de CYP3A4 (cetoconazol e azólicos)', severidade: 'leve', descricao: 'Aumentam a exposição à progesterona' },
+    ],
     alertas_especiais: [
       'Progesterona NATURAL (bioidêntica) — melhor perfil de tolerabilidade e segurança mamária vs progestinas sintéticas',
       'Via oral: sedação — tomar à noite. Via vaginal: sem efeito sistêmico sedativo',
@@ -300,7 +306,10 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
       'TVP/TEP histórico (↑ risco — via oral)',
       'AVC / DCV (LIFT trial: ↑ AVC)',
     ],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Anticoagulantes (varfarina)', severidade: 'grave', descricao: 'Tibolona ↑ atividade fibrinolítica e inibe CYP2C9 — potencializa o efeito anticoagulante; ajustar dose e monitorar INR' },
+      { com: 'Indutores de CYP3A4 (rifampicina, barbitúricos, carbamazepina, hidantoína)', severidade: 'moderada', descricao: 'Aumentam o metabolismo da tibolona, reduzindo o efeito terapêutico' },
+    ],
     alertas_especiais: [
       'LIFT Trial (Lancet 2009): ↑ recidiva de CA de mama — CONTRAINDICADA em sobreviventes de CA de mama',
       '↑ Risco de AVC em mulheres ≥ 60 anos — prefira transdermal + progesterona nessa faixa etária',
@@ -532,7 +541,10 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
       instrucoes: 'Indicado quando parto < 37 semanas é esperado em 7 dias. Benefício máximo: > 24h após 1ª dose. Curso de resgate único pode ser considerado se > 14 dias do ciclo anterior e IG ainda < 34 sem.',
     },
     contraindicacoes_rapidas: ['Infecção materna sistêmica (relativa)', 'DM descompensado (hiperglicemia grave)'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Betamiméticos tocolíticos (terbutalina, salbutamol, ritodrina)', severidade: 'grave', descricao: 'Uso combinado é fator de risco independente para edema agudo de pulmão materno — monitorar sintomas respiratórios e balanço hídrico' },
+      { com: 'Indutores de CYP3A4 (rifampicina, fenitoína, carbamazepina)', severidade: 'leve', descricao: 'Podem reduzir o efeito do corticoide (relevância limitada no curso antenatal único)' },
+    ],
     alertas_especiais: [
       'Hiperglicemia materna transitória (1–3 dias): monitorar em diabéticas',
       'Reduz: SDR neonatal (-50%), hemorragia intraventricular, enterocolite necrosante, mortalidade perinatal',
