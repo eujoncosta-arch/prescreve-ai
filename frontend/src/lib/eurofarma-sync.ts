@@ -586,11 +586,11 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'ICS + LABA — Corticosteroide Inalatório + Beta-2 Agonista de Longa Ação',
     cids_aprovados: ['J45', 'J44', 'J44.1'],
     apresentacoes: [
-      { concentracao: '50/100 mcg/dose', forma_farmaceutica: 'inalatorio', embalagem: 'Frasco 120 doses', registro_anvisa: '1.0043.1401' },
-      { concentracao: '50/250 mcg/dose', forma_farmaceutica: 'inalatorio', embalagem: 'Frasco 120 doses', registro_anvisa: '1.0043.1402' },
-      { concentracao: '50/500 mcg/dose', forma_farmaceutica: 'inalatorio', embalagem: 'Frasco 120 doses', registro_anvisa: '1.0043.1403' },
+      { concentracao: '12/250 mcg/cápsula', forma_farmaceutica: 'inalatorio', embalagem: '60 cápsulas + inalador CDM Haler' },
+      { concentracao: '12/250 mcg/cápsula', forma_farmaceutica: 'inalatorio', embalagem: '8 cápsulas (refil)' },
+      { concentracao: '12/250 mcg/cápsula', forma_farmaceutica: 'inalatorio', embalagem: '60 cápsulas (refil)' },
     ],
-    posologia_aprovada: 'Asma: 1-2 inalações 2x/dia (manhã e noite). Dose conforme gravidade (50/100 leve-moderada; 50/250 ou 50/500 moderada-grave). DPOC: 1-2 inalações 2x/dia da concentração adequada.',
+    posologia_aprovada: 'Asma (adultos e ≥ 12 anos): 1 cápsula inalada 2x/dia (manhã e noite). Não usar como medicação de resgate.',
     contraindicacoes_bula: ['Hipersensibilidade ao formoterol ou fluticasona', 'Asma aguda / crise grave (não usar como resgate isolado)', 'Tuberculose ativa', 'Infecções respiratórias fúngicas ou virais'],
     advertencias_principais: [
       '⚠ LABA: NUNCA usar sem CI na asma (risco de morte)',
@@ -1118,7 +1118,7 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     cids_aprovados: ['J06', 'J18', 'J20', 'J31', 'J32', 'H66', 'L03'],
     apresentacoes: [
       { concentracao: '250/62,5 mg/5 mL', forma_farmaceutica: 'suspensao_oral', embalagem: 'Frasco 75 mL' },
-      { concentracao: '400/57 mg/5 mL', forma_farmaceutica: 'suspensao_oral', embalagem: 'Frasco 100 mL + seringa dosadora' },
+      { concentracao: '400/57 mg/5 mL', forma_farmaceutica: 'suspensao_oral', embalagem: 'Frasco 70 mL + seringa dosadora' },
       { concentracao: '500/125 mg', forma_farmaceutica: 'comprimido', embalagem: '21 comprimidos' },
       { concentracao: '875/125 mg', forma_farmaceutica: 'comprimido', embalagem: '14 comprimidos' },
     ],
@@ -2507,7 +2507,7 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Antiprotozoário / Antiparasitário de Amplo Espectro',
     cids_aprovados: ['A07', 'A08', 'B82'],
     apresentacoes: [
-      { concentracao: '500 mg', forma_farmaceutica: 'comprimido', embalagem: '6 comprimidos', registro_anvisa: '1.0043.1491' },
+      { concentracao: '500 mg', forma_farmaceutica: 'comprimido', embalagem: '6 comprimidos', registro_anvisa: '1.0043.1228' },
     ],
     posologia_aprovada: 'Giardíase/criptosporidiose: 500 mg 2x/dia por 3 dias (adultos). Tomar com refeição. Cat. B.',
     contraindicacoes_bula: ['Hipersensibilidade à nitazoxanida'],
