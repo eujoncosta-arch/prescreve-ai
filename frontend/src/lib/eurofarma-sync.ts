@@ -3048,7 +3048,7 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Anti-inflamatório Não Esteroidal (AINE) — Analgésico/Antipirétic',
     cids_aprovados: ['R52', 'M79', 'R51'],
     apresentacoes: [
-      { concentracao: '10 mg', forma_farmaceutica: 'comprimido', embalagem: '20 comprimidos' },
+      { concentracao: '10 mg', forma_farmaceutica: 'comprimido_sublingual', embalagem: '20 comprimidos' },
     ],
     posologia_aprovada: 'Dor aguda moderada a intensa (curto prazo): 10 mg a cada 4–6h. Dose máxima: 40 mg/dia. Uso máximo: 5 dias.',
     contraindicacoes_bula: ['Úlcera péptica ativa', 'Sangramento GI/cerebrovascular', 'IR grave', 'Gravidez (especialmente 3º trimestre)', 'Alergia a AINEs/aspirina', 'Cirurgia de grande porte (risco hemorrágico)'],
