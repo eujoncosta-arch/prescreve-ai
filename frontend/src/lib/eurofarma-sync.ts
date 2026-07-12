@@ -1790,7 +1790,7 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Regulador da Motilidade Intestinal — Antiespasmódico',
     cids_aprovados: ['K58', 'K57', 'K59'],
     apresentacoes: [
-      { concentracao: '200 mg', forma_farmaceutica: 'capsula', embalagem: '30 cápsulas', registro_anvisa: '1.0043.1087' },
+      { concentracao: '200 mg', forma_farmaceutica: 'capsula_mole', embalagem: '30 cápsulas', registro_anvisa: '1.0043.1087' },
     ],
     posologia_aprovada: 'SII e distúrbios funcionais: 200 mg 3x/dia antes das refeições. Uso em adultos e crianças ≥ 12 anos.',
     contraindicacoes_bula: ['Hipersensibilidade à trimebutina', 'Menores de 12 anos'],
