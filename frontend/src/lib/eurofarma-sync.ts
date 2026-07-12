@@ -2157,8 +2157,8 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Hipnótico Não-Benzodiazepínico — Liberação Prolongada',
     cids_aprovados: ['G47.0'],
     apresentacoes: [
-      { concentracao: '6,25 mg', forma_farmaceutica: 'comprimido_liberacao_prolongada', embalagem: '10 comprimidos', registro_anvisa: '1.0043.1487' },
-      { concentracao: '12,5 mg', forma_farmaceutica: 'comprimido_liberacao_prolongada', embalagem: '10 comprimidos', registro_anvisa: '1.0043.1487' },
+      { concentracao: '6,25 mg', forma_farmaceutica: 'comprimido_liberacao_prolongada', embalagem: '30 comprimidos', registro_anvisa: '1.0043.1487' },
+      { concentracao: '12,5 mg', forma_farmaceutica: 'comprimido_liberacao_prolongada', embalagem: '30 comprimidos', registro_anvisa: '1.0043.1487' },
     ],
     posologia_aprovada: 'Insônia: 6,25 mg (mulheres/idosos) ou 12,5 mg (homens) imediatamente antes de deitar. NÃO triturar ou mastigar. Retenção especial ANVISA.',
     contraindicacoes_bula: ['Apneia do sono grave', 'IH grave', 'Hipersensibilidade'],
