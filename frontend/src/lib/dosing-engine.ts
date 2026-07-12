@@ -678,3 +678,29 @@ export function formatarDose(mg: number): string {
   if (mg < 1)     return `${(mg * 1000).toFixed(0)} mcg`;
   return `${mg % 1 === 0 ? mg.toFixed(0) : mg.toFixed(1)} mg`;
 }
+
+/**
+ * Returns a structured message when a molecule exists in the pharmacological
+ * library (QuickDrug) but has no structured posology rules in MEDICAMENTOS_DOSAGEM.
+ * Display this instead of a blank/null dose field to avoid physician confusion.
+ */
+export function getDoseIndisponivelMsg(moleculaNome: string): {
+  titulo: string;
+  mensagem: string;
+  orientacao: string;
+} {
+  return {
+    titulo: 'Cálculo de dose indisponível',
+    mensagem: `${moleculaNome} está cadastrada na biblioteca farmacológica, porém ainda não possui regras posológicas estruturadas no mecanismo de cálculo.`,
+    orientacao: 'Consulte a bula, protocolo institucional ou diretriz da especialidade para a posologia adequada.',
+  };
+}
+
+/**
+ * Returns true when a molecule can be dosed via calcularDosagem().
+ * Use before calling calcularDosagem to decide whether to show the
+ * dose calculator UI or the getDoseIndisponivelMsg() message.
+ */
+export function isDoseCalculavel(medicamentoId: string): boolean {
+  return getMedicamentoById(medicamentoId) !== undefined;
+}

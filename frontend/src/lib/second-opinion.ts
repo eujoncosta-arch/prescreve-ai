@@ -988,3 +988,14 @@ export const GRAU_COR: Record<GrauRecomendacao, string> = {
   IIb: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
   III: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
 };
+
+// ─── Bridge to Medical Copilot Second Opinion ────────────────
+// medical-copilot.ts also exposes a second-opinion function that operates on
+// ContextoClinico (unstructured context) while this module operates on
+// structured CondicaoClinica/CondutaOpcao evidence trees.
+// Re-exported here so a single import covers both use cases.
+export {
+  gerarSegundaOpiniao as gerarSegundaOpinaoCopilot,
+  type SegundaOpiniao as SegundaOpinaoCopilot,
+  type ContextoClinico,
+} from './medical-copilot';

@@ -470,3 +470,49 @@ export function getTherapeuticForCondition(
     ...protocolo,
   };
 }
+
+// ─── Cross-engine: Evidence + Conflict + Registry integration ─
+
+import { EVIDENCE_DB } from './evidence-engine';
+import { detectarConflitos, buscarConflitoClasse } from './guideline-conflict-engine';
+import { listarRecomendacoes } from './recommendation-registry';
+
+export interface SugestaoTerapeuticaEnriquecida {
+  molecula: string;
+  classe_terapeutica: string;
+  conflitos: ReturnType<typeof detectarConflitos>;
+  conflitos_classe: ReturnType<typeof buscarConflitoClasse>;
+  uso_historico: number;
+  nivel_evidencia_disponivel: string;
+}
+
+export function enriquecerSugestao(
+  molecula: string,
+  classe_terapeutica: string,
+  diagnostico_id: string,
+): SugestaoTerapeuticaEnriquecida {
+  const conflitos       = detectarConflitos(diagnostico_id);
+  const conflitos_classe = buscarConflitoClasse(classe_terapeutica);
+
+  const historico = listarRecomendacoes({ molecula });
+  const uso_historico = historico.length;
+
+  const diagEv = EVIDENCE_DB.find(d =>
+    d.cid10 === diagnostico_id ||
+    d.nome.toLowerCase().includes(diagnostico_id.toLowerCase())
+  );
+
+  let nivel_evidencia_disponivel = 'Sem evidência indexada';
+  if (diagEv) {
+    for (const dir of diagEv.diretrizes) {
+      for (const ter of dir.terapias) {
+        if (ter.nome.toLowerCase().includes(molecula.toLowerCase())) {
+          nivel_evidencia_disponivel = `Nível ${ter.estudos[0]?.nivel ?? 'B'} (${dir.sigla})`;
+          break;
+        }
+      }
+    }
+  }
+
+  return { molecula, classe_terapeutica, conflitos, conflitos_classe, uso_historico, nivel_evidencia_disponivel };
+}

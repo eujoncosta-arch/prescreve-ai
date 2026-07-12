@@ -2,6 +2,8 @@
 // LGPD · CFM · ANVISA · ISO 27001 · ISO 13485 · IEC 62304 · SaMD
 // Todos os dados em localStorage — arquitetura demonstrativa para futuro backend regulado
 
+import { isClient, lsGet, lsSet, lsGetJSON, lsSetJSON } from './storage';
+
 // ─── Versioning ─────────────────────────────────────────────────────────────
 
 export const VERSAO_SISTEMA      = '2.2.0';
@@ -188,12 +190,12 @@ export function registrarConsentimento(
     base_juridica,
     canal: 'web',
     revogado: false,
-    metadados: { user_agent_hash: anonimizarHash(navigator?.userAgent ?? '') },
+    metadados: { user_agent_hash: anonimizarHash(typeof navigator !== 'undefined' ? (navigator.userAgent ?? '') : '') },
   };
 
-  const existentes: ConsentRecord[] = JSON.parse(localStorage.getItem(LS_CONSENT_KEY) ?? '[]');
+  const existentes = lsGetJSON<ConsentRecord[]>(LS_CONSENT_KEY, []);
   existentes.push(record);
-  localStorage.setItem(LS_CONSENT_KEY, JSON.stringify(existentes));
+  lsSetJSON(LS_CONSENT_KEY, existentes);
 
   registrarLog({ tipo: 'consentimento_registrado', descricao: `Consentimento registrado: ${finalidades.join(', ')}`, resultado: 'sucesso' });
   return record;
@@ -201,20 +203,20 @@ export function registrarConsentimento(
 
 export function revogarConsentimento(finalidade: FinalidadeLGPD, usuario_id = 'usuario_local'): void {
   const hash = anonimizarHash(usuario_id);
-  const registros: ConsentRecord[] = JSON.parse(localStorage.getItem(LS_CONSENT_KEY) ?? '[]');
+  const registros = lsGetJSON<ConsentRecord[]>(LS_CONSENT_KEY, []);
   registros.forEach(r => {
     if (r.usuario_hash === hash && r.finalidades.includes(finalidade) && !r.revogado) {
       r.revogado = true;
       r.timestamp_revogacao = new Date().toISOString();
     }
   });
-  localStorage.setItem(LS_CONSENT_KEY, JSON.stringify(registros));
+  lsSetJSON(LS_CONSENT_KEY, registros);
   registrarLog({ tipo: 'consentimento_revogado', descricao: `Consentimento revogado: ${finalidade}`, resultado: 'sucesso' });
 }
 
 export function verificarConsentimento(finalidade: FinalidadeLGPD, usuario_id = 'usuario_local'): boolean {
   const hash = anonimizarHash(usuario_id);
-  const registros: ConsentRecord[] = JSON.parse(localStorage.getItem(LS_CONSENT_KEY) ?? '[]');
+  const registros = lsGetJSON<ConsentRecord[]>(LS_CONSENT_KEY, []);
   return registros.some(r =>
     r.usuario_hash === hash &&
     r.finalidades.includes(finalidade) &&
@@ -224,7 +226,7 @@ export function verificarConsentimento(finalidade: FinalidadeLGPD, usuario_id = 
 }
 
 export function listarConsentimentos(): ConsentRecord[] {
-  return JSON.parse(localStorage.getItem(LS_CONSENT_KEY) ?? '[]');
+  return lsGetJSON<ConsentRecord[]>(LS_CONSENT_KEY, []);
 }
 
 // ─── Logs Regulatórios ───────────────────────────────────────────────────────
@@ -249,16 +251,16 @@ export function registrarLog(input: LogInput): RegulatoryLog {
   };
   const log: RegulatoryLog = { ...base, hash_integridade: hashIntegridade(base) };
 
-  const logs: RegulatoryLog[] = JSON.parse(localStorage.getItem(LS_REG_LOG_KEY) ?? '[]');
+  const logs = lsGetJSON<RegulatoryLog[]>(LS_REG_LOG_KEY, []);
   logs.push(log);
   // Manter últimos 5000 logs
   if (logs.length > 5000) logs.splice(0, logs.length - 5000);
-  localStorage.setItem(LS_REG_LOG_KEY, JSON.stringify(logs));
+  lsSetJSON(LS_REG_LOG_KEY, logs);
   return log;
 }
 
 export function listarLogs(filtros?: { tipo?: LogType; resultado?: string; limit?: number }): RegulatoryLog[] {
-  let logs: RegulatoryLog[] = JSON.parse(localStorage.getItem(LS_REG_LOG_KEY) ?? '[]');
+  let logs = lsGetJSON<RegulatoryLog[]>(LS_REG_LOG_KEY, []);
   if (filtros?.tipo)      logs = logs.filter(l => l.tipo === filtros.tipo);
   if (filtros?.resultado) logs = logs.filter(l => l.resultado === filtros.resultado);
   logs.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
@@ -266,7 +268,7 @@ export function listarLogs(filtros?: { tipo?: LogType; resultado?: string; limit
 }
 
 export function verificarIntegridadeLogs(): { total: number; corrompidos: number; ids_corrompidos: string[] } {
-  const logs: RegulatoryLog[] = JSON.parse(localStorage.getItem(LS_REG_LOG_KEY) ?? '[]');
+  const logs = lsGetJSON<RegulatoryLog[]>(LS_REG_LOG_KEY, []);
   const ids_corrompidos: string[] = [];
   logs.forEach(log => {
     const { hash_integridade, ...base } = log;
@@ -281,13 +283,14 @@ const LS_DEVICE_KEY = 'prescreve_ai_device_key_v1';
 const CRYPTO_ALG    = { name: 'AES-GCM', length: 256 } as const;
 
 async function obterChaveCripto(): Promise<CryptoKey> {
+  if (!isClient()) throw new Error('obterChaveCripto: browser-only API (Web Crypto + localStorage)');
   // Deriva chave AES-GCM a partir de material de chave único por dispositivo
   const deviceKeyMaterial = (() => {
-    let k = localStorage.getItem(LS_DEVICE_KEY);
+    let k = lsGet(LS_DEVICE_KEY);
     if (!k) {
       k = Array.from(crypto.getRandomValues(new Uint8Array(32)))
         .map(b => b.toString(16).padStart(2, '0')).join('');
-      localStorage.setItem(LS_DEVICE_KEY, k);
+      lsSet(LS_DEVICE_KEY, k);
     }
     return k;
   })();

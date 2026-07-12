@@ -5,6 +5,8 @@
 
 import type { LabInfo, ProdutoComercial } from '../types';
 import { eurofarmaAdapter } from './eurofarma';
+import { emsAdapter } from './ems';
+import { acheAdapter } from './ache';
 
 export interface LabAdapter {
   lab_info: LabInfo;
@@ -18,8 +20,8 @@ export interface LabAdapter {
 
 export const LAB_ADAPTERS: LabAdapter[] = [
   eurofarmaAdapter,
-  // emsAdapter,       ← descomentar após criar ems.ts
-  // acheAdapter,      ← descomentar após criar ache.ts
+  emsAdapter,
+  acheAdapter,
   // libbsAdapter,     ← descomentar após criar libbs.ts
   // biozineAdapter,   ← descomentar após criar biozine.ts
 ];

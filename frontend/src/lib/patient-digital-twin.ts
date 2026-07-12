@@ -5,6 +5,10 @@
 
 'use client';
 
+import { gerarPrognostico, type PerfilPrognostico, type Prognostico } from './prognosis-engine';
+import { calcularNNT, type OutcomeCalculado } from './outcome-engine';
+import type { AvaliacaoRiscoClinico } from './clinical-risk-engine';
+
 // ══════════════════════════════════════════════════════════════
 // TIPOS
 // ══════════════════════════════════════════════════════════════
@@ -329,3 +333,38 @@ export const CLASSE_RISCO_META: Record<ClasseRisco, { label: string; cls: string
   alto:         { label: 'Alto', cls: 'text-orange-700 bg-orange-50' },
   muito_alto:   { label: 'Muito alto', cls: 'text-red-700 bg-red-50' },
 };
+
+// ─── Cross-engine: Prognosis + Outcome integration ───────────
+
+export interface TwinPrognosis {
+  twin_id: string;
+  perfil: PerfilPrognostico;
+  prognostico_30d: Prognostico;
+  prognostico_1a: Prognostico;
+  nnt_comparativo: { nnt: number; nnH: number } | null;
+}
+
+export function gerarPrognosisTwin(
+  twin: DigitalTwin,
+  risco?: AvaliacaoRiscoClinico,
+): TwinPrognosis {
+  const perfil: PerfilPrognostico = {
+    cid: twin.diagnostico_principal,
+    idade: twin.perfil.idade,
+    sexo: twin.perfil.sexo,
+    comorbidades: twin.perfil.comorbidades,
+  };
+
+  const prog30d = gerarPrognostico(perfil, '30d');
+  const prog1a  = gerarPrognostico(perfil, '1a');
+
+  let nnt_comparativo: { nnt: number; nnH: number } | null = null;
+  if (risco) {
+    const incTratamento = risco.score_global / 100 * 0.4;
+    const incControle   = risco.score_global / 100 * 0.7;
+    const nntResult = calcularNNT(incTratamento, incControle);
+    nnt_comparativo = { nnt: nntResult.nnt, nnH: nntResult.nnt * 1.8 };
+  }
+
+  return { twin_id: twin.id, perfil, prognostico_30d: prog30d, prognostico_1a: prog1a, nnt_comparativo };
+}

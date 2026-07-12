@@ -2,6 +2,9 @@
 // PRESCREVE-AI — Motor de Prognóstico Clínico
 // Scores validados com fórmulas, interpretação, evidência e diretriz
 // Ferramenta de apoio à decisão clínica — não substitui julgamento médico
+// NOTA: arquivo distinto de prognosis-engine.ts (predição de desfechos 30d/6m/1a)
+//       Este módulo: scores de risco estruturados (GRACE, TIMI, CHA₂DS₂-VASc…)
+//       prognosis-engine.ts: predição probabilística por perfil CID + comorbidades
 // ============================================================
 
 // ─── Tipos ───────────────────────────────────────────────────

@@ -280,3 +280,64 @@ export const CLASSIFICACAO_META: Record<PerformanceHospital['classificacao'], { 
   C: { label: 'Classe C', cls: 'text-yellow-700 bg-yellow-100 border-yellow-300', desc: 'Em desenvolvimento' },
   D: { label: 'Classe D', cls: 'text-red-700 bg-red-100 border-red-300',       desc: 'Oportunidade crítica de melhora' },
 };
+
+// ─── Cross-engine: Outcome + Medical Audit integration ───────
+
+import { gerarPainelOutcome, calcularNNT, OUTCOME_DB } from './outcome-engine';
+import { listarAudits, calcularEstatisticas, type AuditStats } from './medical-audit';
+
+export interface QualidadeIntegrada {
+  hospital_id?: string;
+  audit_stats: AuditStats;
+  outcome_resumo: Array<{
+    cid: string;
+    nnt: number | null;
+    casos_auditados: number;
+    qualidade_prescricao: number;
+  }>;
+  score_qualidade_clinica: number;
+  recomendacoes: string[];
+}
+
+export function gerarQualidadeIntegrada(hospital_id?: string): QualidadeIntegrada {
+  const audits    = listarAudits({ status: 'ativo' });
+  const audit_stats = calcularEstatisticas(audits);
+
+  const cidsCobertos = [...new Set(OUTCOME_DB.map(o => o.cid))].slice(0, 5);
+
+  const outcome_resumo = cidsCobertos.map(cid => {
+    const outcome = OUTCOME_DB.find(o => o.cid === cid);
+    const nntResult = outcome
+      ? calcularNNT(outcome.incidencia_tratamento, outcome.incidencia_controle)
+      : null;
+    const casos_auditados = audits.filter(a =>
+      a.diagnosticos.some(d => d.cid === cid)
+    ).length;
+    return {
+      cid,
+      nnt: nntResult?.nnt ?? null,
+      casos_auditados,
+      qualidade_prescricao: Math.min(100, Math.round(70 + casos_auditados * 2)),
+    };
+  });
+
+  const score_medio = outcome_resumo.length > 0
+    ? outcome_resumo.reduce((s, o) => s + o.qualidade_prescricao, 0) / outcome_resumo.length
+    : 75;
+
+  const recomendacoes: string[] = [];
+  if (audit_stats.total_alertas_ignorados > 0)
+    recomendacoes.push(`${audit_stats.total_alertas_ignorados} alerta(s) ignorado(s) de auditoria pendentes de revisão.`);
+  if (score_medio < 80)
+    recomendacoes.push('Score de qualidade abaixo do benchmark — revisar protocolos de prescrição.');
+  if (audit_stats.total === 0)
+    recomendacoes.push('Nenhum registro de auditoria encontrado — iniciar rastreabilidade clínica.');
+
+  return {
+    hospital_id,
+    audit_stats,
+    outcome_resumo,
+    score_qualidade_clinica: Math.round(score_medio),
+    recomendacoes,
+  };
+}

@@ -34,8 +34,7 @@ type Action =
   | { type: 'UPDATE_PRESCRIPTION'; payload: Prescription }
   | { type: 'UPDATE_PROGNOSTIC'; payload: PrognosisData }
   | { type: 'UPDATE_SETTINGS'; payload: Partial<AppSettings> }
-  | { type: 'SET_LAB_PREFERENCE'; payload: LaboratoryPreference }
-  | { type: 'ADVANCE_STATUS' };
+  | { type: 'SET_LAB_PREFERENCE'; payload: LaboratoryPreference };
 
 const initialState: AppState = {
   consultations: MOCK_CONSULTATIONS,

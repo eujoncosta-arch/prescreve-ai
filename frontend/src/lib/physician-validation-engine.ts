@@ -9,6 +9,8 @@
 'use client';
 
 import type { EspecialidadeMedica } from './physician-profile';
+import { REGISTRY_KEY } from './recommendation-registry';
+import { lsGet } from './storage';
 
 // ══════════════════════════════════════════════════════════════
 // TIPOS COMPARTILHADOS
@@ -554,8 +556,8 @@ export function calcularCalibração(): ResultadoCalibração {
   let registros: Array<{ score: number; concordou: boolean }> = [];
 
   try {
-    const KEY_REG = 'prescreve_ai_recommendation_registry_v1';
-    const raw = localStorage.getItem(KEY_REG);
+    const KEY_REG = REGISTRY_KEY;
+    const raw = lsGet(KEY_REG);
     const recsRegistry: Array<{ id: string; molecula: string; score_confianca: number }> =
       raw ? JSON.parse(raw) : [];
 

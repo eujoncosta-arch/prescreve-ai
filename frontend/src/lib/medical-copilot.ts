@@ -591,3 +591,49 @@ export function gerarJustificativa(medicamento: string, ctx: ContextoClinico): J
     conforme_protocolo: !emConflito && !emRisco,
   };
 }
+
+// ─── Cross-engine: Evidence + Knowledge Graph + Clinical Risk ─
+
+import { EVIDENCE_DB } from './evidence-engine';
+import { buscarRelacionamentos } from './medical-knowledge-graph';
+import { avaliarRiscoClinico } from './clinical-risk-engine';
+
+export interface CopilotContextoEnriquecido {
+  soap: NotaSOAP;
+  segunda_opiniao: SegundaOpiniao;
+  relacionamentos_grafo: ReturnType<typeof buscarRelacionamentos>;
+  estudos_relevantes: Array<{ titulo: string; nivel: string; n_pacientes: number }>;
+  risco_clinico: ReturnType<typeof avaliarRiscoClinico>;
+}
+
+export function gerarCopilotCompleto(
+  ctx: ContextoClinico,
+  diagnostico_id: string,
+  anamnese?: import('./types').Anamnesis,
+): CopilotContextoEnriquecido {
+  const soap           = gerarSOAP(ctx);
+  const segunda_opiniao = gerarSegundaOpiniao(ctx);
+  const relacionamentos_grafo = buscarRelacionamentos(diagnostico_id);
+
+  const diagEv = EVIDENCE_DB.find(d =>
+    d.cid10 === diagnostico_id ||
+    d.nome.toLowerCase().includes(diagnostico_id.toLowerCase())
+  );
+  const estudos_relevantes = diagEv
+    ? diagEv.diretrizes.flatMap(d =>
+        d.terapias.flatMap(t =>
+          t.estudos.slice(0, 2).map(e => ({
+            titulo: e.nome,
+            nivel: String(e.nivel ?? 'B'),
+            n_pacientes: e.n_pacientes ?? 0,
+          }))
+        )
+      ).slice(0, 6)
+    : [];
+
+  const risco_clinico = anamnese
+    ? avaliarRiscoClinico(anamnese, [])
+    : avaliarRiscoClinico({} as import('./types').Anamnesis, []);
+
+  return { soap, segunda_opiniao, relacionamentos_grafo, estudos_relevantes, risco_clinico };
+}

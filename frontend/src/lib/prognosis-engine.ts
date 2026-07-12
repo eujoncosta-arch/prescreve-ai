@@ -219,3 +219,46 @@ export const CONDICOES_PROGNOSE: { cid: string; label: string }[] = [
   { cid: 'J45', label: 'Asma (J45)' },
   { cid: 'J44', label: 'DPOC (J44)' },
 ];
+
+// ─── Cross-engine: Outcome Engine integration ────────────────
+
+import { calcularNNT, OUTCOME_DB } from './outcome-engine';
+
+export interface PrognosticoComNNT {
+  prognostico: Prognostico;
+  nnt_beneficio: number | null;
+  nnt_dano: number | null;
+  base_populacional: number;
+  interpretacao_nnt: string;
+}
+
+export function gerarPrognosticoComOutcome(
+  perfil: PerfilPrognostico,
+  horizonte: HorizontePrognostico,
+): PrognosticoComNNT {
+  const prognostico = gerarPrognostico(perfil, horizonte);
+  const outcomeBase = OUTCOME_DB.find(o => o.cid === perfil.cid);
+
+  let nnt_beneficio: number | null = null;
+  let nnt_dano: number | null = null;
+
+  if (outcomeBase) {
+    nnt_beneficio = calcularNNT(outcomeBase.incidencia_tratamento, outcomeBase.incidencia_controle).nnt;
+  }
+
+  const interpretacao_nnt = nnt_beneficio === null
+    ? 'Dados de outcome não disponíveis para este CID.'
+    : nnt_beneficio <= 10
+    ? `NNT = ${nnt_beneficio} — benefício clínico expressivo. Tratamento altamente recomendado.`
+    : nnt_beneficio <= 20
+    ? `NNT = ${nnt_beneficio} — benefício moderado. Indicação baseada no perfil individual.`
+    : `NNT = ${nnt_beneficio} — benefício limitado. Avaliar custo-efetividade e preferências do paciente.`;
+
+  return {
+    prognostico,
+    nnt_beneficio,
+    nnt_dano,
+    base_populacional: 0,
+    interpretacao_nnt,
+  };
+}

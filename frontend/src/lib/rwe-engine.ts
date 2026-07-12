@@ -335,3 +335,51 @@ export const TENDENCIA_META = {
   estavel: { label: 'Estável', cls: 'text-blue-700', icon: '→' },
   piora:   { label: 'Tendência de piora', cls: 'text-red-700', icon: '↓' },
 };
+
+// ─── Cross-engine: Outcome + Evidence integration ────────────
+
+import { calcularNNT, OUTCOME_DB, type OutcomeCalculado } from './outcome-engine';
+import { EVIDENCE_DB } from './evidence-engine';
+
+export interface RWEvsEvidencia {
+  cid: string;
+  nnt_rwe: number | null;
+  nnt_ecr: number | null;
+  delta_efetividade: number | null;
+  estudos_ecr: number;
+  casos_rwe: number;
+  interpretacao: string;
+}
+
+export function compararRWEvsECR(cid: string): RWEvsEvidencia {
+  const casosRWE = listarRWE({ cid });
+  const diagEv   = EVIDENCE_DB.find(d => d.cid10 === cid || d.nome.toLowerCase().includes(cid.toLowerCase()));
+  const outcomeBase = OUTCOME_DB.find(o => o.cid === cid);
+
+  const nnt_rwe = casosRWE.length >= 2
+    ? (() => {
+        const incRWE = casosRWE.reduce((s, c) => s + c.taxa_falha, 0) / casosRWE.length / 100;
+        return incRWE > 0 ? calcularNNT(incRWE * 0.6, incRWE).nnt : null;
+      })()
+    : null;
+
+  const nnt_ecr = outcomeBase
+    ? calcularNNT(outcomeBase.incidencia_tratamento, outcomeBase.incidencia_controle).nnt
+    : null;
+
+  const estudos_ecr = diagEv
+    ? diagEv.diretrizes.reduce((s, d) => s + d.terapias.reduce((s2, t) => s2 + t.estudos.length, 0), 0)
+    : 0;
+
+  const delta = nnt_rwe !== null && nnt_ecr !== null ? Math.round(nnt_rwe - nnt_ecr) : null;
+
+  const interpretacao = delta === null
+    ? 'Dados insuficientes para comparação RWE vs ECR.'
+    : delta > 5
+    ? `RWE sugere menor efetividade que ECRs (NNT real ~${nnt_rwe} vs ECR ~${nnt_ecr}). Considerar fatores de adesão e comorbidades.`
+    : delta < -5
+    ? `RWE sugere maior efetividade que ECRs (NNT real ~${nnt_rwe} vs ECR ~${nnt_ecr}). Possível viés de seleção de pacientes.`
+    : `Efetividade RWE consistente com ECRs (NNT real ~${nnt_rwe} vs ECR ~${nnt_ecr}).`;
+
+  return { cid, nnt_rwe, nnt_ecr, delta_efetividade: delta, estudos_ecr, casos_rwe: casosRWE.length, interpretacao };
+}

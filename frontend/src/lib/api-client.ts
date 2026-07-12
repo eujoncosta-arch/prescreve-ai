@@ -13,7 +13,9 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? '';
 const BACKEND_AVAILABLE = !!API_BASE;
 
 // ── Token storage ─────────────────────────────────────────────
-
+// These keys are written only when NEXT_PUBLIC_API_URL is set (backend mode).
+// In frontend-only mode (BACKEND_AVAILABLE = false) they remain empty.
+// Keys are orphan in the localStorage map when running without a backend.
 const KEY_ACCESS  = 'prescreve_ai_access_token';
 const KEY_REFRESH = 'prescreve_ai_refresh_token';
 const KEY_USER    = 'prescreve_ai_current_user';

@@ -3,7 +3,7 @@
 // Interações, duplicidade, contraindicações, limites de dose
 // ============================================================
 
-import { PHARMA_DB, type QuickDrug } from './pharma-database';
+import { getAllDrugs, type QuickDrug } from './pharma-database';
 
 export type AlertSeverityFast = 'info' | 'warning' | 'danger' | 'critical';
 
@@ -31,7 +31,7 @@ export function runSafetyCheck(input: SafetyCheckInput): QuickSafetyAlert[] {
 
   // Busca dados das moléculas no banco
   const drugs: QuickDrug[] = moleculas
-    .map(m => PHARMA_DB.find(d => d.molecula.toLowerCase() === m.toLowerCase() ||
+    .map(m => getAllDrugs().find(d => d.molecula.toLowerCase() === m.toLowerCase() ||
       d.sinonimos.some(s => s.toLowerCase() === m.toLowerCase())))
     .filter(Boolean) as QuickDrug[];
 

@@ -4,14 +4,15 @@
 // resolve: evidência + posologia + produto + dose
 // ============================================================
 
-import { PHARMA_DB, searchDrugs, type QuickDrug } from './pharma-database';
+import { PHARMA_DB, getAllDrugs, searchAllDrugs, type QuickDrug } from './pharma-database';
 import {
-  EUROFARMA_CATALOG,
   CORRELACAO_TERAPEUTICA,
-  getProdutosByMolecula,
   getCorrelacaoByCID,
   type CorrelacaoTerapeutica,
 } from './eurofarma-sync';
+import {
+  getProductsByMolecule as getLabProductsByMolecule,
+} from './lab-catalog';
 import type { ProdutoComercial } from './types';
 import { DRUG_DATABASE, getMoleculesByCondition } from './drug-database';
 import type { MoleculeEntry } from './types';
@@ -42,7 +43,7 @@ export interface ResolvedDrug {
   produto_comercial: ProdutoComercial | null;
   evidencia: EvidenciaResolvida | null;
   molecule_entry: MoleculeEntry | null;
-  fonte: ('pharma_db' | 'eurofarma_catalog' | 'correlacao' | 'drug_db')[];
+  fonte: ('pharma_db' | 'lab_catalog' | 'correlacao' | 'drug_db')[];
   pgx_alerts: AvaliacaoFarmacogenomica[];
 }
 
@@ -63,19 +64,19 @@ export function resolveDrug(
 
   // 1. PHARMA_DB — QuickDrug com posologia completa
   const molNorm = molecula.toLowerCase().trim();
-  const quickDrug = PHARMA_DB.find(d =>
+  const quickDrug = getAllDrugs().find(d =>
     d.molecula.toLowerCase() === molNorm ||
     d.nome_generico?.toLowerCase() === molNorm ||
     d.sinonimos.some(s => s.toLowerCase() === molNorm)
   ) ?? null;
   if (quickDrug) fonte.push('pharma_db');
 
-  // 2. EUROFARMA_CATALOG — produto comercial preferencial
-  const produtosDisponiveis = getProdutosByMolecula(molecula);
+  // 2. LAB_CATALOG — produto comercial de qualquer laboratório ativo
+  const produtosDisponiveis = getLabProductsByMolecule(molecula);
   let produtoComercial: ProdutoComercial | null = null;
   if (produtosDisponiveis.length > 0) {
-    fonte.push('eurofarma_catalog');
-    // Filtrar pelo lab preferido, senão usa o primeiro
+    fonte.push('lab_catalog');
+    // Filtrar pelo lab preferido, senão usa o primeiro disponível
     if (labPreferencia) {
       produtoComercial = produtosDisponiveis.find(p => p.lab_id === labPreferencia) ?? produtosDisponiveis[0];
     } else {
@@ -178,7 +179,7 @@ export function resolveSearch(
   const q = query.toLowerCase().trim();
   if (q.length < 2) return [];
 
-  const found = searchDrugs(q);
+  const found = searchAllDrugs(q);
   return found
     .slice(0, limit)
     .map(drug => resolveDrug(drug.molecula, cid10, labPreferencia));
@@ -208,5 +209,12 @@ export function getPreferredBrandName(
  * Verifica se a molécula tem produto Eurofarma verificado no catálogo.
  */
 export function hasVerifiedEurofarmaProduct(molecula: string): boolean {
-  return getProdutosByMolecula(molecula).length > 0;
+  return getLabProductsByMolecule(molecula, 'eurofarma').length > 0;
+}
+
+/**
+ * Retorna todos os produtos disponíveis para uma molécula em todos os labs ativos.
+ */
+export function getAllProductsForMolecule(molecula: string, labId?: string): ProdutoComercial[] {
+  return getLabProductsByMolecule(molecula, labId);
 }

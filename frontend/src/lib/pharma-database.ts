@@ -1,16 +1,18 @@
-// ============================================================
+﻿// ============================================================
 // PRESCREVE-AI — Banco Farmacológico para Prescrição Rápida
 // Otimizado para busca instantânea e cálculo de doses
 // ============================================================
 
-export type DoseUnit = 'mg' | 'mcg' | 'g' | 'mL' | 'UI' | 'mg/kg' | 'mcg/kg' | 'mg/m²' | 'UI/kg' | 'gotas' | 'mg/dia' | 'mg/kg/dia';
-export type Via = 'VO' | 'IV' | 'IM' | 'SC' | 'Inalatório' | 'Tópico' | 'Retal' | 'Sublingual' | 'spray nasal';
+export type DoseUnit = 'mg' | 'mcg' | 'g' | 'mL' | 'UI' | 'mg/kg' | 'mcg/kg' | 'mg/m²' | 'UI/kg' | 'gotas' | 'mg/dia' | 'mg/kg/dia' | 'L/min'
+  | 'mcg/kg/min' | 'mcg/kg/h' | 'mg/kg/h' | 'mcg/h' | 'mcg/min' | 'UI/min' | 'UI/h' | 'mEq/kg' | 'mEq';
+export type Via = 'VO' | 'IV' | 'IM' | 'SC' | 'Inalatório' | 'Tópico' | 'Retal' | 'Sublingual' | 'TD' | 'spray nasal' | 'Intratraqueal' | 'Intranasal';
 
 export type DrugCategory =
   | 'cardiovascular' | 'antihipertensivo' | 'antidiabético' | 'respiratory'
-  | 'antibiotico' | 'antifungico' | 'antiparasitario' | 'psiquiatria'
+  | 'antibiotico' | 'antifungico' | 'antiviral' | 'antiparasitario' | 'psiquiatria'
   | 'neurologico' | 'gastroenterologia' | 'analgesico' | 'antiinflamatorio'
-  | 'hormonio' | 'oncologia' | 'imunossupressor' | 'outro';
+  | 'hormonio' | 'oncologia' | 'imunossupressor' | 'pediatria' | 'neonatologia'
+  | 'uti' | 'emergencia' | 'paliativo' | 'outro';
 
 export interface QuickBrand {
   nome: string;
@@ -81,6 +83,26 @@ export interface QuickDrug {
   uso_lactante: 'seguro' | 'risco' | 'contraindicado' | 'avaliar';
 
   marcas: QuickBrand[];
+
+  // ─── Campos opcionais — Infectologia ───────────────────────
+  espectro?: string[];
+  mic_breakpoints?: Record<string, string>;
+  resistencia?: string[];
+  guidelines_referencia?: string[];
+
+  // ─── Campos opcionais — Neurologia/Psiquiatria ─────────────
+  beers_criteria?: string;   // AGS Beers 2023 — risco em idosos
+  stopp?: string;            // STOPP v3 2023 — prescrição potencialmente inapropriada
+  start?: string;            // START v3 2023 — omissão potencialmente inapropriada
+  pgx_genes?: string[];      // genes farmacogenômicos relevantes (CPIC/PharmGKB)
+
+  // ─── Campos opcionais — Farmacologia / Evidência ───────────
+  atc_code?: string;                             // Código ATC (ex: 'A10BA02')
+  nivel_evidencia?: 'A' | 'B' | 'C';            // Nível de evidência da indicação principal
+  grau_recomendacao?: 'I' | 'IIa' | 'IIb' | 'III'; // Grau de recomendação
+  monitoramento?: string[];                      // Parâmetros a monitorar (ex: ['K+', 'Creatinina'])
+  doi_referencia?: string;                       // DOI do guideline principal
+  pmid_referencia?: number;                      // PMID do guideline principal
 }
 
 export interface InteractionRule {
@@ -93,6 +115,23 @@ export interface InteractionRule {
 // A biblioteca importa os produtos oficiais e substitui as marcas hardcoded
 import { EUROFARMA_CATALOG, normMol } from './eurofarma-sync';
 import type { ProdutoComercial } from './types';
+import { getAllLabProducts } from './lab-catalog';
+import { EVIDENCE_DB } from './evidence-engine';
+import { PHARMA_DB_CARDIO } from './pharma-database-cardio';
+import { PHARMA_DB_ENDO } from './pharma-database-endo';
+import { PHARMA_DB_INFECTOLOGY_AB } from './pharma-database-infectology-ab';
+import { PHARMA_DB_INFECTOLOGY_AF } from './pharma-database-infectology-af';
+import { PHARMA_DB_PULMO_A } from './pharma-database-pulmo-a';
+import { PHARMA_DB_PULMO_B } from './pharma-database-pulmo-b';
+import { PHARMA_DB_NEURO_A } from './pharma-database-neuro-a';
+import { PHARMA_DB_NEURO_B } from './pharma-database-neuro-b';
+import { PHARMA_DB_GASTRO_A } from './pharma-database-gastro-a';
+import { PHARMA_DB_NEFRO } from './pharma-database-nefro';
+import { PHARMA_DB_PEDIATRIA } from './pharma-database-pediatria';
+import { PHARMA_DB_GINECO } from './pharma-database-gineco';
+import { PHARMA_DB_ONCO } from './pharma-database-onco';
+import { PHARMA_DB_ICU } from './pharma-database-icu';
+import { PHARMA_DB_PALLIATIVE } from './pharma-database-palliative';
 
 function produtoToQuickBrand(p: ProdutoComercial): QuickBrand {
   const formas = [...new Set(p.apresentacoes.map((a: { forma_farmaceutica: string }) => {
@@ -241,7 +280,8 @@ export const PHARMA_DB: QuickDrug[] = [
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste em hepatopatia não-biliar; cautela em obstrução biliar ou cirrose', child_c: 'Contraindicado' },
     contraindicacoes_rapidas: ['Gestação', 'Com aliskiren em DM/DRC'],
     interacoes_importantes: [
-      { com: 'Enalapril', severidade: 'grave', descricao: 'Duplo bloqueio SRAA' },
+      { com: 'Enalapril', severidade: 'grave', descricao: 'Duplo bloqueio SRAA — risco aumentado de hipotensão, hipercalemia e insuficiência renal aguda.' },
+      { com: 'Alisquireno', severidade: 'contraindicado', descricao: 'Inibição dupla SRAA com alisquireno em DM ou DRC — contraindicado (aumento de AVC, hipotensão, hipercalemia).' },
     ],
     alertas_especiais: [],
     uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
@@ -547,6 +587,7 @@ export const PHARMA_DB: QuickDrug[] = [
     contraindicacoes_rapidas: ['TFG < 30', 'Insuficiência hepática', 'Acidose metabólica', 'Contraste iodado IV em 48h'],
     interacoes_importantes: [
       { com: 'Furosemida', severidade: 'leve', descricao: 'Furosemida pode aumentar níveis de metformina' },
+      { com: 'Contraste iodado IV', severidade: 'grave', descricao: 'Suspender 48h antes. Risco de acidose lática fatal. Retomar somente após confirmação de função renal estável (creatinina/TFG).' },
     ],
     alertas_especiais: ['Suspender 48h antes de contraste iodado IV', 'Risco de acidose lática (raro, mas fatal)', 'Monitorar B12 anualmente'],
     uso_gestante: 'avaliar', uso_lactante: 'avaliar',
@@ -688,7 +729,7 @@ export const PHARMA_DB: QuickDrug[] = [
     sinonimos: ['singulair', 'leucotrieno', 'antileucotriene'],
     categoria: 'respiratory',
     classe: 'Antagonista de Receptor de Leucotrieno',
-    indicacoes_principais: ['Asma (coadjuvante)', 'Rinite alérgica', 'Urticária crônica'],
+    indicacoes_principais: ['Asma leve persistente (coadjuvante — NÃO monoterapia em moderada/grave)', 'Rinite alérgica', 'Urticária crônica'],
     dose_adulto: {
       habitual: '10', min: '10', max: '10', unidade: 'mg', via: 'VO',
       frequencias: ['1x/dia (à noite)'],
@@ -827,38 +868,6 @@ export const PHARMA_DB: QuickDrug[] = [
     ],
   },
 
-  {
-    id: 'ciprofloxacino',
-    molecula: 'Ciprofloxacino',
-    nome_generico: 'Cloridrato de Ciprofloxacino',
-    sinonimos: ['cipro', 'quinolona', 'fluoroquinolona', 'itu', 'infeccao urinaria'],
-    categoria: 'antibiotico',
-    classe: 'Fluoroquinolona',
-    indicacoes_principais: ['ITU complicada', 'Pielonefrite', 'Prostatite bacteriana', 'Infecções entéricas'],
-    dose_adulto: {
-      habitual: '500', min: '250', max: '750', unidade: 'mg', via: 'VO',
-      frequencias: ['2x/dia'],
-      instrucoes: 'ITU não complicada: 250 mg 2x/dia por 3 dias. Pielonefrite: 500 mg 2x/dia por 7-14 dias.',
-    },
-    ajuste_renal: {
-      normal: '250–750 mg 2x/dia', tfg_60_30: '250-500 mg 2x/dia',
-      tfg_30_15: '250-500 mg/dia', tfg_lt_15: '250 mg/dia', dialisavel: true,
-    },
-    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Cautela' },
-    contraindicacoes_rapidas: ['< 18 anos (cartilagem)', 'QT prolongado', 'Hipersensibilidade a quinolonas', 'Tendinopatia prévia por quinolonas'],
-    interacoes_importantes: [
-      { com: 'Varfarina', severidade: 'grave', descricao: 'Aumento marcado do INR' },
-      { com: 'Amiodarona', severidade: 'grave', descricao: 'Prolongamento QT' },
-      { com: 'Antiácidos (Al, Mg)', severidade: 'moderada', descricao: 'Redução de 50% da absorção — tomar 2h antes' },
-    ],
-    alertas_especiais: ['Risco de ruptura de tendão (especialmente > 60 anos + corticoide)', 'Alerta FDA: efeitos adversos graves no SNC e tendões', 'QT prolongado'],
-    uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
-    marcas: [
-      { nome: 'Cipro', laboratorio: 'Bayer', concentracoes: ['250 mg', '500 mg', '750 mg'], formas: ['Comprimido'] },
-      { nome: 'Ciprofloxacino EMS', laboratorio: 'EMS', concentracoes: ['500 mg'], formas: ['Comprimido'] },
-    ],
-  },
-
   // ══════════════════════════════════════════════════════════
   // PSIQUIATRIA / SNC
   // ══════════════════════════════════════════════════════════
@@ -924,37 +933,6 @@ export const PHARMA_DB: QuickDrug[] = [
     marcas: [
       { nome: 'Lexapro', laboratorio: 'Lundbeck', concentracoes: ['5 mg', '10 mg', '20 mg'], formas: ['Comprimido'] },
       { nome: 'Escitalopram Eurofarma', laboratorio: 'Eurofarma', concentracoes: ['10 mg', '20 mg'], formas: ['Comprimido'], lab_id: 'eurofarma' },
-    ],
-  },
-
-  {
-    id: 'desvenlafaxina',
-    molecula: 'Desvenlafaxina',
-    nome_generico: 'Desvenlafaxina',
-    sinonimos: ['desve', 'pristiq', 'irsn', 'antidepressivo'],
-    categoria: 'psiquiatria',
-    classe: 'IRSN — Inibidor da Recaptação de Serotonina e Noradrenalina',
-    indicacoes_principais: ['Depressão maior', 'TAG', 'Fogachos na menopausa'],
-    dose_adulto: {
-      habitual: '50', min: '50', max: '100', unidade: 'mg', via: 'VO',
-      frequencias: ['1x/dia'],
-      instrucoes: 'Dose padrão 50 mg/dia. Não partir/mastigar o comprimido de liberação prolongada.',
-    },
-    ajuste_renal: {
-      normal: '50 mg/dia', tfg_60_30: '50 mg/dia',
-      tfg_30_15: '50 mg em dias alternados', tfg_lt_15: '50 mg 2x/semana', dialisavel: false,
-    },
-    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Máx 100 mg/dia', child_c: 'Evitar' },
-    contraindicacoes_rapidas: ['IMAOs (dentro de 7 dias)', 'Hipersensibilidade à venlafaxina'],
-    interacoes_importantes: [
-      { com: 'Tramadol', severidade: 'grave', descricao: 'Síndrome serotoninérgica' },
-      { com: 'Varfarina', severidade: 'moderada', descricao: 'Potencialização do efeito anticoagulante' },
-    ],
-    alertas_especiais: ['Síndrome de descontinuação — reduzir gradualmente', 'Monitorar PA (pode elevar discretamente)', 'Efeito surge após 2-4 semanas'],
-    uso_gestante: 'avaliar', uso_lactante: 'risco',
-    marcas: [
-      { nome: 'Desve®', laboratorio: 'Eurofarma', concentracoes: ['50 mg', '100 mg'], formas: ['Comprimido'], lab_id: 'eurofarma' },
-      { nome: 'Pristiq', laboratorio: 'Pfizer', concentracoes: ['50 mg', '100 mg'], formas: ['Comprimido'] },
     ],
   },
 
@@ -1697,7 +1675,11 @@ export const PHARMA_DB: QuickDrug[] = [
     ],
     alertas_especiais: ['Menor risco GI que AINEs não seletivos (COX-2 preferencial, não exclusivo)', 'Preferir dose mínima eficaz pelo menor tempo possível'],
     uso_gestante: 'risco', uso_lactante: 'risco',
-    marcas: [],
+    marcas: [
+      { nome: 'Mobic®', laboratorio: 'Boehringer Ingelheim', concentracoes: ['7,5 mg', '15 mg'], formas: ['Comprimido'] },
+      { nome: 'Meloxicam EMS', laboratorio: 'EMS', concentracoes: ['7,5 mg', '15 mg'], formas: ['Comprimido'] },
+      { nome: 'Meloxicam Eurofarma', laboratorio: 'Eurofarma', concentracoes: ['15 mg'], formas: ['Comprimido'], lab_id: 'eurofarma' },
+    ],
   },
 
   // ══════════════════════════════════════════════════════════
@@ -1745,35 +1727,6 @@ export const PHARMA_DB: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   // PSIQUIATRIA/ALERGIA — HIDROXIZINA
   // ══════════════════════════════════════════════════════════
-
-  {
-    id: 'hidroxizina',
-    molecula: 'Hidroxizina',
-    nome_generico: 'Cloridrato de Hidroxizina',
-    sinonimos: ['pergo', 'hidroxizina', 'antihistaminico', 'ansiolítico', 'anti-histaminico', 'prurido', 'urticaria'],
-    categoria: 'psiquiatria',
-    classe: 'Anti-histamínico H1 de 1ª geração — Ansiolítico',
-    indicacoes_principais: ['Ansiedade (uso pontual)', 'Prurido alérgico', 'Urticária', 'Pré-medicação anestésica'],
-    dose_adulto: {
-      habitual: '25', min: '10', max: '100', unidade: 'mg', via: 'VO',
-      frequencias: ['2x/dia', '3x/dia', '4x/dia'],
-      instrucoes: 'Ansiedade: 12,5–25 mg 3–4x/dia. Prurido/urticária: 25 mg 3–4x/dia.',
-    },
-    ajuste_renal: {
-      normal: 'Dose habitual', tfg_60_30: 'Reduzir 50%', tfg_30_15: 'Reduzir 50%', tfg_lt_15: 'Evitar', dialisavel: false,
-    },
-    ajuste_hepatico: { child_a: 'Reduzir intervalo', child_b: 'Reduzir dose', child_c: 'Evitar' },
-    contraindicacoes_rapidas: ['QT prolongado', 'Hipersensibilidade à cetrizina/piperazinas', 'Gestação (Cat. C)'],
-    interacoes_importantes: [
-      { com: 'Depressores do SNC/álcool', severidade: 'grave', descricao: 'Sedação aditiva — risco de depressão respiratória' },
-      { com: 'QT-prolongadores', severidade: 'grave', descricao: 'Risco de prolongamento QT sinérgico' },
-    ],
-    alertas_especiais: ['⚠ Idosos: risco de sedação excessiva, confusão, quedas (critérios Beers)', 'Efeito anticolinérgico: retenção urinária, boca seca', 'Solução oral 2 mg/mL — útil quando comprimido não é possível'],
-    uso_gestante: 'risco', uso_lactante: 'risco',
-    marcas: [
-      { nome: 'Pergo®', laboratorio: 'Eurofarma', concentracoes: ['2 mg/mL solução oral'], formas: ['Solução Oral'], lab_id: 'eurofarma', produto_id: 'euro-pergo', verificado: true },
-    ],
-  },
 
   // ══════════════════════════════════════════════════════════
   // DOR/ANTI-INFLAMATÓRIO — ACECLOFENACO
@@ -1837,7 +1790,15 @@ export const PHARMA_DB: QuickDrug[] = [
     ],
     alertas_especiais: ['Monitorar PA (pode elevar diastólica em doses altas ≥ 225 mg)', 'Retirada gradual — síndrome de descontinuação', 'Caixa preta FDA: risco suicída em < 24 anos'],
     uso_gestante: 'risco', uso_lactante: 'risco',
-    marcas: [],
+    atc_code: 'N06AX16',
+    pgx_genes: ['CYP2D6 (metabolização)', 'CYP3A4'],
+    monitoramento: ['PA (monitoramento regular em doses ≥ 150 mg)', 'FC', 'Sintomas depressivos', 'Ideação suicida (< 24 anos)'],
+    marcas: [
+      { nome: 'Efexor XR®', laboratorio: 'Pfizer', concentracoes: ['37,5 mg', '75 mg', '150 mg'], formas: ['Cápsula LP'] },
+      { nome: 'Venlift OD®', laboratorio: 'Torrent/Aché', concentracoes: ['75 mg', '150 mg'], formas: ['Cápsula LP'] },
+      { nome: 'Venlafaxina EMS', laboratorio: 'EMS', concentracoes: ['75 mg', '150 mg'], formas: ['Cápsula LP'] },
+      { nome: 'Venlafaxina Eurofarma', laboratorio: 'Eurofarma', concentracoes: ['75 mg', '150 mg'], formas: ['Comprimido LP'], lab_id: 'eurofarma' },
+    ],
   },
 
   {
@@ -1864,9 +1825,14 @@ export const PHARMA_DB: QuickDrug[] = [
     ],
     alertas_especiais: ['Maior potencial de descontinuação entre os ISRS (meia-vida curta)', 'Efeitos anticolinérgicos maiores que outros ISRS', 'Pondera XR® 12,5/25 mg — formulação de liberação prolongada'],
     uso_gestante: 'risco', uso_lactante: 'risco',
+    atc_code: 'N06AB05',
+    pgx_genes: ['CYP2D6 (metabolização — PM: risco de toxicidade; UM: subdosagem)', 'CYP3A4'],
+    beers_criteria: 'Cautela em idosos — atividade anticolinérgica (Beers 2023)',
+    monitoramento: ['Sintomas depressivos (PHQ-9)', 'Ideação suicida (< 24 anos, primeiras 4 semanas)', 'Interações CYP2D6 (verificar antes de prescr.)'],
     marcas: [
       { nome: 'Pondera®', laboratorio: 'Eurofarma', concentracoes: ['20 mg'], formas: ['Comprimido'], lab_id: 'eurofarma', produto_id: 'euro-paroxetina-20', verificado: true },
       { nome: 'Pondera XR®', laboratorio: 'Eurofarma', concentracoes: ['12,5 mg', '25 mg'], formas: ['Comprimido LP'], lab_id: 'eurofarma', produto_id: 'euro-pondera-xr', verificado: true },
+      { nome: 'Aropax®', laboratorio: 'GSK', concentracoes: ['20 mg'], formas: ['Comprimido'] },
     ],
   },
 
@@ -1894,7 +1860,12 @@ export const PHARMA_DB: QuickDrug[] = [
     ],
     alertas_especiais: ['Risco de convulsão dose-dependente (raro com doses corretas)', 'Não causa disfunção sexual — vantagem sobre ISRS/IRSN', 'Pode auxiliar em perda de peso'],
     uso_gestante: 'avaliar', uso_lactante: 'risco',
-    marcas: [],
+    marcas: [
+      { nome: 'Wellbutrin XL®', laboratorio: 'Pfizer', concentracoes: ['150 mg', '300 mg'], formas: ['Comprimido LP'] },
+      { nome: 'Bup®', laboratorio: 'Eurofarma', concentracoes: ['150 mg', '300 mg'], formas: ['Comprimido LP'], lab_id: 'eurofarma' },
+      { nome: 'Zyban®', laboratorio: 'GSK', concentracoes: ['150 mg'], formas: ['Comprimido LP'] },
+      { nome: 'Bupropiona EMS', laboratorio: 'EMS', concentracoes: ['150 mg', '300 mg'], formas: ['Comprimido LP'] },
+    ],
   },
 
   {
@@ -1921,7 +1892,15 @@ export const PHARMA_DB: QuickDrug[] = [
     ],
     alertas_especiais: ['ECG antes de iniciar (prolongamento QT)', 'Menos sedativo e anticolinérgico que amitriptilina', 'Idosos: critérios Beers — preferir outros antidepressivos'],
     uso_gestante: 'risco', uso_lactante: 'risco',
-    marcas: [],
+    atc_code: 'N06AA10',
+    pgx_genes: ['CYP2D6 (metabolização — PM: risco de toxicidade)', 'CYP1A2'],
+    beers_criteria: 'Cautela em idosos — anticolinérgico (preferir outros antidepressivos) (Beers 2023)',
+    monitoramento: ['ECG (QTc) antes e após ajuste de dose', 'PA ortostática (hipotensão)', 'Nível sérico (se disponível: 50–150 ng/mL)'],
+    marcas: [
+      { nome: 'Pamelor®', laboratorio: 'Novartis', concentracoes: ['10 mg', '25 mg', '50 mg', '75 mg', '10 mg/mL solução'], formas: ['Cápsula', 'Solução Oral'] },
+      { nome: 'Nortriptilina EMS', laboratorio: 'EMS', concentracoes: ['25 mg', '50 mg', '75 mg'], formas: ['Cápsula'] },
+      { nome: 'Nortriptilina Eurofarma', laboratorio: 'Eurofarma', concentracoes: ['25 mg', '50 mg'], formas: ['Cápsula'], lab_id: 'eurofarma' },
+    ],
   },
 
   {
@@ -1948,7 +1927,13 @@ export const PHARMA_DB: QuickDrug[] = [
     ],
     alertas_especiais: ['🚨 Índice terapêutico estreito — monitorar litemia regularmente', 'Sinais de toxicidade: tremores grosseiros, confusão, ataxia, vômitos', 'Hidratação adequada obrigatória — evitar dieta hipossódica', 'Cat. D na gestação'],
     uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
-    marcas: [],
+    atc_code: 'N05AN01',
+    pgx_genes: ['SLC12A1 (transportador renal — influência na clearance)'],
+    monitoramento: ['Litemía (0,6–1,2 mEq/L; colher 12h após última dose)', 'TSH anual', 'Creatinina/TFGe semestral', 'ECG (onda T)', 'Na+ sérico'],
+    marcas: [
+      { nome: 'Carbolitium®', laboratorio: 'Eurofarma', concentracoes: ['300 mg', '450 mg LP'], formas: ['Comprimido', 'Comprimido LP'], lab_id: 'eurofarma' },
+      { nome: 'Litiocar®', laboratorio: 'Biolab', concentracoes: ['300 mg'], formas: ['Comprimido'] },
+    ],
   },
 
   {
@@ -1975,7 +1960,12 @@ export const PHARMA_DB: QuickDrug[] = [
     ],
     alertas_especiais: ['⚠ RECEITA ESPECIAL AMARELA (lista A3 — psicotrópico)', 'Monitorar FC, PA e crescimento em crianças', 'Potencial de abuso — avaliar antes de prescrever'],
     uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
-    marcas: [],
+    marcas: [
+      { nome: 'Ritalina®', laboratorio: 'Novartis', concentracoes: ['10 mg'], formas: ['Comprimido'] },
+      { nome: 'Ritalina LA®', laboratorio: 'Novartis', concentracoes: ['20 mg', '30 mg', '40 mg'], formas: ['Cápsula LP'] },
+      { nome: 'Concerta®', laboratorio: 'Janssen', concentracoes: ['18 mg', '27 mg', '36 mg', '54 mg'], formas: ['Comprimido LP'] },
+      { nome: 'Metilfenidato EMS', laboratorio: 'EMS', concentracoes: ['10 mg', '20 mg'], formas: ['Comprimido'] },
+    ],
   },
 
   // ══════════════════════════════════════════════════════════
@@ -2041,7 +2031,11 @@ export const PHARMA_DB: QuickDrug[] = [
     ],
     alertas_especiais: ['Não suspender abruptamente (angina de rebote/IAM)', 'Preferir succinato (LP) ao tartarato para IC e dose única diária', 'Pode mascarar hipoglicemia em diabéticos insulino-dependentes'],
     uso_gestante: 'avaliar', uso_lactante: 'avaliar',
-    marcas: [],
+    marcas: [
+      { nome: 'Seloken ZOK®', laboratorio: 'AstraZeneca', concentracoes: ['25 mg', '50 mg', '100 mg', '200 mg'], formas: ['Comprimido LP'] },
+      { nome: 'Metoprolol EMS', laboratorio: 'EMS', concentracoes: ['25 mg', '50 mg', '100 mg'], formas: ['Comprimido'] },
+      { nome: 'Metoprolol Eurofarma', laboratorio: 'Eurofarma', concentracoes: ['50 mg', '100 mg'], formas: ['Comprimido'], lab_id: 'eurofarma' },
+    ],
   },
 
   {
@@ -2068,7 +2062,11 @@ export const PHARMA_DB: QuickDrug[] = [
     ],
     alertas_especiais: ['Não usar em gestação (fetotóxico)', 'Monitorar K+ e creatinina especialmente em IRC'],
     uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
-    marcas: [],
+    marcas: [
+      { nome: 'Aprovel®', laboratorio: 'Sanofi', concentracoes: ['75 mg', '150 mg', '300 mg'], formas: ['Comprimido'] },
+      { nome: 'Irovel®', laboratorio: 'Eurofarma', concentracoes: ['150 mg', '300 mg'], formas: ['Comprimido'], lab_id: 'eurofarma' },
+      { nome: 'Irbesartana EMS', laboratorio: 'EMS', concentracoes: ['150 mg', '300 mg'], formas: ['Comprimido'] },
+    ],
   },
 
   {
@@ -2124,7 +2122,11 @@ export const PHARMA_DB: QuickDrug[] = [
     ],
     alertas_especiais: ['⚠ Contraindicado com nitratos — risco de vida', 'Meia-vida longa (~17h) — menos urgência vs sildenafila (4h)', 'Pode causar lombalgia/mialgia (diferencial vs sildenafila)'],
     uso_gestante: 'avaliar', uso_lactante: 'avaliar',
-    marcas: [],
+    marcas: [
+      { nome: 'Cialis®', laboratorio: 'Eli Lilly', concentracoes: ['5 mg', '10 mg', '20 mg'], formas: ['Comprimido'] },
+      { nome: 'Tadalafila Eurofarma', laboratorio: 'Eurofarma', concentracoes: ['5 mg', '10 mg', '20 mg'], formas: ['Comprimido'], lab_id: 'eurofarma' },
+      { nome: 'Tadalafila EMS', laboratorio: 'EMS', concentracoes: ['5 mg', '10 mg', '20 mg'], formas: ['Comprimido'] },
+    ],
   },
 
   // ══════════════════════════════════════════════════════════
@@ -2183,7 +2185,10 @@ export const PHARMA_DB: QuickDrug[] = [
     ],
     alertas_especiais: ['⚠ Risco de prolongamento QT — ANVISA recomenda uso pelo menor tempo possível', 'Preferir metoclopramida para uso agudo hospitalar (acessa SNC)', 'Não usar com inibidores CYP3A4 fortes'],
     uso_gestante: 'risco', uso_lactante: 'risco',
-    marcas: [],
+    marcas: [
+      { nome: 'Motilium®', laboratorio: 'Janssen', concentracoes: ['10 mg', '1 mg/mL suspensão oral'], formas: ['Comprimido', 'Suspensão Oral'] },
+      { nome: 'Domperidona EMS', laboratorio: 'EMS', concentracoes: ['10 mg'], formas: ['Comprimido'] },
+    ],
   },
 
   // ══════════════════════════════════════════════════════════
@@ -2213,7 +2218,11 @@ export const PHARMA_DB: QuickDrug[] = [
     ],
     alertas_especiais: ['Frequentemente combinado com donepezila (sinérgico)', 'Benefício modesto — avaliar junto com família/cuidadores'],
     uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
-    marcas: [],
+    marcas: [
+      { nome: 'Ebix®', laboratorio: 'Lundbeck', concentracoes: ['10 mg', '20 mg', '10 mg/mL solução'], formas: ['Comprimido', 'Solução Oral'] },
+      { nome: 'Akatinol®', laboratorio: 'Merz', concentracoes: ['10 mg'], formas: ['Comprimido'] },
+      { nome: 'Memantina EMS', laboratorio: 'EMS', concentracoes: ['10 mg', '20 mg'], formas: ['Comprimido'] },
+    ],
   },
 
   {
@@ -2240,7 +2249,11 @@ export const PHARMA_DB: QuickDrug[] = [
     ],
     alertas_especiais: ['Efeitos colinérgicos: náuseas, diarreia, cãibras, bradicardia', 'Não modifica a progressão da doença — melhora sintomática'],
     uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
-    marcas: [],
+    marcas: [
+      { nome: 'Eranz®', laboratorio: 'Eisai/Pfizer', concentracoes: ['5 mg', '10 mg'], formas: ['Comprimido'] },
+      { nome: 'Aricept®', laboratorio: 'Eisai', concentracoes: ['5 mg', '10 mg'], formas: ['Comprimido'] },
+      { nome: 'Donepezila EMS', laboratorio: 'EMS', concentracoes: ['5 mg', '10 mg'], formas: ['Comprimido'] },
+    ],
   },
 
   {
@@ -2264,7 +2277,10 @@ export const PHARMA_DB: QuickDrug[] = [
     interacoes_importantes: [],
     alertas_especiais: ['Pouquíssimas interações medicamentosas — vantagem em politerapia', 'Efeito adverso principal: irritabilidade/alterações de humor (10–15%)', 'Monitorar humor especialmente em pacientes com histórico psiquiátrico'],
     uso_gestante: 'risco', uso_lactante: 'risco',
-    marcas: [],
+    marcas: [
+      { nome: 'Keppra®', laboratorio: 'UCB', concentracoes: ['250 mg', '500 mg', '750 mg', '1000 mg', '100 mg/mL sol oral', '5 mg/mL IV'], formas: ['Comprimido', 'Solução Oral', 'Solução Injetável'] },
+      { nome: 'Levetiracetam EMS', laboratorio: 'EMS', concentracoes: ['250 mg', '500 mg', '750 mg', '1000 mg'], formas: ['Comprimido'] },
+    ],
   },
 
   // ══════════════════════════════════════════════════════════
@@ -2327,7 +2343,14 @@ export const PHARMA_DB: QuickDrug[] = [
     ],
     alertas_especiais: ['Hipoglicemia: principal risco — orientar paciente sobre sinais e tratamento', 'MR (liberação modificada) permite dose única diária — melhor adesão', 'Segura no idoso (menor risco de hipoglicemia que glibenclamida)'],
     uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
-    marcas: [],
+    atc_code: 'A10BB09',
+    monitoramento: ['Glicemia em jejum', 'HbA1c trimestral', 'Hipoglicemia (sintomas)', 'Peso', 'TFGe (suspender se < 30)'],
+    marcas: [
+      { nome: 'Diamicron MR®', laboratorio: 'Servier', concentracoes: ['30 mg', '60 mg'], formas: ['Comprimido MR'] },
+      { nome: 'Azulix®', laboratorio: 'Torrent', concentracoes: ['30 mg', '60 mg'], formas: ['Comprimido MR'] },
+      { nome: 'Glicazida EMS', laboratorio: 'EMS', concentracoes: ['30 mg', '80 mg'], formas: ['Comprimido'] },
+      { nome: 'Glicazida Eurofarma', laboratorio: 'Eurofarma', concentracoes: ['30 mg', '60 mg'], formas: ['Comprimido MR'], lab_id: 'eurofarma' },
+    ],
   },
 
   {
@@ -2354,7 +2377,15 @@ export const PHARMA_DB: QuickDrug[] = [
     ],
     alertas_especiais: ['⚠ Critérios Beers: EVITAR em idosos — hipoglicemia prolongada grave', 'Mecanismo: fecha canal K+-ATP → insulinossecretagogo independente de glicose', 'Preferir glicazida MR ou glimepirida no idoso'],
     uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
-    marcas: [],
+    atc_code: 'A10BB01',
+    beers_criteria: 'EVITAR em idosos ≥ 65 anos — hipoglicemia prolongada e grave (Beers 2023)',
+    monitoramento: ['Glicemia em jejum', 'HbA1c', 'TFGe (descontinuar se < 60)', 'Hipoglicemia (sintomas)'],
+    marcas: [
+      { nome: 'Daonil®', laboratorio: 'Sanofi', concentracoes: ['5 mg'], formas: ['Comprimido'] },
+      { nome: 'Euglucon®', laboratorio: 'Sanofi', concentracoes: ['5 mg'], formas: ['Comprimido'] },
+      { nome: 'Glibenclamida EMS', laboratorio: 'EMS', concentracoes: ['5 mg'], formas: ['Comprimido'] },
+      { nome: 'Glibenclamida Eurofarma', laboratorio: 'Eurofarma', concentracoes: ['5 mg'], formas: ['Comprimido'], lab_id: 'eurofarma' },
+    ],
   },
 
   // ══════════════════════════════════════════════════════════
@@ -2794,7 +2825,61 @@ export function searchDrugs(query: string, labPreference?: string): QuickDrug[] 
 }
 
 export function getDrugById(id: string): QuickDrug | undefined {
-  return PHARMA_DB.find(d => d.id === id);
+  return getAllDrugs().find(d => d.id === id);
+}
+
+// ─── BANCO UNIFICADO (PHARMA_DB + CARDIO + ENDO) ──────────────
+// getAllDrugs() agrega todas as extensões temáticas.
+// Use esta função em vez de PHARMA_DB diretamente nas engines de
+// safety-rules, drug-resolver e knowledge-graph.
+let _allDrugs: QuickDrug[] | null = null;
+export function getAllDrugs(): QuickDrug[] {
+  if (_allDrugs) return _allDrugs;
+  const raw = [...PHARMA_DB, ...PHARMA_DB_CARDIO, ...PHARMA_DB_ENDO, ...PHARMA_DB_INFECTOLOGY_AB, ...PHARMA_DB_INFECTOLOGY_AF, ...PHARMA_DB_PULMO_A, ...PHARMA_DB_PULMO_B, ...PHARMA_DB_NEURO_A, ...PHARMA_DB_NEURO_B, ...PHARMA_DB_GASTRO_A, ...PHARMA_DB_NEFRO, ...PHARMA_DB_PEDIATRIA, ...PHARMA_DB_GINECO, ...PHARMA_DB_ONCO, ...PHARMA_DB_ICU, ...PHARMA_DB_PALLIATIVE];
+  // Deduplicate brands within each molecule: same nome (case-insensitive) → keep verificado:true or first
+  _allDrugs = raw.map(drug => {
+    const seen = new Map<string, QuickBrand>();
+    for (const m of (drug.marcas ?? [])) {
+      const key = m.nome.toLowerCase().trim();
+      if (!seen.has(key) || m.verificado) seen.set(key, m);
+    }
+    return { ...drug, marcas: [...seen.values()] };
+  });
+  return _allDrugs;
+}
+
+export function searchAllDrugs(query: string, labPreference?: string): QuickDrug[] {
+  if (!query || query.length < 2) return [];
+  const q = query.toLowerCase().trim();
+  const esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const wordRe = new RegExp(`(?:^|[\\s\\-\\/+®,(\\[])${esc}`, 'i');
+  const wordMatch = (text: string) => wordRe.test(text);
+
+  const results = getAllDrugs().filter(drug => {
+    if (drug.molecula.toLowerCase().includes(q)) return true;
+    if (drug.nome_generico.toLowerCase().includes(q)) return true;
+    if (drug.sinonimos.some(s => wordMatch(s) || s.toLowerCase() === q)) return true;
+    if (wordMatch(drug.classe)) return true;
+    if (drug.marcas.some(b =>
+      b.nome.toLowerCase().includes(q) ||
+      b.laboratorio.toLowerCase().includes(q)
+    )) return true;
+    if (drug.indicacoes_principais.some(i => wordMatch(i))) return true;
+    return false;
+  });
+
+  const scored = results.map(drug => {
+    let score = 0;
+    if (drug.molecula.toLowerCase().startsWith(q)) score += 100;
+    else if (drug.molecula.toLowerCase().includes(q)) score += 60;
+    if (drug.marcas.some(b => b.nome.toLowerCase().startsWith(q))) score += 80;
+    if (drug.sinonimos.some(s => s.toLowerCase().startsWith(q))) score += 50;
+    if (labPreference && labPreference !== 'sem_preferencia') {
+      if (drug.marcas.some(m => m.lab_id === labPreference)) score += 30;
+    }
+    return { drug, score };
+  });
+  return scored.sort((a, b) => b.score - a.score).map(s => s.drug);
 }
 
 export function getBrandsForLab(drug: QuickDrug, labId: string): QuickBrand[] {
@@ -2871,6 +2956,7 @@ export const CATEGORIA_LABELS: Record<DrugCategory, string> = {
   respiratory: 'Respiratório',
   antibiotico: 'Antibiótico',
   antifungico: 'Antifúngico',
+  antiviral: 'Antiviral',
   antiparasitario: 'Antiparasitário',
   psiquiatria: 'Psiquiatria',
   neurologico: 'Neurológico',
@@ -2880,14 +2966,17 @@ export const CATEGORIA_LABELS: Record<DrugCategory, string> = {
   hormonio: 'Hormônio',
   oncologia: 'Oncologia',
   imunossupressor: 'Imunossupressor',
+  pediatria: 'Pediatria',
+  neonatologia: 'Neonatologia',
+  uti: 'UTI / Terapia Intensiva',
+  emergencia: 'Emergência / PCR',
+  paliativo: 'Cuidados Paliativos',
   outro: 'Outro',
 };
 
 // ─── ENRIQUECIMENTO COM CATÁLOGO DE LABORATÓRIOS VERIFICADOS ─
-// Substitui marcas hardcoded pelos dados reais do catálogo oficial.
-// normMol() (importada de eurofarma-sync) garante matching exato após
-// normalizar prefixos salinos e sufixos de hidratação — evita falsos
-// positivos como Prednisona → Prednisolona, Amoxicilina → Amox+Clav etc.
+// Passo 1: Eurofarma — substitui marcas hardcoded pelos dados reais.
+// normMol() garante matching exato após normalizar prefixos salinos.
 (function enrichWithEurofarma() {
   for (const drug of PHARMA_DB) {
     const dn = normMol(drug.molecula);
@@ -2900,9 +2989,215 @@ export const CATEGORIA_LABELS: Record<DrugCategory, string> = {
   }
 })();
 
+// Passo 2: Multi-lab — adiciona marcas dos demais laboratórios ativos.
+// Executado após o enriquecimento Eurofarma para não sobrescrever dados verificados.
+(function enrichWithAllLabs() {
+  try {
+    const allProducts = getAllLabProducts();
+    for (const drug of PHARMA_DB) {
+      const dn = normMol(drug.molecula);
+      const existingLabIds = new Set(drug.marcas.map(m => m.lab_id).filter(Boolean));
+      const newProducts = allProducts.filter(p =>
+        normMol(p.molecula) === dn && !existingLabIds.has(p.lab_id)
+      );
+      if (newProducts.length === 0) continue;
+      drug.marcas = [...drug.marcas, ...newProducts.map(produtoToQuickBrand)];
+    }
+  } catch {
+    // lab-catalog não disponível no SSR estático — sem efeito
+  }
+})();
+
 export const GESTANTE_LABELS: Record<string, { label: string; color: string }> = {
   seguro: { label: 'Geralmente seguro', color: 'text-green-600' },
   avaliar: { label: 'Avaliar risco-benefício', color: 'text-yellow-600' },
   risco: { label: 'Risco potencial', color: 'text-orange-600' },
   contraindicado: { label: 'Contraindicado', color: 'text-red-600' },
 };
+
+// ══════════════════════════════════════════════════════════════════
+// TABELA ATC — Códigos WHO ATC para as moléculas do PHARMA_DB
+// Referência: WHO Collaborating Centre for Drug Statistics Methodology
+// ══════════════════════════════════════════════════════════════════
+export const PHARMA_ATC_CODES: Record<string, string> = {
+  // Cardiovascular — C
+  enalapril: 'C09AA02', lisinopril: 'C09AA03', ramipril: 'C09AA05',
+  perindopril: 'C09AA04', captopril: 'C09AA01',
+  valsartana: 'C09CA03', losartana: 'C09CA01', irbesartana: 'C09CA04',
+  candesartana: 'C09CA06', olmesartana: 'C09CA08', telmisartana: 'C09CA07',
+  anlodipino: 'C08CA01', nifedipino: 'C08CA05', diltiazem: 'C08DB01',
+  verapamil: 'C08DA01', hidroclorotiazida: 'C03AA03', furosemida: 'C03CA01',
+  clortalidona: 'C03BA04', indapamida: 'C03BA11',
+  espironolactona: 'C03DA01', eplerenona: 'C03DA04', finerenona: 'C03AX01',
+  atenolol: 'C07AB03', metoprolol: 'C07AB02', carvedilol: 'C07AG02',
+  bisoprolol: 'C07AB07', nebivolol: 'C07AB12',
+  atorvastatina: 'C10AA05', rosuvastatina: 'C10AA07', sinvastatina: 'C10AA01',
+  ezetimiba: 'C10AX09', evolocumabe: 'C10AX13', alirocumabe: 'C10AX14',
+  fenofibrato: 'C10AB05',
+  digoxina: 'C01AA05', amiodarona: 'C01BD01',
+  isossorbida_mononitrato: 'C01DA14', nitroglicerina: 'C01DA02',
+  varfarina: 'B01AA03', rivaroxabana: 'B01AF01', apixabana: 'B01AF02',
+  dabigatrana: 'B01AE07', edoxabana: 'B01AF03', enoxaparina: 'B01AB05', heparina: 'B01AB01',
+  aspirina: 'B01AC06', clopidogrel: 'B01AC04', ticagrelor: 'B01AC24',
+  prasugrel: 'B01AC22',
+  ivabradina: 'C01EB17', sacubitril_valsartana: 'C09DX04',
+  // Endocrinologia — A10, H
+  metformina: 'A10BA02', empagliflozina: 'A10BK03', dapagliflozina: 'A10BK01',
+  canagliflozina: 'A10BK02', semaglutida: 'A10BJ06', liraglutida: 'A10BJ02',
+  dulaglutida: 'A10BJ05', sitagliptina: 'A10BH01', saxagliptina: 'A10BH03',
+  alogliptina: 'A10BH04', glicazida: 'A10BB09', glibenclamida: 'A10BB01',
+  glimepirida: 'A10BB12', insulina_glargina: 'A10AE04', insulina_degludeca: 'A10AE06',
+  insulina_lispro: 'A10AB04', insulina_aspart: 'A10AB05', insulina_regular: 'A10AB01',
+  levotiroxina: 'H03AA01', metimazol: 'H03BB02',
+  // Neurologia/Psiquiatria — N
+  levodopa_carbidopa: 'N04BA02', pramipexol: 'N04BC05', ropinirol: 'N04BC04',
+  amantadina: 'N04BB01', selegilina: 'N04BD01', rasagilina: 'N04BD02',
+  donepezila: 'N06DA02', rivastigmina: 'N06DA03', galantamina: 'N06DA04',
+  memantina: 'N06DX01', quetiapina: 'N05AH04', olanzapina: 'N05AH03',
+  risperidona: 'N05AX08', aripiprazol: 'N05AX12', haloperidol: 'N05AD01',
+  sertralina: 'N06AB06', fluoxetina: 'N06AB03', escitalopram: 'N06AB10',
+  paroxetina: 'N06AB05', venlafaxina: 'N06AX16', duloxetina: 'N06AX21',
+  nortriptilina: 'N06AA10', amitriptilina: 'N06AA09', imipramina: 'N06AA02',
+  litio: 'N05AN01', valproato: 'N03AG01', carbamazepina: 'N03AF01',
+  lamotrigina: 'N03AX09', topiramato: 'N03AX11', levetiracetam: 'N03AX14',
+  fenitoina: 'N03AB02', clonazepam: 'N03AE01', alprazolam: 'N05BA12',
+  lorazepam: 'N05BA06', diazepam: 'N05BA01', midazolam: 'N05CD08',
+  zolpidem: 'N05CF02', gabapentina: 'N03AX12', pregabalina: 'N03AX16',
+  // Pneumologia — R
+  salbutamol: 'R03AC02', formoterol: 'R03AC13', salmeterol: 'R03AC12',
+  budesonida: 'R03BA02', fluticasona: 'R03BA05', beclometasona: 'R03BA01',
+  tiotropio: 'R03BB04', ipratropio: 'R03BB01', brometo_umeclidinio: 'R03BB07',
+  glicopirronio: 'R03BB06', vilanterol: 'R03AC30',
+  montelucaste: 'R03DC03', teofilina: 'R03DA04', benralizumabe: 'R03DX10',
+  mepolizumabe: 'R03DX09', dupilumabe: 'D04AA34', roflumilaste: 'R03DX07',
+  omalizumabe: 'R03DX05',
+  // Gastroenterologia — A02, A03
+  omeprazol: 'A02BC01', pantoprazol: 'A02BC02', esomeprazol: 'A02BC05',
+  lansoprazol: 'A02BC03', rabeprazol: 'A02BC04', ranitidina: 'A02BA02',
+  domperidona: 'A03FA03', metoclopramida: 'A03FA01', ondansetrona: 'A04AA01',
+  // Infectologia — J01, J02, J05
+  amoxicilina: 'J01CA04', ampicilina: 'J01CA01', amoxicilina_clavulanato: 'J01CR02',
+  piperacilina_tazobactam: 'J01CR05', cefazolina: 'J01DB04', cefalexina: 'J01DB01',
+  cefuroxima: 'J01DC02', ceftriaxona: 'J01DD04', cefepima: 'J01DE01',
+  meropenem: 'J01DH02', ertapenem: 'J01DH03', imipenem: 'J01DH51',
+  ciprofloxacino: 'J01MA02', levofloxacino: 'J01MA12', moxifloxacino: 'J01MA14',
+  azitromicina: 'J01FA10', claritromicina: 'J01FA09', eritromicina: 'J01FA01',
+  doxiciclina: 'J01AA02', tetraciclina: 'J01AA07', clindamicina: 'J01FF01',
+  metronidazol: 'J01XD01', vancomicina: 'J01XA01', linezolida: 'J01XX08',
+  colistina: 'J01XB01', rifampicina: 'J04AB02', isoniazida: 'J04AC01',
+  fluconazol: 'J02AC01', voriconazol: 'J02AC03', anfotericina_b: 'J02AA01',
+  aciclovir: 'J05AB01', oseltamivir: 'J05AH02',
+  // Nefrologia — V03
+  allopurinol: 'M04AA01', febuxostate: 'M04AA03',
+  // Osteometabolismo — M05
+  alendronato: 'M05BA04', acido_zoledronico: 'M05BA08', risedronato: 'M05BA07',
+  denosumabe: 'M05BX04', teriparatida: 'H05AA02',
+  // Antidepressivos adicionais — N06
+  bupropiona: 'N06AX12', desvenlafaxina: 'N06AX23', mirtazapina: 'N06AX11',
+  // Analgesia — N02, M01
+  paracetamol: 'N02BE01', dipirona: 'N02BB02', ibuprofeno: 'M01AE01',
+  naproxeno: 'M01AE02', diclofenaco: 'M01AB05', celecoxibe: 'M01AH01',
+  morfina: 'N02AA01', tramadol: 'N02AX02', codeina: 'N02AA59',
+  // Oncologia — L01
+  capecitabina: 'L01BC06', oxaliplatina: 'L01XA03', carboplatina: 'L01XA02',
+  cisplatina: 'L01XA01',
+  // Outros
+  prednisona: 'H02AB07', prednisolona: 'H02AB06', dexametasona: 'H02AB02',
+  hidrocortisona: 'H02AB09', budesonida_oral: 'A07EA06',
+};
+
+// ══════════════════════════════════════════════════════════════════
+// TABELA MONITORAMENTO — Parâmetros de monitorização por molécula
+// Referência: diretrizes SBC, SBD, SBMF, ESC, AHA/ACC
+// ══════════════════════════════════════════════════════════════════
+export const PHARMA_MONITORAMENTO: Record<string, string[]> = {
+  // IECA / BRA
+  enalapril: ['Creatinina', 'K+ sérico', 'PA', 'Tosse seca (IECA)'],
+  lisinopril: ['Creatinina', 'K+ sérico', 'PA', 'Tosse seca (IECA)'],
+  ramipril: ['Creatinina', 'K+ sérico', 'PA', 'Tosse seca (IECA)'],
+  valsartana: ['Creatinina', 'K+ sérico', 'PA'],
+  losartana: ['Creatinina', 'K+ sérico', 'PA', 'Ácido úrico'],
+  // Diuréticos
+  espironolactona: ['K+ sérico (hipercalemia)', 'Creatinina', 'PA', 'Ginecomastia'],
+  eplerenona: ['K+ sérico', 'Creatinina', 'PA'],
+  finerenona: ['K+ sérico', 'TFGe', 'PA'],
+  furosemida: ['K+ sérico (hipocalemia)', 'Na+', 'Creatinina', 'PA'],
+  hidroclorotiazida: ['K+ sérico', 'Na+', 'Ácido úrico', 'Glicemia'],
+  // Betabloqueadores
+  metoprolol: ['FC', 'PA', 'Broncoespasmo'],
+  bisoprolol: ['FC', 'PA', 'ECG (bloqueios)'],
+  carvedilol: ['FC', 'PA', 'Peso (IC)'],
+  // Estatinas
+  atorvastatina: ['CPK (miopatia)', 'TGO/TGP anual', 'LDL-c meta'],
+  rosuvastatina: ['CPK', 'TGO/TGP anual', 'LDL-c meta', 'Proteinúria (altas doses)'],
+  // Antidiabéticos
+  metformina: ['TFGe (ajuste/suspensão)', 'Vitamina B12 anual', 'HbA1c trimestral'],
+  empagliflozina: ['TFGe', 'K+', 'PA', 'Infecções geniturinárias', 'Cetoacidose'],
+  dapagliflozina: ['TFGe', 'K+', 'PA', 'Infecções geniturinárias'],
+  semaglutida: ['HbA1c', 'Peso', 'TGI (náuseas)', 'FC'],
+  liraglutida: ['HbA1c', 'Peso', 'TGI', 'Lipase (pancreatite)'],
+  insulina_glargina: ['Glicemia em jejum', 'HbA1c', 'Hipoglicemia'],
+  // Anticoagulantes
+  varfarina: ['INR (meta 2-3 na FA; 2,5-3,5 prótese mecânica)', 'Sangramento'],
+  rivaroxabana: ['TFGe semestral', 'Sangramento', 'Hemoglobina'],
+  apixabana: ['TFGe semestral', 'Sangramento', 'Hemoglobina'],
+  dabigatrana: ['TFGe (mínimo anual)', 'Sangramento', 'Hemoglobina'],
+  // Neurologia/Psiquiatria
+  litio: ['Litemía (0,6–1,2 mEq/L)', 'TSH anual', 'Creatinina semestral', 'ECG'],
+  valproato: ['TGO/TGP', 'Hemograma', 'Amônia (encefalopatia)', 'Peso'],
+  carbamazepina: ['Hemograma (aplasia)', 'Na+ (SIADH)', 'TGO/TGP', 'Nível sérico'],
+  lamotrigina: ['Nível sérico (gravidez)', 'Rash/SJS-TEN'],
+  fenitoina: ['Nível sérico (10–20 µg/mL)', 'Hemograma', 'TGO/TGP'],
+  quetiapina: ['Glicemia', 'Perfil lipídico', 'ECG (QTc)', 'Peso'],
+  olanzapina: ['Glicemia', 'Perfil lipídico', 'Peso (síndrome metabólica)'],
+  clozapina: ['Hemograma semanal 18 sem → mensal 1 ano → trimestral (agranulocitose)', 'Glicemia', 'ECG'],
+  // Pneumologia
+  montelucaste: ['Sintomas neuropsiquiátricos (depressão, ideação suicida)'],
+  teofilina: ['Nível sérico (10–20 µg/mL)', 'FC', 'Arritmias'],
+  // Reumatologia/outros
+  allopurinol: ['Ácido úrico alvo < 6 mg/dL', 'Creatinina', 'Rash (HLA-B*58:01 asiáticos)'],
+  metotrexato: ['Hemograma mensal', 'TGO/TGP', 'Creatinina', 'Mucosites'],
+  // Antifúngicos
+  voriconazol: ['TGO/TGP', 'Nível sérico', 'Visão (fotofobia)', 'QTc'],
+  anfotericina_b: ['Creatinina diária', 'K+', 'Mg2+', 'Hemograma'],
+  // Antibióticos
+  vancomicina: ['Nível sérico (vale 15–20 µg/mL ou AUC/MIC)', 'Creatinina', 'Audiometria (ototoxicidade)'],
+  gentamicina: ['Nível sérico', 'Creatinina', 'Audiometria'],
+  linezolida: ['Hemograma semanal (mielossupressão)', 'Acidose lática', 'Neuropatia óptica (> 28 dias)'],
+};
+
+// ══════════════════════════════════════════════════════════════════
+// FUNÇÕES UTILITÁRIAS — ATC / Monitoramento / Evidência
+// ══════════════════════════════════════════════════════════════════
+
+/** Retorna o código ATC da molécula, priorizando campo inline; fallback para tabela. */
+export function getATCCode(id: string): string | undefined {
+  const drug = PHARMA_DB.find(d => d.id === id);
+  return drug?.atc_code ?? PHARMA_ATC_CODES[id];
+}
+
+/** Retorna parâmetros de monitoramento da molécula, priorizando campo inline; fallback para tabela. */
+export function getMonitoramento(id: string): string[] {
+  const drug = PHARMA_DB.find(d => d.id === id);
+  if (drug?.monitoramento && drug.monitoramento.length > 0) return drug.monitoramento;
+  return PHARMA_MONITORAMENTO[id] ?? [];
+}
+
+/** Busca DOI/PMID/nível de evidência no EVIDENCE_DB para uma molécula, via bridge. */
+export function getEvidenciaLink(moleculaId: string): { doi?: string; pmid?: string; nivel?: string } | null {
+  try {
+    for (const diag of EVIDENCE_DB) {
+      for (const dir of diag.diretrizes) {
+        for (const ter of dir.terapias) {
+          const nomeTer = ter.nome.toLowerCase().replace(/[^a-z]/g, '');
+          const nomeMol = moleculaId.toLowerCase().replace(/[^a-z]/g, '');
+          if (nomeTer.includes(nomeMol) || nomeMol.includes(nomeTer)) {
+            const estudo = ter.estudos?.[0];
+            if (estudo) return { doi: estudo.doi, pmid: estudo.pmid, nivel: String(estudo.nivel ?? '') };
+          }
+        }
+      }
+    }
+  } catch { /* evidence-engine não disponível — sem efeito */ }
+  return null;
+}

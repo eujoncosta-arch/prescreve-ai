@@ -834,8 +834,7 @@ const EUROFARMA_ENRICHED: Partial<MarcaFarmaceuticaEnterprise>[] = [
     ],
     nivel_evidencia_geral: 'A',
     observacao_evidencia: 'Estatina de alta intensidade. Meta: redução de LDL-c ≥ 50%. Alvo LDL-c < 55 mg/dL em muito alto risco cardiovascular. Evidência de nível I-A em prevenção secundária (ASCOT-LLA, TNT, IDEAL).',
-    nivel_evidencia_geral_real: 'A',
-  } as any,
+  },
   {
     id: 'euro-holmes-20',
     diretrizes_associadas: [
@@ -845,7 +844,7 @@ const EUROFARMA_ENRICHED: Partial<MarcaFarmaceuticaEnterprise>[] = [
     ],
     nivel_evidencia_geral: 'A',
     observacao_evidencia: 'Olmesartana tem o maior potencial anti-hipertensivo entre os BRAs em estudos comparativos. Enteropatia sprue-like: rara, mas relatada. Estudo ROADMAP (nefropatia diabética).',
-  } as any,
+  },
   {
     id: 'euro-glif',
     diretrizes_associadas: [
@@ -856,7 +855,7 @@ const EUROFARMA_ENRICHED: Partial<MarcaFarmaceuticaEnterprise>[] = [
     ],
     nivel_evidencia_geral: 'A',
     observacao_evidencia: 'Dapagliflozina: DECLARE-TIMI 58 (2019, NNT 67 para hospitalização IC), DAPA-HF (2019, NNT 21 em IC-FEr), DAPA-CKD (2020, NNT 19 para progressão renal). Indicação para IC-FEr independente de DM2 (DAPA-HF).',
-  } as any,
+  },
   {
     id: 'euro-lugano',
     diretrizes_associadas: [
@@ -866,7 +865,7 @@ const EUROFARMA_ENRICHED: Partial<MarcaFarmaceuticaEnterprise>[] = [
     ],
     nivel_evidencia_geral: 'A',
     observacao_evidencia: 'ICS+LABA como terapia de manutenção em asma moderada-grave (Degraus 3–5 GINA). Fluticasona tem maior potência anti-inflamatória que budesonida mg/mg. Formoterol: início rápido (< 3 min), permite uso como resgate em esquema SMART.',
-  } as any,
+  },
 ];
 
 // ─── Build the complete enterprise catalog ────────────────────────────────────

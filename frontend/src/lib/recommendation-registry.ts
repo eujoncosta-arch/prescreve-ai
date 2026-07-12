@@ -95,7 +95,7 @@ export interface RecomendacaoRegistroSumario {
 // Storage
 // ──────────────────────────────────────────────────────────────
 
-const REGISTRY_KEY = 'prescreve_ai_recommendation_registry_v1';
+export const REGISTRY_KEY = 'prescreve_ai_recommendation_registry_v1';
 const MAX_ENTRIES  = 5000;
 const SISTEMA_VER  = '2.2.0';
 

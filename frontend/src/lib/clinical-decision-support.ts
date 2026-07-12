@@ -1083,3 +1083,36 @@ export function analyzeClinical(anamnesis: Anamnesis): DiagnosticSupport {
 
 export const CDS_VERSION = '1.0.0';
 export const CDS_BASE_CONHECIMENTO = `${BASE_CLINICA.length} condições | Diretrizes SBC, SBD, SBEM, SBPT, GINA, GOLD, IDSA`;
+
+// ─── Cross-engine: Evidence + Conflict + Knowledge Graph ─────
+
+import { EVIDENCE_DB } from './evidence-engine';
+import { detectarConflitos } from './guideline-conflict-engine';
+import { buscarRelacionamentos } from './medical-knowledge-graph';
+
+export interface CDSContextoEnriquecido {
+  diagnostico_id: string;
+  hipoteses_cds: DiagnosticSupport;
+  conflitos_guideline: ReturnType<typeof detectarConflitos>;
+  relacionamentos_grafo: ReturnType<typeof buscarRelacionamentos>;
+  estudos_disponiveis: number;
+}
+
+export function gerarContextoEnriquecido(
+  anamnesis: import('./types').Anamnesis,
+  diagnostico_id: string,
+): CDSContextoEnriquecido {
+  const hipoteses_cds      = analyzeClinical(anamnesis);
+  const conflitos_guideline = detectarConflitos(diagnostico_id);
+  const relacionamentos_grafo = buscarRelacionamentos(diagnostico_id);
+
+  const diagEv = EVIDENCE_DB.find(d =>
+    d.cid10 === diagnostico_id ||
+    d.nome.toLowerCase().includes(diagnostico_id.toLowerCase())
+  );
+  const estudos_disponiveis = diagEv
+    ? diagEv.diretrizes.reduce((s, d) => s + d.terapias.reduce((s2, t) => s2 + t.estudos.length, 0), 0)
+    : 0;
+
+  return { diagnostico_id, hipoteses_cds, conflitos_guideline, relacionamentos_grafo, estudos_disponiveis };
+}

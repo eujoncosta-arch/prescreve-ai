@@ -3,6 +3,8 @@
 // CG (Cockcroft-Gault), Mosteller (BSA), mg/kg, conversões
 // ============================================================
 
+import { calcularBSA as _calcularBSACore } from './dosing-engine';
+
 // ─── INTERFACES ───────────────────────────────────────────────
 
 export interface PatientParams {
@@ -105,8 +107,7 @@ export function calcCrCl(params: PatientParams): CrClResult | null {
 // ─── BSA — MOSTELLER ──────────────────────────────────────────
 
 export function calcBSA(peso: number, altura: number): BSAResult {
-  const bsa = Math.sqrt((altura * peso) / 3600);
-  const bsaRounded = Math.round(bsa * 100) / 100;
+  const bsaRounded = Math.round(_calcularBSACore(peso, altura) * 100) / 100;
   return {
     bsa: bsaRounded,
     formula: 'Mosteller',

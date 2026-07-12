@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
   useGovernance,
   STATUS_GUIDELINE,
@@ -42,6 +42,12 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import {
+  gerarDashboardGovernanca,
+  ALERTA_META,
+  STATUS_MODULO_META,
+  scoreGlobalCor,
+} from '@/lib/governance-dashboard';
 
 // ─── Helpers ─────────────────────────────────────────────────
 
@@ -69,6 +75,8 @@ export default function GovernancaPage() {
     markUpdateRead, updateReviewStatus, updateGuidelineStatus,
     unreadCount, pendingReviews,
   } = useGovernance();
+
+  const dashboard = useMemo(() => gerarDashboardGovernanca(guidelines), [guidelines]);
 
   const vigentes   = guidelines.filter(g => g.status === 'vigente').length;
   const emRevisao  = guidelines.filter(g => g.status === 'em_revisao').length;
@@ -128,7 +136,7 @@ export default function GovernancaPage() {
 
       {/* Tabs */}
       <Tabs defaultValue="diretrizes">
-        <TabsList className="grid grid-cols-4">
+        <TabsList className="grid grid-cols-5">
           <TabsTrigger value="diretrizes" className="text-xs">
             <BookOpen className="w-3.5 h-3.5 mr-1" /> Diretrizes
           </TabsTrigger>
@@ -142,6 +150,9 @@ export default function GovernancaPage() {
           </TabsTrigger>
           <TabsTrigger value="auditoria" className="text-xs">
             <History className="w-3.5 h-3.5 mr-1" /> Auditoria
+          </TabsTrigger>
+          <TabsTrigger value="score" className="text-xs">
+            <Award className="w-3.5 h-3.5 mr-1" /> Score Global
           </TabsTrigger>
         </TabsList>
 
@@ -237,6 +248,56 @@ export default function GovernancaPage() {
                 })}
             </div>
           </div>
+        </TabsContent>
+
+        {/* ── ABA 5: SCORE GLOBAL ────────────────────── */}
+        <TabsContent value="score" className="space-y-4 mt-4">
+          <div className="flex items-center gap-3 p-4 rounded-xl border bg-slate-50">
+            <div className={cn('text-4xl font-black', scoreGlobalCor(dashboard.score_global))}>
+              {dashboard.score_global}
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-slate-800">Score Global de Governança</p>
+              <p className="text-xs text-slate-500">0–100 · Calculado sobre diretrizes, evidências e módulos ativos</p>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-xs font-semibold text-slate-600 uppercase tracking-wide">Score por Especialidade</p>
+            {dashboard.scores_especialidade.map(se => (
+              <div key={se.especialidade} className="flex items-center gap-2 text-xs">
+                <span className="w-32 text-slate-600 capitalize">{se.especialidade}</span>
+                <div className="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden">
+                  <div className="h-full bg-indigo-500 rounded-full" style={{ width: `${se.score}%` }} />
+                </div>
+                <span className={cn('w-8 text-right font-semibold', scoreGlobalCor(se.score))}>{se.score}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-xs font-semibold text-slate-600 uppercase tracking-wide">Status dos Módulos</p>
+            {dashboard.modulos.map(m => (
+              <div key={m.arquivo} className="flex items-center justify-between text-xs border rounded-lg px-3 py-2">
+                <span className="text-slate-700">{m.modulo}</span>
+                <span className={cn('text-[10px] px-2 py-0.5 rounded-full font-semibold', STATUS_MODULO_META[m.status]?.cls ?? 'bg-slate-100 text-slate-600')}>
+                  {STATUS_MODULO_META[m.status]?.label ?? m.status}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {dashboard.evidencias_expirando.length > 0 && (
+            <div className="space-y-2">
+              <p className="text-xs font-semibold text-slate-600 uppercase tracking-wide">Evidências Expirando</p>
+              {dashboard.evidencias_expirando.map((e, i) => (
+                <div key={i} className={cn('text-xs border rounded-lg px-3 py-2', e.alerta === 'alto' ? 'border-red-200 bg-red-50' : 'border-amber-200 bg-amber-50')}>
+                  <p className="font-medium text-slate-800">{e.titulo}</p>
+                  <p className="text-slate-500">{e.guideline_sigla} · {e.anos_desde_publicacao} anos · {e.recomendacao}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </TabsContent>
       </Tabs>
 

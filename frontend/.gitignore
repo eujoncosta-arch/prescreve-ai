@@ -41,3 +41,9 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# Generated audit artifacts (ETAPA 22.6)
+integrity-report.json
+integrity-stderr.txt
+stress-report.json
+stress-stderr.txt

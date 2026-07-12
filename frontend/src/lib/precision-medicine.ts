@@ -419,3 +419,50 @@ export function calcularScoreFarmacogenomico(
       .map(a => ({ molecula: a.molecula, alternativa: a.alternativa! })),
   };
 }
+
+// ─── Cross-engine: Clinical Risk + Prognosis integration ─────
+
+import { gerarPrognostico, type PerfilPrognostico, type Prognostico } from './prognosis-engine';
+import type { AvaliacaoRiscoClinico } from './clinical-risk-engine';
+
+export interface RecomendacaoPrecisao {
+  molecula: string;
+  score_farmacogenomico: number;
+  risco_global: number;
+  prognostico_ajustado: Prognostico;
+  recomendacao: string;
+  nivel_personalizacao: 'alta' | 'media' | 'padrao';
+}
+
+export function gerarRecomendacaoPrecisao(
+  moleculas: string[],
+  genotipos: GenotipoPaciente[],
+  perfilRisco: AvaliacaoRiscoClinico,
+  cid: string,
+): RecomendacaoPrecisao[] {
+  const perfil: PerfilPrognostico = {
+    cid,
+    idade: 55,
+    sexo: 'M',
+    comorbidades: perfilRisco.recomendacoes_prioritarias.slice(0, 3),
+  };
+
+  const prognostico = gerarPrognostico(perfil, '1a');
+
+  return moleculas.map(molecula => {
+    const scoreResult = calcularScoreFarmacogenomico([molecula], genotipos as GenotipoPaciente[]);
+    const fg_score    = scoreResult.score_geral;
+    const risco_global = perfilRisco.score_global;
+
+    const nivel_personalizacao: RecomendacaoPrecisao['nivel_personalizacao'] =
+      fg_score >= 80 ? 'alta' : fg_score >= 60 ? 'media' : 'padrao';
+
+    const recomendacao = nivel_personalizacao === 'alta'
+      ? `${molecula}: perfil genético favorável — dose padrão com alta probabilidade de resposta.`
+      : nivel_personalizacao === 'media'
+      ? `${molecula}: metabolizador intermediário — considerar ajuste de dose.`
+      : `${molecula}: sem dados farmacogenômicos suficientes — seguir posologia padrão com monitorização.`;
+
+    return { molecula, score_farmacogenomico: fg_score, risco_global, prognostico_ajustado: prognostico, recomendacao, nivel_personalizacao };
+  });
+}

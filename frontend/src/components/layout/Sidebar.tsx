@@ -40,6 +40,10 @@ import {
   Bell,
   Share2,
   Bot,
+  Pill,
+  HelpCircle,
+  Package,
+  Beaker,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -68,6 +72,10 @@ const navGroups = [
       { href: '/comparador',       label: 'Comparador',          icon: Scale,       badge: 'NOVO' },
       { href: '/insights',         label: 'Clinical Insights',   icon: Brain,       badge: 'NOVO' },
       { href: '/segunda-opiniao',  label: 'Segunda Opinião',     icon: Lightbulb,   badge: 'NOVO' },
+      { href: '/dosagem',       label: 'Cálculo de Doses',    icon: Pill,        badge: 'NOVO' },
+      { href: '/farmalib',      label: 'Farmacoteca',         icon: Package,     badge: 'NOVO' },
+      { href: '/eurofarma',     label: 'Eurofarma',           icon: Beaker,      badge: 'EURO' },
+      { href: '/explicar',      label: 'Explicar Conduta',    icon: HelpCircle,  badge: 'NOVO' },
       { href: '/governanca',    label: 'Governança',          icon: ShieldCheck, badge: null },
       { href: '/comite',        label: 'Comitê Científico',   icon: Users,       badge: 'NOVO' },
       { href: '/atualizacoes',  label: 'Guideline Updates',   icon: TrendingUp,  badge: '2025' },

@@ -16,6 +16,7 @@ import {
 } from '@/lib/dose-calculator';
 import { DoseCalcCard } from '@/components/modules/DoseCalcCard';
 import { runSafetyCheck, SEVERITY_CONFIG, type QuickSafetyAlert } from '@/lib/safety-rules';
+import { getAllProductsForMolecule, getPreferredBrandName } from '@/lib/drug-resolver';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';

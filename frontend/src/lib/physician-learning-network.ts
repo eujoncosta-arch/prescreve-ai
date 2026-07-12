@@ -319,3 +319,50 @@ export const DISCORDANCIA_META: Record<TipoDiscordancia, { label: string; cls: s
   interacao:      { label: 'Interação', cls: 'bg-amber-100 text-amber-700' },
   indicacao:      { label: 'Indicação', cls: 'bg-violet-100 text-violet-700' },
 };
+
+// ─── Cross-engine: Registry + Scientific Update integration ──
+
+import { calcularEstatisticasRegistry, type EstatisticasRegistry } from './recommendation-registry';
+import { listarAlertas, getEstadoMonitoramento, type AlertaAtualizacao } from './scientific-update-engine';
+
+export interface PainelAprendizagem {
+  estatisticas_registry: EstatisticasRegistry;
+  alertas_nao_lidos: AlertaAtualizacao[];
+  diretrizes_monitoradas: number;
+  consenso_por_cid: Array<{ cid: string; consenso: number; variabilidade: number }>;
+  insight: string;
+}
+
+export function gerarPainelAprendizagem(cids: string[]): PainelAprendizagem {
+  const estatisticas_registry = calcularEstatisticasRegistry();
+  const alertas_nao_lidos = listarAlertas({ lido: false });
+  const estado = getEstadoMonitoramento();
+
+  const consenso_por_cid = cids.map(cid => {
+    const c = calcularConsenso(cid);
+    const v = calcularVariabilidade(cid);
+    return {
+      cid,
+      consenso: c.concordancia_guideline,
+      variabilidade: v.indice,
+    };
+  });
+
+  const taxa_media = consenso_por_cid.length > 0
+    ? consenso_por_cid.reduce((s, c) => s + c.consenso, 0) / consenso_por_cid.length
+    : 0;
+
+  const insight = alertas_nao_lidos.length > 0
+    ? `${alertas_nao_lidos.length} atualização(ões) científica(s) pendente(s) de revisão. Taxa de consenso médio: ${taxa_media.toFixed(0)}%.`
+    : taxa_media >= 80
+    ? `Boa consistência clínica (${taxa_media.toFixed(0)}% de consenso). Nenhuma atualização urgente pendente.`
+    : `Variabilidade elevada (consenso médio ${taxa_media.toFixed(0)}%). Considerar revisão de protocolos internos.`;
+
+  return {
+    estatisticas_registry,
+    alertas_nao_lidos,
+    diretrizes_monitoradas: estado.sociedades_monitoradas.length,
+    consenso_por_cid,
+    insight,
+  };
+}

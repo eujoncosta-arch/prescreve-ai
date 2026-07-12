@@ -349,3 +349,24 @@ export function gerarExplanacao(
     flags_seguranca: flags,
   };
 }
+
+
+// ─── Bridge to Explainable AI v2 ─────────────────────────────
+// Re-exports v2 API so this module is the single entry point for
+// explainability consumers (v1 = patient-profile fit; v2 = WHY/WHY-NOT/WHAT-IF).
+export {
+  gerarExplainableAIv2,
+  gerarWHY,
+  gerarWHYNOT,
+  gerarWHATIF,
+  gerarALTERNATIVAS,
+  calcularExplainabilityScore,
+} from './explainable-ai-v2';
+export type {
+  ExplainableAIv2Result,
+  RespostaWHY,
+  RespostaWHYNOT,
+  RespostaWHATIF,
+  RespostaALTERNATIVAS,
+  ExplainabilityScore,
+} from './explainable-ai-v2';

@@ -278,3 +278,20 @@ export const TIPO_ALTERACAO_META: Record<TipoAlteracao, { label: string; icon: s
   revisao_dose:              { label: 'Revisão de dose',         icon: '⚖' },
   nova_combinacao_recomendada:{ label: 'Nova combinação',        icon: '🔗' },
 };
+
+// ─── Bridge to Guideline Updates ─────────────────────────────
+// Re-exports the static updates database so consumers can access
+// both real-time alerts and the curated guidelines catalog from one import.
+export {
+  GUIDELINE_UPDATES,
+  totalMudancasByImpacto,
+  IMPACTO_META as IMPACTO_UPDATE_META,
+  AREA_META,
+} from './guideline-updates';
+export type {
+  GuidelineUpdate,
+  EvidenciaUpdate,
+  MudancaRecomendacao,
+  ImpactoClinico,
+  AreaEspecialidade,
+} from './guideline-updates';

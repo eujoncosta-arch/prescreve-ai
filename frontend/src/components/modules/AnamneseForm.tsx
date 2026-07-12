@@ -150,6 +150,9 @@ export function AnamneseForm({ consultationId, onComplete }: AnamneseFormProps) 
     };
 
     dispatch({ type: 'UPDATE_ANAMNESIS', payload: anamnese });
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('prescreve_ai_anamnese', JSON.stringify(anamnese));
+    }
     const apoioClinico = analyzeClinical(anamnese);
     dispatch({ type: 'UPDATE_DIAGNOSTIC', payload: apoioClinico });
     setLoading(false);
