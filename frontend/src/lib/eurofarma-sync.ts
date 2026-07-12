@@ -1887,7 +1887,7 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     classe_terapeutica: 'Anti-inflamatório Não Esteroidal (AINE) — Profeno',
     cids_aprovados: ['M06', 'M15', 'M17', 'M54', 'M79'],
     apresentacoes: [
-      { concentracao: '150 mg', forma_farmaceutica: 'comprimido_liberacao_prolongada', embalagem: '20 comprimidos', registro_anvisa: '1.0043.1249' },
+      { concentracao: '150 mg', forma_farmaceutica: 'comprimido_liberacao_prolongada', embalagem: '10 comprimidos', registro_anvisa: '1.0043.1249' },
     ],
     posologia_aprovada: 'Artrite/dor musculoesquelética: 150 mg 1x/dia. Dose máxima: 200 mg/dia (libdr. prolongada).',
     contraindicacoes_bula: ['Gravidez (Cat. D — 3º trimestre)', 'IR/IH grave', 'Úlcera péptica ativa', 'Alergia a AINEs/aspirina'],
