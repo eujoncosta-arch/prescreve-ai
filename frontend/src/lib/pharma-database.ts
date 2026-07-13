@@ -3124,6 +3124,101 @@ export const PHARMA_ATC_CODES: Record<string, string> = {
   // Outros
   prednisona: 'H02AB07', prednisolona: 'H02AB06', dexametasona: 'H02AB02',
   hidrocortisona: 'H02AB09', budesonida_oral: 'A07EA06',
+
+  // ── RM-01 MED-02: ATC (classificação WHO) das moléculas antes sem código ──
+  // Cardiovascular / anti-hipertensivos
+  hctz: 'C03AA03', aas: 'B01AC06', doxazosina: 'C02CA04', trimetazidina: 'C01EB15',
+  metildopa: 'C02AB01', hidralazina: 'C02DB02',
+  // Antidiabéticos / obesidade
+  insulina_nph: 'A10AC01', insulina_asparte: 'A10AB05', tirzepatida: 'A10BX16',
+  pioglitazona: 'A10BG03', acarbose: 'A10BF01', semaglutida_obesidade: 'A10BJ06',
+  orlistate: 'A08AB01', naltrexona_bupropiona: 'A08AA62',
+  // Endócrino / hormônios
+  propiltiouracil: 'H03BA02', fludrocortisona: 'H02AA02', cabergolina: 'G02CB03',
+  ocitocina: 'H01BB02', misoprostol: 'A02BB01', 'betametasona-antenatal': 'H02AB01',
+  'etinilestradiol-levonorgestrel': 'G03AA07', 'etinilestradiol-desogestrel': 'G03AA09',
+  'desogestrel-75mcg': 'G03AC09', 'levonorgestrel-emergencia': 'G03AD01',
+  'medroxiprogesterona-injetavel': 'G03AC06', 'estradiol-transdermico': 'G03CA03',
+  'progesterona-micronizada': 'G03DA04', tibolona: 'G03CX01',
+  // Vitaminas / minerais / suplementos
+  'acido-folico': 'B03BB01', 'sulfato-ferroso-gestacao': 'B03AA07', 'ferro-iv': 'B03AC',
+  'vitamina-k1-neonatal': 'B02BA01', calcitriol: 'A11CC04', paricalcitol: 'H05BX02',
+  cinacalcete: 'H05BX01',
+  // Analgésicos / AINE
+  cetorolaco: 'M01AB15', meloxicam: 'M01AC06', aceclofenaco: 'M01AB16',
+  cetoprofeno: 'M01AE03', 'ibuprofeno-paracetamol': 'M01AE51',
+  // Anti-histamínicos / respiratório
+  fexofenadina: 'R06AX26', ebastina: 'R06AX22', betaistina: 'N07CA01',
+  'mometasona-nasal': 'R01AD09', fenoterol: 'R03AC04', fenoterol_ipratropio: 'R03AL01',
+  indacaterol: 'R03AC18', olodaterol: 'R03AC19', aclidinio: 'R03BB05',
+  umeclidinio: 'R03BB07', fluticasona_propionato: 'R03BA05', fluticasona_furoato: 'R03BA09',
+  ciclesonida: 'R03BA08', budesonida_formoterol: 'R03AK07', fluticasona_salmeterol: 'R03AK06',
+  fluticasona_ff_vilanterol: 'R03AK10', beclometasona_formoterol: 'R03AK08',
+  indacaterol_glicopirronio: 'R03AL04', vilanterol_umeclidinio: 'R03AL03',
+  olodaterol_tiotropio: 'R03AL06', fluticasona_ff_vilanterol_umeclidinio: 'R03AL08',
+  budesonida_formoterol_glicopirronio: 'R03AL11', tezepelumabe: 'R03DX11',
+  acetilcisteina: 'R05CB01', ambroxol: 'R05CB06', carbocisteina: 'R05CB03',
+  dornase_alfa: 'R05CB13', zafirlucaste: 'R03DC01', zileutona: 'R03DC03',
+  prednisolona_asma: 'H02AB06', oxigenio_suplementar: 'V03AN01', heliox: 'V03AN03',
+  azitromicina_dpoc: 'J01FA10',
+  // Antimicrobianos / antivirais / antifúngicos / antiparasitários
+  valaciclovir: 'J05AB11', nitazoxanida: 'P01AX11', ampicilina_sulbactam: 'J01CR01',
+  oxacilina: 'J01CF04', smz_tmp: 'J01EE01', caspofungina: 'J02AX04',
+  albendazol: 'P02CA03', ivermectina: 'P02CF01', hidroxicloroquina: 'P01BA02',
+  // Psiquiatria / neurologia
+  vortioxetina: 'N06AX26', eszopiclona: 'N05CF04', metilfenidato: 'N06BA04',
+  citalopram: 'N06AB04', fluvoxamina: 'N06AB08', levomilnaciprano: 'N06AX28',
+  agomelatina: 'N06AX22', clomipramina: 'N06AA04', tranilcipromina: 'N06AF04',
+  moclobemida: 'N06AG02', clozapina: 'N05AH02', ziprasidona: 'N05AE04',
+  paliperidona: 'N05AX13', 'acido-valproico': 'N03AG01', oxcarbazepina: 'N03AF02',
+  fenobarbital: 'N03AA02', 'fenobarbital-neonatal': 'N03AA02', 'fenobarbital-paliativo': 'N03AA02',
+  zopiclona: 'N05CF01', buspirona: 'N05BE01', hidroxizina: 'N05BB01', lurasidona: 'N05AE05',
+  isotretinoia: 'D10BA01', tadalafila: 'G04BE08',
+  // Gastroenterologia
+  famotidina: 'A02BA03', cimetidina: 'A02BA01', granisetrona: 'A04AA02',
+  palonossetrona: 'A04AA05', aprepitanto: 'A04AD12', lactulose: 'A06AD11',
+  bisacodil: 'A06AB02', polietilenoglicol: 'A06AD15', 'picossulfato-sodio': 'A06AB08',
+  loperamida: 'A07DA03', racecadotrila: 'A07XA04', 'hidroxido-aluminio': 'A02AB01',
+  // Imunossupressores
+  azatioprina: 'L04AX01', ciclosporina: 'L04AD01', tacrolimo: 'L04AD02',
+  'micofenolato-mofetil': 'L04AA06',
+  // Nefrologia / quelantes / ESA
+  sevelamer: 'V03AE02', 'carbonato-calcio-quelante': 'A12AA04', 'carbonato-lantanio': 'V03AE03',
+  patiromer: 'V03AE09', 'poliestireno-sulfonato-calcio': 'V03AE01', 'eritropoetina-alfa': 'B03XA01',
+  'darbepoetina-alfa': 'B03XA02', 'bicarbonato-sodio-oral': 'B05XA02',
+  // Neonatologia
+  'cafeina-citrato': 'N06BC01', 'poractant-alfa': 'R07AA02', palivizumabe: 'J06BD01',
+  'sildenafil-neonatal': 'G04BE03',
+  // Obstetrícia / outros
+  'sulfato-magnesio': 'A12CC02',
+  // Oncologia — L01
+  paclitaxel: 'L01CD01', docetaxel: 'L01CD02', fluorouracil: 'L01BC02',
+  gencitabina: 'L01BC05', pemetrexede: 'L01BA04', 'metotrexato-onco': 'L01BA01',
+  doxorrubicina: 'L01DB01', pembrolizumabe: 'L01FF02', nivolumabe: 'L01FF01',
+  ipilimumabe: 'L01FX04', rituximabe: 'L01FA01', imatinibe: 'L01EA01',
+  trastuzumabe: 'L01FD01', bevacizumabe: 'L01FG01', osimertinibe: 'L01EB04',
+  palbociclibe: 'L01EF01', filgrastim: 'L03AA02', pegfilgrastim: 'L03AA13',
+  mesna: 'V03AF01', 'alopurinol-onco': 'M04AA01', leucovorin: 'V03AF03',
+  rasburicase: 'V03AF07',
+  // UTI / emergência
+  norepinefrina: 'C01CA03', 'epinefrina-uti': 'C01CA24', vasopressina: 'H01BA01',
+  dobutamina: 'C01CA07', dopamina: 'C01CA04', milrinona: 'C01CE02',
+  'propofol-uti': 'N01AX10', dexmedetomidina: 'N05CM18', 'midazolam-uti': 'N05CD08',
+  'ketamina-uti': 'N01AX03', etomidato: 'N01AX07', 'fentanil-uti': 'N02AB03',
+  remifentanil: 'N01AH06', succinilcolina: 'M03AB01', 'rocurônio': 'M03AC09',
+  'cisatracúrio': 'M03AC11', sugamadex: 'V03AB35', 'hidrocortisona-choque': 'H02AB09',
+  'acido-tranexamico': 'B02AA02', 'amiodarona-pcr': 'C01BD01', adenosina: 'C01EB10',
+  'bicarbonato-sodio-pcr': 'B05XA02', 'gluconato-calcio': 'A12AA03', atropina: 'A03BA01',
+  'alteplase-tep': 'B01AD02', naloxona: 'V03AB15', flumazenil: 'V03AB25',
+  // Cuidados paliativos
+  'tramadol-paliativo': 'N02AX02', 'morfina-paliativa': 'N02AA01', 'oxicodona-paliativa': 'N02AA05',
+  'fentanil-transdermico': 'N02AB03', 'buprenorfina-transdermico': 'N02AE01', hidromorfona: 'N02AA03',
+  'metadona-paliativa': 'N07BC02', 'midazolam-paliativo': 'N05CD08', 'haloperidol-paliativo': 'N05AD01',
+  levomepromazina: 'N05AA02', 'lorazepam-paliativo': 'N05BA06', 'metoclopramida-paliativa': 'A03FA01',
+  'ondansetrona-paliativa': 'A04AA01', 'hioscina-butilbrometo': 'A03BB01', 'glicopirronio-sc': 'A03AB02',
+  metilnaltrexona: 'A06AH01', 'dexametasona-paliativa': 'H02AB02', 'gabapentina-paliativa': 'N03AX12',
+  'amitriptilina-paliativa': 'N06AA09', 'octreotida-paliativa': 'H01CB02',
+  'naloxona-antidoto-opioide': 'V03AB15',
 };
 
 // ══════════════════════════════════════════════════════════════════
