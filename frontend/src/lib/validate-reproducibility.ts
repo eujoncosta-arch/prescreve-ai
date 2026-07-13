@@ -8,7 +8,6 @@ import { calcularDosagem, getMedicamentoById, calcularBSA } from './dosing-engin
 import { detectarConflitos } from './guideline-conflict-engine';
 import { calcSofa, calcQsofa } from './icu-engine';
 import { calcularNNT } from './outcome-engine';
-import { getAllDrugs } from './pharma-database';
 import { gerarMapaConhecimento, buscarRelacionamentos } from './medical-knowledge-graph';
 import { EVIDENCE_DB } from './evidence-engine';
 

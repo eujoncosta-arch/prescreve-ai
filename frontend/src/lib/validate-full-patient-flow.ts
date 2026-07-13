@@ -30,7 +30,7 @@ import { gerarIdPacienteAnonimo } from './medical-audit';
 import { EVIDENCE_DB } from './evidence-engine';
 import { gerarPrognostico, PerfilPrognostico } from './prognosis-engine';
 import { listarAlertas } from './scientific-update-engine';
-import { getAllDrugs } from './pharma-database';
+import { drugRepository } from './pharma-core';
 
 // ─── Step recorder ───────────────────────────────────────────────────────────
 
@@ -350,10 +350,9 @@ async function main() {
   const pharmCoverage = tryRecord(20, 'PharmDB — marcas IC molecules',
     'carvedilol, furosemida, sacubitril_valsartana, eplerenona',
     () => {
-      const all = getAllDrugs();
       return ['carvedilol', 'furosemida', 'sacubitril_valsartana', 'eplerenona', 'metformina'].map(mol => {
-        const drug = all.find(d => d.id === mol);
-        return { mol, marcas: drug?.marcas?.length ?? 0, found: !!drug };
+        const drug = drugRepository.getById(mol);
+        return { mol, marcas: drug?.brands?.length ?? 0, found: !!drug };
       });
     });
 

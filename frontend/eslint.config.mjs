@@ -8,13 +8,14 @@ import nextTs from "eslint-config-next/typescript";
 // atuais estão na allowlist abaixo (dívida de migração) — arquivos NOVOS que
 // tentarem acessar as bases diretamente falham o lint. Reduza a allowlist à
 // medida que cada consumidor for migrado.
+// Bases de DADOS farmacológicos superseded pelo pharma-core. (dosing-engine é
+// motor de cálculo de dose, não base de dados — fora de escopo.)
 const LEGACY_PHARMA_BASES = [
   "**/pharma-database",
   "**/eurofarma-sync",
   "**/lab-catalog",
   "**/drug-database",
   "**/drug-comparator",
-  "**/dosing-engine",
 ];
 
 const RM06_MESSAGE =
@@ -49,17 +50,17 @@ const RM06_ALLOWLIST = [
   "src/components/modules/TherapeuticPanel.tsx",
   "src/lib/clinical-simulation-etapa8.ts",
   "src/lib/clinical-stress-etapa9.ts",
-  "src/lib/dose-calculator.ts",
+  // dose-calculator.ts — só importava dosing-engine (fora de escopo agora); delistado.
   "src/lib/drug-resolver.ts",
   "src/lib/pharma-library.ts",
-  // src/lib/safety-rules.ts — MIGRADO para pharma-core (RM-06 piloto); fora da allowlist.
+  // safety-rules.ts — MIGRADO para pharma-core (RM-06 piloto); delistado.
   "src/lib/simulation-phase22-3.ts",
   "src/lib/stress-test-phase22-4.ts",
   "src/lib/validate-extreme-data.ts",
-  "src/lib/validate-full-patient-flow.ts",
+  // validate-full-patient-flow.ts — MIGRADO para drugRepository; delistado.
   "src/lib/validate-incomplete-data.ts",
   "src/lib/validate-integrity-22-5.ts",
-  "src/lib/validate-reproducibility.ts",
+  // validate-reproducibility.ts — import morto removido; delistado.
 ];
 
 const eslintConfig = defineConfig([
