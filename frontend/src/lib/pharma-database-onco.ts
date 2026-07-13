@@ -343,6 +343,11 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
       instrucoes: 'SUPLEMENTAÇÃO OBRIGATÓRIA 7–14 dias antes: ácido fólico 400 mcg/dia VO + vitamina B12 1000 mcg IM 1× antes (repetir a cada 9 semanas). Dexametasona 4 mg 2×/dia D-1, D0, D+1 (previne rush cutâneo).',
     },
     contraindicacoes_rapidas: ['ClCr < 45 mL/min', 'Gravidez', 'Hipersensibilidade'],
+    ajuste_renal: {
+      normal: 'Dose plena se ClCr ≥ 45 mL/min', tfg_60_30: 'ClCr ≥ 45 sem ajuste; ClCr 30–45 apenas com cautela + profilaxia com ácido folínico',
+      tfg_30_15: 'Contraindicado (ClCr < 30 — toxicidade hematológica potencialmente fatal)', tfg_lt_15: 'Contraindicado',
+      dialisavel: false,
+    },
     interacoes_importantes: [
       { com: 'AINEs', severidade: 'moderada', descricao: 'Reduzem clearance renal de pemetrexede → ↑ toxicidade; evitar 2–5 dias antes/após' },
     ],
@@ -372,6 +377,11 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
       instrucoes: 'LEUCOVORIN RESGATE OBRIGATÓRIO: 15 mg IV/VO 6/6h a partir de 24h do início de MTX. Alcalinização urinária (bicarbonato IV): pH urinário > 7 antes e durante infusão. Hidratação: 3 L/m²/dia. Monitorar nível sérico de MTX às 24h, 48h, 72h.',
     },
     contraindicacoes_rapidas: ['Derrame pleural / ascite significativa (third space — retarda eliminação)', 'ClCr < 60 mL/min', 'Gravidez', 'Disfunção hepática grave'],
+    ajuste_renal: {
+      normal: 'Dose plena (ClCr ≥ 60 mL/min)', tfg_60_30: 'Reduzir dose e monitorar nível sérico de MTX + hidratação/alcalinização',
+      tfg_30_15: 'Contraindicado — eliminação renal, risco de toxicidade grave (mielo/mucosite)', tfg_lt_15: 'Contraindicado (antídoto: glucarpidase)',
+      dialisavel: false,
+    },
     interacoes_importantes: [
       { com: 'AINEs', severidade: 'grave', descricao: 'Reduzem excreção renal de MTX → toxicidade fatal; suspender 48h antes' },
       { com: 'penicilinas', severidade: 'moderada', descricao: 'Competem com secreção tubular → ↑ MTX' },
@@ -954,6 +964,11 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
       instrucoes: 'Iniciar 24–48h antes da QT. Beber ≥ 2 L/dia. Monitorar ácido úrico, creatinina, eletrólitos.',
     },
     contraindicacoes_rapidas: ['Hipersensibilidade (DRESS/SJS graves, principalmente em HLA-B*58:01 — populações asiáticas)'],
+    ajuste_renal: {
+      normal: '300 mg/dia', tfg_60_30: 'ClCr 30–60: iniciar 200 mg/dia',
+      tfg_30_15: 'ClCr 15–30: 100 mg/dia', tfg_lt_15: '≤ 100 mg/dia ou intervalos maiores; dose após diálise',
+      dialisavel: true,
+    },
     interacoes_importantes: [
       { com: 'mercaptopurina / azatioprina', severidade: 'contraindicado', descricao: 'Inibe metabolismo da 6-MP → toxicidade grave. Reduzir dose de 6-MP em 75% ou substituir por rasburicase' },
       { com: 'amoxicilina', severidade: 'leve', descricao: 'Rash cutâneo aumentado (10× com alopurinol)' },

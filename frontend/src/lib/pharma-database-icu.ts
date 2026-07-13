@@ -604,6 +604,11 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
       instrucoes: 'Bolus IV em 10 s. Reversão em 3 min (TOF moderado) ou < 3 min (emergência com 16 mg/kg). Aguardar TOF ≥ 4/4 para extubação segura.',
     },
     contraindicacoes_rapidas: ['Hipersensibilidade'],
+    ajuste_renal: {
+      normal: 'ClCr ≥ 30: sem ajuste', tfg_60_30: 'Sem ajuste (ClCr ≥ 30)',
+      tfg_30_15: 'Não recomendado (ClCr < 30 — meia-vida ↑ para ~19 h, exposição 5×)', tfg_lt_15: 'Não recomendado',
+      dialisavel: true,
+    },
     interacoes_importantes: [
       { com: 'contraceptivos hormonais', severidade: 'moderada', descricao: 'Sugamadex liga-se ao progestogênio — usar método de barreira adicional por 7 dias' },
       { com: 'toremifeno', severidade: 'moderada', descricao: 'Deslocamento competitivo do sugamadex' },

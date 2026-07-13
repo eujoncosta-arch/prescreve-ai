@@ -350,6 +350,11 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
       'Hipocalcemia grave',
       'Oligúria grave (< 25 mL/h) sem diurese adequada',
     ],
+    ajuste_renal: {
+      normal: 'Dose padrão (ex.: eclâmpsia)', tfg_60_30: 'Reduzir manutenção; monitorar Mg sérico e reflexos',
+      tfg_30_15: 'Reduzir substancialmente (máx ~20 g/48 h); monitorização rigorosa', tfg_lt_15: 'Evitar / só com monitorização intensiva — risco de hipermagnesemia fatal',
+      dialisavel: true,
+    },
     interacoes_importantes: [
       { com: 'nifedipino', severidade: 'moderada', descricao: 'Potencializa hipotensão e bloqueio neuromuscular — monitorar' },
       { com: 'bloqueadores neuromusculares', severidade: 'grave', descricao: 'Potencializa paralisia muscular' },

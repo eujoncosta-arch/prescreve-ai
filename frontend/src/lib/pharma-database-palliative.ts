@@ -166,6 +166,11 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
       instrucoes: 'Equianalgesia: morfina oral 30 mg ≈ oxicodona oral 20 mg. Targin: naloxona periférica reduz constipação sem reverter analgesia central.',
     },
     contraindicacoes_rapidas: ['Insuficiência respiratória grave', 'Íleo paralítico', 'Hipersensibilidade'],
+    ajuste_renal: {
+      normal: 'Dose padrão titulada', tfg_60_30: 'Reduzir ~25%',
+      tfg_30_15: 'Reduzir ~50% e titular', tfg_lt_15: 'Usar com cautela / evitar — acúmulo de metabólitos (noroxicodona/oximorfona)',
+      dialisavel: false,
+    },
     interacoes_importantes: [
       { com: 'inibidores CYP3A4 (cetoconazol, eritromicina)', severidade: 'moderada', descricao: 'Aumentam nível de oxicodona — monitorar sedação' },
       { com: 'BZD', severidade: 'grave', descricao: 'Depressão respiratória' },
@@ -282,6 +287,11 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
       instrucoes: 'Conversão: morfina oral 30 mg ≈ hidromorfona oral 4–6 mg (fator 5–7,5:1). Morfina SC 10 mg ≈ hidromorfona SC 1,5–2 mg. Útil quando volume SC precisa ser mínimo (alta potência).',
     },
     contraindicacoes_rapidas: ['IR grave (metabólito H3G pode causar neuroexcitação)', 'Hipersensibilidade'],
+    ajuste_renal: {
+      normal: 'Dose padrão titulada', tfg_60_30: 'Reduzir ~25% e titular',
+      tfg_30_15: 'Reduzir ~50%, monitorar neuroexcitação (H3G)', tfg_lt_15: 'Cautela — H3G acumula; intervalos maiores, preferir opioide alternativo',
+      dialisavel: true,
+    },
     interacoes_importantes: [
       { com: 'BZD', severidade: 'grave', descricao: 'Depressão respiratória' },
     ],
