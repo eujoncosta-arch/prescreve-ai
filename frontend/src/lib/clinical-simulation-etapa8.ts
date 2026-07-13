@@ -35,7 +35,7 @@ import { calcSofa, calcQsofa } from './icu-engine';
 import { calcMASCC, calcBSAMosteller } from './oncology-engine';
 import { assessPalliativePatient } from './palliative-engine';
 import { calcularNNT } from './outcome-engine';
-import { getAllDrugs } from './pharma-database';
+import { drugRepository } from './pharma-core';
 import {
   calcCKDEPI, calcMDRD, calcCHA2DS2VASc, calcHASBLED,
   calcCURB65, calcNEWS2, calcChildPugh, calcMELD, calcASCVD,
@@ -797,7 +797,7 @@ export function validarCalculadorasPorCategoria(): Record<string, unknown> {
     hepatico_meld14:     calcMELD({ bilirrubina_mgdL:2.0, inr:1.5, creatinina_mgdL:1.0, sodio_mEqL:132 }),
     empa_reg_nnt63:      calcEstatisticasDesfecho({ nome_desfecho:'MACE EMPA-REG', incidencia_tratamento:0.108, incidencia_controle:0.124 }),
     risco_renal_DRC4:    renalRisco.risco_renal.nivel,
-    drugs_loaded:        getAllDrugs().length,
+    drugs_loaded:        drugRepository.count(),
     bsa_mosteller:       calcBSAMosteller(70, 170),
   };
 }

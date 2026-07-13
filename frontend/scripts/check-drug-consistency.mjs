@@ -25,11 +25,13 @@ console.log(
 );
 
 if (!report.buildOk) {
-  console.error(`[RM-23] ❌ BUILD BLOQUEADO: ${critical} inconsistência(s) CRÍTICA(s). Ver RM23_DRUG_CONSISTENCY_REPORT.md`);
+  console.error(
+    `[RM-23] ❌ BUILD BLOQUEADO: ${critical} crítica(s) + ${high} alta(s). Ver RM23_DRUG_CONSISTENCY_REPORT.md`,
+  );
   process.exit(1);
 }
 
-if (high > 0) {
-  console.warn(`[RM-23] ⚠ ${high} inconsistência(s) de gravidade HIGH — revisar (não bloqueia o build).`);
+if (medium > 0) {
+  console.warn(`[RM-23] ⚠ ${medium} inconsistência(s) MEDIUM — revisar (não bloqueia o build).`);
 }
-console.log('[RM-23] ✅ consistência OK (sem inconsistências críticas).');
+console.log('[RM-23] ✅ consistência OK (sem inconsistências critical/high).');

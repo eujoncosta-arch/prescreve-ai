@@ -28,6 +28,6 @@ export interface ConsistencyReport {
   bySeverity: Record<ConsistencySeverity, number>;
   byRule: Record<string, number>;
   inconsistencies: Inconsistency[];
-  /** true quando não há inconsistência de gravidade `critical`. */
+  /** true quando não há inconsistência `critical` NEM `high` (gate elevado). */
   buildOk: boolean;
 }

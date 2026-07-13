@@ -48,13 +48,13 @@ const RM06_ALLOWLIST = [
   "src/components/modules/BulaViewer.tsx",
   "src/components/modules/PrescricaoPorMarca.tsx",
   "src/components/modules/TherapeuticPanel.tsx",
-  "src/lib/clinical-simulation-etapa8.ts",
+  // clinical-simulation-etapa8.ts — MIGRADO (drugRepository.count); delistado.
   "src/lib/clinical-stress-etapa9.ts",
   // dose-calculator.ts — só importava dosing-engine (fora de escopo agora); delistado.
   "src/lib/drug-resolver.ts",
   "src/lib/pharma-library.ts",
   // safety-rules.ts — MIGRADO para pharma-core (RM-06 piloto); delistado.
-  "src/lib/simulation-phase22-3.ts",
+  // simulation-phase22-3.ts — MIGRADO (drugRepository.count); delistado.
   "src/lib/stress-test-phase22-4.ts",
   "src/lib/validate-extreme-data.ts",
   // validate-full-patient-flow.ts — MIGRADO para drugRepository; delistado.

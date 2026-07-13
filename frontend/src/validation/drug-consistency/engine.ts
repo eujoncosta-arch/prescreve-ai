@@ -160,6 +160,8 @@ export function buildConsistencyReport(
     bySeverity,
     byRule,
     inconsistencies,
-    buildOk: bySeverity.critical === 0,
+    // RM-23 (gate elevado): o build só é liberado sem inconsistências
+    // `critical` NEM `high`. medium/low são reportadas como avisos.
+    buildOk: bySeverity.critical === 0 && bySeverity.high === 0,
   };
 }

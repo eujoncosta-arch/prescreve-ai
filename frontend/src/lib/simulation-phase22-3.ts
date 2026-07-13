@@ -25,7 +25,7 @@ import {
 import { calcDosePediatrica, calcBSA as calcBSAped, PediatricPatient } from './pediatric-engine';
 import { screenObstetricSafety, ObstetricProfile } from './obstetric-engine';
 import { calcularNNT } from './outcome-engine';
-import { getAllDrugs } from './pharma-database';
+import { drugRepository } from './pharma-core';
 
 // ─── INFRA ────────────────────────────────────────────────────────────────────
 
@@ -98,7 +98,7 @@ sim('S01','simples','HAS estágio 1, 45 anos',45,'simple',() => {
   steps.push(tryStep('calcularDosagem', () => drug ? calcularDosagem(78, 170, idadeDias(45,0,0), drug, drug.formulacoes[0]?.id ?? '') : 'enalapril not in MEDICAMENTOS_DOSAGEM'));
   steps.push(tryStep('calcClCrCockcroft', () => calcClCrCockcroft(45, 78, 88, 'M')));
   steps.push(tryStep('detectarConflitos', () => detectarConflitos('has')));
-  steps.push(tryStep('getAllDrugs_count', () => `${getAllDrugs().length} drugs loaded`));
+  steps.push(tryStep('getAllDrugs_count', () => `${drugRepository.count()} drugs loaded`));
   return { steps, prescription: ['Enalapril 10 mg VO 1×/dia','Reavaliação PA + K⁺ em 4 semanas'] };
 });
 
