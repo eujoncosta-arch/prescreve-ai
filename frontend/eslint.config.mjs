@@ -57,12 +57,13 @@ const RM06_ALLOWLIST = [
   "src/lib/pharma-library.ts",
   // safety-rules.ts — MIGRADO para pharma-core (RM-06 piloto); delistado.
   // simulation-phase22-3.ts — MIGRADO (drugRepository.count); delistado.
+  // Harnesses de QA que testam PROPOSITALMENTE a API legada getAllDrugs
+  // (benchmark/cache/integridade da fonte) — leitura legítima da fonte.
   "src/lib/stress-test-phase22-4.ts",
-  "src/lib/validate-extreme-data.ts",
-  // validate-full-patient-flow.ts — MIGRADO para drugRepository; delistado.
-  "src/lib/validate-incomplete-data.ts",
   "src/lib/validate-integrity-22-5.ts",
-  // validate-reproducibility.ts — import morto removido; delistado.
+  // validate-extreme-data.ts / validate-incomplete-data.ts — não importam base
+  //   restrita; removidos da allowlist (eram entradas desnecessárias).
+  // validate-full-patient-flow.ts / validate-reproducibility.ts — MIGRADOS.
 ];
 
 const eslintConfig = defineConfig([

@@ -74,13 +74,20 @@ export function compareSources(): SyncFinding[] {
   // Eurofarma comercializa um ativo ausente na base clínica principal.
   for (const [key, e] of euro) {
     if (!pharma.has(key)) {
+      // Combinações comerciais (ex.: "A + B") estão fora do escopo do PHARMA_DB,
+      // que é uma base de moléculas isoladas — divergência esperada (low).
+      const isCombo = /\+/.test(e.name);
       findings.push({
         tipo: 'medicamento_ausente',
-        gravidade: 'medium',
+        gravidade: isCombo ? 'low' : 'medium',
         chave: key,
         fontes: `${SOURCES.EUROFARMA} ✗ ${SOURCES.PHARMA_DB}`,
-        detalhe: `"${e.name}" (${e.brand ?? '?'}) existe no catálogo Eurofarma mas não no PHARMA_DB.`,
-        correcaoSugerida: 'Cadastrar o princípio ativo no PHARMA_DB ou revisar o catálogo Eurofarma.',
+        detalhe: isCombo
+          ? `Combinação comercial "${e.name}" (${e.brand ?? '?'}) fora do escopo do PHARMA_DB (moléculas isoladas).`
+          : `"${e.name}" (${e.brand ?? '?'}) existe no catálogo Eurofarma mas não no PHARMA_DB.`,
+        correcaoSugerida: isCombo
+          ? 'Aceitável: PHARMA_DB indexa moléculas isoladas. Registrar a combinação apenas se for prescritível isoladamente.'
+          : 'Cadastrar o princípio ativo no PHARMA_DB (com fonte) ou revisar o catálogo Eurofarma.',
       });
     }
   }
@@ -115,14 +122,17 @@ export function compareSources(): SyncFinding[] {
   for (const [key, e] of euro) {
     const p = pharma.get(key);
     if (!p) continue;
-    if (toSlug(p.name) !== toSlug(e.name)) {
+    // Divergência de nome REAL só existe quando a DCB canônica (salt-agnóstica)
+    // difere. Diferenças de sal ("Losartana" vs "Losartana Potássica") já são
+    // reconciliadas pelo molecule_id — não são divergências.
+    if (toMoleculeId(p.name) !== toMoleculeId(e.name)) {
       findings.push({
         tipo: 'divergencia_nome',
         gravidade: 'low',
         chave: key,
         fontes: `${SOURCES.PHARMA_DB} × ${SOURCES.EUROFARMA}`,
-        detalhe: `Nome do ativo difere: PHARMA_DB="${p.name}" vs Eurofarma="${e.name}".`,
-        correcaoSugerida: 'Padronizar a DCB entre as fontes (o molecule_id já é o mesmo).',
+        detalhe: `DCB canônica difere: PHARMA_DB="${p.name}" vs Eurofarma="${e.name}".`,
+        correcaoSugerida: 'Padronizar a DCB entre as fontes.',
       });
     }
     const pTem = !!p.dose?.trim();
