@@ -523,7 +523,9 @@ export const PHARMA_DB_GASTRO_A: QuickDrug[] = [
     ajuste_renal: { normal: 'Sem ajuste', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Preferível (não absorvido) — Monitorar eletrólitos em preparo de colonoscopia', dialisavel: false },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste' },
     contraindicacoes_rapidas: ['Obstrução intestinal', 'Perfuração GI', 'Hipersensibilidade'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Medicamentos orais concomitantes', severidade: 'leve', descricao: 'Não tem interação sistêmica (não absorvido, sem CYP), mas o efeito osmótico/laxativo pode reduzir a absorção de outros fármacos VO — espaçar a administração' },
+    ],
     alertas_especiais: [
       'LAXANTE PREFERIDO em DRC/hemodiálise: não absorvido, não altera eletrólitos',
       'SEM FERMENTAÇÃO: não causa flatulência excessiva (diferente de lactulose)',
@@ -565,7 +567,11 @@ export const PHARMA_DB_GASTRO_A: QuickDrug[] = [
     ajuste_renal: { normal: 'Sem ajuste', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Cautela', tfg_lt_15: 'Evitar', dialisavel: false },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Contraindicado' },
     contraindicacoes_rapidas: ['Obstrução intestinal', 'Desidratação grave', 'Hipersensibilidade'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Diuréticos e corticosteroides', severidade: 'moderada', descricao: 'Risco aumentado de distúrbio eletrolítico/hipocalemia, sobretudo em doses excessivas' },
+      { com: 'Antibióticos', severidade: 'leve', descricao: 'Podem reduzir a ação laxativa (dependem da flora colônica para ativar o picossulfato)' },
+      { com: 'Fármacos que prolongam QT (ondansetrona, haloperidol, macrolídeos, quinolonas)', severidade: 'moderada', descricao: 'A hipocalemia resultante aumenta o risco de torsades de pointes' },
+    ],
     alertas_especiais: ['Uso pediátrico em gotas: cálculo de dose por kg necessário', 'Não usar cronicamente (estimulante — cólon catártico)'],
     uso_gestante: 'risco',
     uso_lactante: 'risco',
@@ -647,7 +653,9 @@ export const PHARMA_DB_GASTRO_A: QuickDrug[] = [
     ajuste_renal: { normal: 'Sem ajuste', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Cautela', tfg_lt_15: 'Não recomendado', dialisavel: false },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Não recomendado' },
     contraindicacoes_rapidas: ['Hipersensibilidade', 'Uso prolongado > 7 dias'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Inibidores da ECA (enalapril, captopril, lisinopril)', severidade: 'grave', descricao: 'Risco aumentado de angioedema (ambos afetam metabolismo de peptídeos — bradicinina + encefalinase). Não recomendado em quem já teve angioedema por IECA' },
+    ],
     alertas_especiais: [
       'MECANISMO DIFERENTE: não inibe motilidade → pode ser usado em diarreia infecciosa (diferente de loperamida)',
       'Pró-droga → tiorfano (metabólito ativo)',

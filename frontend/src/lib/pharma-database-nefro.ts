@@ -503,7 +503,12 @@ export const PHARMA_DB_NEFRO: QuickDrug[] = [
     ajuste_renal: { normal: 'Uso principal em DRC', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Uso primário', dialisavel: false },
     ajuste_hepatico: { child_a: 'Cautela', child_b: 'Cautela', child_c: 'Não recomendado' },
     contraindicacoes_rapidas: ['Hipocalemia', 'Obstrução intestinal', 'Pós-operatório GI recente (necrose intestinal)'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Sorbitol', severidade: 'grave', descricao: 'Associação aumenta o risco de necrose intestinal — evitar administração conjunta (recomendação removida pela FDA em 2009)' },
+      { com: 'Antiácidos/laxantes com cátions (hidróxido de Mg/Al)', severidade: 'moderada', descricao: 'Podem causar alcalose metabólica e perda de eficácia da resina — espaçar ≥2 h' },
+      { com: 'Digoxina', severidade: 'grave', descricao: 'A hipocalemia induzida potencializa a toxicidade digitálica (arritmias ventriculares)' },
+      { com: 'Medicamentos orais em geral', severidade: 'moderada', descricao: 'A resina liga fármacos no TGI e reduz sua absorção — espaçar ≥3 h' },
+    ],
     alertas_especiais: [
       'NÃO É EMERGÊNCIA: efeito em 6–12h. Para hipercalemia aguda grave: gluconato de Ca IV, insulina+glicose, bicarbonato, salbutamol → DEPOIS resina para eliminar K+',
       'NECROSE INTESTINAL: associada ao uso com sorbitol (Kayexalate + sorbitol) — NÃO associar',
