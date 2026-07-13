@@ -54,7 +54,9 @@
 - **Correção sugerida:** popular `contraindicacoes_rapidas` a partir da bula (ex.: 'Depressão respiratória não monitorada', 'IMAO nos últimos 14 dias', 'Hipersensibilidade a opioides'). Aplicar também a `naloxona-antidoto-opioide`.
 - **Impacto clínico:** **ALTO** — um CDSS que não exibe contraindicação de opioide potente pode deixar de alertar em cenário de risco de depressão respiratória.
 
-**CRIT-02 · 37 medicamentos sem regras de interação documentadas** — **⏸ REQUER VERIFICAÇÃO EM BULA (não corrigível sem fabricar)**
+**CRIT-02 · 37 medicamentos sem regras de interação documentadas** — **🔄 EM ANDAMENTO: 25/37 corrigidos com verificação em fonte (12 pendentes)**
+> **Progresso (lotes 1–5, cada interação confirmada em bula/literatura):** sitagliptina, naloxona (×2), flumazenil, etomidato, milrinona, montelucaste, levetiracetam, betaistina, ciclesonida, carbocisteína, trimetazidina, medroxiprogesterona, progesterona, tibolona, betametasona-antenatal, filgrastim, pegfilgrastim, ipilimumabe, bevacizumabe, rasburicase, polietilenoglicol, picossulfato-sódio, racecadotrila, poliestireno-sulfonato-cálcio.
+> **Pendentes (12) — aguardam verificação em fonte:** omalizumabe, mepolizumabe, benralizumabe, tezepelumabe, dornase alfa, heliox, darbepoetina-alfa, poractant alfa, palivizumabe, mesna, glicopirrônio-SC, metilnaltrexona (predominantemente anticorpos monoclonais/agentes locais com perfil de "sem interação FC relevante" — a ser confirmado, não preenchido de memória).
 - **Arquivo:** múltiplos (`pharma-database-*.ts`)
 - **Exemplos (id):** `sitagliptina`, `montelucaste`, `betaistina`, `levetiracetam`, `trimetazidina`, `ciclesonida`, `omalizumabe`, `mepolizumabe`, `benralizumabe`, `tezepelumabe` (+27)
 - **Problema:** `interacoes_importantes` **vazio** em 37 moléculas. Parte é aceitável (biológicos com poucas interações), mas outras têm interações relevantes (ex.: sitagliptina — cuidado com sulfonilureias/insulina; levetiracetam — sem indução enzimática, porém interações clínicas existem).
