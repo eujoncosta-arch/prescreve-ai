@@ -241,9 +241,24 @@ export const LABORATORY_REGISTRY: Record<string, GovernedLaboratory> = Object.fr
   ]),
 );
 
+/**
+ * RM-06: aliases de slugs que representam o MESMO laboratório real escrito de
+ * formas diferentes nas fontes legadas (co-marketing, transição de titularidade,
+ * grafia composta). Unifica ao slug canônico para eliminar conflitos marca↔lab.
+ */
+const LAB_ALIASES: Record<string, string> = {
+  'boehringer-lilly': 'boehringer',
+  'boehringer_lilly': 'boehringer',
+  'gsk-novartis': 'novartis',
+  'gsk_novartis': 'novartis',
+  'cristalia-hipolabor': 'cristalia',
+  'cristalia_hipolabor': 'cristalia',
+};
+
 /** Resolve o laboratório canônico a partir de um `lab_id` ou nome livre. */
 export function resolveLaboratory(labIdOrName: string): GovernedLaboratory {
-  const slug = toSlug(labIdOrName);
+  const raw = toSlug(labIdOrName);
+  const slug = LAB_ALIASES[raw] ?? LAB_ALIASES[raw.replace(/-/g, '_')] ?? raw;
   // RM-01 (MED-04): as chaves do registro usam '_' (novo_nordisk, eli_lilly),
   // mas toSlug normaliza para '-'. Tenta ambas as formas antes do fallback.
   const alt = slug.replace(/-/g, '_');
