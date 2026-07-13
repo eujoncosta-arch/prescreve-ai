@@ -79,6 +79,13 @@ export interface QuickDrug {
    * ausência do campo com dose_pediatrica ausente = dose pediátrica a verificar.
    */
   uso_pediatrico?: 'nao_aplicavel';
+  /**
+   * RM-01 MED-01: quando a mesma molécula existe em múltiplos registros por contexto
+   * clínico (ex.: midazolam geral vs UTI vs paliativo), este metadado torna a
+   * duplicação INTENCIONAL e explícita — cada registro preserva a dose do seu
+   * contexto (não consolidar/mesclar, sob risco de perder posologia específica).
+   */
+  indicacao_contexto?: string;
   ajuste_renal?: RenalAdjustment;
   ajuste_hepatico?: HepaticAdjustment;
 
@@ -852,6 +859,7 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'azitromicina',
+    indicacao_contexto: 'Infecção aguda (esquema padrão)',
     molecula: 'Azitromicina',
     nome_generico: 'Azitromicina Di-hidratada',
     sinonimos: ['astro', 'zithromax', 'macrolideo', 'antibiotico atipico', 'azitromicina'],
@@ -1718,6 +1726,7 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'prednisolona',
+    indicacao_contexto: 'Corticoterapia geral (anti-inflamatório/imunossupressor)',
     molecula: 'Prednisolona',
     nome_generico: 'Prednisolona',
     sinonimos: ['preni', 'prednisolona', 'corticoide', 'corticosteroide', 'anti-inflamatorio', 'imunossupressor', 'preni solução', 'preni gotas'],
@@ -2004,6 +2013,7 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'tramadol',
+    indicacao_contexto: 'Dor aguda moderada (geral)',
     molecula: 'Tramadol',
     nome_generico: 'Cloridrato de Tramadol',
     sinonimos: ['gesico', 'tramadol', 'opioid', 'analgesico', 'dor moderada', 'dor intensa'],

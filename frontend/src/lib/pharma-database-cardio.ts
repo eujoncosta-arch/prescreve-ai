@@ -628,6 +628,7 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'amiodarona',
+    indicacao_contexto: 'Antiarrítmico crônico (FA/flutter)',
     molecula: 'Amiodarona',
     nome_generico: 'Cloridrato de Amiodarona',
     sinonimos: ['cordarone', 'amiodarona', 'antiarritmico', 'classe iii', 'vaughan-williams iii'],

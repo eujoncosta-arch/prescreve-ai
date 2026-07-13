@@ -547,6 +547,7 @@ export const PHARMA_DB_PULMO_B: QuickDrug[] = [
 
   {
     id: 'prednisolona_asma',
+    indicacao_contexto: 'Exacerbação de asma (curso curto)',
     molecula: 'Prednisolona',
     nome_generico: 'Prednisolona',
     sinonimos: ['predsim', 'prelone', 'prednisolona', 'corticoide oral asma', 'corticoide dpoc', 'puff oral asma'],
@@ -692,6 +693,7 @@ OTLD: ≥ 15h/dia melhora sobrevida em DPOC hipoxêmico crônico (estudos MRC/NO
 
   {
     id: 'azitromicina_dpoc',
+    indicacao_contexto: 'Profilaxia de exacerbação na DPOC (uso prolongado)',
     molecula: 'Azitromicina',
     nome_generico: 'Di-hidrato de Azitromicina',
     sinonimos: ['zithromax', 'azitromicina', 'azithromycin', 'dpoc profilaxia', 'macrolidio 15-membros'],

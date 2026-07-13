@@ -12,6 +12,7 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'tramadol-paliativo',
+    indicacao_contexto: 'Dor em cuidados paliativos',
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Reduzir/espaçar (máx 50 mg q12h)', child_c: 'Evitar' },
     molecula: 'tramadol',
     nome_generico: 'Tramadol (Dor Moderada — WHO 2)',
@@ -194,6 +195,7 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   },
   {
     id: 'fentanil-transdermico',
+    indicacao_contexto: 'Dor crônica — adesivo transdérmico',
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Reduzir ~50%', child_c: 'Evitar/titular' },
     molecula: 'fentanil',
     nome_generico: 'Fentanil Transdérmico (Adesivo)',
@@ -361,6 +363,7 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'midazolam-paliativo',
+    indicacao_contexto: 'Sedação paliativa',
     ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste do fármaco', tfg_30_15: 'Reduzir — metabólito alfa-OH acumula (sedação prolongada)', tfg_lt_15: 'Reduzir ao menos 50%, titular', dialisavel: false },
     ajuste_hepatico: { child_a: 'Reduzir', child_b: 'Reduzir ~50%', child_c: 'Reduzir muito (sedação prolongada)' },
     molecula: 'midazolam',
@@ -403,6 +406,7 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   },
   {
     id: 'fenobarbital-paliativo',
+    indicacao_contexto: 'Sedação paliativa / convulsão refratária',
     ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Reduzir/espaçar', tfg_lt_15: 'Reduzir; dose após diálise', dialisavel: true },
     ajuste_hepatico: { child_a: 'Cautela', child_b: 'Reduzir', child_c: 'Reduzir (metabolismo hepático)' },
     molecula: 'fenobarbital',
@@ -442,6 +446,7 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'haloperidol-paliativo',
+    indicacao_contexto: 'Náusea / delirium em cuidados paliativos',
     ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (metabolismo hepático)', dialisavel: false },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Reduzir' },
     molecula: 'haloperidol',
@@ -526,6 +531,7 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'lorazepam-paliativo',
+    indicacao_contexto: 'Ansiedade / agitação em cuidados paliativos',
     ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (glicuronidação)', dialisavel: false },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste (glicuronidação preservada)', child_c: 'Reduzir' },
     molecula: 'lorazepam',
@@ -569,6 +575,7 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'metoclopramida-paliativa',
+    indicacao_contexto: 'Náusea / obstrução intestinal em cuidados paliativos',
     ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Reduzir ~25%', tfg_30_15: 'Reduzir ~50% (risco extrapiramidal)', tfg_lt_15: 'Reduzir 50–75%', dialisavel: false },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Reduzir ~50%', child_c: 'Reduzir' },
     molecula: 'metoclopramida',
@@ -613,6 +620,7 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   },
   {
     id: 'ondansetrona-paliativa',
+    indicacao_contexto: 'Náusea em cuidados paliativos',
     ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (metabolismo hepático)', dialisavel: false },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Máx 8 mg/dia' },
     molecula: 'ondansetrona',
@@ -814,6 +822,7 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   },
   {
     id: 'gabapentina-paliativa',
+    indicacao_contexto: 'Dor neuropática em cuidados paliativos',
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste (eliminação renal)' },
     molecula: 'gabapentina',
     nome_generico: 'Gabapentina (Dor Neuropática — Paliativo)',
@@ -855,6 +864,7 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   },
   {
     id: 'amitriptilina-paliativa',
+    indicacao_contexto: 'Dor neuropática em cuidados paliativos',
     ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (metabolismo hepático)', dialisavel: false },
     ajuste_hepatico: { child_a: 'Reduzir', child_b: 'Reduzir', child_c: 'Evitar (sedação/hepatotox)' },
     molecula: 'amitriptilina',
@@ -935,6 +945,7 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   },
   {
     id: 'naloxona-antidoto-opioide',
+    indicacao_contexto: 'Reversão de opioide — cuidados paliativos',
     ajuste_renal: { normal: 'Titular ao efeito', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Titular ao efeito', dialisavel: false },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Titular ao efeito' },
     molecula: 'naloxona',

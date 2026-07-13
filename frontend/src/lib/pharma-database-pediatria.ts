@@ -313,6 +313,7 @@ export const PHARMA_DB_PEDIATRIA: QuickDrug[] = [
   // ─── FENOBARBITAL NEONATAL IV ─────────────────────────────
   {
     id: 'fenobarbital-neonatal',
+    indicacao_contexto: 'Convulsão neonatal',
     ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Reduzir/espaçar', tfg_lt_15: 'Reduzir; dose após diálise', dialisavel: true },
     ajuste_hepatico: { child_a: 'Cautela', child_b: 'Reduzir', child_c: 'Reduzir' },
     molecula: 'fenobarbital',

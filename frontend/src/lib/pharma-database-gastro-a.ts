@@ -274,6 +274,7 @@ export const PHARMA_DB_GASTRO_A: QuickDrug[] = [
 
   {
     id: 'ondansetrona',
+    indicacao_contexto: 'Náusea / vômito (geral)',
     molecula: 'Ondansetrona',
     nome_generico: 'Cloridrato de Ondansetrona',
     sinonimos: ['zofran', 'ondansetron', 'ondansetrona', 'antiemetico oncologia', '5ht3 antagonista', 'nauseias quimioterapia'],
@@ -320,6 +321,7 @@ export const PHARMA_DB_GASTRO_A: QuickDrug[] = [
 
   {
     id: 'metoclopramida',
+    indicacao_contexto: 'Náusea / gastroparesia (geral)',
     molecula: 'Metoclopramida',
     nome_generico: 'Cloridrato de Metoclopramida',
     sinonimos: ['plasil', 'metoclopramide', 'metoclopramida', 'antiemetico plasil', 'procinético plasil', 'antagonista dopamina gástrica'],

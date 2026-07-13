@@ -93,8 +93,8 @@
 
 ---
 
-**MED-01 · Duplicidade de molécula por contexto clínico (14 grupos)** — **⏸ ADIADO PARA RM-06 (refatoração de modelo, não correção pontual)**
-> Nota: os registros por contexto (UTI/paliativo/neonatal) carregam **doses clínicas distintas por cenário**. Consolidá-los à força agora arriscaria **perder posologia específica de contexto** — exatamente o tipo de dado que não se pode fabricar ao re-mesclar. Correto tratar na consolidação canônica (RM-06) com `indicacao_contexto` como metadado, não como "correção" cega.
+**MED-01 · Duplicidade de molécula por contexto clínico (14 grupos)** — **✅ CORRIGIDO (metadado `indicacao_contexto`, sem mesclar)**
+> Adicionado campo `indicacao_contexto` e marcados os **30 registros** dos 14 grupos (midazolam, fenobarbital, fentanil, amiodarona, haloperidol, gabapentina, lorazepam, ondansetrona, metoclopramida, tramadol, amitriptilina, azitromicina, prednisolona, naloxona). A duplicação passa a ser **intencional e explícita** — cada registro preserva a posologia do seu contexto (UTI/paliativo/neonatal/emergência). **Não houve mesclagem** (evita perder dose específica de contexto); a consolidação física numa base canônica única permanece escopo do RM-06.
 - **Arquivos/Linhas (exemplo `midazolam`):** `pharma-database-neuro-b.ts:566` (`midazolam`), `pharma-database-icu.ts:299` (`midazolam-uti`), `pharma-database-palliative.ts:342` (`midazolam-paliativo`)
 - **Problema:** 14 moléculas existem como múltiplos registros para contextos diferentes (UTI/paliativo/neonatal/PCR/transdérmico): midazolam (3×), fenobarbital (3×), fentanil (2×), amiodarona, haloperidol, gabapentina, lorazepam, ondansetrona, metoclopramida, tramadol, amitriptilina, azitromicina, prednisolona, naloxona. Compartilham `molecule_id` mas têm dados potencialmente divergentes entre as cópias.
 - **Correção sugerida:** manter contexto como metadado (`indicacao_contexto`) sobre **um** registro canônico por `molecule_id`, em vez de duplicar a molécula. Consolidar via RM-06.
@@ -128,16 +128,14 @@
 
 ---
 
-**BAIXO-01 · 335 moléculas sem dose pediátrica** — **⏸ REQUER VERIFICAÇÃO CLÍNICA (não fabricar dose)**
-- **Arquivo:** `pharma-database-*.ts`
-- **Problema:** `dose_pediatrica` ausente em 94% da base. Muitos são fármacos de uso adulto (aceitável), mas a ausência não distingue "não se aplica" de "dado faltante".
-- **Correção sugerida:** para fármacos de uso pediátrico, popular a dose; para os demais, marcar explicitamente `uso_pediatrico: 'nao_aplicavel'`.
-- **Impacto clínico:** **BAIXO-MÉDIO** — relevante apenas na população pediátrica (coberta por `pediatric-engine`).
+**BAIXO-01 · 335 moléculas sem dose pediátrica** — **✅ CORRIGIDO estruturalmente (marcador `uso_pediatrico`)**
+- **Correção aplicada:** adicionado campo `uso_pediatrico?: 'nao_aplicavel'` ao schema e marcados **61 fármacos comprovadamente adulto-only** (DPOC-específicos, T2DM/obesidade, DOACs, menopausa, demência/Parkinson, quelantes de fosfato). Abordagem conservadora — em caso de dúvida NÃO marca, jamais excluindo falsamente um fármaco de uso pediátrico. As doses pediátricas reais dos fármacos pediátrico-relevantes permanecem como lacuna a verificar (nunca fabricadas).
+- **Impacto clínico:** **BAIXO-MÉDIO** — agora a base distingue "não se aplica" de "dado faltante".
 
-**BAIXO-02 · Registros ANVISA ausentes (~46% das apresentações Eurofarma)** — **⏸ REQUER CONSULTA ANVISA (nunca fabricar número de registro)**
-- **Arquivo:** `eurofarma-sync.ts`
-- **Problema:** ~46% das apresentações sem `registro_anvisa`.
-- **Correção sugerida:** completar via consulta ANVISA (nunca fabricar número).
+**BAIXO-02 · Registros ANVISA ausentes (47% das apresentações Eurofarma)** — **⏸ NÃO PREENCHÍVEL SEM PORTAL ANVISA (consulta realizada; não fabricado)**
+- **Arquivo:** `eurofarma-sync.ts` — 106 apresentações (50 produtos) sem `registro_anvisa`.
+- **Consulta realizada (autorizada):** as fontes abertas (bulários, sites) devolvem no máximo o número-base do registro (ex.: Zart H `1.0043.1131`), mas o **formato armazenado é granular por apresentação** (`1.0281.0192.001-7`, com sufixo `.00X-Y` específico da embalagem) e os produtos Eurofarma usam prefixos distintos (1.0043, 1.0281…). O sufixo por apresentação **não é derivável nem presumível**.
+- **Decisão:** **não preenchido** — completar o código por apresentação exige o portal oficial `consultas.anvisa.gov.br` por produto. Preencher número parcial/presumido violaria a regra "nunca fabricar número de registro". Permanece `NÃO VERIFICADO` por princípio.
 - **Impacto clínico:** **BAIXO** — rastreabilidade regulatória.
 
 **BAIXO-03 · Slugs de laboratório inconsistentes (documental)** — **✅ CORRIGIDO no caminho de projeção** (resolvido junto com MED-04: `resolveLaboratory` agora unifica `_`/`-` e emite `laboratory_id` canônico; unificação das strings estáticas legadas fica para o RM-06).

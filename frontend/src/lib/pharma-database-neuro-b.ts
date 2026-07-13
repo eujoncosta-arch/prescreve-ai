@@ -222,6 +222,7 @@ export const PHARMA_DB_NEURO_B: QuickDrug[] = [
 
   {
     id: 'gabapentina',
+    indicacao_contexto: 'Epilepsia / dor neuropática (geral)',
     molecula: 'Gabapentina',
     nome_generico: 'Gabapentina',
     sinonimos: ['neurontin', 'gabapentin', 'gabapentina', 'anticonvulsivante neuropatia', 'dor neuropatica gabapentina'],
@@ -368,6 +369,7 @@ export const PHARMA_DB_NEURO_B: QuickDrug[] = [
 
   {
     id: 'fenobarbital',
+    indicacao_contexto: 'Epilepsia (geral)',
     molecula: 'Fenobarbital',
     nome_generico: 'Fenobarbital',
     sinonimos: ['gardenal', 'phenobarbital', 'fenobarbital', 'barbiturico anticonvulsivante', 'gardenal epilepsia'],
@@ -566,6 +568,7 @@ export const PHARMA_DB_NEURO_B: QuickDrug[] = [
 
   {
     id: 'midazolam',
+    indicacao_contexto: 'Sedação / ansiólise (geral)',
     molecula: 'Midazolam',
     nome_generico: 'Maleato de Midazolam',
     sinonimos: ['dormicum', 'midazolam', 'benzodiazepÃ­nico iv', 'sedacao procedimento', 'midazolam status epilepticus'],
@@ -669,6 +672,7 @@ export const PHARMA_DB_NEURO_B: QuickDrug[] = [
 
   {
     id: 'lorazepam',
+    indicacao_contexto: 'Ansiedade / status epilepticus (psiquiatria)',
     molecula: 'Lorazepam',
     nome_generico: 'Lorazepam',
     sinonimos: ['ativan', 'lorazepam', 'bzd aÃ§Ã£o intermediÃ¡ria', 'status lorazepam', 'antiemetico quimio'],

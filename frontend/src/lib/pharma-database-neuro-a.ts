@@ -338,6 +338,7 @@ export const PHARMA_DB_NEURO_A: QuickDrug[] = [
 
   {
     id: 'amitriptilina',
+    indicacao_contexto: 'Depressão / dor neuropática (psiquiatria)',
     molecula: 'Amitriptilina',
     nome_generico: 'Cloridrato de Amitriptilina',
     sinonimos: ['tryptanol', 'amitriptyline', 'amitriptilina', 'tca', 'antidepressivo triclico', 'neuropatia dor'],
@@ -585,6 +586,7 @@ export const PHARMA_DB_NEURO_A: QuickDrug[] = [
 
   {
     id: 'haloperidol',
+    indicacao_contexto: 'Psicose / agitação (psiquiatria)',
     molecula: 'Haloperidol',
     nome_generico: 'Haloperidol',
     sinonimos: ['haldol', 'haloperidol', 'antipsicótico tipico', 'dopaminergico d2', 'butirofenona'],

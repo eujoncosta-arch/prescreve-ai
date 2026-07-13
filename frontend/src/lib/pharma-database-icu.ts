@@ -316,6 +316,7 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   },
   {
     id: 'midazolam-uti',
+    indicacao_contexto: 'Sedação contínua em UTI',
     ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste do fármaco', tfg_30_15: 'Reduzir — metabólito alfa-OH acumula (sedação prolongada)', tfg_lt_15: 'Reduzir ao menos 50%, titular', dialisavel: false },
     ajuste_hepatico: { child_a: 'Reduzir', child_b: 'Reduzir ~50%', child_c: 'Reduzir muito' },
     molecula: 'midazolam',
@@ -438,6 +439,7 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'fentanil-uti',
+    indicacao_contexto: 'Analgossedação em UTI (IV contínuo)',
     ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste — opioide de escolha na IR (titular)', dialisavel: false },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Reduzir', child_c: 'Reduzir/titular' },
     molecula: 'fentanil',
@@ -742,6 +744,7 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'amiodarona-pcr',
+    indicacao_contexto: 'PCR / arritmia — protocolo de emergência',
     ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (eliminação hepática/biliar)', dialisavel: false },
     ajuste_hepatico: { child_a: 'Cautela', child_b: 'Reduzir/monitorar TGO/TGP', child_c: 'Evitar (hepatotoxicidade)' },
     molecula: 'amiodarona',
@@ -964,6 +967,7 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   },
   {
     id: 'naloxona',
+    indicacao_contexto: 'Reversão de opioide — emergência',
     ajuste_renal: { normal: 'Titular ao efeito', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Titular ao efeito', dialisavel: false },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Titular' },
     molecula: 'naloxona',
