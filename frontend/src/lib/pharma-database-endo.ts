@@ -294,6 +294,7 @@ export const PHARMA_DB_ENDO: QuickDrug[] = [
 
   {
     id: 'liraglutida',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Liraglutida',
     nome_generico: 'Liraglutida',
     sinonimos: ['victoza', 'saxenda', 'liraglutide', 'glp-1', 'ar-glp1', 'agonista glp-1'],
@@ -350,6 +351,7 @@ export const PHARMA_DB_ENDO: QuickDrug[] = [
 
   {
     id: 'tirzepatida',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Tirzepatida',
     nome_generico: 'Tirzepatida',
     sinonimos: ['mounjaro', 'zepbound', 'tirzepatide', 'dual gip glp-1', 'agonista duplo', 'twincretin'],
@@ -408,6 +410,7 @@ export const PHARMA_DB_ENDO: QuickDrug[] = [
 
   {
     id: 'pioglitazona',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Pioglitazona',
     nome_generico: 'Cloridrato de Pioglitazona',
     sinonimos: ['actos', 'pioglitazona', 'tiazolidinediona', 'glitazona', 'ppar-gama'],
@@ -461,6 +464,7 @@ export const PHARMA_DB_ENDO: QuickDrug[] = [
 
   {
     id: 'acarbose',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Acarbose',
     nome_generico: 'Acarbose',
     sinonimos: ['glucobay', 'acarbose', 'inibidor alfa-glicosidase', 'iag'],
@@ -678,6 +682,7 @@ export const PHARMA_DB_ENDO: QuickDrug[] = [
 
   {
     id: 'alendronato',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Alendronato',
     nome_generico: 'Alendronato Sódico',
     sinonimos: ['fosamax', 'alendronato', 'bifosfonato', 'osteoporose', 'alendronate'],
@@ -787,6 +792,7 @@ export const PHARMA_DB_ENDO: QuickDrug[] = [
 
   {
     id: 'orlistate',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Orlistate',
     nome_generico: 'Orlistate',
     sinonimos: ['xenical', 'orlistat', 'inibidor lipase', 'obesidade'],
@@ -839,6 +845,7 @@ export const PHARMA_DB_ENDO: QuickDrug[] = [
 
   {
     id: 'naltrexona_bupropiona',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Naltrexona/Bupropiona',
     nome_generico: 'Cloridrato de Naltrexona + Cloridrato de Bupropiona (LP)',
     sinonimos: ['contrave', 'mysimba', 'naltrexona bupropiona', 'antiobesidade combinado'],
@@ -891,6 +898,7 @@ export const PHARMA_DB_ENDO: QuickDrug[] = [
 
   {
     id: 'semaglutida_obesidade',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Semaglutida 2,4 mg',
     nome_generico: 'Semaglutida (dose obesidade)',
     sinonimos: ['wegovy', 'semaglutida obesidade', 'semaglutida 2.4', 'glp-1 obesidade', 'ar-glp1 anti-obesidade'],

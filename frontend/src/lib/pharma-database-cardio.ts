@@ -186,6 +186,7 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'sacubitril_valsartana',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Sacubitril/Valsartana',
     nome_generico: 'Sacubitril + Valsartana (LCZ696)',
     sinonimos: ['entresto', 'arni', 'sacubitril valsartana', 'lbq657', 'sacubitril', 'neprilisina'],
@@ -245,6 +246,7 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'nebivolol',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Nebivolol',
     nome_generico: 'Cloridrato de Nebivolol',
     sinonimos: ['nebilet', 'nebivolol', 'bb3', 'betabloqueador vasodilatador', 'beta1 seletivo'],
@@ -569,6 +571,7 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'eplerenona',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Eplerenona',
     nome_generico: 'Eplerenona',
     sinonimos: ['inspra', 'eplerenona', 'arm seletivo', 'arm2', 'aldosterona antagonista seletivo'],
@@ -806,6 +809,7 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'apixabana',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Apixabana',
     nome_generico: 'Apixabana',
     sinonimos: ['eliquis', 'apixaban', 'doac', 'xoa', 'fator xa direto', 'anticoagulante oral direto'],
@@ -855,6 +859,7 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'rivaroxabana',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Rivaroxabana',
     nome_generico: 'Rivaroxabana',
     sinonimos: ['xarelto', 'rivaroxaban', 'doac', 'fator xa', 'xoa direto'],
@@ -899,6 +904,7 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'dabigatrana',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Dabigatrana',
     nome_generico: 'Etexilato de Dabigatrana',
     sinonimos: ['pradaxa', 'dabigatran', 'doac', 'inibidor trombina direta', 'fator iia direto'],
@@ -1006,6 +1012,7 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'ticagrelor',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Ticagrelor',
     nome_generico: 'Ticagrelor',
     sinonimos: ['brilique', 'ticagrelor', 'antiplaquetario', 'p2y12 reversivel', 'ciclopentrole'],
@@ -1062,6 +1069,7 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'ezetimiba',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Ezetimiba',
     nome_generico: 'Ezetimiba',
     sinonimos: ['ezetrol', 'ezetimibe', 'hipolipemiante', 'inibidor absorcao colesterol', 'niemann-pick c1l1'],
@@ -1109,6 +1117,7 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'fenofibrato',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Fenofibrato',
     nome_generico: 'Fenofibrato',
     sinonimos: ['lipanthyl', 'lipliner', 'fenofibrate', 'fibrato', 'ppar-alfa'],
@@ -1262,6 +1271,7 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'ivabradina',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Ivabradina',
     nome_generico: 'Cloridrato de Ivabradina',
     sinonimos: ['procoralan', 'corlanor', 'ivabradina', 'inibidor if', 'cronotrópico negativo puro'],

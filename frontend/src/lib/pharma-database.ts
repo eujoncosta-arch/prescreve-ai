@@ -73,6 +73,12 @@ export interface QuickDrug {
   };
 
   dose_pediatrica?: PediatricDose;
+  /**
+   * RM-01 BAIXO-01: distingue "não se aplica" (fármaco de uso adulto) de "dose ausente".
+   * 'nao_aplicavel' = sem indicação/uso pediátrico estabelecido nesta base;
+   * ausência do campo com dose_pediatrica ausente = dose pediátrica a verificar.
+   */
+  uso_pediatrico?: 'nao_aplicavel';
   ajuste_renal?: RenalAdjustment;
   ajuste_hepatico?: HepaticAdjustment;
 
@@ -604,6 +610,7 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'empagliflozina',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Empagliflozina',
     nome_generico: 'Empagliflozina',
     sinonimos: ['jardiance', 'sglt2', 'sglt-2', 'glifozina'],
@@ -633,6 +640,7 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'sitagliptina',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Sitagliptina',
     nome_generico: 'Fosfato de Sitagliptina',
     sinonimos: ['januvia', 'dpp4', 'dpp-4', 'gliptina'],
@@ -1099,6 +1107,8 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'dapagliflozina',
+    uso_pediatrico: 'nao_aplicavel',
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Avaliar risco-benefício (iniciar 5 mg)' },
     molecula: 'Dapagliflozina',
     nome_generico: 'Dapagliflozina',
     sinonimos: ['glif', 'dapa', 'sglt2', 'forxiga', 'isglt2', 'glifozina'],
@@ -1128,6 +1138,8 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'semaglutida',
+    uso_pediatrico: 'nao_aplicavel',
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Experiência limitada (cautela)' },
     molecula: 'Semaglutida',
     nome_generico: 'Semaglutida',
     sinonimos: ['extensior', 'ozempic', 'wegovy', 'glp1', 'ar-glp1', 'semaglutide'],
@@ -1156,6 +1168,7 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'glimepirida',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Glimepirida',
     nome_generico: 'Glimepirida',
     sinonimos: ['betes', 'amaryl', 'sulfonilureia', 'glimepiride'],
@@ -1221,6 +1234,7 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'vortioxetina',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Vortioxetina',
     nome_generico: 'Bromidrato de Vortioxetina',
     sinonimos: ['vod', 'brintellix', 'vortioxetine', 'multimodal', 'antidepressivo multimodal'],
@@ -1413,6 +1427,7 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'pramipexol',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Pramipexol',
     nome_generico: 'Dicloridrato de Pramipexol',
     sinonimos: ['pisa', 'mirapex', 'pramipexole', 'parkinson', 'spi', 'agonista dopaminergico'],
@@ -2086,6 +2101,7 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'doxazosina',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Mesilato de Doxazosina',
     nome_generico: 'Mesilato de Doxazosina',
     sinonimos: ['duomo', 'doxazosina', 'alfa-bloqueador', 'hiperplasia prostática', 'hbp', 'hipertensão'],
@@ -2115,6 +2131,7 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'tadalafila',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Tadalafila',
     nome_generico: 'Tadalafila',
     sinonimos: ['cialis', 'tadalafila', 'pde5', 'disfunção erétil', 'hbp', 'hipertensão pulmonar'],
@@ -2212,6 +2229,7 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'memantina',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Cloridrato de Memantina',
     nome_generico: 'Cloridrato de Memantina',
     sinonimos: ['memantina', 'ebixa', 'alzheimer', 'demência', 'antagonista nmda'],
@@ -2242,6 +2260,7 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'donepezila',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Cloridrato de Donepezila',
     nome_generico: 'Cloridrato de Donepezila',
     sinonimos: ['aricept', 'donepezila', 'alzheimer', 'demência', 'inibidor colinesterase'],
@@ -2339,6 +2358,7 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'glicazida',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Glicazida',
     nome_generico: 'Glicazida',
     sinonimos: ['diamicron', 'glicazida', 'sulfonilureia', 'antidiabético', 'dm2', 'hipoglicemiante'],
@@ -2373,6 +2393,7 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'glibenclamida',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Glibenclamida',
     nome_generico: 'Glibenclamida',
     sinonimos: ['daonil', 'glibenclamida', 'sulfonilureia', 'antidiabético', 'dm2', 'hipoglicemiante'],
@@ -2446,6 +2467,7 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'trimetazidina',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Trimetazidina',
     nome_generico: 'Dicloridrato de Trimetazidina',
     sinonimos: ['vascor mr', 'trimetazidina', 'angina', 'cardioprotecao', 'ischemia'],
@@ -2583,6 +2605,7 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'risedronato',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Risedronato',
     nome_generico: 'Sódio de Risedronato',
     sinonimos: ['dorto', 'risedronato', 'osteoporose', 'bifosfonato', 'bisfosfonato'],
@@ -2678,6 +2701,8 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'tiotropio',
+    uso_pediatrico: 'nao_aplicavel',
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste (inalatório)' },
     molecula: 'Tiotrópio',
     nome_generico: 'Brometo de Tiotrópio',
     sinonimos: ['tiotropio', 'tiotrópio', 'tiotropium', 'spiriva'],
@@ -2708,6 +2733,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'umeclidinio',
+    uso_pediatrico: 'nao_aplicavel',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (inalatório)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste (inalatório)' },
     molecula: 'Umeclidínio',
     nome_generico: 'Brometo de Umeclidínio',
     sinonimos: ['umeclidinio', 'umeclidínio', 'umeclidinium', 'incruse'],
@@ -2739,6 +2767,8 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'formoterol',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (inalatório)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Cautela' },
     molecula: 'Formoterol',
     nome_generico: 'Fumarato de Formoterol',
     sinonimos: ['formoterol', 'formoteroldihidratado', 'foradil', 'oxis'],
@@ -2769,6 +2799,8 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'salmeterol',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (inalatório)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Cautela' },
     molecula: 'Salmeterol',
     nome_generico: 'Xinafoato de Salmeterol',
     sinonimos: ['salmeterol', 'serevent', 'xinafoato de salmeterol'],

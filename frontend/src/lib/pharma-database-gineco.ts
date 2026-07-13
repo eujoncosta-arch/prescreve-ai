@@ -170,6 +170,7 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
   },
   {
     id: 'medroxiprogesterona-injetavel',
+    uso_pediatrico: 'nao_aplicavel',
     ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
     ajuste_hepatico: { child_a: 'Cautela', child_b: 'Evitar', child_c: 'Contraindicado (disfunção hepática)' },
     molecula: 'acetato de medroxiprogesterona',
@@ -211,6 +212,7 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
   // ─── TERAPIA HORMONAL DA MENOPAUSA ───────────────────────
   {
     id: 'estradiol-transdermico',
+    uso_pediatrico: 'nao_aplicavel',
     ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
     ajuste_hepatico: { child_a: 'Cautela', child_b: 'Evitar', child_c: 'Contraindicado' },
     molecula: 'estradiol',
@@ -254,6 +256,7 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
   },
   {
     id: 'progesterona-micronizada',
+    uso_pediatrico: 'nao_aplicavel',
     ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
     ajuste_hepatico: { child_a: 'Cautela', child_b: 'Reduzir', child_c: 'Evitar' },
     molecula: 'progesterona micronizada',
@@ -300,6 +303,7 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
   },
   {
     id: 'tibolona',
+    uso_pediatrico: 'nao_aplicavel',
     ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
     ajuste_hepatico: { child_a: 'Cautela', child_b: 'Evitar', child_c: 'Contraindicado' },
     molecula: 'tibolona',
@@ -552,6 +556,7 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
   },
   {
     id: 'betametasona-antenatal',
+    uso_pediatrico: 'nao_aplicavel',
     ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Cautela' },
     molecula: 'betametasona',
@@ -664,6 +669,7 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
   },
   {
     id: 'cabergolina',
+    uso_pediatrico: 'nao_aplicavel',
     ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (metabolismo hepático)', dialisavel: false },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Reduzir', child_c: 'Reduzir (metabolismo hepático)' },
     molecula: 'cabergolina',

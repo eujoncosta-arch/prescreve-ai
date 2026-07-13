@@ -142,6 +142,7 @@ export const PHARMA_DB_PULMO_A: QuickDrug[] = [
 
   {
     id: 'indacaterol',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Indacaterol',
     nome_generico: 'Maleato de Indacaterol',
     sinonimos: ['onbrez', 'indacaterol', 'indacaterolum', 'laba once daily', 'laba 1x dia'],
@@ -182,6 +183,7 @@ export const PHARMA_DB_PULMO_A: QuickDrug[] = [
 
   {
     id: 'olodaterol',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Olodaterol',
     nome_generico: 'Cloridrato de Olodaterol',
     sinonimos: ['striverdi', 'olodaterol', 'laba respimat', 'laba 1x dia dpoc'],
@@ -255,6 +257,7 @@ export const PHARMA_DB_PULMO_A: QuickDrug[] = [
 
   {
     id: 'aclidinio',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Aclidínio',
     nome_generico: 'Brometo de Aclidínio',
     sinonimos: ['eklira', 'aclidinio', 'aclidinium', 'lama genuair'],
@@ -536,6 +539,7 @@ export const PHARMA_DB_PULMO_A: QuickDrug[] = [
 
   {
     id: 'fluticasona_ff_vilanterol',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Fluticasona Furoato/Vilanterol',
     nome_generico: 'Furoato de Fluticasona + Trifenatato de Vilanterol',
     sinonimos: ['breo', 'relvar', 'fluticasona vilanterol', 'ics laba 1x dia', 'breo ellipta'],
@@ -616,6 +620,7 @@ export const PHARMA_DB_PULMO_A: QuickDrug[] = [
 
   {
     id: 'indacaterol_glicopirronio',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Indacaterol/Glicopirrônio',
     nome_generico: 'Maleato de Indacaterol + Brometo de Glicopirrônio',
     sinonimos: ['ultibro', 'indacaterol glicopirronio', 'laba lama ultibro', 'laba lama breezhaler'],
@@ -655,6 +660,7 @@ export const PHARMA_DB_PULMO_A: QuickDrug[] = [
 
   {
     id: 'vilanterol_umeclidinio',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Vilanterol/Umeclidínio',
     nome_generico: 'Trifenatato de Vilanterol + Brometo de Umeclidínio',
     sinonimos: ['anoro', 'vilanterol umeclidinio', 'laba lama anoro', 'anoro ellipta'],
@@ -689,6 +695,7 @@ export const PHARMA_DB_PULMO_A: QuickDrug[] = [
 
   {
     id: 'olodaterol_tiotropio',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Olodaterol/Tiotrópio',
     nome_generico: 'Cloridrato de Olodaterol + Brometo de Tiotrópio',
     sinonimos: ['spiolto', 'olodaterol tiotropio', 'laba lama respimat', 'spiolto respimat'],
@@ -725,6 +732,7 @@ export const PHARMA_DB_PULMO_A: QuickDrug[] = [
 
   {
     id: 'fluticasona_ff_vilanterol_umeclidinio',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Fluticasona Furoato/Vilanterol/Umeclidínio',
     nome_generico: 'FF/Vilanterol/Umeclidínio (Trelegy)',
     sinonimos: ['trelegy', 'triple therapy ellipta', 'ics laba lama 1x dia', 'trelegy ellipta'],
@@ -765,6 +773,7 @@ export const PHARMA_DB_PULMO_A: QuickDrug[] = [
 
   {
     id: 'budesonida_formoterol_glicopirronio',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Budesonida/Formoterol/Glicopirrônio',
     nome_generico: 'Budesonida + Fumarato de Formoterol + Brometo de Glicopirrônio',
     sinonimos: ['trixeo', 'triple turbuhaler', 'ics laba lama budesonida', 'trixeo aerosphere'],

@@ -501,6 +501,7 @@ export const PHARMA_DB_PULMO_B: QuickDrug[] = [
 
   {
     id: 'roflumilaste',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Roflumilaste',
     nome_generico: 'Roflumilaste',
     sinonimos: ['daxas', 'daliresp', 'roflumilast', 'roflumilaste', 'pde4 inibidor', 'dpoc exacerbações'],

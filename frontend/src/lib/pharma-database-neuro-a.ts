@@ -207,6 +207,7 @@ export const PHARMA_DB_NEURO_A: QuickDrug[] = [
 
   {
     id: 'levomilnaciprano',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Levomilnaciprano',
     nome_generico: 'Cloridrato de Levomilnaciprano',
     sinonimos: ['fetzima', 'levomilnacipran', 'levomilnaciprano', 'irsn noradrenergico'],
@@ -291,6 +292,7 @@ export const PHARMA_DB_NEURO_A: QuickDrug[] = [
 
   {
     id: 'agomelatina',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Agomelatina',
     nome_generico: 'Agomelatina',
     sinonimos: ['valdoxan', 'agomelatine', 'agomelatina', 'melatonina antidepressivo', 'mt1 mt2'],
@@ -481,6 +483,7 @@ export const PHARMA_DB_NEURO_A: QuickDrug[] = [
 
   {
     id: 'tranilcipromina',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Tranilcipromina',
     nome_generico: 'Sulfato de Tranilcipromina',
     sinonimos: ['parnate', 'tranylcypromine', 'tranilcipromina', 'imao nao seletivo', 'imao irreversivel'],
@@ -534,6 +537,7 @@ export const PHARMA_DB_NEURO_A: QuickDrug[] = [
 
   {
     id: 'moclobemida',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Moclobemida',
     nome_generico: 'Moclobemida',
     sinonimos: ['aurorix', 'moclobemide', 'moclobemida', 'imao reversivel', 'rima'],

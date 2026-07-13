@@ -13,6 +13,7 @@ export const PHARMA_DB_NEFRO: QuickDrug[] = [
 
   {
     id: 'sevelamer',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Sevelamer',
     nome_generico: 'Carbonato de Sevelamer / Cloridrato de Sevelamer',
     sinonimos: ['renvela', 'renagel', 'sevelamer', 'quelante fosforo', 'hiperfosfatemia dialise', 'sevelamer carbonato'],
@@ -99,6 +100,7 @@ export const PHARMA_DB_NEFRO: QuickDrug[] = [
 
   {
     id: 'carbonato-lantanio',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Carbonato de Lantânio',
     nome_generico: 'Carbonato de Lantânio',
     sinonimos: ['fosrenol', 'lanthanum carbonate', 'carbonato lantanio', 'quelante fosforo lantanio', 'hiperfosfatemia sem calcio'],
@@ -308,6 +310,7 @@ export const PHARMA_DB_NEFRO: QuickDrug[] = [
 
   {
     id: 'cinacalcete',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Cinacalcete',
     nome_generico: 'Cloridrato de Cinacalcete',
     sinonimos: ['mimpara', 'sensipar', 'cinacalcet', 'cinacalcete', 'calcimimetico', 'pth secundario calcimimetico', 'hipercalcemia paratireoidea'],
@@ -442,6 +445,7 @@ export const PHARMA_DB_NEFRO: QuickDrug[] = [
 
   {
     id: 'patiromer',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Patiromer Sórbitex Cálcio',
     nome_generico: 'Patiromer',
     sinonimos: ['veltassa', 'patiromer', 'quelante potassio', 'hipercalemia drc', 'hipercalemia ieca'],

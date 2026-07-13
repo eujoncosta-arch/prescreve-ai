@@ -424,6 +424,7 @@ export const PHARMA_DB_NEURO_B: QuickDrug[] = [
 
   {
     id: 'rivastigmina',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Rivastigmina',
     nome_generico: 'Tartarato de Rivastigmina',
     sinonimos: ['exelon', 'rivastigmine', 'rivastigmina', 'antidemencial patch', 'alzheimer rivastigmina', 'parkinson demencia'],
@@ -472,6 +473,7 @@ export const PHARMA_DB_NEURO_B: QuickDrug[] = [
 
   {
     id: 'galantamina',
+    uso_pediatrico: 'nao_aplicavel',
     molecula: 'Galantamina',
     nome_generico: 'Bromidrato de Galantamina',
     sinonimos: ['reminyl', 'galantamine', 'galantamina', 'antidemencial galantamina', 'alzheimer galantamina'],
