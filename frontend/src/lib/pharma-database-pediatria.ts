@@ -75,7 +75,9 @@ export const PHARMA_DB_PEDIATRIA: QuickDrug[] = [
       observacao: 'Dose inicial: 100–200 mg/kg. Dose de resgate: 100 mg/kg após 12h se necessário. Técnica LISA/MIST preferível.',
     },
     contraindicacoes_rapidas: ['Malformação congênita incompatível com a vida', 'Hemorragia pulmonar ativa'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: '(sem interação medicamentosa)', severidade: 'leve', descricao: 'Surfactante pulmonar de uso intratraqueal exclusivo — ação local; nenhuma interação medicamentosa relatada' },
+    ],
     alertas_especiais: [
       'Aquecer ao TA por 15–20 min antes de administrar (não agitar)',
       'Bradicardia e dessaturação transitórias: normais, regridem em segundos',
@@ -161,7 +163,9 @@ export const PHARMA_DB_PEDIATRIA: QuickDrug[] = [
       observacao: 'Volume > 1 mL: dividir em 2 sítios. Refrigerar 2–8°C. Aplicar no vasto lateral.',
     },
     contraindicacoes_rapidas: ['Hipersensibilidade grave a anticorpos monoclonais humanizados'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: '(sem interação farmacocinética relevante)', severidade: 'leve', descricao: 'Anticorpo monoclonal anti-VSR — sem estudos formais de interação; não interfere na resposta às vacinas de rotina (pode ser coadministrado). Pode interferir em ensaios de cultura viral' },
+    ],
     alertas_especiais: [
       'Não é vacina — não confere imunidade ativa',
       'Seguir critérios CONITEC/RENAME para acesso SUS',

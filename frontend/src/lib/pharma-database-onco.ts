@@ -923,7 +923,10 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
       instrucoes: 'Dose: 20% do peso de ifosfamida em cada bolus × 3. Exemplo: ifosfamida 2 g/m² → mesna 400 mg/m² em 3 × IV. Mesna VO disponível: 40% da dose IV (biodisponibilidade ~50%).',
     },
     contraindicacoes_rapidas: ['Hipersensibilidade'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Ifosfamida / ciclofosfamida', severidade: 'leve', descricao: 'Uroprotetor — liga metabólitos urotóxicos (acroleína) sem reduzir a atividade antineoplásica (dose 50–200% da oxazafosforina)' },
+      { com: 'Exames laboratoriais (cetonas urinárias, CPK)', severidade: 'leve', descricao: 'Causa falso-positivo de cetonas na urina e pode interferir na dosagem enzimática de CPK' },
+    ],
     alertas_especiais: [
       'INATIVA APENAS NA BEXIGA (via renal) — não interfere com ação antineoplásica da ifosfamida',
       'Hidratação vigorosa (2–3 L/dia) obrigatória em conjunto',

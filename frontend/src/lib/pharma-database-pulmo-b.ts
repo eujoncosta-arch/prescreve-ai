@@ -36,7 +36,9 @@ export const PHARMA_DB_PULMO_B: QuickDrug[] = [
     ajuste_renal: { normal: 'Sem ajuste formal', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Dados limitados', tfg_lt_15: 'Dados limitados', dialisavel: false },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Dados limitados' },
     contraindicacoes_rapidas: ['Hipersensibilidade ao omalizumabe', 'IgE < 30 ou > 1500 UI/mL (fora da faixa de eficácia)'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: '(sem interação farmacocinética relevante)', severidade: 'leve', descricao: 'Anticorpo monoclonal anti-IgE — não metabolizado por CYP, sem interações farmacocinéticas conhecidas. Não usar para tratar broncoespasmo agudo; cautela com vacinas de vírus vivo (imunobiológico)' },
+    ],
     alertas_especiais: [
       'ANAFILAXIA: rara (0,1–0,2%) — administrar em ambiente com recursos de emergência, observar 30 min',
       'RESPOSTA: avaliar em 16 semanas — suspender se sem melhora objetiva',
@@ -82,7 +84,9 @@ export const PHARMA_DB_PULMO_B: QuickDrug[] = [
     ajuste_renal: { normal: 'Sem ajuste', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Dados limitados', dialisavel: false },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Dados limitados' },
     contraindicacoes_rapidas: ['Hipersensibilidade ao mepolizumabe'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: '(sem interação farmacocinética relevante)', severidade: 'leve', descricao: 'Anticorpo monoclonal anti-IL-5 — não metabolizado por CYP, sem interações farmacocinéticas conhecidas. Não usar para broncoespasmo agudo; cautela com vacinas de vírus vivo' },
+    ],
     alertas_especiais: [
       'Indicação principal: asma eosinofílica (eosinófilos ≥ 150/μL) — NÃO usar em asma alérgica sem eosinofilia',
       'EGPA: dose de 300 mg SC q4 semanas (diferente da asma)',
@@ -124,7 +128,9 @@ export const PHARMA_DB_PULMO_B: QuickDrug[] = [
     ajuste_renal: { normal: 'Sem ajuste', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Dados limitados', dialisavel: false },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Dados limitados' },
     contraindicacoes_rapidas: ['Hipersensibilidade ao benralizumabe'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: '(sem interação farmacocinética relevante)', severidade: 'leve', descricao: 'Anticorpo monoclonal anti-IL-5Rα — não metabolizado por CYP, sem interações farmacocinéticas conhecidas. Não usar para broncoespasmo agudo; cautela com vacinas de vírus vivo' },
+    ],
     alertas_especiais: [
       'DEPLEÇÃO QUASE COMPLETA de eosinófilos — mecanismo via ADCC (citotoxicidade celular dependente de anticorpo)',
       'VANTAGEM POSOLÓGICA: após 3 doses mensais → 1 aplicação a cada 8 semanas',
@@ -213,7 +219,9 @@ export const PHARMA_DB_PULMO_B: QuickDrug[] = [
     ajuste_renal: { normal: 'Sem ajuste', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Dados limitados', dialisavel: false },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Dados limitados' },
     contraindicacoes_rapidas: ['Hipersensibilidade ao tezepelumabe'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: '(sem interação farmacocinética relevante)', severidade: 'leve', descricao: 'Anticorpo monoclonal anti-TSLP — não metabolizado por CYP, sem interações farmacocinéticas conhecidas. Não usar para broncoespasmo agudo; evitar vacinas de vírus vivo (recomendação de bula)' },
+    ],
     alertas_especiais: [
       'AMPLIAÇÃO DE PERFIL: eficaz em asma grave com e sem eosinofilia (eosinófilos < 150/μL) — diferencial vs anti-IL5',
       'Age upstream: bloqueia TSLP → impede ativação de múltiplas vias inflamatórias (Th1, Th2, Th17)',
@@ -385,7 +393,9 @@ export const PHARMA_DB_PULMO_B: QuickDrug[] = [
     ajuste_renal: { normal: 'Sem ajuste (ação local)', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste' },
     contraindicacoes_rapidas: ['Hipersensibilidade à dornase alfa ou CHO-derived proteins'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Outros medicamentos inalados (no mesmo nebulizador)', severidade: 'moderada', descricao: 'Não diluir nem misturar dornase alfa com outros fármacos no nebulizador (alteração físico-química) — nebulizar separadamente. Sem interações sistêmicas conhecidas' },
+    ],
     alertas_especiais: [
       'FIBROSE CÍSTICA: reduz exacerbações em 20% e melhora VEF1 em 5–10% — recomendado para FC com VEF1 > 40% previsto',
       'Custo elevado — disponível pelo SUS para fibrose cística (PCDT)',
@@ -660,7 +670,9 @@ OTLD: ≥ 15h/dia melhora sobrevida em DPOC hipoxêmico crônico (estudos MRC/NO
     ajuste_renal: { normal: 'Sem ajuste', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
     ajuste_hepatico: { child_a: 'Sem restrição', child_b: 'Sem restrição', child_c: 'Sem restrição' },
     contraindicacoes_rapidas: ['Pneumotórax hipertensivo (não ventila)', 'Necessidade de FiO₂ > 0,40 (mistura 70:30 limita O₂)'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Fármacos nebulizados (broncodilatadores)', severidade: 'leve', descricao: 'Gás de baixa densidade — altera o depósito do aerossol (↑deposição distal); ajustar o fluxo do nebulizador quando usado como gás propelente. Sem interação farmacológica sistêmica' },
+    ],
     alertas_especiais: [
       'NÃO é broncodilatador — reduz trabalho respiratório mas não trata broncoespasmo',
       'PONTE: usar enquanto broncodilatadores e corticoides fazem efeito',

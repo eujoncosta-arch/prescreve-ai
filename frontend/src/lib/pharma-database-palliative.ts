@@ -671,7 +671,9 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
       instrucoes: 'Compatível com morfina/midazolam em bomba SC. Potência similar à hioscina butilbrometo.',
     },
     contraindicacoes_rapidas: ['Glaucoma ângulo fechado', 'Hipersensibilidade'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Outros anticolinérgicos/antimuscarínicos (atropina, escopolamina, ADT, anti-H1, antiespasmódicos)', severidade: 'moderada', descricao: 'Efeitos anticolinérgicos aditivos — ↑risco de retenção urinária, íleo, delirium, arritmia (carga anticolinérgica), especialmente em idosos' },
+    ],
     alertas_especiais: [
       'Não cruza BHE — sem efeito central (vantagem sobre atropina)',
       'Alternativa à hioscina butilbrometo quando não disponível',
@@ -701,7 +703,10 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
       instrucoes: 'Injetar em abdome, coxa ou braço. Efeito em 30–60 min (evacuação em 50% dos casos). Manter laxantes convencionais. NÃO usar se suspeita de obstrução mecânica.',
     },
     contraindicacoes_rapidas: ['Obstrução intestinal mecânica conhecida ou suspeita (risco de perfuração)', 'Hipersensibilidade'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Outros antagonistas opioides (naloxona, naltrexona)', severidade: 'moderada', descricao: 'Efeito antagonista aditivo — pode precipitar síndrome de abstinência opioide sistêmica' },
+      { com: '(perfil CYP)', severidade: 'leve', descricao: 'Não inibe/induz significativamente CYP450 — mínimas interações farmacocinéticas; antagonista periférico, não reverte analgesia central' },
+    ],
     alertas_especiais: [
       'NÃO reverte analgesia central (antagonista periférico — não cruza BHE)',
       'OIC: desenvolve em 90% dos em uso crônico de opioides — prevenir profilaticamente',

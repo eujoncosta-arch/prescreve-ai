@@ -247,7 +247,9 @@ export const PHARMA_DB_NEFRO: QuickDrug[] = [
     ajuste_renal: { normal: 'Uso primário em DRC', tfg_60_30: 'Dose conforme Hb', tfg_30_15: 'Dose conforme Hb', tfg_lt_15: 'Dose conforme Hb', dialisavel: false },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Cautela' },
     contraindicacoes_rapidas: ['HAS não controlada', 'Hipersensibilidade', 'PRCA'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Ferro (suplementação)', severidade: 'leve', descricao: 'Não é interação farmacocinética, mas a resposta ao ESA depende de estoques de ferro adequados — corrigir ferropenia antes/durante o tratamento' },
+    ],
     alertas_especiais: [
       'MESMAS CAUTELAS QUE EPOETINA: Hb alvo < 11,5 g/dL, corrigir ferropenia antes',
       'VANTAGEM: 1×/semana ou quinzenal (vs 3×/semana da epoetina alfa)',
