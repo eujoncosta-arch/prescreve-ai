@@ -73,6 +73,8 @@ drugRepository.getAll();
 
 A migração dos consumidores existentes (UI/engines) para o repositório é o passo de rollout — as bases legadas **permanecem intactas até a migração completa e nova validação** (ver §5).
 
+**Guard de lint (catraca):** a regra `no-restricted-imports` (em `eslint.config.mjs`) **bloqueia imports diretos das bases legadas** em arquivos novos. Os consumidores atuais estão numa allowlist explícita (dívida de migração) — o build permanece verde, mas qualquer arquivo novo que tente `import … from '@/lib/pharma-database'` (ou outra base) falha o lint com orientação para usar o `drugRepository`. À medida que cada consumidor migra, ele sai da allowlist.
+
 ---
 
 ## 4. Resultado da migração (medido)
