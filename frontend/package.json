@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "tsx scripts/check-drug-consistency.mjs",
+    "prebuild": "tsx scripts/check-drug-consistency.mjs && tsx scripts/check-cross-database.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "check:consistency": "tsx scripts/check-drug-consistency.mjs",
+    "check:sync": "tsx scripts/check-cross-database.mjs",
     "test": "vitest run",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage"

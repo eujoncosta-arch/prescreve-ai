@@ -37,6 +37,8 @@ const RM06_ALLOWLIST = [
   "src/lib/lab-adapters/**",
   // Governanca RM-00 (adaptadores read-only das fontes)
   "src/lib/governance/**",
+  // RM-24 Cross Database Validator — compara as fontes legadas entre si (read-only)
+  "src/validation/cross-database/**",
   // Testes
   "src/tests/**",
   // Consumidores atuais (divida de migracao — migrar para pharma-core)

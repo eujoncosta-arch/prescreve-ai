@@ -45,7 +45,8 @@ export function toSlug(input: string): string {
 /** Qualificadores de sal removidos para obter a Denominação Comum (DCB) canônica. */
 const SALT_QUALIFIERS = [
   'besilato', 'maleato', 'cloridrato', 'dicloridrato', 'bromidrato', 'hemifumarato',
-  'fumarato', 'bissulfato', 'sulfato', 'sodica', 'sodico', 'potassica', 'potassico',
+  'fumarato', 'bissulfato', 'sulfato', 'sodica', 'sodico', 'potassica', 'potassico', 'potassio',
+  'oxalato',
   'calcica', 'calcico', 'tri-hidratada', 'trihidratada', 'di-hidratada', 'dihidratada',
   'di-hidratado', 'dihidratado', 'diidratado', 'diidratada',
   'di-hidrato', 'dihidrato', 'monoidratado', 'monoidratada', 'mononitrato', 'dinitrato',
@@ -59,7 +60,11 @@ const SALT_QUALIFIERS = [
  * Resolve as 27 duplicatas de sal detectadas na ETAPA 1.
  */
 export function toMoleculeId(molecula: string): string {
-  let s = ' ' + toSlug(molecula).replace(/-/g, ' ') + ' ';
+  // RM-24: remove conteúdo entre parênteses (sinônimos, ex.: "Paracetamol
+  // (Acetaminofeno)") antes de canonicalizar — evita molecule_ids divergentes
+  // para a mesma molécula entre fontes.
+  const base = molecula.replace(/\([^)]*\)/g, ' ');
+  let s = ' ' + toSlug(base).replace(/-/g, ' ') + ' ';
   for (const q of SALT_QUALIFIERS) {
     // Normaliza o qualificador do mesmo modo que a string (hífen → espaço),
     // para casar formas compostas como "di-hidratado" → "di hidratado".
