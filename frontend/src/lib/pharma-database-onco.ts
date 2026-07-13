@@ -529,7 +529,10 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
       instrucoes: 'Infundir em 90 min. NÃO administrar em bolus. Combinação com nivolumabe: nivo 1 mg/kg + ipi 3 mg/kg q3w × 4 ciclos.',
     },
     contraindicacoes_rapidas: ['Doença autoimune ativa grave', 'Transplante de órgão', 'Gravidez'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Corticosteroides sistêmicos / imunossupressores (basais)', severidade: 'moderada', descricao: 'Evitar ANTES de iniciar — podem reduzir a eficácia antitumoral (inibem ativação de linfócitos T). Após início, podem ser usados para tratar irAE sem prejuízo aparente da eficácia' },
+      { com: 'Outros inibidores de checkpoint (ex.: nivolumabe)', severidade: 'grave', descricao: 'Combinação ↑ substancialmente a incidência e gravidade de eventos adversos imunomediados' },
+    ],
     alertas_especiais: [
       '⚠ irAE MAIS GRAVE que anti-PD-1: colite (30–40%), hepatite, hipofisit',
       '⚠ DOSE DEPENDENTE DE irAE: 10 mg/kg (não aprovado) tem toxicidade proibitiva',
@@ -682,7 +685,10 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
       'Fístula ativa',
       'Tromboembolismo arterial recente (< 6 meses)',
     ],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Sunitinibe', severidade: 'grave', descricao: 'Combinação não recomendada — casos de anemia hemolítica microangiopática (MAHA) com fragmentação de hemácias e trombocitopenia' },
+      { com: 'Antraciclinas (± radioterapia torácica)', severidade: 'moderada', descricao: 'Possível aumento de cardiotoxicidade — cautela e monitorização da FEVE' },
+    ],
     alertas_especiais: [
       '⚠ PERFURAÇÃO GI: risco 1–3%; dor abdominal aguda → investigar urgência',
       '⚠ HIPERTENSÃO: desenvolve em 30–40% — monitorar PA a cada ciclo; tratar proativamente',
@@ -846,7 +852,10 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
       instrucoes: 'Iniciar 24–72h após última dose de QT. NÃO administrar 24h antes ou no dia da QT. Continuar até nadir passado e ANC ≥ 2000/mm³ em recuperação. Refrigerar 2–8°C.',
     },
     contraindicacoes_rapidas: ['LMA/LMC em tratamento ativo (pode estimular células malignas)', 'Hipersensibilidade'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Quimioterápicos citotóxicos', severidade: 'grave', descricao: 'Não administrar nas 24h antes até 24h após a QT — precursores mieloides em proliferação ficam mais sensíveis à citotoxicidade (piora a neutropenia)' },
+      { com: 'Lítio', severidade: 'moderada', descricao: 'Pode potencializar a liberação de neutrófilos — usar com cautela e monitorar leucograma' },
+    ],
     alertas_especiais: [
       'Dor óssea: tratamento com paracetamol ± loratadina',
       'Ruptura esplênica rara — dor abdominal esquerda nova: investigar',
@@ -877,7 +886,10 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
       instrucoes: 'Dose fixa (não depende do peso). 1 injeção por ciclo. NÃO usar em ciclos < 14 dias (overlap com próximo ciclo). Dispositivo On-Body Injector (OBI): injeção automática 27h após fixação — conveniência hospitalar/domiciliar.',
     },
     contraindicacoes_rapidas: ['Ciclos de QT < 14 dias', 'Hipersensibilidade'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Quimioterápicos citotóxicos', severidade: 'grave', descricao: 'Não administrar no mesmo dia da QT — dose única ≥24h após; mesma-dia prolonga a neutropenia grave (ECR)' },
+      { com: 'Lítio', severidade: 'moderada', descricao: 'Pode potencializar a liberação de neutrófilos — usar com cautela e monitorar leucograma' },
+    ],
     alertas_especiais: [
       'Equivalência terapêutica ao filgrastim diário demonstrada em múltiplos ECR',
       'Prefira para pacientes com dificuldade de adesão a filgrastim diário',
@@ -1001,7 +1013,9 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
       instrucoes: 'Diluir em SF 50 mL. Infundir em 30 min via linha separada (sem filtro). Coletar amostra de ácido úrico em gelo imediatamente — enzima degrada UA à temperatura ambiente.',
     },
     contraindicacoes_rapidas: ['Deficiência de G6PD (hemólise grave / metahemoglobinemia)', 'Hipersensibilidade'],
-    interacoes_importantes: [],
+    interacoes_importantes: [
+      { com: 'Dosagem de ácido úrico (interferência laboratorial)', severidade: 'moderada', descricao: 'Provoca leitura falsamente baixa de ácido úrico — coletar em tubo gelado com heparina e processar em ≤4 h. Sem interação metabólica com quimioterápicos (não induz/inibe CYP)' },
+    ],
     alertas_especiais: [
       '⚠ G6PD: triagem obrigatória antes — hemólise fulminante em deficientes',
       '⚠ AMOSTRA DE AU: coletar em tubo pré-gelado imediatamente — rasburicase ativa degrada UA in vitro',
