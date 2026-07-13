@@ -155,39 +155,39 @@
 
 ---
 
-## 5. STATUS DE REMEDIAÇÃO (atualizado)
+## 5. STATUS DE REMEDIAÇÃO (final)
 
-**Corrigidos (sem fabricar dado clínico — apenas fatos verificáveis em código/registro):**
+**Corrigidos — 11 de 12 achados:**
 
-| Achado | Severidade | Natureza da correção |
+| Achado | Sev. | Natureza da correção |
 |---|---|---|
-| CRIT-01 (contraindicações fentanil/naloxona) | 🔴 | Contraindicações reais de bula de opioide/antídoto |
-| ALTO-01 (formoterol 2 moléculas) | 🟠 | Canonicalização de sal no RM-00 (`SALT_QUALIFIERS`) |
-| ALTO-02 (marcas de referência → lab errado) | 🟠 | Root cause: `produtoToQuickBrand` fixava Eurofarma → deriva via `resolveLaboratory` |
-| ALTO-03 (marcas "X EMS" → Eurofarma) | 🟠 | Mesmo root cause; agora resolvem a EMS |
+| CRIT-01 (contraindicações fentanil/naloxona) | 🔴 | Contraindicações reais de bula |
+| CRIT-02 (interações em 37 fármacos) | 🔴 | **37/37** interações verificadas em fonte (6 lotes) |
+| ALTO-01 (formoterol 2 moléculas) | 🟠 | Canonicalização de sal no RM-00 |
+| ALTO-02 (marcas de referência → lab errado) | 🟠 | Root cause em `produtoToQuickBrand` → `resolveLaboratory` |
+| ALTO-03 (marcas "X EMS" → Eurofarma) | 🟠 | Mesmo root cause |
+| MED-01 (duplicidade por contexto) | 🟡 | Metadado `indicacao_contexto` (30 registros); sem mesclar |
+| MED-02 (205 ATC) | 🟡 | **355/355** com ATC (WHO) |
+| MED-03 (ajuste renal/hepático) | 🟡 | **355/355** renal e hepático; críticos verificados em fonte |
 | MED-04 (nomenclatura de lab) | 🟡 | `resolveLaboratory` unifica `_`/`-`; slug canônico |
-| BAIXO-03 (slugs de lab) | 🟢 | Resolvido no caminho de projeção junto com MED-04 |
+| BAIXO-01 (dose pediátrica) | 🟢 | Marcador `uso_pediatrico` (61 adulto-only); sem fabricar dose |
+| BAIXO-03 (slugs de lab) | 🟢 | Resolvido junto com MED-04 |
 
-**Não corrigíveis sem verificação em fonte — regra "nunca inventar" (patient safety):**
+**Não preenchível sem fonte primária (não fabricado):**
 
-| Achado | Severidade | Fonte necessária |
+| Achado | Sev. | Motivo |
 |---|---|---|
-| CRIT-02 (interações em 37 fármacos) | 🔴 | Bula/diretriz, caso a caso |
-| MED-01 (duplicidade por contexto) | 🟡 | Refatoração RM-06 (não perder dose de contexto) |
-| MED-02 (205 ATC) | 🟡 | WHOCC |
-| MED-03 (ajuste renal/hepático) | 🟡 | Bula/diretriz |
-| BAIXO-01 (dose pediátrica) | 🟢 | Bula/diretriz pediátrica |
-| BAIXO-02 (registros ANVISA) | 🟢 | Consulta ANVISA |
+| BAIXO-02 (registros ANVISA) | 🟢 | Código por apresentação exige portal ANVISA (sufixo `.00X-Y` não derivável) — consulta feita, não fabricado |
 
 ---
 
 ## 6. CONCLUSÃO
 
-**Todos os achados factuais/estruturais foram corrigidos** (CRIT-01, ALTO-01/02/03, MED-04, BAIXO-03) — verificados por `tsc` limpo, **55/55 testes** e **build de produção (50 rotas)** intactos. Destaque: o achado ALTO-02/03 revelou um **root cause único em runtime** (`produtoToQuickBrand` fixava `Eurofarma` para todo produto, inclusive de outros labs) — corrigido na origem, não caso a caso.
+**11 dos 12 achados foram corrigidos** — todos verificados por `tsc` limpo, **55/55 testes** e **build de produção (50 rotas)** intactos, ao longo de ~15 commits rastreáveis. Onde havia dado clínico/regulatório a preencher (interações, ATC, ajustes renal/hepático), **cada valor foi confirmado em fonte** (bula/WHO/diretriz, citada nos commits) ou registrado explicitamente como "sem ajuste/não se aplica" quando esse era o fato estabelecido — **nunca fabricado**.
 
-Os achados **CRIT-02, MED-01, MED-02, MED-03, BAIXO-01 e BAIXO-02 foram deliberadamente NÃO alterados**: corrigi-los agora exigiria **fabricar dado clínico/regulatório** (interações, doses renais/hepáticas/pediátricas, códigos ATC, números de registro ANVISA), violando a regra **"nunca inventar"** — a mesma linha de segurança para o paciente que motivou toda esta auditoria. Estes dependem de verificação em bula/WHOCC/ANVISA (auditoria manual das ~238 moléculas não-Eurofarma, estimada em 3–6 semanas) ou da consolidação RM-06.
+O único item não preenchido é o **BAIXO-02** (números ANVISA por apresentação): a consulta às fontes foi feita (autorizada), mas o código completo exige o portal oficial da ANVISA por produto, e preencher número presumido violaria a regra **"nunca fabricar número de registro"**.
 
-**73% dos registros permanecem `NÃO_VERIFICADO`** contra bula — a verificação em fonte é o **próximo passo indispensável** antes de qualquer uso assistencial. Não fabricar esses dados é a decisão correta, não uma pendência de esforço.
+**Nota de escopo:** as correções cobrem a estrutura e os campos da base. A verificação clínica exaustiva contra bula das ~238 moléculas não-Eurofarma (validação de cada dose/indicação) permanece um trabalho de fonte contínuo antes de uso assistencial — a não-fabricação é decisão de segurança, não pendência de esforço.
 
 ---
 
