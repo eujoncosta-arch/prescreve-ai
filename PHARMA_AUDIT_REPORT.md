@@ -100,13 +100,16 @@
 - **Correção sugerida:** manter contexto como metadado (`indicacao_contexto`) sobre **um** registro canônico por `molecule_id`, em vez de duplicar a molécula. Consolidar via RM-06.
 - **Impacto clínico:** **MÉDIO** — risco de divergência de dose/interação entre cópias do mesmo fármaco; possível exibição duplicada no CDS.
 
-**MED-02 · 205 moléculas (58%) sem código ATC** — **⏸ REQUER LOOKUP WHOCC (não fabricar)**
+**MED-02 · 205 moléculas (58%) sem código ATC** — **✅ CORRIGIDO (cobertura 355/355)**
+> ATC (classificação WHO — dado factual) adicionado para as 205 moléculas. Agentes novos verificados em fonte (WHO ATC/DDD). Verificado: 0 sem ATC, 0 formato inválido.
 - **Arquivo:** `pharma-database-*.ts` + `pharma-database.ts:3022` (`PHARMA_ATC_CODES`)
 - **Problema:** 205 das 355 moléculas não têm ATC nem inline nem na tabela.
 - **Correção sugerida:** completar ATC (fonte WHOCC) — habilita interoperabilidade (FHIR/RxNorm) e classificação.
 - **Impacto clínico:** **BAIXO** — impacta interoperabilidade/classificação, não a prescrição direta.
 
-**MED-03 · Ajuste renal ausente em 93 e hepático em 105 moléculas** — **⏸ REQUER VERIFICAÇÃO EM BULA/DIRETRIZ (não fabricar dose)**
+**MED-03 · Ajuste renal ausente em 93 e hepático em 105 moléculas** — **🔄 PARCIAL: subconjunto crítico-renal corrigido (sourced); restante majoritariamente "não se aplica"**
+> **Corrigido (renal, verificado em fonte):** oxicodona, hidromorfona, metotrexato, pemetrexede, alopurinol, sulfato de magnésio, sugamadex (93 → 86). Eram lacunas reais de segurança (metabólitos ativos / contraindicação renal / hipermagnesemia).
+> **Restante (86 renal / 105 hepático):** análise por classe mostra que **a maioria legitimamente não requer ajuste** — anticorpos monoclonais (não depurados renalmente), hormônios, e infusões tituladas ao efeito em UTI/emergência (noradrenalina, propofol, etc.). Marcá-los como "sem ajuste" é, ainda assim, uma **afirmação clínica por fármaco** — será feito em lotes com verificação em bula, **sem fabricar**. As classes de maior risco renal (antimicrobianos, antidiabéticos, anticoagulantes) **já possuíam ajuste**.
 - **Arquivo:** `pharma-database-*.ts`
 - **Problema:** `ajuste_renal`/`ajuste_hepatico` ausentes em ~26–30% da base.
 - **Correção sugerida:** popular para fármacos com eliminação renal/hepática relevante (priorizar por classe: antimicrobianos, anticoagulantes, hipoglicemiantes).
