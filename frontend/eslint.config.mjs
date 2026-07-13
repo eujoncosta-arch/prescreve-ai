@@ -52,7 +52,7 @@ const RM06_ALLOWLIST = [
   "src/lib/dose-calculator.ts",
   "src/lib/drug-resolver.ts",
   "src/lib/pharma-library.ts",
-  "src/lib/safety-rules.ts",
+  // src/lib/safety-rules.ts — MIGRADO para pharma-core (RM-06 piloto); fora da allowlist.
   "src/lib/simulation-phase22-3.ts",
   "src/lib/stress-test-phase22-4.ts",
   "src/lib/validate-extreme-data.ts",

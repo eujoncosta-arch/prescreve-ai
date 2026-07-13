@@ -3,9 +3,62 @@
 // Interações, duplicidade, contraindicações, limites de dose
 // ============================================================
 
-import { getAllDrugs, type QuickDrug } from './pharma-database';
+// RM-06: consome exclusivamente a Single Source of Truth (Drug Repository Layer),
+// sem importar as bases legadas. A forma `SafeDrug` adapta a DrugEntity canônica
+// aos campos usados por este motor, preservando o algoritmo original 1:1.
+import { drugRepository } from './pharma-core';
+import type { DrugEntity, InteractionSeverity } from './pharma-core';
 
 export type AlertSeverityFast = 'info' | 'warning' | 'danger' | 'critical';
+
+/** Projeção mínima da DrugEntity usada pelo motor de segurança. */
+interface SafeDrug {
+  id: string;
+  molecula: string;
+  classe: string;
+  sinonimos: string[];
+  interacoes_importantes: { com: string; severidade: InteractionSeverity; descricao: string }[];
+  uso_gestante: string;
+  uso_lactante: string;
+  alertas_especiais: string[];
+  ajuste_renal?: { tfg_lt_15: string; tfg_30_15: string };
+}
+
+function toSafeDrug(e: DrugEntity): SafeDrug {
+  const renal = e.dosageRules.find((r) => r.population === 'renal');
+  return {
+    id: e.id,
+    molecula: e.activeIngredient.name,
+    classe: e.therapeuticClass,
+    sinonimos: e.activeIngredient.sinonimos ?? [],
+    interacoes_importantes: e.interactions.map((i) => ({
+      com: i.with,
+      severidade: i.severity,
+      descricao: i.description,
+    })),
+    uso_gestante: e.pregnancy,
+    uso_lactante: e.lactation,
+    alertas_especiais: e.alerts,
+    ajuste_renal: renal?.detail
+      ? {
+          tfg_lt_15: String(renal.detail.tfg_lt_15 ?? ''),
+          tfg_30_15: String(renal.detail.tfg_30_15 ?? ''),
+        }
+      : undefined,
+  };
+}
+
+/** Resolve uma molécula (por DCB, nome genérico ou sinônimo) via repositório canônico. */
+function resolveSafeDrug(m: string): SafeDrug | null {
+  const target = m.toLowerCase().trim();
+  const e = drugRepository.getAll().find(
+    (x) =>
+      x.activeIngredient.name.toLowerCase() === target ||
+      x.activeIngredient.fullName?.toLowerCase() === target ||
+      (x.activeIngredient.sinonimos ?? []).some((s) => s.toLowerCase() === target),
+  );
+  return e ? toSafeDrug(e) : null;
+}
 
 export interface QuickSafetyAlert {
   id: string;
@@ -29,11 +82,10 @@ export function runSafetyCheck(input: SafetyCheckInput): QuickSafetyAlert[] {
   const alerts: QuickSafetyAlert[] = [];
   const { moleculas, gestante, lactante, idoso, crclValue, potassiumLevel } = input;
 
-  // Busca dados das moléculas no banco
-  const drugs: QuickDrug[] = moleculas
-    .map(m => getAllDrugs().find(d => d.molecula.toLowerCase() === m.toLowerCase() ||
-      d.sinonimos.some(s => s.toLowerCase() === m.toLowerCase())))
-    .filter(Boolean) as QuickDrug[];
+  // Busca dados das moléculas na Single Source of Truth (Drug Repository)
+  const drugs: SafeDrug[] = moleculas
+    .map(m => resolveSafeDrug(m))
+    .filter(Boolean) as SafeDrug[];
 
   // ── 1. Interações medicamentosas ──────────────────────────
   for (let i = 0; i < drugs.length; i++) {
