@@ -1,17 +1,18 @@
 # RM22_CLINICAL_REGRESSION_REPORT
 
-**Gerado:** 2026-07-13T22:22:35.701Z · **Total:** 25 · **PASS:** 25 · **FAIL:** 0
+**Gerado:** 2026-07-13T22:32:36.465Z · **Total:** 37 · **PASS:** 37 · **FAIL:** 0
 
 | Categoria | PASS/Total |
 |---|---|
-| interacoes | 4/4 |
-| contraindicacoes | 3/3 |
+| interacoes | 7/7 |
+| contraindicacoes | 5/5 |
 | gestantes | 3/3 |
 | idosos | 3/3 |
-| renal | 3/3 |
-| pediatria | 3/3 |
-| dose | 2/2 |
-| controlados | 4/4 |
+| renal | 4/4 |
+| pediatria | 4/4 |
+| dose | 3/3 |
+| controlados | 6/6 |
+| hepatico | 2/2 |
 
 ### ✅ INT-01 · interacoes
 - **Caso clínico:** Homem, 58 anos, angina estável em uso de nitrato; procura PS por disfunção erétil e recebe sildenafila.
@@ -186,4 +187,88 @@
 - **Entrada:** isControlled(Metilfenidato)
 - **Resultado esperado:** Controlado = true.
 - **Resultado obtido:** controlado=true
+- **Status:** PASS
+
+### ✅ INT-05 · interacoes
+- **Caso clínico:** ITU tratada com azitromicina em paciente cardiopata usando amiodarona.
+- **Entrada:** moléculas: [Azitromicina, Amiodarona]
+- **Resultado esperado:** Alerta de interação azitromicina + amiodarona (risco de QT/torsades).
+- **Resultado obtido:** [danger] Interação: Azitromicina + Amiodarona
+- **Status:** PASS
+
+### ✅ INT-06 · interacoes
+- **Caso clínico:** DM2 em metformina agendado para TC com contraste iodado.
+- **Entrada:** moléculas: [Metformina, Contraste iodado]
+- **Resultado esperado:** Alerta de risco de acidose lática (suspender metformina).
+- **Resultado obtido:** [warning] Metformina + Contraste iodado — Risco de acidose lática
+- **Status:** PASS
+
+### ✅ INT-07 · interacoes
+- **Caso clínico:** Depressão em escitalopram; adiciona-se tramadol para dor.
+- **Entrada:** moléculas: [Escitalopram, Tramadol]
+- **Resultado esperado:** Alerta de síndrome serotoninérgica.
+- **Resultado obtido:** [danger] Interação: Escitalopram + Tramadol · [danger] ISRS + Tramadol — Síndrome serotoninérgica
+- **Status:** PASS
+
+### ✅ DUP-01 · contraindicacoes
+- **Caso clínico:** Prescrição simultânea de dois IECA (enalapril + ramipril).
+- **Entrada:** moléculas: [Enalapril, Ramipril]
+- **Resultado esperado:** Alerta de duplicidade terapêutica (mesma classe IECA).
+- **Resultado obtido:** [warning] Duplicidade terapêutica: IECA
+- **Status:** PASS
+
+### ✅ LAC-01 · contraindicacoes
+- **Caso clínico:** Puérpera amamentando em uso de amiodarona.
+- **Entrada:** moléculas: [Amiodarona]; lactante
+- **Resultado esperado:** Alerta de risco na amamentação.
+- **Resultado obtido:** [danger] Risco na amamentação: Amiodarona
+- **Status:** PASS
+
+### ✅ REN-04 · renal
+- **Caso clínico:** Dor em paciente com DRC grave (TFG 10) recebendo codeína.
+- **Entrada:** moléculas: [Codeína]; TFG 10
+- **Resultado esperado:** Alerta renal CRÍTICO (metabólitos ativos acumulam).
+- **Resultado obtido:** [critical] Contraindicado na insuficiência renal grave: codeína
+- **Status:** PASS
+
+### ✅ HEP-01 · hepatico
+- **Caso clínico:** Cirrose Child C — metotrexato oncológico.
+- **Entrada:** drugRepository.getById('metotrexato-onco') → dosageRule hepático (Child C)
+- **Resultado esperado:** Child C contraindicado (hepatotoxicidade).
+- **Resultado obtido:** Child C: Contraindicado (hepatotoxicidade)
+- **Status:** PASS
+
+### ✅ HEP-02 · hepatico
+- **Caso clínico:** Toda a base deve ter ajuste hepático cadastrado (cobertura RM-01 MED-03).
+- **Entrada:** drugRepository.getAll() → dosageRules com population hepatico
+- **Resultado esperado:** 100% das entidades possuem regra hepática.
+- **Resultado obtido:** 355/355 com ajuste hepático
+- **Status:** PASS
+
+### ✅ PED-04 · pediatria
+- **Caso clínico:** Recém-nascido (7 dias) — classificação populacional neonatal.
+- **Entrada:** classifyPopulation(0.02)
+- **Resultado esperado:** population=neonato, usar_dose_pediatrica=true.
+- **Resultado obtido:** neonato · ped=true
+- **Status:** PASS
+
+### ✅ CTR-05 · controlados
+- **Caso clínico:** Fentanila em UTI (variante de contexto) — reconhecimento por sufixo.
+- **Entrada:** isControlled(fentanil-uti)
+- **Resultado esperado:** Controlado = true (tolera sufixo de contexto).
+- **Resultado obtido:** controlado=true
+- **Status:** PASS
+
+### ✅ CTR-06 · controlados
+- **Caso clínico:** Analgésico comum (paracetamol) — NÃO controlado (controle negativo).
+- **Entrada:** isControlled(Paracetamol)
+- **Resultado esperado:** Controlado = false.
+- **Resultado obtido:** controlado=false
+- **Status:** PASS
+
+### ✅ DOS-03 · dose
+- **Caso clínico:** Antibiótico 100 mg/kg/dia, 12 kg, 6/6h, teto 4000 mg — cálculo por peso.
+- **Entrada:** calcWeightDose(100, 12, 4, 4000, "mg")
+- **Resultado esperado:** Total 1200 mg/dia; 300 mg por dose (6/6h).
+- **Resultado obtido:** 1200 mg/dia · 300 mg/dose
 - **Status:** PASS

@@ -17,6 +17,7 @@ export type ClinicalCategory =
   | 'idosos'
   | 'gestantes'
   | 'renal'
+  | 'hepatico'
   | 'interacoes'
   | 'contraindicacoes'
   | 'dose'

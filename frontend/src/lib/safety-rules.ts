@@ -226,7 +226,7 @@ export function runSafetyCheck(input: SafetyCheckInput): QuickSafetyAlert[] {
       if (!d.ajuste_renal) continue;
       const { tfg_lt_15, tfg_30_15 } = d.ajuste_renal;
 
-      if (crclValue < 15 && tfg_lt_15.toLowerCase().includes('contraindicado')) {
+      if (crclValue < 15 && tfg_lt_15.toLowerCase().includes('contraindicad')) {
         alerts.push({
           id: `renal-${d.id}`,
           tipo: 'renal',
@@ -235,7 +235,7 @@ export function runSafetyCheck(input: SafetyCheckInput): QuickSafetyAlert[] {
           descricao: `TFG estimada: ${crclValue} mL/min. ${d.molecula}: ${tfg_lt_15}`,
           acao: 'Substituir medicamento ou aguardar melhora da função renal.',
         });
-      } else if (crclValue < 30 && (tfg_30_15.toLowerCase().includes('contraindicado') || tfg_30_15.toLowerCase().includes('evitar'))) {
+      } else if (crclValue < 30 && (tfg_30_15.toLowerCase().includes('contraindicad') || tfg_30_15.toLowerCase().includes('evitar'))) {
         alerts.push({
           id: `renal-${d.id}`,
           tipo: 'renal',

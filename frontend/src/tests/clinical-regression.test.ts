@@ -17,6 +17,7 @@ describe('RM-22 · Clinical Regression Suite', () => {
       'idosos',
       'gestantes',
       'renal',
+      'hepatico',
       'interacoes',
       'contraindicacoes',
       'dose',

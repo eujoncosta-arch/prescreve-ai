@@ -288,4 +288,143 @@ export const CLINICAL_CASES: ClinicalCase[] = [
     esperado: 'Controlado = true.',
     assert: () => expectTrue(isControlled('Metilfenidato'), `controlado=${isControlled('Metilfenidato')}`),
   },
+
+  // ═══════════ EXPANSÃO (RM-22.1): mais cenários por categoria ═══════════
+
+  // ── Interações adicionais ──
+  {
+    id: 'INT-05',
+    category: 'interacoes',
+    caso: 'ITU tratada com azitromicina em paciente cardiopata usando amiodarona.',
+    entrada: 'moléculas: [Azitromicina, Amiodarona]',
+    esperado: 'Alerta de interação azitromicina + amiodarona (risco de QT/torsades).',
+    assert: () => expectAlert(safety({ moleculas: ['Azitromicina', 'Amiodarona'] }), {
+      tipo: 'interacao',
+      match: 'amiodarona',
+    }),
+  },
+  {
+    id: 'INT-06',
+    category: 'interacoes',
+    caso: 'DM2 em metformina agendado para TC com contraste iodado.',
+    entrada: 'moléculas: [Metformina, Contraste iodado]',
+    esperado: 'Alerta de risco de acidose lática (suspender metformina).',
+    assert: () => expectAlert(safety({ moleculas: ['Metformina', 'Contraste iodado'] }), {
+      match: 'acidose',
+    }),
+  },
+  {
+    id: 'INT-07',
+    category: 'interacoes',
+    caso: 'Depressão em escitalopram; adiciona-se tramadol para dor.',
+    entrada: 'moléculas: [Escitalopram, Tramadol]',
+    esperado: 'Alerta de síndrome serotoninérgica.',
+    assert: () => expectAlert(safety({ moleculas: ['Escitalopram', 'Tramadol'] }), {
+      match: 'serotonin',
+    }),
+  },
+
+  // ── Duplicidade terapêutica ──
+  {
+    id: 'DUP-01',
+    category: 'contraindicacoes',
+    caso: 'Prescrição simultânea de dois IECA (enalapril + ramipril).',
+    entrada: 'moléculas: [Enalapril, Ramipril]',
+    esperado: 'Alerta de duplicidade terapêutica (mesma classe IECA).',
+    assert: () => expectAlert(safety({ moleculas: ['Enalapril', 'Ramipril'] }), { tipo: 'duplicidade' }),
+  },
+
+  // ── Lactação ──
+  {
+    id: 'LAC-01',
+    category: 'contraindicacoes',
+    caso: 'Puérpera amamentando em uso de amiodarona.',
+    entrada: 'moléculas: [Amiodarona]; lactante',
+    esperado: 'Alerta de risco na amamentação.',
+    assert: () => expectAlert(safety({ moleculas: ['Amiodarona'], lactante: true }), { tipo: 'lactante' }),
+  },
+
+  // ── Renal adicional (opioide com metabólito ativo) ──
+  {
+    id: 'REN-04',
+    category: 'renal',
+    caso: 'Dor em paciente com DRC grave (TFG 10) recebendo codeína.',
+    entrada: 'moléculas: [Codeína]; TFG 10',
+    esperado: 'Alerta renal CRÍTICO (metabólitos ativos acumulam).',
+    assert: () => expectAlert(safety({ moleculas: ['Codeína'], crclValue: 10 }), {
+      tipo: 'renal',
+      severidade: 'critical',
+    }),
+  },
+
+  // ── Hepatopatas (Child-Pugh via base canônica) ──
+  {
+    id: 'HEP-01',
+    category: 'hepatico',
+    caso: 'Cirrose Child C — metotrexato oncológico.',
+    entrada: "drugRepository.getById('metotrexato-onco') → dosageRule hepático (Child C)",
+    esperado: 'Child C contraindicado (hepatotoxicidade).',
+    assert: () => {
+      const e = drugRepository.getById('metotrexato-onco');
+      const hep = e?.dosageRules.find((r) => r.population === 'hepatico');
+      const cc = String(hep?.detail?.child_c ?? '').toLowerCase();
+      return expectTrue(cc.includes('contraindic'), `Child C: ${hep?.detail?.child_c ?? '(ausente)'}`);
+    },
+  },
+  {
+    id: 'HEP-02',
+    category: 'hepatico',
+    caso: 'Toda a base deve ter ajuste hepático cadastrado (cobertura RM-01 MED-03).',
+    entrada: 'drugRepository.getAll() → dosageRules com population hepatico',
+    esperado: '100% das entidades possuem regra hepática.',
+    assert: () => {
+      const all = drugRepository.getAll();
+      const semHep = all.filter((e) => !e.dosageRules.some((r) => r.population === 'hepatico'));
+      return expectTrue(semHep.length === 0, `${all.length - semHep.length}/${all.length} com ajuste hepático`);
+    },
+  },
+
+  // ── Pediatria: neonato ──
+  {
+    id: 'PED-04',
+    category: 'pediatria',
+    caso: 'Recém-nascido (7 dias) — classificação populacional neonatal.',
+    entrada: 'classifyPopulation(0.02)',
+    esperado: 'population=neonato, usar_dose_pediatrica=true.',
+    assert: () => {
+      const p = classifyPopulation(0.02);
+      return expectTrue(p.population === 'neonato' && p.usar_dose_pediatrica === true, `${p.population} · ped=${p.usar_dose_pediatrica}`);
+    },
+  },
+
+  // ── Controlados adicionais ──
+  {
+    id: 'CTR-05',
+    category: 'controlados',
+    caso: 'Fentanila em UTI (variante de contexto) — reconhecimento por sufixo.',
+    entrada: 'isControlled(fentanil-uti)',
+    esperado: 'Controlado = true (tolera sufixo de contexto).',
+    assert: () => expectTrue(isControlled('fentanil-uti'), `controlado=${isControlled('fentanil-uti')}`),
+  },
+  {
+    id: 'CTR-06',
+    category: 'controlados',
+    caso: 'Analgésico comum (paracetamol) — NÃO controlado (controle negativo).',
+    entrada: 'isControlled(Paracetamol)',
+    esperado: 'Controlado = false.',
+    assert: () => expectTrue(!isControlled('Paracetamol'), `controlado=${isControlled('Paracetamol')}`),
+  },
+
+  // ── Dose: divisão 6/6h ──
+  {
+    id: 'DOS-03',
+    category: 'dose',
+    caso: 'Antibiótico 100 mg/kg/dia, 12 kg, 6/6h, teto 4000 mg — cálculo por peso.',
+    entrada: 'calcWeightDose(100, 12, 4, 4000, "mg")',
+    esperado: 'Total 1200 mg/dia; 300 mg por dose (6/6h).',
+    assert: () => {
+      const r = calcWeightDose(100, 12, 4, 4000, 'mg');
+      return expectTrue(r.dose_total_dia === 1200 && r.dose_por_tomada === 300, `${r.dose_total_dia} mg/dia · ${r.dose_por_tomada} mg/dose`);
+    },
+  },
 ];
