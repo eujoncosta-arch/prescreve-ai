@@ -378,7 +378,7 @@ export const MEDICAMENTOS_DOSAGEM: MedicamentoDosagem[] = [
   },
   {
     id: 'sulfametoxazol-trimetoprim',
-    nome_generico: 'Sulfametoxazol + Trimetoprim (SMX-TMP)',
+    nome_generico: 'Sulfametoxazol + Trimetoprima (SMX-TMP)',
     classe: 'Antibiótico — Sulfonamida',
     cids: ['N30', 'N39.0', 'J18'],
     formulacoes: [

@@ -11,6 +11,61 @@ import type { QuickDrug } from './pharma-database';
 
 export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
+  // ── RM-24: agente antes ausente no PHARMA_DB (dados verificados em fonte) ──
+  {
+    id: 'atenolol',
+    molecula: 'Atenolol',
+    nome_generico: 'Atenolol',
+    sinonimos: ['atenol', 'ablok', 'angipress', 'atenolol', 'betabloqueador cardiosseletivo'],
+    categoria: 'antihipertensivo',
+    classe: 'Beta-bloqueador',
+    subclasse: 'β1-seletivo (cardiosseletivo), hidrofílico — excreção renal',
+    indicacoes_principais: ['HAS', 'Angina estável', 'Pós-IAM', 'Controle de FC em taquiarritmias'],
+    dose_adulto: {
+      habitual: '50 mg 1x/dia',
+      min: '25 mg 1x/dia',
+      max: '100 mg/dia',
+      unidade: 'mg',
+      via: 'VO',
+      frequencias: ['1x/dia', '2x/dia'],
+      instrucoes: 'HAS: iniciar 25–50 mg 1x/dia, titular até 100 mg/dia. Não interromper abruptamente (rebote/isquemia). Na IC-FEr preferir betabloqueador com evidência (carvedilol/bisoprolol/metoprolol succinato).',
+    },
+    atc_code: 'C07AB03',
+    ajuste_renal: {
+      normal: 'Dose padrão',
+      tfg_60_30: 'ClCr 15–35: máx 50 mg/dia',
+      tfg_30_15: 'ClCr < 15: máx 25 mg/dia ou dias alternados',
+      tfg_lt_15: 'Reduzir substancialmente — acúmulo (excreção renal); dose após diálise',
+      dialisavel: true,
+    },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste (baixo metabolismo hepático)' },
+    contraindicacoes_rapidas: [
+      'Bradicardia sinusal / BAV 2º ou 3º grau sem marca-passo',
+      'Insuficiência cardíaca descompensada',
+      'Choque cardiogênico',
+      'Broncoespasmo grave (relativa — β1-seletivo, mas cautela)',
+      'Hipersensibilidade',
+    ],
+    interacoes_importantes: [
+      { com: 'Verapamil / Diltiazem (BCC não di-hidropiridínicos)', severidade: 'grave', descricao: 'Bradicardia grave, bloqueio AV e depressão da contratilidade — evitar associação' },
+      { com: 'Clonidina', severidade: 'grave', descricao: 'Hipertensão rebote grave na retirada da clonidina — suspender o betabloqueador antes' },
+      { com: 'Insulina / hipoglicemiantes', severidade: 'moderada', descricao: 'Mascara sintomas adrenérgicos de hipoglicemia (taquicardia, tremor)' },
+      { com: 'AINEs', severidade: 'moderada', descricao: 'Reduzem o efeito anti-hipertensivo' },
+    ],
+    alertas_especiais: [
+      'NÃO interromper abruptamente — desmame gradual (rebote/isquemia)',
+      'Hidrofílico com excreção renal — ajustar na DRC (acúmulo)',
+      'Gestação: associado a restrição de crescimento intrauterino — evitar; preferir metildopa/labetalol',
+    ],
+    uso_gestante: 'risco',
+    uso_lactante: 'risco',
+    marcas: [
+      { nome: 'Atenol', laboratorio: 'Biolab', concentracoes: ['25 mg', '50 mg', '100 mg'], formas: ['Comprimido'] },
+      { nome: 'Angipress', laboratorio: 'Biolab', concentracoes: ['25 mg', '50 mg', '100 mg'], formas: ['Comprimido'] },
+      { nome: 'Ablok', laboratorio: 'Biolab', concentracoes: ['25 mg', '50 mg'], formas: ['Comprimido'] },
+    ],
+  },
+
   // ══════════════════════════════════════════════════════════════
   // IECA — Inibidores da Enzima Conversora de Angiotensina
   // ══════════════════════════════════════════════════════════════

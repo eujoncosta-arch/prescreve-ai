@@ -1,21 +1,21 @@
 # DATABASE_SYNC_REPORT
 
-**Gerado:** 2026-07-13T22:59:26.033Z · **Publicação:** ✅ liberada
+**Gerado:** 2026-07-13T23:17:44.416Z · **Publicação:** ✅ liberada
 
 ## Resumo
 
 | Métrica | Valor |
 |---|---|
-| Total analisado | 367 |
-| Compatíveis | 90 |
-| Divergentes | 28 |
+| Total analisado | 365 |
+| Compatíveis | 94 |
+| Divergentes | 23 |
 | Críticos | 0 |
 
 ## Fontes comparadas
 
 | Fonte | Princípios ativos |
 |---|---|
-| PHARMA_DB | 339 |
+| PHARMA_DB | 342 |
 | Eurofarma | 100 |
 | Clinical rules (pediatria) | 21 |
 | Prescription engine | 18 |
@@ -24,17 +24,10 @@
 
 | Gravidade | Tipo | Chave | Fontes | Detalhe | Correção sugerida |
 |---|---|---|---|---|---|
-| high | medicamento_ausente | mol:sulfametoxazol-trimetoprim | Prescription engine ✗ PHARMA_DB | Motor de prescrição calcula dose para "Sulfametoxazol + Trimetoprim (SMX-TMP)" sem correspondência no PHARMA_DB. | Alinhar o identificador entre o motor de prescrição e o PHARMA_DB. |
-| high | medicamento_ausente | mol:prednisona | Prescription engine ✗ PHARMA_DB | Motor de prescrição calcula dose para "Prednisona" sem correspondência no PHARMA_DB. | Alinhar o identificador entre o motor de prescrição e o PHARMA_DB. |
-| high | medicamento_ausente | mol:atenolol | Prescription engine ✗ PHARMA_DB | Motor de prescrição calcula dose para "Atenolol" sem correspondência no PHARMA_DB. | Alinhar o identificador entre o motor de prescrição e o PHARMA_DB. |
-| high | medicamento_ausente | mol:fenitoina | Prescription engine ✗ PHARMA_DB | Motor de prescrição calcula dose para "Fenitoína" sem correspondência no PHARMA_DB. | Alinhar o identificador entre o motor de prescrição e o PHARMA_DB. |
-| high | medicamento_ausente | mol:dienogeste | Prescription engine ✗ PHARMA_DB | Motor de prescrição calcula dose para "Dienogeste" sem correspondência no PHARMA_DB. | Alinhar o identificador entre o motor de prescrição e o PHARMA_DB. |
-| medium | medicamento_ausente | mol:prednisona | Eurofarma ✗ PHARMA_DB | "Prednisona" (Prednisona Eurofarma) existe no catálogo Eurofarma mas não no PHARMA_DB. | Cadastrar o princípio ativo no PHARMA_DB (com fonte) ou revisar o catálogo Eurofarma. |
 | medium | medicamento_ausente | mol:levocetirizina | Eurofarma ✗ PHARMA_DB | "Dicloridrato de Levocetirizina" (Zina®) existe no catálogo Eurofarma mas não no PHARMA_DB. | Cadastrar o princípio ativo no PHARMA_DB (com fonte) ou revisar o catálogo Eurofarma. |
 | medium | medicamento_ausente | mol:divalproato-sodio | Eurofarma ✗ PHARMA_DB | "Divalproato de Sódio" (GABA ER®) existe no catálogo Eurofarma mas não no PHARMA_DB. | Cadastrar o princípio ativo no PHARMA_DB (com fonte) ou revisar o catálogo Eurofarma. |
 | medium | medicamento_ausente | mol:acido-ibandronico | Eurofarma ✗ PHARMA_DB | "Ácido Ibandrónico" (Iban®) existe no catálogo Eurofarma mas não no PHARMA_DB. | Cadastrar o princípio ativo no PHARMA_DB (com fonte) ou revisar o catálogo Eurofarma. |
 | medium | medicamento_ausente | mol:trimebutina | Eurofarma ✗ PHARMA_DB | "Maleato de Trimebutina" (Trimeb®) existe no catálogo Eurofarma mas não no PHARMA_DB. | Cadastrar o princípio ativo no PHARMA_DB (com fonte) ou revisar o catálogo Eurofarma. |
-| medium | medicamento_ausente | mol:dienogeste | Eurofarma ✗ PHARMA_DB | "Dienogeste" (Pietra ED®) existe no catálogo Eurofarma mas não no PHARMA_DB. | Cadastrar o princípio ativo no PHARMA_DB (com fonte) ou revisar o catálogo Eurofarma. |
 | medium | medicamento_ausente | mol:colecalciferol | Eurofarma ✗ PHARMA_DB | "Colecalciferol (Vitamina D3)" (AltaD Caps®) existe no catálogo Eurofarma mas não no PHARMA_DB. | Cadastrar o princípio ativo no PHARMA_DB (com fonte) ou revisar o catálogo Eurofarma. |
 | medium | medicamento_ausente | mol:hidroxocobalamina | Eurofarma ✗ PHARMA_DB | "Hidroxocobalamina (Vitamina B12)" (Bedoze®) existe no catálogo Eurofarma mas não no PHARMA_DB. | Cadastrar o princípio ativo no PHARMA_DB (com fonte) ou revisar o catálogo Eurofarma. |
 | medium | medicamento_ausente | mol:nitrato-fenticonazol | Eurofarma ✗ PHARMA_DB | "Nitrato de Fenticonazol" (Ginna®) existe no catálogo Eurofarma mas não no PHARMA_DB. | Cadastrar o princípio ativo no PHARMA_DB (com fonte) ou revisar o catálogo Eurofarma. |

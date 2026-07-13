@@ -15,8 +15,8 @@ export const PHARMA_DB_NEURO_B: QuickDrug[] = [
 
   {
     id: 'fenitoina',
-    molecula: 'FenitoÃ­na',
-    nome_generico: 'FenitoÃ­na',
+    molecula: 'Fenitoína',
+    nome_generico: 'Fenitoína',
     sinonimos: ['hidantal', 'phenytoin', 'fenitoina', 'difenil-hidantoina', 'anticonvulsivante', 'status epilepticus'],
     categoria: 'neurologico',
     classe: 'Anticonvulsivante',
@@ -118,8 +118,8 @@ export const PHARMA_DB_NEURO_B: QuickDrug[] = [
 
   {
     id: 'acido-valproico',
-    molecula: 'Ãcido ValprÃ³ico / Valproato de SÃ³dio',
-    nome_generico: 'Ãcido ValprÃ³ico',
+    molecula: 'Ácido Valproico / Valproato de Sódio',
+    nome_generico: 'Ácido Valproico',
     sinonimos: ['depakene', 'depakote', 'valproate', 'valproato', 'valproico', 'anticonvulsivante vpa', 'estabilizador bipolar valproato', 'enxaqueca profilaxia valproato'],
     categoria: 'neurologico',
     classe: 'Anticonvulsivante',

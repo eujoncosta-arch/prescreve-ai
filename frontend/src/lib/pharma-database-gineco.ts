@@ -6,6 +6,51 @@
 import { QuickDrug } from './pharma-database';
 
 export const PHARMA_DB_GINECO: QuickDrug[] = [
+
+  // ── RM-24: agente antes ausente no PHARMA_DB (dados verificados em fonte) ──
+  {
+    id: 'dienogeste',
+    molecula: 'Dienogeste',
+    nome_generico: 'Dienogeste',
+    sinonimos: ['allurene', 'pietra', 'dienogeste', 'progestagenio endometriose', 'endometriose'],
+    categoria: 'hormonio',
+    classe: 'Progestagênio (derivado da 19-nortestosterona)',
+    subclasse: 'Progestagênio isolado — antiproliferativo/anti-inflamatório na endometriose',
+    indicacoes_principais: ['Endometriose (dor pélvica crônica)', 'Adenomiose', 'Sangramento uterino anormal (off-label)'],
+    dose_adulto: {
+      habitual: '2 mg 1x/dia contínuo',
+      max: '2 mg/dia',
+      unidade: 'mg',
+      via: 'VO',
+      frequencias: ['1x/dia contínuo (sem pausa)'],
+      instrucoes: 'Iniciar em qualquer dia do ciclo, uso contínuo. Spotting/sangramento irregular é comum nos primeiros meses. Não é contraceptivo de alta eficácia isolado.',
+    },
+    atc_code: 'G03DB08',
+    uso_pediatrico: 'nao_aplicavel',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Cautela (dados limitados)', tfg_lt_15: 'Cautela (dados limitados)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Evitar', child_c: 'Contraindicado (doença hepática ativa)' },
+    contraindicacoes_rapidas: [
+      'Tromboembolismo venoso ativo',
+      'Doença hepática grave ativa / tumor hepático',
+      'Neoplasia hormônio-dependente conhecida ou suspeita',
+      'Sangramento vaginal não diagnosticado',
+      'Gravidez',
+    ],
+    interacoes_importantes: [
+      { com: 'Indutores de CYP3A4 (rifampicina, carbamazepina, fenitoína, erva-de-são-joão)', severidade: 'moderada', descricao: 'Aumentam a depuração do dienogeste — reduzem a eficácia' },
+      { com: 'Inibidores potentes de CYP3A4 (cetoconazol, ritonavir)', severidade: 'leve', descricao: 'Podem aumentar a exposição ao dienogeste' },
+    ],
+    alertas_especiais: [
+      'Spotting/sangramento irregular frequente nos primeiros meses — counseling prévio',
+      'Não substitui contracepção de alta eficácia isoladamente',
+      'Uso prolongado pode reduzir densidade mineral óssea — avaliar em adolescentes/osteopenia',
+    ],
+    uso_gestante: 'contraindicado',
+    uso_lactante: 'avaliar',
+    marcas: [
+      { nome: 'Allurene', laboratorio: 'Libbs', concentracoes: ['2 mg'], formas: ['Comprimido'] },
+    ],
+  },
   // ─── CONTRACEPTIVOS ORAIS ─────────────────────────────────
   {
     id: 'etinilestradiol-levonorgestrel',

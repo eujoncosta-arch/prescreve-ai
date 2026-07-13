@@ -173,6 +173,53 @@ function produtoToQuickBrand(p: ProdutoComercial): QuickBrand {
 
 export const PHARMA_DB: QuickDrug[] = [
 
+  // ── RM-24: agente antes ausente no PHARMA_DB (dados verificados em fonte) ──
+  {
+    id: 'prednisona',
+    molecula: 'Prednisona',
+    nome_generico: 'Prednisona',
+    sinonimos: ['meticorten', 'prednisona', 'corticoide oral', 'corticosteroide', 'glicocorticoide'],
+    categoria: 'imunossupressor',
+    classe: 'Corticosteroide sistêmico',
+    subclasse: 'Glicocorticoide de ação intermediária — pró-fármaco (ativado em prednisolona no fígado)',
+    indicacoes_principais: ['Doenças inflamatórias/autoimunes', 'Exacerbação de asma/DPOC', 'Reações alérgicas graves', 'Imunossupressão', 'Doenças reumatológicas'],
+    dose_adulto: {
+      habitual: '5–60 mg/dia (conforme indicação)',
+      min: '5 mg/dia',
+      max: '1–2 mg/kg/dia (agudo)',
+      unidade: 'mg',
+      via: 'VO',
+      frequencias: ['1x/dia (manhã)'],
+      instrucoes: 'Tomar pela manhã (ritmo circadiano). Cursos > 2–3 semanas exigem desmame gradual (supressão adrenal). Proteção gástrica se associado a AINE.',
+    },
+    atc_code: 'H02AB07',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Preferir prednisolona (prednisona depende de ativação hepática)' },
+    contraindicacoes_rapidas: [
+      'Infecção fúngica sistêmica',
+      'Hipersensibilidade',
+      'Vacinas de vírus vivo em dose imunossupressora (≥ 20 mg/dia por ≥ 2 semanas)',
+    ],
+    interacoes_importantes: [
+      { com: 'AINEs', severidade: 'moderada', descricao: 'Risco aumentado de úlcera/sangramento gastrointestinal — associar IBP' },
+      { com: 'Indutores de CYP3A4 (rifampicina, fenitoína, carbamazepina)', severidade: 'moderada', descricao: 'Reduzem a eficácia do corticoide' },
+      { com: 'Hipoglicemiantes / insulina', severidade: 'moderada', descricao: 'Hiperglicemia — ajustar antidiabético' },
+      { com: 'Diuréticos espoliadores de potássio', severidade: 'moderada', descricao: 'Hipocalemia aditiva' },
+      { com: 'Vacinas de vírus vivo', severidade: 'grave', descricao: 'Risco de doença vacinal em imunossuprimidos — contraindicado em dose alta' },
+    ],
+    alertas_especiais: [
+      'Uso > 2–3 semanas: desmame gradual (supressão do eixo HHA)',
+      'Monitorar glicemia, PA, potássio e densidade óssea em uso crônico',
+      'Pró-fármaco: usar prednisolona na hepatopatia grave (ativação hepática)',
+    ],
+    uso_gestante: 'avaliar',
+    uso_lactante: 'seguro',
+    marcas: [
+      { nome: 'Meticorten', laboratorio: 'Mantecorp', concentracoes: ['5 mg', '20 mg'], formas: ['Comprimido'] },
+      { nome: 'Prednisona EMS', laboratorio: 'EMS', concentracoes: ['5 mg', '20 mg'], formas: ['Comprimido'], lab_id: 'ems' },
+    ],
+  },
+
   // ══════════════════════════════════════════════════════════
   // CARDIOVASCULAR — ANTIHIPERTENSIVOS
   // ══════════════════════════════════════════════════════════
