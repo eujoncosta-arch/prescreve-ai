@@ -9,6 +9,8 @@ export const PHARMA_DB_PEDIATRIA: QuickDrug[] = [
   // ─── CAFEÍNA CITRATO ──────────────────────────────────────
   {
     id: 'cafeina-citrato',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste; monitorar nível sérico', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Reduzir/monitorar nível', child_c: 'Reduzir' },
     molecula: 'cafeína citrato',
     nome_generico: 'Cafeína Citrato',
     sinonimos: ['cafeina', 'caffeine citrate', 'cafeína prematura', 'apneia prematuridade'],
@@ -51,6 +53,8 @@ export const PHARMA_DB_PEDIATRIA: QuickDrug[] = [
   // ─── PORACTANT ALFA (SURFACTANTE) ────────────────────────
   {
     id: 'poractant-alfa',
+    ajuste_renal: { normal: 'Não se aplica (uso intratraqueal)', tfg_60_30: 'Não se aplica', tfg_30_15: 'Não se aplica', tfg_lt_15: 'Não se aplica', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Não se aplica', child_b: 'Não se aplica', child_c: 'Não se aplica (uso local)' },
     molecula: 'poractant alfa',
     nome_generico: 'Poractant Alfa',
     sinonimos: ['Curosurf', 'surfactante', 'surfactante pulmonar', 'SDR prematuro', 'surfatante'],
@@ -92,6 +96,8 @@ export const PHARMA_DB_PEDIATRIA: QuickDrug[] = [
   // ─── VITAMINA K1 NEONATAL ────────────────────────────────
   {
     id: 'vitamina-k1-neonatal',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste' },
     molecula: 'fitomenadiona',
     nome_generico: 'Fitomenadiona (Vitamina K1)',
     sinonimos: ['vitamina K1', 'kanakion', 'fitomenadiona neonatal', 'profilaxia hemorrágica RN', 'DHRN'],
@@ -135,6 +141,8 @@ export const PHARMA_DB_PEDIATRIA: QuickDrug[] = [
   // ─── PALIVIZUMABE ────────────────────────────────────────
   {
     id: 'palivizumabe',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (anticorpo monoclonal)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem dados' },
     molecula: 'palivizumabe',
     nome_generico: 'Palivizumabe',
     sinonimos: ['Synagis', 'VSR', 'bronquiolite prematuro', 'anti-VSR', 'anti-RSV'],
@@ -180,6 +188,8 @@ export const PHARMA_DB_PEDIATRIA: QuickDrug[] = [
   // ─── SILDENAFIL NEONATAL (HPPRN) ─────────────────────────
   {
     id: 'sildenafil-neonatal',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste; cautela (metabolismo hepático)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Reduzir', child_c: 'Reduzir (metabolismo hepático)' },
     molecula: 'sildenafil',
     nome_generico: 'Sildenafil (Neonatal/Pediátrico)',
     sinonimos: ['Revatio', 'HPPRN', 'hipertensão pulmonar persistente RN', 'HAP pediátrica', 'sildenafil neonatal'],
@@ -227,6 +237,7 @@ export const PHARMA_DB_PEDIATRIA: QuickDrug[] = [
   // ─── IBUPROFENO (standalone adulto + pediátrico) ─────────
   {
     id: 'ibuprofeno',
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Reduzir', child_c: 'Evitar (sangramento/hepatorrenal)' },
     molecula: 'ibuprofeno',
     nome_generico: 'Ibuprofeno',
     sinonimos: ['ibuprofen', 'ibuprofeno pediátrico', 'ibuprofeno gotas', 'Advil', 'Alivium', 'Motrin', 'Caldofen'],
@@ -302,6 +313,8 @@ export const PHARMA_DB_PEDIATRIA: QuickDrug[] = [
   // ─── FENOBARBITAL NEONATAL IV ─────────────────────────────
   {
     id: 'fenobarbital-neonatal',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Reduzir/espaçar', tfg_lt_15: 'Reduzir; dose após diálise', dialisavel: true },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Reduzir', child_c: 'Reduzir' },
     molecula: 'fenobarbital',
     nome_generico: 'Fenobarbital (Convulsão Neonatal)',
     sinonimos: ['gardenal', 'phenobarbital', 'convulsão neonatal', 'EHI', 'epilepsia neonatal', 'fenobarbital IV neonato'],

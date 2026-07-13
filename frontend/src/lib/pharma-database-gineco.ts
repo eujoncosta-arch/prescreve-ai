@@ -9,6 +9,8 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
   // ─── CONTRACEPTIVOS ORAIS ─────────────────────────────────
   {
     id: 'etinilestradiol-levonorgestrel',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Evitar', child_c: 'Contraindicado (colestase)' },
     molecula: 'etinilestradiol + levonorgestrel',
     nome_generico: 'Etinilestradiol + Levonorgestrel (ACO)',
     sinonimos: ['anticoncep', 'pílula anticoncepcional', 'ACO combinado', 'anticoncepcional oral', 'Ciclo 21', 'Nordette', 'Levordiol'],
@@ -57,6 +59,8 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
   },
   {
     id: 'etinilestradiol-desogestrel',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Evitar', child_c: 'Contraindicado (colestase)' },
     molecula: 'etinilestradiol + desogestrel',
     nome_generico: 'Etinilestradiol + Desogestrel (ACO 3ª geração)',
     sinonimos: ['Mercilon', 'Marvelon', 'desogestrel', 'ACO 3ª geração'],
@@ -91,6 +95,8 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
   },
   {
     id: 'desogestrel-75mcg',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Reduzir', child_c: 'Evitar' },
     molecula: 'desogestrel',
     nome_generico: 'Desogestrel 75 mcg (Minipílula)',
     sinonimos: ['Cerazette', 'minipílula', 'pílula só de progestogênio', 'POP', 'amamentando anticoncepcional'],
@@ -128,6 +134,8 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
   },
   {
     id: 'levonorgestrel-emergencia',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Cautela' },
     molecula: 'levonorgestrel',
     nome_generico: 'Levonorgestrel 1,5 mg (Contracepção de Emergência)',
     sinonimos: ['pílula do dia seguinte', 'postinor', 'escapelle', 'contracepção emergência', 'CE'],
@@ -162,6 +170,8 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
   },
   {
     id: 'medroxiprogesterona-injetavel',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Evitar', child_c: 'Contraindicado (disfunção hepática)' },
     molecula: 'acetato de medroxiprogesterona',
     nome_generico: 'Acetato de Medroxiprogesterona (Injetável)',
     sinonimos: ['Depo-Provera', 'injetável trimestral', 'AMPD', 'anticoncepcional injetável 3 meses'],
@@ -201,6 +211,8 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
   // ─── TERAPIA HORMONAL DA MENOPAUSA ───────────────────────
   {
     id: 'estradiol-transdermico',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Evitar', child_c: 'Contraindicado' },
     molecula: 'estradiol',
     nome_generico: 'Estradiol Transdérmico',
     sinonimos: ['adesivo estrogênio', 'gel estradiol', 'TH transdérmica', 'TRH transdérmica', 'Estraderm', 'Climara'],
@@ -242,6 +254,8 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
   },
   {
     id: 'progesterona-micronizada',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Reduzir', child_c: 'Evitar' },
     molecula: 'progesterona micronizada',
     nome_generico: 'Progesterona Micronizada',
     sinonimos: ['Utrogestan', 'progestogênio natural', 'progesterona bioidêntica', 'progesterona vaginal', 'suporte lúteo'],
@@ -286,6 +300,8 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
   },
   {
     id: 'tibolona',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Evitar', child_c: 'Contraindicado' },
     molecula: 'tibolona',
     nome_generico: 'Tibolona',
     sinonimos: ['Libiam', 'Livial', 'TH combinada sintética'],
@@ -326,6 +342,7 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
   // ─── TERAPIA GESTACIONAL ─────────────────────────────────
   {
     id: 'sulfato-magnesio',
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste (eliminação renal)' },
     molecula: 'sulfato de magnésio',
     nome_generico: 'Sulfato de Magnésio',
     sinonimos: ['MgSO4', 'magnésio gestação', 'eclâmpsia', 'pré-eclâmpsia grave', 'neuroproteção fetal'],
@@ -373,6 +390,7 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
   },
   {
     id: 'metildopa',
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Evitar', child_c: 'Contraindicado (hepatotoxicidade)' },
     molecula: 'metildopa',
     nome_generico: 'Metildopa',
     sinonimos: ['Aldomet', 'alfa-metildopa', 'hipertensão gestacional', 'pré-eclâmpsia leve'],
@@ -413,6 +431,8 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
   },
   {
     id: 'hidralazina',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Espaçar intervalo (acúmulo — meia-vida maior)', tfg_lt_15: 'q8–12h, cautela (meia-vida ~16 h)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Reduzir', child_c: 'Reduzir (metabolismo hepático)' },
     molecula: 'hidralazina',
     nome_generico: 'Hidralazina',
     sinonimos: ['Nepresol', 'crise hipertensiva gestacional', 'emergência hipertensiva obstetrícia'],
@@ -445,6 +465,8 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
   },
   {
     id: 'ocitocina',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste' },
     molecula: 'ocitocina',
     nome_generico: 'Ocitocina',
     sinonimos: ['Syntocinon', 'ocitocina sintética', 'uterotônico', 'indução parto', 'HPP'],
@@ -486,6 +508,8 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
   },
   {
     id: 'misoprostol',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste' },
     molecula: 'misoprostol',
     nome_generico: 'Misoprostol',
     sinonimos: ['Cytotec', 'Prostokos', 'uterotônico PGE1', 'amadurecimento cervical', 'maturação colo'],
@@ -528,6 +552,8 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
   },
   {
     id: 'betametasona-antenatal',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Cautela' },
     molecula: 'betametasona',
     nome_generico: 'Betametasona (Corticoide Antenatal)',
     sinonimos: ['Celestone', 'corticoide fetal', 'maturação pulmonar', 'corticoterapia antenatal'],
@@ -564,6 +590,8 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
   },
   {
     id: 'acido-folico',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste; suplementar na diálise', dialisavel: true },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste' },
     molecula: 'ácido fólico',
     nome_generico: 'Ácido Fólico',
     sinonimos: ['folato', 'vitamina B9', 'suplemento gestacional', 'prevenção DTN', 'vitamina gestação'],
@@ -600,6 +628,8 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
   },
   {
     id: 'sulfato-ferroso-gestacao',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste' },
     molecula: 'sulfato ferroso',
     nome_generico: 'Sulfato Ferroso (Gestação)',
     sinonimos: ['ferro gestacional', 'suplemento ferro gestação', 'anemia ferropriva gestante', 'Noripurum', 'Ferrolab'],
@@ -634,6 +664,8 @@ export const PHARMA_DB_GINECO: QuickDrug[] = [
   },
   {
     id: 'cabergolina',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (metabolismo hepático)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Reduzir', child_c: 'Reduzir (metabolismo hepático)' },
     molecula: 'cabergolina',
     nome_generico: 'Cabergolina',
     sinonimos: ['Dostinex', 'agonista dopaminérgico', 'inibição lactação', 'hiperprolactinemia', 'prolactinoma'],

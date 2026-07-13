@@ -12,6 +12,7 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'tramadol-paliativo',
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Reduzir/espaçar (máx 50 mg q12h)', child_c: 'Evitar' },
     molecula: 'tramadol',
     nome_generico: 'Tramadol (Dor Moderada — WHO 2)',
     sinonimos: ['Tramal', 'cloridrato de tramadol', 'opioide fraco', 'WHO degrau 2'],
@@ -59,6 +60,8 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   },
   {
     id: 'codeina',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Reduzir/monitorar', tfg_30_15: 'Evitar', tfg_lt_15: 'Contraindicada — metabólitos ativos acumulam', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Reduzir — ativação hepática imprevisível', child_c: 'Evitar' },
     molecula: 'codeína',
     nome_generico: 'Codeína',
     sinonimos: ['fosfato de codeína', 'opioide fraco', 'WHO degrau 2', 'codeína + paracetamol'],
@@ -100,6 +103,7 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'morfina-paliativa',
+    ajuste_hepatico: { child_a: 'Reduzir/titular', child_b: 'Reduzir — clearance reduzido', child_c: 'Reduzir muito, intervalos maiores' },
     molecula: 'morfina',
     nome_generico: 'Morfina (Cuidados Paliativos)',
     sinonimos: ['MST', 'Dimorf', 'morfina IR', 'morfina LP', 'opioide forte', 'WHO degrau 3'],
@@ -151,6 +155,7 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   },
   {
     id: 'oxicodona-paliativa',
+    ajuste_hepatico: { child_a: 'Reduzir 1/3–1/2', child_b: 'Reduzir', child_c: 'Evitar/titular cuidadoso' },
     molecula: 'oxicodona',
     nome_generico: 'Oxicodona',
     sinonimos: ['OxyContin', 'Targin', 'oxicodona LP', 'WHO degrau 3'],
@@ -189,6 +194,7 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   },
   {
     id: 'fentanil-transdermico',
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Reduzir ~50%', child_c: 'Evitar/titular' },
     molecula: 'fentanil',
     nome_generico: 'Fentanil Transdérmico (Adesivo)',
     sinonimos: ['Durogesic', 'adesivo de fentanil', 'fentanil TD', 'patch opioide'],
@@ -239,6 +245,8 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   },
   {
     id: 'buprenorfina-transdermico',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste — opioide de escolha na IR', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Monitorar (metabolismo hepático)' },
     molecula: 'buprenorfina',
     nome_generico: 'Buprenorfina Transdérmica',
     sinonimos: ['Norspan', 'BuTrans', 'agonista parcial opioide TD', 'opioide IR seguro'],
@@ -272,6 +280,7 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   },
   {
     id: 'hidromorfona',
+    ajuste_hepatico: { child_a: 'Reduzir', child_b: 'Reduzir ~50%', child_c: 'Cautela — clearance reduzido' },
     molecula: 'hidromorfona',
     nome_generico: 'Hidromorfona',
     sinonimos: ['Dilaudid', 'hidromorphone', 'opioide forte alternativo'],
@@ -306,6 +315,8 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   },
   {
     id: 'metadona-paliativa',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste (excreção fecal); titular', tfg_lt_15: 'Reduzir/titular', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Reduzir', child_c: 'Evitar — acúmulo, QT' },
     molecula: 'metadona',
     nome_generico: 'Metadona',
     sinonimos: ['cloridrato de metadona', 'dolophine', 'WHO degrau 3 especial', 'NMDA antagonista opioide'],
@@ -350,6 +361,8 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'midazolam-paliativo',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste do fármaco', tfg_30_15: 'Reduzir — metabólito alfa-OH acumula (sedação prolongada)', tfg_lt_15: 'Reduzir ao menos 50%, titular', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Reduzir', child_b: 'Reduzir ~50%', child_c: 'Reduzir muito (sedação prolongada)' },
     molecula: 'midazolam',
     nome_generico: 'Midazolam (Sedação Paliativa / SC)',
     sinonimos: ['Dormicum', 'sedação terminal', 'midazolam SC', 'agitação terminal'],
@@ -390,6 +403,8 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   },
   {
     id: 'fenobarbital-paliativo',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Reduzir/espaçar', tfg_lt_15: 'Reduzir; dose após diálise', dialisavel: true },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Reduzir', child_c: 'Reduzir (metabolismo hepático)' },
     molecula: 'fenobarbital',
     nome_generico: 'Fenobarbital (Sedação Paliativa Refratária)',
     sinonimos: ['gardenal', 'barbitúrico sedação terminal', 'sedação refratária'],
@@ -427,6 +442,8 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'haloperidol-paliativo',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (metabolismo hepático)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Reduzir' },
     molecula: 'haloperidol',
     nome_generico: 'Haloperidol',
     sinonimos: ['Haldol', 'antipsicótico típico', 'delirium paliativo', 'náusea opioide'],
@@ -469,6 +486,8 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   },
   {
     id: 'levomepromazina',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (metabolismo hepático)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Reduzir', child_c: 'Evitar' },
     molecula: 'levomepromazina',
     nome_generico: 'Levomepromazina (Metotrimeprazina)',
     sinonimos: ['Neozine', 'antipsicótico sedativo', 'multimodal paliativo', 'levomepromazina SC'],
@@ -507,6 +526,8 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'lorazepam-paliativo',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (glicuronidação)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste (glicuronidação preservada)', child_c: 'Reduzir' },
     molecula: 'lorazepam',
     nome_generico: 'Lorazepam',
     sinonimos: ['Ativan', 'ansiolítico paliativo', 'dispneia ansiedade', 'BZD sublingual'],
@@ -548,6 +569,8 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'metoclopramida-paliativa',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Reduzir ~25%', tfg_30_15: 'Reduzir ~50% (risco extrapiramidal)', tfg_lt_15: 'Reduzir 50–75%', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Reduzir ~50%', child_c: 'Reduzir' },
     molecula: 'metoclopramida',
     nome_generico: 'Metoclopramida',
     sinonimos: ['Plasil', 'procinético', 'antiemético paliativo', 'gastroparesia'],
@@ -590,6 +613,8 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   },
   {
     id: 'ondansetrona-paliativa',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (metabolismo hepático)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Máx 8 mg/dia' },
     molecula: 'ondansetrona',
     nome_generico: 'Ondansetrona',
     sinonimos: ['Zofran', '5-HT3 antagonista', 'antiemético paliativo'],
@@ -629,6 +654,8 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'hioscina-butilbrometo',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (baixa absorção sistêmica)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste (baixa absorção)' },
     molecula: 'hioscina butilbrometo',
     nome_generico: 'Hioscina Butilbrometo (Escopolamina Butilbrometo)',
     sinonimos: ['Buscopan', 'butilescopolamina', 'estertores terminais', 'anticolinérgico periférico'],
@@ -666,6 +693,8 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   },
   {
     id: 'glicopirronio-sc',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Cautela — reduzir (excreção renal)', tfg_lt_15: 'Reduzir', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Cautela' },
     molecula: 'Glicopirrônio SC/IV',
     nome_generico: 'Glicopirronato (Glicopirrônio — uso SC/IV paliativo)',
     sinonimos: ['Robinul', 'anticolinérgico estertores', 'glicopirrolate', 'glicopirronio sc', 'glicopirronio iv'],
@@ -698,6 +727,7 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'metilnaltrexona',
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Cautela' },
     molecula: 'metilnaltrexona',
     nome_generico: 'Metilnaltrexona',
     sinonimos: ['Relistor', 'PAMORA', 'constipação opioide', 'antagonista periférico µ'],
@@ -739,6 +769,8 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'dexametasona-paliativa',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Cautela' },
     molecula: 'dexametasona',
     nome_generico: 'Dexametasona (Paliativo — Múltiplas Indicações)',
     sinonimos: ['Decadron', 'corticoide paliativo', 'dexametasona SC', 'anti-inflamatório paliativo'],
@@ -782,6 +814,7 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   },
   {
     id: 'gabapentina-paliativa',
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste (eliminação renal)' },
     molecula: 'gabapentina',
     nome_generico: 'Gabapentina (Dor Neuropática — Paliativo)',
     sinonimos: ['Neurontin', 'adjuvante dor neuropática', 'canal cálcio antagonista'],
@@ -822,6 +855,8 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   },
   {
     id: 'amitriptilina-paliativa',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (metabolismo hepático)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Reduzir', child_b: 'Reduzir', child_c: 'Evitar (sedação/hepatotox)' },
     molecula: 'amitriptilina',
     nome_generico: 'Amitriptilina (Dor Neuropática — Paliativo)',
     sinonimos: ['Tryptanol', 'antidepressivo tricíclico', 'adjuvante dor neuropática', 'TCA'],
@@ -862,6 +897,8 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   },
   {
     id: 'octreotida-paliativa',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Diálise: ajustar manutenção (meia-vida maior)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Reduzir manutenção (cirrose)', child_c: 'Reduzir' },
     molecula: 'octreotida',
     nome_generico: 'Octreotida (Obstrução Intestinal Maligna)',
     sinonimos: ['Sandostatin', 'análogo somatostatina', 'OIM paliativo', 'redução secreções GI'],
@@ -898,6 +935,8 @@ export const PHARMA_DB_PALLIATIVE: QuickDrug[] = [
   },
   {
     id: 'naloxona-antidoto-opioide',
+    ajuste_renal: { normal: 'Titular ao efeito', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Titular ao efeito', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Titular ao efeito' },
     molecula: 'naloxona',
     nome_generico: 'Naloxona (Antídoto / Toxicidade por Opioide)',
     sinonimos: ['Narcan', 'antídoto opioide', 'reversão opioide paliativo'],

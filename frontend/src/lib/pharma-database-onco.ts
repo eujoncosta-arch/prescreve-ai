@@ -12,6 +12,7 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'cisplatina',
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Cautela' },
     molecula: 'cisplatina',
     nome_generico: 'Cisplatina',
     sinonimos: ['CDDP', 'platinol', 'platina', 'DDP'],
@@ -59,6 +60,7 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   },
   {
     id: 'carboplatina',
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Cautela' },
     molecula: 'carboplatina',
     nome_generico: 'Carboplatina',
     sinonimos: ['CBDCA', 'paraplatin', 'carbo'],
@@ -102,6 +104,8 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   },
   {
     id: 'oxaliplatina',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste (ClCr ≥ 30)', tfg_30_15: 'ClCr < 30: reduzir para 65 mg/m²', tfg_lt_15: 'Avaliar risco-benefício', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Cautela (dados limitados)' },
     molecula: 'oxaliplatina',
     nome_generico: 'Oxaliplatina',
     sinonimos: ['Eloxatin', 'oxali', 'platina 3ª geração'],
@@ -140,6 +144,8 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'paclitaxel',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (metabolismo hepático)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Reduzir', child_b: 'Reduzir', child_c: 'Contraindicado/reduzir muito' },
     molecula: 'paclitaxel',
     nome_generico: 'Paclitaxel',
     sinonimos: ['Taxol', 'PTX', 'taxano'],
@@ -180,6 +186,7 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   },
   {
     id: 'docetaxel',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (metabolismo hepático)', dialisavel: false },
     molecula: 'docetaxel',
     nome_generico: 'Docetaxel',
     sinonimos: ['Taxotere', 'DTX'],
@@ -216,6 +223,8 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'fluorouracil',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Cautela', child_c: 'Contraindicado se bilirrubina > 5' },
     molecula: 'fluorouracil',
     nome_generico: '5-Fluorouracil (5-FU)',
     sinonimos: ['5-FU', '5FU', 'fluorouracilo', 'FOLFOX', 'FOLFIRI'],
@@ -252,6 +261,7 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   },
   {
     id: 'capecitabina',
+    ajuste_hepatico: { child_a: 'Sem ajuste (monitorar)', child_b: 'Cautela', child_c: 'Cautela — monitorar bilirrubina' },
     molecula: 'capecitabina',
     nome_generico: 'Capecitabina',
     sinonimos: ['Xeloda', 'XELOX', 'cape', 'oral 5-FU'],
@@ -297,6 +307,8 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   },
   {
     id: 'gencitabina',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Cautela (dados limitados)', tfg_lt_15: 'Cautela', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Cautela — bilirrubina elevada', child_c: 'Cautela' },
     molecula: 'gencitabina',
     nome_generico: 'Gencitabina',
     sinonimos: ['Gemzar', 'GEM', 'gemcitabine'],
@@ -328,6 +340,7 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   },
   {
     id: 'pemetrexede',
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Dados limitados' },
     molecula: 'pemetrexede',
     nome_generico: 'Pemetrexede',
     sinonimos: ['Alimta', 'PMX', 'antifolato'],
@@ -362,6 +375,7 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   },
   {
     id: 'metotrexato-onco',
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Reduzir', child_c: 'Contraindicado (hepatotoxicidade)' },
     molecula: 'metotrexato',
     nome_generico: 'Metotrexato (Alta Dose)',
     sinonimos: ['MTX-AD', 'MTX alta dose', 'metotrexato HD', 'leucovorin resgate'],
@@ -404,6 +418,7 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'doxorrubicina',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (metabolismo hepático)', dialisavel: false },
     molecula: 'doxorrubicina',
     nome_generico: 'Doxorrubicina',
     sinonimos: ['adriamicina', 'ADM', 'AC', 'FAC', 'antracíclina'],
@@ -449,6 +464,8 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'pembrolizumabe',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (anticorpo monoclonal)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem dados (cautela)' },
     molecula: 'pembrolizumabe',
     nome_generico: 'Pembrolizumabe',
     sinonimos: ['Keytruda', 'anti-PD-1', 'ICI', 'imunoterapia', 'pembro'],
@@ -495,6 +512,8 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   },
   {
     id: 'nivolumabe',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (anticorpo monoclonal)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem dados (cautela)' },
     molecula: 'nivolumabe',
     nome_generico: 'Nivolumabe',
     sinonimos: ['Opdivo', 'anti-PD-1', 'nivo'],
@@ -524,6 +543,8 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   },
   {
     id: 'ipilimumabe',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (anticorpo monoclonal)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem dados (cautela)' },
     molecula: 'ipilimumabe',
     nome_generico: 'Ipilimumabe',
     sinonimos: ['Yervoy', 'anti-CTLA-4', 'ipi'],
@@ -555,6 +576,8 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   },
   {
     id: 'rituximabe',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (anticorpo monoclonal)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem dados (cautela)' },
     molecula: 'rituximabe',
     nome_generico: 'Rituximabe',
     sinonimos: ['MabThera', 'Rituxan', 'anti-CD20', 'R-CHOP'],
@@ -597,6 +620,8 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'imatinibe',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'ClCr 40–59: máx 600 mg/dia', tfg_30_15: 'ClCr 20–39: máx 400 mg/dia', tfg_lt_15: 'Cautela (exposição maior 1,5–2x)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Reduzir', child_c: 'Reduzir (CYP3A4)' },
     molecula: 'imatinibe',
     nome_generico: 'Imatinibe',
     sinonimos: ['Gleevec', 'Glivec', 'STI571', 'inibidor BCR-ABL', 'GIST', 'LMC'],
@@ -635,6 +660,8 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   },
   {
     id: 'trastuzumabe',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (anticorpo monoclonal)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem dados (cautela)' },
     molecula: 'trastuzumabe',
     nome_generico: 'Trastuzumabe',
     sinonimos: ['Herceptin', 'anti-HER2', 'HER2', 'Herceptin SC'],
@@ -674,6 +701,8 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   },
   {
     id: 'bevacizumabe',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (anticorpo monoclonal)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem dados (cautela)' },
     molecula: 'bevacizumabe',
     nome_generico: 'Bevacizumabe',
     sinonimos: ['Avastin', 'anti-VEGF', 'antiangiogênico'],
@@ -715,6 +744,8 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   },
   {
     id: 'osimertinibe',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Cautela (dados limitados em grave)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Dados limitados' },
     molecula: 'osimertinibe',
     nome_generico: 'Osimertinibe',
     sinonimos: ['Tagrisso', 'anti-EGFR 3ª geração', 'T790M', 'EGFR mutado CPNPC'],
@@ -747,6 +778,8 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   },
   {
     id: 'palbociclibe',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Cautela (dados limitados)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Reduzir (Child C)' },
     molecula: 'palbociclibe',
     nome_generico: 'Palbociclibe',
     sinonimos: ['Ibrance', 'CDK4/6 inibidor', 'HR+ HER2- mama'],
@@ -782,6 +815,8 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'palonossetrona',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (metabolismo hepático)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste' },
     molecula: 'palonossetrona',
     nome_generico: 'Palonossetrona',
     sinonimos: ['Aloxi', '5-HT3', 'antiemético QT', 'antiemese quimio'],
@@ -810,6 +845,8 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   },
   {
     id: 'aprepitanto',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (metabolismo hepático)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Cautela (Child C: dados limitados)' },
     molecula: 'aprepitanto',
     nome_generico: 'Aprepitanto / Fosaprepitanto',
     sinonimos: ['Emend', 'NK1 antagonista', 'anti-NK1', 'antiemese 3 drogas'],
@@ -847,6 +884,8 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'filgrastim',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste' },
     molecula: 'filgrastim',
     nome_generico: 'Filgrastim (G-CSF)',
     sinonimos: ['Neupogen', 'G-CSF', 'fator estimulante de colônias', 'neutropenia quimio'],
@@ -881,6 +920,8 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   },
   {
     id: 'pegfilgrastim',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste' },
     molecula: 'pegfilgrastim',
     nome_generico: 'Pegfilgrastim',
     sinonimos: ['Neulasta', 'G-CSF peguilado', 'long-acting G-CSF'],
@@ -918,6 +959,8 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'mesna',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste' },
     molecula: 'mesna',
     nome_generico: 'Mesna (2-Mercaptoetanossulfonato de Sódio)',
     sinonimos: ['Uromitexan', 'protetor bexiga', 'cistite hemorrágica ifosfamida'],
@@ -949,6 +992,7 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   },
   {
     id: 'alopurinol-onco',
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Reduzir/monitorar' },
     molecula: 'alopurinol',
     nome_generico: 'Alopurinol (Profilaxia SLT)',
     sinonimos: ['Zyloric', 'profilaxia hiperuricemia', 'síndrome lise tumoral', 'SLT'],
@@ -985,6 +1029,8 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   },
   {
     id: 'leucovorin',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste' },
     molecula: 'leucovorin',
     nome_generico: 'Leucovorin (Ácido Folínico)',
     sinonimos: ['folinato de cálcio', 'resgate de metotrexato', 'ácido folínico', 'LV'],
@@ -1016,6 +1062,8 @@ export const PHARMA_DB_ONCO: QuickDrug[] = [
   },
   {
     id: 'rasburicase',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste' },
     molecula: 'rasburicase',
     nome_generico: 'Rasburicase',
     sinonimos: ['Fasturtec', 'uricase recombinante', 'SLT alto risco'],

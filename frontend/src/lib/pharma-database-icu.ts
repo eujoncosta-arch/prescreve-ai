@@ -12,6 +12,8 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'norepinefrina',
+    ajuste_renal: { normal: 'Titular ao efeito hemodinâmico', tfg_60_30: 'Titular', tfg_30_15: 'Titular', tfg_lt_15: 'Titular — sem ajuste renal fixo', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Titular ao efeito', child_b: 'Titular ao efeito', child_c: 'Titular ao efeito' },
     molecula: 'norepinefrina',
     nome_generico: 'Norepinefrina (Noradrenalina)',
     sinonimos: ['noradrenalina', 'levophed', 'NE', 'vasopressor 1ª linha', 'NOR'],
@@ -50,6 +52,8 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   },
   {
     id: 'epinefrina-uti',
+    ajuste_renal: { normal: 'Titular ao efeito', tfg_60_30: 'Titular', tfg_30_15: 'Titular', tfg_lt_15: 'Titular', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Titular', child_b: 'Titular', child_c: 'Titular' },
     molecula: 'epinefrina',
     nome_generico: 'Epinefrina (Adrenalina)',
     sinonimos: ['adrenalina', 'epinephrine', 'PCR', 'anafilaxia', 'vasopressor'],
@@ -93,6 +97,8 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   },
   {
     id: 'vasopressina',
+    ajuste_renal: { normal: 'Titular ao efeito', tfg_60_30: 'Titular', tfg_30_15: 'Titular', tfg_lt_15: 'Titular — sem ajuste renal fixo', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Titular ao efeito', child_b: 'Titular ao efeito', child_c: 'Titular ao efeito' },
     molecula: 'vasopressina',
     nome_generico: 'Vasopressina (ADH)',
     sinonimos: ['ADH', 'hormônio antidiurético', '2ª linha sepse', 'vasopressina endógena'],
@@ -123,6 +129,8 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   },
   {
     id: 'dobutamina',
+    ajuste_renal: { normal: 'Titular ao efeito', tfg_60_30: 'Titular', tfg_30_15: 'Titular', tfg_lt_15: 'Titular — sem ajuste renal fixo', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Titular ao efeito', child_b: 'Titular ao efeito', child_c: 'Titular ao efeito' },
     molecula: 'dobutamina',
     nome_generico: 'Dobutamina',
     sinonimos: ['dobut', 'inotrópico', 'choque cardiogênico', 'IC descompensada', 'Dobutrex'],
@@ -157,6 +165,8 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   },
   {
     id: 'dopamina',
+    ajuste_renal: { normal: 'Titular ao efeito', tfg_60_30: 'Titular', tfg_30_15: 'Titular', tfg_lt_15: 'Titular — sem ajuste renal fixo', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Titular ao efeito', child_b: 'Titular ao efeito', child_c: 'Titular ao efeito' },
     molecula: 'dopamina',
     nome_generico: 'Dopamina',
     sinonimos: ['Intropin', 'DA', 'vasopresor', 'inotrópico'],
@@ -187,6 +197,7 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   },
   {
     id: 'milrinona',
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Cautela' },
     molecula: 'milrinona',
     nome_generico: 'Milrinona',
     sinonimos: ['Primacor', 'inodilatador', 'inibidor PDE-3', 'IC refratária'],
@@ -230,6 +241,8 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'propofol-uti',
+    ajuste_renal: { normal: 'Titular ao efeito', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (titular)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste (titular)', child_c: 'Titular — clearance pode reduzir' },
     molecula: 'propofol',
     nome_generico: 'Propofol',
     sinonimos: ['Diprivan', 'sedação UTI', 'TIVA', 'anestesia IV'],
@@ -269,6 +282,8 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   },
   {
     id: 'dexmedetomidina',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste; considerar menor dose', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Reduzir', child_b: 'Reduzir', child_c: 'Reduzir (metabolismo hepático)' },
     molecula: 'dexmedetomidina',
     nome_generico: 'Dexmedetomidina',
     sinonimos: ['Precedex', 'dex', 'alfa-2 agonista', 'sedação consciente UTI'],
@@ -301,6 +316,8 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   },
   {
     id: 'midazolam-uti',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste do fármaco', tfg_30_15: 'Reduzir — metabólito alfa-OH acumula (sedação prolongada)', tfg_lt_15: 'Reduzir ao menos 50%, titular', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Reduzir', child_b: 'Reduzir ~50%', child_c: 'Reduzir muito' },
     molecula: 'midazolam',
     nome_generico: 'Midazolam',
     sinonimos: ['dormicum', 'BZD', 'benzodiazepínico', 'sedação', 'MDZ'],
@@ -339,6 +356,8 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   },
   {
     id: 'ketamina-uti',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (metabolismo hepático)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Reduzir' },
     molecula: 'ketamina',
     nome_generico: 'Ketamina',
     sinonimos: ['cetamina', 'ketamine', 'NMDA antagonista', 'anestesia dissociativa'],
@@ -378,6 +397,8 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   },
   {
     id: 'etomidato',
+    ajuste_renal: { normal: 'Dose única de indução', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Cautela' },
     molecula: 'etomidato',
     nome_generico: 'Etomidato',
     sinonimos: ['Amidate', 'hipnótico SRI', 'indução ISH'],
@@ -417,6 +438,8 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'fentanil-uti',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste — opioide de escolha na IR (titular)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Reduzir', child_c: 'Reduzir/titular' },
     molecula: 'fentanil',
     nome_generico: 'Fentanil (Infusão Contínua — UTI)',
     sinonimos: ['fentanil IC', 'opioide UTI', 'analgesia-first', 'Fentanest'],
@@ -454,6 +477,8 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   },
   {
     id: 'remifentanil',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (esterases plasmáticas)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste (esterases plasmáticas)' },
     molecula: 'remifentanil',
     nome_generico: 'Remifentanil',
     sinonimos: ['Ultiva', 'opioide ultracurto', 'desmame VM', 'opioide contexto-insensível'],
@@ -488,6 +513,8 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'succinilcolina',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Cautela na IRC (risco de hipercalemia)', tfg_30_15: 'Cautela (hipercalemia)', tfg_lt_15: 'Cautela — risco de hipercalemia/arritmia', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Colinesterase reduzida — efeito prolongado', child_c: 'Efeito prolongado (síntese hepática reduzida)' },
     molecula: 'succinilcolina',
     nome_generico: 'Succinilcolina (Suxametônio)',
     sinonimos: ['sux', 'suxametônio', 'BNM despolarizante', 'SRI rápida', 'Quelicin'],
@@ -525,6 +552,7 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   },
   {
     id: 'rocurônio',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Efeito prolongado — titular por TOF', tfg_lt_15: 'Efeito prolongado', dialisavel: false },
     molecula: 'rocurônio',
     nome_generico: 'Rocurônio',
     sinonimos: ['Esmeron', 'BNM não-despolarizante', 'SRI', 'ICU BNM', 'reversível sugamadex'],
@@ -557,6 +585,8 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   },
   {
     id: 'cisatracúrio',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (eliminação de Hofmann)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste (Hofmann)' },
     molecula: 'cisatracúrio',
     nome_generico: 'Cisatracúrio',
     sinonimos: ['Nimbex', 'BNM ARDS', 'degradação de Hofmann', 'ICU BNM'],
@@ -589,6 +619,7 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   },
   {
     id: 'sugamadex',
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem dados (cautela)' },
     molecula: 'sugamadex',
     nome_generico: 'Sugamadex',
     sinonimos: ['Bridion', 'reversão BNM', 'antídoto rocurônio', 'ciclo-dextrina'],
@@ -630,6 +661,8 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'hidrocortisona-choque',
+    ajuste_renal: { normal: 'Titular ao efeito', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Cautela' },
     molecula: 'hidrocortisona',
     nome_generico: 'Hidrocortisona (Choque Séptico Refratário)',
     sinonimos: ['Solu-Cortef', 'corticoide sepse', 'hidrocortisona IC', 'insuficiência adrenal relativa'],
@@ -664,6 +697,7 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   },
   {
     id: 'acido-tranexamico',
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste (eliminação renal)' },
     molecula: 'ácido tranexâmico',
     nome_generico: 'Ácido Tranexâmico',
     sinonimos: ['Transamin', 'TXA', 'antifibrinolítico', 'trauma hemorrágico', 'hemorragia pós-parto'],
@@ -708,6 +742,8 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   // ══════════════════════════════════════════════════════════
   {
     id: 'amiodarona-pcr',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (eliminação hepática/biliar)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Reduzir/monitorar TGO/TGP', child_c: 'Evitar (hepatotoxicidade)' },
     molecula: 'amiodarona',
     nome_generico: 'Amiodarona (PCR / Arritmia Ventricular)',
     sinonimos: ['Ancoron', 'Cordarone', 'antiarrítmico Classe III', 'FV refratária'],
@@ -747,6 +783,8 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   },
   {
     id: 'adenosina',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (meia-vida < 10 s)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste (meia-vida < 10 s)' },
     molecula: 'adenosina',
     nome_generico: 'Adenosina',
     sinonimos: ['Adenocard', 'TSV', 'conversão sinusal', 'AV bloqueio'],
@@ -784,6 +822,8 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   },
   {
     id: 'bicarbonato-sodio-pcr',
+    ajuste_renal: { normal: 'Titular por gasometria', tfg_60_30: 'Titular', tfg_30_15: 'Titular', tfg_lt_15: 'Titular por pH/gasometria', dialisavel: true },
+    ajuste_hepatico: { child_a: 'Titular', child_b: 'Titular', child_c: 'Titular por pH' },
     molecula: 'bicarbonato de sódio',
     nome_generico: 'Bicarbonato de Sódio (PCR / Acidose)',
     sinonimos: ['NaHCO3', 'bicarb', 'PCR hipercalemia', 'acidose grave'],
@@ -815,6 +855,8 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   },
   {
     id: 'gluconato-calcio',
+    ajuste_renal: { normal: 'Titular por cálcio sérico', tfg_60_30: 'Titular', tfg_30_15: 'Titular', tfg_lt_15: 'Titular por cálcio sérico', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Titular por cálcio' },
     molecula: 'gluconato de cálcio',
     nome_generico: 'Gluconato de Cálcio',
     sinonimos: ['Calciguard', 'Ca²⁺ IV', 'estabilizador membrana', 'hipercalemia', 'hipocalcemia'],
@@ -849,6 +891,8 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   },
   {
     id: 'atropina',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Cautela', tfg_lt_15: 'Cautela', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Cautela' },
     molecula: 'atropina',
     nome_generico: 'Atropina',
     sinonimos: ['anticolinérgico', 'bradicardia', 'PCR assistolia AESP (histórico)'],
@@ -879,6 +923,8 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   },
   {
     id: 'alteplase-tep',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (clearance hepático)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Cautela', child_b: 'Cautela (coagulopatia)', child_c: 'Maior risco de sangramento' },
     molecula: 'alteplase',
     nome_generico: 'Alteplase (rtPA — Trombólise)',
     sinonimos: ['Actilyse', 'rtPA', 'trombolítico', 'TEP maciço', 'AVC isquêmico', 'fibrinolítico'],
@@ -918,6 +964,8 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   },
   {
     id: 'naloxona',
+    ajuste_renal: { normal: 'Titular ao efeito', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Titular ao efeito', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Titular' },
     molecula: 'naloxona',
     nome_generico: 'Naloxona',
     sinonimos: ['Narcan', 'antídoto opioide', 'reversão opioide', 'NLX'],
@@ -952,6 +1000,8 @@ export const PHARMA_DB_ICU: QuickDrug[] = [
   },
   {
     id: 'flumazenil',
+    ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (metabolismo hepático)', dialisavel: false },
+    ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Reduzir (clearance hepático reduzido)', child_c: 'Reduzir' },
     molecula: 'flumazenil',
     nome_generico: 'Flumazenil',
     sinonimos: ['Lanexat', 'antídoto BZD', 'reversão benzodiazepínico'],
