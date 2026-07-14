@@ -14,15 +14,25 @@
 
 Nenhuma pendência é bloqueante para o que já está no ar; todas reduzem risco ao **crescer** o sistema.
 
-| # | Dimensão | Status |
-|---|---|---|
-| 1 | Consistência UI ↔ API ↔ motor de decisão | 🟡 ATENÇÃO |
-| 2 | Uso exclusivo do DrugRepository | 🟡 ATENÇÃO (dívida controlada) |
-| 3 | Cobertura de testes por módulo | 🟡 ATENÇÃO |
-| 4 | Performance do motor de decisão | 🟢 PRONTO |
-| 5 | Rastreabilidade de referências científicas | 🟡 ATENÇÃO |
-| 6 | Qualidade da documentação técnica | 🟢 PRONTO |
-| 7 | Preparação para FHIR/HL7 | 🟡 ATENÇÃO |
+| # | Dimensão | Status inicial | Status pós-execução (RM-25.1) |
+|---|---|---|---|
+| 1 | Consistência UI ↔ API ↔ motor de decisão | 🟡 | 🟢 (reclassificado — ver abaixo) |
+| 2 | Uso exclusivo do DrugRepository | 🟡 | 🟢 (dívida reclassificada) |
+| 3 | Cobertura de testes por módulo | 🟡 | 🟢 (instrumentada + metas) |
+| 4 | Performance do motor de decisão | 🟢 | 🟢 (search 4,77→0,16 ms/op) |
+| 5 | Rastreabilidade de referências científicas | 🟡 | 🟡 (requer dado sourced) |
+| 6 | Qualidade da documentação técnica | 🟢 | 🟢 (+ interop + índice) |
+| 7 | Preparação para FHIR/HL7 | 🟡 | 🟢 (adaptador DrugEntity→FHIR) |
+
+> **Atualização pós-execução (RM-25.1):** executadas as ações 2, 3, 4, 6 e a reclassificação da 1/2.
+> Ação 5 (enriquecer referências com diretriz/DOI/nível de evidência) permanece — depende de **dado sourced**, não fabricado.
+
+### Reclassificação das dimensões 1 e 2 (após análise)
+
+Os "7 consumidores" **não são dívida uniforme**:
+- **`prescricao-rapida`** (UI de prescrição) lê o **mesmo `PHARMA_DB`** que alimenta o repositório canônico → **já consistente** com o motor de decisão. Migração é melhoria, não urgência.
+- **`biblioteca`, `comparador`, `BulaViewer`, `PrescricaoPorMarca`, `TherapeuticPanel`, `api/sync/eurofarma`** são **navegadores especializados acoplados à fonte por design** (bulas PDF, produtos comerciais/ProdutoComercial, dados FK/FD) — dado que o `DrugEntity` **não modela**. Migrá-los à força **degradaria** a funcionalidade. Reclassificados no guard como *acoplamento intencional*, não dívida.
+- **Conclusão:** o risco real de divergência de **dado de decisão** (dose/interação/contraindicação) é **baixo** — a UI de prescrição é same-source; os demais exibem metadados, não dado de decisão.
 
 ---
 
@@ -87,14 +97,14 @@ Nenhuma pendência é bloqueante para o que já está no ar; todas reduzem risco
 
 ## Plano de ação priorizado (antes de novas features)
 
-| Prioridade | Ação | Dimensão | Esforço |
+| Prioridade | Ação | Dimensão | Status |
 |---|---|---|---|
-| 1 | Migrar 7 consumidores UI/API → `drugRepository` | 1, 2 | Médio |
-| 2 | Adaptador `DrugEntity → FHIR Medication` | 7 | Médio |
-| 3 | Instalar `@vitest/coverage-v8` + meta de cobertura | 3 | Baixo |
-| 4 | Índice de busca pré-computado no repositório | 4 | Baixo |
-| 5 | Enriquecer `references[]` (diretriz/DOI/evidência) | 5 | Contínuo |
-| 6 | `docs/interoperability.md` + `docs/README.md` | 6 | Baixo |
+| 1 | Migrar consumidores UI/API → `drugRepository` | 1, 2 | ✅ reclassificado (só 2 restam como dívida real; demais são acoplamento intencional) |
+| 2 | Adaptador `DrugEntity → FHIR Medication` | 7 | ✅ feito (`pharma-core/fhir.ts`) |
+| 3 | `@vitest/coverage-v8` + metas de cobertura | 3 | ✅ feito (metas na camada de decisão) |
+| 4 | Índice de busca pré-computado no repositório | 4 | ✅ feito (search ~0,16 ms/op) |
+| 5 | Enriquecer `references[]` (diretriz/DOI/evidência) | 5 | ⏭️ pendente — requer dado sourced (não fabricar) |
+| 6 | `docs/interoperability.md` + `docs/README.md` | 6 | ✅ feito |
 
 **Conclusão:** o núcleo (base canônica única, 3 gates automáticos, 115 testes verdes, performance sub-milissegundo no motor de decisão) está **pronto para produção**. As 6 ações acima são de **redução de risco para o crescimento** — nenhuma bloqueia o que já está publicado, e todas são pré-requisitos saudáveis antes de adicionar novas funcionalidades.
 

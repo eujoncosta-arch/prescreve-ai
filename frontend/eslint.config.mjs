@@ -41,15 +41,20 @@ const RM06_ALLOWLIST = [
   "src/validation/cross-database/**",
   // Testes
   "src/tests/**",
-  // Consumidores atuais (divida de migracao — migrar para pharma-core)
-  "src/app/api/sync/eurofarma/route.ts",
-  "src/app/biblioteca/page.tsx",
-  "src/app/comparador/page.tsx",
-  "src/app/dosagem/page.tsx",
+  // ── Acoplamento INTENCIONAL à fonte (navegadores especializados) ──
+  // Estas telas exibem metadados específicos da fonte (bulas PDF, produtos
+  // comerciais, dados FK/FD) que o DrugEntity não modela — não são dívida.
+  "src/app/api/sync/eurofarma/route.ts",     // endpoint de sync do catálogo Eurofarma
+  "src/app/biblioteca/page.tsx",             // navegador do catálogo Eurofarma
+  "src/app/comparador/page.tsx",             // comparador FK/FD (MOLECULES_DB próprio)
+  "src/components/modules/BulaViewer.tsx",    // visualizador de bula (ProdutoComercial/PDF)
+  "src/components/modules/PrescricaoPorMarca.tsx", // escolha de marca verificada + bula
+  "src/components/modules/TherapeuticPanel.tsx",   // bula Eurofarma contextual + prognóstico
+  // ── Dívida de migração real (dado clínico; migrar para drugRepository) ──
+  // prescricao-rapida lê o MESMO PHARMA_DB que alimenta o repositório canônico
+  // → já é consistente com o motor de decisão; migração é melhoria, não urgência.
   "src/app/prescricao-rapida/page.tsx",
-  "src/components/modules/BulaViewer.tsx",
-  "src/components/modules/PrescricaoPorMarca.tsx",
-  "src/components/modules/TherapeuticPanel.tsx",
+  "src/app/dosagem/page.tsx",
   // clinical-simulation-etapa8.ts — MIGRADO (drugRepository.count); delistado.
   "src/lib/clinical-stress-etapa9.ts",
   // dose-calculator.ts — só importava dosing-engine (fora de escopo agora); delistado.
