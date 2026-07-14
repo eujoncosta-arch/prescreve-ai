@@ -25,3 +25,7 @@ export type {
 
 export { RM06_VERSION } from './types';
 export { drugRepository } from './repository';
+
+// RM-25: adaptador de interoperabilidade (DrugEntity → FHIR R4)
+export type { FHIRMedication, FHIRCodeableConcept, FHIRCoding } from './fhir';
+export { toFHIRMedication, toMedicationCodeableConcept, ATC_SYSTEM } from './fhir';

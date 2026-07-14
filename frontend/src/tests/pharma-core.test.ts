@@ -3,7 +3,7 @@
 // ============================================================
 
 import { describe, it, expect } from 'vitest';
-import { drugRepository } from '@/lib/pharma-core';
+import { drugRepository, toFHIRMedication, ATC_SYSTEM } from '@/lib/pharma-core';
 import { validateMigration } from '@/lib/pharma-core/validate';
 import { getAllDrugs } from '@/lib/pharma-database';
 
@@ -50,6 +50,28 @@ describe('RM-06 · Drug Repository Layer', () => {
       expect(e.provenance).toBeDefined();
       expect(e.provenance.nivel_confianca).toBeTruthy();
       expect(e.dosageRules.length).toBeGreaterThan(0);
+    }
+  });
+});
+
+describe('RM-25 · adaptador FHIR (DrugEntity → Medication)', () => {
+  it('projeta uma entidade em FHIR Medication com codificação ATC', () => {
+    const e = drugRepository.getById('enalapril')!;
+    const med = toFHIRMedication(e);
+    expect(med.resourceType).toBe('Medication');
+    expect(med.id).toBe('enalapril');
+    expect(med.code.text).toBe('Enalapril');
+    expect(med.code.coding?.some((c) => c.system === ATC_SYSTEM && c.code === e.activeIngredient.atc)).toBe(true);
+    expect(med.ingredient.length).toBeGreaterThan(0);
+    expect(med.ingredient[0].isActive).toBe(true);
+  });
+
+  it('toda entidade gera um Medication válido (id + code.text + ingrediente)', () => {
+    for (const e of drugRepository.getAll()) {
+      const med = toFHIRMedication(e);
+      expect(med.id).toBeTruthy();
+      expect(med.code.text.length).toBeGreaterThan(0);
+      expect(med.ingredient[0].itemCodeableConcept.text.length).toBeGreaterThan(0);
     }
   });
 });

@@ -18,6 +18,9 @@ class DrugRepository {
   private byBrandSlug = new Map<string, DrugEntity[]>();
   private byCategory = new Map<string, DrugEntity[]>();
   private byAtc = new Map<string, DrugEntity[]>();
+  // RM-25 (perf): índice de busca pré-computado (haystack normalizado por entidade)
+  // — evita normalizar todos os campos a cada chamada de search().
+  private searchIndex: { e: DrugEntity; haystack: string }[] = [];
   private loaded = false;
 
   private ensureLoaded(): void {
@@ -29,6 +32,16 @@ class DrugRepository {
       this.push(this.byCategory, e.category, e);
       if (e.activeIngredient.atc) this.push(this.byAtc, e.activeIngredient.atc, e);
       for (const b of e.brands) this.push(this.byBrandSlug, toSlug(b.name), e);
+      const haystack = [
+        e.activeIngredient.name,
+        e.activeIngredient.fullName ?? '',
+        ...(e.activeIngredient.sinonimos ?? []),
+        ...e.brands.map((b) => b.name),
+        e.therapeuticClass,
+      ]
+        .map(toSlug)
+        .join(' ');
+      this.searchIndex.push({ e, haystack });
     }
     this.loaded = true;
   }
@@ -47,6 +60,7 @@ class DrugRepository {
     this.byBrandSlug.clear();
     this.byCategory.clear();
     this.byAtc.clear();
+    this.searchIndex = [];
     this.ensureLoaded();
   }
 
@@ -99,16 +113,7 @@ class DrugRepository {
     const q = toSlug(query);
     if (!q) return [];
     const out: DrugEntity[] = [];
-    for (const e of this.entities) {
-      const haystack = [
-        e.activeIngredient.name,
-        e.activeIngredient.fullName ?? '',
-        ...(e.activeIngredient.sinonimos ?? []),
-        ...e.brands.map((b) => b.name),
-        e.therapeuticClass,
-      ]
-        .map(toSlug)
-        .join(' ');
+    for (const { e, haystack } of this.searchIndex) {
       if (haystack.includes(q)) {
         out.push(e);
         if (out.length >= limit) break;
