@@ -15,6 +15,9 @@ export const PHARMA_DB_NEURO_B: QuickDrug[] = [
 
   {
     id: 'fenitoina',
+    guidelines_referencia: ['ILAE — antiepileptico; status epilepticus'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Fenitoína',
     nome_generico: 'Fenitoína',
     sinonimos: ['hidantal', 'phenytoin', 'fenitoina', 'difenil-hidantoina', 'anticonvulsivante', 'status epilepticus'],
@@ -67,6 +70,9 @@ export const PHARMA_DB_NEURO_B: QuickDrug[] = [
 
   {
     id: 'carbamazepina',
+    guidelines_referencia: ['ILAE — 1a linha na epilepsia focal'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Carbamazepina',
     nome_generico: 'Carbamazepina',
     sinonimos: ['tegretol', 'carbamazepine', 'carbamazepina', 'anticonvulsivante cbz', 'estabilizador bipolar', 'neuralgia trigemeo'],
@@ -118,6 +124,9 @@ export const PHARMA_DB_NEURO_B: QuickDrug[] = [
 
   {
     id: 'acido-valproico',
+    guidelines_referencia: ['ILAE — 1a linha na epilepsia generalizada (evitar em gestante)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Ácido Valproico / Valproato de Sódio',
     nome_generico: 'Ácido Valproico',
     sinonimos: ['depakene', 'depakote', 'valproate', 'valproato', 'valproico', 'anticonvulsivante vpa', 'estabilizador bipolar valproato', 'enxaqueca profilaxia valproato'],
@@ -175,6 +184,9 @@ export const PHARMA_DB_NEURO_B: QuickDrug[] = [
 
   {
     id: 'lamotrigina',
+    guidelines_referencia: ['ILAE — antiepileptico (focal; estabilizador no TB)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Lamotrigina',
     nome_generico: 'Lamotrigina',
     sinonimos: ['lamictal', 'lamotrigine', 'lamotrigina', 'anticonvulsivante lam', 'bipolar depressÃ£o lamotrigina'],
@@ -222,6 +234,9 @@ export const PHARMA_DB_NEURO_B: QuickDrug[] = [
 
   {
     id: 'gabapentina',
+    guidelines_referencia: ['NeuPSIG — 1a linha na dor neuropatica'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     indicacao_contexto: 'Epilepsia / dor neuropática (geral)',
     molecula: 'Gabapentina',
     nome_generico: 'Gabapentina',
@@ -274,6 +289,9 @@ export const PHARMA_DB_NEURO_B: QuickDrug[] = [
 
   {
     id: 'pregabalina',
+    guidelines_referencia: ['NeuPSIG — 1a linha na dor neuropatica'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Pregabalina',
     nome_generico: 'Pregabalina',
     sinonimos: ['lyrica', 'pregabalin', 'pregabalina', 'anticonvulsivante neuropatia pregabalina', 'fibromialgia lyrica', 'ansiedade pregabalina'],
@@ -325,6 +343,9 @@ export const PHARMA_DB_NEURO_B: QuickDrug[] = [
 
   {
     id: 'oxcarbazepina',
+    guidelines_referencia: ['ILAE — epilepsia focal'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Oxcarbazepina',
     nome_generico: 'Oxcarbazepina',
     sinonimos: ['trileptal', 'oxcarbazepine', 'oxcarbazepina', 'anticonvulsivante trileptal', 'cbz analogia'],

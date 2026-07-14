@@ -55,6 +55,9 @@ export const PHARMA_DB_PULMO_A: QuickDrug[] = [
 
   {
     id: 'ipratropio',
+    guidelines_referencia: ['GOLD 2024 — SAMA de resgate'],
+    nivel_evidencia: 'B',
+    grau_recomendacao: 'I',
     molecula: 'Ipratrópio',
     nome_generico: 'Brometo de Ipratrópio',
     sinonimos: ['atrovent', 'ipratropio', 'ipratropium', 'sama', 'anticolinergico curta acao', 'brometo ipratropio'],
@@ -142,6 +145,9 @@ export const PHARMA_DB_PULMO_A: QuickDrug[] = [
 
   {
     id: 'indacaterol',
+    guidelines_referencia: ['GOLD 2024 — LABA de manutencao na DPOC'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Indacaterol',
     nome_generico: 'Maleato de Indacaterol',
@@ -183,6 +189,9 @@ export const PHARMA_DB_PULMO_A: QuickDrug[] = [
 
   {
     id: 'olodaterol',
+    guidelines_referencia: ['GOLD 2024 — LABA de manutencao na DPOC'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Olodaterol',
     nome_generico: 'Cloridrato de Olodaterol',
@@ -257,6 +266,9 @@ export const PHARMA_DB_PULMO_A: QuickDrug[] = [
 
   {
     id: 'aclidinio',
+    guidelines_referencia: ['GOLD 2024 — LAMA de manutencao na DPOC'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Aclidínio',
     nome_generico: 'Brometo de Aclidínio',
@@ -295,6 +307,9 @@ export const PHARMA_DB_PULMO_A: QuickDrug[] = [
 
   {
     id: 'fluticasona_propionato',
+    guidelines_referencia: ['GINA 2024 — corticoide inalatorio (ICS)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Fluticasona Propionato',
     nome_generico: 'Propionato de Fluticasona',
     sinonimos: ['flixotide', 'fluticasona', 'fluticasone', 'ics fluticasona', 'flutiform', 'fluticasona propionato'],
@@ -415,6 +430,9 @@ export const PHARMA_DB_PULMO_A: QuickDrug[] = [
 
   {
     id: 'ciclesonida',
+    guidelines_referencia: ['GINA 2024 — corticoide inalatorio (ICS)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Ciclesonida',
     nome_generico: 'Ciclesonida',
     sinonimos: ['alvesco', 'ciclesonide', 'ciclesonida', 'ics pró-droga', 'ics menos candidíase'],
@@ -456,6 +474,9 @@ export const PHARMA_DB_PULMO_A: QuickDrug[] = [
 
   {
     id: 'budesonida_formoterol',
+    guidelines_referencia: ['GINA 2024 — ICS-formoterol MART (controlador preferencial, Track 1)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Budesonida/Formoterol',
     nome_generico: 'Budesonida + Fumarato de Formoterol',
     sinonimos: ['symbicort', 'budesonida formoterol', 'ics laba combinado', 'smart therapy', 'airsupra', 'noex duo'],
@@ -500,6 +521,9 @@ export const PHARMA_DB_PULMO_A: QuickDrug[] = [
 
   {
     id: 'fluticasona_salmeterol',
+    guidelines_referencia: ['GINA 2024 — ICS-LABA controlador'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Fluticasona/Salmeterol',
     nome_generico: 'Propionato de Fluticasona + Xinafoato de Salmeterol',
     sinonimos: ['seretide', 'advair', 'fluticasona salmeterol', 'ics laba fluticasona'],
@@ -539,6 +563,9 @@ export const PHARMA_DB_PULMO_A: QuickDrug[] = [
 
   {
     id: 'fluticasona_ff_vilanterol',
+    guidelines_referencia: ['GINA 2024 — ICS-LABA controlador'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Fluticasona Furoato/Vilanterol',
     nome_generico: 'Furoato de Fluticasona + Trifenatato de Vilanterol',
@@ -578,6 +605,9 @@ export const PHARMA_DB_PULMO_A: QuickDrug[] = [
 
   {
     id: 'beclometasona_formoterol',
+    guidelines_referencia: ['GINA 2024 — ICS-formoterol (MART)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Beclometasona/Formoterol',
     nome_generico: 'Dipropionato de Beclometasona (extrafina) + Fumarato de Formoterol',
     sinonimos: ['foster', 'beclometasona formoterol', 'ics laba extrafino', 'foster 100'],

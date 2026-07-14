@@ -72,6 +72,9 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'ramipril',
+    guidelines_referencia: ['ESC/ESH 2023 HAS — IECA 1a linha (Classe I)', 'ESC 2021 IC — IECA pilar (Classe I-A)', 'Estudo HOPE'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Ramipril',
     nome_generico: 'Ramipril',
     sinonimos: ['altace', 'triatec', 'ramipril', 'ieca', 'ramipril ic', 'ramipril pos-iam'],
@@ -130,6 +133,9 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'perindopril',
+    guidelines_referencia: ['ESC/ESH 2023 HAS — IECA 1a linha (Classe I)', 'Estudo EUROPA/ADVANCE'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Perindopril',
     nome_generico: 'Erbutamina de Perindopril',
     sinonimos: ['coversyl', 'perindopril', 'ieca', 'perindopril europa'],
@@ -186,6 +192,9 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'telmisartana',
+    guidelines_referencia: ['ESC/ESH 2023 HAS — BRA 1a linha (Classe I)', 'Estudo ONTARGET'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Telmisartana',
     nome_generico: 'Telmisartana',
     sinonimos: ['micardis', 'telmisartana', 'bra', 'ara-ii'],
@@ -241,6 +250,9 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'sacubitril_valsartana',
+    guidelines_referencia: ['ESC 2021 IC — ARNI substitui IECA na IC-FEr (Classe I-B)', 'PARADIGM-HF'],
+    nivel_evidencia: 'B',
+    grau_recomendacao: 'I',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Sacubitril/Valsartana',
     nome_generico: 'Sacubitril + Valsartana (LCZ696)',
@@ -301,6 +313,9 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'nebivolol',
+    guidelines_referencia: ['ESC HAS — betabloqueador', 'Estudo SENIORS (IC no idoso)'],
+    nivel_evidencia: 'B',
+    grau_recomendacao: 'I',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Nebivolol',
     nome_generico: 'Cloridrato de Nebivolol',
@@ -361,6 +376,9 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'nifedipino',
+    guidelines_referencia: ['ESC/ESH 2023 HAS — BCC di-hidropiridinico 1a linha (Classe I)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Nifedipino',
     nome_generico: 'Nifedipino',
     sinonimos: ['adalat', 'nifedipino', 'bcc diidropiridinco', 'nifedipino retard'],
@@ -413,6 +431,9 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'diltiazem',
+    guidelines_referencia: ['ESC FA — controle de frequencia (BCC nao di-hidropiridinico) (Classe I)'],
+    nivel_evidencia: 'B',
+    grau_recomendacao: 'I',
     molecula: 'Diltiazem',
     nome_generico: 'Cloridrato de Diltiazem',
     sinonimos: ['cardizem', 'diltiazem', 'bcc nao-diidropiridinco', 'benzotiazepina'],
@@ -466,6 +487,9 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'verapamil',
+    guidelines_referencia: ['ESC FA — controle de frequencia (Classe I)', 'Angina/arritmia'],
+    nivel_evidencia: 'B',
+    grau_recomendacao: 'I',
     molecula: 'Verapamil',
     nome_generico: 'Cloridrato de Verapamil',
     sinonimos: ['isoptin', 'verapamil', 'bcc fenilalquilamina', 'bloqueador canal calcio'],
@@ -524,6 +548,9 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'clortalidona',
+    guidelines_referencia: ['ESC/ESH 2023 HAS — tiazidico-simile 1a linha (Classe I)', 'SHEP/ALLHAT'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Clortalidona',
     nome_generico: 'Clortalidona',
     sinonimos: ['higrotona', 'chlortalidone', 'clortalidona', 'diuretico tiazidico', 'allhat diuretico'],
@@ -577,6 +604,9 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'indapamida',
+    guidelines_referencia: ['ESC/ESH 2023 HAS — tiazidico-simile 1a linha (Classe I)', 'HYVET'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Indapamida',
     nome_generico: 'Indapamida',
     sinonimos: ['natrilix', 'indapamida', 'diuretico tiazidico-simile', 'indapamide'],
@@ -626,6 +656,9 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'eplerenona',
+    guidelines_referencia: ['ESC 2021 IC — ARM na IC-FEr (Classe I-A)', 'EMPHASIS-HF'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Eplerenona',
     nome_generico: 'Eplerenona',
@@ -683,6 +716,9 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'amiodarona',
+    guidelines_referencia: ['ESC — controle de ritmo e arritmias ventriculares (Classe IIa)'],
+    nivel_evidencia: 'B',
+    grau_recomendacao: 'IIa',
     indicacao_contexto: 'Antiarrítmico crônico (FA/flutter)',
     molecula: 'Amiodarona',
     nome_generico: 'Cloridrato de Amiodarona',
@@ -743,6 +779,9 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'digoxina',
+    guidelines_referencia: ['ESC 2021 IC — controle sintomatico/frequencia (Classe IIa/IIb)', 'ESC FA — controle de FC'],
+    nivel_evidencia: 'B',
+    grau_recomendacao: 'IIa',
     molecula: 'Digoxina',
     nome_generico: 'Digoxina',
     sinonimos: ['lanoxin', 'digoxin', 'glicosideo cardiaco', 'digitálico'],
@@ -804,6 +843,9 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'varfarina',
+    guidelines_referencia: ['ESC 2020 FA — AVK quando DOAC contraindicado (valva mecanica/estenose mitral) (Classe I)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Varfarina',
     nome_generico: 'Varfarina Sódica',
     sinonimos: ['coumadin', 'varfarin', 'warfarin', 'avk', 'antagonista vitamina k', 'anticoagulante oral'],
@@ -865,6 +907,9 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'apixabana',
+    guidelines_referencia: ['ESC 2020 FA — DOAC preferivel a varfarina na FA nao-valvar (Classe I-A)', 'ARISTOTLE'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Apixabana',
     nome_generico: 'Apixabana',
@@ -963,6 +1008,9 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'dabigatrana',
+    guidelines_referencia: ['ESC 2020 FA — DOAC preferivel a varfarina na FA nao-valvar (Classe I-A)', 'RE-LY'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Dabigatrana',
     nome_generico: 'Etexilato de Dabigatrana',
@@ -1074,6 +1122,9 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'ticagrelor',
+    guidelines_referencia: ['ESC SCA — dupla antiagregacao (DAPT) (Classe I-B)', 'PLATO'],
+    nivel_evidencia: 'B',
+    grau_recomendacao: 'I',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Ticagrelor',
     nome_generico: 'Ticagrelor',
@@ -1131,6 +1182,9 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'ezetimiba',
+    guidelines_referencia: ['ESC/EAS 2019 Dislipidemias — associacao a estatina (Classe I-B)', 'IMPROVE-IT'],
+    nivel_evidencia: 'B',
+    grau_recomendacao: 'I',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Ezetimiba',
     nome_generico: 'Ezetimiba',
@@ -1179,6 +1233,9 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'fenofibrato',
+    guidelines_referencia: ['ESC/EAS 2019 Dislipidemias — hipertrigliceridemia grave (Classe IIb)'],
+    nivel_evidencia: 'B',
+    grau_recomendacao: 'IIb',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Fenofibrato',
     nome_generico: 'Fenofibrato',
@@ -1333,6 +1390,9 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'ivabradina',
+    guidelines_referencia: ['ESC 2021 IC — FC >= 70 em ritmo sinusal (Classe IIa)', 'SHIFT'],
+    nivel_evidencia: 'B',
+    grau_recomendacao: 'IIa',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Ivabradina',
     nome_generico: 'Cloridrato de Ivabradina',

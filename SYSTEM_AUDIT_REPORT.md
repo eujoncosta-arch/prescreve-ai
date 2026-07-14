@@ -1,6 +1,6 @@
 # SYSTEM_AUDIT_REPORT — Prescreve-AI
 
-**Gerado:** 2026-07-14T22:45:14.127Z · **Escopo:** auditoria geral do sistema farmacológico (camadas RM-00 → RM-24)
+**Gerado:** 2026-07-14T23:02:03.227Z · **Escopo:** auditoria geral do sistema farmacológico (camadas RM-00 → RM-24)
 
 > Relatório consolidado e reproduzível, com métricas extraídas ao vivo das camadas de dados, governança, testes e gates de publicação.
 

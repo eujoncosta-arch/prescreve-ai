@@ -15,6 +15,9 @@ export const PHARMA_DB_ENDO: QuickDrug[] = [
 
   {
     id: 'insulina_nph',
+    guidelines_referencia: ['ADA 2024 — insulina basal (NPH)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Insulina NPH',
     nome_generico: 'Insulina Isófana Humana (NPH)',
     sinonimos: ['nph', 'insulina nph', 'insulina intermediaria', 'insulina isofana', 'humulin n', 'novolin n'],
@@ -111,6 +114,9 @@ export const PHARMA_DB_ENDO: QuickDrug[] = [
 
   {
     id: 'insulina_glargina',
+    guidelines_referencia: ['ADA 2024 — insulina basal quando indicado'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Insulina Glargina',
     nome_generico: 'Insulina Glargina (rDNA)',
     sinonimos: ['lantus', 'toujeo', 'basaglar', 'glargina', 'insulina basal', 'insulina prolongada', 'análogo basal'],
@@ -294,6 +300,9 @@ export const PHARMA_DB_ENDO: QuickDrug[] = [
 
   {
     id: 'liraglutida',
+    guidelines_referencia: ['ADA 2024 — GLP-1 RA com protecao cardiorrenal (preferencial)', 'LEADER'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Liraglutida',
     nome_generico: 'Liraglutida',
@@ -351,6 +360,9 @@ export const PHARMA_DB_ENDO: QuickDrug[] = [
 
   {
     id: 'tirzepatida',
+    guidelines_referencia: ['ADA 2024 — agonista duplo GIP/GLP-1 (muito alta eficacia)', 'SURPASS'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Tirzepatida',
     nome_generico: 'Tirzepatida',
@@ -410,6 +422,9 @@ export const PHARMA_DB_ENDO: QuickDrug[] = [
 
   {
     id: 'pioglitazona',
+    guidelines_referencia: ['ADA 2024 — tiazolidinediona (alta eficacia; cautela IC/edema)'],
+    nivel_evidencia: 'B',
+    grau_recomendacao: 'IIa',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Pioglitazona',
     nome_generico: 'Cloridrato de Pioglitazona',
@@ -464,6 +479,9 @@ export const PHARMA_DB_ENDO: QuickDrug[] = [
 
   {
     id: 'acarbose',
+    guidelines_referencia: ['ADA 2024 — inibidor da alfa-glicosidase (baixa eficacia)'],
+    nivel_evidencia: 'B',
+    grau_recomendacao: 'IIb',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Acarbose',
     nome_generico: 'Acarbose',
@@ -519,6 +537,9 @@ export const PHARMA_DB_ENDO: QuickDrug[] = [
 
   {
     id: 'levotiroxina',
+    guidelines_referencia: ['ATA — reposicao no hipotireoidismo (padrao-ouro)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Levotiroxina',
     nome_generico: 'Levotiroxina Sódica (L-T4)',
     sinonimos: ['puran', 'synthroid', 'euthyrox', 'levotiroxina', 'l-t4', 'tiroxina', 'hipotireoidismo', 't4'],
@@ -579,6 +600,9 @@ export const PHARMA_DB_ENDO: QuickDrug[] = [
 
   {
     id: 'metimazol',
+    guidelines_referencia: ['ATA — antitireoidiano de 1a linha no hipertireoidismo (Graves)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Metimazol',
     nome_generico: 'Metimazol (Tiamazol)',
     sinonimos: ['tapazol', 'metimazol', 'tiamazol', 'antitireoideo', 'hipertireoidismo', 'doença de graves'],
@@ -682,6 +706,9 @@ export const PHARMA_DB_ENDO: QuickDrug[] = [
 
   {
     id: 'alendronato',
+    guidelines_referencia: ['Diretriz de osteoporose — bisfosfonato de 1a linha'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Alendronato',
     nome_generico: 'Alendronato Sódico',

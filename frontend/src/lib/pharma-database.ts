@@ -264,6 +264,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'olmesartana',
+    guidelines_referencia: ['ESC/ESH 2023 HAS — BRA 1a linha (Classe I)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Olmesartana',
     nome_generico: 'Olmesartana Medoxomila',
     sinonimos: ['holmes', 'olmesartan', 'bra', 'benicar'],
@@ -334,6 +337,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'valsartana',
+    guidelines_referencia: ['ESC/ESH 2023 HAS — BRA 1a linha (Classe I)', 'ESC 2021 IC — BRA/ARNI (Classe I)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Valsartana',
     nome_generico: 'Valsartana',
     sinonimos: ['valsartan', 'diovan', 'bra'],
@@ -474,6 +480,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'bisoprolol',
+    guidelines_referencia: ['ESC 2021 IC — betabloqueador na IC-FEr (Classe I-A)', 'Estudo CIBIS-II'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Bisoprolol',
     nome_generico: 'Hemifumarato de Bisoprolol',
     sinonimos: ['bisoprolol', 'concor', 'bisoprol', 'betabloqueador seletivo'],
@@ -540,6 +549,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'furosemida',
+    guidelines_referencia: ['ESC 2021 IC — diuretico de alca para congestao (Classe I-C)'],
+    nivel_evidencia: 'C',
+    grau_recomendacao: 'I',
     molecula: 'Furosemida',
     nome_generico: 'Furosemida',
     sinonimos: ['furosemide', 'lasix', 'diuretico alca'],
@@ -613,6 +625,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'rosuvastatina',
+    guidelines_referencia: ['ESC/EAS 2019 Dislipidemias — estatina de alta intensidade (Classe I-A)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Rosuvastatina',
     nome_generico: 'Rosuvastatina Cálcica',
     sinonimos: ['crestor', 'ruva', 'rosuvastatina', 'estatina potente'],
@@ -688,6 +703,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'empagliflozina',
+    guidelines_referencia: ['ESC 2021 IC — iSGLT2 na IC-FEr (Classe I-A)', 'ADA 2024 DM2', 'EMPA-REG/EMPEROR'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Empagliflozina',
     nome_generico: 'Empagliflozina',
@@ -718,6 +736,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'sitagliptina',
+    guidelines_referencia: ['ADA 2024 — inibidor de DPP-4 (eficacia intermediaria, add-on)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'IIa',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Sitagliptina',
     nome_generico: 'Fosfato de Sitagliptina',
@@ -754,6 +775,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'salbutamol',
+    guidelines_referencia: ['GINA 2024 — SABA de resgate (nao usar isolado; sempre com ICS)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Salbutamol',
     nome_generico: 'Sulfato de Salbutamol',
     sinonimos: ['albuterol', 'aerolin', 'saba', 'broncodilatador rapido', 'ventolin'],
@@ -787,6 +811,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'budesonida',
+    guidelines_referencia: ['GINA 2024 — corticoide inalatorio (ICS) de base'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Budesonida',
     nome_generico: 'Budesonida',
     sinonimos: ['noex', 'pulmicort', 'ics', 'corticoide inalatorio'],
@@ -819,6 +846,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'montelucaste',
+    guidelines_referencia: ['GINA 2024 — antileucotrieno (controlador alternativo)'],
+    nivel_evidencia: 'B',
+    grau_recomendacao: 'IIa',
     molecula: 'Montelucaste',
     nome_generico: 'Montelucaste Sódico',
     sinonimos: ['singulair', 'leucotrieno', 'antileucotriene'],
@@ -855,6 +885,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'amoxicilina',
+    guidelines_referencia: ['IDSA — beta-lactamico de 1a linha (CAP ambulatorial, otite, sinusite)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Amoxicilina',
     nome_generico: 'Amoxicilina Tri-hidratada',
     sinonimos: ['sinot', 'amoxil', 'amoxicillin', 'penicilina', 'antibiotico', 'amoxicilina'],
@@ -892,6 +925,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'amoxicilina_clavulanato',
+    guidelines_referencia: ['IDSA — amoxicilina-clavulanato (produtores de beta-lactamase)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Amoxicilina + Clavulanato',
     nome_generico: 'Amoxicilina Tri-hidratada + Clavulanato de Potássio',
     sinonimos: ['sinot clav', 'clavulin', 'augmentin', 'amoxicilina clavulanato', 'amoxiclav', 'sinot clavulanato'],
@@ -930,6 +966,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'azitromicina',
+    guidelines_referencia: ['IDSA CAP — macrolideo'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     indicacao_contexto: 'Infecção aguda (esquema padrão)',
     molecula: 'Azitromicina',
     nome_generico: 'Azitromicina Di-hidratada',
@@ -1009,6 +1048,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'escitalopram',
+    guidelines_referencia: ['NICE/APA Depressao — ISRS de 1a linha'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Escitalopram',
     nome_generico: 'Oxalato de Escitalopram',
     sinonimos: ['lexapro', 'isrs', 'antidepressivo', 'ansiedade'],
@@ -1192,6 +1234,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'dapagliflozina',
+    guidelines_referencia: ['ESC 2021 IC — iSGLT2 na IC-FEr (Classe I-A)', 'ADA 2024 DM2', 'DAPA-HF'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     uso_pediatrico: 'nao_aplicavel',
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Avaliar risco-benefício (iniciar 5 mg)' },
     molecula: 'Dapagliflozina',
@@ -1223,6 +1268,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'semaglutida',
+    guidelines_referencia: ['ADA 2024 — GLP-1 RA com protecao cardiorrenal (preferencial)', 'SUSTAIN-6'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     uso_pediatrico: 'nao_aplicavel',
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Experiência limitada (cautela)' },
     molecula: 'Semaglutida',
@@ -1253,6 +1301,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'glimepirida',
+    guidelines_referencia: ['ADA 2024 — sulfonilureia (alta eficacia, add-on; risco de hipoglicemia)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'IIa',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Glimepirida',
     nome_generico: 'Glimepirida',
@@ -1288,6 +1339,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'duloxetina',
+    guidelines_referencia: ['NICE — IRSN (depressao e dor neuropatica)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Duloxetina',
     nome_generico: 'Cloridrato de Duloxetina',
     sinonimos: ['dep', 'cymbalta', 'irsn', 'duloxetine'],
@@ -1351,6 +1405,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'risperidona',
+    guidelines_referencia: ['APA Esquizofrenia — antipsicotico de 2a geracao'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Risperidona',
     nome_generico: 'Risperidona',
     sinonimos: ['riss', 'risperdal', 'antipsicótico', 'atípico', 'risperidone'],
@@ -1577,6 +1634,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'enoxaparina',
+    guidelines_referencia: ['ESC/ACCP — profilaxia e tratamento de TEV (Classe I)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Enoxaparina',
     nome_generico: 'Enoxaparina Sódica',
     sinonimos: ['versa', 'clexane', 'hbpm', 'anticoagulante', 'enoxaparin', 'heparina baixo peso'],
@@ -1887,6 +1947,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'venlafaxina',
+    guidelines_referencia: ['NICE Depressao — IRSN'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Cloridrato de Venlafaxina',
     nome_generico: 'Cloridrato de Venlafaxina',
     sinonimos: ['effexor', 'venlafaxina', 'irsn', 'antidepressivo', 'ansiedade generalizada', 'tdm'],
@@ -1922,6 +1985,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'paroxetina',
+    guidelines_referencia: ['NICE/APA Depressao — ISRS de 1a linha'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Cloridrato de Paroxetina',
     nome_generico: 'Cloridrato de Paroxetina',
     sinonimos: ['pondera', 'pondera xr', 'paroxetina', 'isrs', 'antidepressivo', 'ansiedade', 'toc', 'tdm'],
@@ -2024,6 +2090,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'litio',
+    guidelines_referencia: ['CANMAT — estabilizador de humor de 1a linha no TB; reduz suicidio'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Carbonato de Lítio',
     nome_generico: 'Carbonato de Lítio',
     sinonimos: ['litio', 'carbolitium', 'lítio', 'estabilizador humor', 'bipolar', 'tab'],
@@ -2163,6 +2232,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'irbesartana',
+    guidelines_referencia: ['ESC/ESH 2023 HAS — BRA 1a linha (Classe I)', 'IDNT (nefropatia diabetica)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Irbesartana',
     nome_generico: 'Irbesartana',
     sinonimos: ['aprovel', 'irbesartana', 'bra', 'sartana', 'hipertensão', 'nefropatia diabetica'],
@@ -2260,6 +2332,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'esomeprazol',
+    guidelines_referencia: ['ACG DRGE — IBP de 1a linha na doenca erosiva'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Esomeprazol Magnésico',
     nome_generico: 'Esomeprazol Magnésico',
     sinonimos: ['esio', 'esomeprazol', 'nexium', 'ibb', 'inibidor bomba protónica', 'drge', 'ulcera', 'refluxo'],
@@ -2288,6 +2363,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'domperidona',
+    guidelines_referencia: ['Diretriz — procinetico (cautela com QT)'],
+    nivel_evidencia: 'B',
+    grau_recomendacao: 'IIa',
     molecula: 'Domperidona',
     nome_generico: 'Domperidona',
     sinonimos: ['domperidona', 'motilium', 'procinético', 'nausei', 'vomito', 'motilidade', 'refluxo'],
@@ -2322,6 +2400,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'memantina',
+    guidelines_referencia: ['Diretriz de demencia — antagonista NMDA (Alzheimer moderado-grave)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Cloridrato de Memantina',
     nome_generico: 'Cloridrato de Memantina',
@@ -2353,6 +2434,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'donepezila',
+    guidelines_referencia: ['Diretriz de demencia — anticolinesterasico na doenca de Alzheimer'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Cloridrato de Donepezila',
     nome_generico: 'Cloridrato de Donepezila',
@@ -2385,6 +2469,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'levetiracetam',
+    guidelines_referencia: ['ILAE/AAN — antiepileptico de amplo espectro'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Levetiracetam',
     nome_generico: 'Levetiracetam',
     sinonimos: ['keppra', 'levetiracetam', 'anticonvulsivante', 'epilepsia', 'convulsão', 'dae'],
@@ -2451,6 +2538,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'glicazida',
+    guidelines_referencia: ['ADA 2024 — sulfonilureia (menor risco de hipoglicemia na classe)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'IIa',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Glicazida',
     nome_generico: 'Glicazida',
@@ -2486,6 +2576,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'glibenclamida',
+    guidelines_referencia: ['ADA 2024 — sulfonilureia (evitar em idosos/DRC — hipoglicemia)'],
+    nivel_evidencia: 'B',
+    grau_recomendacao: 'IIb',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Glibenclamida',
     nome_generico: 'Glibenclamida',
@@ -2794,6 +2887,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'tiotropio',
+    guidelines_referencia: ['GOLD 2024 — LAMA de manutencao na DPOC'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     uso_pediatrico: 'nao_aplicavel',
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste (inalatório)' },
     molecula: 'Tiotrópio',
@@ -2826,6 +2922,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'umeclidinio',
+    guidelines_referencia: ['GOLD 2024 — LAMA de manutencao na DPOC'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     uso_pediatrico: 'nao_aplicavel',
     ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (inalatório)', dialisavel: false },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Sem ajuste', child_c: 'Sem ajuste (inalatório)' },
@@ -2860,6 +2959,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'formoterol',
+    guidelines_referencia: ['GINA 2024 — LABA sempre associado a ICS'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (inalatório)', dialisavel: false },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Cautela' },
     molecula: 'Formoterol',
@@ -2892,6 +2994,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'salmeterol',
+    guidelines_referencia: ['GINA 2024 — LABA sempre associado a ICS'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     ajuste_renal: { normal: 'Dose padrão', tfg_60_30: 'Sem ajuste', tfg_30_15: 'Sem ajuste', tfg_lt_15: 'Sem ajuste (inalatório)', dialisavel: false },
     ajuste_hepatico: { child_a: 'Sem ajuste', child_b: 'Cautela', child_c: 'Cautela' },
     molecula: 'Salmeterol',

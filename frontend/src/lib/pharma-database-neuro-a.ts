@@ -15,6 +15,9 @@ export const PHARMA_DB_NEURO_A: QuickDrug[] = [
 
   {
     id: 'fluoxetina',
+    guidelines_referencia: ['NICE/APA Depressao — ISRS de 1a linha'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Fluoxetina',
     nome_generico: 'Cloridrato de Fluoxetina',
     sinonimos: ['prozac', 'fluoxetine', 'fluoxetina', 'isrs', 'antidepressivo', 'fluoxetina prozac'],
@@ -645,6 +648,9 @@ export const PHARMA_DB_NEURO_A: QuickDrug[] = [
 
   {
     id: 'olanzapina',
+    guidelines_referencia: ['APA — antipsicotico de 2a geracao'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Olanzapina',
     nome_generico: 'Olanzapina',
     sinonimos: ['zyprexa', 'olanzapine', 'olanzapina', 'antipsicótico atipico', 'zyprexa metabolico'],
@@ -694,6 +700,9 @@ export const PHARMA_DB_NEURO_A: QuickDrug[] = [
 
   {
     id: 'quetiapina',
+    guidelines_referencia: ['APA/CANMAT — antipsicotico (esquizofrenia/transtorno bipolar)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Quetiapina',
     nome_generico: 'Fumarato de Quetiapina',
     sinonimos: ['seroquel', 'quetiapine', 'quetiapina', 'seroquel bipolar', 'antipsicótico sono'],
@@ -744,6 +753,9 @@ export const PHARMA_DB_NEURO_A: QuickDrug[] = [
 
   {
     id: 'aripiprazol',
+    guidelines_referencia: ['APA — antipsicotico de 2a geracao (melhor perfil metabolico)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Aripiprazol',
     nome_generico: 'Aripiprazol',
     sinonimos: ['abilify', 'aripiprazole', 'aripiprazol', 'agonista parcial d2', 'antipsicótico atipico metabolico'],
@@ -791,6 +803,9 @@ export const PHARMA_DB_NEURO_A: QuickDrug[] = [
 
   {
     id: 'clozapina',
+    guidelines_referencia: ['APA — padrao-ouro na esquizofrenia refrataria'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Clozapina',
     nome_generico: 'Clozapina',
     sinonimos: ['leponex', 'clozaril', 'clozapine', 'clozapina', 'antipsicótico esquizofrenia resistente', 'esquizofrenia refratária'],

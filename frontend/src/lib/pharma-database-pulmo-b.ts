@@ -501,6 +501,9 @@ export const PHARMA_DB_PULMO_B: QuickDrug[] = [
 
   {
     id: 'roflumilaste',
+    guidelines_referencia: ['GOLD 2024 — inibidor de PDE4 (bronquite cronica exacerbadora)'],
+    nivel_evidencia: 'B',
+    grau_recomendacao: 'IIa',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Roflumilaste',
     nome_generico: 'Roflumilaste',

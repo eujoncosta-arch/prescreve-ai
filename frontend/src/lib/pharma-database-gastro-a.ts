@@ -14,6 +14,9 @@ export const PHARMA_DB_GASTRO_A: QuickDrug[] = [
 
   {
     id: 'pantoprazol',
+    guidelines_referencia: ['ACG DRGE — IBP de 1a linha'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Pantoprazol',
     nome_generico: 'Sódio de Pantoprazol',
     sinonimos: ['pantoprazol', 'pantozol', 'protonix', 'ibp pantoprazol', 'ulcera pantoprazol', 'drge pantoprazol', 'pantoprazol clopidogrel'],
@@ -63,6 +66,9 @@ export const PHARMA_DB_GASTRO_A: QuickDrug[] = [
 
   {
     id: 'lansoprazol',
+    guidelines_referencia: ['ACG DRGE — IBP de 1a linha'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Lansoprazol',
     nome_generico: 'Lansoprazol',
     sinonimos: ['lanzol', 'prevacid', 'lansoprazol', 'ibp lansoprazol', 'ulcera lansoprazol'],
@@ -274,6 +280,9 @@ export const PHARMA_DB_GASTRO_A: QuickDrug[] = [
 
   {
     id: 'ondansetrona',
+    guidelines_referencia: ['ASCO/MASCC — antiemetico 5-HT3 (Classe I)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     indicacao_contexto: 'Náusea / vômito (geral)',
     molecula: 'Ondansetrona',
     nome_generico: 'Cloridrato de Ondansetrona',
