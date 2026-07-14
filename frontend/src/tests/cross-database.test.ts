@@ -4,7 +4,7 @@
 // ============================================================
 
 import { describe, it, expect } from 'vitest';
-import { buildSyncReport, compareSources } from '@/validation/cross-database';
+import { buildSyncReport, compareSources, formatSyncMarkdown } from '@/validation/cross-database';
 
 describe('RM-24 · Cross Database Validator', () => {
   const report = buildSyncReport();
@@ -39,5 +39,11 @@ describe('RM-24 · Cross Database Validator', () => {
       expect(f.chave).toBeTruthy();
       expect(f.correcaoSugerida.length).toBeGreaterThan(0);
     }
+  });
+
+  it('gera o DATABASE_SYNC_REPORT em Markdown', () => {
+    const md = formatSyncMarkdown();
+    expect(md).toContain('DATABASE_SYNC_REPORT');
+    expect(md).toContain('Total analisado');
   });
 });

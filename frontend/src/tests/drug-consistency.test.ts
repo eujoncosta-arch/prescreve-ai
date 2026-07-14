@@ -4,7 +4,7 @@
 // ============================================================
 
 import { describe, it, expect } from 'vitest';
-import { buildConsistencyReport, checkDrugConsistency } from '@/validation/drug-consistency';
+import { buildConsistencyReport, checkDrugConsistency, formatConsistencyMarkdown } from '@/validation/drug-consistency';
 import { drugRepository } from '@/lib/pharma-core';
 
 describe('RM-23 · Drug Consistency Engine', () => {
@@ -32,6 +32,12 @@ describe('RM-23 · Drug Consistency Engine', () => {
   it('nenhuma marca com laboratório divergente (pós RM-06)', () => {
     const labDiv = checkDrugConsistency().filter((i) => i.rule === 'MARCA_LAB_DIVERGENTE');
     expect(labDiv).toHaveLength(0);
+  });
+
+  it('gera relatório Markdown com o resumo', () => {
+    const md = formatConsistencyMarkdown();
+    expect(md).toContain('RM23_DRUG_CONSISTENCY_REPORT');
+    expect(md).toContain('Gravidade');
   });
 
   it('detecta corretamente uma inconsistência injetada (sanidade do engine)', () => {
