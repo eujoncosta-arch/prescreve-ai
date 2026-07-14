@@ -915,6 +915,9 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'rivaroxabana',
+    guidelines_referencia: ['ESC 2020 FA — DOAC preferível à varfarina na FA não-valvar (Classe I)', 'ROCKET-AF'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Rivaroxabana',
     nome_generico: 'Rivaroxabana',
@@ -1017,6 +1020,9 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
 
   {
     id: 'clopidogrel',
+    guidelines_referencia: ['ESC SCA — dupla antiagregação (DAPT) (Classe I)', 'Estudo CURE'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Clopidogrel',
     nome_generico: 'Bissulfato de Clopidogrel',
     sinonimos: ['plavix', 'clopidogrel', 'antiplaquetario', 'p2y12', 'tienopiridina'],

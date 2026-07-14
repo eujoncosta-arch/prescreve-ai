@@ -125,7 +125,13 @@ function buildReferences(d: QuickDrug, atc?: string): Reference[] {
   const refs: Reference[] = [];
   if (atc) refs.push({ type: 'ATC', value: atc });
   for (const g of d.guidelines_referencia ?? []) refs.push({ type: 'GUIDELINE', value: g });
-  if (d.nivel_evidencia) refs.push({ type: 'EVIDENCIA', value: `Nível ${d.nivel_evidencia}` });
+  if (d.nivel_evidencia || d.grau_recomendacao) {
+    const partes = [
+      d.nivel_evidencia ? `Nível ${d.nivel_evidencia}` : '',
+      d.grau_recomendacao ? `Classe ${d.grau_recomendacao}` : '',
+    ].filter(Boolean);
+    refs.push({ type: 'EVIDENCIA', value: partes.join(' · ') });
+  }
   if (d.beers_criteria) refs.push({ type: 'BEERS', value: d.beers_criteria });
   if (d.stopp) refs.push({ type: 'STOPP', value: d.stopp });
   if (d.start) refs.push({ type: 'START', value: d.start });

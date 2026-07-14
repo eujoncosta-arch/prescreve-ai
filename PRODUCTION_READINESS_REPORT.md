@@ -20,7 +20,7 @@ Nenhuma pendência é bloqueante para o que já está no ar; todas reduzem risco
 | 2 | Uso exclusivo do DrugRepository | 🟡 | 🟢 (dívida reclassificada) |
 | 3 | Cobertura de testes por módulo | 🟡 | 🟢 (instrumentada + metas) |
 | 4 | Performance do motor de decisão | 🟢 | 🟢 (search 4,77→0,16 ms/op) |
-| 5 | Rastreabilidade de referências científicas | 🟡 | 🟡 (requer dado sourced) |
+| 5 | Rastreabilidade de referências científicas | 🟡 | 🟡→🟢 (14 flagship sourced; contínuo) |
 | 6 | Qualidade da documentação técnica | 🟢 | 🟢 (+ interop + índice) |
 | 7 | Preparação para FHIR/HL7 | 🟡 | 🟢 (adaptador DrugEntity→FHIR) |
 
@@ -103,7 +103,7 @@ Os "7 consumidores" **não são dívida uniforme**:
 | 2 | Adaptador `DrugEntity → FHIR Medication` | 7 | ✅ feito (`pharma-core/fhir.ts`) |
 | 3 | `@vitest/coverage-v8` + metas de cobertura | 3 | ✅ feito (metas na camada de decisão) |
 | 4 | Índice de busca pré-computado no repositório | 4 | ✅ feito (search ~0,16 ms/op) |
-| 5 | Enriquecer `references[]` (diretriz/DOI/evidência) | 5 | ⏭️ pendente — requer dado sourced (não fabricar) |
+| 5 | Enriquecer `references[]` (diretriz/DOI/evidência) | 5 | 🔄 iniciado — 14 moléculas de maior uso com diretriz + nível/classe sourced (ESC/ADA/EAS/NICE); segue em lotes |
 | 6 | `docs/interoperability.md` + `docs/README.md` | 6 | ✅ feito |
 
 **Conclusão:** o núcleo (base canônica única, 3 gates automáticos, 115 testes verdes, performance sub-milissegundo no motor de decisão) está **pronto para produção**. As 6 ações acima são de **redução de risco para o crescimento** — nenhuma bloqueia o que já está publicado, e todas são pré-requisitos saudáveis antes de adicionar novas funcionalidades.

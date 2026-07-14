@@ -226,6 +226,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'enalapril',
+    guidelines_referencia: ['ESC 2021 IC — IECA pilar da IC-FEr (Classe I)', 'ESC/ESH 2023 HAS — IECA 1ª linha (Classe I)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Enalapril',
     nome_generico: 'Maleato de Enalapril',
     sinonimos: ['enalapril', 'renitec', 'ieca'],
@@ -294,6 +297,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'losartana',
+    guidelines_referencia: ['ESC/ESH 2023 HAS — BRA 1ª linha (Classe I)', 'Estudo LIFE'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Losartana',
     nome_generico: 'Losartana Potássica',
     sinonimos: ['losartan', 'zart', 'cozaar', 'bra', 'bra bloq'],
@@ -359,6 +365,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'anlodipino',
+    guidelines_referencia: ['ESC/ESH 2023 HAS — BCC di-hidropiridínico 1ª linha (Classe I)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Anlodipino',
     nome_generico: 'Besilato de Anlodipino',
     sinonimos: ['amlodipine', 'norvasc', 'bcc', 'bloqueador canal calcio'],
@@ -396,6 +405,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'hctz',
+    guidelines_referencia: ['ESC/ESH 2023 HAS — tiazídico 1ª linha (Classe I)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Hidroclorotiazida',
     nome_generico: 'Hidroclorotiazida',
     sinonimos: ['hctz', 'hidroclorotiazida', 'tiazidico', 'diuretico'],
@@ -427,6 +439,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'carvedilol',
+    guidelines_referencia: ['ESC 2021 IC — betabloqueador na IC-FEr (Classe I, Nível A)', 'Estudo COPERNICUS'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Carvedilol',
     nome_generico: 'Carvedilol',
     sinonimos: ['carvedilol', 'coreg', 'betabloqueador', 'beta-bloq'],
@@ -492,6 +507,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'espironolactona',
+    guidelines_referencia: ['ESC 2021 IC — ARM na IC-FEr (Classe I, Nível A)', 'Estudo RALES'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Espironolactona',
     nome_generico: 'Espironolactona',
     sinonimos: ['aldactone', 'espirono', 'arm', 'anti-aldosterona'],
@@ -560,6 +578,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'atorvastatina',
+    guidelines_referencia: ['ESC/EAS 2019 Dislipidemias — estatina de alta intensidade (Classe I, Nível A)'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Atorvastatina',
     nome_generico: 'Atorvastatina Cálcica',
     sinonimos: ['lipitor', 'vast', 'atorvastatin', 'estatina', 'colesterol'],
@@ -628,6 +649,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'metformina',
+    guidelines_referencia: ['ADA Standards of Care 2024 — 1ª linha no DM2', 'UKPDS'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Metformina',
     nome_generico: 'Cloridrato de Metformina',
     sinonimos: ['glucoformin', 'metformin', 'biguanida', 'diabetes'],
@@ -949,6 +973,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'sertralina',
+    guidelines_referencia: ['NICE/APA Depressão — ISRS 1ª linha'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Sertralina',
     nome_generico: 'Cloridrato de Sertralina',
     sinonimos: ['afetus', 'zoloft', 'isrs', 'antidepressivo', 'sertraline'],
@@ -1048,6 +1075,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'omeprazol',
+    guidelines_referencia: ['ACG 2022 DRGE — IBP 1ª linha na doença erosiva'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Omeprazol',
     nome_generico: 'Omeprazol',
     sinonimos: ['losec', 'ppi', 'ibb', 'antiácido', 'gastrite'],
@@ -1577,6 +1607,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'aas',
+    guidelines_referencia: ['AHA/ACC — antiagregante na prevenção secundária de DCV (Classe I)', 'Antithrombotic Trialists'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Ácido Acetilsalicílico',
     nome_generico: 'Ácido Acetilsalicílico (AAS)',
     sinonimos: ['saliprevi', 'aspirina', 'aas', 'aspirin', 'antiagregante'],
@@ -2096,6 +2129,9 @@ export const PHARMA_DB: QuickDrug[] = [
 
   {
     id: 'metoprolol',
+    guidelines_referencia: ['ESC 2021 IC — betabloqueador (succinato) na IC-FEr (Classe I, Nível A)', 'MERIT-HF'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
     molecula: 'Succinato de Metoprolol',
     nome_generico: 'Succinato de Metoprolol',
     sinonimos: ['selozok', 'metoprolol', 'betabloqueador', 'hipertensão', 'ic', 'angina', 'arritmia'],
