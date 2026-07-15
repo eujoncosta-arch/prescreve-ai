@@ -86,20 +86,20 @@ export function WhyThisRecommendation({ med }: Props) {
         </DialogHeader>
 
         <Tabs defaultValue="beneficios" className="mt-2">
-          <TabsList className="grid grid-cols-6 text-[10px]">
-            <TabsTrigger value="beneficios">Benefícios</TabsTrigger>
-            <TabsTrigger value="riscos">Riscos</TabsTrigger>
-            <TabsTrigger value="perfil">Perfil</TabsTrigger>
-            <TabsTrigger value="alternativas">Alternativas</TabsTrigger>
-            <TabsTrigger value="estudos" className="relative">
-              Estudos
+          <TabsList className="grid w-full grid-cols-6 h-auto gap-0.5 text-[10px]">
+            <TabsTrigger value="beneficios" className="min-w-0 px-0.5"><span className="max-w-full truncate">Benefícios</span></TabsTrigger>
+            <TabsTrigger value="riscos" className="min-w-0 px-0.5"><span className="max-w-full truncate">Riscos</span></TabsTrigger>
+            <TabsTrigger value="perfil" className="min-w-0 px-0.5"><span className="max-w-full truncate">Perfil</span></TabsTrigger>
+            <TabsTrigger value="alternativas" className="min-w-0 px-0.5"><span className="max-w-full truncate">Alternativas</span></TabsTrigger>
+            <TabsTrigger value="estudos" className="relative min-w-0 px-0.5">
+              <span className="max-w-full truncate">Estudos</span>
               {estudos.length > 0 && (
-                <span className="ml-1 bg-blue-600 text-white rounded-full text-[8px] px-1 py-0 leading-3">
+                <span className="ml-1 shrink-0 bg-blue-600 text-white rounded-full text-[8px] px-1 py-0 leading-3">
                   {estudos.length}
                 </span>
               )}
             </TabsTrigger>
-            <TabsTrigger value="evidencia">Diretriz</TabsTrigger>
+            <TabsTrigger value="evidencia" className="min-w-0 px-0.5"><span className="max-w-full truncate">Diretriz</span></TabsTrigger>
           </TabsList>
 
           {/* ── ABA: Benefícios ── */}

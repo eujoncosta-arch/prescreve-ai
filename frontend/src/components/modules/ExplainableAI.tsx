@@ -138,21 +138,26 @@ export function ExplainableAI({ med }: Props) {
         </DialogHeader>
 
         <Tabs defaultValue="achados" className="mt-2">
-          <TabsList className="grid grid-cols-5 text-[10px]">
-            <TabsTrigger value="achados">
-              <Activity className="w-3 h-3 mr-1" />Achados
+          <TabsList className="grid w-full grid-cols-5 h-auto gap-0.5 text-[10px]">
+            <TabsTrigger value="achados" className="flex-col gap-0.5 h-auto min-w-0 px-0.5 py-1">
+              <Activity className="size-3.5 shrink-0" />
+              <span className="max-w-full truncate">Achados</span>
             </TabsTrigger>
-            <TabsTrigger value="diretriz">
-              <BookOpen className="w-3 h-3 mr-1" />Diretriz
+            <TabsTrigger value="diretriz" className="flex-col gap-0.5 h-auto min-w-0 px-0.5 py-1">
+              <BookOpen className="size-3.5 shrink-0" />
+              <span className="max-w-full truncate">Diretriz</span>
             </TabsTrigger>
-            <TabsTrigger value="beneficios">
-              <TrendingUp className="w-3 h-3 mr-1" />Benefícios
+            <TabsTrigger value="beneficios" className="flex-col gap-0.5 h-auto min-w-0 px-0.5 py-1">
+              <TrendingUp className="size-3.5 shrink-0" />
+              <span className="max-w-full truncate">Benefícios</span>
             </TabsTrigger>
-            <TabsTrigger value="limitacoes">
-              <AlertTriangle className="w-3 h-3 mr-1" />Limitações
+            <TabsTrigger value="limitacoes" className="flex-col gap-0.5 h-auto min-w-0 px-0.5 py-1">
+              <AlertTriangle className="size-3.5 shrink-0" />
+              <span className="max-w-full truncate">Limitações</span>
             </TabsTrigger>
-            <TabsTrigger value="estudos">
-              <FlaskConical className="w-3 h-3 mr-1" />Estudos
+            <TabsTrigger value="estudos" className="flex-col gap-0.5 h-auto min-w-0 px-0.5 py-1">
+              <FlaskConical className="size-3.5 shrink-0" />
+              <span className="max-w-full truncate">Estudos</span>
             </TabsTrigger>
           </TabsList>
 
