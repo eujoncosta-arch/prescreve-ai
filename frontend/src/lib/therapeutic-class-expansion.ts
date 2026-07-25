@@ -34,6 +34,7 @@ import type {
   DrugBrand,
   ScientificReference,
   Anamnesis,
+  ExcludedTherapeuticOption,
 } from './types';
 
 // ─── Contexto de elegibilidade (reaproveita os campos já existentes em Anamnesis) ─
@@ -45,9 +46,11 @@ export interface EligibilityContext {
   childPugh?: 'A' | 'B' | 'C'; // de Anamnesis.funcao_hepatica.child_pugh
   alergias?: string[]; // substâncias, de Anamnesis.alergias[].substancia
   medicamentosEmUso?: string[]; // nomes, de Anamnesis.medicamentos_em_uso[].nome
+  /** RM-26: comorbidades da anamnese — usadas para priorização (não afeta elegibilidade). */
+  comorbidades?: string[]; // de Anamnesis.comorbidades
 }
 
-/** Constrói o contexto de elegibilidade a partir da Anamnese já coletada (reuso — nenhum dado novo). */
+/** Constrói o contexto de elegibilidade/priorização a partir da Anamnese já coletada (reuso — nenhum dado novo). */
 export function eligibilityContextFromAnamnesis(a?: Anamnesis): EligibilityContext | undefined {
   if (!a) return undefined;
   return {
@@ -57,14 +60,12 @@ export function eligibilityContextFromAnamnesis(a?: Anamnesis): EligibilityConte
     childPugh: a.funcao_hepatica?.child_pugh,
     alergias: (a.alergias ?? []).map((x) => x.substancia),
     medicamentosEmUso: (a.medicamentos_em_uso ?? []).filter((m) => m.em_uso).map((m) => m.nome),
+    comorbidades: a.comorbidades ?? [],
   };
 }
 
-export interface ExcludedOption {
-  molecula: string;
-  classe: string;
-  motivo: string;
-}
+/** @deprecated use `ExcludedTherapeuticOption` (types.ts) — mantido como alias para compatibilidade. */
+export type ExcludedOption = ExcludedTherapeuticOption;
 
 // ─── 1) Classe terapêutica elegível — normalização ───────────────────────────
 //
@@ -402,7 +403,7 @@ export function expandTherapeuticPlan(
       if (!entityCoversCondition(entity, conditionId)) {
         excluded.push({
           molecula: entity.activeIngredient.name,
-          classe: CLASS_LABELS[classKey] ?? classKey,
+          classe_terapeutica: CLASS_LABELS[classKey] ?? classKey,
           motivo: 'Indicação própria da molécula (base canônica) não cobre esta condição',
         });
         continue;
@@ -410,7 +411,7 @@ export function expandTherapeuticPlan(
 
       const elig = isEligible(entity, ctx);
       if (!elig.eligible) {
-        excluded.push({ molecula: entity.activeIngredient.name, classe: CLASS_LABELS[classKey] ?? classKey, motivo: elig.reason! });
+        excluded.push({ molecula: entity.activeIngredient.name, classe_terapeutica: CLASS_LABELS[classKey] ?? classKey, motivo: elig.reason! });
         continue;
       }
 

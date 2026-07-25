@@ -152,6 +152,27 @@ export interface TherapeuticSuggestion {
   monitoramento: string[];
   alternativas: string[];
   marcas?: DrugBrand[];
+  /** RM-26: priorização clínica desta opção para o paciente (ausente = não classificado). */
+  prioridade?: ClinicalPriority;
+}
+
+/** RM-26 — Priorização Clínica. Nível 1–3 (Nível 4 = excluído, não aparece em farmacologico). */
+export type ClinicalPriorityTier = 'preferencial' | 'primeira_linha' | 'contextual';
+
+export type EvidenceStatus = 'diretriz_estruturada' | 'sem_diretriz_estruturada';
+
+export interface ClinicalPriority {
+  tier: ClinicalPriorityTier;
+  motivo: string;
+  fatores_considerados: string[];
+  evidencia_status: EvidenceStatus;
+}
+
+/** RM-26 — opção considerada, porém excluída (Nível 4), com motivo obrigatório. */
+export interface ExcludedTherapeuticOption {
+  molecula: string;
+  classe_terapeutica: string;
+  motivo: string;
 }
 
 export interface DrugBrand {
@@ -186,6 +207,8 @@ export interface TherapeuticPlan {
   monitorizacao: string[];
   encaminhamento?: string;
   preferencia_laboratorio: LaboratoryPreference;
+  /** RM-26: opções consideradas e excluídas, com motivo — nunca ocultas, apenas separadas. */
+  opcoes_excluidas?: ExcludedTherapeuticOption[];
 }
 
 export type AlertSeverity = 'info' | 'warning' | 'danger' | 'critical';

@@ -6,6 +6,7 @@
 
 import type { TherapeuticPlan, TherapeuticSuggestion } from './types';
 import { expandTherapeuticPlan, type EligibilityContext } from './therapeutic-class-expansion';
+import { prioritizeTherapeuticPlan } from './therapeutic-prioritization';
 
 // ─── HELPER ──────────────────────────────────────────────────
 
@@ -475,8 +476,12 @@ export function getTherapeuticForCondition(
   // Cobertura de recomendação: expande a conduta com moléculas elegíveis da
   // mesma classe terapêutica já citada no protocolo, descobertas via
   // drugRepository (pharma-core) — nunca remove as sugestões curadas acima.
-  const { plan } = expandTherapeuticPlan(basePlan, conditionId, eligibilityContext);
-  return plan;
+  const { plan: expandedPlan, excluded } = expandTherapeuticPlan(basePlan, conditionId, eligibilityContext);
+
+  // RM-26: prioriza clinicamente o conjunto elegível (não remove nada) e
+  // anexa as opções excluídas (Nível 4, com motivo) para rastreabilidade.
+  const prioritizedPlan = prioritizeTherapeuticPlan(expandedPlan, conditionId, eligibilityContext);
+  return { ...prioritizedPlan, opcoes_excluidas: excluded.length ? excluded : undefined };
 }
 
 // ─── Cross-engine: Evidence + Conflict + Registry integration ─
