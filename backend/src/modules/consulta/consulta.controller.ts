@@ -1,11 +1,23 @@
 import {
-  Controller, Post, Get, Body, Param, Query,
-  UseGuards, HttpCode, HttpStatus,
+  Controller,
+  Post,
+  Get,
+  Body,
+  Param,
+  Query,
+  UseGuards,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { ConsultaService } from './consulta.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
-import { CriarConsultaDto, CriarDiagnosticoDto, CriarPrescricaoDto } from './dto/consulta.dto';
+import {
+  CriarConsultaDto,
+  CriarDiagnosticoDto,
+  CriarPrescricaoDto,
+  SalvarRiscoDto,
+} from './dto/consulta.dto';
 
 @Controller('api')
 @UseGuards(JwtAuthGuard)
@@ -15,7 +27,10 @@ export class ConsultaController {
   // ── Consulta ──────────────────────────────────────────────
 
   @Post('consulta')
-  criarConsulta(@Body() dto: CriarConsultaDto, @CurrentUser() user: { id: string }) {
+  criarConsulta(
+    @Body() dto: CriarConsultaDto,
+    @CurrentUser() user: { id: string },
+  ) {
     return this.svc.criarConsulta(dto, user.id);
   }
 
@@ -25,7 +40,11 @@ export class ConsultaController {
     @Query('pagina') pagina?: string,
     @Query('limite') limite?: string,
   ) {
-    return this.svc.listarConsultas(user.id, Number(pagina ?? 1), Number(limite ?? 20));
+    return this.svc.listarConsultas(
+      user.id,
+      Number(pagina ?? 1),
+      Number(limite ?? 20),
+    );
   }
 
   @Get('consulta/:id')
@@ -41,14 +60,20 @@ export class ConsultaController {
   // ── Diagnóstico ───────────────────────────────────────────
 
   @Post('diagnostico')
-  criarDiagnostico(@Body() dto: CriarDiagnosticoDto, @CurrentUser() user: { id: string }) {
+  criarDiagnostico(
+    @Body() dto: CriarDiagnosticoDto,
+    @CurrentUser() user: { id: string },
+  ) {
     return this.svc.criarDiagnostico(dto, user.id);
   }
 
   // ── Prescrição ────────────────────────────────────────────
 
   @Post('prescricao')
-  criarPrescricao(@Body() dto: CriarPrescricaoDto, @CurrentUser() user: { id: string }) {
+  criarPrescricao(
+    @Body() dto: CriarPrescricaoDto,
+    @CurrentUser() user: { id: string },
+  ) {
     return this.svc.criarPrescricao(dto, user.id);
   }
 
@@ -57,7 +82,7 @@ export class ConsultaController {
   @Post('risco')
   @HttpCode(HttpStatus.OK)
   salvarRisco(
-    @Body() body: { consulta_id: string; score: Record<string, unknown> },
+    @Body() body: SalvarRiscoDto,
     @CurrentUser() user: { id: string },
   ) {
     return this.svc.salvarRiskScore(body.consulta_id, body.score, user.id);

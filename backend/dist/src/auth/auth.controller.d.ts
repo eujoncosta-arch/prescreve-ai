@@ -1,5 +1,5 @@
 import { AuthService } from './auth.service';
-import { LoginDto, RefreshDto, RegisterDto } from './dto/login.dto';
+import { LoginDto, RefreshDto, RegisterDto, CriarUsuarioPrivilegiadoDto } from './dto/login.dto';
 import type { Request } from 'express';
 export declare class AuthController {
     private auth;
@@ -7,6 +7,13 @@ export declare class AuthController {
     register(dto: RegisterDto): Promise<{
         access_token: string;
         refresh_token: string;
+        perfil: import("@prisma/client").$Enums.Perfil;
+    }>;
+    criarUsuarioPrivilegiado(dto: CriarUsuarioPrivilegiadoDto, user: {
+        id: string;
+    }): Promise<{
+        id: string;
+        email: string;
         perfil: import("@prisma/client").$Enums.Perfil;
     }>;
     login(dto: LoginDto, req: Request): Promise<{

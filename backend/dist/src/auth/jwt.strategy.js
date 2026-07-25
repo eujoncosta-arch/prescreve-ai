@@ -15,13 +15,14 @@ const passport_1 = require("@nestjs/passport");
 const passport_jwt_1 = require("passport-jwt");
 const config_1 = require("@nestjs/config");
 const prisma_service_1 = require("../prisma/prisma.service");
+const jwt_secrets_util_1 = require("./jwt-secrets.util");
 let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy, 'jwt') {
     prisma;
     constructor(config, prisma) {
         super({
             jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
-            secretOrKey: config.get('JWT_SECRET', 'prescreve-ai-secret-change-in-prod'),
+            secretOrKey: (0, jwt_secrets_util_1.getRequiredSecret)(config, 'JWT_SECRET'),
         });
         this.prisma = prisma;
     }

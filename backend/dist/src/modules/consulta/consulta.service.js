@@ -93,11 +93,14 @@ let ConsultaService = class ConsultaService {
     async listarConsultas(usuarioId, pagina = 1, limite = 20) {
         const skip = (pagina - 1) * limite;
         const [total, consultas] = await Promise.all([
-            this.prisma.consulta.count({ where: { usuario_id: usuarioId, deletado_em: null } }),
+            this.prisma.consulta.count({
+                where: { usuario_id: usuarioId, deletado_em: null },
+            }),
             this.prisma.consulta.findMany({
                 where: { usuario_id: usuarioId, deletado_em: null },
                 orderBy: { criado_em: 'desc' },
-                skip, take: limite,
+                skip,
+                take: limite,
                 include: {
                     diagnosticos: { where: { selecionado: true }, take: 1 },
                     prescricoes: { take: 1, select: { id: true, status: true } },
@@ -150,7 +153,11 @@ let ConsultaService = class ConsultaService {
         });
         if (!consulta)
             throw new common_1.ForbiddenException();
-        const hash = hashIntegridade({ ...dto, usuario_id: usuarioId, ts: Date.now() });
+        const hash = hashIntegridade({
+            ...dto,
+            usuario_id: usuarioId,
+            ts: Date.now(),
+        });
         const prescricao = await this.prisma.prescricao.create({
             data: {
                 consulta_id: dto.consulta_id,
@@ -166,23 +173,28 @@ let ConsultaService = class ConsultaService {
             tipo: 'prescricao_gerada',
             acao: `Prescrição ${prescricao.id} gerada`,
             recurso: `prescricao:${prescricao.id}`,
-            dados_entrada: { moleculas: dto.medicamentos.map(m => m.molecula) },
+            dados_entrada: { moleculas: dto.medicamentos.map((m) => m.molecula) },
         });
         return prescricao;
     }
     async salvarRiskScore(consultaId, score, usuarioId) {
+        const consulta = await this.prisma.consulta.findFirst({
+            where: { id: consultaId, usuario_id: usuarioId, deletado_em: null },
+        });
+        if (!consulta)
+            throw new common_1.ForbiddenException('Consulta não pertence a este usuário');
         return this.prisma.riskScore.create({
             data: {
                 consulta_id: consultaId,
                 risco_global: score.risco_global,
                 score_global: Number(score.score_global ?? 0),
                 alerta_vermelho: Boolean(score.alerta_vermelho),
-                risco_cardiovascular: (score.risco_cardiovascular ?? {}),
-                risco_renal: (score.risco_renal ?? {}),
-                risco_hemorragico: (score.risco_hemorragico ?? {}),
-                risco_farmacologico: (score.risco_farmacologico ?? {}),
-                risco_interacao: (score.risco_interacao ?? {}),
-                risco_terapeutico: (score.risco_terapeutico ?? {}),
+                risco_cardiovascular: score.risco_cardiovascular ?? {},
+                risco_renal: score.risco_renal ?? {},
+                risco_hemorragico: score.risco_hemorragico ?? {},
+                risco_farmacologico: score.risco_farmacologico ?? {},
+                risco_interacao: score.risco_interacao ?? {},
+                risco_terapeutico: score.risco_terapeutico ?? {},
                 recomendacoes: score.recomendacoes_prioritarias ?? [],
             },
         });
@@ -196,7 +208,10 @@ let ConsultaService = class ConsultaService {
     }
     async buscarRWE(cid) {
         const key = this.cache.key('rwe', cid);
-        return this.cache.getOrSet(key, () => this.prisma.rWE.findMany({ where: { cid }, orderBy: { criado_em: 'desc' } }), cache_service_1.TTL.RWE);
+        return this.cache.getOrSet(key, () => this.prisma.rWE.findMany({
+            where: { cid },
+            orderBy: { criado_em: 'desc' },
+        }), cache_service_1.TTL.RWE);
     }
     async buscarTimeline(usuarioId) {
         return this.prisma.consulta.findMany({
@@ -204,8 +219,13 @@ let ConsultaService = class ConsultaService {
             orderBy: { criado_em: 'desc' },
             take: 50,
             select: {
-                id: true, status: true, criado_em: true,
-                diagnosticos: { where: { selecionado: true }, select: { cid: true, descricao: true } },
+                id: true,
+                status: true,
+                criado_em: true,
+                diagnosticos: {
+                    where: { selecionado: true },
+                    select: { cid: true, descricao: true },
+                },
             },
         });
     }

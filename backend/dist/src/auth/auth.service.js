@@ -47,6 +47,7 @@ const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const config_1 = require("@nestjs/config");
 const prisma_service_1 = require("../prisma/prisma.service");
+const jwt_secrets_util_1 = require("./jwt-secrets.util");
 const bcrypt = __importStar(require("bcrypt"));
 const crypto = __importStar(require("crypto"));
 function hashSHA256(value) {
@@ -55,7 +56,7 @@ function hashSHA256(value) {
 function djb2Hash(s) {
     let h = 5381;
     for (let i = 0; i < s.length; i++) {
-        h = ((h << 5) + h) + s.charCodeAt(i);
+        h = (h << 5) + h + s.charCodeAt(i);
         h |= 0;
     }
     return `H${Math.abs(h).toString(36).toUpperCase().padStart(8, '0')}`;
@@ -70,20 +71,19 @@ let AuthService = class AuthService {
         this.config = config;
     }
     async register(dto) {
-        const existing = await this.prisma.usuario.findUnique({ where: { email: dto.email } });
+        const existing = await this.prisma.usuario.findUnique({
+            where: { email: dto.email },
+        });
         if (existing)
             throw new common_1.ConflictException('E-mail já cadastrado');
-        const perfil = dto.perfil;
-        const validPerfis = ['MEDICO', 'ADMIN', 'LABORATORIO', 'HOSPITAL', 'AUDITOR'];
-        if (!validPerfis.includes(perfil))
-            throw new common_1.BadRequestException('Perfil inválido');
         const senha_hash = await bcrypt.hash(dto.senha, 12);
+        const perfil = 'MEDICO';
         const usuario = await this.prisma.usuario.create({
             data: {
                 email: dto.email,
                 senha_hash,
                 perfil,
-                ...(perfil === 'MEDICO' && dto.crm && {
+                ...(dto.crm && {
                     medico: {
                         create: {
                             crm_hash: djb2Hash(dto.crm),
@@ -97,8 +97,42 @@ let AuthService = class AuthService {
         });
         return this.gerarTokens(usuario.id, usuario.email, usuario.perfil);
     }
+    async criarUsuarioPrivilegiado(dto, criadorId) {
+        const existing = await this.prisma.usuario.findUnique({
+            where: { email: dto.email },
+        });
+        if (existing)
+            throw new common_1.ConflictException('E-mail já cadastrado');
+        const senha_hash = await bcrypt.hash(dto.senha, 12);
+        const usuario = await this.prisma.usuario.create({
+            data: {
+                email: dto.email,
+                senha_hash,
+                perfil: dto.perfil,
+                ...(dto.perfil === 'MEDICO' &&
+                    dto.crm && {
+                    medico: {
+                        create: {
+                            crm_hash: djb2Hash(dto.crm),
+                            especialidade: dto.especialidade ?? 'clinica_medica',
+                            uf: dto.uf ?? 'SP',
+                        },
+                    },
+                }),
+            },
+            include: { medico: true },
+        });
+        await this.registrarAuditoria(criadorId, 'criacao_usuario_privilegiado', `Usuário ${usuario.id} (${usuario.email}) criado com perfil ${usuario.perfil} por ${criadorId}`);
+        return {
+            id: usuario.id,
+            email: usuario.email,
+            perfil: usuario.perfil,
+        };
+    }
     async login(dto, ip) {
-        const usuario = await this.prisma.usuario.findUnique({ where: { email: dto.email } });
+        const usuario = await this.prisma.usuario.findUnique({
+            where: { email: dto.email },
+        });
         if (!usuario || !usuario.ativo)
             throw new common_1.UnauthorizedException('Credenciais inválidas');
         const senhaValida = await bcrypt.compare(dto.senha, usuario.senha_hash);
@@ -121,7 +155,10 @@ let AuthService = class AuthService {
         if (!rt || rt.revogado || rt.expira_em < new Date()) {
             throw new common_1.UnauthorizedException('Refresh token inválido ou expirado');
         }
-        await this.prisma.refreshToken.update({ where: { id: rt.id }, data: { revogado: true } });
+        await this.prisma.refreshToken.update({
+            where: { id: rt.id },
+            data: { revogado: true },
+        });
         return this.gerarTokens(rt.usuario.id, rt.usuario.email, rt.usuario.perfil);
     }
     async logout(userId) {
@@ -133,8 +170,8 @@ let AuthService = class AuthService {
     }
     async gerarTokens(userId, email, perfil) {
         const payload = { sub: userId, email, perfil };
-        const secret = this.config.get('JWT_SECRET', 'prescreve-ai-secret-change-in-prod');
-        const refreshSecret = this.config.get('JWT_REFRESH_SECRET', 'prescreve-ai-refresh-secret');
+        const secret = (0, jwt_secrets_util_1.getRequiredSecret)(this.config, 'JWT_SECRET');
+        const refreshSecret = (0, jwt_secrets_util_1.getRequiredSecret)(this.config, 'JWT_REFRESH_SECRET');
         const [access_token, refresh_token] = await Promise.all([
             this.jwt.signAsync(payload, { secret, expiresIn: '15m' }),
             this.jwt.signAsync(payload, { secret: refreshSecret, expiresIn: '7d' }),
@@ -156,7 +193,7 @@ let AuthService = class AuthService {
         await this.prisma.auditoria.create({
             data: {
                 usuario_id: userId,
-                tipo: 'login',
+                tipo,
                 acao,
                 ip_hash: ip ? hashSHA256(ip) : null,
                 hash_integridade: hash,

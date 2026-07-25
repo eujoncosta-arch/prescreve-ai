@@ -1,5 +1,5 @@
 import { ConsultaService } from './consulta.service';
-import { CriarConsultaDto, CriarDiagnosticoDto, CriarPrescricaoDto } from './dto/consulta.dto';
+import { CriarConsultaDto, CriarDiagnosticoDto, CriarPrescricaoDto, SalvarRiscoDto } from './dto/consulta.dto';
 export declare class ConsultaController {
     private svc;
     constructor(svc: ConsultaService);
@@ -68,12 +68,12 @@ export declare class ConsultaController {
                 cid: string;
                 versao: number;
                 molecula: string;
-                nivel_evidencia: import("@prisma/client").$Enums.NivelEvidencia;
-                prescricao_id: string;
-                classe_terapeutica: string;
                 dose: string | null;
                 via: string | null;
                 duracao: string | null;
+                nivel_evidencia: import("@prisma/client").$Enums.NivelEvidencia;
+                prescricao_id: string;
+                classe_terapeutica: string;
                 justificativa: string | null;
                 engine_versao: string;
             }[];
@@ -110,8 +110,8 @@ export declare class ConsultaController {
             id: string;
             criado_em: Date;
             consulta_id: string;
-            score_global: number;
             molecula: string;
+            score_global: number;
             percentual: string;
             classificacao: string;
             resumo_executivo: string;
@@ -167,10 +167,7 @@ export declare class ConsultaController {
         medicamentos: import("@prisma/client/runtime/client").JsonValue;
         versao: number;
     }>;
-    salvarRisco(body: {
-        consulta_id: string;
-        score: Record<string, unknown>;
-    }, user: {
+    salvarRisco(body: SalvarRiscoDto, user: {
         id: string;
     }): Promise<{
         id: string;
@@ -192,8 +189,8 @@ export declare class ConsultaController {
         criado_em: Date;
         atualizado_em: Date;
         cid: string;
-        diretriz_id: string | null;
         molecula: string;
+        diretriz_id: string | null;
         indicacao: string;
         tipo_estudo: string;
         fonte: string;

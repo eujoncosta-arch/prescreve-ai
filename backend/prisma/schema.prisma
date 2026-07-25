@@ -61,6 +61,7 @@ enum TipoAuditoria {
   acesso_negado
   dados_exportados
   migracao
+  criacao_usuario_privilegiado
 }
 
 enum StatusValidacao {

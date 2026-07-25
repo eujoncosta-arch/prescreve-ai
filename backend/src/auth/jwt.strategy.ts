@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
+import { getRequiredSecret } from './jwt-secrets.util';
 
 export interface JwtPayload {
   sub: string;
@@ -21,7 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: config.get<string>('JWT_SECRET', 'prescreve-ai-secret-change-in-prod'),
+      secretOrKey: getRequiredSecret(config, 'JWT_SECRET'),
     });
   }
 
@@ -30,7 +31,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       where: { id: payload.sub },
       select: { id: true, email: true, perfil: true, ativo: true },
     });
-    if (!user || !user.ativo) throw new UnauthorizedException('Usuário inativo ou não encontrado');
+    if (!user || !user.ativo)
+      throw new UnauthorizedException('Usuário inativo ou não encontrado');
     return user;
   }
 }

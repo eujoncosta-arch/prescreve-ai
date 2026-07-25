@@ -66,12 +66,12 @@ export declare class ConsultaService {
                 cid: string;
                 versao: number;
                 molecula: string;
-                nivel_evidencia: import("@prisma/client").$Enums.NivelEvidencia;
-                prescricao_id: string;
-                classe_terapeutica: string;
                 dose: string | null;
                 via: string | null;
                 duracao: string | null;
+                nivel_evidencia: import("@prisma/client").$Enums.NivelEvidencia;
+                prescricao_id: string;
+                classe_terapeutica: string;
                 justificativa: string | null;
                 engine_versao: string;
             }[];
@@ -108,8 +108,8 @@ export declare class ConsultaService {
             id: string;
             criado_em: Date;
             consulta_id: string;
-            score_global: number;
             molecula: string;
+            score_global: number;
             percentual: string;
             classificacao: string;
             resumo_executivo: string;
@@ -170,8 +170,8 @@ export declare class ConsultaService {
         criado_em: Date;
         atualizado_em: Date;
         cid: string;
-        diretriz_id: string | null;
         molecula: string;
+        diretriz_id: string | null;
         indicacao: string;
         tipo_estudo: string;
         fonte: string;

@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsObject, IsEnum } from 'class-validator';
+import { IsString, IsOptional, IsObject } from 'class-validator';
 
 export class CriarConsultaDto {
   @IsOptional()
@@ -50,4 +50,22 @@ export class CriarPrescricaoDto {
 
   @IsOptional()
   validade_dias?: number;
+}
+
+/**
+ * Correção de vulnerabilidade: o endpoint POST /risco recebia um tipo
+ * inline (`{ consulta_id: string; score: Record<string, unknown> }`) sem
+ * classe decorada por class-validator — a ValidationPipe global
+ * (whitelist/forbidNonWhitelisted) não consegue aplicar suas proteções a um
+ * tipo que não é uma classe reconhecida em tempo de execução. Isso não
+ * habilitava escalada de privilégio por si só, mas enfraquecia a validação
+ * de entrada nesse endpoint em relação aos demais. Corrigido com um DTO
+ * real.
+ */
+export class SalvarRiscoDto {
+  @IsString()
+  consulta_id: string;
+
+  @IsObject()
+  score: Record<string, unknown>;
 }

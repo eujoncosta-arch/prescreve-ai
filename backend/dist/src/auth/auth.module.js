@@ -14,6 +14,7 @@ const config_1 = require("@nestjs/config");
 const auth_service_1 = require("./auth.service");
 const auth_controller_1 = require("./auth.controller");
 const jwt_strategy_1 = require("./jwt.strategy");
+const jwt_secrets_util_1 = require("./jwt-secrets.util");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -25,7 +26,7 @@ exports.AuthModule = AuthModule = __decorate([
                 imports: [config_1.ConfigModule],
                 inject: [config_1.ConfigService],
                 useFactory: (config) => ({
-                    secret: config.get('JWT_SECRET', 'prescreve-ai-secret-change-in-prod'),
+                    secret: (0, jwt_secrets_util_1.getRequiredSecret)(config, 'JWT_SECRET'),
                     signOptions: { expiresIn: '15m' },
                 }),
             }),

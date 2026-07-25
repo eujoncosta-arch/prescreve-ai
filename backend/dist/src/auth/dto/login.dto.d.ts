@@ -1,3 +1,4 @@
+import { Perfil } from '@prisma/client';
 export declare class LoginDto {
     email: string;
     senha: string;
@@ -9,7 +10,14 @@ export declare class RefreshDto {
 export declare class RegisterDto {
     email: string;
     senha: string;
-    perfil: string;
+    crm?: string;
+    especialidade?: string;
+    uf?: string;
+}
+export declare class CriarUsuarioPrivilegiadoDto {
+    email: string;
+    senha: string;
+    perfil: Perfil;
     crm?: string;
     especialidade?: string;
     uf?: string;

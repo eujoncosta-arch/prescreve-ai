@@ -23,3 +23,7 @@ export declare class CriarPrescricaoDto {
     orientacoes?: string;
     validade_dias?: number;
 }
+export declare class SalvarRiscoDto {
+    consulta_id: string;
+    score: Record<string, unknown>;
+}

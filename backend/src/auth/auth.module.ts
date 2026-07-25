@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './jwt.strategy';
+import { getRequiredSecret } from './jwt-secrets.util';
 
 @Module({
   imports: [
@@ -12,8 +13,12 @@ import { JwtStrategy } from './jwt.strategy';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
+      // Sem fallback fixo — ver jwt-secrets.util.ts. AuthService.gerarTokens()
+      // sempre passa `secret`/`refreshSecret` explicitamente por chamada; este
+      // default de módulo só protege contra uso futuro de this.jwt.sign()/
+      // verify() sem override explícito.
       useFactory: (config: ConfigService) => ({
-        secret: config.get<string>('JWT_SECRET', 'prescreve-ai-secret-change-in-prod'),
+        secret: getRequiredSecret(config, 'JWT_SECRET'),
         signOptions: { expiresIn: '15m' },
       }),
     }),

@@ -9,8 +9,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RegisterDto = exports.RefreshDto = exports.LoginDto = void 0;
+exports.CriarUsuarioPrivilegiadoDto = exports.RegisterDto = exports.RefreshDto = exports.LoginDto = void 0;
 const class_validator_1 = require("class-validator");
+const client_1 = require("@prisma/client");
 class LoginDto {
     email;
     senha;
@@ -42,7 +43,6 @@ __decorate([
 class RegisterDto {
     email;
     senha;
-    perfil;
     crm;
     especialidade;
     uf;
@@ -58,10 +58,6 @@ __decorate([
     __metadata("design:type", String)
 ], RegisterDto.prototype, "senha", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], RegisterDto.prototype, "perfil", void 0);
-__decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
@@ -76,4 +72,43 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "uf", void 0);
+class CriarUsuarioPrivilegiadoDto {
+    email;
+    senha;
+    perfil;
+    crm;
+    especialidade;
+    uf;
+}
+exports.CriarUsuarioPrivilegiadoDto = CriarUsuarioPrivilegiadoDto;
+__decorate([
+    (0, class_validator_1.IsEmail)(),
+    __metadata("design:type", String)
+], CriarUsuarioPrivilegiadoDto.prototype, "email", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MinLength)(8),
+    __metadata("design:type", String)
+], CriarUsuarioPrivilegiadoDto.prototype, "senha", void 0);
+__decorate([
+    (0, class_validator_1.IsEnum)(client_1.Perfil, {
+        message: 'perfil deve ser um dos valores válidos do enum Perfil',
+    }),
+    __metadata("design:type", String)
+], CriarUsuarioPrivilegiadoDto.prototype, "perfil", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CriarUsuarioPrivilegiadoDto.prototype, "crm", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CriarUsuarioPrivilegiadoDto.prototype, "especialidade", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CriarUsuarioPrivilegiadoDto.prototype, "uf", void 0);
 //# sourceMappingURL=login.dto.js.map

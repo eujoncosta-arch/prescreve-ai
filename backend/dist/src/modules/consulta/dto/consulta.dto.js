@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CriarPrescricaoDto = exports.CriarDiagnosticoDto = exports.CriarConsultaDto = void 0;
+exports.SalvarRiscoDto = exports.CriarPrescricaoDto = exports.CriarDiagnosticoDto = exports.CriarConsultaDto = void 0;
 const class_validator_1 = require("class-validator");
 class CriarConsultaDto {
     paciente_hash;
@@ -80,4 +80,17 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Number)
 ], CriarPrescricaoDto.prototype, "validade_dias", void 0);
+class SalvarRiscoDto {
+    consulta_id;
+    score;
+}
+exports.SalvarRiscoDto = SalvarRiscoDto;
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], SalvarRiscoDto.prototype, "consulta_id", void 0);
+__decorate([
+    (0, class_validator_1.IsObject)(),
+    __metadata("design:type", Object)
+], SalvarRiscoDto.prototype, "score", void 0);
 //# sourceMappingURL=consulta.dto.js.map
