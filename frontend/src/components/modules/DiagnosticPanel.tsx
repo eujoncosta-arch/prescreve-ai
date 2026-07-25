@@ -27,6 +27,7 @@ import { toast } from 'sonner';
 import { MOCK_SAFETY } from '@/lib/mock-data';
 import { CDS_BASE_CONHECIMENTO } from '@/lib/clinical-decision-support';
 import { getTherapeuticForCondition } from '@/lib/clinical-therapeutics';
+import { eligibilityContextFromAnamnesis } from '@/lib/therapeutic-class-expansion';
 
 const PROB_COLORS: Record<string, string> = {
   alta: 'bg-red-100 text-red-700 border-red-200',
@@ -72,9 +73,10 @@ export function DiagnosticPanel({ onComplete }: DiagnosticPanelProps) {
     await new Promise(r => setTimeout(r, 1000));
 
     const diagnosticoLabel = `${hipotese.nome} (${hipotese.cid10 ?? ''})`;
+    const eligibilityContext = eligibilityContextFromAnamnesis(state.activeConsultation?.anamnese);
     const therapeutic =
-      getTherapeuticForCondition(hipotese.id, diagnosticoLabel) ??
-      getTherapeuticForCondition(hipotese.cid10 ?? '', diagnosticoLabel);
+      getTherapeuticForCondition(hipotese.id, diagnosticoLabel, eligibilityContext) ??
+      getTherapeuticForCondition(hipotese.cid10 ?? '', diagnosticoLabel, eligibilityContext);
 
     dispatch({ type: 'SELECT_DIAGNOSIS', payload: diagnosticoLabel });
     if (therapeutic) {

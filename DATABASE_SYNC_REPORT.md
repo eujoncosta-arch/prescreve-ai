@@ -1,6 +1,6 @@
 # DATABASE_SYNC_REPORT
 
-**Gerado:** 2026-07-13T23:17:44.416Z · **Publicação:** ✅ liberada
+**Gerado:** 2026-07-25T17:17:04.324Z · **Publicação:** ✅ liberada
 
 ## Resumo
 

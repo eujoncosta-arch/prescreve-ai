@@ -5,6 +5,7 @@
 // ============================================================
 
 import type { TherapeuticPlan, TherapeuticSuggestion } from './types';
+import { expandTherapeuticPlan, type EligibilityContext } from './therapeutic-class-expansion';
 
 // ─── HELPER ──────────────────────────────────────────────────
 
@@ -460,15 +461,22 @@ const PROTOCOLOS: Record<string, Omit<TherapeuticPlan, 'diagnostico_selecionado'
 export function getTherapeuticForCondition(
   conditionId: string,
   diagnosticoSelecionado: string,
+  eligibilityContext?: EligibilityContext,
 ): TherapeuticPlan | null {
   const protocolo = PROTOCOLOS[conditionId];
   if (!protocolo) return null;
 
-  return {
+  const basePlan: TherapeuticPlan = {
     diagnostico_selecionado: diagnosticoSelecionado,
     preferencia_laboratorio: 'sem_preferencia',
     ...protocolo,
   };
+
+  // Cobertura de recomendação: expande a conduta com moléculas elegíveis da
+  // mesma classe terapêutica já citada no protocolo, descobertas via
+  // drugRepository (pharma-core) — nunca remove as sugestões curadas acima.
+  const { plan } = expandTherapeuticPlan(basePlan, conditionId, eligibilityContext);
+  return plan;
 }
 
 // ─── Cross-engine: Evidence + Conflict + Registry integration ─
