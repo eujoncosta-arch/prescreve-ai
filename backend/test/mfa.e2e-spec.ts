@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { generate, generateSecret } from 'otplib';
+import { authenticator } from 'otplib';
 import * as bcrypt from 'bcrypt';
 import request from 'supertest';
 import { App } from 'supertest/types';
@@ -33,7 +33,7 @@ describe('MFA (e2e)', () => {
   const SENHA_PLANA = 'senhaSuperForte123';
   const SEM_MFA_ID = 'usuario-sem-mfa';
   const COM_MFA_ID = 'usuario-com-mfa';
-  const secretRaw = generateSecret();
+  const secretRaw = authenticator.generateSecret();
 
   const usuariosFakeDb: Record<string, Record<string, unknown>> = {};
 
@@ -154,7 +154,7 @@ describe('MFA (e2e)', () => {
   });
 
   it('MFA ativo + código válido → sucesso (200, com tokens)', async () => {
-    const codigo = await generate({ secret: secretRaw });
+    const codigo = authenticator.generate(secretRaw);
     const res = await request(app.getHttpServer())
       .post('/auth/login')
       .send({ email: 'com-mfa@x.com', senha: SENHA_PLANA, mfa_code: codigo })
@@ -171,7 +171,7 @@ describe('MFA (e2e)', () => {
   });
 
   it('segredo MFA nunca é exposto na resposta de login (sucesso ou falha)', async () => {
-    const codigo = await generate({ secret: secretRaw });
+    const codigo = authenticator.generate(secretRaw);
     const res = await request(app.getHttpServer())
       .post('/auth/login')
       .send({ email: 'com-mfa@x.com', senha: SENHA_PLANA, mfa_code: codigo })

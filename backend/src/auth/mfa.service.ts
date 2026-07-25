@@ -5,7 +5,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { generateSecret, generateURI, verify } from 'otplib';
+import { authenticator } from 'otplib';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
@@ -40,11 +40,16 @@ import type { Usuario } from '@prisma/client';
 // usuário (independente de rotação de IP).
 // ============================================================
 
-const TOTP_EPOCH_TOLERANCE_SEGUNDOS = 30; // ±1 janela de 30s (RFC 6238 usual)
 const MFA_MAX_FALHAS = 5;
 const MFA_BLOQUEIO_MINUTOS = 15;
 const RECOVERY_CODE_COUNT = 10;
 const RECOVERY_CODE_BCRYPT_ROUNDS = 12;
+
+// Tolerância de ±1 janela de 30s (RFC 6238 usual — step padrão do otplib é
+// 30s). `authenticator` é o singleton exportado por `otplib`; `options` é
+// configuração compartilhada (não por chamada), por isso é ajustada uma
+// única vez aqui, no carregamento do módulo.
+authenticator.options = { window: 1 };
 
 export interface IniciarAtivacaoResult {
   otpauth_url: string;
@@ -78,12 +83,12 @@ export class MfaService {
       );
     }
 
-    const secret = generateSecret();
-    const otpauth_url = generateURI({
-      issuer: 'Prescreve-AI',
-      label: usuario.email,
+    const secret = authenticator.generateSecret();
+    const otpauth_url = authenticator.keyuri(
+      usuario.email,
+      'Prescreve-AI',
       secret,
-    });
+    );
 
     const encrypted = encryptMfaSecret(this.config, secret);
     await this.prisma.usuario.update({
@@ -114,13 +119,9 @@ export class MfaService {
     }
 
     const secret = decryptMfaSecret(this.config, usuario.mfa_secret);
-    const resultado = await verify({
-      secret,
-      token: code,
-      epochTolerance: TOTP_EPOCH_TOLERANCE_SEGUNDOS,
-    });
+    const valido = authenticator.check(code, secret);
 
-    if (!resultado.valid) {
+    if (!valido) {
       await this.audit.registrarAuditoria({
         usuario_id: usuarioId,
         tipo: 'mfa_verificacao_falha',
@@ -191,13 +192,12 @@ export class MfaService {
     // em formato não numérico, como um código de recuperação) é tratado como
     // "não é um TOTP válido" — nunca propaga uma exceção não tratada que
     // poderia, por outro bug, ser interpretada como sucesso.
-    const totpValido = await verify({
-      secret,
-      token: code,
-      epochTolerance: TOTP_EPOCH_TOLERANCE_SEGUNDOS,
-    })
-      .then((r) => r.valid)
-      .catch(() => false);
+    let totpValido: boolean;
+    try {
+      totpValido = authenticator.check(code, secret);
+    } catch {
+      totpValido = false;
+    }
 
     if (totpValido) {
       await this.resetarFalhas(usuario.id);

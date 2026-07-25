@@ -6,7 +6,7 @@ import {
   ConflictException,
   BadRequestException,
 } from '@nestjs/common';
-import { generate, generateSecret } from 'otplib';
+import { authenticator } from 'otplib';
 import * as bcrypt from 'bcrypt';
 import { MfaService } from './mfa.service';
 import { PrismaService } from '../prisma/prisma.service';
@@ -121,13 +121,13 @@ describe('MfaService — TOTP real (RFC 6238), nunca "código presente = aceitar
 
   describe('confirmarAtivacao()', () => {
     it('ativa o MFA e gera 10 códigos de recuperação em texto puro (retornados uma única vez) quando o código TOTP é válido', async () => {
-      const secretRaw = generateSecret();
+      const secretRaw = authenticator.generateSecret();
       const encrypted = encryptMfaSecret(config, secretRaw);
       prisma.usuario.findUnique.mockResolvedValueOnce(
         buildUsuario({ mfa_secret: encrypted, mfa_ativo: false }),
       );
 
-      const codigoValido = await generate({ secret: secretRaw });
+      const codigoValido = authenticator.generate(secretRaw);
       const resultado = await service.confirmarAtivacao(
         'usuario-1',
         codigoValido,
@@ -148,7 +148,7 @@ describe('MfaService — TOTP real (RFC 6238), nunca "código presente = aceitar
     });
 
     it('REJEITA ativação com código TOTP inválido — não ativa o MFA', async () => {
-      const secretRaw = generateSecret();
+      const secretRaw = authenticator.generateSecret();
       const encrypted = encryptMfaSecret(config, secretRaw);
       prisma.usuario.findUnique.mockResolvedValueOnce(
         buildUsuario({ mfa_secret: encrypted, mfa_ativo: false }),
@@ -173,7 +173,7 @@ describe('MfaService — TOTP real (RFC 6238), nunca "código presente = aceitar
   // ── Verificação no login — os 10 cenários obrigatórios ────────
 
   describe('verificarCodigoLogin() — validação criptográfica real', () => {
-    const secretRaw = generateSecret();
+    const secretRaw = authenticator.generateSecret();
     let encrypted: string;
 
     beforeEach(() => {
@@ -182,7 +182,7 @@ describe('MfaService — TOTP real (RFC 6238), nunca "código presente = aceitar
 
     it('MFA ativo + código válido → sucesso (não lança)', async () => {
       const usuario = buildUsuario({ mfa_ativo: true, mfa_secret: encrypted });
-      const codigo = await generate({ secret: secretRaw });
+      const codigo = authenticator.generate(secretRaw);
       await expect(
         service.verificarCodigoLogin(usuario, codigo),
       ).resolves.toBeUndefined();
@@ -204,11 +204,10 @@ describe('MfaService — TOTP real (RFC 6238), nunca "código presente = aceitar
 
     it('MFA ativo + código expirado (gerado 1 hora atrás, fora da tolerância de ±30s) → falha', async () => {
       const usuario = buildUsuario({ mfa_ativo: true, mfa_secret: encrypted });
-      const umaHoraAtras = Math.floor(Date.now() / 1000) - 3600;
-      const codigoExpirado = await generate({
-        secret: secretRaw,
-        epoch: umaHoraAtras,
-      });
+      const umaHoraAtrasMs = Date.now() - 3600_000;
+      const codigoExpirado = authenticator
+        .clone({ epoch: umaHoraAtrasMs })
+        .generate(secretRaw);
       await expect(
         service.verificarCodigoLogin(usuario, codigoExpirado),
       ).rejects.toBeInstanceOf(UnauthorizedException);
@@ -267,7 +266,7 @@ describe('MfaService — TOTP real (RFC 6238), nunca "código presente = aceitar
         mfa_falhas_consecutivas: 5,
         mfa_bloqueado_ate: new Date(Date.now() + 15 * 60_000),
       });
-      const codigoValido = await generate({ secret: secretRaw });
+      const codigoValido = authenticator.generate(secretRaw);
       await expect(
         service.verificarCodigoLogin(usuario, codigoValido),
       ).rejects.toBeInstanceOf(UnauthorizedException);
@@ -321,7 +320,7 @@ describe('MfaService — TOTP real (RFC 6238), nunca "código presente = aceitar
   describe('desativar()', () => {
     it('exige senha correta E código MFA válido — desativa somente após reautenticação completa', async () => {
       const senhaHash = await bcrypt.hash('senha-correta', 12);
-      const secretRaw = generateSecret();
+      const secretRaw = authenticator.generateSecret();
       const encrypted = encryptMfaSecret(config, secretRaw);
       prisma.usuario.findUnique.mockResolvedValueOnce(
         buildUsuario({
@@ -330,7 +329,7 @@ describe('MfaService — TOTP real (RFC 6238), nunca "código presente = aceitar
           senha_hash: senhaHash,
         }),
       );
-      const codigo = await generate({ secret: secretRaw });
+      const codigo = authenticator.generate(secretRaw);
 
       await service.desativar('usuario-1', 'senha-correta', codigo);
 
@@ -341,7 +340,7 @@ describe('MfaService — TOTP real (RFC 6238), nunca "código presente = aceitar
 
     it('rejeita desativação com senha incorreta, mesmo com código MFA válido', async () => {
       const senhaHash = await bcrypt.hash('senha-correta', 12);
-      const secretRaw = generateSecret();
+      const secretRaw = authenticator.generateSecret();
       const encrypted = encryptMfaSecret(config, secretRaw);
       prisma.usuario.findUnique.mockResolvedValueOnce(
         buildUsuario({
@@ -350,7 +349,7 @@ describe('MfaService — TOTP real (RFC 6238), nunca "código presente = aceitar
           senha_hash: senhaHash,
         }),
       );
-      const codigo = await generate({ secret: secretRaw });
+      const codigo = authenticator.generate(secretRaw);
 
       await expect(
         service.desativar('usuario-1', 'senha-errada', codigo),
@@ -359,7 +358,7 @@ describe('MfaService — TOTP real (RFC 6238), nunca "código presente = aceitar
 
     it('rejeita desativação com código MFA inválido, mesmo com senha correta', async () => {
       const senhaHash = await bcrypt.hash('senha-correta', 12);
-      const secretRaw = generateSecret();
+      const secretRaw = authenticator.generateSecret();
       const encrypted = encryptMfaSecret(config, secretRaw);
       prisma.usuario.findUnique.mockResolvedValueOnce(
         buildUsuario({
@@ -388,12 +387,12 @@ describe('MfaService — TOTP real (RFC 6238), nunca "código presente = aceitar
     });
 
     it('confirmarAtivacao() nunca retorna o segredo TOTP na resposta — apenas os códigos de recuperação', async () => {
-      const secretRaw = generateSecret();
+      const secretRaw = authenticator.generateSecret();
       const encrypted = encryptMfaSecret(config, secretRaw);
       prisma.usuario.findUnique.mockResolvedValueOnce(
         buildUsuario({ mfa_secret: encrypted }),
       );
-      const codigo = await generate({ secret: secretRaw });
+      const codigo = authenticator.generate(secretRaw);
       const resultado = await service.confirmarAtivacao('usuario-1', codigo);
 
       expect(JSON.stringify(resultado)).not.toContain(secretRaw);

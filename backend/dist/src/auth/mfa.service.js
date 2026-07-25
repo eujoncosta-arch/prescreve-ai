@@ -51,11 +51,11 @@ const crypto = __importStar(require("crypto"));
 const prisma_service_1 = require("../prisma/prisma.service");
 const audit_service_1 = require("../modules/audit/audit.service");
 const mfa_crypto_util_1 = require("./mfa-crypto.util");
-const TOTP_EPOCH_TOLERANCE_SEGUNDOS = 30;
 const MFA_MAX_FALHAS = 5;
 const MFA_BLOQUEIO_MINUTOS = 15;
 const RECOVERY_CODE_COUNT = 10;
 const RECOVERY_CODE_BCRYPT_ROUNDS = 12;
+otplib_1.authenticator.options = { window: 1 };
 let MfaService = class MfaService {
     prisma;
     config;
@@ -74,12 +74,8 @@ let MfaService = class MfaService {
         if (usuario.mfa_ativo) {
             throw new common_1.ConflictException('MFA já está ativo para este usuário — desative antes de reconfigurar.');
         }
-        const secret = (0, otplib_1.generateSecret)();
-        const otpauth_url = (0, otplib_1.generateURI)({
-            issuer: 'Prescreve-AI',
-            label: usuario.email,
-            secret,
-        });
+        const secret = otplib_1.authenticator.generateSecret();
+        const otpauth_url = otplib_1.authenticator.keyuri(usuario.email, 'Prescreve-AI', secret);
         const encrypted = (0, mfa_crypto_util_1.encryptMfaSecret)(this.config, secret);
         await this.prisma.usuario.update({
             where: { id: usuarioId },
@@ -100,12 +96,8 @@ let MfaService = class MfaService {
             throw new common_1.BadRequestException('Nenhum enrollment de MFA pendente — chame /auth/mfa/setup primeiro.');
         }
         const secret = (0, mfa_crypto_util_1.decryptMfaSecret)(this.config, usuario.mfa_secret);
-        const resultado = await (0, otplib_1.verify)({
-            secret,
-            token: code,
-            epochTolerance: TOTP_EPOCH_TOLERANCE_SEGUNDOS,
-        });
-        if (!resultado.valid) {
+        const valido = otplib_1.authenticator.check(code, secret);
+        if (!valido) {
             await this.audit.registrarAuditoria({
                 usuario_id: usuarioId,
                 tipo: 'mfa_verificacao_falha',
@@ -146,13 +138,13 @@ let MfaService = class MfaService {
             throw new common_1.UnauthorizedException('Muitas tentativas de MFA inválidas — tente novamente mais tarde.');
         }
         const secret = (0, mfa_crypto_util_1.decryptMfaSecret)(this.config, usuario.mfa_secret);
-        const totpValido = await (0, otplib_1.verify)({
-            secret,
-            token: code,
-            epochTolerance: TOTP_EPOCH_TOLERANCE_SEGUNDOS,
-        })
-            .then((r) => r.valid)
-            .catch(() => false);
+        let totpValido;
+        try {
+            totpValido = otplib_1.authenticator.check(code, secret);
+        }
+        catch {
+            totpValido = false;
+        }
         if (totpValido) {
             await this.resetarFalhas(usuario.id);
             return;
