@@ -160,8 +160,21 @@ export const CONDITION_CLASS_KEYS: Record<string, string[]> = {
   has: ['IECA', 'BRA', 'BCC', 'TIAZIDICO'],
   dm2: ['BIGUANIDA', 'SGLT2', 'DPP4', 'GLP1'],
   dislipidemia: ['ESTATINA', 'HIPOLIPEMIANTE'],
-  asma: ['ICS_LABA', 'SABA', 'ICS', 'ANTAGONISTA_LEUCOTRIENO'],
-  dpoc: ['LAMA', 'SABA', 'LABA_LAMA', 'LABA', 'SAMA'],
+  // RM-29 (Global Condition–Drug Coverage Audit): LAMA adicionado — GINA 2024
+  // reconhece LAMA (tiotrópio) como add-on em asma grave não controlada
+  // (Step 4–5), sourced na própria indicação da molécula na base canônica.
+  // NÃO adicionamos LABA isolado a asma: LABA em monoterapia é contraindicado
+  // em asma (risco de exacerbação grave/morte — bula/GINA), mesmo havendo
+  // moléculas LABA na base com texto de indicação em asma — essas SEMPRE
+  // exigem associação com ICS, já coberta pela classe ICS_LABA existente.
+  asma: ['ICS_LABA', 'SABA', 'ICS', 'ANTAGONISTA_LEUCOTRIENO', 'LAMA'],
+  // RM-29: ICS_LABA adicionado a DPOC — GOLD 2024/2025 recomenda ICS+LABA em
+  // pacientes do Grupo E com eosinofilia (≥300 céls/µL) e/ou exacerbações
+  // frequentes, sourced nas próprias indicações das combinações fixas já
+  // existentes na base. NÃO adicionamos ICS isolado a DPOC: GOLD contraindica
+  // ICS em monoterapia em DPOC (sem benefício comprovado e risco aumentado de
+  // pneumonia) — apenas as combinações fixas ICS/LABA já elegíveis.
+  dpoc: ['LAMA', 'SABA', 'LABA_LAMA', 'LABA', 'SAMA', 'ICS_LABA'],
   // RM-28 (Heart Failure Therapeutic Coverage Completion): SGLT2 adicionado —
   // dapagliflozina e empagliflozina já existem na base canônica com indicação
   // própria sourced para IC (ver pharma-database.ts: guidelines_referencia
@@ -169,7 +182,15 @@ export const CONDITION_CLASS_KEYS: Record<string, string[]> = {
   // sua classe já era mapeada por CLASS_KEY_MAP ('SGLT-2'/'iSGLT2' → 'SGLT2')
   // — só não eram descobertas para ICC por ausência nesta lista.
   icc: ['IECA', 'BETABLOQUEADOR', 'ARM', 'DIURETICO_ALCA', 'BRA', 'ARNI', 'SGLT2'],
-  sca: ['ANTIAGREGANTE'],
+  // RM-29: SCA estava restrita a ANTIAGREGANTE, mas a terapia farmacológica
+  // pós-SCA (prevenção secundária/pós-IAM) padrão em diretriz (ESC 2023 ACS
+  // Guidelines) inclui estatina de alta intensidade, betabloqueador, IECA/BRA
+  // e ARM (em subgrupo com FE reduzida/diabetes) — todas já sourced nas
+  // próprias indicações das moléculas já existentes na base ("Pós-IAM",
+  // "Síndrome coronariana aguda"). Ver guideline-class-validation.ts para o
+  // papel clínico e o subgrupo de cada classe (nenhuma é 1ª linha universal
+  // sem contexto — ver overrides RM-29).
+  sca: ['ANTIAGREGANTE', 'ESTATINA', 'BETABLOQUEADOR', 'IECA', 'BRA', 'ARM'],
   hipotireoidismo: ['HORMONIO_TIREOIDIANO'],
   faringoamigdalite: ['AMINOPENICILINA'],
   pac: ['AMINOPENICILINA'],

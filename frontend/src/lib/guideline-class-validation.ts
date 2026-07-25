@@ -322,6 +322,130 @@ export const CLASS_ROLE_OVERRIDES: ClassRoleValidation[] = [
     },
     status_validacao: 'confirmado',
   },
+
+  // ════════════════════════════════════════════════════════════════════
+  // RM-29 (Global Condition–Drug Coverage Audit) — SCA. A condição estava
+  // restrita a ANTIAGREGANTE; a auditoria global encontrou 4 classes com
+  // moléculas já sourced na base para "Pós-IAM"/"Síndrome coronariana
+  // aguda" que nunca eram descobertas por ausência de mapeamento
+  // condição→classe (mesmo padrão de lacuna do RM-28/iSGLT2). Fonte comum:
+  // ESC 2023 ACS Guidelines (terapia farmacológica pós-SCA/prevenção
+  // secundária). Nenhuma é 1ª linha universal sem contexto — subgrupo
+  // (FE reduzida/diabetes) registrado como contexto textual, mesmo padrão
+  // já usado para ICC desde o RM-27.1 (não é filtro programático).
+  // ════════════════════════════════════════════════════════════════════
+  {
+    conditionId: 'sca',
+    classKey: 'ESTATINA',
+    papel_clinico: 'prognostic_modifier',
+    populacao: ['prevencao_secundaria'],
+    contexto:
+      'Estatina de alta intensidade é recomendação Classe I para todo paciente pós-SCA, independentemente do LDL basal — reduz eventos cardiovasculares maiores em prevenção secundária. Não depende de subgrupo de fração de ejeção (diferente das demais classes deste RM).',
+    fonte: {
+      organizacao: 'European Society of Cardiology (ESC)',
+      titulo: '2023 ESC Guidelines for the management of acute coronary syndromes',
+      ano: 2023,
+      identificador: 'doi.org/10.1093/eurheartj/ehad191',
+    },
+    status_validacao: 'confirmado',
+  },
+  {
+    conditionId: 'sca',
+    classKey: 'BETABLOQUEADOR',
+    papel_clinico: 'prognostic_modifier',
+    populacao: ['fe_reduzida'],
+    contexto:
+      'Betabloqueador reduz mortalidade pós-IAM, com benefício mais consistente em pacientes com disfunção ventricular (FE reduzida) — recomendação Classe I na diretriz atual, historicamente extrapolada de ensaios mais antigos para a população geral pós-IAM. Molécula específica precisa ter indicação própria sourced para "Pós-IAM" (já validado a montante pelo RM-25.1) — o benefício de classe não se estende a moléculas sem esse dado.',
+    fonte: {
+      organizacao: 'European Society of Cardiology (ESC)',
+      titulo: '2023 ESC Guidelines for the management of acute coronary syndromes',
+      ano: 2023,
+      identificador: 'doi.org/10.1093/eurheartj/ehad191',
+    },
+    status_validacao: 'confirmado',
+  },
+  {
+    conditionId: 'sca',
+    classKey: 'IECA',
+    papel_clinico: 'prognostic_modifier',
+    populacao: ['fe_reduzida'],
+    contexto:
+      'IECA reduz mortalidade e remodelamento ventricular pós-IAM, com benefício mais robusto em IAM anterior, FE reduzida ou diabetes — recomendação Classe I. Não é indicação universal para toda SCA independente de contexto — ver também o papel já validado de IECA em ICC (RM-27), consistente com este.',
+    fonte: {
+      organizacao: 'European Society of Cardiology (ESC)',
+      titulo: '2023 ESC Guidelines for the management of acute coronary syndromes',
+      ano: 2023,
+      identificador: 'doi.org/10.1093/eurheartj/ehad191',
+    },
+    status_validacao: 'confirmado',
+  },
+  {
+    conditionId: 'sca',
+    classKey: 'BRA',
+    papel_clinico: 'prognostic_modifier',
+    populacao: ['fe_reduzida'],
+    contexto:
+      'BRA é alternativa validada ao IECA pós-IAM quando este não é tolerado (VALIANT — valsartana não inferior a captopril) — mesmo papel de "alternativa a IECA" já documentado para BRA em ICC (RM-27.1), não substituto de rotina quando IECA é tolerado.',
+    fonte: {
+      organizacao: 'European Society of Cardiology (ESC)',
+      titulo: '2023 ESC Guidelines for the management of acute coronary syndromes (VALIANT)',
+      ano: 2023,
+      identificador: 'doi.org/10.1093/eurheartj/ehad191',
+    },
+    status_validacao: 'confirmado',
+  },
+  {
+    conditionId: 'sca',
+    classKey: 'ARM',
+    papel_clinico: 'prognostic_modifier',
+    populacao: ['fe_reduzida', 'diabetes'],
+    contexto:
+      'ARM (eplerenona) reduz mortalidade pós-IAM especificamente no subgrupo com FE ≤ 40% e sinais de IC ou diabetes (EPHESUS) — não é indicação para todo paciente com SCA, apenas para este subgrupo específico, adicionado a IECA/ARNI + betabloqueador já em uso.',
+    fonte: {
+      organizacao: 'European Society of Cardiology (ESC)',
+      titulo: '2023 ESC Guidelines for the management of acute coronary syndromes (EPHESUS)',
+      ano: 2023,
+      identificador: 'doi.org/10.1093/eurheartj/ehad191',
+    },
+    status_validacao: 'confirmado',
+  },
+
+  // ════════════════════════════════════════════════════════════════════
+  // RM-29 — Asma: LAMA (tiotrópio) como add-on em asma grave não controlada.
+  // RM-29 — DPOC: ICS_LABA para Grupo E com eosinofilia/exacerbações
+  // frequentes. Ambas seguem o mesmo padrão do SABA/asma-DPOC (RM-27):
+  // classe elegível, mas papel contextual — não 1ª linha geral.
+  // ════════════════════════════════════════════════════════════════════
+  {
+    conditionId: 'asma',
+    classKey: 'LAMA',
+    papel_clinico: 'contextual',
+    populacao: ['exacerbador_frequente'],
+    contexto:
+      'LAMA (tiotrópio) é recomendado pela GINA como terapia add-on em asma grave não controlada (Step 4–5), sempre em associação a ICS — nunca como monoterapia ou terapia inicial. Papel contextual (subgrupo grave/não controlado), não 1ª linha geral de asma.',
+    fonte: {
+      organizacao: 'Global Initiative for Asthma (GINA)',
+      titulo: 'Global Strategy for Asthma Management and Prevention — Step 4–5 add-on therapy',
+      ano: 2024,
+      identificador: 'ginasthma.org',
+    },
+    status_validacao: 'reclassificado',
+  },
+  {
+    conditionId: 'dpoc',
+    classKey: 'ICS_LABA',
+    papel_clinico: 'contextual',
+    populacao: ['exacerbador_frequente'],
+    contexto:
+      'ICS/LABA (combinação fixa) é recomendado pela GOLD especificamente para o Grupo E com eosinofilia (≥300 céls/µL) e/ou exacerbações frequentes — não é terapia inicial para a maioria dos pacientes com DPOC (que iniciam com LAMA/LABA broncodilatador). Papel contextual (subgrupo eosinofílico/exacerbador), não 1ª linha geral. Deliberadamente NÃO foi adicionado ICS isolado (sem LABA) a DPOC — GOLD contraindica ICS em monoterapia nesta condição.',
+    fonte: {
+      organizacao: 'Global Initiative for Chronic Obstructive Lung Disease (GOLD)',
+      titulo: 'Global Strategy for Prevention, Diagnosis and Management of COPD — Group E',
+      ano: 2024,
+      identificador: 'goldcopd.org',
+    },
+    status_validacao: 'reclassificado',
+  },
 ];
 
 const overrideIndex = new Map<string, ClassRoleValidation>(

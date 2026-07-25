@@ -55,15 +55,18 @@ describe('RM-27 · 2/3) Classe validada como contextual não é promovida a prim
 
   it('demais classes de asma/DPOC (sem override) permanecem primeira_linha — o rebaixamento é seletivo, não geral', () => {
     const plan = getTherapeuticForCondition('asma', 'Asma (J45)', {})!;
-    const naoSaba = plan.farmacologico.filter((s) => !s.classe_terapeutica.includes('SABA'));
-    expect(naoSaba.length).toBeGreaterThan(0);
-    expect(naoSaba.every((s) => s.prioridade!.tier === 'primeira_linha')).toBe(true);
+    // SABA e LAMA (RM-29 — add-on GINA Step 4-5) têm override contextual próprio; as demais classes (ICS, ICS/LABA, antileucotrieno) não têm override e permanecem primeira_linha.
+    const semOverrideContextual = plan.farmacologico.filter(
+      (s) => !s.classe_terapeutica.includes('SABA') && !s.classe_terapeutica.includes('LAMA'),
+    );
+    expect(semOverrideContextual.length).toBeGreaterThan(0);
+    expect(semOverrideContextual.every((s) => s.prioridade!.tier === 'primeira_linha')).toBe(true);
   });
 });
 
 describe('RM-27 · 4) Classe não validada (sem override) não é automaticamente expandida ou promovida', () => {
-  it('condições sem entradas em CLASS_ROLE_OVERRIDES mantêm comportamento idêntico ao RM-26.1 (dm2 passou a ter overrides no RM-27.1 — ver guideline-class-validation-27-1.test.ts)', () => {
-    const condicoesSemOverride = ['dislipidemia', 'sca'];
+  it('condições sem entradas em CLASS_ROLE_OVERRIDES mantêm comportamento idêntico ao RM-26.1 (dm2 desde o RM-27.1; sca desde o RM-29 — ver testes respectivos)', () => {
+    const condicoesSemOverride = ['dislipidemia'];
     const classesComOverride = new Set(CLASS_ROLE_OVERRIDES.map((o) => o.conditionId));
     for (const c of condicoesSemOverride) {
       expect(classesComOverride.has(c)).toBe(false);
