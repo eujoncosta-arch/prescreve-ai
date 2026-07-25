@@ -113,7 +113,8 @@ const CLASS_KEY_MAP: Record<string, string> = {
   'Aminopenicilina': 'AMINOPENICILINA',
 };
 
-const CLASS_LABELS: Record<string, string> = {
+/** Exportado para reuso pelo motor de priorização (RM-26.1). */
+export const CLASS_LABELS: Record<string, string> = {
   IECA: 'Inibidor da Enzima Conversora de Angiotensina (IECA)',
   BRA: 'Bloqueador do Receptor de Angiotensina II (BRA)',
   BCC: 'Bloqueador de Canal de Cálcio (BCC)',
@@ -141,7 +142,8 @@ const CLASS_LABELS: Record<string, string> = {
   AMINOPENICILINA: 'Aminopenicilina',
 };
 
-function classKeyOf(rawClasse: string): string | null {
+/** Exportado para reuso pelo motor de priorização (RM-26.1) — evita duplicar o mapa de classes. */
+export function classKeyOf(rawClasse: string): string | null {
   return CLASS_KEY_MAP[rawClasse] ?? null;
 }
 
@@ -153,7 +155,8 @@ function classKeyOf(rawClasse: string): string | null {
 // Não é uma lista nova de classes clínicas — é a promoção do texto livre já
 // escrito pelo time clínico para chaves estruturadas e pesquisáveis.
 
-const CONDITION_CLASS_KEYS: Record<string, string[]> = {
+/** Exportado para reuso pelo motor de priorização (RM-26.1) — é a mesma estrutura, sem duplicação. */
+export const CONDITION_CLASS_KEYS: Record<string, string[]> = {
   has: ['IECA', 'BRA', 'BCC', 'TIAZIDICO'],
   dm2: ['BIGUANIDA', 'SGLT2', 'DPP4', 'GLP1'],
   dislipidemia: ['ESTATINA', 'HIPOLIPEMIANTE'],

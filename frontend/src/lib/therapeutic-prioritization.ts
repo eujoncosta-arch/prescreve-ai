@@ -1,11 +1,23 @@
 // ============================================================
-// PRESCREVE-AI — RM-26: Priorização Clínica da Conduta Farmacológica
+// PRESCREVE-AI — RM-26 / RM-26.1: Priorização Clínica da Conduta Farmacológica
 //
-// PROBLEMA: a expansão de cobertura (RM-25.1 / therapeutic-class-expansion.ts)
-// tornou o sistema abrangente (ex.: HAS 2 → 15 opções), mas a ORDEM em que as
-// opções aparecem é puramente estrutural (ordem de escrita do protocolo +
-// ordem de iteração do drugRepository) — não reflete relevância clínica para
-// o paciente específico.
+// PROBLEMA (RM-26): a expansão de cobertura (RM-25.1) tornou o sistema
+// abrangente (ex.: HAS 2 → 15 opções), mas a ORDEM em que as opções aparecem
+// é puramente estrutural — não reflete relevância clínica.
+//
+// LIMITAÇÃO DO RM-26 (corrigida no RM-26.1): o Nível 1 exigia
+// comorbidade + diretriz estruturada SIMULTANEAMENTE, e o Nível 2 era apenas
+// o "else" residual — sem checagem POSITIVA de que a molécula é reconhecida
+// como 1ª linha PARA A CONDIÇÃO. Um paciente sem comorbidade específica
+// via 100% das opções empilhadas sem essa distinção sendo tornada explícita.
+//
+// RM-26.1 introduz DOIS NÍVEIS de julgamento, explícitos e auditáveis:
+//   A) PRIORIDADE DA CONDIÇÃO — a classe da molécula é uma das classes já
+//      reconhecidas como elegíveis/1ª linha para esta condição
+//      (CONDITION_CLASS_KEYS, reaproveitado de therapeutic-class-expansion.ts
+//      — a mesma estrutura que já seleciona quais classes expandir).
+//   B) PRIORIDADE INDIVIDUAL — a molécula tem uma vantagem ESPECÍFICA para
+//      ESTE paciente (indicação própria cita a comorbidade real da anamnese).
 //
 // ESTE MÓDULO NÃO SUBSTITUI A ELEGIBILIDADE (isEligible/entityCoversCondition
 // em therapeutic-class-expansion.ts continuam sendo o único portão de
@@ -13,9 +25,17 @@
 // decide, de forma determinística e auditável, em qual dos 3 níveis cada
 // opção entra:
 //
-//   Nível 1 — preferencial        (maior adequação a ESTE paciente)
-//   Nível 2 — primeira_linha      (clinicamente apropriado, sem destaque específico)
+//   Nível 1 — preferencial        (vantagem individual verificável p/ ESTE paciente)
+//   Nível 2 — primeira_linha      (classe reconhecida como 1ª linha PARA A CONDIÇÃO)
 //   Nível 3 — contextual          (requer monitoramento/ressalva — não é 1ª escolha)
+//
+// PRECEDÊNCIA (spec RM-26.1):
+//   1) exclusão de segurança          → já resolvida a montante (RM-25.1)
+//   2) elegibilidade/indicação        → já resolvida a montante (RM-25.1)
+//   3) cautela clínica                → Nível 3
+//   4) vantagem individual            → Nível 1
+//   5) 1ª linha da condição           → Nível 2
+//   6) fallback conservador           → Nível 2 (nunca inventa, nunca exclui aqui)
 //
 // Não é um score numérico opaco: é uma árvore de decisão determinística sobre
 // sinais REAIS já existentes na DrugEntity/Anamnesis — nenhum peso inventado,
@@ -24,8 +44,9 @@
 
 import { drugRepository } from './pharma-core';
 import type { DrugEntity } from './pharma-core';
-import type { TherapeuticSuggestion, TherapeuticPlan, ClinicalPriority, ClinicalPriorityTier } from './types';
+import type { TherapeuticSuggestion, TherapeuticPlan, ClinicalPriority, ClinicalPriorityTier, EvidenceScope } from './types';
 import type { EligibilityContext } from './therapeutic-class-expansion';
+import { classKeyOf, CONDITION_CLASS_KEYS } from './therapeutic-class-expansion';
 
 function normalize(s: string): string {
   return s
@@ -66,14 +87,35 @@ function resolveEntity(sug: TherapeuticSuggestion): DrugEntity | undefined {
 
 interface Signals {
   hasStructuredGuideline: boolean;
+  /** RM-26.1: escopo real da diretriz — 'molecula' quando o texto sourced cita um ensaio nomeado (ex.: "Estudo LIFE"); 'classe' quando é recomendação genérica da classe terapêutica. Nunca inferido além do texto real (RM-25). */
+  evidenceScope?: EvidenceScope;
+  /** RM-26.1: classe da molécula (canônica) pertence às classes já reconhecidas como elegíveis/1ª linha para esta condição (CONDITION_CLASS_KEYS). */
+  isConditionFirstLine: boolean;
   hasComorbidityMatch: string[]; // comorbidades (texto da anamnese) encontradas na indicação real da molécula
   cautionRenal?: string; // texto real do dosageRules renal quando há cautela (não contraindicação — essa já exclui)
   cautionHepatic?: string;
   nonBlockingInteractionsWithCurrentMeds: { with: string; severity: string }[]; // grave/moderada/leve — 'contraindicado' já é excluído antes
 }
 
+/** Detecta, no texto REAL das referências (RM-25), se há citação de ensaio clínico nomeado — sinal de evidência ESPECÍFICA DA MOLÉCULA, e não apenas da classe. Padrão: "Estudo <NOME>" ou "<NOME-TRIAL>" (ex.: "Estudo LIFE", "EMPA-REG", "HOPE"). Bounded e determinístico — não infere além do texto já sourced. */
+function detectEvidenceScope(entity: DrugEntity): EvidenceScope | undefined {
+  const texts = entity.references.filter((r) => r.type === 'GUIDELINE' || r.type === 'EVIDENCIA').map((r) => r.value);
+  if (texts.length === 0) return undefined;
+  const hasNamedTrial = texts.some((t) => /\bEstudo\s+[A-ZÀ-Ú][\w-]*/i.test(t) || /\b[A-Z]{3,}(-[A-Z0-9]+)?\b.*(Trial|Outcome)/i.test(t));
+  return hasNamedTrial ? 'molecula' : 'classe';
+}
+
 function collectSignals(entity: DrugEntity, conditionId: string, ctx?: EligibilityContext): Signals {
   const hasStructuredGuideline = entity.references.some((r) => r.type === 'GUIDELINE');
+  const evidenceScope = hasStructuredGuideline ? detectEvidenceScope(entity) : undefined;
+
+  // RM-26.1 — Nível A: a classe canônica da molécula é uma das classes já
+  // reconhecidas como elegíveis/1ª linha para esta condição (mesma estrutura
+  // que já seleciona quais classes expandir no RM-25.1 — reaproveitada, não
+  // duplicada).
+  const classKey = classKeyOf(entity.therapeuticClass);
+  const conditionClassKeys = CONDITION_CLASS_KEYS[conditionId] ?? [];
+  const isConditionFirstLine = classKey !== null && conditionClassKeys.includes(classKey);
 
   const comorbidades = ctx?.comorbidades ?? [];
   const indicacoesTexto = normalize(entity.indications.join(' | '));
@@ -107,7 +149,15 @@ function collectSignals(entity: DrugEntity, conditionId: string, ctx?: Eligibili
     (i) => i.severity !== 'contraindicado' && emUso.some((m) => m.includes(normalize(i.with)) || normalize(i.with).includes(m)),
   );
 
-  return { hasStructuredGuideline, hasComorbidityMatch, cautionRenal, cautionHepatic, nonBlockingInteractionsWithCurrentMeds };
+  return {
+    hasStructuredGuideline,
+    evidenceScope,
+    isConditionFirstLine,
+    hasComorbidityMatch,
+    cautionRenal,
+    cautionHepatic,
+    nonBlockingInteractionsWithCurrentMeds,
+  };
 }
 
 /**
@@ -147,8 +197,10 @@ export function classifyPriority(
   const evidencia_status: ClinicalPriority['evidencia_status'] = s.hasStructuredGuideline
     ? 'diretriz_estruturada'
     : 'sem_diretriz_estruturada';
+  const evidencia_escopo = s.evidenceScope;
 
-  // Nível 3 — cautela ativa (não é exclusão; é ressalva que desaconselha ser 1ª escolha)
+  // ── Passo 3 (precedência) — cautela ativa → NÍVEL 3 ──────────────────────
+  // Não é exclusão; é ressalva que desaconselha ser 1ª escolha para este paciente.
   const cautelas: string[] = [];
   if (s.cautionRenal) cautelas.push(`função renal (${s.cautionRenal})`);
   if (s.cautionHepatic) cautelas.push(`função hepática (${s.cautionHepatic})`);
@@ -165,30 +217,71 @@ export function classifyPriority(
         [!!s.cautionRenal, !!s.cautionHepatic, s.nonBlockingInteractionsWithCurrentMeds.length > 0][i],
       ),
       evidencia_status,
+      evidencia_escopo,
     };
   }
 
-  // Nível 1 — indicação própria cita a comorbidade do paciente E há diretriz estruturada
-  if (s.hasComorbidityMatch.length > 0 && s.hasStructuredGuideline) {
-    fatores.push('comorbidade', 'evidencia_diretriz');
+  // ── Passo 4 (precedência) — vantagem individual → NÍVEL 1 ────────────────
+  // Basta a indicação PRÓPRIA da molécula (dado real, sourced) citar a
+  // comorbidade do paciente — essa é, por si só, a "característica clínica
+  // individual verificável" exigida pelo RM-26.1. Uma diretriz GENÉRICA da
+  // condição não é usada aqui (isso seria Nível 2); quando a diretriz também
+  // é específica da molécula (evidencia_escopo === 'molecula'), isso reforça
+  // a justificativa, mas não é pré-requisito.
+  if (s.hasComorbidityMatch.length > 0) {
+    fatores.push('comorbidade');
+    if (s.hasStructuredGuideline) fatores.push('evidencia_diretriz');
+    const reforco =
+      evidencia_escopo === 'molecula'
+        ? ' Há, adicionalmente, evidência específica da molécula (ensaio clínico nomeado).'
+        : '';
     return {
       tier: 'preferencial',
-      motivo: `Indicação registrada na base cobre a(s) comorbidade(s) do paciente (${s.hasComorbidityMatch.join(', ')}) e há diretriz estruturada respaldando a classe.`,
+      motivo: `Indicação registrada na base (dado real da molécula) cobre a(s) comorbidade(s) do paciente (${s.hasComorbidityMatch.join(', ')}) — vantagem clínica individual verificável.${reforco}`,
       fatores_considerados: fatores,
       evidencia_status,
+      evidencia_escopo,
     };
   }
 
-  // Nível 2 — elegível, indicado para a condição, sem destaque específico deste paciente
+  // ── Passo 5 (precedência) — 1ª linha da condição → NÍVEL 2 ───────────────
+  // Checagem POSITIVA: a classe canônica desta molécula é uma das classes já
+  // reconhecidas como elegíveis/1ª linha para ESTA condição — não depende de
+  // comorbidade alguma (correção da limitação do RM-26).
+  if (s.isConditionFirstLine) {
+    fatores.push('indicacao_condicao', 'classe_primeira_linha');
+    if (s.hasStructuredGuideline) fatores.push('evidencia_diretriz');
+    const escopoTexto =
+      evidencia_escopo === 'classe'
+        ? ' (diretriz de classe — não atribuída como evidência específica desta molécula)'
+        : evidencia_escopo === 'molecula'
+          ? ' (evidência específica desta molécula)'
+          : '';
+    return {
+      tier: 'primeira_linha',
+      motivo: s.hasStructuredGuideline
+        ? `Classe terapêutica reconhecida como opção de 1ª linha para esta condição, com diretriz estruturada${escopoTexto}; sem vantagem individual específica identificada para este paciente.`
+        : 'Classe terapêutica reconhecida como opção de 1ª linha para esta condição; sem diretriz estruturada indexada para esta molécula na base (ausência de evidência não é contraindicação) e sem vantagem individual específica para este paciente.',
+      fatores_considerados: fatores,
+      evidencia_status,
+      evidencia_escopo,
+    };
+  }
+
+  // ── Passo 6 (precedência) — fallback conservador → NÍVEL 2 ───────────────
+  // Elegível e indicado (já garantido a montante), mas a classe não pôde ser
+  // resolvida para nenhuma classe-semente da condição (ex.: sugestão curada
+  // com rótulo de classe fora do mapa). Nunca inventa, nunca promove, nunca
+  // exclui aqui — mantém-se conservadoramente em primeira linha.
   fatores.push('indicacao_condicao');
   if (s.hasStructuredGuideline) fatores.push('evidencia_diretriz');
   return {
     tier: 'primeira_linha',
-    motivo: s.hasStructuredGuideline
-      ? 'Clinicamente apropriado e respaldado por diretriz estruturada; sem fator específico deste paciente que o destaque como preferencial.'
-      : 'Clinicamente apropriado e elegível; sem diretriz estruturada indexada para esta molécula na base (ausência de evidência não é contraindicação).',
+    motivo:
+      'Clinicamente elegível e indicado; classe não mapeada às classes-semente desta condição na base — classificação conservadora mantida sem inventar destaque adicional.',
     fatores_considerados: fatores,
     evidencia_status,
+    evidencia_escopo,
   };
 }
 
@@ -210,14 +303,19 @@ export function prioritizeTherapeuticPlan(
     prioridade: classifyPriority(sug, conditionId, ctx),
   }));
 
-  // Ordenação determinística: nível → tem diretriz estruturada primeiro → nome (alfabético).
+  // Ordenação determinística (RM-26.1): nível → evidência mais diretamente
+  // aplicável (molécula > classe > ausente) → classe terapêutica → nome
+  // (alfabético). Nunca usa ordem de inserção, de construção do banco ou de
+  // marca/preferência comercial.
+  const evidenceRank = (p: ClinicalPriority) =>
+    p.evidencia_escopo === 'molecula' ? 0 : p.evidencia_status === 'diretriz_estruturada' ? 1 : 2;
   withPriority.sort((a, b) => {
     const t = TIER_ORDER[a.prioridade!.tier] - TIER_ORDER[b.prioridade!.tier];
     if (t !== 0) return t;
-    const e =
-      Number(b.prioridade!.evidencia_status === 'diretriz_estruturada') -
-      Number(a.prioridade!.evidencia_status === 'diretriz_estruturada');
+    const e = evidenceRank(a.prioridade!) - evidenceRank(b.prioridade!);
     if (e !== 0) return e;
+    const c = a.classe_terapeutica.localeCompare(b.classe_terapeutica, 'pt-BR');
+    if (c !== 0) return c;
     return a.molecula.localeCompare(b.molecula, 'pt-BR');
   });
 

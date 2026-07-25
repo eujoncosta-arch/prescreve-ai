@@ -161,11 +161,16 @@ export type ClinicalPriorityTier = 'preferencial' | 'primeira_linha' | 'contextu
 
 export type EvidenceStatus = 'diretriz_estruturada' | 'sem_diretriz_estruturada';
 
+/** RM-26.1: distingue se a diretriz estruturada é da CLASSE terapêutica (recomendação geral) ou específica da MOLÉCULA (ensaio clínico nomeado, ex.: "Estudo LIFE"). Só é definido quando `evidencia_status === 'diretriz_estruturada'`. */
+export type EvidenceScope = 'classe' | 'molecula';
+
 export interface ClinicalPriority {
   tier: ClinicalPriorityTier;
   motivo: string;
   fatores_considerados: string[];
   evidencia_status: EvidenceStatus;
+  /** RM-26.1 — campo opcional, aditivo; ausência não afeta consumidores existentes. */
+  evidencia_escopo?: EvidenceScope;
 }
 
 /** RM-26 — opção considerada, porém excluída (Nível 4), com motivo obrigatório. */
