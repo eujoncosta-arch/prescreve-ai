@@ -48,6 +48,8 @@ export interface EligibilityContext {
   medicamentosEmUso?: string[]; // nomes, de Anamnesis.medicamentos_em_uso[].nome
   /** RM-26: comorbidades da anamnese — usadas para priorização (não afeta elegibilidade). */
   comorbidades?: string[]; // de Anamnesis.comorbidades
+  /** RM-30: estágio DRC (KDIGO) já coletado na anamnese — de Anamnesis.funcao_renal.ckd_stage. Campo pré-existente, apenas passado adiante (nenhum dado novo). */
+  ckdStage?: 'G1' | 'G2' | 'G3a' | 'G3b' | 'G4' | 'G5';
 }
 
 /** Constrói o contexto de elegibilidade/priorização a partir da Anamnese já coletada (reuso — nenhum dado novo). */
@@ -61,6 +63,7 @@ export function eligibilityContextFromAnamnesis(a?: Anamnesis): EligibilityConte
     alergias: (a.alergias ?? []).map((x) => x.substancia),
     medicamentosEmUso: (a.medicamentos_em_uso ?? []).filter((m) => m.em_uso).map((m) => m.nome),
     comorbidades: a.comorbidades ?? [],
+    ckdStage: a.funcao_renal?.ckd_stage,
   };
 }
 
@@ -390,6 +393,59 @@ export interface ExpansionResult {
   excluded: ExcludedOption[];
 }
 
+// ─── 6b) RM-30 — Classes contextuais (habilitadas SOMENTE por contexto do paciente) ─
+//
+// PROBLEMA (RM-29): ARM, DIURETICO_ALCA e BETABLOQUEADOR têm moléculas com
+// indicação própria sourced que também cita "HAS" (Espironolactona: "HAS
+// resistente"; Furosemida: "HAS (DRC avançada)"; Carvedilol/Bisoprolol/
+// Atenolol/Succinato de Metoprolol: "HAS" direto) — mas adicioná-las a
+// CONDITION_CLASS_KEYS['has'] estaticamente as apresentaria a TODO paciente
+// com HAS, contrariando a evidência (nenhuma das três é 1ª linha geral para
+// HAS não complicada).
+//
+// SOLUÇÃO: estas classes só entram no conjunto de descoberta quando o
+// CONTEXTO do paciente (dados já existentes em EligibilityContext — nunca um
+// campo novo) sustenta o subgrupo. Fora desse contexto, o comportamento é
+// IDÊNTICO ao anterior ao RM-30 (classe ausente da descoberta).
+//
+// Reaproveita normalize() (já definida acima) e os mesmos campos de
+// EligibilityContext já usados pelo RM-26 (comorbidades) e RM-25.1 (tfg).
+
+/** RM-30 — HAS resistente: só reconhecida quando EXPLICITAMENTE documentada como comorbidade/diagnóstico na anamnese (nunca inferida por contagem de medicamentos em uso — heurística clinicamente perigosa, deliberadamente rejeitada; ver relatório). */
+function hasResistantHypertensionContext(ctx?: EligibilityContext): boolean {
+  const comorbidades = (ctx?.comorbidades ?? []).map(normalize);
+  return comorbidades.some((c) => /resistente/.test(c) && /hipertens|has\b/.test(c));
+}
+
+/** RM-30 — DRC avançada: KDIGO estágio G4/G5 (já estruturado em Anamnesis.funcao_renal.ckd_stage) OU TFG < 30 mL/min/1,73m² (mesmo limiar já usado nos ajustes renais existentes na base — dosageRules `tfg_30_15`/`tfg_lt_15`). "Necessidade de controle volêmico" isolada (sem DRC avançada) NÃO é representável com segurança pelo modelo atual (sem campo estruturado de edema/estado volêmico) — deliberadamente não implementada; ver relatório. */
+function advancedCkdContext(ctx?: EligibilityContext): boolean {
+  if (ctx?.ckdStage === 'G4' || ctx?.ckdStage === 'G5') return true;
+  if (ctx?.tfg !== undefined && ctx.tfg < 30) return true;
+  return false;
+}
+
+/** RM-30 — Indicação cardiovascular concomitante: comorbidade documentada (mesmo campo já usado pelo RM-26 para vantagem individual) compatível com IC, doença coronariana/pós-IAM ou arritmia/controle de FC — os três contextos citados nas próprias indicações das moléculas betabloqueadoras já na base. */
+function cardiovascularIndicationContext(ctx?: EligibilityContext): boolean {
+  const comorbidades = (ctx?.comorbidades ?? []).map(normalize);
+  const tokens = ['insuficiencia cardiaca', 'ic-fer', 'icc', 'coronaria', 'infarto', 'iam', 'arritmia', 'fibrilacao', 'taquicardia', 'flutter'];
+  return comorbidades.some((c) => tokens.some((t) => c.includes(t)) || c === 'ic');
+}
+
+/**
+ * RM-30 — Resolve as classes adicionais habilitadas EXCLUSIVAMENTE pelo
+ * contexto clínico do paciente para uma condição (hoje, apenas HAS). Fora do
+ * contexto documentado, retorna lista vazia — comportamento idêntico ao
+ * pré-RM-30. Aditivo: nunca remove nem substitui `CONDITION_CLASS_KEYS`.
+ */
+function resolveContextualClassKeys(conditionId: string, ctx?: EligibilityContext): string[] {
+  if (conditionId !== 'has') return [];
+  const extra: string[] = [];
+  if (hasResistantHypertensionContext(ctx)) extra.push('ARM');
+  if (advancedCkdContext(ctx)) extra.push('DIURETICO_ALCA');
+  if (cardiovascularIndicationContext(ctx)) extra.push('BETABLOQUEADOR');
+  return extra;
+}
+
 /**
  * Expande `plan.farmacologico` com moléculas elegíveis adicionais das MESMAS
  * classes terapêuticas já citadas no protocolo da condição — sem remover
@@ -401,8 +457,11 @@ export function expandTherapeuticPlan(
   conditionId: string,
   ctx?: EligibilityContext,
 ): ExpansionResult {
-  const classKeys = CONDITION_CLASS_KEYS[conditionId];
-  if (!classKeys || classKeys.length === 0) {
+  // RM-30: classes estáticas (RM-25.1) + classes contextuais (habilitadas somente quando o contexto do paciente sustenta o subgrupo — nunca para todo paciente da condição).
+  const staticClassKeys = CONDITION_CLASS_KEYS[conditionId] ?? [];
+  const contextualClassKeys = resolveContextualClassKeys(conditionId, ctx);
+  const classKeys = [...new Set([...staticClassKeys, ...contextualClassKeys])];
+  if (classKeys.length === 0) {
     return { plan, added: [], excluded: [] };
   }
 

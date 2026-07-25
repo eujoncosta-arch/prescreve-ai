@@ -54,7 +54,10 @@ export type PopulationContext =
   | 'fe_preservada'
   | 'exacerbador_frequente'
   | 'fase_aguda'
-  | 'prevencao_secundaria';
+  | 'prevencao_secundaria'
+  // RM-30 — subgrupos de HAS habilitados apenas por contexto (nunca a população geral de HAS).
+  | 'has_resistente'
+  | 'indicacao_cardiovascular_concomitante';
 
 export interface GuidelineSource {
   organizacao: string;
@@ -445,6 +448,62 @@ export const CLASS_ROLE_OVERRIDES: ClassRoleValidation[] = [
       identificador: 'goldcopd.org',
     },
     status_validacao: 'reclassificado',
+  },
+
+  // ════════════════════════════════════════════════════════════════════
+  // RM-30 (Contextual Hypertension Subgroup Coverage) — ARM, DIURETICO_ALCA
+  // e BETABLOQUEADOR em HAS. Diferente de todos os overrides anteriores,
+  // estas 3 classes só são DESCOBERTAS (therapeutic-class-expansion.ts,
+  // resolveContextualClassKeys) quando o contexto do paciente sustenta o
+  // subgrupo — nunca para HAS não complicada. O papel 'contextual' aqui
+  // garante que, mesmo quando descobertas, elas nunca sejam apresentadas
+  // como "1ª linha geral" (Nível 2) sem uma vantagem individual real
+  // (Nível 1, RM-26.1) — apenas Nível 3 (contextual) no caso conservador.
+  // ════════════════════════════════════════════════════════════════════
+  {
+    conditionId: 'has',
+    classKey: 'ARM',
+    papel_clinico: 'contextual',
+    populacao: ['has_resistente'],
+    contexto:
+      'Antagonista da aldosterona (espironolactona) é o 4º agente preferencial em hipertensão resistente (BP não controlada em uso de 3+ classes, incluindo diurético, em doses otimizadas) — PATHWAY-2. NÃO é opção de 1ª linha nem de rotina para HAS não complicada; a descoberta desta classe depende de a anamnese documentar explicitamente "HAS resistente" como comorbidade/diagnóstico — nunca inferida por contagem de medicamentos em uso.',
+    fonte: {
+      organizacao: 'European Society of Cardiology / European Society of Hypertension (ESC/ESH)',
+      titulo: '2023 ESH Guidelines for the management of arterial hypertension (PATHWAY-2)',
+      ano: 2023,
+      identificador: 'doi.org/10.1097/HJH.0000000000003480',
+    },
+    status_validacao: 'confirmado',
+  },
+  {
+    conditionId: 'has',
+    classKey: 'DIURETICO_ALCA',
+    papel_clinico: 'contextual',
+    populacao: ['drc'],
+    contexto:
+      'Diurético de alça substitui o tiazídico como agente diurético em HAS quando há DRC avançada (TFG < 30 mL/min/1,73m² — estágio KDIGO G4/G5), situação em que os tiazídicos perdem eficácia natriurética. NÃO é opção para HAS não complicada ou DRC leve/moderada — a descoberta depende de TFG/estágio KDIGO já estruturados na anamnese (Anamnesis.funcao_renal). "Necessidade de controle volêmico" isolada (sem DRC avançada documentada) não é representável com segurança pelo modelo atual — não implementada nesta entrega.',
+    fonte: {
+      organizacao: 'European Society of Cardiology / European Society of Hypertension (ESC/ESH)',
+      titulo: '2023 ESH Guidelines for the management of arterial hypertension',
+      ano: 2023,
+      identificador: 'doi.org/10.1097/HJH.0000000000003480',
+    },
+    status_validacao: 'confirmado',
+  },
+  {
+    conditionId: 'has',
+    classKey: 'BETABLOQUEADOR',
+    papel_clinico: 'contextual',
+    populacao: ['indicacao_cardiovascular_concomitante'],
+    contexto:
+      'Betabloqueador não é recomendação de 1ª linha geral para HAS não complicada (ESC/ESH 2023) — é reservado para indicação cardiovascular compulsória concomitante (insuficiência cardíaca, doença coronariana/pós-IAM, arritmia/controle de frequência). A descoberta desta classe depende de a anamnese documentar uma dessas comorbidades; a indicação PRÓPRIA de cada molécula (RM-25.1) continua prevalecendo — ex.: Atenolol só é sugerido se sua própria indicação cobrir o contexto identificado, não apenas por pertencer à classe.',
+    fonte: {
+      organizacao: 'European Society of Cardiology / European Society of Hypertension (ESC/ESH)',
+      titulo: '2023 ESH Guidelines for the management of arterial hypertension',
+      ano: 2023,
+      identificador: 'doi.org/10.1097/HJH.0000000000003480',
+    },
+    status_validacao: 'confirmado',
   },
 ];
 

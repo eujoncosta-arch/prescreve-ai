@@ -225,8 +225,10 @@ describe('RM-27.1 · ICC · 13) Marca e apresentação não alteram o papel clí
 // ─── Regressão obrigatória ──────────────────────────────────────────────
 
 describe('RM-27.1 · Regressão — RM-25.1/RM-26/RM-26.1/RM-27 intactos', () => {
-  it('todas as relações em CLASS_ROLE_OVERRIDES referenciam classes que já existiam em CONDITION_CLASS_KEYS (nenhuma classe nova)', () => {
+  it('todas as relações em CLASS_ROLE_OVERRIDES referenciam classes que já existiam em CONDITION_CLASS_KEYS (nenhuma classe nova) — exceto as 3 classes contextuais do RM-30 (has/ARM, has/DIURETICO_ALCA, has/BETABLOQUEADOR), descobertas apenas via contexto do paciente, não na lista estática', () => {
+    const rm30ContextualExceptions = new Set(['has::ARM', 'has::DIURETICO_ALCA', 'has::BETABLOQUEADOR']);
     for (const override of CLASS_ROLE_OVERRIDES) {
+      if (rm30ContextualExceptions.has(`${override.conditionId}::${override.classKey}`)) continue;
       expect(CONDITION_CLASS_KEYS[override.conditionId]).toContain(override.classKey);
     }
   });

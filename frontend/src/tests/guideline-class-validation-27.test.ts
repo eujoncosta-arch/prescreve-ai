@@ -177,9 +177,11 @@ describe('RM-27 · 16/17) RM-23 e RM-24 continuam íntegros', () => {
 });
 
 describe('RM-27 · 18) Nenhuma condição/molécula/classe nova foi criada', () => {
-  it('todas as chaves de condição em CLASS_ROLE_OVERRIDES já existem em CONDITION_CLASS_KEYS', () => {
+  it('todas as chaves de condição em CLASS_ROLE_OVERRIDES já existem em CONDITION_CLASS_KEYS (exceto as 3 classes contextuais do RM-30, que são intencionalmente descobertas fora da lista estática — ver resolveContextualClassKeys)', () => {
+    const rm30ContextualExceptions = new Set(['has::ARM', 'has::DIURETICO_ALCA', 'has::BETABLOQUEADOR']);
     for (const override of CLASS_ROLE_OVERRIDES) {
       expect(Object.keys(CONDITION_CLASS_KEYS)).toContain(override.conditionId);
+      if (rm30ContextualExceptions.has(`${override.conditionId}::${override.classKey}`)) continue;
       expect(CONDITION_CLASS_KEYS[override.conditionId]).toContain(override.classKey);
     }
   });

@@ -136,8 +136,10 @@ describe('RM-29 · 10) Combinações comerciais não são tratadas indevidamente
 });
 
 describe('RM-29 · 11) Gap confirmado corrigido sem duplicar o DrugRepository', () => {
-  it('CLASS_ROLE_OVERRIDES do RM-29 referencia apenas classKeys já existentes em CONDITION_CLASS_KEYS — nenhuma classe nova criada', () => {
+  it('CLASS_ROLE_OVERRIDES do RM-29 referencia apenas classKeys já existentes em CONDITION_CLASS_KEYS — nenhuma classe nova criada (exceto as 3 classes contextuais do RM-30 em HAS, descobertas apenas via contexto do paciente)', () => {
+    const rm30ContextualExceptions = new Set(['has::ARM', 'has::DIURETICO_ALCA', 'has::BETABLOQUEADOR']);
     for (const o of CLASS_ROLE_OVERRIDES) {
+      if (rm30ContextualExceptions.has(`${o.conditionId}::${o.classKey}`)) continue;
       expect(CONDITION_CLASS_KEYS[o.conditionId]).toContain(o.classKey);
     }
   });

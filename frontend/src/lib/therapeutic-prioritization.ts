@@ -61,6 +61,13 @@ function normalize(s: string): string {
 // condição em textos diferentes já presentes na própria base canônica.
 // Tabela bounded, auditável, restrita a abreviações padrão da prática BR.
 const COMORBIDITY_SYNONYMS: Record<string, string[]> = {
+  // RM-30: chave mais específica DEVE vir antes de 'has' — Object.entries().find()
+  // retorna o primeiro match por ordem de inserção. Sem isso, "HAS resistente"
+  // colapsaria para o sinônimo genérico de 'has' ("hipertensao"), que
+  // combina com a indicação de QUALQUER anti-hipertensivo (falso positivo:
+  // promoveria Irbesartana, Losartana etc. a Nível 1 só por o paciente ter
+  // HAS resistente, quando a condição já tratada é a própria HAS).
+  'has resistente': ['hipertensao resistente', 'resistente'],
   drc: ['doenca renal cronica', 'nefropatia', 'insuficiencia renal cronica', 'nefropatia diabetica'],
   dm2: ['diabetes', 'diabetes mellitus', 'diabetes mellitus tipo 2', 'dm2'],
   dm: ['diabetes'],
