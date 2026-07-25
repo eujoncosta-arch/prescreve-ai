@@ -171,6 +171,8 @@ export interface ClinicalPriority {
   evidencia_status: EvidenceStatus;
   /** RM-26.1 — campo opcional, aditivo; ausência não afeta consumidores existentes. */
   evidencia_escopo?: EvidenceScope;
+  /** RM-27 — papel clínico validado (governança) quando a classe possui auditoria específica; ausente = fallback conservador padrão do RM-26.1. */
+  papel_clinico_validado?: import('./guideline-class-validation').ClinicalRole;
 }
 
 /** RM-26 — opção considerada, porém excluída (Nível 4), com motivo obrigatório. */

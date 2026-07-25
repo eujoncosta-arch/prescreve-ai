@@ -47,6 +47,7 @@ import type { DrugEntity } from './pharma-core';
 import type { TherapeuticSuggestion, TherapeuticPlan, ClinicalPriority, ClinicalPriorityTier, EvidenceScope } from './types';
 import type { EligibilityContext } from './therapeutic-class-expansion';
 import { classKeyOf, CONDITION_CLASS_KEYS } from './therapeutic-class-expansion';
+import { getValidatedClassRole, isRoleFirstLine } from './guideline-class-validation';
 
 function normalize(s: string): string {
   return s
@@ -89,8 +90,10 @@ interface Signals {
   hasStructuredGuideline: boolean;
   /** RM-26.1: escopo real da diretriz — 'molecula' quando o texto sourced cita um ensaio nomeado (ex.: "Estudo LIFE"); 'classe' quando é recomendação genérica da classe terapêutica. Nunca inferido além do texto real (RM-25). */
   evidenceScope?: EvidenceScope;
-  /** RM-26.1: classe da molécula (canônica) pertence às classes já reconhecidas como elegíveis/1ª linha para esta condição (CONDITION_CLASS_KEYS). */
+  /** RM-26.1: classe da molécula (canônica) pertence às classes já reconhecidas como elegíveis/1ª linha para esta condição (CONDITION_CLASS_KEYS), respeitando o papel validado pelo RM-27 quando houver. */
   isConditionFirstLine: boolean;
+  /** RM-27: override de papel clínico auditado para esta relação condição→classe, quando existente. */
+  validatedRole?: import('./guideline-class-validation').ClassRoleValidation;
   hasComorbidityMatch: string[]; // comorbidades (texto da anamnese) encontradas na indicação real da molécula
   cautionRenal?: string; // texto real do dosageRules renal quando há cautela (não contraindicação — essa já exclui)
   cautionHepatic?: string;
@@ -115,7 +118,14 @@ function collectSignals(entity: DrugEntity, conditionId: string, ctx?: Eligibili
   // duplicada).
   const classKey = classKeyOf(entity.therapeuticClass);
   const conditionClassKeys = CONDITION_CLASS_KEYS[conditionId] ?? [];
-  const isConditionFirstLine = classKey !== null && conditionClassKeys.includes(classKey);
+  // RM-27: quando a auditoria clínica validou um papel mais estreito que "1ª
+  // linha geral" para esta relação condição→classe (ex.: SABA = resgate, não
+  // controle), a checagem positiva do RM-26.1 respeita esse papel. Ausência
+  // de override = comportamento idêntico ao RM-26.1 original (fallback
+  // conservador, nunca inventa, nunca rebaixa sem fonte).
+  const validatedRole = classKey ? getValidatedClassRole(conditionId, classKey) : undefined;
+  const isConditionFirstLine =
+    classKey !== null && conditionClassKeys.includes(classKey) && (!validatedRole || isRoleFirstLine(validatedRole.papel_clinico));
 
   const comorbidades = ctx?.comorbidades ?? [];
   const indicacoesTexto = normalize(entity.indications.join(' | '));
@@ -153,6 +163,7 @@ function collectSignals(entity: DrugEntity, conditionId: string, ctx?: Eligibili
     hasStructuredGuideline,
     evidenceScope,
     isConditionFirstLine,
+    validatedRole,
     hasComorbidityMatch,
     cautionRenal,
     cautionHepatic,
@@ -265,6 +276,26 @@ export function classifyPriority(
       fatores_considerados: fatores,
       evidencia_status,
       evidencia_escopo,
+      papel_clinico_validado: s.validatedRole?.papel_clinico,
+    };
+  }
+
+  // ── Passo 5.5 (RM-27) — papel clínico validado mais estreito → NÍVEL 3 ───
+  // A classe pertence a `CONDITION_CLASS_KEYS[condição]`, mas a auditoria
+  // clínica (RM-27, `guideline-class-validation.ts`) documentou, com fonte,
+  // que o papel real da classe para esta condição é mais estreito que "1ª
+  // linha geral" (ex.: SABA é terapia de resgate em asma/DPOC — GINA/GOLD).
+  // Isso nunca promove; só evita que o Nível 2 seja atribuído sem respaldo.
+  if (s.validatedRole && !isRoleFirstLine(s.validatedRole.papel_clinico)) {
+    fatores.push('papel_clinico_auditado_rm27');
+    if (s.hasStructuredGuideline) fatores.push('evidencia_diretriz');
+    return {
+      tier: 'contextual',
+      motivo: `Classe pertence às classes elegíveis para esta condição, porém a auditoria clínica (RM-27) documenta papel mais estreito que "1ª linha geral": ${s.validatedRole.contexto} Fonte: ${s.validatedRole.fonte.organizacao} — ${s.validatedRole.fonte.titulo} (${s.validatedRole.fonte.ano}).`,
+      fatores_considerados: fatores,
+      evidencia_status,
+      evidencia_escopo,
+      papel_clinico_validado: s.validatedRole.papel_clinico,
     };
   }
 
