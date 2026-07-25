@@ -62,8 +62,8 @@ describe('RM-27 · 2/3) Classe validada como contextual não é promovida a prim
 });
 
 describe('RM-27 · 4) Classe não validada (sem override) não é automaticamente expandida ou promovida', () => {
-  it('condições sem entradas em CLASS_ROLE_OVERRIDES mantêm comportamento idêntico ao RM-26.1', () => {
-    const condicoesSemOverride = ['dm2', 'dislipidemia', 'sca'];
+  it('condições sem entradas em CLASS_ROLE_OVERRIDES mantêm comportamento idêntico ao RM-26.1 (dm2 passou a ter overrides no RM-27.1 — ver guideline-class-validation-27-1.test.ts)', () => {
+    const condicoesSemOverride = ['dislipidemia', 'sca'];
     const classesComOverride = new Set(CLASS_ROLE_OVERRIDES.map((o) => o.conditionId));
     for (const c of condicoesSemOverride) {
       expect(classesComOverride.has(c)).toBe(false);

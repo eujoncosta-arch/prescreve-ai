@@ -1,6 +1,6 @@
 # RM23_DRUG_CONSISTENCY_REPORT
 
-**Gerado:** 2026-07-25T19:02:25.689Z · **Entidades:** 358 · **Inconsistências:** 0 · **Build:** ✅ OK
+**Gerado:** 2026-07-25T19:18:42.232Z · **Entidades:** 358 · **Inconsistências:** 0 · **Build:** ✅ OK
 
 | Gravidade | Qtde |
 |---|---|

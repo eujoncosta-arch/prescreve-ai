@@ -268,11 +268,20 @@ export function classifyPriority(
         : evidencia_escopo === 'molecula'
           ? ' (evidência específica desta molécula)'
           : '';
+    // RM-27.1 — quando a auditoria clínica documenta um OBJETIVO TERAPÊUTICO
+    // específico (ex.: benefício cardiovascular/renal/ponderal em DM2;
+    // modificação de prognóstico vs. controle de congestão em ICC), o motivo
+    // deixa isso explícito — evita que "1ª linha" seja lido como "melhor
+    // opção universal" quando o papel real é mais específico que isso.
+    const objetivoTexto = s.validatedRole ? ` Objetivo terapêutico documentado (RM-27.1): ${s.validatedRole.contexto}` : '';
+    if (fatores.includes('classe_primeira_linha') && s.validatedRole) fatores.push('objetivo_terapeutico_rm27_1');
     return {
       tier: 'primeira_linha',
-      motivo: s.hasStructuredGuideline
-        ? `Classe terapêutica reconhecida como opção de 1ª linha para esta condição, com diretriz estruturada${escopoTexto}; sem vantagem individual específica identificada para este paciente.`
-        : 'Classe terapêutica reconhecida como opção de 1ª linha para esta condição; sem diretriz estruturada indexada para esta molécula na base (ausência de evidência não é contraindicação) e sem vantagem individual específica para este paciente.',
+      motivo:
+        (s.hasStructuredGuideline
+          ? `Classe terapêutica reconhecida como opção de 1ª linha para esta condição, com diretriz estruturada${escopoTexto}; sem vantagem individual específica identificada para este paciente.`
+          : 'Classe terapêutica reconhecida como opção de 1ª linha para esta condição; sem diretriz estruturada indexada para esta molécula na base (ausência de evidência não é contraindicação) e sem vantagem individual específica para este paciente.') +
+        objetivoTexto,
       fatores_considerados: fatores,
       evidencia_status,
       evidencia_escopo,
