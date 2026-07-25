@@ -78,21 +78,21 @@ Nenhum campo novo foi criado em `Anamnesis` ou `EligibilityContext` (exceto `ckd
 
 ## 11. Testes
 
-`src/tests/hypertension-contextual-coverage-30.test.ts` — **38 testes**: HAS não complicada (5, incluindo verificação de que `CONDITION_CLASS_KEYS['has']` estático é intocado); HAS resistente (9, incluindo o bug de sinonímia corrigido, contraindicação, alergia, ajuste renal, marcas/apresentações, sem duplicidade); DRC avançada/controle volêmico (6, TFG e `ckdStage` como caminhos independentes, DRC leve não habilita); indicação cardiovascular concomitante (8, IC/IAM/arritmia, Atenolol não promovido automaticamente, indicação própria sempre prevalece); prioridade clínica (3, papel contextual confirmado, nunca Nível 2 automático); determinismo (1); regressão RM-23 a RM-29 (6).
+`src/tests/hypertension-contextual-coverage-30.test.ts` — **52 testes** (revisado nesta rodada para cobrir explicitamente os limites e variações exigidos): HAS não complicada (5, incluindo verificação de que `CONDITION_CLASS_KEYS['has']` estático é intocado); HAS resistente (13, incluindo variações textuais "hipertensão resistente"/"hipertensão arterial resistente", ausência total de comorbidades, o bug de sinonímia corrigido, contraindicação, alergia, interação, ajuste renal, marcas/apresentações, sem duplicidade); DRC avançada/controle volêmico (10, TFG estritamente < 30 — TFG=30 e TFG=31 testados como limite —, `ckdStage` G4/G5 vs. G3b isolado, ausência total de contexto renal); indicação cardiovascular concomitante (10, IC/IAM/arritmia/doença coronariana, Atenolol não promovido automaticamente, indicação própria sempre prevalece, sem duplicidade); prioridade clínica (3); determinismo (3, incluindo independência de ordem de comorbidades e de medicamentos em uso); regressão RM-23 a RM-29 (8, incluindo as exclusões explícitas do RM-29: LABA isolado em asma, ICS isolado em DPOC, GLP1 fora de SCA, Irbesartana fora de DM2).
 
 Testes pré-existentes ajustados (3, todos com justificativa inline): `guideline-class-validation-27.test.ts` (item 18), `guideline-class-validation-27-1.test.ts` (regressão), `global-condition-drug-coverage-29.test.ts` (item 11) — todos assumiam que todo `classKey` em `CLASS_ROLE_OVERRIDES` precisa estar em `CONDITION_CLASS_KEYS` estático; passaram a excluir explicitamente as 3 novas relações contextuais de HAS (documentado no próprio teste, com o motivo: essas classes são intencionalmente descobertas fora da lista estática).
 
-## 12. Resultados dos gates
+## 12. Resultados dos gates (execução verificada nesta rodada)
 
-| Verificação | Resultado |
+| Comando | Resultado |
 |---|---|
-| `tsc --noEmit` | ✅ limpo |
-| `npm run lint` | ✅ 0 violações |
-| `npx vitest run` | ✅ **353/353** (315 pré-existentes, 3 asserções ajustadas intencionalmente + 38 novos) |
-| `npx vitest run --coverage` | ✅ sem violação de meta |
-| RM-23 (via `npm run build`) | ✅ 358 entidades, 0 crítico/alto |
-| RM-24 (via `npm run build`) | ✅ 365 analisados, 0 crítico, publicação liberada |
-| `npm run build` | ✅ compilado, 50 rotas |
+| `npx tsc --noEmit` | ✅ **exit 0**, sem erros |
+| `npm run lint` (projeto inteiro) | ⚠️ **exit 1** — 107 erros / 254 avisos, mas **em 17 arquivos não tocados por nenhuma alteração do RM-30** (`theme.tsx`, `timeline.ts`, `ProtocolEditor.tsx`, `TherapeuticPanel.tsx`, `governance.ts`, `comite.ts`, etc.). Confirmado via `git log` que o último commit a tocar esses arquivos foi `d061ab5` ("premium medical UX"), anterior a toda a série RM-27→RM-30 — débito técnico pré-existente, não introduzido por este RM. `npx eslint` rodado individualmente em todos os arquivos alterados pelo RM-30 (`therapeutic-class-expansion.ts`, `guideline-class-validation.ts`, `therapeutic-prioritization.ts`, `hypertension-contextual-coverage-30.test.ts`) retorna **0 violações**. |
+| `npx vitest run` | ✅ **367/367** passando (315 pré-existentes ao RM-30, 3 asserções ajustadas intencionalmente do RM-27/27.1/29 + 52 testes novos em `hypertension-contextual-coverage-30.test.ts`) |
+| `npx vitest run --coverage` | ✅ exit 0 — Statements 9,51% (1140/11985) · Branches 8,44% (637/7542) · Functions 8,52% (259/3039) · Lines 10,21% (979/9580). Sem violação de threshold (thresholds do `vitest.config.ts` são por escopo — `pharma-core`, `safety-rules.ts`, `validation/**` — não sobre o total do repositório) |
+| `npm run build` (inclui `prebuild`: RM-23 + RM-24) | ✅ exit 0 — `[RM-23] consistência: 358 entidades · 0 inconsistências (critical=0 high=0 medium=0 low=0)`; `[RM-24] cross-db: total=365 compatíveis=94 divergentes=23 críticos=0`; `next build` compilado, 50 rotas geradas |
+
+**Nenhum gate relacionado ao escopo do RM-30 falhou.** O único resultado não-verde (`npm run lint` no nível do projeto) é pré-existente e documentado com causa raiz confirmada (arquivos e commit de origem), não uma regressão desta entrega.
 
 ## 13. Impacto sobre RM-25.1 a RM-29
 

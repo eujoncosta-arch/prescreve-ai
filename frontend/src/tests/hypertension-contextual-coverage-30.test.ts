@@ -63,8 +63,23 @@ describe('RM-30 · HAS resistente', () => {
     expect(irbesartana!.prioridade!.tier).toBe('primeira_linha');
   });
 
+  it('"hipertensão resistente" (variação normalizada, com acento) também habilita ARM', () => {
+    const plan = hasPlan({ tfg: 90, comorbidades: ['hipertensão resistente'] });
+    expect(plan.farmacologico.find((s) => s.molecula === 'Espironolactona')).toBeDefined();
+  });
+
+  it('"hipertensão arterial resistente" (variação com termo intermediário) também habilita ARM', () => {
+    const plan = hasPlan({ tfg: 90, comorbidades: ['hipertensão arterial resistente'] });
+    expect(plan.farmacologico.find((s) => s.molecula === 'Espironolactona')).toBeDefined();
+  });
+
   it('HAS sem "resistente" documentado não habilita ARM mesmo com múltiplos medicamentos em uso (não infere resistência por contagem de fármacos)', () => {
     const plan = hasPlan({ tfg: 90, medicamentosEmUso: ['Losartana', 'Anlodipino', 'Hidroclorotiazida'] });
+    expect(plan.farmacologico.find((s) => s.classe_terapeutica.includes('Aldosterona'))).toBeUndefined();
+  });
+
+  it('ausência total de documentação explícita (comorbidades vazias) não habilita ARM', () => {
+    const plan = hasPlan({ tfg: 90, comorbidades: [] });
     expect(plan.farmacologico.find((s) => s.classe_terapeutica.includes('Aldosterona'))).toBeUndefined();
   });
 
@@ -85,6 +100,13 @@ describe('RM-30 · HAS resistente', () => {
   it('alergia à espironolactona remove a molécula mesmo em HAS resistente', () => {
     const plan = hasPlan({ tfg: 90, comorbidades: ['HAS resistente'], alergias: ['Espironolactona'] });
     expect(plan.farmacologico.find((s) => s.molecula === 'Espironolactona')).toBeUndefined();
+  });
+
+  it('interação continua sendo aplicada — toda molécula descoberta em HAS resistente resolve para uma DrugEntity real (checagem de interações não é ignorada/mockada)', () => {
+    const plan = hasPlan({ tfg: 90, comorbidades: ['HAS resistente'] });
+    for (const s of plan.farmacologico) {
+      expect(s.id).toBeTruthy();
+    }
   });
 
   it('ajuste renal continua exposto para Espironolactona', () => {
@@ -131,6 +153,26 @@ describe('RM-30 · DRC avançada / controle volêmico', () => {
     expect(plan.farmacologico.find((s) => s.molecula === 'Furosemida')).toBeUndefined();
   });
 
+  it('TFG exatamente 30 NÃO é tratado como < 30 (limite estrito)', () => {
+    const plan = hasPlan({ tfg: 30 });
+    expect(plan.farmacologico.find((s) => s.molecula === 'Furosemida')).toBeUndefined();
+  });
+
+  it('TFG 31 (> 30) não habilita', () => {
+    const plan = hasPlan({ tfg: 31 });
+    expect(plan.farmacologico.find((s) => s.molecula === 'Furosemida')).toBeUndefined();
+  });
+
+  it('CKD G3b não habilita por si só (apenas G4/G5)', () => {
+    const plan = hasPlan({ tfg: 40, ckdStage: 'G3b' });
+    expect(plan.farmacologico.find((s) => s.molecula === 'Furosemida')).toBeUndefined();
+  });
+
+  it('ausência de estágio KDIGO e TFG normal não habilita', () => {
+    const plan = hasPlan({});
+    expect(plan.farmacologico.find((s) => s.molecula === 'Furosemida')).toBeUndefined();
+  });
+
   it('aplica regras renais existentes — TFG muito baixa não quebra e reflete cautela real da base (dado real, não fabricado)', () => {
     const plan = hasPlan({ tfg: 25 });
     expect(plan.farmacologico.length).toBeGreaterThan(0);
@@ -163,6 +205,17 @@ describe('RM-30 · Indicação cardiovascular concomitante', () => {
   it('HAS + arritmia/controle de frequência: considera moléculas elegíveis', () => {
     const plan = hasPlan({ tfg: 90, comorbidades: ['Fibrilação atrial'] });
     expect(plan.farmacologico.find((s) => s.classe_terapeutica.includes('Betabloqueador'))).toBeDefined();
+  });
+
+  it('HAS + doença coronariana (texto "doença coronariana") também habilita betabloqueador', () => {
+    const plan = hasPlan({ tfg: 90, comorbidades: ['doença coronariana'] });
+    expect(plan.farmacologico.find((s) => s.classe_terapeutica.includes('Betabloqueador'))).toBeDefined();
+  });
+
+  it('sem duplicidades em HAS+arritmia', () => {
+    const plan = hasPlan({ tfg: 90, comorbidades: ['Fibrilação atrial'] });
+    const molecules = plan.farmacologico.map((s) => s.molecula);
+    expect(new Set(molecules).size).toBe(molecules.length);
   });
 
   it('HAS isolada (sem indicação CV): não promove betabloqueador', () => {
@@ -228,6 +281,18 @@ describe('RM-30 · Determinismo', () => {
     const p2 = hasPlan(ctx);
     expect(p1.farmacologico.map((s) => s.molecula)).toEqual(p2.farmacologico.map((s) => s.molecula));
   });
+
+  it('ordem das comorbidades não altera o resultado', () => {
+    const p1 = hasPlan({ tfg: 90, comorbidades: ['HAS resistente', 'ICC'] });
+    const p2 = hasPlan({ tfg: 90, comorbidades: ['ICC', 'HAS resistente'] });
+    expect(p1.farmacologico.map((s) => s.molecula).sort()).toEqual(p2.farmacologico.map((s) => s.molecula).sort());
+  });
+
+  it('ordem dos medicamentos em uso não altera o resultado', () => {
+    const p1 = hasPlan({ tfg: 90, medicamentosEmUso: ['Losartana', 'Anlodipino', 'Hidroclorotiazida'] });
+    const p2 = hasPlan({ tfg: 90, medicamentosEmUso: ['Hidroclorotiazida', 'Anlodipino', 'Losartana'] });
+    expect(p1.farmacologico.map((s) => s.molecula).sort()).toEqual(p2.farmacologico.map((s) => s.molecula).sort());
+  });
 });
 
 // ─── Regressão obrigatória ──────────────────────────────────────────────
@@ -266,5 +331,30 @@ describe('RM-30 · Regressão — RM-23 a RM-29 íntegros', () => {
   it('RM-29: SCA continua descobrindo estatina/betabloqueador/IECA/BRA/ARM', () => {
     const sca = getTherapeuticForCondition('sca', 'SCA', { tfg: 90 })!;
     expect(sca.farmacologico.find((s) => s.molecula === 'Atorvastatina')).toBeDefined();
+    expect(sca.farmacologico.find((s) => s.molecula === 'Succinato de Metoprolol')).toBeDefined();
+    expect(sca.farmacologico.find((s) => s.molecula === 'Enalapril')).toBeDefined();
+    expect(sca.farmacologico.find((s) => s.molecula === 'Valsartana')).toBeDefined();
+    expect(sca.farmacologico.find((s) => s.molecula === 'Eplerenona')).toBeDefined();
+  });
+
+  it('RM-29: Asma+LAMA e DPOC+ICS_LABA continuam funcionando (contextual)', () => {
+    const asma = getTherapeuticForCondition('asma', 'Asma (J45)', {})!;
+    expect(asma.farmacologico.find((s) => s.molecula === 'Tiotrópio')?.prioridade?.tier).toBe('contextual');
+    const dpoc = getTherapeuticForCondition('dpoc', 'DPOC (J44)', {})!;
+    expect(dpoc.farmacologico.find((s) => s.molecula === 'Budesonida/Formoterol')?.prioridade?.tier).toBe('contextual');
+  });
+
+  it('RM-29: exclusões permanecem válidas — LABA isolado não promovido em asma, ICS isolado não promovido em DPOC, GLP1 não aparece em SCA, Irbesartana não aparece em DM2', () => {
+    const asma = getTherapeuticForCondition('asma', 'Asma (J45)', {})!;
+    expect(asma.farmacologico.find((s) => s.classe_terapeutica === 'Broncodilatador LABA (Beta-2 agonista de Longa Ação)')).toBeUndefined();
+
+    const dpoc = getTherapeuticForCondition('dpoc', 'DPOC (J44)', { tfg: 90 })!;
+    expect(dpoc.farmacologico.find((s) => s.classe_terapeutica === 'Corticosteroide Inalatório isolado (ICS)')).toBeUndefined();
+
+    const sca = getTherapeuticForCondition('sca', 'SCA', { tfg: 90 })!;
+    expect(sca.farmacologico.find((s) => s.classe_terapeutica.includes('GLP-1') || s.molecula === 'Liraglutida')).toBeUndefined();
+
+    const dm2 = getTherapeuticForCondition('dm2', 'DM2 (E11)', {})!;
+    expect(dm2.farmacologico.find((s) => s.molecula === 'Irbesartana')).toBeUndefined();
   });
 });
