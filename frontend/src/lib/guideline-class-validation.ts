@@ -295,6 +295,33 @@ export const CLASS_ROLE_OVERRIDES: ClassRoleValidation[] = [
     },
     status_validacao: 'reclassificado',
   },
+
+  // ════════════════════════════════════════════════════════════════════
+  // RM-28 (Heart Failure Therapeutic Coverage Completion) — iSGLT2 em ICC.
+  // A classe passou a ser descoberta em CONDITION_CLASS_KEYS['icc']
+  // (therapeutic-class-expansion.ts) porque dapagliflozina e empagliflozina
+  // já possuíam, na base canônica, indicação própria sourced para IC
+  // (pharma-database.ts — guidelines_referencia cita ESC 2021 IC, DAPA-HF,
+  // EMPEROR-Reduced) mas não eram alcançadas por ausência da chave de
+  // classe na lista de ICC — não por ausência de evidência. O papel clínico
+  // aqui reflete a mesma evidência já usada por ARNI/BETABLOQUEADOR/ARM
+  // (redução de mortalidade/hospitalização em IC-FEr).
+  // ════════════════════════════════════════════════════════════════════
+  {
+    conditionId: 'icc',
+    classKey: 'SGLT2',
+    papel_clinico: 'prognostic_modifier',
+    populacao: ['fe_reduzida'],
+    contexto:
+      'Inibidores de SGLT2 (dapagliflozina — DAPA-HF; empagliflozina — EMPEROR-Reduced) reduzem mortalidade cardiovascular e hospitalização por IC em IC-FEr, independentemente da presença de DM2 — recomendação Classe I. Terapia modificadora de prognóstico, adicionada a IECA/ARNI + betabloqueador + ARM. A evidência pivotal (DAPA-HF, EMPEROR-Reduced) é em IC-FEr — extensão para IC-FEp/IC-FElr (ex.: EMPEROR-Preserved) não é generalizada aqui automaticamente; ver limitação de fenótipo no relatório do RM-28.',
+    fonte: {
+      organizacao: 'European Society of Cardiology (ESC)',
+      titulo: '2021 ESC Guidelines for the diagnosis and treatment of acute and chronic heart failure (DAPA-HF, EMPEROR-Reduced)',
+      ano: 2021,
+      identificador: 'doi.org/10.1093/eurheartj/ehab368',
+    },
+    status_validacao: 'confirmado',
+  },
 ];
 
 const overrideIndex = new Map<string, ClassRoleValidation>(

@@ -162,7 +162,13 @@ export const CONDITION_CLASS_KEYS: Record<string, string[]> = {
   dislipidemia: ['ESTATINA', 'HIPOLIPEMIANTE'],
   asma: ['ICS_LABA', 'SABA', 'ICS', 'ANTAGONISTA_LEUCOTRIENO'],
   dpoc: ['LAMA', 'SABA', 'LABA_LAMA', 'LABA', 'SAMA'],
-  icc: ['IECA', 'BETABLOQUEADOR', 'ARM', 'DIURETICO_ALCA', 'BRA', 'ARNI'],
+  // RM-28 (Heart Failure Therapeutic Coverage Completion): SGLT2 adicionado —
+  // dapagliflozina e empagliflozina já existem na base canônica com indicação
+  // própria sourced para IC (ver pharma-database.ts: guidelines_referencia
+  // "ESC 2021 IC — iSGLT2 na IC-FEr (Classe I-A)"; DAPA-HF/EMPEROR-Reduced) e
+  // sua classe já era mapeada por CLASS_KEY_MAP ('SGLT-2'/'iSGLT2' → 'SGLT2')
+  // — só não eram descobertas para ICC por ausência nesta lista.
+  icc: ['IECA', 'BETABLOQUEADOR', 'ARM', 'DIURETICO_ALCA', 'BRA', 'ARNI', 'SGLT2'],
   sca: ['ANTIAGREGANTE'],
   hipotireoidismo: ['HORMONIO_TIREOIDIANO'],
   faringoamigdalite: ['AMINOPENICILINA'],

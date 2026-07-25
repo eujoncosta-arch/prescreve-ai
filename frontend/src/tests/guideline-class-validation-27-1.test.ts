@@ -180,10 +180,10 @@ describe('RM-27.1 · ICC · 8) ARM — papel clínico específico', () => {
   });
 });
 
-describe('RM-27.1 · ICC · 9) iSGLT2 — limitação documentada, não corrigida nesta entrega', () => {
-  it('SGLT2 não está em CONDITION_CLASS_KEYS[icc] — RM-27.1 não expande RM-25.1; iSGLT2 em ICC é limitação registrada no relatório, não implementada', () => {
-    expect(CONDITION_CLASS_KEYS.icc).not.toContain('SGLT2');
-    expect(getValidatedClassRole('icc', 'SGLT2')).toBeUndefined();
+describe('RM-27.1 · ICC · 9) iSGLT2 — limitação documentada no RM-27.1, corrigida no RM-28', () => {
+  it('SGLT2 passou a estar em CONDITION_CLASS_KEYS[icc] a partir do RM-28 (Heart Failure Therapeutic Coverage Completion) — gap de cobertura corrigido, não de evidência (ver HEART_FAILURE_THERAPEUTIC_COVERAGE_REPORT.md)', () => {
+    expect(CONDITION_CLASS_KEYS.icc).toContain('SGLT2');
+    expect(getValidatedClassRole('icc', 'SGLT2')?.papel_clinico).toBe('prognostic_modifier');
   });
 });
 
