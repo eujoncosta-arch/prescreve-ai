@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { ConflictException } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { MfaService } from './mfa.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { RegisterDto, CriarUsuarioPrivilegiadoDto } from './dto/login.dto';
 
@@ -67,6 +68,12 @@ describe('AuthService — autorização e escalada de privilégio', () => {
               if (key === 'JWT_REFRESH_SECRET') return 'test-refresh-secret';
               return undefined;
             }),
+          },
+        },
+        {
+          provide: MfaService,
+          useValue: {
+            verificarCodigoLogin: jest.fn().mockResolvedValue(undefined),
           },
         },
       ],

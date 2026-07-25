@@ -6,3 +6,6 @@
 process.env.JWT_SECRET = process.env.JWT_SECRET || 'e2e-test-secret';
 process.env.JWT_REFRESH_SECRET =
   process.env.JWT_REFRESH_SECRET || 'e2e-test-refresh-secret';
+// 32 bytes em hex — apenas para teste (ver src/auth/mfa-crypto.util.ts).
+process.env.MFA_ENCRYPTION_KEY =
+  process.env.MFA_ENCRYPTION_KEY || 'b'.repeat(64);

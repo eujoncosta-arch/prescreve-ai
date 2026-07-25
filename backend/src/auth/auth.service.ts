@@ -13,6 +13,7 @@ import {
 } from './dto/login.dto';
 import { Perfil, TipoAuditoria } from '@prisma/client';
 import { getRequiredSecret } from './jwt-secrets.util';
+import { MfaService } from './mfa.service';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 
@@ -37,6 +38,7 @@ export class AuthService {
     private prisma: PrismaService,
     private jwt: JwtService,
     private config: ConfigService,
+    private mfa: MfaService,
   ) {}
 
   // ── REGISTER (público) ───────────────────────────────────────
@@ -149,9 +151,22 @@ export class AuthService {
       throw new UnauthorizedException('Credenciais inválidas');
     }
 
-    // MFA
-    if (usuario.mfa_ativo && !dto.mfa_code) {
-      throw new UnauthorizedException('Código MFA obrigatório');
+    // MFA — verificação criptográfica REAL (TOTP/RFC 6238 ou código de
+    // recuperação de uso único), nunca "código presente = aceitar".
+    // MfaService.verificarCodigoLogin() lança UnauthorizedException em
+    // qualquer caso de falha (ausente, inválido, expirado, bloqueado).
+    if (usuario.mfa_ativo) {
+      try {
+        await this.mfa.verificarCodigoLogin(usuario, dto.mfa_code ?? '');
+      } catch (e) {
+        await this.registrarAuditoria(
+          usuario.id,
+          'login',
+          'FALHA — MFA inválido',
+          ip,
+        );
+        throw e;
+      }
     }
 
     await this.registrarAuditoria(usuario.id, 'login', 'SUCESSO', ip);

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
-import { ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { CacheModule } from './modules/cache/cache.module';
@@ -22,6 +23,13 @@ import { AppService } from './app.service';
     MigrationModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    // ThrottlerModule estava configurado mas o guard nunca era aplicado —
+    // rate limiting era inteiramente inerte. Registrado globalmente (60
+    // req/min por padrão); endpoints sensíveis (login, MFA) sobrescrevem
+    // com limites mais restritivos via @Throttle().
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
+  ],
 })
 export class AppModule {}

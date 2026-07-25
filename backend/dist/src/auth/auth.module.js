@@ -13,14 +13,18 @@ const passport_1 = require("@nestjs/passport");
 const config_1 = require("@nestjs/config");
 const auth_service_1 = require("./auth.service");
 const auth_controller_1 = require("./auth.controller");
+const mfa_service_1 = require("./mfa.service");
+const mfa_controller_1 = require("./mfa.controller");
 const jwt_strategy_1 = require("./jwt.strategy");
 const jwt_secrets_util_1 = require("./jwt-secrets.util");
+const audit_module_1 = require("../modules/audit/audit.module");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            audit_module_1.AuditModule,
             passport_1.PassportModule.register({ defaultStrategy: 'jwt' }),
             jwt_1.JwtModule.registerAsync({
                 imports: [config_1.ConfigModule],
@@ -31,9 +35,9 @@ exports.AuthModule = AuthModule = __decorate([
                 }),
             }),
         ],
-        controllers: [auth_controller_1.AuthController],
-        providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy],
-        exports: [auth_service_1.AuthService, jwt_1.JwtModule, passport_1.PassportModule],
+        controllers: [auth_controller_1.AuthController, mfa_controller_1.MfaController],
+        providers: [auth_service_1.AuthService, mfa_service_1.MfaService, jwt_strategy_1.JwtStrategy],
+        exports: [auth_service_1.AuthService, mfa_service_1.MfaService, jwt_1.JwtModule, passport_1.PassportModule],
     })
 ], AuthModule);
 //# sourceMappingURL=auth.module.js.map

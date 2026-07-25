@@ -17,18 +17,18 @@ export declare class AuditService {
     constructor(prisma: PrismaService);
     registrarAuditoria(input: AuditoriaInput): Promise<{
         timestamp: Date;
-        id: string;
-        crm_hash: string | null;
         usuario_id: string | null;
+        crm_hash: string | null;
         tipo: import("@prisma/client").$Enums.TipoAuditoria;
         acao: string;
         recurso: string | null;
         dados_entrada: import("@prisma/client/runtime/client").JsonValue | null;
         dados_saida: import("@prisma/client/runtime/client").JsonValue | null;
-        ip_hash: string | null;
-        user_agent_hash: string | null;
         guideline_ref: string | null;
         evidencia_ref: string | null;
+        id: string;
+        ip_hash: string | null;
+        user_agent_hash: string | null;
         hash_integridade: string;
     }>;
     buscarAuditoria(filtros: {
@@ -44,14 +44,14 @@ export declare class AuditService {
         limite: number;
         registros: {
             timestamp: Date;
-            id: string;
             crm_hash: string | null;
             tipo: import("@prisma/client").$Enums.TipoAuditoria;
             acao: string;
             recurso: string | null;
-            ip_hash: string | null;
             guideline_ref: string | null;
             evidencia_ref: string | null;
+            id: string;
+            ip_hash: string | null;
             hash_integridade: string;
         }[];
     }>;

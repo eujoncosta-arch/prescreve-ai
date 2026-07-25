@@ -6,5 +6,8 @@
   "setupFiles": ["<rootDir>/setup-e2e.ts"],
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
-  }
+  },
+  "transformIgnorePatterns": [
+    "node_modules/(?!(otplib|@otplib|@scure|@noble)/)"
+  ]
 }

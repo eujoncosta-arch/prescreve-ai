@@ -7,6 +7,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { AuthService } from './auth.service';
 import {
   LoginDto,
@@ -53,7 +54,10 @@ export class AuthController {
     return this.auth.criarUsuarioPrivilegiado(dto, user.id);
   }
 
+  // Rate limit próprio (mais restritivo que os 60/min globais) — mitiga
+  // força bruta de senha e/ou código MFA diretamente no endpoint de login.
   @Post('login')
+  @Throttle({ default: { limit: 10, ttl: 60_000 } })
   @HttpCode(HttpStatus.OK)
   login(@Body() dto: LoginDto, @Req() req: Request) {
     const ip = req.ip ?? req.headers['x-forwarded-for']?.toString();

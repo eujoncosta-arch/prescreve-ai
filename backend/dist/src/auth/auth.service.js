@@ -48,6 +48,7 @@ const jwt_1 = require("@nestjs/jwt");
 const config_1 = require("@nestjs/config");
 const prisma_service_1 = require("../prisma/prisma.service");
 const jwt_secrets_util_1 = require("./jwt-secrets.util");
+const mfa_service_1 = require("./mfa.service");
 const bcrypt = __importStar(require("bcrypt"));
 const crypto = __importStar(require("crypto"));
 function hashSHA256(value) {
@@ -65,10 +66,12 @@ let AuthService = class AuthService {
     prisma;
     jwt;
     config;
-    constructor(prisma, jwt, config) {
+    mfa;
+    constructor(prisma, jwt, config, mfa) {
         this.prisma = prisma;
         this.jwt = jwt;
         this.config = config;
+        this.mfa = mfa;
     }
     async register(dto) {
         const existing = await this.prisma.usuario.findUnique({
@@ -140,8 +143,14 @@ let AuthService = class AuthService {
             await this.registrarAuditoria(usuario.id, 'login', 'FALHA — senha incorreta', ip);
             throw new common_1.UnauthorizedException('Credenciais inválidas');
         }
-        if (usuario.mfa_ativo && !dto.mfa_code) {
-            throw new common_1.UnauthorizedException('Código MFA obrigatório');
+        if (usuario.mfa_ativo) {
+            try {
+                await this.mfa.verificarCodigoLogin(usuario, dto.mfa_code ?? '');
+            }
+            catch (e) {
+                await this.registrarAuditoria(usuario.id, 'login', 'FALHA — MFA inválido', ip);
+                throw e;
+            }
         }
         await this.registrarAuditoria(usuario.id, 'login', 'SUCESSO', ip);
         return this.gerarTokens(usuario.id, usuario.email, usuario.perfil);
@@ -206,6 +215,7 @@ exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
         jwt_1.JwtService,
-        config_1.ConfigService])
+        config_1.ConfigService,
+        mfa_service_1.MfaService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

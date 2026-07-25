@@ -62,6 +62,11 @@ enum TipoAuditoria {
   dados_exportados
   migracao
   criacao_usuario_privilegiado
+  mfa_ativado
+  mfa_desativado
+  mfa_verificacao_falha
+  mfa_recovery_usado
+  mfa_bloqueado
 }
 
 enum StatusValidacao {
@@ -81,8 +86,19 @@ model Usuario {
   senha_hash     String
   perfil         Perfil    @default(MEDICO)
   ativo          Boolean   @default(true)
-  mfa_secret     String?
-  mfa_ativo      Boolean   @default(false)
+  /// Segredo TOTP (RFC 6238), SEMPRE armazenado criptografado (AES-256-GCM,
+  /// ver mfa-crypto.util.ts) — nunca em texto puro. Ausente até o usuário
+  /// iniciar o enrollment; presente mas com mfa_ativo=false durante o
+  /// enrollment pendente de confirmação.
+  mfa_secret               String?
+  mfa_ativo                Boolean   @default(false)
+  /// Contador de falhas consecutivas de verificação MFA (login/desativação) —
+  /// zera a cada sucesso. Usado para bloqueio temporário (ver mfa_bloqueado_ate).
+  mfa_falhas_consecutivas  Int       @default(0)
+  /// Timestamp até quando novas tentativas de MFA são recusadas sem sequer
+  /// verificar o código, após exceder o limite de falhas consecutivas.
+  mfa_bloqueado_ate        DateTime?
+  mfa_recovery_codes       MfaRecoveryCode[]
   refresh_tokens RefreshToken[]
   consultas      Consulta[]
   validacoes     MedicalValidation[]
@@ -111,6 +127,22 @@ model RefreshToken {
 
   @@index([usuario_id])
   @@map("refresh_tokens")
+}
+
+/// Código de recuperação MFA de uso único. `code_hash` é um hash bcrypt do
+/// código real (nunca armazenado em texto puro, mesma estratégia de
+/// `senha_hash`) — códigos não são recuperáveis, apenas verificáveis.
+model MfaRecoveryCode {
+  id         String    @id @default(cuid())
+  usuario_id String
+  usuario    Usuario   @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  code_hash  String
+  usado      Boolean   @default(false)
+  usado_em   DateTime?
+  criado_em  DateTime  @default(now())
+
+  @@index([usuario_id])
+  @@map("mfa_recovery_codes")
 }
 
 model Medico {

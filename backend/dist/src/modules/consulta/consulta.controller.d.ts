@@ -7,11 +7,11 @@ export declare class ConsultaController {
         id: string;
     }): Promise<{
         status: import("@prisma/client").$Enums.StatusConsulta;
+        usuario_id: string;
         id: string;
         criado_em: Date;
         atualizado_em: Date;
         deletado_em: Date | null;
-        usuario_id: string;
         anamnese: import("@prisma/client/runtime/client").JsonValue | null;
         paciente_id: string | null;
     }>;
@@ -37,11 +37,11 @@ export declare class ConsultaController {
             }[];
         } & {
             status: import("@prisma/client").$Enums.StatusConsulta;
+            usuario_id: string;
             id: string;
             criado_em: Date;
             atualizado_em: Date;
             deletado_em: Date | null;
-            usuario_id: string;
             anamnese: import("@prisma/client/runtime/client").JsonValue | null;
             paciente_id: string | null;
         })[];
@@ -63,8 +63,8 @@ export declare class ConsultaController {
                 status: string;
                 diretriz: string;
                 id: string;
-                criado_em: Date;
                 hash_integridade: string;
+                criado_em: Date;
                 cid: string;
                 versao: number;
                 molecula: string;
@@ -80,10 +80,10 @@ export declare class ConsultaController {
         } & {
             status: import("@prisma/client").$Enums.StatusPrescricao;
             id: string;
+            hash_integridade: string;
             criado_em: Date;
             atualizado_em: Date;
             deletado_em: Date | null;
-            hash_integridade: string;
             consulta_id: string;
             diagnostico_id: string | null;
             orientacoes: string | null;
@@ -121,11 +121,11 @@ export declare class ConsultaController {
         }[];
     } & {
         status: import("@prisma/client").$Enums.StatusConsulta;
+        usuario_id: string;
         id: string;
         criado_em: Date;
         atualizado_em: Date;
         deletado_em: Date | null;
-        usuario_id: string;
         anamnese: import("@prisma/client/runtime/client").JsonValue | null;
         paciente_id: string | null;
     }>;
@@ -156,10 +156,10 @@ export declare class ConsultaController {
     }): Promise<{
         status: import("@prisma/client").$Enums.StatusPrescricao;
         id: string;
+        hash_integridade: string;
         criado_em: Date;
         atualizado_em: Date;
         deletado_em: Date | null;
-        hash_integridade: string;
         consulta_id: string;
         diagnostico_id: string | null;
         orientacoes: string | null;
@@ -212,8 +212,8 @@ export declare class ConsultaController {
         diagnostico: string;
         especialidade: string;
         id: string;
-        criado_em: Date;
         hash_integridade: string;
+        criado_em: Date;
         cid: string;
         medicamentos: string[];
         total_casos: number;
