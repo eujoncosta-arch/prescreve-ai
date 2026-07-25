@@ -65,12 +65,16 @@ let MigrationService = MigrationService_1 = class MigrationService {
             data: {
                 usuario_id: usuarioId,
                 status: 'concluida',
-                anamnese: { origem: 'migracao_localStorage', dados: (dados.consultas ?? []) },
+                anamnese: {
+                    origem: 'migracao_localStorage',
+                    dados: (dados.consultas ?? []),
+                },
             },
         });
         for (const rx of dados.prescricoes ?? []) {
             try {
-                const hash = crypto.createHash('sha256')
+                const hash = crypto
+                    .createHash('sha256')
                     .update(JSON.stringify({ ...rx, ts: Date.now() }))
                     .digest('hex');
                 await this.prisma.prescricao.create({
@@ -121,9 +125,15 @@ let MigrationService = MigrationService_1 = class MigrationService {
             this.prisma.prescricao.count({
                 where: { consulta: { usuario_id: usuarioId } },
             }),
-            this.prisma.medicalValidation.count({ where: { validador_id: usuarioId } }),
+            this.prisma.medicalValidation.count({
+                where: { validador_id: usuarioId },
+            }),
         ]);
-        return { migrado: prescricoes > 0 || validacoes > 0, prescricoes, validacoes };
+        return {
+            migrado: prescricoes > 0 || validacoes > 0,
+            prescricoes,
+            validacoes,
+        };
     }
 };
 exports.MigrationService = MigrationService;

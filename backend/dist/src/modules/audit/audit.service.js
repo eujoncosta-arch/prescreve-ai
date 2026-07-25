@@ -53,9 +53,14 @@ let AuditService = class AuditService {
     }
     async registrarAuditoria(input) {
         const { ip, ...rest } = input;
-        const ip_hash = ip ? crypto.createHash('sha256').update(ip).digest('hex') : undefined;
+        const ip_hash = ip
+            ? crypto.createHash('sha256').update(ip).digest('hex')
+            : undefined;
         const payload = JSON.stringify({ ...rest, ip_hash, timestamp: Date.now() });
-        const hash_integridade = crypto.createHash('sha256').update(payload).digest('hex');
+        const hash_integridade = crypto
+            .createHash('sha256')
+            .update(payload)
+            .digest('hex');
         return this.prisma.auditoria.create({
             data: {
                 usuario_id: input.usuario_id,
@@ -83,9 +88,16 @@ let AuditService = class AuditService {
                 skip,
                 take: limite,
                 select: {
-                    id: true, tipo: true, acao: true, recurso: true,
-                    ip_hash: true, hash_integridade: true, timestamp: true,
-                    crm_hash: true, guideline_ref: true, evidencia_ref: true,
+                    id: true,
+                    tipo: true,
+                    acao: true,
+                    recurso: true,
+                    ip_hash: true,
+                    hash_integridade: true,
+                    timestamp: true,
+                    crm_hash: true,
+                    guideline_ref: true,
+                    evidencia_ref: true,
                 },
             }),
         ]);
@@ -100,7 +112,7 @@ let AuditService = class AuditService {
         if (formato === 'json')
             return JSON.stringify(registros, null, 2);
         const header = 'id,tipo,acao,recurso,hash_integridade,timestamp';
-        const rows = registros.map(r => `${r.id},${r.tipo},${r.acao},${r.recurso ?? ''},${r.hash_integridade},${r.timestamp.toISOString()}`);
+        const rows = registros.map((r) => `${r.id},${r.tipo},${r.acao},${r.recurso ?? ''},${r.hash_integridade},${r.timestamp.toISOString()}`);
         return [header, ...rows].join('\n');
     }
 };

@@ -64,10 +64,14 @@ export class AuthController {
     return this.auth.login(dto, ip);
   }
 
+  // Rate limit próprio — refresh token é um alvo de força bruta/replay tão
+  // sensível quanto login (compromete a sessão inteira em caso de sucesso).
   @Post('refresh')
+  @Throttle({ default: { limit: 10, ttl: 60_000 } })
   @HttpCode(HttpStatus.OK)
-  refresh(@Body() dto: RefreshDto) {
-    return this.auth.refresh(dto.refresh_token);
+  refresh(@Body() dto: RefreshDto, @Req() req: Request) {
+    const ip = req.ip ?? req.headers['x-forwarded-for']?.toString();
+    return this.auth.refresh(dto.refresh_token, ip);
   }
 
   @Post('logout')

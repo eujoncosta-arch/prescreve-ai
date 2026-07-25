@@ -10,10 +10,18 @@ export class MigrationController {
 
   @Post()
   migrar(
-    @Body() dados: { prescricoes?: unknown[]; validacoes?: unknown[]; consultas?: unknown[] },
+    @Body()
+    dados: {
+      prescricoes?: unknown[];
+      validacoes?: unknown[];
+      consultas?: unknown[];
+    },
     @CurrentUser() user: { id: string },
   ) {
-    return this.svc.migrarHistorico(user.id, dados as Parameters<MigrationService['migrarHistorico']>[1]);
+    return this.svc.migrarHistorico(
+      user.id,
+      dados as Parameters<MigrationService['migrarHistorico']>[1],
+    );
   }
 
   @Get('status')

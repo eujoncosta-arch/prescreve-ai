@@ -155,13 +155,24 @@ let AuthService = class AuthService {
         await this.registrarAuditoria(usuario.id, 'login', 'SUCESSO', ip);
         return this.gerarTokens(usuario.id, usuario.email, usuario.perfil);
     }
-    async refresh(token) {
+    async refresh(token, ip) {
         const hash = hashSHA256(token);
         const rt = await this.prisma.refreshToken.findUnique({
             where: { token_hash: hash },
             include: { usuario: true },
         });
-        if (!rt || rt.revogado || rt.expira_em < new Date()) {
+        if (!rt) {
+            throw new common_1.UnauthorizedException('Refresh token inválido ou expirado');
+        }
+        if (rt.revogado) {
+            await this.prisma.refreshToken.updateMany({
+                where: { usuario_id: rt.usuario_id, revogado: false },
+                data: { revogado: true },
+            });
+            await this.registrarAuditoria(rt.usuario_id, 'acesso_negado', 'Reuso de refresh token já revogado detectado — todas as sessões do usuário foram revogadas por precaução', ip);
+            throw new common_1.UnauthorizedException('Refresh token inválido ou expirado');
+        }
+        if (rt.expira_em < new Date()) {
             throw new common_1.UnauthorizedException('Refresh token inválido ou expirado');
         }
         await this.prisma.refreshToken.update({

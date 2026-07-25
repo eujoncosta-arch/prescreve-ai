@@ -2,7 +2,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { ConflictException } from '@nestjs/common';
+import { ConflictException, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { MfaService } from './mfa.service';
 import { PrismaService } from '../prisma/prisma.service';
@@ -30,7 +30,12 @@ describe('AuthService — autorização e escalada de privilégio', () => {
   let service: AuthService;
   let prisma: {
     usuario: { findUnique: jest.Mock; create: jest.Mock };
-    refreshToken: { create: jest.Mock };
+    refreshToken: {
+      create: jest.Mock;
+      findUnique: jest.Mock;
+      update: jest.Mock;
+      updateMany: jest.Mock;
+    };
     auditoria: { create: jest.Mock };
   };
 
@@ -46,7 +51,12 @@ describe('AuthService — autorização e escalada de privilégio', () => {
           }),
         ),
       },
-      refreshToken: { create: jest.fn().mockResolvedValue({}) },
+      refreshToken: {
+        create: jest.fn().mockResolvedValue({}),
+        findUnique: jest.fn(),
+        update: jest.fn().mockResolvedValue({}),
+        updateMany: jest.fn().mockResolvedValue({ count: 0 }),
+      },
       auditoria: { create: jest.fn().mockResolvedValue({}) },
     };
 
@@ -64,8 +74,10 @@ describe('AuthService — autorização e escalada de privilégio', () => {
           provide: ConfigService,
           useValue: {
             get: jest.fn((key: string) => {
-              if (key === 'JWT_SECRET') return 'test-secret';
-              if (key === 'JWT_REFRESH_SECRET') return 'test-refresh-secret';
+              if (key === 'JWT_SECRET')
+                return 'test-secret-abcdefghijklmnopqrstuvwxyz-0123456789';
+              if (key === 'JWT_REFRESH_SECRET')
+                return 'test-refresh-secret-zyxwvutsrqponmlkjih-9876543210';
               return undefined;
             }),
           },
@@ -183,6 +195,106 @@ describe('AuthService — autorização e escalada de privilégio', () => {
       const resultado = await service.criarUsuarioPrivilegiado(dto, 'admin-id');
       expect(resultado).not.toHaveProperty('senha_hash');
       expect(Object.keys(resultado).sort()).toEqual(['email', 'id', 'perfil']);
+    });
+  });
+
+  describe('refresh() — hardening: rotação, revogação, reuso e expiração', () => {
+    const usuarioBase = {
+      id: 'user-1',
+      email: 'medico@x.com',
+      perfil: 'MEDICO' as const,
+    };
+
+    it('refresh token REVOGADO → falha (401) e revoga TODAS as sessões ativas do usuário (detecção de reuso)', async () => {
+      prisma.refreshToken.findUnique.mockResolvedValueOnce({
+        id: 'rt-1',
+        usuario_id: usuarioBase.id,
+        revogado: true,
+        expira_em: new Date(Date.now() + 60_000),
+        usuario: usuarioBase,
+      });
+
+      await expect(service.refresh('token-revogado')).rejects.toBeInstanceOf(
+        UnauthorizedException,
+      );
+
+      expect(prisma.refreshToken.updateMany).toHaveBeenCalledWith({
+        where: { usuario_id: usuarioBase.id, revogado: false },
+        data: { revogado: true },
+      });
+      const auditCalls = prisma.auditoria.create.mock.calls as unknown[][];
+      const auditCall = auditCalls.find(
+        (c) =>
+          (c[0] as { data: { tipo: string } }).data.tipo === 'acesso_negado',
+      );
+      expect(auditCall).toBeDefined();
+    });
+
+    it('refresh token REUTILIZADO (mesmo token apresentado duas vezes) → a segunda tentativa falha', async () => {
+      // Primeira apresentação: válido, rotaciona (revoga o antigo).
+      prisma.refreshToken.findUnique.mockResolvedValueOnce({
+        id: 'rt-1',
+        usuario_id: usuarioBase.id,
+        revogado: false,
+        expira_em: new Date(Date.now() + 60_000),
+        usuario: usuarioBase,
+      });
+      await service.refresh('token-original');
+      expect(prisma.refreshToken.update).toHaveBeenCalledWith({
+        where: { id: 'rt-1' },
+        data: { revogado: true },
+      });
+
+      // Segunda apresentação do MESMO token: agora já está revogado no "banco".
+      prisma.refreshToken.findUnique.mockResolvedValueOnce({
+        id: 'rt-1',
+        usuario_id: usuarioBase.id,
+        revogado: true,
+        expira_em: new Date(Date.now() + 60_000),
+        usuario: usuarioBase,
+      });
+      await expect(service.refresh('token-original')).rejects.toBeInstanceOf(
+        UnauthorizedException,
+      );
+    });
+
+    it('refresh token EXPIRADO → falha (401)', async () => {
+      prisma.refreshToken.findUnique.mockResolvedValueOnce({
+        id: 'rt-1',
+        usuario_id: usuarioBase.id,
+        revogado: false,
+        expira_em: new Date(Date.now() - 1000), // já expirou
+        usuario: usuarioBase,
+      });
+      await expect(service.refresh('token-expirado')).rejects.toBeInstanceOf(
+        UnauthorizedException,
+      );
+      expect(prisma.refreshToken.update).not.toHaveBeenCalled();
+    });
+
+    it('refresh token INEXISTENTE/desconhecido → falha (401)', async () => {
+      prisma.refreshToken.findUnique.mockResolvedValueOnce(null);
+      await expect(
+        service.refresh('token-nunca-emitido'),
+      ).rejects.toBeInstanceOf(UnauthorizedException);
+    });
+
+    it('refresh token VÁLIDO → sucesso, rotaciona (revoga o antigo, emite novo par)', async () => {
+      prisma.refreshToken.findUnique.mockResolvedValueOnce({
+        id: 'rt-1',
+        usuario_id: usuarioBase.id,
+        revogado: false,
+        expira_em: new Date(Date.now() + 60_000),
+        usuario: usuarioBase,
+      });
+      const resultado = await service.refresh('token-valido');
+      expect(resultado.access_token).toBeTruthy();
+      expect(prisma.refreshToken.update).toHaveBeenCalledWith({
+        where: { id: 'rt-1' },
+        data: { revogado: true },
+      });
+      // Novo refresh token é persistido (rotação real, não reaproveita o mesmo registro).
+      expect(prisma.refreshToken.create).toHaveBeenCalled();
     });
   });
 });

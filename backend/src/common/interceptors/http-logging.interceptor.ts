@@ -21,11 +21,15 @@ export class HttpLoggingInterceptor implements NestInterceptor {
       tap({
         next: () => {
           const res = context.switchToHttp().getResponse();
-          this.logger.log(`${method} ${url} ${res.statusCode} — ${Date.now() - now}ms`);
+          this.logger.log(
+            `${method} ${url} ${res.statusCode} — ${Date.now() - now}ms`,
+          );
         },
         error: (err: { status?: number }) => {
           const status = err?.status ?? 500;
-          this.logger.error(`${method} ${url} ${status} — ${Date.now() - now}ms`);
+          this.logger.error(
+            `${method} ${url} ${status} — ${Date.now() - now}ms`,
+          );
         },
       }),
     );

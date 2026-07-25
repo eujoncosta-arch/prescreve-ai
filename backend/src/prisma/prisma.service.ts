@@ -11,7 +11,10 @@ function criarAdapter() {
 }
 
 @Injectable()
-export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
+export class PrismaService
+  extends PrismaClient
+  implements OnModuleInit, OnModuleDestroy
+{
   constructor() {
     const adapter = criarAdapter();
     super(adapter ? { adapter } : {});

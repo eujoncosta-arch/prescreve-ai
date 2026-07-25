@@ -35,7 +35,10 @@ let CacheService = CacheService_1 = class CacheService {
         this.config = config;
         const url = config.get('REDIS_URL');
         if (url) {
-            this.client = new ioredis_1.default(url, { lazyConnect: true, enableOfflineQueue: false });
+            this.client = new ioredis_1.default(url, {
+                lazyConnect: true,
+                enableOfflineQueue: false,
+            });
             this.client.on('error', (e) => this.logger.warn(`Redis: ${e.message}`));
             this.enabled = true;
         }

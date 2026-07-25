@@ -37,8 +37,9 @@ let AuthController = class AuthController {
         const ip = req.ip ?? req.headers['x-forwarded-for']?.toString();
         return this.auth.login(dto, ip);
     }
-    refresh(dto) {
-        return this.auth.refresh(dto.refresh_token);
+    refresh(dto, req) {
+        const ip = req.ip ?? req.headers['x-forwarded-for']?.toString();
+        return this.auth.refresh(dto.refresh_token, ip);
     }
     logout(user) {
         return this.auth.logout(user.id);
@@ -75,10 +76,12 @@ __decorate([
 ], AuthController.prototype, "login", null);
 __decorate([
     (0, common_1.Post)('refresh'),
+    (0, throttler_1.Throttle)({ default: { limit: 10, ttl: 60_000 } }),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [login_dto_1.RefreshDto]),
+    __metadata("design:paramtypes", [login_dto_1.RefreshDto, Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "refresh", null);
 __decorate([

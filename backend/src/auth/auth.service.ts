@@ -174,19 +174,45 @@ export class AuthService {
   }
 
   // ── REFRESH TOKEN ────────────────────────────────────────────
+  //
+  // Hardening de infraestrutura — detecção de REUSO: um refresh token só
+  // pode ser apresentado uma vez (rotação obrigatória a cada uso). Se um
+  // token JÁ REVOGADO (seja por rotação anterior ou por logout explícito)
+  // for apresentado novamente, isso é tratado como sinal de possível
+  // comprometimento (token roubado sendo reproduzido) — TODAS as sessões
+  // ativas do usuário são revogadas imediatamente, forçando novo login em
+  // todos os dispositivos, e o evento é auditado.
 
-  async refresh(token: string) {
+  async refresh(token: string, ip?: string) {
     const hash = hashSHA256(token);
     const rt = await this.prisma.refreshToken.findUnique({
       where: { token_hash: hash },
       include: { usuario: true },
     });
 
-    if (!rt || rt.revogado || rt.expira_em < new Date()) {
+    if (!rt) {
       throw new UnauthorizedException('Refresh token inválido ou expirado');
     }
 
-    // Rotação: revogar o antigo
+    if (rt.revogado) {
+      await this.prisma.refreshToken.updateMany({
+        where: { usuario_id: rt.usuario_id, revogado: false },
+        data: { revogado: true },
+      });
+      await this.registrarAuditoria(
+        rt.usuario_id,
+        'acesso_negado',
+        'Reuso de refresh token já revogado detectado — todas as sessões do usuário foram revogadas por precaução',
+        ip,
+      );
+      throw new UnauthorizedException('Refresh token inválido ou expirado');
+    }
+
+    if (rt.expira_em < new Date()) {
+      throw new UnauthorizedException('Refresh token inválido ou expirado');
+    }
+
+    // Rotação: revogar o antigo antes de emitir o novo par de tokens.
     await this.prisma.refreshToken.update({
       where: { id: rt.id },
       data: { revogado: true },

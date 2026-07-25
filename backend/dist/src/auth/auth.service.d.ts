@@ -24,7 +24,7 @@ export declare class AuthService {
         refresh_token: string;
         perfil: import("@prisma/client").$Enums.Perfil;
     }>;
-    refresh(token: string): Promise<{
+    refresh(token: string, ip?: string): Promise<{
         access_token: string;
         refresh_token: string;
         perfil: import("@prisma/client").$Enums.Perfil;

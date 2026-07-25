@@ -55,14 +55,18 @@ export class MigrationService {
       data: {
         usuario_id: usuarioId,
         status: 'concluida',
-        anamnese: { origem: 'migracao_localStorage', dados: (dados.consultas ?? []) as object[] },
+        anamnese: {
+          origem: 'migracao_localStorage',
+          dados: (dados.consultas ?? []) as object[],
+        },
       },
     });
 
     // ── Migrar prescrições ────────────────────────────────────
     for (const rx of dados.prescricoes ?? []) {
       try {
-        const hash = crypto.createHash('sha256')
+        const hash = crypto
+          .createHash('sha256')
           .update(JSON.stringify({ ...rx, ts: Date.now() }))
           .digest('hex');
 
@@ -109,7 +113,9 @@ export class MigrationService {
       dados_saida: { prescricoes_migradas, validacoes_migradas, erros },
     });
 
-    this.logger.log(`Migração concluída: ${prescricoes_migradas}rx, ${validacoes_migradas}val, ${erros.length} erros — ${duracao_ms}ms`);
+    this.logger.log(
+      `Migração concluída: ${prescricoes_migradas}rx, ${validacoes_migradas}val, ${erros.length} erros — ${duracao_ms}ms`,
+    );
 
     return { prescricoes_migradas, validacoes_migradas, erros, duracao_ms };
   }
@@ -123,8 +129,14 @@ export class MigrationService {
       this.prisma.prescricao.count({
         where: { consulta: { usuario_id: usuarioId } },
       }),
-      this.prisma.medicalValidation.count({ where: { validador_id: usuarioId } }),
+      this.prisma.medicalValidation.count({
+        where: { validador_id: usuarioId },
+      }),
     ]);
-    return { migrado: prescricoes > 0 || validacoes > 0, prescricoes, validacoes };
+    return {
+      migrado: prescricoes > 0 || validacoes > 0,
+      prescricoes,
+      validacoes,
+    };
   }
 }
