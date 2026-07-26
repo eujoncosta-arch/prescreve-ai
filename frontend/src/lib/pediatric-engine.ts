@@ -564,8 +564,15 @@ export const PEDIATRIC_DOSES: PediatricDoseEntry[] = [
     drugId: 'lactulose',
     drugName: 'Lactulose',
     indicacoes: [{
+      // Correção PED-AUDIT-05 (auditoria RM-36): `doseMgKg: 0` era um
+      // placeholder — mas `0` é falsy em JS, então `else if (indicEntry.doseMgKg)`
+      // em calcDosePediatrica NUNCA entrava nesse ramo, deixando
+      // doseUnitariaMg/doseUnitariaTexto sempre nulos/vazios mesmo com dados
+      // válidos disponíveis (a posologia real é por mL/kg, documentada em
+      // `instrucoes`, não em mg/kg). Removido o campo em vez de um valor
+      // falsy, para não simular uma dose estruturada que não existe.
       nome: 'Constipação intestinal',
-      doseMgKg: 0, frequencia: '1–3×/dia',
+      frequencia: '1–3×/dia',
       idadeMinMeses: 0,
       instrucoes: 'Lactente: 1–2 mL/kg/dia ÷ 2–3 tomadas. 1–5 anos: 5–10 mL/dia. 6–12 anos: 10–15 mL/dia. Encefalopatia: dose dobrada até 2–3 evacuações/dia.',
     }],
@@ -585,19 +592,43 @@ export function calcDosePediatrica(
   const entry = PEDIATRIC_DOSES.find(d => d.drugId === drugId);
   if (!entry) return null;
 
-  const indicEntry = indicacao
-    ? entry.indicacoes.find(i => i.nome.toLowerCase().includes(indicacao.toLowerCase()))
-    : entry.indicacoes[0];
-  if (!indicEntry) return null;
-
   const idadeEfetiva = patient.idadeGestacionalSemanas && patient.idadePostNatalDias
     ? calcIdadeCorrigida(patient.idadeGestacionalSemanas, patient.idadePostNatalDias).mesesCorrigidos
     : patient.idadeMeses;
 
-  // Verificar idade mínima
+  /**
+   * Correção PED-AUDIT-02 (auditoria RM-36 — crítico): quando nenhuma
+   * `indicacao` era passada, o código sempre usava `entry.indicacoes[0]`,
+   * ignorando `idadeMinMeses`/`idadeMaxMeses` de cada indicação. Para
+   * aciclovir, `indicacoes[0]` é o regime NEONATAL (20 mg/kg IV 8/8h,
+   * idadeMaxMeses:3, SEM maxDoseMg — apropriado só até 3 meses de vida).
+   * Qualquer chamador que não especificasse `indicacao` explicitamente
+   * (`calcDosePediatrica('aciclovir', patient)` — usado de fato em
+   * simulation-phase22-3.ts, stress-test-phase22-4.ts,
+   * validate-extreme-data.ts) recebia esse regime neonatal MESMO para uma
+   * criança de 5 anos, sem cap de dose. Corrigido para selecionar, entre
+   * as indicações do medicamento, a primeira cuja faixa etária realmente
+   * contém `idadeEfetiva` — só cai de volta a `indicacoes[0]` se nenhuma
+   * faixa etária bater (comportamento anterior, preservado como fallback).
+   */
+  const indicEntry = indicacao
+    ? entry.indicacoes.find(i => i.nome.toLowerCase().includes(indicacao.toLowerCase()))
+    : (entry.indicacoes.find(i =>
+        (i.idadeMinMeses === undefined || idadeEfetiva >= i.idadeMinMeses) &&
+        (i.idadeMaxMeses === undefined || idadeEfetiva <= i.idadeMaxMeses),
+      ) ?? entry.indicacoes[0]);
+  if (!indicEntry) return null;
+
+  // Verificar idade mínima e máxima — ambas checadas mesmo quando a
+  // indicação foi passada explicitamente pelo chamador (defesa em
+  // profundidade: um chamador pode pedir uma indicação existente mas
+  // inadequada para a idade do paciente).
   const alertas: string[] = [...(indicEntry.alertas ?? []), ...(entry.contraindPediatrica ?? [])];
   if (indicEntry.idadeMinMeses !== undefined && idadeEfetiva < indicEntry.idadeMinMeses) {
     alertas.unshift(`⚠ CONTRAINDICADO: idade mínima ${indicEntry.idadeMinMeses} meses. Paciente tem ${idadeEfetiva} meses.`);
+  }
+  if (indicEntry.idadeMaxMeses !== undefined && idadeEfetiva > indicEntry.idadeMaxMeses) {
+    alertas.unshift(`⚠ CONTRAINDICADO: esta indicação é válida até ${indicEntry.idadeMaxMeses} meses. Paciente tem ${idadeEfetiva} meses — reavaliar indicação/dose apropriada para a idade.`);
   }
 
   // Calcular dose
@@ -632,7 +663,15 @@ export function calcDosePediatrica(
         if (valorComparado > limite) doseFixaValor = dose;
       } else if (faixaLimpa.includes('–')) {
         const [minS, maxS] = faixaLimpa.split('–').map(s => parseFloat(s));
-        if (valorComparado >= minS && valorComparado < maxS) doseFixaValor = dose;
+        // Correção PED-AUDIT-01 (auditoria RM-36 — alto): limite superior era
+        // EXCLUSIVO (`< maxS`) enquanto o ramo `>limite` também é exclusivo
+        // (`> limite`) — um paciente EXATAMENTE no valor de fronteira (ex.:
+        // 2,0 anos para albendazol; 40,0 kg para oseltamivir) não satisfazia
+        // nenhum dos dois ramos e ficava sem dose calculada (`null`),
+        // silenciosamente. Tornado o limite superior INCLUSIVO — na
+        // fronteira exata, usa-se a faixa mais conservadora (dose menor),
+        // nunca a mais alta por omissão.
+        if (valorComparado >= minS && valorComparado <= maxS) doseFixaValor = dose;
       }
     }
     doseUnitariaMg = doseFixaValor;
@@ -641,6 +680,14 @@ export function calcDosePediatrica(
     doseUnitariaMg = indicEntry.doseMgKg * patient.pesoKg;
     if (indicEntry.maxDoseMg) doseUnitariaMg = Math.min(doseUnitariaMg, indicEntry.maxDoseMg);
     doseUnitariaTexto = `${doseUnitariaMg.toFixed(0)} mg/dose (${indicEntry.doseMgKg} mg/kg)`;
+    // Correção PED-AUDIT-04 (auditoria RM-36 — médio): quando a entrada só
+    // declara dose POR TOMADA (`doseMgKg`) + `divisoes` (nº de tomadas/dia),
+    // o total diário nunca era multiplicado por `divisoes` — o fallback
+    // abaixo (`doseTotalDiaMg ?? doseUnitariaMg`) tratava o total diário
+    // como se fosse igual à dose de UMA tomada, subestimando o total real
+    // por um fator de `divisoes` (ex.: paracetamol 4x/dia exibia "total
+    // diário" = dose de uma única tomada, 4x menor que o real).
+    if (indicEntry.divisoes) doseTotalDiaMg = doseUnitariaMg * indicEntry.divisoes;
   } else if (indicEntry.doseMgKgDia && indicEntry.divisoes) {
     doseTotalDiaMg = indicEntry.doseMgKgDia * patient.pesoKg;
     if (indicEntry.maxDoseMg) doseTotalDiaMg = Math.min(doseTotalDiaMg, indicEntry.maxDoseMg * indicEntry.divisoes);
@@ -653,7 +700,22 @@ export function calcDosePediatrica(
 
   doseTotalDiaMg = doseTotalDiaMg ?? doseUnitariaMg;
 
-  // Restrição de dose máxima
+  // Correção PED-AUDIT-03 (auditoria RM-36 — alto): `maxDoseMgKgDia` era um
+  // campo de dados declarado e preenchido (ex.: SMZ-TMP: 12 mg/kg/dia) mas
+  // NUNCA lido por esta função — o teto diário por peso não era aplicado a
+  // nenhum medicamento, mesmo quando não havia `maxDoseMg` (por tomada)
+  // para servir de proteção substituta (confusão entre limite MÁXIMO POR
+  // DOSE e limite MÁXIMO POR DIA).
+  if (indicEntry.maxDoseMgKgDia && doseTotalDiaMg) {
+    const tetoDiario = indicEntry.maxDoseMgKgDia * patient.pesoKg;
+    if (doseTotalDiaMg > tetoDiario) {
+      alertas.unshift(`Dose diária calculada (${doseTotalDiaMg.toFixed(0)} mg/dia) excede o máximo de ${indicEntry.maxDoseMgKgDia} mg/kg/dia (${tetoDiario.toFixed(0)} mg/dia). Ajustar para o teto.`);
+      doseTotalDiaMg = tetoDiario;
+      if (indicEntry.divisoes) doseUnitariaMg = doseTotalDiaMg / indicEntry.divisoes;
+    }
+  }
+
+  // Restrição de dose máxima (por tomada)
   if (indicEntry.maxDoseMg && doseUnitariaMg && doseUnitariaMg > indicEntry.maxDoseMg) {
     alertas.unshift(`Dose calculada (${doseUnitariaMg.toFixed(0)} mg) excede máximo permitido (${indicEntry.maxDoseMg} mg/dose). Usar ${indicEntry.maxDoseMg} mg.`);
     doseUnitariaMg = indicEntry.maxDoseMg;

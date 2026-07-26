@@ -222,6 +222,20 @@ export function calcularDosagem(
       formula_texto = `Dose: ${regra.dose} ${regra.unidade}/dia`;
   }
 
+  // Correção UNIT-AUDIT-02 (auditoria RM-36 — alto): `excede_dose_maxima_dia`/
+  // `_dose` eram calculadas DEPOIS do `Math.min`/clamp já ter reduzido
+  // `dose_total_dia_mg`/`dose_por_dose_mg` ao próprio teto — ou seja,
+  // comparavam o valor JÁ LIMITADO contra o mesmo limite, o que é
+  // matematicamente quase impossível de dar `true` (só um artefato de
+  // ponto flutuante). `app/dosagem/page.tsx` usa esses booleanos para
+  // exibir um selo verde "Dose validada" — com o bug, o selo aparecia
+  // verde mesmo quando a dose PRESCRITA (antes do corte automático)
+  // excedia brutalmente o máximo seguro, escondendo do médico que o
+  // sistema teve que reduzir a dose silenciosamente. Corrigido para
+  // capturar os valores BRUTOS (antes do clamp) e comparar esses.
+  const dose_total_dia_mg_bruta = dose_total_dia_mg;
+  const excede_dose_maxima_dia = !!(regra.dose_maxima_por_dia_mg && dose_total_dia_mg_bruta > regra.dose_maxima_por_dia_mg * 1.01);
+
   // apply max constraints
   if (regra.dose_maxima_por_dia_mg && dose_total_dia_mg > regra.dose_maxima_por_dia_mg) {
     dose_total_dia_mg = regra.dose_maxima_por_dia_mg;
@@ -229,14 +243,13 @@ export function calcularDosagem(
   }
 
   let dose_por_dose_mg = dose_total_dia_mg / doses_por_dia;
+  const dose_por_dose_mg_bruta = dose_total_dia_mg_bruta / doses_por_dia;
+  const excede_dose_maxima_dose = !!(regra.dose_maxima_por_dose_mg && dose_por_dose_mg_bruta > regra.dose_maxima_por_dose_mg * 1.01);
 
   if (regra.dose_maxima_por_dose_mg && dose_por_dose_mg > regra.dose_maxima_por_dose_mg) {
     dose_por_dose_mg = regra.dose_maxima_por_dose_mg;
     formula_texto += ` → dose por tomada limitada a ${regra.dose_maxima_por_dose_mg} mg`;
   }
-
-  const excede_dose_maxima_dia = !!(regra.dose_maxima_por_dia_mg && (dose_total_dia_mg / doses_por_dia * doses_por_dia) > regra.dose_maxima_por_dia_mg * 1.01);
-  const excede_dose_maxima_dose = !!(regra.dose_maxima_por_dose_mg && dose_por_dose_mg > regra.dose_maxima_por_dose_mg * 1.01);
 
   // volume calculations
   let volume_por_dose_mL: number | undefined;

@@ -48,6 +48,16 @@ function toSafeDrug(e: DrugEntity): SafeDrug {
   };
 }
 
+/**
+ * Remove acentos/diacríticos para comparação tolerante a variação de
+ * digitação (ex.: "litio" vs "lítio"). Nunca usado para exibição — só para
+ * decidir se dois tokens se referem à mesma substância.
+ */
+const COMBINING_DIACRITICS_RE = new RegExp('[̀-ͯ]', 'g');
+function stripAccents(s: string): string {
+  return s.normalize('NFD').replace(COMBINING_DIACRITICS_RE, '');
+}
+
 /** Resolve uma molécula (por DCB, nome genérico ou sinônimo) via repositório canônico. */
 function resolveSafeDrug(m: string): SafeDrug | null {
   const target = m.toLowerCase().trim();
@@ -471,44 +481,94 @@ export function runSafetyCheck(input: SafetyCheckInput): QuickSafetyAlert[] {
     },
   ];
 
-  const molsLower = moleculas.map(m => m.toLowerCase());
+  const order: Record<AlertSeverityFast, number> = { critical: 0, danger: 1, warning: 2, info: 3 };
+  const molsLower = moleculas.map(m => stripAccents(m.toLowerCase()));
+
+  /**
+   * BUG REAL CORRIGIDO (auditoria RM-36 — varredura exaustiva de unidades):
+   * a checagem original de presença de `pair.mol_a`/`mol_b` só testava o
+   * texto bruto digitado (`moleculas`) e o campo `classe` da DrugEntity
+   * resolvida — nunca `molecula` (nome canônico) nem `sinonimos`, e sem
+   * normalização de acento. Duas consequências reais:
+   *   1) "lítio" (nome canônico real, com acento) nunca batia com o token
+   *      `mol_a: 'litio'` (sem acento) — o par lítio+hidroclorotiazida
+   *      (CONTRAINDICADO, toxicidade por lítio) NUNCA disparava para uma
+   *      prescrição real de "Carbonato de Lítio".
+   *   2) o token `mol_a: 'nitrato'` não aparece nem no `molecula`
+   *      ("Nitroglicerina", "Isossorbida Mononitrato") nem sempre no
+   *      `classe` de todo nitrato real — só no `sinonimos`, nunca
+   *      consultado. Os 3 pares nitrato+iPDE5 (hipotensão fatal) nunca
+   *      disparavam para prescrições reais.
+   * Corrigido para normalizar acentos e checar também `molecula`/`sinonimos`.
+   */
+  function matchToken(token: string): boolean {
+    const alvo = stripAccents(token);
+    return (
+      molsLower.some(m => m.includes(alvo) || alvo.includes(m)) ||
+      drugs.some(d =>
+        stripAccents(d.classe.toLowerCase()).includes(alvo) ||
+        stripAccents(d.molecula.toLowerCase()).includes(alvo) ||
+        d.sinonimos.some(s => stripAccents(s.toLowerCase()).includes(alvo)),
+      )
+    );
+  }
 
   for (const pair of CRITICAL_PAIRS) {
-    const hasA = molsLower.some(m => m.includes(pair.mol_a) || pair.mol_a.includes(m)) ||
-      drugs.some(d => d.classe.toLowerCase().includes(pair.mol_a));
-    const hasB = molsLower.some(m => m.includes(pair.mol_b) || pair.mol_b.includes(m)) ||
-      drugs.some(d => d.classe.toLowerCase().includes(pair.mol_b));
+    const hasA = matchToken(pair.mol_a);
+    const hasB = matchToken(pair.mol_b);
     if (hasA && hasB) {
-      // Evita duplicatas com interações já encontradas pelo banco de dados.
-      // BUG REAL CORRIGIDO (auditoria de segurança final): a checagem original
-      // só testava a presença de `pair.mol_a` em QUALQUER alerta já emitido —
-      // como vários pares de CRITICAL_PAIRS compartilham a mesma mol_a (ex.:
-      // "ieca" aparece em ieca+aine, ieca+espironolactona, ieca+bra,
-      // sacubitril+ieca), o primeiro alerta ieca+X gerado suprimia
-      // silenciosamente TODOS os pares ieca+Y críticos posteriores, mesmo
-      // sendo interações não relacionadas e potencialmente mais graves
-      // (ex.: duplo bloqueio SRAA, angioedema fatal). Corrigido para exigir
-      // que AMBAS as moléculas do par apareçam juntas no mesmo alerta.
+      const molA = stripAccents(pair.mol_a);
+      const molB = stripAccents(pair.mol_b);
       const dupKey = `${pair.mol_a}-${pair.mol_b}`;
-      const jaExiste = alerts.some(a =>
-        (a.id.includes(pair.mol_a) || a.titulo.toLowerCase().includes(pair.mol_a)) &&
-        (a.id.includes(pair.mol_b) || a.titulo.toLowerCase().includes(pair.mol_b)),
+
+      // Evita duplicatas com interações já encontradas pelo banco de dados
+      // OU por outro par crítico já emitido para as MESMAS duas moléculas.
+      //
+      // BUG REAL CORRIGIDO (auditoria RM-36): a versão anterior, ao achar
+      // uma correspondência, simplesmente DESCARTAVA o novo alerta — mesmo
+      // quando ele era MAIS GRAVE e mais específico que o já existente.
+      // Caso real: azitromicina tem, no banco, uma interação genérica com
+      // amiodarona classificada como `grave` (severidade 'danger'); esse
+      // alerta nasce PRIMEIRO (seção 1 roda antes da seção 7). Quando o par
+      // crítico "Azitromicina + Amiodarona — QT prolongado" (severidade
+      // 'critical', ação específica "EVITAR combinação...") era avaliado
+      // depois, a checagem de duplicata o via como "já coberto" e o
+      // descartava — o médico via só o alerta mais fraco e genérico.
+      // Mesma falha para moxifloxacino+amiodarona. Corrigido para
+      // SUBSTITUIR o(s) alerta(s) mais fraco(s) pelo mais grave, nunca
+      // manter só o mais fraco.
+      const existentes = alerts.filter(a =>
+        (a.id.includes(pair.mol_a) || a.titulo.toLowerCase().includes(molA)) &&
+        (a.id.includes(pair.mol_b) || a.titulo.toLowerCase().includes(molB)),
       );
-      if (!jaExiste) {
-        alerts.push({
-          id: `critical-pair-${dupKey}`,
-          tipo: 'interacao',
-          severidade: pair.severidade,
-          titulo: pair.titulo,
-          descricao: pair.descricao,
-          acao: pair.acao,
-        });
+
+      const novoAlerta: QuickSafetyAlert = {
+        id: `critical-pair-${dupKey}`,
+        tipo: 'interacao',
+        severidade: pair.severidade,
+        titulo: pair.titulo,
+        descricao: pair.descricao,
+        acao: pair.acao,
+      };
+
+      if (existentes.length === 0) {
+        alerts.push(novoAlerta);
+      } else {
+        const severidadeMaisGraveExistente = Math.min(...existentes.map(a => order[a.severidade]));
+        if (order[pair.severidade] < severidadeMaisGraveExistente) {
+          for (const e of existentes) {
+            const idx = alerts.indexOf(e);
+            if (idx !== -1) alerts.splice(idx, 1);
+          }
+          alerts.push(novoAlerta);
+        }
+        // Caso contrário: já existe alerta igual ou mais grave cobrindo o
+        // mesmo par — não duplica nem enfraquece o que já está lá.
       }
     }
   }
 
   // Ordenar por severidade
-  const order: Record<AlertSeverityFast, number> = { critical: 0, danger: 1, warning: 2, info: 3 };
   return alerts.sort((a, b) => order[a.severidade] - order[b.severidade]);
 }
 

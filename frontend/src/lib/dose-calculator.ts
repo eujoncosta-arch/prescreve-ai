@@ -506,6 +506,7 @@ export function calcFullDose(
 
   const usarPediatrica = profile.usar_dose_pediatrica && drug.dose_pediatrica && drug.dose_pediatrica.dose_por_kg > 0;
   let bsaM2: number | undefined;
+  let bloqueadoPorAlturaAusente = false;
 
   if (usarPediatrica && drug.dose_pediatrica) {
     const ped = drug.dose_pediatrica;
@@ -516,14 +517,25 @@ export function calcFullDose(
     if (ped.calculo === 'mg/m²' || ped.calculo === 'mcg/m²') {
       // Dose por superfície corporal — requer altura
       if (!alturaFinal || alturaFinal <= 0) {
-        passos.push(`ℹ Cálculo ${ped.calculo}: altura necessária para calcular BSA. Informe a altura do paciente.`);
-        alertas.push(`⚠ Informe a altura para calcular dose por superfície corporal (${ped.calculo})`);
-        // fallback: usa dose adulto
-        dosePorTomada = parseFloat(drug.dose_adulto.habitual) || 0;
-        doseUnidade = drug.dose_adulto.unidade;
-        tomadas = drug.dose_adulto.frequencias[0]?.includes('2x') ? 2 : 1;
-        doseTotalDia = dosePorTomada * tomadas;
-        fonte = 'adulto_fixo';
+        // Correção UNIT-AUDIT-01 (auditoria RM-36 — crítico): sem altura, o
+        // código antes substituía SILENCIOSAMENTE a dose pediátrica por
+        // superfície corporal (mg/m² — usada em quimioterápicos) pela DOSE
+        // ADULTA INTEIRA, com um alerta prefixado "⚠" (aviso, não crítico).
+        // `DoseCalcCard.tsx` só desabilita o botão "Aplicar" quando existe
+        // um alerta prefixado "🚨" (`hasCritical`) — um alerta "⚠" mantinha
+        // o botão HABILITADO, permitindo ao médico aplicar uma dose adulta
+        // de quimioterápico em uma criança com um clique. Corrigido para
+        // NUNCA calcular uma dose substituta: bloqueia o cálculo e emite um
+        // alerta 🚨 (crítico), desabilitando o botão de aplicar.
+        passos.push(`🚨 Cálculo ${ped.calculo}: altura é OBRIGATÓRIA para calcular a superfície corporal — dose não pode ser calculada sem ela.`);
+        alertas.push(`🚨 BLOQUEADO: informe a altura do paciente para calcular a dose por superfície corporal (${ped.calculo}). Nunca aplicar a dose adulta em substituição.`);
+        dosePorTomada = 0;
+        doseUnidade = ped.unidade;
+        tomadas = ped.frequencia_divisoes;
+        doseTotalDia = 0;
+        fonte = 'pediatrica_mg_m2';
+        limitado = true;
+        bloqueadoPorAlturaAusente = true;
       } else {
         const alturaCm = alturaFinal > 10 ? alturaFinal : alturaFinal * 100; // aceita m ou cm
         const bsaResult = calcBSA(pesoKg, alturaCm);
@@ -581,7 +593,7 @@ export function calcFullDose(
       passos.push(`Dose calculada: ${ped.dose_por_kg} × ${pesoKg} kg = ${calculada.toFixed(1)} ${ped.unidade}/dia`);
     }
 
-    if (fonte !== 'adulto_fixo') {
+    if (!bloqueadoPorAlturaAusente) {
       if (limitado) {
         passos.push(`⚠ Excede dose máxima (${ped.max_dose_dia} ${ped.max_dose_dia_unidade}) → usando ${doseTotalDia} ${ped.unidade}/dia`);
         alertas.push(`⚠ Dose máxima aplicada: ${ped.max_dose_dia} ${ped.max_dose_dia_unidade}`);
