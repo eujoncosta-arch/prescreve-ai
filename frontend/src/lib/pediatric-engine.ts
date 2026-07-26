@@ -106,9 +106,66 @@ export function calcIdadeCorrigida(
 }
 
 // ─── CLEARANCE DE CREATININA PEDIÁTRICO (Schwartz) ───────────
-export function calcClCrSchwartz(alturaCm: number, creatininaMgdL: number, idadeMeses: number): number {
-  const k = idadeMeses < 12 ? 0.33 : idadeMeses <= 192 ? 0.55 : 0.70;
-  return (k * alturaCm) / creatininaMgdL;
+
+/**
+ * Resolução PED-AUDIT-07 (auditoria RM-36): a fórmula de Schwartz aplica
+ * um coeficiente `k` diferente por faixa etária, e o coeficiente do
+ * adolescente (≥13 anos) é ESPECÍFICO POR SEXO — k=0,70 para meninos,
+ * k=0,55 para meninas (a mesma referência clássica que já usa k=0,55 para
+ * crianças 1–12 anos, unissex). A implementação anterior não tinha
+ * parâmetro de sexo e aplicava k=0,70 (coeficiente MASCULINO) a qualquer
+ * adolescente, superestimando o clearance de creatinina em adolescentes
+ * do sexo feminino — o que poderia levar a SUBESTIMAR a necessidade de
+ * ajuste de dose renal (uma função renal aparentando melhor do que é).
+ *
+ * Auditoria de consumidores: `calcClCrSchwartz` não tem NENHUM chamador
+ * em todo o repositório (só esta definição) — nenhum consumidor precisou
+ * ser atualizado para propagar o sexo.
+ */
+export type ResultadoClCrSchwartz =
+  | {
+      ok: true;
+      clcrMlMin1_73m2: number;
+      kUsado: number;
+      faixaEtaria: 'lactente' | 'crianca' | 'adolescente';
+    }
+  | {
+      ok: false;
+      erro: string;
+      motivo: 'sexo_ausente_para_adolescente';
+    };
+
+export function calcClCrSchwartz(
+  alturaCm: number,
+  creatininaMgdL: number,
+  idadeMeses: number,
+  sexo: 'M' | 'F' | undefined,
+): ResultadoClCrSchwartz {
+  // Lactente (<1 ano): k=0,33 — unissex na literatura de referência (Schwartz).
+  if (idadeMeses < 12) {
+    const k = 0.33;
+    return { ok: true, clcrMlMin1_73m2: (k * alturaCm) / creatininaMgdL, kUsado: k, faixaEtaria: 'lactente' };
+  }
+  // Criança (1–12 anos, < 156 meses): k=0,55 — unissex.
+  if (idadeMeses < 156) {
+    const k = 0.55;
+    return { ok: true, clcrMlMin1_73m2: (k * alturaCm) / creatininaMgdL, kUsado: k, faixaEtaria: 'crianca' };
+  }
+  // Adolescente (≥13 anos, ≥156 meses): k é ESPECÍFICO POR SEXO.
+  //
+  // Correção PED-AUDIT-07: sexo ausente/indeterminado NUNCA aplica
+  // automaticamente o coeficiente masculino (nem o feminino) — o cálculo
+  // fica explicitamente impossível, retornado de forma estruturada, sem
+  // inventar o sexo do paciente.
+  if (sexo === undefined) {
+    return {
+      ok: false,
+      erro: 'Não é possível calcular o clearance de creatinina pediátrico (Schwartz) para um adolescente (≥13 anos) sem o sexo do paciente — o coeficiente k é diferente para meninos (0,70) e meninas (0,55). Informe o sexo para calcular.',
+      motivo: 'sexo_ausente_para_adolescente',
+    };
+  }
+  const k = sexo === 'M' ? 0.70 : 0.55;
+  return { ok: true, clcrMlMin1_73m2: (k * alturaCm) / creatininaMgdL, kUsado: k, faixaEtaria: 'adolescente' };
 }
 
 // ─── BANCO DE DOSES PEDIÁTRICAS ───────────────────────────────
