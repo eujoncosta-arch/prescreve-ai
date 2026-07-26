@@ -244,8 +244,21 @@ export class AuthService {
 
   // ── HELPERS ─────────────────────────────────────────────────
 
+  /**
+   * Bug real encontrado ao escrever a suíte de regressão de segurança
+   * (auth-flows.e2e-spec.ts): sem um `jti` (identificador único por
+   * token), dois tokens emitidos para o MESMO usuário dentro do MESMO
+   * segundo (`iat` do JWT tem granularidade de segundos) são
+   * byte-a-byte IDÊNTICOS — mesmo header, payload e assinatura. Como
+   * `RefreshToken.token_hash` é `@unique` no schema, dois logins/refreshes
+   * rápidos o suficiente (ex.: duplo clique, retry automático) podiam
+   * colidir e o segundo `create()` falhar com violação de unicidade em
+   * produção. `jti` aleatório garante que cada token emitido é sempre
+   * único, mesmo no mesmo segundo, para o mesmo usuário.
+   */
   private async gerarTokens(userId: string, email: string, perfil: Perfil) {
-    const payload = { sub: userId, email, perfil };
+    const jti = crypto.randomUUID();
+    const payload = { sub: userId, email, perfil, jti };
     const secret = getRequiredSecret(this.config, 'JWT_SECRET');
     const refreshSecret = getRequiredSecret(this.config, 'JWT_REFRESH_SECRET');
 

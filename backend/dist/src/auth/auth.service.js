@@ -188,7 +188,8 @@ let AuthService = class AuthService {
         return { message: 'Logout realizado com sucesso' };
     }
     async gerarTokens(userId, email, perfil) {
-        const payload = { sub: userId, email, perfil };
+        const jti = crypto.randomUUID();
+        const payload = { sub: userId, email, perfil, jti };
         const secret = (0, jwt_secrets_util_1.getRequiredSecret)(this.config, 'JWT_SECRET');
         const refreshSecret = (0, jwt_secrets_util_1.getRequiredSecret)(this.config, 'JWT_REFRESH_SECRET');
         const [access_token, refresh_token] = await Promise.all([
