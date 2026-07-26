@@ -134,7 +134,7 @@ describe('ConsultaService — acesso horizontal (ownership) e IDOR', () => {
       await expect(
         service.salvarRiskScore(
           CONSULTA_DA_VITIMA_ID,
-          { risco_global: 'alto' },
+          { risco_global: 'alto', score_global: 90 },
           USUARIO_ATACANTE_ID,
         ),
       ).rejects.toBeInstanceOf(ForbiddenException);

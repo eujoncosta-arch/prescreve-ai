@@ -3,6 +3,7 @@ import {
   NotFoundException,
   ForbiddenException,
 } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CacheService, TTL } from '../cache/cache.service';
 import { AuditService } from '../audit/audit.service';
@@ -10,11 +11,18 @@ import {
   CriarConsultaDto,
   CriarDiagnosticoDto,
   CriarPrescricaoDto,
+  RiskScorePayloadDto,
 } from './dto/consulta.dto';
 import * as crypto from 'crypto';
 
 function hashIntegridade(obj: unknown): string {
   return crypto.createHash('sha256').update(JSON.stringify(obj)).digest('hex');
+}
+
+function toJson(
+  value: Record<string, unknown> | undefined,
+): Prisma.InputJsonValue {
+  return (value ?? {}) as Prisma.InputJsonValue;
 }
 
 @Injectable()
@@ -176,7 +184,7 @@ export class ConsultaService {
    */
   async salvarRiskScore(
     consultaId: string,
-    score: Record<string, unknown>,
+    score: RiskScorePayloadDto,
     usuarioId: string,
   ) {
     const consulta = await this.prisma.consulta.findFirst({
@@ -188,21 +196,16 @@ export class ConsultaService {
     return this.prisma.riskScore.create({
       data: {
         consulta_id: consultaId,
-        risco_global: score.risco_global as string as
-          | 'baixo'
-          | 'intermediario'
-          | 'alto'
-          | 'muito_alto'
-          | 'critico',
-        score_global: Number(score.score_global ?? 0),
-        alerta_vermelho: Boolean(score.alerta_vermelho),
-        risco_cardiovascular: score.risco_cardiovascular ?? {},
-        risco_renal: score.risco_renal ?? {},
-        risco_hemorragico: score.risco_hemorragico ?? {},
-        risco_farmacologico: score.risco_farmacologico ?? {},
-        risco_interacao: score.risco_interacao ?? {},
-        risco_terapeutico: score.risco_terapeutico ?? {},
-        recomendacoes: (score.recomendacoes_prioritarias as string[]) ?? [],
+        risco_global: score.risco_global,
+        score_global: score.score_global,
+        alerta_vermelho: score.alerta_vermelho ?? false,
+        risco_cardiovascular: toJson(score.risco_cardiovascular),
+        risco_renal: toJson(score.risco_renal),
+        risco_hemorragico: toJson(score.risco_hemorragico),
+        risco_farmacologico: toJson(score.risco_farmacologico),
+        risco_interacao: toJson(score.risco_interacao),
+        risco_terapeutico: toJson(score.risco_terapeutico),
+        recomendacoes: score.recomendacoes_prioritarias ?? [],
       },
     });
   }

@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CriarUsuarioPrivilegiadoDto = exports.RegisterDto = exports.RefreshDto = exports.LoginDto = void 0;
 const class_validator_1 = require("class-validator");
 const client_1 = require("@prisma/client");
+const MFA_CODE_PATTERN = /^[0-9A-Fa-f]{6}$|^[0-9A-Fa-f]{10}$/;
 class LoginDto {
     email;
     senha;
@@ -20,16 +21,21 @@ class LoginDto {
 exports.LoginDto = LoginDto;
 __decorate([
     (0, class_validator_1.IsEmail)(),
+    (0, class_validator_1.MaxLength)(254),
     __metadata("design:type", String)
 ], LoginDto.prototype, "email", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.MinLength)(8),
+    (0, class_validator_1.MaxLength)(72),
     __metadata("design:type", String)
 ], LoginDto.prototype, "senha", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Matches)(MFA_CODE_PATTERN, {
+        message: 'mfa_code deve ser um TOTP de 6 dígitos ou um código de recuperação de 10 caracteres',
+    }),
     __metadata("design:type", String)
 ], LoginDto.prototype, "mfa_code", void 0);
 class RefreshDto {
@@ -38,6 +44,7 @@ class RefreshDto {
 exports.RefreshDto = RefreshDto;
 __decorate([
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(2000),
     __metadata("design:type", String)
 ], RefreshDto.prototype, "refresh_token", void 0);
 class RegisterDto {
@@ -50,26 +57,33 @@ class RegisterDto {
 exports.RegisterDto = RegisterDto;
 __decorate([
     (0, class_validator_1.IsEmail)(),
+    (0, class_validator_1.MaxLength)(254),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "email", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.MinLength)(8),
+    (0, class_validator_1.MaxLength)(72),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "senha", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(20),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "crm", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(100),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "especialidade", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Matches)(/^[A-Za-z]{2}$/, {
+        message: 'uf deve ser a sigla de 2 letras do estado',
+    }),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "uf", void 0);
 class CriarUsuarioPrivilegiadoDto {
@@ -83,11 +97,13 @@ class CriarUsuarioPrivilegiadoDto {
 exports.CriarUsuarioPrivilegiadoDto = CriarUsuarioPrivilegiadoDto;
 __decorate([
     (0, class_validator_1.IsEmail)(),
+    (0, class_validator_1.MaxLength)(254),
     __metadata("design:type", String)
 ], CriarUsuarioPrivilegiadoDto.prototype, "email", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.MinLength)(8),
+    (0, class_validator_1.MaxLength)(72),
     __metadata("design:type", String)
 ], CriarUsuarioPrivilegiadoDto.prototype, "senha", void 0);
 __decorate([
@@ -99,16 +115,21 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(20),
     __metadata("design:type", String)
 ], CriarUsuarioPrivilegiadoDto.prototype, "crm", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(100),
     __metadata("design:type", String)
 ], CriarUsuarioPrivilegiadoDto.prototype, "especialidade", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Matches)(/^[A-Za-z]{2}$/, {
+        message: 'uf deve ser a sigla de 2 letras do estado',
+    }),
     __metadata("design:type", String)
 ], CriarUsuarioPrivilegiadoDto.prototype, "uf", void 0);
 //# sourceMappingURL=login.dto.js.map

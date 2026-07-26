@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import helmet from 'helmet';
+import { json, urlencoded } from 'express';
 import { AppModule } from './app.module';
 import { HttpLoggingInterceptor } from './common/interceptors/http-logging.interceptor';
 import { validarSegredosDistintos } from './auth/jwt-secrets.util';
@@ -36,11 +37,22 @@ async function bootstrap() {
     }),
   );
 
-  // Validação global de DTOs
+  // Teto de tamanho de corpo de requisição — nunca um payload ilimitado.
+  // 1MB é generoso para o maior payload legítimo hoje (lote de migração de
+  // localStorage), mas impede um cliente de enviar um corpo arbitrariamente
+  // grande antes mesmo da ValidationPipe entrar em ação.
+  app.use(json({ limit: '1mb' }));
+  app.use(urlencoded({ extended: true, limit: '1mb' }));
+
+  // Validação global de DTOs — whitelist/forbidNonWhitelisted rejeitam
+  // qualquer campo não declarado no DTO (nunca aceitos silenciosamente);
+  // forbidUnknownValues rejeita objetos sem metadata de validação nenhuma
+  // (protege contra DTOs "vazios"/mal decorados passando despercebidos).
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
+      forbidUnknownValues: true,
       transform: true,
     }),
   );

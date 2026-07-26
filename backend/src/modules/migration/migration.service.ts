@@ -1,25 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { AuditService } from '../audit/audit.service';
+import { MigrarHistoricoDto } from './dto/migration.dto';
 import * as crypto from 'crypto';
-
-// Tipos que espelham o localStorage do frontend
-
-interface LocalPrescricao {
-  id?: string;
-  medicamentos?: unknown[];
-  orientacoes?: string;
-  diagnostico?: string;
-  criado_em?: string;
-}
-
-interface LocalValidacao {
-  id?: string;
-  crm_hash?: string;
-  especialidade?: string;
-  veredicto?: string;
-  justificativa?: string;
-}
 
 export interface MigracaoResult {
   prescricoes_migradas: number;
@@ -39,11 +22,7 @@ export class MigrationService {
 
   async migrarHistorico(
     usuarioId: string,
-    dados: {
-      prescricoes?: LocalPrescricao[];
-      validacoes?: LocalValidacao[];
-      consultas?: unknown[];
-    },
+    dados: MigrarHistoricoDto,
   ): Promise<MigracaoResult> {
     const inicio = Date.now();
     const erros: string[] = [];

@@ -1,5 +1,5 @@
 import { ConsultaService } from './consulta.service';
-import { CriarConsultaDto, CriarDiagnosticoDto, CriarPrescricaoDto, SalvarRiscoDto } from './dto/consulta.dto';
+import { CriarConsultaDto, CriarDiagnosticoDto, CriarPrescricaoDto, SalvarRiscoDto, PaginacaoQueryDto } from './dto/consulta.dto';
 export declare class ConsultaController {
     private svc;
     constructor(svc: ConsultaService);
@@ -17,7 +17,7 @@ export declare class ConsultaController {
     }>;
     listarConsultas(user: {
         id: string;
-    }, pagina?: string, limite?: string): Promise<{
+    }, paginacao: PaginacaoQueryDto): Promise<{
         total: number;
         pagina: number;
         limite: number;

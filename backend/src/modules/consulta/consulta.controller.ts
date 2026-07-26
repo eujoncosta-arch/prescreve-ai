@@ -12,11 +12,13 @@ import {
 import { ConsultaService } from './consulta.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
+import { ParseSafeIdPipe } from '../../common/pipes/parse-safe-id.pipe';
 import {
   CriarConsultaDto,
   CriarDiagnosticoDto,
   CriarPrescricaoDto,
   SalvarRiscoDto,
+  PaginacaoQueryDto,
 } from './dto/consulta.dto';
 
 @Controller('api')
@@ -37,18 +39,20 @@ export class ConsultaController {
   @Get('consultas')
   listarConsultas(
     @CurrentUser() user: { id: string },
-    @Query('pagina') pagina?: string,
-    @Query('limite') limite?: string,
+    @Query() paginacao: PaginacaoQueryDto,
   ) {
     return this.svc.listarConsultas(
       user.id,
-      Number(pagina ?? 1),
-      Number(limite ?? 20),
+      paginacao.pagina ?? 1,
+      paginacao.limite ?? 20,
     );
   }
 
   @Get('consulta/:id')
-  buscarConsulta(@Param('id') id: string, @CurrentUser() user: { id: string }) {
+  buscarConsulta(
+    @Param('id', ParseSafeIdPipe) id: string,
+    @CurrentUser() user: { id: string },
+  ) {
     return this.svc.buscarConsulta(id, user.id);
   }
 
@@ -91,12 +95,12 @@ export class ConsultaController {
   // ── Evidências ────────────────────────────────────────────
 
   @Get('evidence/:cid')
-  buscarEvidencias(@Param('cid') cid: string) {
+  buscarEvidencias(@Param('cid', ParseSafeIdPipe) cid: string) {
     return this.svc.buscarEvidencias(cid);
   }
 
   @Get('rwe/:cid')
-  buscarRWE(@Param('cid') cid: string) {
+  buscarRWE(@Param('cid', ParseSafeIdPipe) cid: string) {
     return this.svc.buscarRWE(cid);
   }
 }

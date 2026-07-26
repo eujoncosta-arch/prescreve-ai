@@ -18,8 +18,10 @@ exports.AtivarMfaDto = AtivarMfaDto;
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.Length)(6, 6, { message: 'code deve ter exatamente 6 dígitos (código TOTP)' }),
+    (0, class_validator_1.Matches)(/^\d{6}$/, { message: 'code deve conter apenas dígitos' }),
     __metadata("design:type", String)
 ], AtivarMfaDto.prototype, "code", void 0);
+const MFA_CODE_PATTERN = /^[0-9A-Fa-f]{6}$|^[0-9A-Fa-f]{10}$/;
 class DesativarMfaDto {
     senha;
     code;
@@ -27,10 +29,14 @@ class DesativarMfaDto {
 exports.DesativarMfaDto = DesativarMfaDto;
 __decorate([
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(72),
     __metadata("design:type", String)
 ], DesativarMfaDto.prototype, "senha", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Matches)(MFA_CODE_PATTERN, {
+        message: 'code deve ser um TOTP de 6 dígitos ou um código de recuperação de 10 caracteres',
+    }),
     __metadata("design:type", String)
 ], DesativarMfaDto.prototype, "code", void 0);
 //# sourceMappingURL=mfa.dto.js.map

@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const consulta_service_1 = require("./consulta.service");
 const jwt_auth_guard_1 = require("../../auth/guards/jwt-auth.guard");
 const current_user_decorator_1 = require("../../auth/decorators/current-user.decorator");
+const parse_safe_id_pipe_1 = require("../../common/pipes/parse-safe-id.pipe");
 const consulta_dto_1 = require("./dto/consulta.dto");
 let ConsultaController = class ConsultaController {
     svc;
@@ -26,8 +27,8 @@ let ConsultaController = class ConsultaController {
     criarConsulta(dto, user) {
         return this.svc.criarConsulta(dto, user.id);
     }
-    listarConsultas(user, pagina, limite) {
-        return this.svc.listarConsultas(user.id, Number(pagina ?? 1), Number(limite ?? 20));
+    listarConsultas(user, paginacao) {
+        return this.svc.listarConsultas(user.id, paginacao.pagina ?? 1, paginacao.limite ?? 20);
     }
     buscarConsulta(id, user) {
         return this.svc.buscarConsulta(id, user.id);
@@ -63,15 +64,14 @@ __decorate([
 __decorate([
     (0, common_1.Get)('consultas'),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
-    __param(1, (0, common_1.Query)('pagina')),
-    __param(2, (0, common_1.Query)('limite')),
+    __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, String]),
+    __metadata("design:paramtypes", [Object, consulta_dto_1.PaginacaoQueryDto]),
     __metadata("design:returntype", void 0)
 ], ConsultaController.prototype, "listarConsultas", null);
 __decorate([
     (0, common_1.Get)('consulta/:id'),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id', parse_safe_id_pipe_1.ParseSafeIdPipe)),
     __param(1, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
@@ -111,14 +111,14 @@ __decorate([
 ], ConsultaController.prototype, "salvarRisco", null);
 __decorate([
     (0, common_1.Get)('evidence/:cid'),
-    __param(0, (0, common_1.Param)('cid')),
+    __param(0, (0, common_1.Param)('cid', parse_safe_id_pipe_1.ParseSafeIdPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], ConsultaController.prototype, "buscarEvidencias", null);
 __decorate([
     (0, common_1.Get)('rwe/:cid'),
-    __param(0, (0, common_1.Param)('cid')),
+    __param(0, (0, common_1.Param)('cid', parse_safe_id_pipe_1.ParseSafeIdPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)

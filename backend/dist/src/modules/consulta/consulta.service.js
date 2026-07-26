@@ -51,6 +51,9 @@ const crypto = __importStar(require("crypto"));
 function hashIntegridade(obj) {
     return crypto.createHash('sha256').update(JSON.stringify(obj)).digest('hex');
 }
+function toJson(value) {
+    return (value ?? {});
+}
 let ConsultaService = class ConsultaService {
     prisma;
     cache;
@@ -187,14 +190,14 @@ let ConsultaService = class ConsultaService {
             data: {
                 consulta_id: consultaId,
                 risco_global: score.risco_global,
-                score_global: Number(score.score_global ?? 0),
-                alerta_vermelho: Boolean(score.alerta_vermelho),
-                risco_cardiovascular: score.risco_cardiovascular ?? {},
-                risco_renal: score.risco_renal ?? {},
-                risco_hemorragico: score.risco_hemorragico ?? {},
-                risco_farmacologico: score.risco_farmacologico ?? {},
-                risco_interacao: score.risco_interacao ?? {},
-                risco_terapeutico: score.risco_terapeutico ?? {},
+                score_global: score.score_global,
+                alerta_vermelho: score.alerta_vermelho ?? false,
+                risco_cardiovascular: toJson(score.risco_cardiovascular),
+                risco_renal: toJson(score.risco_renal),
+                risco_hemorragico: toJson(score.risco_hemorragico),
+                risco_farmacologico: toJson(score.risco_farmacologico),
+                risco_interacao: toJson(score.risco_interacao),
+                risco_terapeutico: toJson(score.risco_terapeutico),
                 recomendacoes: score.recomendacoes_prioritarias ?? [],
             },
         });

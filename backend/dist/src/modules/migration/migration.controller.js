@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const migration_service_1 = require("./migration.service");
 const jwt_auth_guard_1 = require("../../auth/guards/jwt-auth.guard");
 const current_user_decorator_1 = require("../../auth/decorators/current-user.decorator");
+const migration_dto_1 = require("./dto/migration.dto");
 let MigrationController = class MigrationController {
     svc;
     constructor(svc) {
@@ -35,7 +36,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [migration_dto_1.MigrarHistoricoDto, Object]),
     __metadata("design:returntype", void 0)
 ], MigrationController.prototype, "migrar", null);
 __decorate([

@@ -1,7 +1,8 @@
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CacheService } from '../cache/cache.service';
 import { AuditService } from '../audit/audit.service';
-import { CriarConsultaDto, CriarDiagnosticoDto, CriarPrescricaoDto } from './dto/consulta.dto';
+import { CriarConsultaDto, CriarDiagnosticoDto, CriarPrescricaoDto, RiskScorePayloadDto } from './dto/consulta.dto';
 export declare class ConsultaService {
     private prisma;
     private cache;
@@ -14,7 +15,7 @@ export declare class ConsultaService {
         criado_em: Date;
         atualizado_em: Date;
         deletado_em: Date | null;
-        anamnese: import("@prisma/client/runtime/client").JsonValue | null;
+        anamnese: Prisma.JsonValue | null;
         paciente_id: string | null;
     }>;
     listarConsultas(usuarioId: string, pagina?: number, limite?: number): Promise<{
@@ -42,7 +43,7 @@ export declare class ConsultaService {
             criado_em: Date;
             atualizado_em: Date;
             deletado_em: Date | null;
-            anamnese: import("@prisma/client/runtime/client").JsonValue | null;
+            anamnese: Prisma.JsonValue | null;
             paciente_id: string | null;
         })[];
     }>;
@@ -84,7 +85,7 @@ export declare class ConsultaService {
             deletado_em: Date | null;
             consulta_id: string;
             diagnostico_id: string | null;
-            medicamentos: import("@prisma/client/runtime/client").JsonValue;
+            medicamentos: Prisma.JsonValue;
             orientacoes: string | null;
             validade_dias: number;
             versao: number;
@@ -96,12 +97,12 @@ export declare class ConsultaService {
             risco_global: import("@prisma/client").$Enums.NivelRisco;
             score_global: number;
             alerta_vermelho: boolean;
-            risco_cardiovascular: import("@prisma/client/runtime/client").JsonValue;
-            risco_renal: import("@prisma/client/runtime/client").JsonValue;
-            risco_hemorragico: import("@prisma/client/runtime/client").JsonValue;
-            risco_farmacologico: import("@prisma/client/runtime/client").JsonValue;
-            risco_interacao: import("@prisma/client/runtime/client").JsonValue;
-            risco_terapeutico: import("@prisma/client/runtime/client").JsonValue;
+            risco_cardiovascular: Prisma.JsonValue;
+            risco_renal: Prisma.JsonValue;
+            risco_hemorragico: Prisma.JsonValue;
+            risco_farmacologico: Prisma.JsonValue;
+            risco_interacao: Prisma.JsonValue;
+            risco_terapeutico: Prisma.JsonValue;
             recomendacoes: string[];
         }[];
         trust_scores: {
@@ -115,7 +116,7 @@ export declare class ConsultaService {
             resumo_executivo: string;
             limitacoes: string[];
             recomendacao_uso: string;
-            dimensoes: import("@prisma/client/runtime/client").JsonValue;
+            dimensoes: Prisma.JsonValue;
         }[];
     } & {
         status: import("@prisma/client").$Enums.StatusConsulta;
@@ -124,7 +125,7 @@ export declare class ConsultaService {
         criado_em: Date;
         atualizado_em: Date;
         deletado_em: Date | null;
-        anamnese: import("@prisma/client/runtime/client").JsonValue | null;
+        anamnese: Prisma.JsonValue | null;
         paciente_id: string | null;
     }>;
     criarDiagnostico(dto: CriarDiagnosticoDto, usuarioId: string): Promise<{
@@ -145,24 +146,24 @@ export declare class ConsultaService {
         deletado_em: Date | null;
         consulta_id: string;
         diagnostico_id: string | null;
-        medicamentos: import("@prisma/client/runtime/client").JsonValue;
+        medicamentos: Prisma.JsonValue;
         orientacoes: string | null;
         validade_dias: number;
         versao: number;
     }>;
-    salvarRiskScore(consultaId: string, score: Record<string, unknown>, usuarioId: string): Promise<{
+    salvarRiskScore(consultaId: string, score: RiskScorePayloadDto, usuarioId: string): Promise<{
         id: string;
         criado_em: Date;
         consulta_id: string;
         risco_global: import("@prisma/client").$Enums.NivelRisco;
         score_global: number;
         alerta_vermelho: boolean;
-        risco_cardiovascular: import("@prisma/client/runtime/client").JsonValue;
-        risco_renal: import("@prisma/client/runtime/client").JsonValue;
-        risco_hemorragico: import("@prisma/client/runtime/client").JsonValue;
-        risco_farmacologico: import("@prisma/client/runtime/client").JsonValue;
-        risco_interacao: import("@prisma/client/runtime/client").JsonValue;
-        risco_terapeutico: import("@prisma/client/runtime/client").JsonValue;
+        risco_cardiovascular: Prisma.JsonValue;
+        risco_renal: Prisma.JsonValue;
+        risco_hemorragico: Prisma.JsonValue;
+        risco_farmacologico: Prisma.JsonValue;
+        risco_interacao: Prisma.JsonValue;
+        risco_terapeutico: Prisma.JsonValue;
         recomendacoes: string[];
     }>;
     buscarEvidencias(cid: string): Promise<{

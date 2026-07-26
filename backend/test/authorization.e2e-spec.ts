@@ -205,7 +205,7 @@ describe('Autorização (e2e)', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           consulta_id: CONSULTA_DO_OUTRO_MEDICO,
-          score: { risco_global: 'alto' },
+          score: { risco_global: 'alto', score_global: 90 },
         })
         .expect(403);
     });
