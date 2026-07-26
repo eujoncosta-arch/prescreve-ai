@@ -214,6 +214,9 @@ model Consulta {
   paciente        Paciente?      @relation(fields: [paciente_id], references: [id])
   status          StatusConsulta @default(em_andamento)
   anamnese        Json?
+  /// Chave de idempotência gerada pelo cliente — reenviar a mesma requisição
+  /// (retry após timeout/falha de rede) nunca cria uma segunda consulta.
+  idempotency_key String?        @unique
   diagnosticos    Diagnostico[]
   prescricoes     Prescricao[]
   risco_scores    RiskScore[]
@@ -236,6 +239,8 @@ model Diagnostico {
   descricao       String
   confianca       Float      // 0–1
   selecionado     Boolean    @default(false)
+  /// Chave de idempotência gerada pelo cliente — ver Consulta.idempotency_key.
+  idempotency_key String?    @unique
   criado_em       DateTime   @default(now())
 
   prescricoes     Prescricao[]
@@ -257,6 +262,9 @@ model Prescricao {
   orientacoes     String?
   validade_dias   Int              @default(30)
   hash_integridade String
+  /// Chave de idempotência gerada pelo cliente — nunca duplicar uma prescrição
+  /// por reenvio (retry de rede, duplo clique, fila de sincronização).
+  idempotency_key String?          @unique
   versao          Int              @default(1)
   criado_em       DateTime         @default(now())
   atualizado_em   DateTime         @updatedAt
@@ -440,6 +448,8 @@ model RiskScore {
   risco_interacao          Json
   risco_terapeutico        Json
   recomendacoes            String[]
+  /// Chave de idempotência gerada pelo cliente — ver Consulta.idempotency_key.
+  idempotency_key          String?    @unique
   criado_em                DateTime   @default(now())
 
   @@index([consulta_id])

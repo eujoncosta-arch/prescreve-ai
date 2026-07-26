@@ -10,6 +10,7 @@ import {
   IsNotEmpty,
   ValidateNested,
   MaxLength,
+  MinLength,
   Min,
   Max,
   ArrayMaxSize,
@@ -19,6 +20,26 @@ import {
 import { Type } from 'class-transformer';
 import { NivelRisco } from '@prisma/client';
 import { MaxJsonSize } from '../../../common/validators/max-json-size.validator';
+
+// ============================================================
+// PRESCREVE-AI — Integridade de persistência (idempotência)
+//
+// `idempotency_key` é gerada pelo CLIENTE (UUID v4) e reaproveitada em
+// todo retry da mesma operação (timeout, falha de rede, fila de
+// sincronização). O service faz upsert-por-chave: se um registro com a
+// mesma chave já existe, retorna o registro existente em vez de criar
+// um duplicado — nunca confia em "o cliente promete não reenviar".
+// ============================================================
+function IsIdempotencyKey() {
+  return function (target: object, propertyKey: string) {
+    IsOptional()(target, propertyKey);
+    IsString()(target, propertyKey);
+    MinLength(8, {
+      message: 'idempotency_key deve ter ao menos 8 caracteres',
+    })(target, propertyKey);
+    MaxLength(100)(target, propertyKey);
+  };
+}
 
 // ============================================================
 // PRESCREVE-AI — Hardening de validação de entrada (auditoria dedicada)
@@ -48,6 +69,9 @@ export class CriarConsultaDto {
     message: 'anamnese excede o tamanho máximo permitido (50KB serializado)',
   })
   anamnese?: Record<string, unknown>;
+
+  @IsIdempotencyKey()
+  idempotency_key?: string;
 }
 
 export class CriarDiagnosticoDto {
@@ -76,6 +100,9 @@ export class CriarDiagnosticoDto {
   @IsOptional()
   @IsBoolean()
   selecionado?: boolean;
+
+  @IsIdempotencyKey()
+  idempotency_key?: string;
 }
 
 export class ItemMedicamentoDto {
@@ -146,6 +173,9 @@ export class CriarPrescricaoDto {
   @Min(1)
   @Max(365)
   validade_dias?: number;
+
+  @IsIdempotencyKey()
+  idempotency_key?: string;
 }
 
 /**
@@ -220,6 +250,9 @@ export class SalvarRiscoDto {
   @ValidateNested()
   @Type(() => RiskScorePayloadDto)
   score: RiskScorePayloadDto;
+
+  @IsIdempotencyKey()
+  idempotency_key?: string;
 }
 
 /** Paginação de listagem — nunca confia em `limite` livre do cliente (teto explícito evita varredura de tabela sem limite). */

@@ -2,6 +2,7 @@ import { NivelRisco } from '@prisma/client';
 export declare class CriarConsultaDto {
     paciente_hash?: string;
     anamnese?: Record<string, unknown>;
+    idempotency_key?: string;
 }
 export declare class CriarDiagnosticoDto {
     consulta_id: string;
@@ -9,6 +10,7 @@ export declare class CriarDiagnosticoDto {
     descricao: string;
     confianca?: number;
     selecionado?: boolean;
+    idempotency_key?: string;
 }
 export declare class ItemMedicamentoDto {
     molecula: string;
@@ -24,6 +26,7 @@ export declare class CriarPrescricaoDto {
     medicamentos: ItemMedicamentoDto[];
     orientacoes?: string;
     validade_dias?: number;
+    idempotency_key?: string;
 }
 export declare class RiskScorePayloadDto {
     risco_global: NivelRisco;
@@ -40,6 +43,7 @@ export declare class RiskScorePayloadDto {
 export declare class SalvarRiscoDto {
     consulta_id: string;
     score: RiskScorePayloadDto;
+    idempotency_key?: string;
 }
 export declare class PaginacaoQueryDto {
     pagina?: number;

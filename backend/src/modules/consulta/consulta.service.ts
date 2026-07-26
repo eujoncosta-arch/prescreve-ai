@@ -35,7 +35,41 @@ export class ConsultaService {
 
   // ── CONSULTA ──────────────────────────────────────────────
 
+  /**
+   * Integridade de persistência — idempotência: se `idempotency_key` já
+   * existir para este usuário/escopo, retorna o registro já criado em vez
+   * de criar um duplicado. Cobre retry de rede, timeout, duplo clique e
+   * reenvio pela fila de sincronização do frontend. `existente` pertencer a
+   * outro dono é tratado como erro (chave nunca deveria colidir entre
+   * usuários — UUID gerado no cliente — mas nunca se confia nisso).
+   */
+  private async buscarPorIdempotencyKey<
+    T extends { usuario_id?: string; consulta_id?: string },
+  >(
+    finder: (key: string) => Promise<T | null>,
+    idempotencyKey: string | undefined,
+    ownerCheck: (registro: T) => boolean,
+  ): Promise<T | null> {
+    if (!idempotencyKey) return null;
+    const existente = await finder(idempotencyKey);
+    if (!existente) return null;
+    if (!ownerCheck(existente)) {
+      throw new ForbiddenException(
+        'Chave de idempotência já utilizada em outro escopo',
+      );
+    }
+    return existente;
+  }
+
   async criarConsulta(dto: CriarConsultaDto, usuarioId: string) {
+    const existente = await this.buscarPorIdempotencyKey(
+      (key) =>
+        this.prisma.consulta.findUnique({ where: { idempotency_key: key } }),
+      dto.idempotency_key,
+      (c) => c.usuario_id === usuarioId,
+    );
+    if (existente) return existente;
+
     let pacienteId: string | undefined;
 
     if (dto.paciente_hash) {
@@ -58,6 +92,7 @@ export class ConsultaService {
         usuario_id: usuarioId,
         paciente_id: pacienteId,
         anamnese: dto.anamnese as object,
+        idempotency_key: dto.idempotency_key,
       },
     });
 
@@ -114,6 +149,14 @@ export class ConsultaService {
     if (!consulta)
       throw new ForbiddenException('Consulta não pertence a este usuário');
 
+    const existente = await this.buscarPorIdempotencyKey(
+      (key) =>
+        this.prisma.diagnostico.findUnique({ where: { idempotency_key: key } }),
+      dto.idempotency_key,
+      (d) => d.consulta_id === dto.consulta_id,
+    );
+    if (existente) return existente;
+
     const diagnostico = await this.prisma.diagnostico.create({
       data: {
         consulta_id: dto.consulta_id,
@@ -121,6 +164,7 @@ export class ConsultaService {
         descricao: dto.descricao,
         confianca: dto.confianca ?? 1.0,
         selecionado: dto.selecionado ?? false,
+        idempotency_key: dto.idempotency_key,
       },
     });
 
@@ -143,6 +187,19 @@ export class ConsultaService {
     });
     if (!consulta) throw new ForbiddenException();
 
+    // Integridade de persistência — CRÍTICO: uma prescrição nunca pode ser
+    // duplicada por reenvio (retry de rede, timeout, fila de sincronização
+    // do frontend, duplo clique). idempotency_key é gerada uma única vez no
+    // cliente no momento em que o médico finaliza a prescrição e reutilizada
+    // em toda tentativa subsequente da MESMA operação.
+    const existente = await this.buscarPorIdempotencyKey(
+      (key) =>
+        this.prisma.prescricao.findUnique({ where: { idempotency_key: key } }),
+      dto.idempotency_key,
+      (p) => p.consulta_id === dto.consulta_id,
+    );
+    if (existente) return existente;
+
     const hash = hashIntegridade({
       ...dto,
       usuario_id: usuarioId,
@@ -157,6 +214,7 @@ export class ConsultaService {
         orientacoes: dto.orientacoes,
         validade_dias: dto.validade_dias ?? 30,
         hash_integridade: hash,
+        idempotency_key: dto.idempotency_key,
       },
     });
 
@@ -186,12 +244,21 @@ export class ConsultaService {
     consultaId: string,
     score: RiskScorePayloadDto,
     usuarioId: string,
+    idempotencyKey?: string,
   ) {
     const consulta = await this.prisma.consulta.findFirst({
       where: { id: consultaId, usuario_id: usuarioId, deletado_em: null },
     });
     if (!consulta)
       throw new ForbiddenException('Consulta não pertence a este usuário');
+
+    const existente = await this.buscarPorIdempotencyKey(
+      (key) =>
+        this.prisma.riskScore.findUnique({ where: { idempotency_key: key } }),
+      idempotencyKey,
+      (r) => r.consulta_id === consultaId,
+    );
+    if (existente) return existente;
 
     return this.prisma.riskScore.create({
       data: {
@@ -206,6 +273,7 @@ export class ConsultaService {
         risco_interacao: toJson(score.risco_interacao),
         risco_terapeutico: toJson(score.risco_terapeutico),
         recomendacoes: score.recomendacoes_prioritarias ?? [],
+        idempotency_key: idempotencyKey,
       },
     });
   }

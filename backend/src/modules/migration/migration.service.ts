@@ -42,12 +42,30 @@ export class MigrationService {
     });
 
     // ── Migrar prescrições ────────────────────────────────────
+    //
+    // Integridade de persistência — a migração é reexecutável (o frontend
+    // pode reenviar o mesmo lote de localStorage após uma falha parcial ou
+    // timeout). Correção de bug: o hash anterior incluía `ts: Date.now()`,
+    // então o MESMO item de localStorage produzia um hash DIFERENTE a cada
+    // chamada — nunca detectava re-migração, criando uma prescrição
+    // duplicada por reenvio. O hash agora é estável (determinístico pelo
+    // conteúdo) e uma `idempotency_key` (escopada por usuário + id local do
+    // item, com fallback no próprio hash quando o item não tem id) é
+    // checada antes de criar — reenviar o mesmo lote nunca duplica.
     for (const rx of dados.prescricoes ?? []) {
       try {
         const hash = crypto
           .createHash('sha256')
-          .update(JSON.stringify({ ...rx, ts: Date.now() }))
+          .update(JSON.stringify(rx))
           .digest('hex');
+        const idempotencyKey = `migracao:${usuarioId}:${rx.id ?? hash}`;
+
+        const existente = await this.prisma.prescricao.findUnique({
+          where: { idempotency_key: idempotencyKey },
+        });
+        if (existente) {
+          continue; // já migrada em uma tentativa anterior — não duplica
+        }
 
         await this.prisma.prescricao.create({
           data: {
@@ -55,6 +73,7 @@ export class MigrationService {
             medicamentos: (rx.medicamentos as object) ?? [],
             orientacoes: rx.orientacoes,
             hash_integridade: hash,
+            idempotency_key: idempotencyKey,
             status: 'finalizada',
           },
         });

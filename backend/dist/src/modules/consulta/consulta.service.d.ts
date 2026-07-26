@@ -8,6 +8,7 @@ export declare class ConsultaService {
     private cache;
     private audit;
     constructor(prisma: PrismaService, cache: CacheService, audit: AuditService);
+    private buscarPorIdempotencyKey;
     criarConsulta(dto: CriarConsultaDto, usuarioId: string): Promise<{
         status: import("@prisma/client").$Enums.StatusConsulta;
         usuario_id: string;
@@ -16,6 +17,7 @@ export declare class ConsultaService {
         atualizado_em: Date;
         deletado_em: Date | null;
         anamnese: Prisma.JsonValue | null;
+        idempotency_key: string | null;
         paciente_id: string | null;
     }>;
     listarConsultas(usuarioId: string, pagina?: number, limite?: number): Promise<{
@@ -26,6 +28,7 @@ export declare class ConsultaService {
             diagnosticos: {
                 id: string;
                 criado_em: Date;
+                idempotency_key: string | null;
                 consulta_id: string;
                 cid: string;
                 descricao: string;
@@ -44,6 +47,7 @@ export declare class ConsultaService {
             atualizado_em: Date;
             deletado_em: Date | null;
             anamnese: Prisma.JsonValue | null;
+            idempotency_key: string | null;
             paciente_id: string | null;
         })[];
     }>;
@@ -51,6 +55,7 @@ export declare class ConsultaService {
         diagnosticos: {
             id: string;
             criado_em: Date;
+            idempotency_key: string | null;
             consulta_id: string;
             cid: string;
             descricao: string;
@@ -83,6 +88,7 @@ export declare class ConsultaService {
             criado_em: Date;
             atualizado_em: Date;
             deletado_em: Date | null;
+            idempotency_key: string | null;
             consulta_id: string;
             diagnostico_id: string | null;
             medicamentos: Prisma.JsonValue;
@@ -93,6 +99,7 @@ export declare class ConsultaService {
         risco_scores: {
             id: string;
             criado_em: Date;
+            idempotency_key: string | null;
             consulta_id: string;
             risco_global: import("@prisma/client").$Enums.NivelRisco;
             score_global: number;
@@ -126,11 +133,13 @@ export declare class ConsultaService {
         atualizado_em: Date;
         deletado_em: Date | null;
         anamnese: Prisma.JsonValue | null;
+        idempotency_key: string | null;
         paciente_id: string | null;
     }>;
     criarDiagnostico(dto: CriarDiagnosticoDto, usuarioId: string): Promise<{
         id: string;
         criado_em: Date;
+        idempotency_key: string | null;
         consulta_id: string;
         cid: string;
         descricao: string;
@@ -144,6 +153,7 @@ export declare class ConsultaService {
         criado_em: Date;
         atualizado_em: Date;
         deletado_em: Date | null;
+        idempotency_key: string | null;
         consulta_id: string;
         diagnostico_id: string | null;
         medicamentos: Prisma.JsonValue;
@@ -151,9 +161,10 @@ export declare class ConsultaService {
         validade_dias: number;
         versao: number;
     }>;
-    salvarRiskScore(consultaId: string, score: RiskScorePayloadDto, usuarioId: string): Promise<{
+    salvarRiskScore(consultaId: string, score: RiskScorePayloadDto, usuarioId: string, idempotencyKey?: string): Promise<{
         id: string;
         criado_em: Date;
+        idempotency_key: string | null;
         consulta_id: string;
         risco_global: import("@prisma/client").$Enums.NivelRisco;
         score_global: number;

@@ -13,6 +13,7 @@ export declare class ConsultaController {
         atualizado_em: Date;
         deletado_em: Date | null;
         anamnese: import("@prisma/client/runtime/client").JsonValue | null;
+        idempotency_key: string | null;
         paciente_id: string | null;
     }>;
     listarConsultas(user: {
@@ -25,6 +26,7 @@ export declare class ConsultaController {
             diagnosticos: {
                 id: string;
                 criado_em: Date;
+                idempotency_key: string | null;
                 consulta_id: string;
                 cid: string;
                 descricao: string;
@@ -43,6 +45,7 @@ export declare class ConsultaController {
             atualizado_em: Date;
             deletado_em: Date | null;
             anamnese: import("@prisma/client/runtime/client").JsonValue | null;
+            idempotency_key: string | null;
             paciente_id: string | null;
         })[];
     }>;
@@ -52,6 +55,7 @@ export declare class ConsultaController {
         diagnosticos: {
             id: string;
             criado_em: Date;
+            idempotency_key: string | null;
             consulta_id: string;
             cid: string;
             descricao: string;
@@ -84,6 +88,7 @@ export declare class ConsultaController {
             criado_em: Date;
             atualizado_em: Date;
             deletado_em: Date | null;
+            idempotency_key: string | null;
             consulta_id: string;
             diagnostico_id: string | null;
             medicamentos: import("@prisma/client/runtime/client").JsonValue;
@@ -94,6 +99,7 @@ export declare class ConsultaController {
         risco_scores: {
             id: string;
             criado_em: Date;
+            idempotency_key: string | null;
             consulta_id: string;
             risco_global: import("@prisma/client").$Enums.NivelRisco;
             score_global: number;
@@ -127,6 +133,7 @@ export declare class ConsultaController {
         atualizado_em: Date;
         deletado_em: Date | null;
         anamnese: import("@prisma/client/runtime/client").JsonValue | null;
+        idempotency_key: string | null;
         paciente_id: string | null;
     }>;
     timeline(user: {
@@ -145,6 +152,7 @@ export declare class ConsultaController {
     }): Promise<{
         id: string;
         criado_em: Date;
+        idempotency_key: string | null;
         consulta_id: string;
         cid: string;
         descricao: string;
@@ -160,6 +168,7 @@ export declare class ConsultaController {
         criado_em: Date;
         atualizado_em: Date;
         deletado_em: Date | null;
+        idempotency_key: string | null;
         consulta_id: string;
         diagnostico_id: string | null;
         medicamentos: import("@prisma/client/runtime/client").JsonValue;
@@ -172,6 +181,7 @@ export declare class ConsultaController {
     }): Promise<{
         id: string;
         criado_em: Date;
+        idempotency_key: string | null;
         consulta_id: string;
         risco_global: import("@prisma/client").$Enums.NivelRisco;
         score_global: number;

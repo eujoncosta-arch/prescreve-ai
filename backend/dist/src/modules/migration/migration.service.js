@@ -75,14 +75,22 @@ let MigrationService = MigrationService_1 = class MigrationService {
             try {
                 const hash = crypto
                     .createHash('sha256')
-                    .update(JSON.stringify({ ...rx, ts: Date.now() }))
+                    .update(JSON.stringify(rx))
                     .digest('hex');
+                const idempotencyKey = `migracao:${usuarioId}:${rx.id ?? hash}`;
+                const existente = await this.prisma.prescricao.findUnique({
+                    where: { idempotency_key: idempotencyKey },
+                });
+                if (existente) {
+                    continue;
+                }
                 await this.prisma.prescricao.create({
                     data: {
                         consulta_id: consulta.id,
                         medicamentos: rx.medicamentos ?? [],
                         orientacoes: rx.orientacoes,
                         hash_integridade: hash,
+                        idempotency_key: idempotencyKey,
                         status: 'finalizada',
                     },
                 });

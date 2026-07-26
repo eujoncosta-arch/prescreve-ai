@@ -274,6 +274,28 @@ export interface Prescription {
   diagnostico?: string;
 }
 
+/**
+ * Estado de persistência no backend de um recurso clínico individual —
+ * NUNCA "synced" sem uma resposta 2xx real do servidor. `idempotency_key`
+ * é gerada uma única vez e reutilizada em todo retry da MESMA operação
+ * (nunca duplica um registro clínico por reenvio).
+ */
+export interface ResourceSyncState {
+  status: 'local' | 'syncing' | 'synced' | 'failed';
+  attempts: number;
+  error?: string;
+  backend_id?: string;
+  idempotency_key?: string;
+  last_attempt_at?: string;
+}
+
+/** Estado de sincronização de todos os recursos clínicos de uma consulta. */
+export interface ConsultationSync {
+  consulta?: ResourceSyncState;
+  diagnostico?: ResourceSyncState;
+  prescricao?: ResourceSyncState;
+}
+
 export interface Consultation {
   id: string;
   status: 'anamnese' | 'diagnostico' | 'terapeutico' | 'prescricao' | 'concluida';
@@ -286,6 +308,8 @@ export interface Consultation {
   seguranca?: SafetyCheck;
   prescricao?: Prescription;
   prognostico?: PrognosisData;
+  /** Estado real de persistência no backend — nunca inferido pelo estado local/UI. */
+  sync?: ConsultationSync;
 }
 
 // ============================================================

@@ -185,7 +185,7 @@ export function getCurrentUser(): CurrentUser | null {
 // ══════════════════════════════════════════════════════════════
 
 export const consultaApi = {
-  async criar(dados: { paciente_hash?: string; anamnese?: object }) {
+  async criar(dados: { paciente_hash?: string; anamnese?: object; idempotency_key?: string }) {
     if (!BACKEND_AVAILABLE) return { id: `local-${Date.now()}`, status: 'em_andamento' };
     return apiFetch('/api/consulta', { method: 'POST', body: JSON.stringify(dados) });
   },
@@ -205,19 +205,19 @@ export const consultaApi = {
     return apiFetch('/api/timeline');
   },
 
-  async criarDiagnostico(dados: { consulta_id: string; cid: string; descricao: string; confianca?: number; selecionado?: boolean }) {
+  async criarDiagnostico(dados: { consulta_id: string; cid: string; descricao: string; confianca?: number; selecionado?: boolean; idempotency_key?: string }) {
     if (!BACKEND_AVAILABLE) return { id: `local-diag-${Date.now()}`, ...dados };
     return apiFetch('/api/diagnostico', { method: 'POST', body: JSON.stringify(dados) });
   },
 
-  async criarPrescricao(dados: { consulta_id: string; diagnostico_id?: string; medicamentos: object[]; orientacoes?: string }) {
+  async criarPrescricao(dados: { consulta_id: string; diagnostico_id?: string; medicamentos: object[]; orientacoes?: string; idempotency_key?: string }) {
     if (!BACKEND_AVAILABLE) return { id: `local-rx-${Date.now()}`, ...dados };
     return apiFetch('/api/prescricao', { method: 'POST', body: JSON.stringify(dados) });
   },
 
-  async salvarRisco(consulta_id: string, score: object) {
+  async salvarRisco(consulta_id: string, score: object, idempotency_key?: string) {
     if (!BACKEND_AVAILABLE) return { id: `local-risk-${Date.now()}` };
-    return apiFetch('/api/risco', { method: 'POST', body: JSON.stringify({ consulta_id, score }) });
+    return apiFetch('/api/risco', { method: 'POST', body: JSON.stringify({ consulta_id, score, idempotency_key }) });
   },
 
   async buscarEvidencias(cid: string) {

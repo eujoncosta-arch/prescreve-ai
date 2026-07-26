@@ -20,12 +20,71 @@ import {
   CheckCircle2,
   AlertTriangle,
   Loader2,
+  CloudOff,
+  Cloud,
+  RefreshCw,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { formatDate } from '@/lib/utils';
 
 interface PrescriptionPanelProps {
   onComplete: () => void;
+}
+
+/**
+ * Estado REAL de persistência da prescrição no backend — nunca inferido do
+ * estado local. Enquanto não houver confirmação do servidor, a prescrição
+ * NÃO deve ser tratada pelo médico como "emitida"/persistida.
+ */
+function PrescriptionSyncBadge() {
+  const { state, auth, retrySync } = useApp();
+  const consultaId = state.activeConsultation?.id;
+  const sync = state.activeConsultation?.sync?.prescricao;
+
+  if (!auth.backendMode) {
+    return (
+      <div className="flex items-center gap-1.5 text-xs text-slate-500">
+        <CloudOff className="w-3.5 h-3.5" />
+        Modo local — backend não configurado; prescrição salva apenas neste dispositivo
+      </div>
+    );
+  }
+  if (!sync || sync.status === 'local') return null;
+
+  if (sync.status === 'syncing') {
+    return (
+      <div className="flex items-center gap-1.5 text-xs text-blue-600">
+        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+        Sincronizando com o servidor{sync.attempts > 1 ? ` (tentativa ${sync.attempts})` : ''}...
+      </div>
+    );
+  }
+  if (sync.status === 'synced') {
+    return (
+      <div className="flex items-center gap-1.5 text-xs text-green-600">
+        <Cloud className="w-3.5 h-3.5" />
+        Prescrição confirmada no servidor
+      </div>
+    );
+  }
+  // failed — NUNCA sugerir que foi salva no servidor.
+  return (
+    <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded-md px-2 py-1.5">
+      <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+      <span>
+        Falha ao sincronizar com o servidor — a prescrição existe SÓ neste
+        dispositivo até a sincronização ter sucesso.
+        {sync.error ? ` (${sync.error})` : ''}
+      </span>
+      <button
+        type="button"
+        onClick={() => consultaId && void retrySync(consultaId)}
+        className="ml-auto shrink-0 flex items-center gap-1 font-medium underline hover:no-underline"
+      >
+        <RefreshCw className="w-3 h-3" /> Tentar novamente
+      </button>
+    </div>
+  );
 }
 
 export function PrescriptionPanel({ onComplete }: PrescriptionPanelProps) {
@@ -103,7 +162,12 @@ export function PrescriptionPanel({ onComplete }: PrescriptionPanelProps) {
     await new Promise(r => setTimeout(r, 800));
     dispatch({ type: 'UPDATE_PRESCRIPTION', payload: { ...prescricao, id: Date.now().toString() } });
     setLoading(false);
-    toast.success('Consulta concluída e prescrição emitida!');
+    // Honesto quanto ao estado real: o dado só está confirmado localmente
+    // neste momento. A sincronização com o backend acontece em seguida
+    // (ver AppProvider.sincronizarConsulta) — o resultado real (sucesso ou
+    // falha) é refletido pelo <PrescriptionSyncBadge> acima, nunca por este
+    // toast, que não pode prometer persistência no servidor.
+    toast.success('Prescrição registrada. Sincronizando com o servidor...');
     onComplete();
   };
 
@@ -346,6 +410,9 @@ export function PrescriptionPanel({ onComplete }: PrescriptionPanelProps) {
           </CardContent>
         </Card>
       </div>
+
+      {/* Estado real de persistência no backend — nunca inferido do estado local */}
+      <PrescriptionSyncBadge />
 
       {/* Finalizar */}
       <div className="flex items-center justify-between pt-2">

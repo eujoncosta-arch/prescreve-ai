@@ -43,7 +43,7 @@ let ConsultaController = class ConsultaController {
         return this.svc.criarPrescricao(dto, user.id);
     }
     salvarRisco(body, user) {
-        return this.svc.salvarRiskScore(body.consulta_id, body.score, user.id);
+        return this.svc.salvarRiskScore(body.consulta_id, body.score, user.id, body.idempotency_key);
     }
     buscarEvidencias(cid) {
         return this.svc.buscarEvidencias(cid);

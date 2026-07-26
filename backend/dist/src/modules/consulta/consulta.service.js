@@ -63,7 +63,21 @@ let ConsultaService = class ConsultaService {
         this.cache = cache;
         this.audit = audit;
     }
+    async buscarPorIdempotencyKey(finder, idempotencyKey, ownerCheck) {
+        if (!idempotencyKey)
+            return null;
+        const existente = await finder(idempotencyKey);
+        if (!existente)
+            return null;
+        if (!ownerCheck(existente)) {
+            throw new common_1.ForbiddenException('Chave de idempotência já utilizada em outro escopo');
+        }
+        return existente;
+    }
     async criarConsulta(dto, usuarioId) {
+        const existente = await this.buscarPorIdempotencyKey((key) => this.prisma.consulta.findUnique({ where: { idempotency_key: key } }), dto.idempotency_key, (c) => c.usuario_id === usuarioId);
+        if (existente)
+            return existente;
         let pacienteId;
         if (dto.paciente_hash) {
             const paciente = await this.prisma.paciente.upsert({
@@ -83,6 +97,7 @@ let ConsultaService = class ConsultaService {
                 usuario_id: usuarioId,
                 paciente_id: pacienteId,
                 anamnese: dto.anamnese,
+                idempotency_key: dto.idempotency_key,
             },
         });
         await this.audit.registrarAuditoria({
@@ -132,6 +147,9 @@ let ConsultaService = class ConsultaService {
         });
         if (!consulta)
             throw new common_1.ForbiddenException('Consulta não pertence a este usuário');
+        const existente = await this.buscarPorIdempotencyKey((key) => this.prisma.diagnostico.findUnique({ where: { idempotency_key: key } }), dto.idempotency_key, (d) => d.consulta_id === dto.consulta_id);
+        if (existente)
+            return existente;
         const diagnostico = await this.prisma.diagnostico.create({
             data: {
                 consulta_id: dto.consulta_id,
@@ -139,6 +157,7 @@ let ConsultaService = class ConsultaService {
                 descricao: dto.descricao,
                 confianca: dto.confianca ?? 1.0,
                 selecionado: dto.selecionado ?? false,
+                idempotency_key: dto.idempotency_key,
             },
         });
         await this.audit.registrarAuditoria({
@@ -156,6 +175,9 @@ let ConsultaService = class ConsultaService {
         });
         if (!consulta)
             throw new common_1.ForbiddenException();
+        const existente = await this.buscarPorIdempotencyKey((key) => this.prisma.prescricao.findUnique({ where: { idempotency_key: key } }), dto.idempotency_key, (p) => p.consulta_id === dto.consulta_id);
+        if (existente)
+            return existente;
         const hash = hashIntegridade({
             ...dto,
             usuario_id: usuarioId,
@@ -169,6 +191,7 @@ let ConsultaService = class ConsultaService {
                 orientacoes: dto.orientacoes,
                 validade_dias: dto.validade_dias ?? 30,
                 hash_integridade: hash,
+                idempotency_key: dto.idempotency_key,
             },
         });
         await this.audit.registrarAuditoria({
@@ -180,12 +203,15 @@ let ConsultaService = class ConsultaService {
         });
         return prescricao;
     }
-    async salvarRiskScore(consultaId, score, usuarioId) {
+    async salvarRiskScore(consultaId, score, usuarioId, idempotencyKey) {
         const consulta = await this.prisma.consulta.findFirst({
             where: { id: consultaId, usuario_id: usuarioId, deletado_em: null },
         });
         if (!consulta)
             throw new common_1.ForbiddenException('Consulta não pertence a este usuário');
+        const existente = await this.buscarPorIdempotencyKey((key) => this.prisma.riskScore.findUnique({ where: { idempotency_key: key } }), idempotencyKey, (r) => r.consulta_id === consultaId);
+        if (existente)
+            return existente;
         return this.prisma.riskScore.create({
             data: {
                 consulta_id: consultaId,
@@ -199,6 +225,7 @@ let ConsultaService = class ConsultaService {
                 risco_interacao: toJson(score.risco_interacao),
                 risco_terapeutico: toJson(score.risco_terapeutico),
                 recomendacoes: score.recomendacoes_prioritarias ?? [],
+                idempotency_key: idempotencyKey,
             },
         });
     }

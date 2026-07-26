@@ -11,13 +11,14 @@ describe('ConsultaService — acesso horizontal (ownership) e IDOR', () => {
   let prisma: {
     consulta: {
       findFirst: jest.Mock;
+      findUnique: jest.Mock;
       create: jest.Mock;
       count: jest.Mock;
       findMany: jest.Mock;
     };
-    diagnostico: { create: jest.Mock };
-    prescricao: { create: jest.Mock };
-    riskScore: { create: jest.Mock };
+    diagnostico: { create: jest.Mock; findUnique: jest.Mock };
+    prescricao: { create: jest.Mock; findUnique: jest.Mock };
+    riskScore: { create: jest.Mock; findUnique: jest.Mock };
   };
 
   const OUTRO_USUARIO_ID = 'usuario-victima-id';
@@ -28,13 +29,23 @@ describe('ConsultaService — acesso horizontal (ownership) e IDOR', () => {
     prisma = {
       consulta: {
         findFirst: jest.fn(),
+        findUnique: jest.fn().mockResolvedValue(null),
         create: jest.fn().mockResolvedValue({ id: 'nova-consulta' }),
         count: jest.fn(),
         findMany: jest.fn(),
       },
-      diagnostico: { create: jest.fn().mockResolvedValue({ id: 'diag-1' }) },
-      prescricao: { create: jest.fn().mockResolvedValue({ id: 'presc-1' }) },
-      riskScore: { create: jest.fn().mockResolvedValue({ id: 'risk-1' }) },
+      diagnostico: {
+        create: jest.fn().mockResolvedValue({ id: 'diag-1' }),
+        findUnique: jest.fn().mockResolvedValue(null),
+      },
+      prescricao: {
+        create: jest.fn().mockResolvedValue({ id: 'presc-1' }),
+        findUnique: jest.fn().mockResolvedValue(null),
+      },
+      riskScore: {
+        create: jest.fn().mockResolvedValue({ id: 'risk-1' }),
+        findUnique: jest.fn().mockResolvedValue(null),
+      },
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -167,6 +178,140 @@ describe('ConsultaService — acesso horizontal (ownership) e IDOR', () => {
         data: { consulta_id: string };
       };
       expect(callArg.data.consulta_id).toBe(CONSULTA_DA_VITIMA_ID);
+    });
+  });
+
+  describe('Integridade de persistência — idempotência (nunca duplica por reenvio)', () => {
+    it('criarConsulta(): mesma idempotency_key retorna o registro já criado, sem chamar create de novo', async () => {
+      const registroExistente = {
+        id: 'consulta-ja-criada',
+        usuario_id: OUTRO_USUARIO_ID,
+        idempotency_key: 'chave-fixa-123',
+      };
+      prisma.consulta.findUnique.mockResolvedValueOnce(registroExistente);
+
+      const resultado = await service.criarConsulta(
+        { idempotency_key: 'chave-fixa-123' },
+        OUTRO_USUARIO_ID,
+      );
+
+      expect(resultado).toBe(registroExistente);
+      expect(prisma.consulta.create).not.toHaveBeenCalled();
+    });
+
+    it('criarConsulta(): idempotency_key pertencente a outro usuário é rejeitada (nunca retorna o registro de outro dono)', async () => {
+      prisma.consulta.findUnique.mockResolvedValueOnce({
+        id: 'consulta-de-outro',
+        usuario_id: OUTRO_USUARIO_ID,
+        idempotency_key: 'chave-roubada',
+      });
+
+      await expect(
+        service.criarConsulta(
+          { idempotency_key: 'chave-roubada' },
+          USUARIO_ATACANTE_ID,
+        ),
+      ).rejects.toBeInstanceOf(ForbiddenException);
+      expect(prisma.consulta.create).not.toHaveBeenCalled();
+    });
+
+    it('criarPrescricao(): reenvio com a mesma idempotency_key NUNCA cria uma segunda prescrição (retry seguro)', async () => {
+      prisma.consulta.findFirst.mockResolvedValue({
+        id: CONSULTA_DA_VITIMA_ID,
+        usuario_id: OUTRO_USUARIO_ID,
+      });
+      const dto = {
+        consulta_id: CONSULTA_DA_VITIMA_ID,
+        medicamentos: [
+          {
+            molecula: 'Losartana',
+            dose: '50mg',
+            via: 'VO',
+            frequencia: '1x/dia',
+            duracao: '30d',
+          },
+        ],
+        idempotency_key: 'rx-idem-key-abc',
+      };
+
+      // 1ª tentativa: cria normalmente.
+      const primeira = await service.criarPrescricao(dto, OUTRO_USUARIO_ID);
+      expect(prisma.prescricao.create).toHaveBeenCalledTimes(1);
+
+      // Simula o banco já tendo o registro (o que a 1ª chamada real teria persistido).
+      prisma.prescricao.findUnique.mockResolvedValueOnce({
+        id: 'presc-1',
+        consulta_id: CONSULTA_DA_VITIMA_ID,
+        idempotency_key: 'rx-idem-key-abc',
+      });
+
+      // 2ª tentativa (retry — timeout/falha de rede na 1ª resposta): mesma chave.
+      const segunda = await service.criarPrescricao(dto, OUTRO_USUARIO_ID);
+
+      expect(prisma.prescricao.create).toHaveBeenCalledTimes(1); // NÃO chamou create de novo
+      expect(segunda.id).toBe(primeira.id);
+    });
+
+    it('criarDiagnostico(): reenvio com a mesma idempotency_key não duplica', async () => {
+      prisma.consulta.findFirst.mockResolvedValueOnce({
+        id: CONSULTA_DA_VITIMA_ID,
+        usuario_id: OUTRO_USUARIO_ID,
+      });
+      prisma.diagnostico.findUnique.mockResolvedValueOnce({
+        id: 'diag-existente',
+        consulta_id: CONSULTA_DA_VITIMA_ID,
+        idempotency_key: 'diag-idem-key',
+      });
+
+      const resultado = await service.criarDiagnostico(
+        {
+          consulta_id: CONSULTA_DA_VITIMA_ID,
+          cid: 'I10',
+          descricao: 'HAS',
+          idempotency_key: 'diag-idem-key',
+        },
+        OUTRO_USUARIO_ID,
+      );
+
+      expect(resultado.id).toBe('diag-existente');
+      expect(prisma.diagnostico.create).not.toHaveBeenCalled();
+    });
+
+    it('salvarRiskScore(): reenvio com a mesma idempotency_key não duplica', async () => {
+      prisma.consulta.findFirst.mockResolvedValueOnce({
+        id: CONSULTA_DA_VITIMA_ID,
+        usuario_id: OUTRO_USUARIO_ID,
+      });
+      prisma.riskScore.findUnique.mockResolvedValueOnce({
+        id: 'risk-existente',
+        consulta_id: CONSULTA_DA_VITIMA_ID,
+        idempotency_key: 'risk-idem-key',
+      });
+
+      const resultado = await service.salvarRiskScore(
+        CONSULTA_DA_VITIMA_ID,
+        { risco_global: 'alto', score_global: 80 },
+        OUTRO_USUARIO_ID,
+        'risk-idem-key',
+      );
+
+      expect(resultado.id).toBe('risk-existente');
+      expect(prisma.riskScore.create).not.toHaveBeenCalled();
+    });
+
+    it('sem idempotency_key nenhuma (campo ausente): comportamento normal, sem checagem de duplicata', async () => {
+      prisma.consulta.findFirst.mockResolvedValueOnce({
+        id: CONSULTA_DA_VITIMA_ID,
+        usuario_id: OUTRO_USUARIO_ID,
+      });
+
+      await service.criarDiagnostico(
+        { consulta_id: CONSULTA_DA_VITIMA_ID, cid: 'I10', descricao: 'HAS' },
+        OUTRO_USUARIO_ID,
+      );
+
+      expect(prisma.diagnostico.findUnique).not.toHaveBeenCalled();
+      expect(prisma.diagnostico.create).toHaveBeenCalledTimes(1);
     });
   });
 

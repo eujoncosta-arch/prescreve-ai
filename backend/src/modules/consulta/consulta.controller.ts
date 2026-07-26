@@ -89,7 +89,12 @@ export class ConsultaController {
     @Body() body: SalvarRiscoDto,
     @CurrentUser() user: { id: string },
   ) {
-    return this.svc.salvarRiskScore(body.consulta_id, body.score, user.id);
+    return this.svc.salvarRiskScore(
+      body.consulta_id,
+      body.score,
+      user.id,
+      body.idempotency_key,
+    );
   }
 
   // ── Evidências ────────────────────────────────────────────

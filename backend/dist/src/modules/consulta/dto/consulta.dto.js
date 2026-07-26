@@ -14,9 +14,20 @@ const class_validator_1 = require("class-validator");
 const class_transformer_1 = require("class-transformer");
 const client_1 = require("@prisma/client");
 const max_json_size_validator_1 = require("../../../common/validators/max-json-size.validator");
+function IsIdempotencyKey() {
+    return function (target, propertyKey) {
+        (0, class_validator_1.IsOptional)()(target, propertyKey);
+        (0, class_validator_1.IsString)()(target, propertyKey);
+        (0, class_validator_1.MinLength)(8, {
+            message: 'idempotency_key deve ter ao menos 8 caracteres',
+        })(target, propertyKey);
+        (0, class_validator_1.MaxLength)(100)(target, propertyKey);
+    };
+}
 class CriarConsultaDto {
     paciente_hash;
     anamnese;
+    idempotency_key;
 }
 exports.CriarConsultaDto = CriarConsultaDto;
 __decorate([
@@ -35,12 +46,17 @@ __decorate([
     }),
     __metadata("design:type", Object)
 ], CriarConsultaDto.prototype, "anamnese", void 0);
+__decorate([
+    IsIdempotencyKey(),
+    __metadata("design:type", String)
+], CriarConsultaDto.prototype, "idempotency_key", void 0);
 class CriarDiagnosticoDto {
     consulta_id;
     cid;
     descricao;
     confianca;
     selecionado;
+    idempotency_key;
 }
 exports.CriarDiagnosticoDto = CriarDiagnosticoDto;
 __decorate([
@@ -73,6 +89,10 @@ __decorate([
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
 ], CriarDiagnosticoDto.prototype, "selecionado", void 0);
+__decorate([
+    IsIdempotencyKey(),
+    __metadata("design:type", String)
+], CriarDiagnosticoDto.prototype, "idempotency_key", void 0);
 class ItemMedicamentoDto {
     molecula;
     dose;
@@ -124,6 +144,7 @@ class CriarPrescricaoDto {
     medicamentos;
     orientacoes;
     validade_dias;
+    idempotency_key;
 }
 exports.CriarPrescricaoDto = CriarPrescricaoDto;
 __decorate([
@@ -159,6 +180,10 @@ __decorate([
     (0, class_validator_1.Max)(365),
     __metadata("design:type", Number)
 ], CriarPrescricaoDto.prototype, "validade_dias", void 0);
+__decorate([
+    IsIdempotencyKey(),
+    __metadata("design:type", String)
+], CriarPrescricaoDto.prototype, "idempotency_key", void 0);
 class RiskScorePayloadDto {
     risco_global;
     score_global;
@@ -235,6 +260,7 @@ __decorate([
 class SalvarRiscoDto {
     consulta_id;
     score;
+    idempotency_key;
 }
 exports.SalvarRiscoDto = SalvarRiscoDto;
 __decorate([
@@ -249,6 +275,10 @@ __decorate([
     (0, class_transformer_1.Type)(() => RiskScorePayloadDto),
     __metadata("design:type", RiskScorePayloadDto)
 ], SalvarRiscoDto.prototype, "score", void 0);
+__decorate([
+    IsIdempotencyKey(),
+    __metadata("design:type", String)
+], SalvarRiscoDto.prototype, "idempotency_key", void 0);
 class PaginacaoQueryDto {
     pagina = 1;
     limite = 20;
