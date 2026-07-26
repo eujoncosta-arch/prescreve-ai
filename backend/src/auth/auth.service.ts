@@ -263,8 +263,16 @@ export class AuthService {
     const refreshSecret = getRequiredSecret(this.config, 'JWT_REFRESH_SECRET');
 
     const [access_token, refresh_token] = await Promise.all([
-      this.jwt.signAsync(payload, { secret, expiresIn: '15m' }),
-      this.jwt.signAsync(payload, { secret: refreshSecret, expiresIn: '7d' }),
+      this.jwt.signAsync(payload, {
+        secret,
+        expiresIn: '15m',
+        algorithm: 'HS256',
+      }),
+      this.jwt.signAsync(payload, {
+        secret: refreshSecret,
+        expiresIn: '7d',
+        algorithm: 'HS256',
+      }),
     ]);
 
     // Salvar refresh token (hash)

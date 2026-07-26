@@ -7,8 +7,12 @@ export class AtivarMfaDto {
   code: string;
 }
 
-/** TOTP (6 dígitos) OU código de recuperação de uso único (10 caracteres hex). */
-const MFA_CODE_PATTERN = /^[0-9A-Fa-f]{6}$|^[0-9A-Fa-f]{10}$/;
+/**
+ * TOTP (6 dígitos) OU código de recuperação no formato real emitido pelo
+ * servidor "XXXXX-XXXXX" (ver login.dto.ts para o histórico do bug
+ * corrigido — o traço é parte do código hasheado, nunca removido).
+ */
+const MFA_CODE_PATTERN = /^[0-9A-Fa-f]{6}$|^[0-9A-Fa-f]{5}-[0-9A-Fa-f]{5}$/;
 
 export class DesativarMfaDto {
   @IsString()
@@ -18,7 +22,7 @@ export class DesativarMfaDto {
   @IsString()
   @Matches(MFA_CODE_PATTERN, {
     message:
-      'code deve ser um TOTP de 6 dígitos ou um código de recuperação de 10 caracteres',
+      'code deve ser um TOTP de 6 dígitos ou um código de recuperação no formato XXXXX-XXXXX',
   })
   code: string;
 }

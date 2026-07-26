@@ -479,9 +479,21 @@ export function runSafetyCheck(input: SafetyCheckInput): QuickSafetyAlert[] {
     const hasB = molsLower.some(m => m.includes(pair.mol_b) || pair.mol_b.includes(m)) ||
       drugs.some(d => d.classe.toLowerCase().includes(pair.mol_b));
     if (hasA && hasB) {
-      // Evita duplicatas com interações já encontradas pelo banco de dados
+      // Evita duplicatas com interações já encontradas pelo banco de dados.
+      // BUG REAL CORRIGIDO (auditoria de segurança final): a checagem original
+      // só testava a presença de `pair.mol_a` em QUALQUER alerta já emitido —
+      // como vários pares de CRITICAL_PAIRS compartilham a mesma mol_a (ex.:
+      // "ieca" aparece em ieca+aine, ieca+espironolactona, ieca+bra,
+      // sacubitril+ieca), o primeiro alerta ieca+X gerado suprimia
+      // silenciosamente TODOS os pares ieca+Y críticos posteriores, mesmo
+      // sendo interações não relacionadas e potencialmente mais graves
+      // (ex.: duplo bloqueio SRAA, angioedema fatal). Corrigido para exigir
+      // que AMBAS as moléculas do par apareçam juntas no mesmo alerta.
       const dupKey = `${pair.mol_a}-${pair.mol_b}`;
-      const jaExiste = alerts.some(a => a.id.includes(pair.mol_a) || a.titulo.toLowerCase().includes(pair.mol_a));
+      const jaExiste = alerts.some(a =>
+        (a.id.includes(pair.mol_a) || a.titulo.toLowerCase().includes(pair.mol_a)) &&
+        (a.id.includes(pair.mol_b) || a.titulo.toLowerCase().includes(pair.mol_b)),
+      );
       if (!jaExiste) {
         alerts.push({
           id: `critical-pair-${dupKey}`,

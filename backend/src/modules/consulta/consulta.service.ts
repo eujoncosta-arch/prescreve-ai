@@ -64,6 +64,37 @@ export class ConsultaService {
     return existente;
   }
 
+  /**
+   * Correção de bug real (auditoria de segurança final, PERSIST-01): o
+   * fluxo de idempotência era "findUnique → se nulo, create", sem
+   * proteção contra corrida — duas requisições genuinamente concorrentes
+   * com a MESMA idempotency_key (retry automático, duplo clique) podiam
+   * ambas passar pelo `findUnique` antes de qualquer `create` comitar; a
+   * perdedora da corrida colidia com a constraint `@unique` do banco
+   * (Prisma P2002) e recebia um 500 não tratado em vez do MESMO registro
+   * já criado pela vencedora — quebrando exatamente a garantia de
+   * "retry-safe" que a idempotency_key existe para prover. Agora, ao
+   * detectar P2002 no `create`, busca e retorna o registro que a outra
+   * requisição concorrente acabou de criar.
+   */
+  private async criarComIdempotenciaSobColisao<T>(
+    criar: () => Promise<T>,
+    buscarExistente: () => Promise<T | null>,
+  ): Promise<T> {
+    try {
+      return await criar();
+    } catch (e) {
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2002'
+      ) {
+        const existente = await buscarExistente();
+        if (existente) return existente;
+      }
+      throw e;
+    }
+  }
+
   async criarConsulta(dto: CriarConsultaDto, usuarioId: string) {
     const existente = await this.buscarPorIdempotencyKey(
       (key) =>
@@ -102,14 +133,23 @@ export class ConsultaService {
       pacienteId = paciente.id;
     }
 
-    const consulta = await this.prisma.consulta.create({
-      data: {
-        usuario_id: usuarioId,
-        paciente_id: pacienteId,
-        anamnese: dto.anamnese as object,
-        idempotency_key: dto.idempotency_key,
-      },
-    });
+    const consulta = await this.criarComIdempotenciaSobColisao(
+      () =>
+        this.prisma.consulta.create({
+          data: {
+            usuario_id: usuarioId,
+            paciente_id: pacienteId,
+            anamnese: dto.anamnese as object,
+            idempotency_key: dto.idempotency_key,
+          },
+        }),
+      () =>
+        dto.idempotency_key
+          ? this.prisma.consulta.findUnique({
+              where: { idempotency_key: dto.idempotency_key },
+            })
+          : Promise.resolve(null),
+    );
 
     await this.audit.registrarAuditoria({
       usuario_id: usuarioId,
@@ -172,16 +212,25 @@ export class ConsultaService {
     );
     if (existente) return existente;
 
-    const diagnostico = await this.prisma.diagnostico.create({
-      data: {
-        consulta_id: dto.consulta_id,
-        cid: dto.cid,
-        descricao: dto.descricao,
-        confianca: dto.confianca ?? 1.0,
-        selecionado: dto.selecionado ?? false,
-        idempotency_key: dto.idempotency_key,
-      },
-    });
+    const diagnostico = await this.criarComIdempotenciaSobColisao(
+      () =>
+        this.prisma.diagnostico.create({
+          data: {
+            consulta_id: dto.consulta_id,
+            cid: dto.cid,
+            descricao: dto.descricao,
+            confianca: dto.confianca ?? 1.0,
+            selecionado: dto.selecionado ?? false,
+            idempotency_key: dto.idempotency_key,
+          },
+        }),
+      () =>
+        dto.idempotency_key
+          ? this.prisma.diagnostico.findUnique({
+              where: { idempotency_key: dto.idempotency_key },
+            })
+          : Promise.resolve(null),
+    );
 
     await this.audit.registrarAuditoria({
       usuario_id: usuarioId,
@@ -215,23 +264,52 @@ export class ConsultaService {
     );
     if (existente) return existente;
 
+    // Correção de vulnerabilidade (auditoria de segurança final, OWN-01):
+    // `dto.diagnostico_id` é opcional e vinha do cliente sem NENHUMA
+    // verificação de que pertence à mesma consulta (e portanto ao mesmo
+    // usuário) — só `dto.consulta_id` era checado. Como `Diagnostico.id` é
+    // um cuid global (não escopado por consulta), qualquer id de
+    // diagnóstico de OUTRO usuário obtido/adivinhado podia ser vinculado à
+    // própria prescrição, quebrando a fronteira de tenant que o resto deste
+    // método (corretamente) impõe. Mesmo padrão de ownership já usado para
+    // `consulta_id` acima e para RiskScore abaixo.
+    if (dto.diagnostico_id) {
+      const diagnostico = await this.prisma.diagnostico.findFirst({
+        where: { id: dto.diagnostico_id, consulta_id: dto.consulta_id },
+      });
+      if (!diagnostico) {
+        throw new ForbiddenException(
+          'Diagnóstico não pertence a esta consulta',
+        );
+      }
+    }
+
     const hash = hashIntegridade({
       ...dto,
       usuario_id: usuarioId,
       ts: Date.now(),
     });
 
-    const prescricao = await this.prisma.prescricao.create({
-      data: {
-        consulta_id: dto.consulta_id,
-        diagnostico_id: dto.diagnostico_id,
-        medicamentos: dto.medicamentos.map((m) => ({ ...m })),
-        orientacoes: dto.orientacoes,
-        validade_dias: dto.validade_dias ?? 30,
-        hash_integridade: hash,
-        idempotency_key: dto.idempotency_key,
-      },
-    });
+    const prescricao = await this.criarComIdempotenciaSobColisao(
+      () =>
+        this.prisma.prescricao.create({
+          data: {
+            consulta_id: dto.consulta_id,
+            diagnostico_id: dto.diagnostico_id,
+            medicamentos: dto.medicamentos.map((m) => ({ ...m })),
+            orientacoes: dto.orientacoes,
+            validade_dias: dto.validade_dias ?? 30,
+            hash_integridade: hash,
+            idempotency_key: dto.idempotency_key,
+          },
+        }),
+      () =>
+        dto.idempotency_key
+          ? this.prisma.prescricao.findUnique({
+              where: { idempotency_key: dto.idempotency_key },
+            })
+          : Promise.resolve(null),
+    );
 
     await this.audit.registrarAuditoria({
       usuario_id: usuarioId,
@@ -275,22 +353,31 @@ export class ConsultaService {
     );
     if (existente) return existente;
 
-    return this.prisma.riskScore.create({
-      data: {
-        consulta_id: consultaId,
-        risco_global: score.risco_global,
-        score_global: score.score_global,
-        alerta_vermelho: score.alerta_vermelho ?? false,
-        risco_cardiovascular: toJson(score.risco_cardiovascular),
-        risco_renal: toJson(score.risco_renal),
-        risco_hemorragico: toJson(score.risco_hemorragico),
-        risco_farmacologico: toJson(score.risco_farmacologico),
-        risco_interacao: toJson(score.risco_interacao),
-        risco_terapeutico: toJson(score.risco_terapeutico),
-        recomendacoes: score.recomendacoes_prioritarias ?? [],
-        idempotency_key: idempotencyKey,
-      },
-    });
+    return this.criarComIdempotenciaSobColisao(
+      () =>
+        this.prisma.riskScore.create({
+          data: {
+            consulta_id: consultaId,
+            risco_global: score.risco_global,
+            score_global: score.score_global,
+            alerta_vermelho: score.alerta_vermelho ?? false,
+            risco_cardiovascular: toJson(score.risco_cardiovascular),
+            risco_renal: toJson(score.risco_renal),
+            risco_hemorragico: toJson(score.risco_hemorragico),
+            risco_farmacologico: toJson(score.risco_farmacologico),
+            risco_interacao: toJson(score.risco_interacao),
+            risco_terapeutico: toJson(score.risco_terapeutico),
+            recomendacoes: score.recomendacoes_prioritarias ?? [],
+            idempotency_key: idempotencyKey,
+          },
+        }),
+      () =>
+        idempotencyKey
+          ? this.prisma.riskScore.findUnique({
+              where: { idempotency_key: idempotencyKey },
+            })
+          : Promise.resolve(null),
+    );
   }
 
   // ── EVIDÊNCIAS ────────────────────────────────────────────

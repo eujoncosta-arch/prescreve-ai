@@ -33,6 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.validarChaveMfaConfigurada = validarChaveMfaConfigurada;
 exports.encryptMfaSecret = encryptMfaSecret;
 exports.decryptMfaSecret = decryptMfaSecret;
 const crypto = __importStar(require("crypto"));
@@ -49,6 +50,9 @@ function getEncryptionKey(config) {
         throw new Error('MFA_ENCRYPTION_KEY deve ter exatamente 32 bytes (64 caracteres hexadecimais) para uso com AES-256-GCM.');
     }
     return key;
+}
+function validarChaveMfaConfigurada(config) {
+    getEncryptionKey(config);
 }
 function encryptMfaSecret(config, plainSecret) {
     const key = getEncryptionKey(config);

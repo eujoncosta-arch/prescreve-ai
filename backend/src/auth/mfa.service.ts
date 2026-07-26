@@ -10,7 +10,11 @@ import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuditService } from '../modules/audit/audit.service';
-import { encryptMfaSecret, decryptMfaSecret } from './mfa-crypto.util';
+import {
+  encryptMfaSecret,
+  decryptMfaSecret,
+  validarChaveMfaConfigurada,
+} from './mfa-crypto.util';
 import type { Usuario } from '@prisma/client';
 
 // ============================================================
@@ -68,7 +72,14 @@ export class MfaService {
     private prisma: PrismaService,
     private config: ConfigService,
     private audit: AuditService,
-  ) {}
+  ) {
+    // Correção SECRET-01 (auditoria de segurança final): MFA_ENCRYPTION_KEY
+    // antes só era lida lazily, no primeiro uso real (setup de MFA) — a
+    // aplicação subia e passava por health checks em produção mesmo sem a
+    // variável configurada. Validado agora na construção do serviço, mesmo
+    // padrão de fail-fast já usado por JwtStrategy para JWT_SECRET.
+    validarChaveMfaConfigurada(this.config);
+  }
 
   // ── 1) INICIAR ATIVAÇÃO ───────────────────────────────────────
 

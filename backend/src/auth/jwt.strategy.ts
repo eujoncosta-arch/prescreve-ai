@@ -23,6 +23,12 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: getRequiredSecret(config, 'JWT_SECRET'),
+      // Defesa em profundidade (auditoria de segurança final, JWT-01):
+      // fixa explicitamente o algoritmo de verificação em HS256. Sem isso,
+      // a biblioteca já rejeita 'alg: none' e confusão RS/HS por padrão
+      // quando secretOrKey é uma string — mas fixar aqui remove qualquer
+      // dependência implícita desse comportamento padrão da lib.
+      algorithms: ['HS256'],
     });
   }
 

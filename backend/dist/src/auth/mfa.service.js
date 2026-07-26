@@ -64,6 +64,7 @@ let MfaService = class MfaService {
         this.prisma = prisma;
         this.config = config;
         this.audit = audit;
+        (0, mfa_crypto_util_1.validarChaveMfaConfigurada)(this.config);
     }
     async iniciarAtivacao(usuarioId) {
         const usuario = await this.prisma.usuario.findUnique({

@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../../prisma/prisma.service';
 import { TipoAuditoria } from '@prisma/client';
+import {
+  hmacIdentifier,
+  validarChaveHmacConfigurada,
+} from '../../common/crypto/identifier-hash.util';
 import * as crypto from 'crypto';
 
 export interface AuditoriaInput {
@@ -18,13 +23,33 @@ export interface AuditoriaInput {
 
 @Injectable()
 export class AuditService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private config: ConfigService,
+  ) {
+    // Correção SECRET-01 (auditoria de segurança final): IDENTIFIER_HMAC_KEY
+    // antes só era lida lazily, no primeiro `ip`/`crm`/`cpf` realmente
+    // hasheado — a aplicação subia e passava por health checks em produção
+    // mesmo sem a variável configurada. Mesmo padrão de fail-fast já usado
+    // por JwtStrategy para JWT_SECRET.
+    validarChaveHmacConfigurada(this.config);
+  }
 
+  /**
+   * BUG REAL CORRIGIDO (auditoria de segurança final): esta era a ÚNICA
+   * implementação de hash de IP no código-fonte ainda usando SHA-256 puro,
+   * sem segredo — o mesmo anti-padrão já documentado e corrigido em
+   * identifier-hash.util.ts (IPv4 tem só 2^32 valores, trivialmente
+   * reversível por rainbow table sem uma chave HMAC server-side).
+   * AuditService é usado por MfaService/ConsultaService/MigrationService —
+   * ou seja, todo evento de auditoria FORA do login/register direto em
+   * auth.service.ts (que já usava hmacIdentifier corretamente) armazenava
+   * o IP real do usuário de forma reversível. Unificado para usar a mesma
+   * função HMAC-SHA256 com chave server-side (IDENTIFIER_HMAC_KEY).
+   */
   async registrarAuditoria(input: AuditoriaInput) {
     const { ip, ...rest } = input;
-    const ip_hash = ip
-      ? crypto.createHash('sha256').update(ip).digest('hex')
-      : undefined;
+    const ip_hash = ip ? hmacIdentifier(this.config, 'ip', ip) : undefined;
 
     const payload = JSON.stringify({ ...rest, ip_hash, timestamp: Date.now() });
     const hash_integridade = crypto

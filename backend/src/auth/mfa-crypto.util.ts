@@ -34,6 +34,18 @@ function getEncryptionKey(config: ConfigService): Buffer {
   return key;
 }
 
+/**
+ * Valida MFA_ENCRYPTION_KEY no startup (fail-fast), mesmo padrão já usado
+ * para JWT_SECRET/JWT_REFRESH_SECRET em main.ts. Corrige gap encontrado na
+ * auditoria de segurança final (SECRET-01): sem esta chamada, a chave só
+ * era lida lazily no primeiro uso real (setup de MFA), permitindo que o
+ * app subisse e passasse health checks em produção sem a variável
+ * configurada, falhando só quando um usuário real tentasse ativar MFA.
+ */
+export function validarChaveMfaConfigurada(config: ConfigService): void {
+  getEncryptionKey(config);
+}
+
 /** Criptografa o segredo TOTP em texto puro. Formato armazenado: `iv.ciphertext.authTag` (todos base64). */
 export function encryptMfaSecret(
   config: ConfigService,

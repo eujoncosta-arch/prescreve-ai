@@ -606,22 +606,33 @@ export function calcDosePediatrica(
   let doseTotalDiaMg: number | null = null;
 
   if (indicEntry.doseFixa) {
-    // Dose fixa por peso/faixa
+    // Dose fixa por peso ou por idade, conforme a unidade na própria chave.
+    //
+    // BUG REAL CORRIGIDO (auditoria de segurança final): as chaves de faixa
+    // por PESO (ex.: "3–15kg", ">40kg") e por IDADE (ex.: "1–2 anos",
+    // ">2 anos") eram parseadas pelo MESMO código, que sempre comparava
+    // contra `patient.pesoKg` — nunca contra a idade. Como o peso de uma
+    // criança real (ex.: 9–20 kg) é numericamente muito maior que os
+    // limiares de idade em anos (1, 2), praticamente todo paciente pediátrico
+    // caía no ramo ">2 anos" (dose de 400 mg, tier adulto) mesmo bebês de
+    // 12–23 meses que deveriam receber 200 mg — uma superdosagem sistemática
+    // de 2× para albendazol. A unidade agora é detectada explicitamente
+    // ("anos"/"meses" → compara idade; "kg" ou ausente → compara peso).
     const faixas = Object.entries(indicEntry.doseFixa);
     let doseFixaValor: number | null = null;
+    const idadeAnos = idadeEfetiva / 12;
     for (const [faixa, dose] of faixas) {
-      if (faixa.startsWith('>')) {
-        const limite = parseFloat(faixa.replace('>', '').replace('kg', ''));
-        if (patient.pesoKg > limite) doseFixaValor = dose;
-      } else if (faixa.includes('–')) {
-        const [minS, maxS] = faixa.split('–').map(s => parseFloat(s));
-        if (patient.pesoKg >= minS && patient.pesoKg < maxS) doseFixaValor = dose;
-      } else {
-        const match = faixa.match(/(\d+)–(\d+)/);
-        if (match) {
-          const [, minM, maxM] = match.map(Number);
-          if (idadeEfetiva >= minM && idadeEfetiva <= maxM) doseFixaValor = dose;
-        }
+      const isIdade = faixa.includes('anos') || faixa.includes('meses');
+      const emMeses = faixa.includes('meses');
+      const valorComparado = isIdade ? (emMeses ? idadeEfetiva : idadeAnos) : patient.pesoKg;
+      const faixaLimpa = faixa.replace('anos', '').replace('meses', '').replace('kg', '').trim();
+
+      if (faixaLimpa.startsWith('>')) {
+        const limite = parseFloat(faixaLimpa.replace('>', ''));
+        if (valorComparado > limite) doseFixaValor = dose;
+      } else if (faixaLimpa.includes('–')) {
+        const [minS, maxS] = faixaLimpa.split('–').map(s => parseFloat(s));
+        if (valorComparado >= minS && valorComparado < maxS) doseFixaValor = dose;
       }
     }
     doseUnitariaMg = doseFixaValor;

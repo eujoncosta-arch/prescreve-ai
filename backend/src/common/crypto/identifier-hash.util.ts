@@ -63,6 +63,16 @@ function normalize(value: string): string {
 }
 
 /**
+ * Valida IDENTIFIER_HMAC_KEY no startup (fail-fast). Corrige gap
+ * encontrado na auditoria de segurança final (SECRET-01): sem esta
+ * chamada, a chave só era lida lazily no primeiro CPF/CRM/IP hasheado,
+ * permitindo que o app subisse em produção sem a variável configurada.
+ */
+export function validarChaveHmacConfigurada(config: ConfigService): void {
+  getHmacKey(config);
+}
+
+/**
  * HMAC-SHA256 de um identificador de baixa entropia, com separação de
  * domínio e chave exclusivamente server-side. NUNCA loga `value` (a
  * assinatura só aceita a string bruta como parâmetro em memória — não há

@@ -40,7 +40,6 @@ const USE_REAL_BACKEND = !IS_DEMO_MODE && API_URL_CONFIGURED;
 // ── Token storage ─────────────────────────────────────────────
 const KEY_ACCESS  = 'prescreve_ai_access_token';
 const KEY_REFRESH = 'prescreve_ai_refresh_token';
-const KEY_USER    = 'prescreve_ai_current_user';
 
 export interface AuthTokens {
   access_token: string;
@@ -67,9 +66,27 @@ function setTokens(tokens: AuthTokens): void {
   localStorage.setItem(KEY_REFRESH, tokens.refresh_token);
 }
 
+/**
+ * Correção de bug real (auditoria de segurança final, FE-03): antes,
+ * clearTokens() removia só as 3 chaves de autenticação — dados clínicos
+ * (anamnese, histórico, favoritos de protocolo, timeline, RWE) ficavam em
+ * localStorage mesmo depois do logout, legíveis por qualquer script de
+ * mesma origem (ou pela próxima pessoa a abrir o navegador, em uma
+ * estação de trabalho compartilhada de clínica). Agora remove TODAS as
+ * chaves com o prefixo do app (`prescreve_ai_`/`prescreve-ai-`), exceto a
+ * preferência de tema (não é dado clínico nem de sessão).
+ */
 function clearTokens(): void {
   if (typeof window === 'undefined') return;
-  [KEY_ACCESS, KEY_REFRESH, KEY_USER].forEach(k => localStorage.removeItem(k));
+  const prefixos = ['prescreve_ai_', 'prescreve-ai-'];
+  const chaves: string[] = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const chave = localStorage.key(i);
+    if (chave && prefixos.some((p) => chave.startsWith(p))) {
+      chaves.push(chave);
+    }
+  }
+  chaves.forEach((k) => localStorage.removeItem(k));
 }
 
 // ══════════════════════════════════════════════════════════════

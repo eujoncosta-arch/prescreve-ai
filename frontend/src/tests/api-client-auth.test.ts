@@ -143,6 +143,28 @@ describe('DEMO explicitamente ativado → comportamento isolado', () => {
   });
 });
 
+describe('logout() limpa TODOS os dados do app, não só os tokens (regressão FE-03)', () => {
+  it('dados clínicos (anamnese, histórico, favoritos) persistidos em localStorage são removidos no logout', async () => {
+    setEnv({ NEXT_PUBLIC_APP_ENV: 'development', NEXT_PUBLIC_DEMO_MODE: 'true' });
+    const { authApi } = await import('@/lib/api-client');
+
+    await authApi.login('qualquer@x.com', 'qualquer-senha');
+    localStorage.setItem('prescreve_ai_anamnese', JSON.stringify({ queixa: 'dor' }));
+    localStorage.setItem('prescreve_ai_historico', JSON.stringify([{ id: 1 }]));
+    localStorage.setItem('prescreve-ai-favoritos', JSON.stringify([{ id: 'fav-1' }]));
+    localStorage.setItem('prescreve_theme', 'dark');
+
+    await authApi.logout();
+
+    expect(localStorage.getItem('prescreve_ai_access_token')).toBeNull();
+    expect(localStorage.getItem('prescreve_ai_anamnese')).toBeNull();
+    expect(localStorage.getItem('prescreve_ai_historico')).toBeNull();
+    expect(localStorage.getItem('prescreve-ai-favoritos')).toBeNull();
+    // Preferência de tema não é dado clínico/de sessão — não precisa ser limpa.
+    expect(localStorage.getItem('prescreve_theme')).toBe('dark');
+  });
+});
+
 describe('Token demo não é aceito fora do modo demo (defesa em profundidade no frontend)', () => {
   it('um token "demo-..." salvo no localStorage é ignorado (usuário tratado como não autenticado) quando o build NÃO está em modo demo', async () => {
     setEnv({ NEXT_PUBLIC_APP_ENV: 'production' });

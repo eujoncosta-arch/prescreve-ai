@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../../prisma/prisma.service';
 import { TipoAuditoria } from '@prisma/client';
 export interface AuditoriaInput {
@@ -14,7 +15,8 @@ export interface AuditoriaInput {
 }
 export declare class AuditService {
     private prisma;
-    constructor(prisma: PrismaService);
+    private config;
+    constructor(prisma: PrismaService, config: ConfigService);
     registrarAuditoria(input: AuditoriaInput): Promise<{
         timestamp: Date;
         usuario_id: string | null;

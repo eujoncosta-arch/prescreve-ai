@@ -11,6 +11,7 @@ export declare class ConsultaService {
     private config;
     constructor(prisma: PrismaService, cache: CacheService, audit: AuditService, config: ConfigService);
     private buscarPorIdempotencyKey;
+    private criarComIdempotenciaSobColisao;
     criarConsulta(dto: CriarConsultaDto, usuarioId: string): Promise<{
         status: import("@prisma/client").$Enums.StatusConsulta;
         usuario_id: string;

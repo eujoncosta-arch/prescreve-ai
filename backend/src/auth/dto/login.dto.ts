@@ -9,8 +9,20 @@ import {
 } from 'class-validator';
 import { Perfil } from '@prisma/client';
 
-/** TOTP (6 dígitos) OU código de recuperação de uso único (10 caracteres hex). */
-const MFA_CODE_PATTERN = /^[0-9A-Fa-f]{6}$|^[0-9A-Fa-f]{10}$/;
+/**
+ * TOTP (6 dígitos) OU código de recuperação de uso único no formato REAL
+ * emitido pelo servidor: "XXXXX-XXXXX" (5 hex + traço + 5 hex — ver
+ * MfaService.gerarCodigosRecuperacaoTexto()).
+ *
+ * BUG REAL CORRIGIDO (auditoria de segurança final): este padrão exigia
+ * 10 caracteres hex SEM traço, mas o código de recuperação gerado e
+ * hasheado no banco SEMPRE inclui o traço no meio (11 caracteres). Um
+ * usuário digitando o código exatamente como recebido era sempre
+ * rejeitado com 400 antes de chegar ao MfaService — a rota de
+ * recuperação (perda do dispositivo TOTP) estava inutilizável via API
+ * pública, mesmo para usuários legítimos.
+ */
+const MFA_CODE_PATTERN = /^[0-9A-Fa-f]{6}$|^[0-9A-Fa-f]{5}-[0-9A-Fa-f]{5}$/;
 
 export class LoginDto {
   @IsEmail()
@@ -28,7 +40,7 @@ export class LoginDto {
   @IsString()
   @Matches(MFA_CODE_PATTERN, {
     message:
-      'mfa_code deve ser um TOTP de 6 dígitos ou um código de recuperação de 10 caracteres',
+      'mfa_code deve ser um TOTP de 6 dígitos ou um código de recuperação no formato XXXXX-XXXXX',
   })
   mfa_code?: string;
 }

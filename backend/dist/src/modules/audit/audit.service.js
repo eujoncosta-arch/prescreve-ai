@@ -44,18 +44,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuditService = void 0;
 const common_1 = require("@nestjs/common");
+const config_1 = require("@nestjs/config");
 const prisma_service_1 = require("../../prisma/prisma.service");
+const identifier_hash_util_1 = require("../../common/crypto/identifier-hash.util");
 const crypto = __importStar(require("crypto"));
 let AuditService = class AuditService {
     prisma;
-    constructor(prisma) {
+    config;
+    constructor(prisma, config) {
         this.prisma = prisma;
+        this.config = config;
+        (0, identifier_hash_util_1.validarChaveHmacConfigurada)(this.config);
     }
     async registrarAuditoria(input) {
         const { ip, ...rest } = input;
-        const ip_hash = ip
-            ? crypto.createHash('sha256').update(ip).digest('hex')
-            : undefined;
+        const ip_hash = ip ? (0, identifier_hash_util_1.hmacIdentifier)(this.config, 'ip', ip) : undefined;
         const payload = JSON.stringify({ ...rest, ip_hash, timestamp: Date.now() });
         const hash_integridade = crypto
             .createHash('sha256')
@@ -119,6 +122,7 @@ let AuditService = class AuditService {
 exports.AuditService = AuditService;
 exports.AuditService = AuditService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        config_1.ConfigService])
 ], AuditService);
 //# sourceMappingURL=audit.service.js.map

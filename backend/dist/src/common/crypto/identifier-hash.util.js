@@ -33,6 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.validarChaveHmacConfigurada = validarChaveHmacConfigurada;
 exports.hmacIdentifier = hmacIdentifier;
 const crypto = __importStar(require("crypto"));
 function getHmacKey(config) {
@@ -52,6 +53,9 @@ function normalize(value) {
         .trim()
         .toLowerCase()
         .replace(/[^a-z0-9]/g, '');
+}
+function validarChaveHmacConfigurada(config) {
+    getHmacKey(config);
 }
 function hmacIdentifier(config, domain, value) {
     const key = getHmacKey(config);

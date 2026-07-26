@@ -23,6 +23,7 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
             jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
             secretOrKey: (0, jwt_secrets_util_1.getRequiredSecret)(config, 'JWT_SECRET'),
+            algorithms: ['HS256'],
         });
         this.prisma = prisma;
     }

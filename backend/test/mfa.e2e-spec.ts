@@ -202,4 +202,52 @@ describe('MFA (e2e)', () => {
       usuariosFakeDb[SEM_MFA_ID].mfa_secret as string,
     );
   });
+
+  // ============================================================
+  // Regressão MFA-01 (auditoria de segurança final): o código de
+  // recuperação REAL emitido pelo servidor tem o formato "XXXXX-XXXXX"
+  // (com traço — ver MfaService.gerarCodigosRecuperacaoTexto()), mas o
+  // DTO de entrada (login.dto.ts / mfa.dto.ts) exigia 10 caracteres hex
+  // SEM traço, rejeitando com 400 qualquer tentativa de login com o
+  // código exatamente como o usuário o recebeu. Estes testes passam pela
+  // camada HTTP real (ValidationPipe + DTO), não chamam MfaService
+  // diretamente — é exatamente essa camada que estava quebrada.
+  // ============================================================
+  describe('Login com código de recuperação (via HTTP real — regressão MFA-01)', () => {
+    const recoveryCodeRaw = 'ABCDE-12345';
+
+    it('código de recuperação no formato XXXXX-XXXXX emitido pelo servidor é ACEITO pela validação de entrada e autentica com sucesso', async () => {
+      const recoveryCodeHash = await bcrypt.hash(recoveryCodeRaw, 10);
+      prismaMock.mfaRecoveryCode.findMany.mockResolvedValueOnce([
+        {
+          id: 'rec-1',
+          usuario_id: COM_MFA_ID,
+          code_hash: recoveryCodeHash,
+          usado: false,
+        },
+      ]);
+      prismaMock.mfaRecoveryCode.updateMany.mockResolvedValueOnce({ count: 1 });
+
+      const res = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({
+          email: 'com-mfa@x.com',
+          senha: SENHA_PLANA,
+          mfa_code: recoveryCodeRaw,
+        })
+        .expect(200);
+      expect(res.body.access_token).toBeTruthy();
+    });
+
+    it('código de recuperação SEM o traço (formato antigo e quebrado) é rejeitado na validação de entrada (400) — nunca confundir com o formato real', async () => {
+      await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({
+          email: 'com-mfa@x.com',
+          senha: SENHA_PLANA,
+          mfa_code: recoveryCodeRaw.replace('-', ''),
+        })
+        .expect(400);
+    });
+  });
 });

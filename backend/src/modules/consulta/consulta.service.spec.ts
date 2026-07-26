@@ -2,6 +2,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { ConsultaService } from './consulta.service';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CacheService } from '../cache/cache.service';
@@ -408,6 +409,94 @@ describe('ConsultaService — acesso horizontal (ownership) e IDOR', () => {
           where: expect.objectContaining({ usuario_id: USUARIO_ATACANTE_ID }),
         }),
       );
+    });
+  });
+
+  describe('Corrida em idempotency_key — regressão PERSIST-01', () => {
+    function p2002(): Prisma.PrismaClientKnownRequestError {
+      return new Prisma.PrismaClientKnownRequestError(
+        'Unique constraint failed on the fields: (`idempotency_key`)',
+        { code: 'P2002', clientVersion: '7.8.0' },
+      );
+    }
+
+    it('criarConsulta(): create() colide com P2002 (corrida) → retorna o registro que a outra requisição concorrente criou, em vez de propagar 500', async () => {
+      const registroDaConcorrente = {
+        id: 'consulta-criada-pela-concorrente',
+        usuario_id: OUTRO_USUARIO_ID,
+        idempotency_key: 'chave-corrida',
+      };
+      prisma.consulta.create.mockRejectedValueOnce(p2002());
+      prisma.consulta.findUnique
+        .mockResolvedValueOnce(null) // 1ª checagem (antes do create) — ainda não existe
+        .mockResolvedValueOnce(registroDaConcorrente); // após P2002 — a concorrente já criou
+
+      const resultado = await service.criarConsulta(
+        { idempotency_key: 'chave-corrida' },
+        OUTRO_USUARIO_ID,
+      );
+
+      expect(resultado).toEqual(registroDaConcorrente);
+    });
+
+    it('criarPrescricao(): create() colide com P2002 → retorna o registro existente em vez de lançar', async () => {
+      prisma.consulta.findFirst.mockResolvedValue({
+        id: CONSULTA_DA_VITIMA_ID,
+        usuario_id: OUTRO_USUARIO_ID,
+      });
+      const registroDaConcorrente = {
+        id: 'prescricao-criada-pela-concorrente',
+        consulta_id: CONSULTA_DA_VITIMA_ID,
+        idempotency_key: 'chave-corrida-presc',
+      };
+      prisma.prescricao.create.mockRejectedValueOnce(p2002());
+      prisma.prescricao.findUnique
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce(registroDaConcorrente);
+
+      const resultado = await service.criarPrescricao(
+        {
+          consulta_id: CONSULTA_DA_VITIMA_ID,
+          medicamentos: [
+            {
+              molecula: 'Losartana',
+              dose: '50mg',
+              via: 'VO',
+              frequencia: '1x/dia',
+              duracao: '30d',
+            },
+          ],
+          idempotency_key: 'chave-corrida-presc',
+        },
+        OUTRO_USUARIO_ID,
+      );
+
+      expect(resultado).toEqual(registroDaConcorrente);
+    });
+
+    it('erro P2002 SEM um registro correspondente encontrado depois (cenário diferente, não é a corrida esperada) ainda propaga o erro — nunca engole silenciosamente', async () => {
+      prisma.consulta.create.mockRejectedValueOnce(p2002());
+      prisma.consulta.findUnique
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce(null); // mesmo após P2002, nada encontrado
+
+      await expect(
+        service.criarConsulta(
+          { idempotency_key: 'chave-inexplicavel' },
+          OUTRO_USUARIO_ID,
+        ),
+      ).rejects.toThrow();
+    });
+
+    it('erros que NÃO são P2002 (ex.: falha transitória de conexão) continuam propagando normalmente, sem tentar reidratar via idempotency_key', async () => {
+      prisma.consulta.create.mockRejectedValueOnce(new Error('ECONNRESET'));
+
+      await expect(
+        service.criarConsulta(
+          { idempotency_key: 'chave-qualquer' },
+          OUTRO_USUARIO_ID,
+        ),
+      ).rejects.toThrow('ECONNRESET');
     });
   });
 });

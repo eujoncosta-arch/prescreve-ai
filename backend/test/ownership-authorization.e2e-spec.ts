@@ -87,7 +87,25 @@ describe('Ownership de recursos clínicos (e2e)', () => {
       findMany: jest.fn().mockResolvedValue([]),
       count: jest.fn().mockResolvedValue(0),
     },
-    diagnostico: { create: jest.fn().mockResolvedValue({ id: 'diag-1' }) },
+    diagnostico: {
+      create: jest.fn().mockResolvedValue({ id: 'diag-1' }),
+      // Espelha o comportamento real: um diagnostico_id só é aceito se
+      // pertencer à MESMA consulta informada no payload (ownership por FK).
+      findFirst: jest.fn(
+        ({ where }: { where: { id: string; consulta_id: string } }) => {
+          if (
+            where.id === 'diag-da-consulta-a' &&
+            where.consulta_id === CONSULTA_A_ID
+          ) {
+            return Promise.resolve({
+              id: 'diag-da-consulta-a',
+              consulta_id: CONSULTA_A_ID,
+            });
+          }
+          return Promise.resolve(null);
+        },
+      ),
+    },
     prescricao: { create: jest.fn().mockResolvedValue({ id: 'presc-1' }) },
     riskScore: { create: jest.fn().mockResolvedValue({ id: 'risk-1' }) },
     auditoria: { create: jest.fn().mockResolvedValue({}) },
@@ -240,6 +258,32 @@ describe('Ownership de recursos clínicos (e2e)', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({ consulta_id: CONSULTA_B_ID, medicamentos })
         .expect(403);
+    });
+
+    it('A NÃO consegue vincular à própria prescrição um diagnostico_id de OUTRA consulta (403 — regressão OWN-01)', async () => {
+      const token = await tokenPara(MEDICO_A_ID);
+      await request(app.getHttpServer())
+        .post('/api/prescricao')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          consulta_id: CONSULTA_A_ID,
+          diagnostico_id: 'diag-que-nao-pertence-a-consulta-a',
+          medicamentos,
+        })
+        .expect(403);
+    });
+
+    it('A CONSEGUE vincular um diagnostico_id que realmente pertence à consulta informada (201)', async () => {
+      const token = await tokenPara(MEDICO_A_ID);
+      await request(app.getHttpServer())
+        .post('/api/prescricao')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          consulta_id: CONSULTA_A_ID,
+          diagnostico_id: 'diag-da-consulta-a',
+          medicamentos,
+        })
+        .expect(201);
     });
 
     it('ADMIN também NÃO consegue criar prescrição na consulta de um médico (403)', async () => {

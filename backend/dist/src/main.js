@@ -11,12 +11,17 @@ const express_1 = require("express");
 const app_module_1 = require("./app.module");
 const http_logging_interceptor_1 = require("./common/interceptors/http-logging.interceptor");
 const jwt_secrets_util_1 = require("./auth/jwt-secrets.util");
+const mfa_crypto_util_1 = require("./auth/mfa-crypto.util");
+const identifier_hash_util_1 = require("./common/crypto/identifier-hash.util");
 const cors_util_1 = require("./config/cors.util");
 const environment_util_1 = require("./config/environment.util");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const config = app.get(config_1.ConfigService);
     (0, jwt_secrets_util_1.validarSegredosDistintos)(config);
+    (0, mfa_crypto_util_1.validarChaveMfaConfigurada)(config);
+    (0, identifier_hash_util_1.validarChaveHmacConfigurada)(config);
+    app.getHttpAdapter().getInstance().set('trust proxy', 1);
     const appEnv = (0, environment_util_1.resolveAppEnv)(config);
     console.log(`PRESCREVE-AI Backend — ambiente: ${appEnv}`);
     app.use((0, helmet_1.default)({

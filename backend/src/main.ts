@@ -2,10 +2,12 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import helmet from 'helmet';
-import { json, urlencoded } from 'express';
+import { json, urlencoded, type Application } from 'express';
 import { AppModule } from './app.module';
 import { HttpLoggingInterceptor } from './common/interceptors/http-logging.interceptor';
 import { validarSegredosDistintos } from './auth/jwt-secrets.util';
+import { validarChaveMfaConfigurada } from './auth/mfa-crypto.util';
+import { validarChaveHmacConfigurada } from './common/crypto/identifier-hash.util';
 import {
   resolveAllowedOrigins,
   buildCorsOriginHandler,
@@ -21,6 +23,21 @@ async function bootstrap() {
   // checagem individual (getRequiredSecret, já feita na construção de
   // JwtStrategy/JwtModule), valida que os dois segredos não coincidem.
   validarSegredosDistintos(config);
+  // Correção SECRET-01 (auditoria de segurança final): MFA_ENCRYPTION_KEY e
+  // IDENTIFIER_HMAC_KEY eram validadas apenas lazily, no primeiro uso real
+  // (setup de MFA / hash de CPF-CRM-IP) — o app passava por health checks
+  // em produção sem essas variáveis e só falhava (500) quando um usuário
+  // real batesse nesses fluxos. Movido para o mesmo fail-fast do startup.
+  validarChaveMfaConfigurada(config);
+  validarChaveHmacConfigurada(config);
+
+  // Correção NET-01 (auditoria de segurança final): a app roda atrás de um
+  // proxy reverso em todo deploy real (Vercel). Sem `trust proxy`, o
+  // Express resolve `req.ip` para o peer imediato (o proxy), não o cliente
+  // real — o que faz o ThrottlerGuard (rate limiting de login/MFA/refresh)
+  // agrupar TODOS os usuários no mesmo bucket por trás do mesmo proxy
+  // (um único cliente abusivo derruba o limite para todo mundo).
+  (app.getHttpAdapter().getInstance() as Application).set('trust proxy', 1);
 
   const appEnv = resolveAppEnv(config);
   console.log(`PRESCREVE-AI Backend — ambiente: ${appEnv}`);

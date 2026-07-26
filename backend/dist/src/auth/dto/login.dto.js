@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CriarUsuarioPrivilegiadoDto = exports.RegisterDto = exports.RefreshDto = exports.LoginDto = void 0;
 const class_validator_1 = require("class-validator");
 const client_1 = require("@prisma/client");
-const MFA_CODE_PATTERN = /^[0-9A-Fa-f]{6}$|^[0-9A-Fa-f]{10}$/;
+const MFA_CODE_PATTERN = /^[0-9A-Fa-f]{6}$|^[0-9A-Fa-f]{5}-[0-9A-Fa-f]{5}$/;
 class LoginDto {
     email;
     senha;
@@ -34,7 +34,7 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.Matches)(MFA_CODE_PATTERN, {
-        message: 'mfa_code deve ser um TOTP de 6 dígitos ou um código de recuperação de 10 caracteres',
+        message: 'mfa_code deve ser um TOTP de 6 dígitos ou um código de recuperação no formato XXXXX-XXXXX',
     }),
     __metadata("design:type", String)
 ], LoginDto.prototype, "mfa_code", void 0);

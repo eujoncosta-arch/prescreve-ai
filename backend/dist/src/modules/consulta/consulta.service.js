@@ -45,6 +45,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConsultaService = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
+const client_1 = require("@prisma/client");
 const prisma_service_1 = require("../../prisma/prisma.service");
 const cache_service_1 = require("../cache/cache.service");
 const audit_service_1 = require("../audit/audit.service");
@@ -78,6 +79,20 @@ let ConsultaService = class ConsultaService {
         }
         return existente;
     }
+    async criarComIdempotenciaSobColisao(criar, buscarExistente) {
+        try {
+            return await criar();
+        }
+        catch (e) {
+            if (e instanceof client_1.Prisma.PrismaClientKnownRequestError &&
+                e.code === 'P2002') {
+                const existente = await buscarExistente();
+                if (existente)
+                    return existente;
+            }
+            throw e;
+        }
+    }
     async criarConsulta(dto, usuarioId) {
         const existente = await this.buscarPorIdempotencyKey((key) => this.prisma.consulta.findUnique({ where: { idempotency_key: key } }), dto.idempotency_key, (c) => c.usuario_id === usuarioId);
         if (existente)
@@ -97,14 +112,18 @@ let ConsultaService = class ConsultaService {
             });
             pacienteId = paciente.id;
         }
-        const consulta = await this.prisma.consulta.create({
+        const consulta = await this.criarComIdempotenciaSobColisao(() => this.prisma.consulta.create({
             data: {
                 usuario_id: usuarioId,
                 paciente_id: pacienteId,
                 anamnese: dto.anamnese,
                 idempotency_key: dto.idempotency_key,
             },
-        });
+        }), () => dto.idempotency_key
+            ? this.prisma.consulta.findUnique({
+                where: { idempotency_key: dto.idempotency_key },
+            })
+            : Promise.resolve(null));
         await this.audit.registrarAuditoria({
             usuario_id: usuarioId,
             tipo: 'consulta_criada',
@@ -155,7 +174,7 @@ let ConsultaService = class ConsultaService {
         const existente = await this.buscarPorIdempotencyKey((key) => this.prisma.diagnostico.findUnique({ where: { idempotency_key: key } }), dto.idempotency_key, (d) => d.consulta_id === dto.consulta_id);
         if (existente)
             return existente;
-        const diagnostico = await this.prisma.diagnostico.create({
+        const diagnostico = await this.criarComIdempotenciaSobColisao(() => this.prisma.diagnostico.create({
             data: {
                 consulta_id: dto.consulta_id,
                 cid: dto.cid,
@@ -164,7 +183,11 @@ let ConsultaService = class ConsultaService {
                 selecionado: dto.selecionado ?? false,
                 idempotency_key: dto.idempotency_key,
             },
-        });
+        }), () => dto.idempotency_key
+            ? this.prisma.diagnostico.findUnique({
+                where: { idempotency_key: dto.idempotency_key },
+            })
+            : Promise.resolve(null));
         await this.audit.registrarAuditoria({
             usuario_id: usuarioId,
             tipo: 'diagnostico_selecionado',
@@ -183,12 +206,20 @@ let ConsultaService = class ConsultaService {
         const existente = await this.buscarPorIdempotencyKey((key) => this.prisma.prescricao.findUnique({ where: { idempotency_key: key } }), dto.idempotency_key, (p) => p.consulta_id === dto.consulta_id);
         if (existente)
             return existente;
+        if (dto.diagnostico_id) {
+            const diagnostico = await this.prisma.diagnostico.findFirst({
+                where: { id: dto.diagnostico_id, consulta_id: dto.consulta_id },
+            });
+            if (!diagnostico) {
+                throw new common_1.ForbiddenException('Diagnóstico não pertence a esta consulta');
+            }
+        }
         const hash = hashIntegridade({
             ...dto,
             usuario_id: usuarioId,
             ts: Date.now(),
         });
-        const prescricao = await this.prisma.prescricao.create({
+        const prescricao = await this.criarComIdempotenciaSobColisao(() => this.prisma.prescricao.create({
             data: {
                 consulta_id: dto.consulta_id,
                 diagnostico_id: dto.diagnostico_id,
@@ -198,7 +229,11 @@ let ConsultaService = class ConsultaService {
                 hash_integridade: hash,
                 idempotency_key: dto.idempotency_key,
             },
-        });
+        }), () => dto.idempotency_key
+            ? this.prisma.prescricao.findUnique({
+                where: { idempotency_key: dto.idempotency_key },
+            })
+            : Promise.resolve(null));
         await this.audit.registrarAuditoria({
             usuario_id: usuarioId,
             tipo: 'prescricao_gerada',
@@ -217,7 +252,7 @@ let ConsultaService = class ConsultaService {
         const existente = await this.buscarPorIdempotencyKey((key) => this.prisma.riskScore.findUnique({ where: { idempotency_key: key } }), idempotencyKey, (r) => r.consulta_id === consultaId);
         if (existente)
             return existente;
-        return this.prisma.riskScore.create({
+        return this.criarComIdempotenciaSobColisao(() => this.prisma.riskScore.create({
             data: {
                 consulta_id: consultaId,
                 risco_global: score.risco_global,
@@ -232,7 +267,11 @@ let ConsultaService = class ConsultaService {
                 recomendacoes: score.recomendacoes_prioritarias ?? [],
                 idempotency_key: idempotencyKey,
             },
-        });
+        }), () => idempotencyKey
+            ? this.prisma.riskScore.findUnique({
+                where: { idempotency_key: idempotencyKey },
+            })
+            : Promise.resolve(null));
     }
     async buscarEvidencias(cid) {
         const key = this.cache.key('evidence', cid);
