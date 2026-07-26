@@ -48,19 +48,12 @@ const jwt_1 = require("@nestjs/jwt");
 const config_1 = require("@nestjs/config");
 const prisma_service_1 = require("../prisma/prisma.service");
 const jwt_secrets_util_1 = require("./jwt-secrets.util");
+const identifier_hash_util_1 = require("../common/crypto/identifier-hash.util");
 const mfa_service_1 = require("./mfa.service");
 const bcrypt = __importStar(require("bcrypt"));
 const crypto = __importStar(require("crypto"));
 function hashSHA256(value) {
     return crypto.createHash('sha256').update(value).digest('hex');
-}
-function djb2Hash(s) {
-    let h = 5381;
-    for (let i = 0; i < s.length; i++) {
-        h = (h << 5) + h + s.charCodeAt(i);
-        h |= 0;
-    }
-    return `H${Math.abs(h).toString(36).toUpperCase().padStart(8, '0')}`;
 }
 let AuthService = class AuthService {
     prisma;
@@ -89,14 +82,14 @@ let AuthService = class AuthService {
                 ...(dto.crm && {
                     medico: {
                         create: {
-                            crm_hash: djb2Hash(dto.crm),
+                            crm_hash: (0, identifier_hash_util_1.hmacIdentifier)(this.config, 'crm', dto.crm),
                             especialidade: dto.especialidade ?? 'clinica_medica',
                             uf: dto.uf ?? 'SP',
                         },
                     },
                 }),
             },
-            include: { medico: true },
+            select: { id: true, email: true, perfil: true },
         });
         return this.gerarTokens(usuario.id, usuario.email, usuario.perfil);
     }
@@ -116,14 +109,14 @@ let AuthService = class AuthService {
                     dto.crm && {
                     medico: {
                         create: {
-                            crm_hash: djb2Hash(dto.crm),
+                            crm_hash: (0, identifier_hash_util_1.hmacIdentifier)(this.config, 'crm', dto.crm),
                             especialidade: dto.especialidade ?? 'clinica_medica',
                             uf: dto.uf ?? 'SP',
                         },
                     },
                 }),
             },
-            include: { medico: true },
+            select: { id: true, email: true, perfil: true },
         });
         await this.registrarAuditoria(criadorId, 'criacao_usuario_privilegiado', `Usuário ${usuario.id} (${usuario.email}) criado com perfil ${usuario.perfil} por ${criadorId}`);
         return {
@@ -159,7 +152,13 @@ let AuthService = class AuthService {
         const hash = hashSHA256(token);
         const rt = await this.prisma.refreshToken.findUnique({
             where: { token_hash: hash },
-            include: { usuario: true },
+            select: {
+                id: true,
+                usuario_id: true,
+                revogado: true,
+                expira_em: true,
+                usuario: { select: { id: true, email: true, perfil: true } },
+            },
         });
         if (!rt) {
             throw new common_1.UnauthorizedException('Refresh token inválido ou expirado');
@@ -215,7 +214,7 @@ let AuthService = class AuthService {
                 usuario_id: userId,
                 tipo,
                 acao,
-                ip_hash: ip ? hashSHA256(ip) : null,
+                ip_hash: ip ? (0, identifier_hash_util_1.hmacIdentifier)(this.config, 'ip', ip) : null,
                 hash_integridade: hash,
             },
         });

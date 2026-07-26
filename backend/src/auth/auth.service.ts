@@ -13,23 +13,23 @@ import {
 } from './dto/login.dto';
 import { Perfil, TipoAuditoria } from '@prisma/client';
 import { getRequiredSecret } from './jwt-secrets.util';
+import { hmacIdentifier } from '../common/crypto/identifier-hash.util';
 import { MfaService } from './mfa.service';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 
 // ── Hash utilities ─────────────────────────────────────────────
-
+//
+// Auditoria de privacidade — CRM: hash NÃO CRIPTOGRÁFICO (`djb2Hash`,
+// removido) foi substituído por HMAC-SHA256 com segredo server-side
+// (`hmacIdentifier`, ver common/crypto/identifier-hash.util.ts). IP: idem,
+// SHA-256 sem segredo trocado por HMAC (IPv4 tem só 2^32 valores — um
+// rainbow table completo é trivial sem uma chave). Refresh token: continua
+// SHA-256 simples DE PROPÓSITO — é o hash de um segredo aleatório de alta
+// entropia (~256 bits) gerado pelo próprio servidor, não um identificador
+// pessoal de baixa entropia; HMAC não traria proteção adicional aqui.
 function hashSHA256(value: string): string {
   return crypto.createHash('sha256').update(value).digest('hex');
-}
-
-function djb2Hash(s: string): string {
-  let h = 5381;
-  for (let i = 0; i < s.length; i++) {
-    h = (h << 5) + h + s.charCodeAt(i);
-    h |= 0;
-  }
-  return `H${Math.abs(h).toString(36).toUpperCase().padStart(8, '0')}`;
 }
 
 @Injectable()
@@ -67,14 +67,17 @@ export class AuthService {
         ...(dto.crm && {
           medico: {
             create: {
-              crm_hash: djb2Hash(dto.crm),
+              crm_hash: hmacIdentifier(this.config, 'crm', dto.crm),
               especialidade: dto.especialidade ?? 'clinica_medica',
               uf: dto.uf ?? 'SP',
             },
           },
         }),
       },
-      include: { medico: true },
+      // Minimização de dados: `medico`/`senha_hash` nunca são usados após
+      // a criação — não faz sentido trazê-los do banco para a memória do
+      // processo só para descartá-los.
+      select: { id: true, email: true, perfil: true },
     });
 
     return this.gerarTokens(usuario.id, usuario.email, usuario.perfil);
@@ -108,14 +111,14 @@ export class AuthService {
           dto.crm && {
             medico: {
               create: {
-                crm_hash: djb2Hash(dto.crm),
+                crm_hash: hmacIdentifier(this.config, 'crm', dto.crm),
                 especialidade: dto.especialidade ?? 'clinica_medica',
                 uf: dto.uf ?? 'SP',
               },
             },
           }),
       },
-      include: { medico: true },
+      select: { id: true, email: true, perfil: true },
     });
 
     await this.registrarAuditoria(
@@ -187,7 +190,15 @@ export class AuthService {
     const hash = hashSHA256(token);
     const rt = await this.prisma.refreshToken.findUnique({
       where: { token_hash: hash },
-      include: { usuario: true },
+      // Minimização de dados: só id/email/perfil do usuário são usados
+      // abaixo — nunca senha_hash/mfa_secret precisam sair do banco aqui.
+      select: {
+        id: true,
+        usuario_id: true,
+        revogado: true,
+        expira_em: true,
+        usuario: { select: { id: true, email: true, perfil: true } },
+      },
     });
 
     if (!rt) {
@@ -278,7 +289,7 @@ export class AuthService {
         usuario_id: userId,
         tipo,
         acao,
-        ip_hash: ip ? hashSHA256(ip) : null,
+        ip_hash: ip ? hmacIdentifier(this.config, 'ip', ip) : null,
         hash_integridade: hash,
       },
     });

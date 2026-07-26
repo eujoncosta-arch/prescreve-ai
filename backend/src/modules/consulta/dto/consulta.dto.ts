@@ -54,14 +54,24 @@ function IsIdempotencyKey() {
 // ============================================================
 
 export class CriarConsultaDto {
-  /** Hash SHA-256 (hex) do identificador do paciente — sempre 64 caracteres hex. */
+  /**
+   * CPF em texto puro (só dígitos ou com pontuação — normalizado no
+   * service). Auditoria de privacidade: o cliente NUNCA deve calcular esse
+   * hash sozinho — um hash calculado no frontend usaria necessariamente um
+   * algoritmo sem segredo (o segredo não pode viver em código público de
+   * navegador), reduzindo a proteção a um SHA-256 simples de um valor de
+   * baixa entropia (rainbow table trivial). O CPF é recebido em texto puro
+   * aqui (só em memória, nunca persistido nem logado em texto puro — ver
+   * `ConsultaService.criarConsulta`) e pseudonimizado no SERVIDOR com
+   * HMAC-SHA256 e uma chave que nunca sai do backend
+   * (`common/crypto/identifier-hash.util.ts`).
+   */
   @IsOptional()
   @IsString()
-  @Matches(/^[a-fA-F0-9]{64}$/, {
-    message:
-      'paciente_hash deve ser um hash SHA-256 em hexadecimal (64 caracteres)',
+  @Matches(/^\d{11}$|^\d{3}\.\d{3}\.\d{3}-\d{2}$/, {
+    message: 'paciente_cpf deve ter 11 dígitos (com ou sem pontuação)',
   })
-  paciente_hash?: string;
+  paciente_cpf?: string;
 
   @IsOptional()
   @IsObject()

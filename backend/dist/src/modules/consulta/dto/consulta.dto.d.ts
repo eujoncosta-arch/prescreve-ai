@@ -1,6 +1,6 @@
 import { NivelRisco } from '@prisma/client';
 export declare class CriarConsultaDto {
-    paciente_hash?: string;
+    paciente_cpf?: string;
     anamnese?: Record<string, unknown>;
     idempotency_key?: string;
 }

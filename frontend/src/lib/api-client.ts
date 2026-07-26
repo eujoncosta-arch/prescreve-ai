@@ -247,7 +247,11 @@ export function getCurrentUser(): CurrentUser | null {
 // ══════════════════════════════════════════════════════════════
 
 export const consultaApi = {
-  async criar(dados: { paciente_hash?: string; anamnese?: object; idempotency_key?: string }) {
+  // Auditoria de privacidade: o CPF NUNCA deve ser hasheado no cliente — um
+  // segredo HMAC não pode viver em código de navegador. `paciente_cpf` (se
+  // usado) é enviado em texto puro por HTTPS e transformado em
+  // HMAC-SHA256 server-side (ver backend/src/common/crypto/identifier-hash.util.ts).
+  async criar(dados: { paciente_cpf?: string; anamnese?: object; idempotency_key?: string }) {
     if (!USE_REAL_BACKEND) return { id: `demo-${Date.now()}`, status: 'em_andamento' };
     return apiFetch('/api/consulta', { method: 'POST', body: JSON.stringify(dados) });
   },

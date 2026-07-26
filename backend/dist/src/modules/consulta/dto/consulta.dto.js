@@ -25,7 +25,7 @@ function IsIdempotencyKey() {
     };
 }
 class CriarConsultaDto {
-    paciente_hash;
+    paciente_cpf;
     anamnese;
     idempotency_key;
 }
@@ -33,11 +33,11 @@ exports.CriarConsultaDto = CriarConsultaDto;
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.Matches)(/^[a-fA-F0-9]{64}$/, {
-        message: 'paciente_hash deve ser um hash SHA-256 em hexadecimal (64 caracteres)',
+    (0, class_validator_1.Matches)(/^\d{11}$|^\d{3}\.\d{3}\.\d{3}-\d{2}$/, {
+        message: 'paciente_cpf deve ter 11 dígitos (com ou sem pontuação)',
     }),
     __metadata("design:type", String)
-], CriarConsultaDto.prototype, "paciente_hash", void 0);
+], CriarConsultaDto.prototype, "paciente_cpf", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsObject)(),

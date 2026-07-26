@@ -3,6 +3,7 @@ import {
   NotFoundException,
   ForbiddenException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CacheService, TTL } from '../cache/cache.service';
@@ -13,6 +14,7 @@ import {
   CriarPrescricaoDto,
   RiskScorePayloadDto,
 } from './dto/consulta.dto';
+import { hmacIdentifier } from '../../common/crypto/identifier-hash.util';
 import * as crypto from 'crypto';
 
 function hashIntegridade(obj: unknown): string {
@@ -31,6 +33,7 @@ export class ConsultaService {
     private prisma: PrismaService,
     private cache: CacheService,
     private audit: AuditService,
+    private config: ConfigService,
   ) {}
 
   // ── CONSULTA ──────────────────────────────────────────────
@@ -72,11 +75,23 @@ export class ConsultaService {
 
     let pacienteId: string | undefined;
 
-    if (dto.paciente_hash) {
+    // Pseudonimização de CPF — CRÍTICO: o hash nunca é calculado pelo
+    // cliente (um segredo HMAC não pode viver em código de navegador). O
+    // CPF chega aqui em texto puro, só em memória, e é imediatamente
+    // transformado em HMAC-SHA256 server-side. `dto.paciente_cpf` NUNCA é
+    // persistido nem passado a `registrarAuditoria`/logger — só a variável
+    // local `hashIdentidade` (irreversível sem a chave do servidor) toca o
+    // banco.
+    if (dto.paciente_cpf) {
+      const hashIdentidade = hmacIdentifier(
+        this.config,
+        'cpf',
+        dto.paciente_cpf,
+      );
       const paciente = await this.prisma.paciente.upsert({
-        where: { hash_identidade: dto.paciente_hash },
+        where: { hash_identidade: hashIdentidade },
         create: {
-          hash_identidade: dto.paciente_hash,
+          hash_identidade: hashIdentidade,
           idade: (dto.anamnese as { idade?: number })?.idade ?? 0,
           sexo: (dto.anamnese as { sexo?: string })?.sexo ?? 'M',
           comorbidades:

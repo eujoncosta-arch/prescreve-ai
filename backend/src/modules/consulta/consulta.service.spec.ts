@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment -- jest.Mock.mock.calls é `any[]` por padrão; os asserts de tipo abaixo tipam o resultado final. */
 import { Test, TestingModule } from '@nestjs/testing';
+import { ConfigService } from '@nestjs/config';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { ConsultaService } from './consulta.service';
 import { PrismaService } from '../../prisma/prisma.service';
@@ -19,6 +20,7 @@ describe('ConsultaService — acesso horizontal (ownership) e IDOR', () => {
     diagnostico: { create: jest.Mock; findUnique: jest.Mock };
     prescricao: { create: jest.Mock; findUnique: jest.Mock };
     riskScore: { create: jest.Mock; findUnique: jest.Mock };
+    paciente: { upsert: jest.Mock };
   };
 
   const OUTRO_USUARIO_ID = 'usuario-victima-id';
@@ -46,6 +48,9 @@ describe('ConsultaService — acesso horizontal (ownership) e IDOR', () => {
         create: jest.fn().mockResolvedValue({ id: 'risk-1' }),
         findUnique: jest.fn().mockResolvedValue(null),
       },
+      paciente: {
+        upsert: jest.fn().mockResolvedValue({ id: 'paciente-1' }),
+      },
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -60,10 +65,88 @@ describe('ConsultaService — acesso horizontal (ownership) e IDOR', () => {
           provide: AuditService,
           useValue: { registrarAuditoria: jest.fn().mockResolvedValue({}) },
         },
+        {
+          provide: ConfigService,
+          useValue: {
+            get: jest.fn((key: string) =>
+              key === 'IDENTIFIER_HMAC_KEY' ? 'bb'.repeat(32) : undefined,
+            ),
+          },
+        },
       ],
     }).compile();
 
     service = module.get(ConsultaService);
+  });
+
+  describe('criarConsulta() — pseudonimização de CPF (auditoria de privacidade)', () => {
+    it('NUNCA persiste o CPF em texto puro — só o hash HMAC chega ao Prisma', async () => {
+      await service.criarConsulta(
+        { paciente_cpf: '12345678909' },
+        OUTRO_USUARIO_ID,
+      );
+
+      expect(prisma.paciente.upsert).toHaveBeenCalledTimes(1);
+      const chamada = prisma.paciente.upsert.mock.calls[0][0] as {
+        where: { hash_identidade: string };
+        create: { hash_identidade: string };
+      };
+      // O hash é hexadecimal de 64 caracteres (HMAC-SHA256) e nunca
+      // contém a substring do CPF original.
+      expect(chamada.where.hash_identidade).toMatch(/^[a-f0-9]{64}$/);
+      expect(chamada.create.hash_identidade).not.toContain('12345678909');
+    });
+
+    it('duas formatações do MESMO CPF (com/sem pontuação) resolvem ao MESMO paciente — normalização antes do HMAC', async () => {
+      await service.criarConsulta(
+        { paciente_cpf: '123.456.789-09' },
+        OUTRO_USUARIO_ID,
+      );
+      await service.criarConsulta(
+        { paciente_cpf: '12345678909' },
+        OUTRO_USUARIO_ID,
+      );
+
+      const hash1 = (
+        prisma.paciente.upsert.mock.calls[0][0] as {
+          where: { hash_identidade: string };
+        }
+      ).where.hash_identidade;
+      const hash2 = (
+        prisma.paciente.upsert.mock.calls[1][0] as {
+          where: { hash_identidade: string };
+        }
+      ).where.hash_identidade;
+      expect(hash1).toBe(hash2);
+    });
+
+    it('CPFs DIFERENTES produzem hashes DIFERENTES (não há colisão trivial)', async () => {
+      await service.criarConsulta(
+        { paciente_cpf: '12345678909' },
+        OUTRO_USUARIO_ID,
+      );
+      await service.criarConsulta(
+        { paciente_cpf: '98765432100' },
+        OUTRO_USUARIO_ID,
+      );
+
+      const hash1 = (
+        prisma.paciente.upsert.mock.calls[0][0] as {
+          where: { hash_identidade: string };
+        }
+      ).where.hash_identidade;
+      const hash2 = (
+        prisma.paciente.upsert.mock.calls[1][0] as {
+          where: { hash_identidade: string };
+        }
+      ).where.hash_identidade;
+      expect(hash1).not.toBe(hash2);
+    });
+
+    it('sem paciente_cpf, nenhuma chamada a paciente.upsert é feita', async () => {
+      await service.criarConsulta({}, OUTRO_USUARIO_ID);
+      expect(prisma.paciente.upsert).not.toHaveBeenCalled();
+    });
   });
 
   describe('buscarConsulta() — leitura', () => {

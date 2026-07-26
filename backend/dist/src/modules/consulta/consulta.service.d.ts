@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CacheService } from '../cache/cache.service';
@@ -7,7 +8,8 @@ export declare class ConsultaService {
     private prisma;
     private cache;
     private audit;
-    constructor(prisma: PrismaService, cache: CacheService, audit: AuditService);
+    private config;
+    constructor(prisma: PrismaService, cache: CacheService, audit: AuditService, config: ConfigService);
     private buscarPorIdempotencyKey;
     criarConsulta(dto: CriarConsultaDto, usuarioId: string): Promise<{
         status: import("@prisma/client").$Enums.StatusConsulta;

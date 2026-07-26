@@ -44,9 +44,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConsultaService = void 0;
 const common_1 = require("@nestjs/common");
+const config_1 = require("@nestjs/config");
 const prisma_service_1 = require("../../prisma/prisma.service");
 const cache_service_1 = require("../cache/cache.service");
 const audit_service_1 = require("../audit/audit.service");
+const identifier_hash_util_1 = require("../../common/crypto/identifier-hash.util");
 const crypto = __importStar(require("crypto"));
 function hashIntegridade(obj) {
     return crypto.createHash('sha256').update(JSON.stringify(obj)).digest('hex');
@@ -58,10 +60,12 @@ let ConsultaService = class ConsultaService {
     prisma;
     cache;
     audit;
-    constructor(prisma, cache, audit) {
+    config;
+    constructor(prisma, cache, audit, config) {
         this.prisma = prisma;
         this.cache = cache;
         this.audit = audit;
+        this.config = config;
     }
     async buscarPorIdempotencyKey(finder, idempotencyKey, ownerCheck) {
         if (!idempotencyKey)
@@ -79,11 +83,12 @@ let ConsultaService = class ConsultaService {
         if (existente)
             return existente;
         let pacienteId;
-        if (dto.paciente_hash) {
+        if (dto.paciente_cpf) {
+            const hashIdentidade = (0, identifier_hash_util_1.hmacIdentifier)(this.config, 'cpf', dto.paciente_cpf);
             const paciente = await this.prisma.paciente.upsert({
-                where: { hash_identidade: dto.paciente_hash },
+                where: { hash_identidade: hashIdentidade },
                 create: {
-                    hash_identidade: dto.paciente_hash,
+                    hash_identidade: hashIdentidade,
                     idade: dto.anamnese?.idade ?? 0,
                     sexo: dto.anamnese?.sexo ?? 'M',
                     comorbidades: dto.anamnese?.comorbidades ?? [],
@@ -265,6 +270,7 @@ exports.ConsultaService = ConsultaService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
         cache_service_1.CacheService,
-        audit_service_1.AuditService])
+        audit_service_1.AuditService,
+        config_1.ConfigService])
 ], ConsultaService);
 //# sourceMappingURL=consulta.service.js.map

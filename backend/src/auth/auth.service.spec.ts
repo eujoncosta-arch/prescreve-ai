@@ -78,6 +78,7 @@ describe('AuthService — autorização e escalada de privilégio', () => {
                 return 'test-secret-abcdefghijklmnopqrstuvwxyz-0123456789';
               if (key === 'JWT_REFRESH_SECRET')
                 return 'test-refresh-secret-zyxwvutsrqponmlkjih-9876543210';
+              if (key === 'IDENTIFIER_HMAC_KEY') return 'aa'.repeat(32); // 32 bytes hex válidos para teste
               return undefined;
             }),
           },

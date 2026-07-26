@@ -149,7 +149,7 @@ model Medico {
   id           String    @id @default(cuid())
   usuario_id   String    @unique
   usuario      Usuario   @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
-  crm_hash     String    @unique    // CRM anonimizado djb2
+  crm_hash     String    @unique    // CRM pseudonimizado (HMAC-SHA256, chave server-side — ver common/crypto/identifier-hash.util.ts)
   especialidade String
   uf           String
   nome_social  String?
@@ -190,7 +190,7 @@ model Hospital {
 
 model Paciente {
   id             String     @id @default(cuid())
-  hash_identidade String    @unique  // CPF hash SHA256 — LGPD
+  hash_identidade String    @unique  // CPF pseudonimizado (HMAC-SHA256, chave server-side — LGPD; ver common/crypto/identifier-hash.util.ts)
   idade          Int
   sexo           String     // M | F
   peso_kg        Float?

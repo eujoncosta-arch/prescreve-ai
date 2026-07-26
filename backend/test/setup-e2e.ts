@@ -15,3 +15,6 @@ process.env.JWT_REFRESH_SECRET =
 // 32 bytes em hex — apenas para teste (ver src/auth/mfa-crypto.util.ts).
 process.env.MFA_ENCRYPTION_KEY =
   process.env.MFA_ENCRYPTION_KEY || 'b'.repeat(64);
+// 32 bytes em hex — apenas para teste (ver src/common/crypto/identifier-hash.util.ts).
+process.env.IDENTIFIER_HMAC_KEY =
+  process.env.IDENTIFIER_HMAC_KEY || 'c'.repeat(64);
