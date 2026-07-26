@@ -45,7 +45,9 @@ function PrescriptionSyncBadge() {
     return (
       <div className="flex items-center gap-1.5 text-xs text-slate-500">
         <CloudOff className="w-3.5 h-3.5" />
-        Modo local — backend não configurado; prescrição salva apenas neste dispositivo
+        {auth.demoMode
+          ? 'MODO DEMONSTRAÇÃO — esta prescrição é simulada e nunca é enviada a um servidor real'
+          : 'Modo local — backend não configurado; prescrição salva apenas neste dispositivo'}
       </div>
     );
   }

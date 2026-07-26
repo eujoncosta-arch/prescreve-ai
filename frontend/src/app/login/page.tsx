@@ -38,10 +38,17 @@ export default function LoginPage() {
         <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
           {modo === 'login' ? 'Entrar' : 'Criar conta'}
         </h1>
+        {auth.demoMode && (
+          <p className="mt-2 inline-flex items-center gap-1 rounded-full bg-amber-100 dark:bg-amber-900/40 px-2.5 py-1 text-xs font-semibold text-amber-800 dark:text-amber-300">
+            MODO DEMONSTRAÇÃO — dados simulados, nunca enviados a um servidor real
+          </p>
+        )}
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
           {auth.backendMode
             ? 'Conecte-se ao servidor PRESCREVE-AI para salvar suas consultas.'
-            : 'Modo demonstração (sem servidor) — os dados ficam apenas na sessão.'}
+            : auth.demoMode
+              ? 'Qualquer e-mail/senha (mínimo 8 caracteres) entra em uma sessão simulada, isolada do backend real.'
+              : 'Backend não configurado neste ambiente — login está bloqueado até a configuração ser corrigida.'}
         </p>
 
         <form onSubmit={submeter} className="mt-6 space-y-4">
@@ -87,12 +94,14 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <button
-          onClick={() => { setModo(modo === 'login' ? 'registro' : 'login'); setErro(null); }}
-          className="mt-4 w-full text-center text-sm text-blue-600 dark:text-blue-400 hover:underline"
-        >
-          {modo === 'login' ? 'Não tem conta? Criar conta' : 'Já tem conta? Entrar'}
-        </button>
+        {!auth.demoMode && (
+          <button
+            onClick={() => { setModo(modo === 'login' ? 'registro' : 'login'); setErro(null); }}
+            className="mt-4 w-full text-center text-sm text-blue-600 dark:text-blue-400 hover:underline"
+          >
+            {modo === 'login' ? 'Não tem conta? Criar conta' : 'Já tem conta? Entrar'}
+          </button>
+        )}
       </div>
     </div>
   );

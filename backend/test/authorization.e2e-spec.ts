@@ -177,6 +177,26 @@ describe('Autorização (e2e)', () => {
         .set('Authorization', `Bearer ${tokenForjado}`)
         .expect(401);
     });
+
+    // Auditoria de modo offline/demo: o frontend, em modo demo, gera um
+    // token puramente local no formato `demo-<timestamp>` — nunca um JWT
+    // real. Prova aqui que, mesmo que esse valor chegue de alguma forma ao
+    // backend (bug de frontend, extensão de navegador, requisição manual),
+    // o JwtAuthGuard o rejeita como qualquer string que não seja um JWT
+    // válido — nunca autentica.
+    it('token estilo "demo-<timestamp>" (formato usado pelo modo demo do frontend) NUNCA é aceito pelo backend — 401', async () => {
+      await request(app.getHttpServer())
+        .get(`/api/consulta/${CONSULTA_DO_OUTRO_MEDICO}`)
+        .set('Authorization', `Bearer demo-${Date.now()}`)
+        .expect(401);
+    });
+
+    it('token vazio/malformado (nem 3 segmentos JWT) retorna 401, não 500', async () => {
+      await request(app.getHttpServer())
+        .get(`/api/consulta/${CONSULTA_DO_OUTRO_MEDICO}`)
+        .set('Authorization', 'Bearer nao-e-um-jwt-de-verdade')
+        .expect(401);
+    });
   });
 
   // ── (a) usuário comum acessando recurso de outro usuário ─────────────

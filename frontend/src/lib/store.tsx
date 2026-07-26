@@ -4,8 +4,9 @@ import React, { createContext, useContext, useReducer, useEffect, useCallback, u
 import { toast } from 'sonner';
 import type { Consultation, Anamnesis, DiagnosticSupport, TherapeuticPlan, SafetyCheck, Prescription, AppSettings, PrognosisData, LaboratoryPreference, ResourceSyncState } from './types';
 import { MOCK_CONSULTATIONS } from './mock-data';
-import { authApi, consultaApi, getCurrentUser, isBackendAvailable, type CurrentUser } from './api-client';
+import { authApi, consultaApi, getCurrentUser, useRealBackend, type CurrentUser } from './api-client';
 import { syncResource, newIdempotencyKey } from './sync-engine';
+import { APP_MODE, IS_DEMO_MODE } from './app-mode';
 
 const DEFAULT_SETTINGS: AppSettings = {
   medico: { nome: 'Dr. João Silva', crm: 'CRM-SP 123456', especialidade: 'Clínica Médica' },
@@ -194,7 +195,11 @@ interface AppContextType {
   auth: {
     currentUser: CurrentUser | null;
     isAuthenticated: boolean;
+    /** Verdadeiro apenas quando chamadas ao backend real acontecem (nunca em modo demo). */
     backendMode: boolean;
+    /** Verdadeiro apenas quando o modo demo foi explicitamente ativado (NEXT_PUBLIC_DEMO_MODE=true) e o ambiente não é produção. */
+    demoMode: boolean;
+    appMode: typeof APP_MODE;
     login: (email: string, senha: string) => Promise<void>;
     register: (dados: RegisterData) => Promise<void>;
     logout: () => Promise<void>;
@@ -247,7 +252,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     // Sem backend configurado ou usuário anônimo: o dado existe SÓ
     // localmente — isso é reportado explicitamente como `status: 'local'`,
     // nunca como sucesso de sincronização (não há tentativa de rede).
-    if (!isBackendAvailable || !authApi.isAuthenticated()) {
+    if (!useRealBackend || !authApi.isAuthenticated()) {
       dispatch({
         type: 'SET_SYNC_STATE',
         payload: { consultaId: c.id, resource: 'consulta', state: { status: 'local', attempts: 0 } },
@@ -335,7 +340,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const auth = {
     currentUser: state.currentUser,
     isAuthenticated: !!state.currentUser,
-    backendMode: isBackendAvailable,
+    backendMode: useRealBackend,
+    demoMode: IS_DEMO_MODE,
+    appMode: APP_MODE,
     login, register, logout,
   };
 

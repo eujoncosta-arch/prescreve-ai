@@ -216,7 +216,11 @@ export function Sidebar() {
           </button>
         ) : (
           <Link href="/login" className="mt-1 block text-center text-[10px] text-blue-500 hover:underline">
-            {auth.backendMode ? 'Entrar / Conectar ao servidor' : 'Entrar (modo demo)'}
+            {auth.backendMode
+              ? 'Entrar / Conectar ao servidor'
+              : auth.demoMode
+                ? 'Entrar (modo demonstração)'
+                : 'Entrar (backend não configurado)'}
           </Link>
         )}
         <p className="text-center text-[9px] text-slate-300 dark:text-slate-700 mt-1.5">v6.0 · Enterprise Platform P20</p>
