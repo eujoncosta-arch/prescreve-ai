@@ -28,6 +28,19 @@ export interface PediatricDoseResult {
   doseMaxPermitida: string;
   formulacaoRecomendada: string;        // gotas | suspensão | comprimido | xarope
   concentracaoComum: string;            // ex: "250 mg/5 mL"
+  /**
+   * Resolução PED-AUDIT-06 (auditoria RM-36): qual base de idade foi usada
+   * para selecionar a formulação por faixa etária (`formulacoes[].faixaMeses`).
+   * 'corrigida' = idade gestacional corrigida foi usada (prematuro, com
+   * dados de IG/dias de vida disponíveis) — mesma base já usada para a
+   * elegibilidade da dose, evitando a inconsistência de usar uma base para
+   * a dose e outra para a formulação. 'cronologica' = idade cronológica
+   * (paciente a termo, ou sem dados gestacionais informados — não há
+   * idade corrigida a aplicar). Quando a formulação é selecionada por
+   * FAIXA DE PESO (`faixaKg`), a idade não influencia a escolha — peso é
+   * sempre atual/medido, nunca "corrigido".
+   */
+  formulacaoBaseIdade: 'corrigida' | 'cronologica';
   volumeCalculado?: string;             // ex: "3 mL por dose"
   alertas: string[];
   idadeMinima: string;
@@ -673,8 +686,9 @@ export function calcDosePediatrica(
   const entry = PEDIATRIC_DOSES.find(d => d.drugId === drugId);
   if (!entry) return null;
 
-  const idadeEfetiva = patient.idadeGestacionalSemanas && patient.idadePostNatalDias
-    ? calcIdadeCorrigida(patient.idadeGestacionalSemanas, patient.idadePostNatalDias).mesesCorrigidos
+  const usaIdadeCorrigida = patient.idadeGestacionalSemanas !== undefined && patient.idadePostNatalDias !== undefined;
+  const idadeEfetiva = usaIdadeCorrigida
+    ? calcIdadeCorrigida(patient.idadeGestacionalSemanas!, patient.idadePostNatalDias!).mesesCorrigidos
     : patient.idadeMeses;
 
   /**
@@ -815,7 +829,44 @@ export function calcDosePediatrica(
   }
 
   // Selecionar formulação
-  const formulacao = getFormulacaoPediatrica(entry, patient);
+  //
+  // Resolução PED-AUDIT-06 (auditoria RM-36): `getFormulacaoPediatrica`
+  // antes usava `patient.idadeMeses` (idade CRONOLÓGICA) para casar contra
+  // `formulacoes[].faixaMeses`, enquanto a elegibilidade de dose acima
+  // (idadeMinMeses/idadeMaxMeses, seleção de indicação, faixas de doseFixa
+  // por idade) já usa `idadeEfetiva` (idade CORRIGIDA quando há dados
+  // gestacionais). Um prematuro cuja idade corrigida e cronológica caem em
+  // faixas etárias DIFERENTES podia receber uma dose calculada para um
+  // estágio de maturidade e uma formulação sugerida para outro.
+  //
+  // REGRA CLÍNICA IMPLEMENTADA:
+  //   - Faixa etária da formulação (`faixaMeses`) É um proxy para o MESMO
+  //     estágio de maturidade fisiológica/de desenvolvimento que já
+  //     determina a elegibilidade da dose (capacidade de deglutir,
+  //     maturidade do trato GI) — por isso agora usa a MESMA base
+  //     (`idadeEfetiva`) para consistência. Prematuridade não deve
+  //     influenciar a dose por um lado e a formulação por outro,
+  //     silenciosamente.
+  //   - Faixa de PESO da formulação (`faixaKg`) continua usando
+  //     `patient.pesoKg` (peso ATUAL medido) sem qualquer alteração — não
+  //     existe "peso corrigido" em pediatria; peso é sempre uma medida
+  //     direta e objetiva do paciente no momento presente.
+  //   - Para um paciente a termo (sem dados gestacionais), `idadeEfetiva`
+  //     é idêntica a `idadeMeses` — nenhuma mudança de comportamento.
+  const formulacao = getFormulacaoPediatrica(entry, patient, idadeEfetiva, usaIdadeCorrigida);
+
+  // Quando a idade corrigida diverge da cronológica a ponto de mudar QUAL
+  // formulação seria escolhida, isso é tornado explícito ao prescritor —
+  // nunca uma troca silenciosa de base de idade.
+  if (formulacao.baseIdadeUsada === 'corrigida') {
+    const formulacaoPorCronologica = getFormulacaoPediatrica(entry, patient, patient.idadeMeses, false);
+    if (formulacaoPorCronologica.forma !== formulacao.forma || formulacaoPorCronologica.concentracao !== formulacao.concentracao) {
+      alertas.push(
+        `ℹ Formulação selecionada pela idade CORRIGIDA (${idadeEfetiva} meses, prematuridade): ${formulacao.forma} (${formulacao.concentracao}). ` +
+        `Pela idade cronológica (${patient.idadeMeses} meses) seria: ${formulacaoPorCronologica.forma} (${formulacaoPorCronologica.concentracao}).`,
+      );
+    }
+  }
 
   // Calcular volume se formulação líquida
   let volumeCalculado: string | undefined;
@@ -847,6 +898,7 @@ export function calcDosePediatrica(
       : 'Verificar protocolo',
     formulacaoRecomendada: formulacao.forma,
     concentracaoComum: formulacao.concentracao,
+    formulacaoBaseIdade: formulacao.baseIdadeUsada,
     volumeCalculado,
     alertas,
     idadeMinima: indicEntry.idadeMinMeses !== undefined ? `${indicEntry.idadeMinMeses} meses` : 'Sem restrição documentada',
@@ -855,16 +907,36 @@ export function calcDosePediatrica(
   };
 }
 
+/**
+ * Seleciona a formulação pediátrica apropriada.
+ *
+ * `idadeMesesParaFaixaEtaria` é a idade (em meses) usada para casar contra
+ * `formulacoes[].faixaMeses` — o CHAMADOR decide qual base de idade
+ * (corrigida ou cronológica) é apropriada (ver PED-AUDIT-06 em
+ * `calcDosePediatrica`). `faixaKg` sempre usa `patient.pesoKg` (peso
+ * atual/medido), independentemente da idade usada para `faixaMeses`.
+ */
 function getFormulacaoPediatrica(
   entry: PediatricDoseEntry,
   patient: PediatricPatient,
-): { forma: string; concentracao: string; instrucoes?: string } {
+  idadeMesesParaFaixaEtaria: number,
+  usouIdadeCorrigida: boolean,
+): { forma: string; concentracao: string; instrucoes?: string; baseIdadeUsada: 'corrigida' | 'cronologica' } {
   const matching = entry.formulacoes.filter(f => {
     const okKg = !f.faixaKg || (patient.pesoKg >= f.faixaKg[0] && patient.pesoKg < f.faixaKg[1]);
-    const okMeses = !f.faixaMeses || (patient.idadeMeses >= f.faixaMeses[0] && patient.idadeMeses < f.faixaMeses[1]);
+    const okMeses = !f.faixaMeses || (idadeMesesParaFaixaEtaria >= f.faixaMeses[0] && idadeMesesParaFaixaEtaria < f.faixaMeses[1]);
     return okKg && okMeses;
   });
-  return matching[0] ?? entry.formulacoes[0] ?? { forma: 'Consultar bula', concentracao: 'N/D' };
+  return {
+    ...(matching[0] ?? entry.formulacoes[0] ?? { forma: 'Consultar bula', concentracao: 'N/D' }),
+    // Correção: `baseIdadeUsada` deve refletir se dados gestacionais foram
+    // efetivamente usados para calcular `idadeMesesParaFaixaEtaria` — NUNCA
+    // inferido comparando os dois números por igualdade. Um recém-nascido
+    // prematuro pode ter idade corrigida IGUAL à cronológica por
+    // coincidência numérica (ex.: ambas 0 meses logo após o nascimento);
+    // comparar valores mascararia que a correção FOI de fato aplicada.
+    baseIdadeUsada: usouIdadeCorrigida ? 'corrigida' : 'cronologica',
+  };
 }
 
 // ─── GUIA RÁPIDO DE FORMULAÇÕES PEDIÁTRICAS ──────────────────
