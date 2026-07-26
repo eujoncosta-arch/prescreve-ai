@@ -64,11 +64,11 @@ export declare class ConsultaService {
                 hash_integridade: string;
                 criado_em: Date;
                 cid: string;
-                versao: number;
                 molecula: string;
                 dose: string | null;
                 via: string | null;
                 duracao: string | null;
+                versao: number;
                 nivel_evidencia: import("@prisma/client").$Enums.NivelEvidencia;
                 prescricao_id: string;
                 classe_terapeutica: string;
@@ -84,9 +84,9 @@ export declare class ConsultaService {
             deletado_em: Date | null;
             consulta_id: string;
             diagnostico_id: string | null;
+            medicamentos: import("@prisma/client/runtime/client").JsonValue;
             orientacoes: string | null;
             validade_dias: number;
-            medicamentos: import("@prisma/client/runtime/client").JsonValue;
             versao: number;
         })[];
         risco_scores: {
@@ -145,9 +145,9 @@ export declare class ConsultaService {
         deletado_em: Date | null;
         consulta_id: string;
         diagnostico_id: string | null;
+        medicamentos: import("@prisma/client/runtime/client").JsonValue;
         orientacoes: string | null;
         validade_dias: number;
-        medicamentos: import("@prisma/client/runtime/client").JsonValue;
         versao: number;
     }>;
     salvarRiskScore(consultaId: string, score: Record<string, unknown>, usuarioId: string): Promise<{

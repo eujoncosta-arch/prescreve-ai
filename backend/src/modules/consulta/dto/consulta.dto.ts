@@ -1,4 +1,12 @@
-import { IsString, IsOptional, IsObject } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsObject,
+  IsArray,
+  IsInt,
+  ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CriarConsultaDto {
   @IsOptional()
@@ -27,6 +35,27 @@ export class CriarDiagnosticoDto {
   selecionado?: boolean;
 }
 
+export class ItemMedicamentoDto {
+  @IsString()
+  molecula: string;
+
+  @IsString()
+  dose: string;
+
+  @IsString()
+  via: string;
+
+  @IsString()
+  frequencia: string;
+
+  @IsString()
+  duracao: string;
+
+  @IsOptional()
+  @IsString()
+  observacoes?: string;
+}
+
 export class CriarPrescricaoDto {
   @IsString()
   consulta_id: string;
@@ -35,20 +64,25 @@ export class CriarPrescricaoDto {
   @IsString()
   diagnostico_id?: string;
 
-  medicamentos: {
-    molecula: string;
-    dose: string;
-    via: string;
-    frequencia: string;
-    duracao: string;
-    observacoes?: string;
-  }[];
+  /**
+   * Sem @IsArray()/@ValidateNested() esta propriedade não tem NENHUM
+   * decorator de class-validator — com `whitelist: true` (main.ts), o
+   * ValidationPipe global trata propriedades sem metadata de validação
+   * como desconhecidas e as remove/rejeita, quebrando o endpoint inteiro
+   * para qualquer uso legítimo (bug encontrado ao escrever o teste e2e
+   * real de ownership desta auditoria — não relacionado a IDOR).
+   */
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ItemMedicamentoDto)
+  medicamentos: ItemMedicamentoDto[];
 
   @IsOptional()
   @IsString()
   orientacoes?: string;
 
   @IsOptional()
+  @IsInt()
   validade_dias?: number;
 }
 

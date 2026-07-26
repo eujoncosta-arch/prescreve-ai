@@ -9,17 +9,18 @@ export declare class CriarDiagnosticoDto {
     confianca?: number;
     selecionado?: boolean;
 }
+export declare class ItemMedicamentoDto {
+    molecula: string;
+    dose: string;
+    via: string;
+    frequencia: string;
+    duracao: string;
+    observacoes?: string;
+}
 export declare class CriarPrescricaoDto {
     consulta_id: string;
     diagnostico_id?: string;
-    medicamentos: {
-        molecula: string;
-        dose: string;
-        via: string;
-        frequencia: string;
-        duracao: string;
-        observacoes?: string;
-    }[];
+    medicamentos: ItemMedicamentoDto[];
     orientacoes?: string;
     validade_dias?: number;
 }

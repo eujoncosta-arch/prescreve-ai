@@ -162,7 +162,7 @@ let ConsultaService = class ConsultaService {
             data: {
                 consulta_id: dto.consulta_id,
                 diagnostico_id: dto.diagnostico_id,
-                medicamentos: dto.medicamentos,
+                medicamentos: dto.medicamentos.map((m) => ({ ...m })),
                 orientacoes: dto.orientacoes,
                 validade_dias: dto.validade_dias ?? 30,
                 hash_integridade: hash,

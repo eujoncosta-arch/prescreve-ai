@@ -9,8 +9,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SalvarRiscoDto = exports.CriarPrescricaoDto = exports.CriarDiagnosticoDto = exports.CriarConsultaDto = void 0;
+exports.SalvarRiscoDto = exports.CriarPrescricaoDto = exports.ItemMedicamentoDto = exports.CriarDiagnosticoDto = exports.CriarConsultaDto = void 0;
 const class_validator_1 = require("class-validator");
+const class_transformer_1 = require("class-transformer");
 class CriarConsultaDto {
     paciente_hash;
     anamnese;
@@ -54,6 +55,40 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Boolean)
 ], CriarDiagnosticoDto.prototype, "selecionado", void 0);
+class ItemMedicamentoDto {
+    molecula;
+    dose;
+    via;
+    frequencia;
+    duracao;
+    observacoes;
+}
+exports.ItemMedicamentoDto = ItemMedicamentoDto;
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ItemMedicamentoDto.prototype, "molecula", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ItemMedicamentoDto.prototype, "dose", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ItemMedicamentoDto.prototype, "via", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ItemMedicamentoDto.prototype, "frequencia", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ItemMedicamentoDto.prototype, "duracao", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ItemMedicamentoDto.prototype, "observacoes", void 0);
 class CriarPrescricaoDto {
     consulta_id;
     diagnostico_id;
@@ -72,12 +107,19 @@ __decorate([
     __metadata("design:type", String)
 ], CriarPrescricaoDto.prototype, "diagnostico_id", void 0);
 __decorate([
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    (0, class_transformer_1.Type)(() => ItemMedicamentoDto),
+    __metadata("design:type", Array)
+], CriarPrescricaoDto.prototype, "medicamentos", void 0);
+__decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CriarPrescricaoDto.prototype, "orientacoes", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)
 ], CriarPrescricaoDto.prototype, "validade_dias", void 0);
 class SalvarRiscoDto {
