@@ -501,28 +501,96 @@ export function runSafetyCheck(input: SafetyCheckInput): QuickSafetyAlert[] {
    *      disparavam para prescrições reais.
    * Corrigido para normalizar acentos e checar também `molecula`/`sinonimos`.
    */
-  function matchToken(token: string): boolean {
+  /**
+   * Resolução CRIT-AUDIT-05 (auditoria RM-36): quando o paciente usa
+   * Sertralina + Tramadol, TANTO o par genérico `isrs+tramadol` QUANTO o
+   * par específico `sertralina+tramadol` batiam — "isrs" e "sertralina"
+   * nunca eram reconhecidos como o MESMO risco clínico (mesma classe
+   * terapêutica, uma é o membro da outra), gerando dois alertas para a
+   * mesma informação. A checagem anterior de duplicata só comparava texto
+   * de alertas já emitidos contra os tokens do NOVO par — "isrs" nunca
+   * aparece no título "Sertralina + Tramadol", então nunca era detectado.
+   *
+   * Corrigido com uma checagem SEMANTICAMENTE CONSCIENTE de classe/membro:
+   * para cada token de um par (`mol_a`/`mol_b`), calculamos o CONJUNTO de
+   * medicamentos REALMENTE PRESCRITOS que o token identifica (via classe,
+   * molécula ou sinônimo — reaproveitando `matchedDrugIds`/`drugs` já
+   * resolvidos). Dois pares representam o MESMO risco clínico quando os
+   * conjuntos de medicamentos que cada lado identifica SE SOBREPÕEM dos
+   * dois lados (ex.: "isrs" e "sertralina" ambos identificam o mesmo
+   * Sertralina prescrito; "tramadol" e "tramadol" identificam o mesmo
+   * Tramadol) — não por comparação de texto do alerta.
+   */
+  function matchedDrugIds(token: string): Set<string> {
     const alvo = stripAccents(token);
-    return (
-      molsLower.some(m => m.includes(alvo) || alvo.includes(m)) ||
-      drugs.some(d =>
+    const ids = new Set<string>();
+    // Match literal contra o texto bruto digitado (moleculas) — cobre
+    // tokens de classe usados diretamente como entrada (ex.: testes/uso
+    // com 'ieca','aine' sem resolver a um DrugEntity real) com uma chave
+    // sintética própria, para não colidir por acaso com um id real.
+    if (molsLower.some(m => m.includes(alvo) || alvo.includes(m))) {
+      ids.add(`literal:${alvo}`);
+    }
+    for (const d of drugs) {
+      const bate =
         stripAccents(d.classe.toLowerCase()).includes(alvo) ||
         stripAccents(d.molecula.toLowerCase()).includes(alvo) ||
-        d.sinonimos.some(s => stripAccents(s.toLowerCase()).includes(alvo)),
-      )
-    );
+        d.sinonimos.some(s => stripAccents(s.toLowerCase()).includes(alvo));
+      if (bate) ids.add(d.id);
+    }
+    return ids;
   }
 
+  /**
+   * Um token é ESPECÍFICO (identifica uma molécula nomeada, não apenas
+   * uma classe terapêutica) quando bate como PALAVRA INTEIRA no nome
+   * próprio (`molecula`) de algum medicamento que ele identifica — nunca
+   * via `sinonimos`, porque sinônimos misturam nomes de marca, abreviações
+   * de classe (ex.: Sertralina tem "isrs" no próprio array de sinônimos)
+   * e termos de uso, o que tornaria essa checagem inútil para distinguir
+   * classe de membro. "isrs" nunca é palavra de "Sertralina"; "sertralina"
+   * é.
+   */
+  function tokenEhEspecifico(token: string, ids: Set<string>): boolean {
+    const alvo = stripAccents(token.toLowerCase());
+    for (const d of drugs) {
+      if (!ids.has(d.id)) continue;
+      const palavras = stripAccents(d.molecula.toLowerCase()).split(/\s+/);
+      if (palavras.includes(alvo) || stripAccents(d.molecula.toLowerCase()) === alvo) return true;
+    }
+    return false;
+  }
+
+  function intersecta(a: Set<string>, b: Set<string>): boolean {
+    for (const x of a) if (b.has(x)) return true;
+    return false;
+  }
+
+  // Pares CRITICAL_PAIRS já aceitos nesta execução — usado para a
+  // deduplicação semântica classe/membro entre pares (CRIT-AUDIT-05).
+  // Cada entrada permanece sincronizada com o alerta correspondente em
+  // `alerts` (mesmo id) enquanto ele não for substituído/removido.
+  const paresAceitos: Array<{
+    alertaId: string;
+    idsA: Set<string>;
+    idsB: Set<string>;
+    severidade: AlertSeverityFast;
+    especificidade: number; // 0, 1 ou 2 lados específicos (molécula nomeada)
+  }> = [];
+
   for (const pair of CRITICAL_PAIRS) {
-    const hasA = matchToken(pair.mol_a);
-    const hasB = matchToken(pair.mol_b);
+    const idsA = matchedDrugIds(pair.mol_a);
+    const idsB = matchedDrugIds(pair.mol_b);
+    const hasA = idsA.size > 0;
+    const hasB = idsB.size > 0;
     if (hasA && hasB) {
       const molA = stripAccents(pair.mol_a);
       const molB = stripAccents(pair.mol_b);
       const dupKey = `${pair.mol_a}-${pair.mol_b}`;
+      const alertaId = `critical-pair-${dupKey}`;
 
-      // Evita duplicatas com interações já encontradas pelo banco de dados
-      // OU por outro par crítico já emitido para as MESMAS duas moléculas.
+      // Camada 1 (inalterada): evita duplicatas com interações já
+      // encontradas pelo BANCO DE DADOS (seção 1, texto do alerta).
       //
       // BUG REAL CORRIGIDO (auditoria RM-36): a versão anterior, ao achar
       // uma correspondência, simplesmente DESCARTAVA o novo alerta — mesmo
@@ -537,13 +605,29 @@ export function runSafetyCheck(input: SafetyCheckInput): QuickSafetyAlert[] {
       // Mesma falha para moxifloxacino+amiodarona. Corrigido para
       // SUBSTITUIR o(s) alerta(s) mais fraco(s) pelo mais grave, nunca
       // manter só o mais fraco.
-      const existentes = alerts.filter(a =>
+      const existentesTexto = alerts.filter(a =>
         (a.id.includes(pair.mol_a) || a.titulo.toLowerCase().includes(molA)) &&
         (a.id.includes(pair.mol_b) || a.titulo.toLowerCase().includes(molB)),
       );
 
+      // Camada 2 (nova — CRIT-AUDIT-05): evita duplicatas com outro par
+      // CRITICAL_PAIRS já aceito que identifica o MESMO risco clínico
+      // (sobreposição real de medicamentos prescritos nos dois lados —
+      // classe vs. membro específico, ex.: isrs+tramadol vs.
+      // sertralina+tramadol).
+      const existentesSemanticos = paresAceitos.filter(p =>
+        (intersecta(p.idsA, idsA) && intersecta(p.idsB, idsB)) ||
+        (intersecta(p.idsA, idsB) && intersecta(p.idsB, idsA)),
+      );
+      const alertasSemanticos = existentesSemanticos
+        .map(p => alerts.find(a => a.id === p.alertaId))
+        .filter((a): a is QuickSafetyAlert => a !== undefined);
+
+      const existentes = [...existentesTexto, ...alertasSemanticos.filter(a => !existentesTexto.includes(a))];
+
+      const novaEspecificidade = (tokenEhEspecifico(pair.mol_a, idsA) ? 1 : 0) + (tokenEhEspecifico(pair.mol_b, idsB) ? 1 : 0);
       const novoAlerta: QuickSafetyAlert = {
-        id: `critical-pair-${dupKey}`,
+        id: alertaId,
         tipo: 'interacao',
         severidade: pair.severidade,
         titulo: pair.titulo,
@@ -553,17 +637,38 @@ export function runSafetyCheck(input: SafetyCheckInput): QuickSafetyAlert[] {
 
       if (existentes.length === 0) {
         alerts.push(novoAlerta);
+        paresAceitos.push({ alertaId, idsA, idsB, severidade: pair.severidade, especificidade: novaEspecificidade });
       } else {
         const severidadeMaisGraveExistente = Math.min(...existentes.map(a => order[a.severidade]));
-        if (order[pair.severidade] < severidadeMaisGraveExistente) {
+        // Requisito CRIT-AUDIT-05: em severidade IGUAL, o alerta mais
+        // ESPECÍFICO (molécula nomeada) prevalece sobre o genérico
+        // (classe terapêutica) — nunca o contrário, e nunca um alerta
+        // crítico é substituído por um genérico de mesma severidade.
+        const especificidadeMaximaExistente = Math.max(
+          0,
+          ...existentesSemanticos.filter(p => alerts.some(a => a.id === p.alertaId)).map(p => p.especificidade),
+        );
+        const maisGrave = order[pair.severidade] < severidadeMaisGraveExistente;
+        const mesmaGraviadeMaisEspecifico =
+          order[pair.severidade] === severidadeMaisGraveExistente && novaEspecificidade > especificidadeMaximaExistente;
+
+        if (maisGrave || mesmaGraviadeMaisEspecifico) {
           for (const e of existentes) {
             const idx = alerts.indexOf(e);
             if (idx !== -1) alerts.splice(idx, 1);
           }
+          // Remove das listas de pares aceitos qualquer entrada cujo
+          // alerta acabou de ser removido, para não referenciar um
+          // alerta que não existe mais.
+          for (let i = paresAceitos.length - 1; i >= 0; i--) {
+            if (existentes.some(e => e.id === paresAceitos[i].alertaId)) paresAceitos.splice(i, 1);
+          }
           alerts.push(novoAlerta);
+          paresAceitos.push({ alertaId, idsA, idsB, severidade: pair.severidade, especificidade: novaEspecificidade });
         }
-        // Caso contrário: já existe alerta igual ou mais grave cobrindo o
-        // mesmo par — não duplica nem enfraquece o que já está lá.
+        // Caso contrário: já existe alerta igual/mais grave OU igualmente
+        // (ou mais) específico cobrindo o mesmo risco — não duplica nem
+        // enfraquece o que já está lá.
       }
     }
   }
