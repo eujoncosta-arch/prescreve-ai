@@ -170,6 +170,41 @@ export function calcClCrSchwartz(
 
 // ─── BANCO DE DOSES PEDIÁTRICAS ───────────────────────────────
 
+/**
+ * Resolução do risco estrutural de `doseFixa` (auditoria RM-36): a versão
+ * anterior representava faixas como chaves de string livres (`"3–15kg"`,
+ * `"1–2 anos"`, `">2 anos"`), e a UNIDADE (kg/meses/anos) era inferida por
+ * parsing textual da própria chave (`faixa.includes('anos')`). Uma entrada
+ * futura como `"0-2": 100` (sem sufixo de unidade) seria silenciosamente
+ * tratada como PESO por esse parser — sem nenhuma checagem estrutural que
+ * pudesse rejeitá-la. `unidade` agora é um campo TIPADO e OBRIGATÓRIO,
+ * nunca inferido de texto.
+ */
+export type UnidadeFaixaDose = 'kg' | 'meses' | 'anos';
+
+/**
+ * Faixa de dose fixa, com intervalo semiaberto (minimo, maximo] — minimo é
+ * EXCLUSIVO, maximo é INCLUSIVO. `maximo` ausente = sem teto superior
+ * (faixa aberta no topo, equivalente ao antigo ">40kg"). Essa convenção
+ * (em vez de min/max ambos inclusivos) elimina por construção a
+ * possibilidade de duas faixas adjacentes ambas reivindicarem o mesmo
+ * valor de fronteira — bug real encontrado nesta auditoria: as faixas
+ * antigas de oseltamivir "3–15kg" e "15–23kg" eram ambas min/max
+ * INCLUSIVOS, então um paciente com EXATAMENTE 15 kg batia nas DUAS
+ * faixas simultaneamente; como o código não parava no primeiro match,
+ * a última faixa declarada (a mais alta, "15–23kg" → 45mg) sempre vencia
+ * silenciosamente — mesmo quando a diretriz clínica real (CDC/AAP) usa
+ * "≤15kg: 30mg" (ou seja, o paciente de 15kg exato deveria receber a
+ * dose MENOR). `validarFaixasDoseFixa()` (abaixo) rejeita qualquer
+ * sobreposição remanescente em tempo de carga do módulo.
+ */
+export interface FaixaDoseFixa {
+  unidade: UnidadeFaixaDose;
+  minimo: number;
+  maximo?: number;
+  doseMg: number;
+}
+
 export interface PediatricDoseEntry {
   drugId: string;
   drugName: string;
@@ -179,7 +214,7 @@ export interface PediatricDoseEntry {
     doseMgKgDia?: number;       // mg/kg/DIA (dividir pelas tomadas)
     doseMcgKg?: number;         // mcg/kg/dose
     doseMgM2?: number;          // mg/m²/dose
-    doseFixa?: { [faixaKg: string]: number }; // dose fixa por peso
+    doseFixa?: FaixaDoseFixa[]; // dose fixa por faixa (unidade explícita e tipada — ver FaixaDoseFixa)
     frequencia: string;
     divisoes?: number;          // nº de tomadas/dia se doseMgKgDia
     maxDoseMg?: number;
@@ -477,12 +512,12 @@ export const PEDIATRIC_DOSES: PediatricDoseEntry[] = [
     drugName: 'Oseltamivir',
     indicacoes: [{
       nome: 'Influenza A e B (tratamento e profilaxia)',
-      doseFixa: {
-        '3–15kg': 30,    // mg/dose
-        '15–23kg': 45,
-        '23–40kg': 60,
-        '>40kg': 75,
-      },
+      doseFixa: [
+        { unidade: 'kg', minimo: 0, maximo: 15, doseMg: 30 },
+        { unidade: 'kg', minimo: 15, maximo: 23, doseMg: 45 },
+        { unidade: 'kg', minimo: 23, maximo: 40, doseMg: 60 },
+        { unidade: 'kg', minimo: 40, doseMg: 75 },
+      ],
       frequencia: '2×/dia × 5 dias (tratamento) | 1×/dia × 10 dias (profilaxia)',
       maxDoseMg: 75,
       instrucoes: 'INICIAR em < 48h de sintomas. < 1 ano: 3 mg/kg/dose 2×/dia (RN: uso especializado). ≥ 1 ano: dose por faixa de peso.',
@@ -562,7 +597,10 @@ export const PEDIATRIC_DOSES: PediatricDoseEntry[] = [
     drugName: 'Albendazol',
     indicacoes: [{
       nome: 'Helmintíases intestinais (ascaris, oxiúros, ancilostomose)',
-      doseFixa: { '1–2 anos': 200, '>2 anos': 400 },
+      doseFixa: [
+        { unidade: 'anos', minimo: 0, maximo: 2, doseMg: 200 },
+        { unidade: 'anos', minimo: 2, doseMg: 400 },
+      ],
       frequencia: 'Dose única (1 dia)',
       idadeMinMeses: 12,
       instrucoes: 'Ascaridíase/ancilostomose: dose única 400 mg. Oxiúros: repetir em 2 semanas. Giardíase: 400 mg/dia × 3–5 dias.',
@@ -734,6 +772,91 @@ export const PEDIATRIC_DOSES: PediatricDoseEntry[] = [
   },
 ];
 
+/**
+ * Validação estrutural obrigatória de uma lista de `FaixaDoseFixa` (RM-36).
+ * Não depende de parsing de string — valida diretamente os campos tipados.
+ * Retorna a lista de erros encontrados (vazia = válido); nunca lança por si
+ * só, para poder ser exercida por testes de schema com dados
+ * propositalmente inválidos sem precisar de try/catch em cada caso.
+ *
+ * Regras aplicadas (cobertura exigida pela auditoria RM-36):
+ *   - toda faixa deve ter `unidade` ∈ {'kg','meses','anos'} — nunca ausente
+ *     nem um valor desconhecido;
+ *   - `minimo` deve ser um número finito ≥ 0;
+ *   - `maximo`, quando presente, deve ser um número finito e MAIOR que
+ *     `minimo` (rejeita faixa invertida ou vazia — ex.: minimo=10,
+ *     maximo=5, ou minimo=10, maximo=10);
+ *   - `doseMg` deve ser um número finito > 0 (rejeita dose ausente/zero/
+ *     negativa);
+ *   - dentro da MESMA unidade, nenhuma faixa pode se sobrepor a outra no
+ *     intervalo semiaberto (minimo, maximo] — ver comentário de
+ *     `FaixaDoseFixa` para o porquê desse intervalo.
+ */
+export function validarFaixasDoseFixa(faixas: FaixaDoseFixa[], contexto: string): string[] {
+  const erros: string[] = [];
+  const UNIDADES_VALIDAS: UnidadeFaixaDose[] = ['kg', 'meses', 'anos'];
+
+  faixas.forEach((f, i) => {
+    const rotulo = `${contexto} [faixa ${i}]`;
+    if (f === null || typeof f !== 'object') {
+      erros.push(`${rotulo}: faixa não é um objeto válido`);
+      return;
+    }
+    if (!UNIDADES_VALIDAS.includes(f.unidade)) {
+      erros.push(`${rotulo}: unidade "${String(f.unidade)}" ausente ou desconhecida — deve ser 'kg', 'meses' ou 'anos'`);
+    }
+    if (typeof f.minimo !== 'number' || !Number.isFinite(f.minimo) || f.minimo < 0) {
+      erros.push(`${rotulo}: minimo inválido (${String(f.minimo)}) — deve ser um número finito ≥ 0`);
+    }
+    if (f.maximo !== undefined && (typeof f.maximo !== 'number' || !Number.isFinite(f.maximo))) {
+      erros.push(`${rotulo}: maximo inválido (${String(f.maximo)}) — deve ser um número finito quando presente`);
+    }
+    if (typeof f.minimo === 'number' && typeof f.maximo === 'number' && Number.isFinite(f.minimo) && Number.isFinite(f.maximo) && f.maximo <= f.minimo) {
+      erros.push(`${rotulo}: faixa invertida ou vazia — maximo (${f.maximo}) deve ser maior que minimo (${f.minimo})`);
+    }
+    if (typeof f.doseMg !== 'number' || !Number.isFinite(f.doseMg) || f.doseMg <= 0) {
+      erros.push(`${rotulo}: dose ausente ou inválida (${String(f.doseMg)}) — deve ser um número > 0`);
+    }
+  });
+
+  // Sobreposição ambígua: duas faixas da MESMA unidade cujos intervalos
+  // semiabertos (minimo, maximo] se cruzam — nunca deve existir mais de
+  // uma faixa correspondente para um mesmo valor de entrada. Interseção de
+  // (aMin, aMax] com (bMin, bMax]: aMin < bMax && bMin < aMax.
+  for (let i = 0; i < faixas.length; i++) {
+    for (let j = i + 1; j < faixas.length; j++) {
+      const a = faixas[i];
+      const b = faixas[j];
+      if (!a || !b || a.unidade !== b.unidade) continue;
+      const aMax = a.maximo ?? Infinity;
+      const bMax = b.maximo ?? Infinity;
+      if (a.minimo < bMax && b.minimo < aMax) {
+        erros.push(`${contexto}: faixas [${i}] (${a.unidade} (${a.minimo}, ${a.maximo ?? '∞'}]) e [${j}] (${b.unidade} (${b.minimo}, ${b.maximo ?? '∞'}]) se sobrepõem de forma ambígua`);
+      }
+    }
+  }
+
+  return erros;
+}
+
+// Validação em tempo de carga do módulo (fail-fast): qualquer entrada de
+// PEDIATRIC_DOSES com `doseFixa` estruturalmente inválido lança
+// imediatamente na importação — nunca chega a calcular uma dose real com
+// dados malformados.
+(() => {
+  const erros: string[] = [];
+  for (const entry of PEDIATRIC_DOSES) {
+    for (const indic of entry.indicacoes) {
+      if (indic.doseFixa) {
+        erros.push(...validarFaixasDoseFixa(indic.doseFixa, `${entry.drugId} / ${indic.nome}`));
+      }
+    }
+  }
+  if (erros.length > 0) {
+    throw new Error(`PEDIATRIC_DOSES: faixas de doseFixa estruturalmente inválidas:\n${erros.join('\n')}`);
+  }
+})();
+
 // ─── FUNÇÃO PRINCIPAL: CALCULAR DOSE PEDIÁTRICA ───────────────
 export function calcDosePediatrica(
   drugId: string,
@@ -789,45 +912,22 @@ export function calcDosePediatrica(
   let doseTotalDiaMg: number | null = null;
 
   if (indicEntry.doseFixa) {
-    // Dose fixa por peso ou por idade, conforme a unidade na própria chave.
-    //
-    // BUG REAL CORRIGIDO (auditoria de segurança final): as chaves de faixa
-    // por PESO (ex.: "3–15kg", ">40kg") e por IDADE (ex.: "1–2 anos",
-    // ">2 anos") eram parseadas pelo MESMO código, que sempre comparava
-    // contra `patient.pesoKg` — nunca contra a idade. Como o peso de uma
-    // criança real (ex.: 9–20 kg) é numericamente muito maior que os
-    // limiares de idade em anos (1, 2), praticamente todo paciente pediátrico
-    // caía no ramo ">2 anos" (dose de 400 mg, tier adulto) mesmo bebês de
-    // 12–23 meses que deveriam receber 200 mg — uma superdosagem sistemática
-    // de 2× para albendazol. A unidade agora é detectada explicitamente
-    // ("anos"/"meses" → compara idade; "kg" ou ausente → compara peso).
-    const faixas = Object.entries(indicEntry.doseFixa);
-    let doseFixaValor: number | null = null;
+    // Dose fixa por faixa TIPADA (campo `unidade` explícito: 'kg' | 'meses' |
+    // 'anos') — nunca inferida por parsing de texto de uma chave de string.
+    // Ver comentário completo em `FaixaDoseFixa` (definição do tipo, acima)
+    // para o histórico do bug estrutural corrigido (RM-36) e o motivo do
+    // intervalo semiaberto (minimo, maximo]. `validarFaixasDoseFixa()` roda
+    // em tempo de carga do módulo (logo abaixo de `PEDIATRIC_DOSES`) e
+    // GARANTE, para toda entrada cadastrada, que as faixas de cada indicação
+    // nunca se sobrepõem, têm unidade válida e dose > 0 — o `find()` abaixo
+    // pode assumir, por construção, no máximo uma faixa correspondente.
     const idadeAnos = idadeEfetiva / 12;
-    for (const [faixa, dose] of faixas) {
-      const isIdade = faixa.includes('anos') || faixa.includes('meses');
-      const emMeses = faixa.includes('meses');
-      const valorComparado = isIdade ? (emMeses ? idadeEfetiva : idadeAnos) : patient.pesoKg;
-      const faixaLimpa = faixa.replace('anos', '').replace('meses', '').replace('kg', '').trim();
-
-      if (faixaLimpa.startsWith('>')) {
-        const limite = parseFloat(faixaLimpa.replace('>', ''));
-        if (valorComparado > limite) doseFixaValor = dose;
-      } else if (faixaLimpa.includes('–')) {
-        const [minS, maxS] = faixaLimpa.split('–').map(s => parseFloat(s));
-        // Correção PED-AUDIT-01 (auditoria RM-36 — alto): limite superior era
-        // EXCLUSIVO (`< maxS`) enquanto o ramo `>limite` também é exclusivo
-        // (`> limite`) — um paciente EXATAMENTE no valor de fronteira (ex.:
-        // 2,0 anos para albendazol; 40,0 kg para oseltamivir) não satisfazia
-        // nenhum dos dois ramos e ficava sem dose calculada (`null`),
-        // silenciosamente. Tornado o limite superior INCLUSIVO — na
-        // fronteira exata, usa-se a faixa mais conservadora (dose menor),
-        // nunca a mais alta por omissão.
-        if (valorComparado >= minS && valorComparado <= maxS) doseFixaValor = dose;
-      }
-    }
-    doseUnitariaMg = doseFixaValor;
-    doseUnitariaTexto = doseFixaValor ? `${doseFixaValor} mg` : 'Ver tabela de dose por faixa';
+    const faixaCorrespondente = indicEntry.doseFixa.find(f => {
+      const valorComparado = f.unidade === 'kg' ? patient.pesoKg : f.unidade === 'meses' ? idadeEfetiva : idadeAnos;
+      return valorComparado > f.minimo && (f.maximo === undefined || valorComparado <= f.maximo);
+    });
+    doseUnitariaMg = faixaCorrespondente?.doseMg ?? null;
+    doseUnitariaTexto = faixaCorrespondente ? `${faixaCorrespondente.doseMg} mg` : 'Ver tabela de dose por faixa';
   } else if (indicEntry.doseMgKg) {
     doseUnitariaMg = indicEntry.doseMgKg * patient.pesoKg;
     if (indicEntry.maxDoseMg) doseUnitariaMg = Math.min(doseUnitariaMg, indicEntry.maxDoseMg);
