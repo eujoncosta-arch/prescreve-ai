@@ -62,3 +62,118 @@ describe('calcularDosagem() — excede_dose_maxima_dia/_dose refletem a dose BRU
     expect(resultado?.excede_dose_maxima_dose).toBe(true);
   });
 });
+
+// ============================================================
+// RM-36 — regressão UNIT-AUDIT-03: `gotas_por_mL` tinha um fallback `?? 20`
+// (macrogotas padrão) para qualquer formulação `gotas_oral` sem o fator
+// explicitamente cadastrado. Corrigido para BLOQUEAR a conversão nesse
+// caso, nunca assumir um fator de gotas/mL.
+// ============================================================
+
+const MEDICAMENTO_GOTAS_COM_FATOR: MedicamentoDosagem = {
+  id: 'teste-gotas-1',
+  nome_generico: 'Fármaco Gotas Com Fator',
+  classe: 'Teste',
+  formulacoes: [
+    {
+      id: 'form-gotas',
+      descricao: 'Gotas 100 mg/mL',
+      tipo: 'gotas_oral',
+      via: 'oral',
+      concentracao_mg: 100,
+      volume_ref_mL: 1,
+      gotas_por_mL: 20, // fator EXPLICITAMENTE cadastrado (não um fallback)
+      unidade_dispensa: 'gotas',
+    },
+  ],
+  regras: [
+    {
+      populacoes: ['pediatrico', 'lactente'],
+      dose: 10,
+      unidade: 'mg/kg',
+      frequencia_horas: 8,
+      via: 'oral',
+    },
+  ],
+};
+
+const MEDICAMENTO_GOTAS_SEM_FATOR: MedicamentoDosagem = {
+  id: 'teste-gotas-2',
+  nome_generico: 'Fármaco Gotas Sem Fator',
+  classe: 'Teste',
+  formulacoes: [
+    {
+      id: 'form-gotas-sem-fator',
+      descricao: 'Gotas 100 mg/mL (fator não cadastrado)',
+      tipo: 'gotas_oral',
+      via: 'oral',
+      concentracao_mg: 100,
+      volume_ref_mL: 1,
+      // gotas_por_mL ausente DE PROPÓSITO — este é o caso que antes caía no fallback ?? 20
+      unidade_dispensa: 'gotas',
+    },
+  ],
+  regras: [
+    {
+      populacoes: ['pediatrico', 'lactente'],
+      dose: 10,
+      unidade: 'mg/kg',
+      frequencia_horas: 8,
+      via: 'oral',
+    },
+  ],
+};
+
+const MEDICAMENTO_SUSPENSAO: MedicamentoDosagem = {
+  id: 'teste-suspensao',
+  nome_generico: 'Amoxicilina de Teste',
+  classe: 'Teste',
+  formulacoes: [
+    {
+      id: 'form-susp',
+      descricao: 'Suspensão 250 mg/5 mL',
+      tipo: 'suspensao',
+      via: 'oral',
+      concentracao_mg: 250,
+      volume_ref_mL: 5,
+      unidade_dispensa: 'mL',
+    },
+  ],
+  regras: [
+    {
+      populacoes: ['pediatrico', 'lactente'],
+      dose: 50,
+      unidade: 'mg/kg/dia',
+      frequencia_horas: 8,
+      via: 'oral',
+    },
+  ],
+};
+
+describe('calcularDosagem() — conversão para gotas exige fator explícito, nunca assume 20 gotas/mL (regressão UNIT-AUDIT-03)', () => {
+  it('formulação gotas COM gotas_por_mL explícito converte corretamente', () => {
+    const resultado = calcularDosagem(10, undefined, 3 * 365, MEDICAMENTO_GOTAS_COM_FATOR, 'form-gotas');
+    expect(resultado?.ok).toBe(true);
+    expect(resultado?.gotas_por_dose).toBeDefined();
+    expect(resultado?.gotas_por_dose).toBeGreaterThan(0);
+  });
+
+  it('formulação gotas SEM gotas_por_mL cadastrado BLOQUEIA o cálculo — nunca assume 20 gotas/mL', () => {
+    const resultado = calcularDosagem(10, undefined, 3 * 365, MEDICAMENTO_GOTAS_SEM_FATOR, 'form-gotas-sem-fator');
+    expect(resultado?.ok).toBe(false);
+    expect(resultado?.erro).toMatch(/gotas.*mL|fator/i);
+    // O cálculo é bloqueado (nenhum valor numérico calculado) — a mensagem
+    // pode mencionar "20" apenas para EXPLICAR que esse valor NÃO foi
+    // assumido, nunca como um resultado de fato usado no cálculo.
+    expect(resultado?.gotas_por_dose).toBeUndefined();
+    expect(resultado?.dose_total_dia_mg).toBe(0);
+  });
+
+  it('suspensão 250 mg/5 mL (tipo "suspensao", não "gotas_oral") NUNCA é convertida automaticamente em gotas', () => {
+    const resultado = calcularDosagem(15, undefined, 4 * 365, MEDICAMENTO_SUSPENSAO, 'form-susp');
+    expect(resultado?.ok).toBe(true);
+    expect(resultado?.volume_por_dose_mL).toBeDefined();
+    expect(resultado?.gotas_por_dose).toBeUndefined();
+    expect(resultado?.unidade_resultado).toBe('mL');
+  });
+});

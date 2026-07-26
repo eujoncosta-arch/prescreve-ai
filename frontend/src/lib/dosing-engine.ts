@@ -12,7 +12,7 @@ export interface FormulacaoMedicamento {
   via: Via;
   concentracao_mg: number;   // mg por unidade de referência
   volume_ref_mL?: number;    // mL da unidade de referência (ex: 5mL num sachê/colher)
-  gotas_por_mL?: number;     // tipicamente 20 gotas/mL
+  gotas_por_mL?: number;     // OBRIGATÓRIO para tipo 'gotas_oral' — fator do conta-gotas desta apresentação específica (varia por produto/fabricante; nunca assumir 20 como padrão)
   unidade_dispensa: string;  // "comprimido", "mL", "gotas", "dose"
 }
 
@@ -152,6 +152,24 @@ export function calcularDosagem(
     };
   }
 
+  // Correção UNIT-AUDIT-03 (auditoria RM-36 — médio): `gotas_por_mL` tinha um
+  // fallback `?? 20` — qualquer formulação `gotas_oral` SEM o fator
+  // explicitamente informado nos dados assumia silenciosamente 20 gotas/mL
+  // (macrogotas padrão), que não é universal (conta-gotas calibrados variam
+  // por produto/fabricante). Bloqueado: sem `gotas_por_mL` explícito, a
+  // conversão para gotas não é calculada — nunca inventado um fator.
+  if (formulacao.tipo === 'gotas_oral' && !formulacao.gotas_por_mL) {
+    return {
+      ok: false,
+      erro: `Formulação em gotas sem fator gotas/mL cadastrado — conversão bloqueada (nunca assumido 20 gotas/mL por padrão). Usar uma formulação com o fator explícito ou informar a dose em mL.`,
+      populacao, regra, formulacao,
+      dose_por_dose_mg: 0, dose_total_dia_mg: 0,
+      frequencia_horas: 0, doses_por_dia: 0,
+      excede_dose_maxima_dose: false, excede_dose_maxima_dia: false,
+      unidade_resultado: '', formula_texto: '',
+    };
+  }
+
   if (regra.contraindicado_em?.includes(populacao)) {
     return {
       ok: false,
@@ -264,8 +282,10 @@ export function calcularDosagem(
     const conc_por_mL = formulacao.concentracao_mg / (formulacao.volume_ref_mL ?? 1);
     volume_por_dose_mL = dose_por_dose_mg / conc_por_mL;
     unidade_resultado = 'mL';
-  } else if (formulacao.tipo === 'gotas_oral') {
-    const gotas_por_mL = formulacao.gotas_por_mL ?? 20;
+  } else if (formulacao.tipo === 'gotas_oral' && formulacao.gotas_por_mL) {
+    // `gotas_por_mL` explícito e validado aqui (a ausência já bloqueou a
+    // função inteira com early return acima). Nunca mais um fallback ?? 20.
+    const gotas_por_mL = formulacao.gotas_por_mL;
     const conc_por_gota = formulacao.concentracao_mg / (gotas_por_mL * (formulacao.volume_ref_mL ?? 1));
     const gotas_float = dose_por_dose_mg / conc_por_gota;
     gotas_por_dose = Math.round(gotas_float);

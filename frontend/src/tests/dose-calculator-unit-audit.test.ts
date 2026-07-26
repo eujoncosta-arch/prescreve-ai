@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calcFullDose, type FullDoseInput } from '@/lib/dose-calculator';
+import { calcFullDose, parseConcentration, convertDose, type FullDoseInput } from '@/lib/dose-calculator';
 
 // ============================================================
 // RM-36 — regressão UNIT-AUDIT-01 (crítico): quando um medicamento
@@ -87,5 +87,131 @@ describe('calcFullDose() — dose por m² SEM altura NUNCA cai para a dose adult
     expect(resultado.dose_total_dia).toBeGreaterThan(0);
     expect(resultado.fonte).toBe('pediatrica_mg_m2');
     expect(resultado.alertas.some((a) => a.startsWith('🚨'))).toBe(false);
+  });
+});
+
+// ============================================================
+// RM-36 — regressão UNIT-AUDIT-03 (médio): a conversão mL → gotas era
+// aplicada a QUALQUER formulação líquida (`* 20`, macrogotas padrão),
+// incluindo suspensões/xaropes comuns que nunca são administrados por
+// contagem de gotas. Corrigido: gotas só são calculadas quando a própria
+// apresentação declara um fator mg/gota explícito; nenhum fallback de
+// 20 gotas/mL permanece em nenhum caminho de código.
+// ============================================================
+
+const AMOXICILINA_SUSPENSAO: FullDoseInput = {
+  molecula: 'Amoxicilina de Teste',
+  dose_adulto: {
+    habitual: '500',
+    max: '1500',
+    unidade: 'mg',
+    via: 'VO',
+    frequencias: ['8/8h'],
+  },
+  alertas_especiais: [],
+  uso_gestante: 'seguro',
+  uso_lactante: 'seguro',
+};
+
+const XAROPE_GENERICO: FullDoseInput = {
+  molecula: 'Xarope de Teste',
+  dose_adulto: {
+    habitual: '10',
+    max: '40',
+    unidade: 'mg',
+    via: 'VO',
+    frequencias: ['1x/dia'],
+  },
+  alertas_especiais: [],
+  uso_gestante: 'seguro',
+  uso_lactante: 'seguro',
+};
+
+const MEDICAMENTO_GOTAS_FATOR_EXPLICITO: FullDoseInput = {
+  molecula: 'Fármaco Gotas de Teste',
+  dose_adulto: {
+    habitual: '10',
+    max: '40',
+    unidade: 'mg',
+    via: 'VO',
+    frequencias: ['1x/dia'],
+  },
+  alertas_especiais: [],
+  uso_gestante: 'seguro',
+  uso_lactante: 'seguro',
+};
+
+describe('parseConcentration() — gotas só reconhecidas com fator mg/gota explícito na própria apresentação', () => {
+  it('suspensão "250 mg/5 mL" NUNCA é interpretada como formulação de gotas', () => {
+    const conc = parseConcentration('250 mg/5 mL');
+    expect(conc.tipo).toBe('liquido');
+    expect(conc.mg_por_mL).toBeCloseTo(50, 5);
+    expect(conc.mg_por_gota).toBeUndefined();
+  });
+
+  it('xarope "10 mg/mL" (solução direta) NUNCA é interpretado como formulação de gotas', () => {
+    const conc = parseConcentration('10 mg/mL');
+    expect(conc.tipo).toBe('liquido');
+    expect(conc.mg_por_mL).toBe(10);
+    expect(conc.mg_por_gota).toBeUndefined();
+  });
+
+  it('"50 mg/mL gotas" (concentração por mL, sem fator de gotas declarado) NÃO gera mg_por_gota — evita inventar um fator', () => {
+    const conc = parseConcentration('50 mg/mL gotas');
+    expect(conc.mg_por_gota).toBeUndefined();
+  });
+
+  it('"1 mg/gota" (fator EXPLICITAMENTE declarado, ex.: Preni Gotas) é reconhecido corretamente', () => {
+    const conc = parseConcentration('1 mg/gota');
+    expect(conc.mg_por_gota).toBe(1);
+  });
+});
+
+describe('calcFullDose() — gotas só calculadas com fator explícito; suspensão/xarope nunca convertidos automaticamente (regressão UNIT-AUDIT-03)', () => {
+  it('suspensão 250 mg/5 mL: calcula volume em mL normalmente, mas gotas_por_tomada permanece indefinido', () => {
+    const resultado = calcFullDose(AMOXICILINA_SUSPENSAO, 5, 20, '250 mg/5 mL');
+    expect(resultado.volume_por_tomada).toBeDefined();
+    expect(resultado.gotas_por_tomada).toBeUndefined();
+  });
+
+  it('xarope genérico "10 mg/mL": calcula volume em mL, mas NUNCA gotas (sem fator declarado)', () => {
+    const resultado = calcFullDose(XAROPE_GENERICO, 30, 70, '10 mg/mL');
+    expect(resultado.volume_por_tomada).toBeDefined();
+    expect(resultado.gotas_por_tomada).toBeUndefined();
+  });
+
+  it('formulação com fator "1 mg/gota" EXPLICITAMENTE declarado converte gotas corretamente', () => {
+    const resultado = calcFullDose(MEDICAMENTO_GOTAS_FATOR_EXPLICITO, 30, 70, '1 mg/gota');
+    expect(resultado.gotas_por_tomada).toBeDefined();
+    expect(resultado.gotas_por_tomada).toBeGreaterThan(0);
+    // dose_por_tomada (10mg, dose adulta habitual) ÷ 1mg/gota = 10 gotas
+    expect(resultado.gotas_por_tomada).toBe(10);
+  });
+
+  it('nenhum fallback de 20 gotas/mL permanece: gotas calculadas NUNCA são simplesmente volume_por_tomada × 20', () => {
+    const resultado = calcFullDose(AMOXICILINA_SUSPENSAO, 5, 20, '250 mg/5 mL');
+    // Para a suspensão (sem fator de gotas declarado), gotas_por_tomada deve
+    // ser undefined — não `volume_por_tomada * 20`.
+    expect(resultado.gotas_por_tomada).toBeUndefined();
+    expect(resultado.volume_por_tomada).toBeDefined();
+  });
+});
+
+describe('convertDose("mL_to_drops") — exige fator gotas/mL explícito, nunca assume 20 (regressão UNIT-AUDIT-03)', () => {
+  it('sem fator informado, a conversão fica BLOQUEADA (resultado 0, mensagem explicativa)', () => {
+    const resultado = convertDose(5, 'mL_to_drops');
+    expect(resultado.resultado).toBe(0);
+    expect(resultado.passo_a_passo.join(' ')).toMatch(/bloqueada|não informado/i);
+    expect(resultado.passo_a_passo.join(' ')).not.toMatch(/20 gotas\/mL(?! como)/);
+  });
+
+  it('com fator EXPLICITAMENTE informado (ex.: 20 gotas/mL de uma apresentação real), converte corretamente', () => {
+    const resultado = convertDose(5, 'mL_to_drops', 20);
+    expect(resultado.resultado).toBe(100);
+  });
+
+  it('com um fator DIFERENTE de 20 (apresentação real com contra-gotas distinto), converte usando o fator informado, não um valor fixo', () => {
+    const resultado = convertDose(5, 'mL_to_drops', 15);
+    expect(resultado.resultado).toBe(75);
   });
 });

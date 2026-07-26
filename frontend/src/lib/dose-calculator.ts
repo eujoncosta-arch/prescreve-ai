@@ -182,7 +182,7 @@ export function calcWeightDose(
 
 export type ConversionType =
   | 'mg_to_mL'       // mg → mL (ex: sol 250 mg/5 mL)
-  | 'mL_to_drops'    // mL → gotas (1 mL = 20 gotas)
+  | 'mL_to_drops'    // mL → gotas (requer fator gotas/mL explícito da apresentação — nunca 20 assumido)
   | 'mg_to_tabs'     // mg → comprimidos
   | 'mcg_to_mg'      // mcg → mg
   | 'g_to_mg'        // g → mg
@@ -208,14 +208,30 @@ export function convertDose(
       };
     }
     case 'mL_to_drops': {
-      const drops = value * 20;
+      // Correção UNIT-AUDIT-03 (auditoria RM-36 — médio): esta conversão
+      // assumia 20 gotas/mL (macrogotas padrão) para QUALQUER líquido —
+      // não universal, contra-gotas calibrados variam por apresentação.
+      // `concentration` agora é reaproveitado como o fator gotas/mL
+      // EXPLICITAMENTE validado da apresentação (nunca um padrão
+      // assumido); sem ele, a conversão fica bloqueada.
+      if (!concentration) {
+        return {
+          resultado: 0,
+          unidade_resultado: 'gotas',
+          passo_a_passo: [
+            'Fator gotas/mL não informado para esta apresentação — conversão bloqueada.',
+            'Nunca assumir 20 gotas/mL como padrão: contra-gotas calibrados variam por produto.',
+          ],
+        };
+      }
+      const drops = value * concentration;
       return {
-        resultado: drops,
+        resultado: Math.round(drops * 10) / 10,
         unidade_resultado: 'gotas',
         passo_a_passo: [
           `Volume: ${value} mL`,
-          `Fator de conversão: 1 mL = 20 gotas (macrogotas padrão)`,
-          `Gotas = ${value} × 20 = ${drops} gotas`,
+          `Fator declarado nesta apresentação: 1 mL = ${concentration} gotas`,
+          `Gotas = ${value} × ${concentration} = ${Math.round(drops * 10) / 10} gotas`,
         ],
       };
     }
@@ -352,12 +368,40 @@ export interface ParsedConcentration {
   tipo: 'solido' | 'liquido' | 'inalatorio' | 'desconhecido';
   mg_por_unidade: number;   // mg por comprimido/cápsula OU mg/mL se líquido
   mg_por_mL?: number;       // somente líquidos
+  /**
+   * Correção UNIT-AUDIT-03 (auditoria RM-36 — médio): fator mg/gota, só
+   * preenchido quando a PRÓPRIA STRING de concentração declara
+   * explicitamente esse fator (ex.: "1 mg/gota"). NUNCA inferido a partir
+   * de mg/mL — diferentes apresentações usam contra-gotas calibrados
+   * diferentes (20 gotas/mL não é universal); sem o fator declarado, a
+   * conversão para gotas fica indisponível, nunca assumida.
+   */
+  mg_por_gota?: number;
   unidade_texto: string;    // "comprimido", "mL", "jato", etc.
   texto_original: string;
 }
 
 export function parseConcentration(texto: string): ParsedConcentration {
   const t = texto.toLowerCase().trim();
+
+  // Fator gotas EXPLÍCITO na própria apresentação — único caso em que a
+  // conversão para gotas é permitida (ver mg_por_gota acima).
+  const gotaDireta = t.match(/(\d+[\.,]?\d*)\s*mg\s*\/\s*gota/i);
+  const gotaIgual = t.match(/1\s*gota\s*=\s*(\d+[\.,]?\d*)\s*mg/i);
+  const mgPorGota = gotaDireta
+    ? parseFloat(gotaDireta[1].replace(',', '.'))
+    : gotaIgual
+    ? parseFloat(gotaIgual[1].replace(',', '.'))
+    : undefined;
+  if (mgPorGota !== undefined) {
+    return {
+      tipo: 'liquido',
+      mg_por_unidade: mgPorGota,
+      mg_por_gota: mgPorGota,
+      unidade_texto: 'gota',
+      texto_original: texto,
+    };
+  }
 
   // Combinação "400/57 mg/5 mL" — usa o PRIMEIRO número (componente principal)
   const liquidoCombinacao = t.match(/^(\d+[\.,]?\d*)\/(\d+[\.,]?\d*)\s*mg\s*\/\s*(\d+[\.,]?\d*)\s*mL/i);
@@ -428,7 +472,7 @@ export interface FullDoseResult {
   dose_por_tomada: number;
   dose_unidade: string;
   volume_por_tomada?: number;      // mL, se líquido
-  gotas_por_tomada?: number;       // 1 mL = 20 macrogotas
+  gotas_por_tomada?: number;       // só calculado quando a apresentação declara um fator mg/gota explícito (ver ParsedConcentration.mg_por_gota) — nunca um padrão assumido de 20 gotas/mL
   bsa_m2?: number;                 // superfície corporal, se calculada
   frequencia: string;
   tomadas_dia: number;
@@ -629,13 +673,26 @@ export function calcFullDose(
   }
 
   // Conversão para volume (se líquido) + gotas
+  //
+  // Correção UNIT-AUDIT-03 (auditoria RM-36 — médio): a conversão de gotas
+  // era calculada para QUALQUER formulação líquida (`mL × 20`), assumindo
+  // 20 gotas/mL (macrogotas padrão) universalmente — mas contra-gotas
+  // calibrados variam por produto/fabricante, e suspensões/xaropes comuns
+  // (ex.: amoxicilina 250mg/5mL) nunca são administrados por contagem de
+  // gotas. Corrigido: volume em mL é calculado normalmente para qualquer
+  // líquido (sempre seguro/universal); gotas só são calculadas quando a
+  // PRÓPRIA apresentação declara um fator mg/gota explícito
+  // (`conc.mg_por_gota` — ver `parseConcentration`) — nunca inferido a
+  // partir do volume em mL.
   let volumePorTomada: number | undefined;
   let gotasPorTomada: number | undefined;
   if (conc.tipo === 'liquido' && conc.mg_por_mL && dosePorTomada > 0) {
     volumePorTomada = Math.round((dosePorTomada / conc.mg_por_mL) * 10) / 10;
-    gotasPorTomada = Math.round(volumePorTomada * 20 * 10) / 10; // 1 mL = 20 macrogotas
     passos.push(`Volume: ${dosePorTomada} ${doseUnidade} ÷ ${conc.mg_por_mL} mg/mL = ${volumePorTomada} mL por dose`);
-    passos.push(`Equivalente: ${volumePorTomada} mL × 20 = ${gotasPorTomada} gotas/dose`);
+  }
+  if (conc.mg_por_gota && dosePorTomada > 0) {
+    gotasPorTomada = Math.round((dosePorTomada / conc.mg_por_gota) * 10) / 10;
+    passos.push(`Gotas: ${dosePorTomada} ${doseUnidade} ÷ ${conc.mg_por_gota} mg/gota = ${gotasPorTomada} gotas por dose (fator declarado nesta apresentação — não estimado)`);
   }
 
   // Posologia sugerida
