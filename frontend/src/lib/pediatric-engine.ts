@@ -114,6 +114,18 @@ export interface PediatricDoseEntry {
     divisoes?: number;          // nº de tomadas/dia se doseMgKgDia
     maxDoseMg?: number;
     maxDoseMgKgDia?: number;
+    /**
+     * Resolução UNIT-AUDIT-04 (auditoria RM-36): quando o campo estruturado
+     * `maxDoseMgKgDia` diverge de um valor citado em fonte secundária/texto
+     * livre e a origem clínica da divergência não pôde ser confirmada com
+     * segurança a partir das fontes disponíveis neste repositório, este
+     * campo documenta a divergência de forma explícita e RASTREÁVEL — em
+     * vez de escolher silenciosamente um dos dois valores ou inventar uma
+     * fonte. Quando preenchido, `calcDosePediatrica()` sempre emite um
+     * alerta de "pendente de validação farmacêutica", nunca apresentando o
+     * teto numérico como definitivamente validado.
+     */
+    maxDoseMgKgDiaPendenteValidacao?: string;
     idadeMinMeses?: number;
     idadeMaxMeses?: number;
     instrucoes?: string;
@@ -530,13 +542,82 @@ export const PEDIATRIC_DOSES: PediatricDoseEntry[] = [
   {
     drugId: 'domperidona',
     drugName: 'Domperidona',
+    /**
+     * ═══════════════════════════════════════════════════════════════
+     * RESOLUÇÃO UNIT-AUDIT-04 (auditoria RM-36) — auditoria de origem
+     * ═══════════════════════════════════════════════════════════════
+     *
+     * ACHADO ORIGINAL: `maxDoseMgKgDia: 0.75` (campo estruturado) divergia
+     * de "Máx 2,4 mg/kg/dia" (texto livre em `alertas`) — fator ~3,2×.
+     *
+     * FONTES DE DADOS DA DOMPERIDONA localizadas no repositório:
+     *   1. Esta entrada (pediatric-engine.ts) — única fonte com dose
+     *      PEDIÁTRICA estruturada (mg/kg).
+     *   2. pharma-database.ts (id:'domperidona') — dose ADULTA fixa apenas
+     *      (10 mg 3×/dia, máx 30 mg/dia absoluto); nenhuma dose mg/kg.
+     *   3. eurofarma-sync.ts (euro-domperix) — bula ANVISA/Eurofarma,
+     *      também só dose ADULTA fixa (10 mg 3×/dia, máx 30 mg/dia); a
+     *      bula não contempla população pediátrica em
+     *      `uso_populacoes_especiais`.
+     *   Nenhuma das fontes 2/3 cita mg/kg pediátrico — não há uma segunda
+     *   fonte estruturada no repositório para comparar contra o valor de
+     *   2,4 mg/kg/dia; ele existe SOMENTE no texto livre desta entrada.
+     *
+     * ANÁLISE DE SEMÂNTICA CLÍNICA (dose por tomada vs. dose diária):
+     *   - `doseMgKg: 0.25` = mg/kg POR DOSE (documentado no comentário do
+     *     tipo `PediatricDoseEntry.doseMgKg`: "mg/kg/dose").
+     *   - `frequencia: 'a cada 8h'` = 3 tomadas/dia (24h ÷ 8h = 3).
+     *   - `instrucoes` confirma explicitamente: "0,25 mg/kg/dose 3×/dia".
+     *   - 0,25 mg/kg/dose × 3 tomadas/dia = 0,75 mg/kg/dia EXATAMENTE.
+     *   → `maxDoseMgKgDia: 0.75` é matematicamente CONSISTENTE com o
+     *     regime pediátrico efetivamente modelado nesta entrada (não é
+     *     um valor arbitrário nem um erro de transcrição do 0,25/3×).
+     *   - O regime neonatal alternativo citado em `instrucoes`
+     *     ("DRGE neonatal: 0,2 mg/kg/dose 8/8h") dá 0,2×3 = 0,6 mg/kg/dia
+     *     — ainda mais conservador, também nunca chega perto de 2,4.
+     *
+     *   O número "2,4 mg/kg/dia" NÃO É explicado por nenhuma combinação
+     *   dose×frequência efetivamente modelada nesta entrada. Não é um
+     *   erro de unidade (ambos já em mg/kg/dia), nem de transcrição do
+     *   0,25 (0,25×3=0,75, não 2,4). É plausivelmente um valor de uma
+     *   fonte/regime DIFERENTE (ex.: protocolos mais antigos, anteriores
+     *   à revisão de segurança da EMA de 2014, que restringiu
+     *   significativamente as doses de domperidona por risco de
+     *   prolongamento de QT/morte súbita cardíaca) — mas isso é uma
+     *   HIPÓTESE, não uma confirmação, pois este repositório não contém
+     *   o texto integral do ESPGHAN 2022 nem da bula ANVISA 2023 citados
+     *   em `fontes` para verificar qual valor eles de fato recomendam.
+     *
+     * DECISÃO (sem inventar, sem escolher silenciosamente):
+     *   - Mantido `maxDoseMgKgDia: 0.75` como ÚNICA fonte estruturada de
+     *     verdade e teto REALMENTE ENFORÇADO pelo código — por ser o
+     *     valor internamente consistente com o regime documentado E o
+     *     mais conservador/seguro entre os dois (em caso de dúvida
+     *     clínica, o valor mais restritivo é o default responsável).
+     *   - REMOVIDO o "Máx 2,4 mg/kg/dia" de `alertas` como afirmação de
+     *     fato — apresentá-lo sem validação seria mostrar uma informação
+     *     não confirmada como se fosse dado validado.
+     *   - ADICIONADO `maxDoseMgKgDiaPendenteValidacao` (ver abaixo),
+     *     que faz `calcDosePediatrica()` emitir um alerta explícito de
+     *     PENDÊNCIA DE VALIDAÇÃO FARMACÊUTICA sempre que esta dose for
+     *     calculada — a divergência fica rastreável e visível ao
+     *     prescritor, nunca escondida nem resolvida por suposição.
+     * ═══════════════════════════════════════════════════════════════
+     */
     indicacoes: [{
       nome: 'Refluxo gastroesofágico / Vômitos pós-prandiais',
-      doseMgKg: 0.25, frequencia: 'a cada 8h',
+      // `divisoes: 3` adicionado nesta correção — sem ele, a dose TOTAL
+      // DIÁRIA calculada (doseTotalDiaMg) ficava igual à dose de UMA
+      // tomada (2,5 mg em vez de 7,5 mg para um paciente de 10 kg),
+      // fazendo o teto `maxDoseMgKgDia` nunca ser efetivamente
+      // verificado contra o total diário real (mesma classe de bug do
+      // PED-AUDIT-04, aqui presente nesta entrada específica).
+      doseMgKg: 0.25, frequencia: 'a cada 8h', divisoes: 3,
       maxDoseMg: 10, maxDoseMgKgDia: 0.75,
+      maxDoseMgKgDiaPendenteValidacao: 'Fonte secundária (texto legado) citava "Máx 2,4 mg/kg/dia", incompatível com o regime modelado (0,25 mg/kg/dose × 3×/dia = 0,75 mg/kg/dia) e não confirmável contra ESPGHAN 2022/ANVISA 2023 a partir das fontes disponíveis. Teto enforçado nesta versão: 0,75 mg/kg/dia (mais conservador). Requer validação farmacêutica antes de qualquer revisão.',
       idadeMinMeses: 0,
       instrucoes: '0,25 mg/kg/dose 3×/dia 15–30 min antes das refeições. DRGE neonatal: 0,2 mg/kg/dose 8/8h.',
-      alertas: ['QT prolongado em prematuros — monitorar ECG', 'ANVISA: uso pediátrico apenas sob prescrição médica', 'Máx 2,4 mg/kg/dia'],
+      alertas: ['QT prolongado em prematuros — monitorar ECG', 'ANVISA: uso pediátrico apenas sob prescrição médica'],
     }],
     formulacoes: [
       { faixaMeses: [0, 24], forma: 'Gotas', concentracao: '1 mg/mL (10 mg/mL alguns frascos — verificar)', instrucoes: 'Verificar concentração — risco de 10× superdose!' },
@@ -713,6 +794,18 @@ export function calcDosePediatrica(
       doseTotalDiaMg = tetoDiario;
       if (indicEntry.divisoes) doseUnitariaMg = doseTotalDiaMg / indicEntry.divisoes;
     }
+  }
+
+  // Resolução UNIT-AUDIT-04 (auditoria RM-36): quando o teto mg/kg/dia tem
+  // uma divergência de fonte não resolvida (ver
+  // `maxDoseMgKgDiaPendenteValidacao` na definição da entrada), o teto
+  // numérico é enforçado normalmente acima (valor mais conservador), mas
+  // NUNCA é apresentado ao prescritor como definitivamente validado —
+  // este alerta torna a pendência visível em toda chamada, sem esconder a
+  // divergência nem exigir que o código "resolva" sozinho uma questão de
+  // fonte farmacêutica.
+  if (indicEntry.maxDoseMgKgDiaPendenteValidacao) {
+    alertas.unshift(`⚠ PENDENTE DE VALIDAÇÃO FARMACÊUTICA: ${indicEntry.maxDoseMgKgDiaPendenteValidacao}`);
   }
 
   // Restrição de dose máxima (por tomada)
