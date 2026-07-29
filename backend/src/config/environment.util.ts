@@ -20,16 +20,28 @@ const VALID_ENVS: ReadonlySet<string> = new Set([
   'production',
 ]);
 
-export function resolveAppEnv(config: ConfigService): AppEnv {
-  const raw = (
-    config.get<string>('APP_ENV') ??
-    config.get<string>('NODE_ENV') ??
-    'development'
-  )
+/**
+ * Núcleo puro de `resolveAppEnv` — sem dependência do `ConfigService` do
+ * Nest, para ser reaproveitado por scripts standalone que rodam fora do
+ * contexto de injeção de dependência da aplicação (ex.: `prisma/seed.ts`,
+ * RM-37) sem duplicar a política de fail-safe (valor desconhecido/ausente
+ * → 'production', nunca 'development').
+ */
+export function resolveAppEnvFromEnv(
+  env: NodeJS.ProcessEnv = process.env,
+): AppEnv {
+  const raw = (env.APP_ENV ?? env.NODE_ENV ?? 'development')
     .trim()
     .toLowerCase();
   if (VALID_ENVS.has(raw)) return raw as AppEnv;
   return 'production';
+}
+
+export function resolveAppEnv(config: ConfigService): AppEnv {
+  return resolveAppEnvFromEnv({
+    APP_ENV: config.get<string>('APP_ENV'),
+    NODE_ENV: config.get<string>('NODE_ENV'),
+  });
 }
 
 export function parseCsvEnv(value: string | undefined): string[] {

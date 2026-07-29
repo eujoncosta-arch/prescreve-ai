@@ -385,8 +385,11 @@ complexCases6to20.forEach(({ cat, patient, age, icuPt, rx }, i) => {
   sim(`C${(i+6).toString().padStart(2,'0')}`, cat, patient, age, 'complex', () => {
     const steps: StepResult[] = [];
     if (icuPt) {
+      // RM-36: removida a chamada redundante a calcQsofa() que substituía
+      // sinais vitais ausentes por valores "normais" (?? 15/?? 16/?? 120)
+      // — assessICUPatient() já calcula o qSOFA corretamente (ou reporta
+      // dado ausente, nunca assume normal) via seu próprio qsofaAssessment.
       steps.push(tryStep('assessICUPatient', () => assessICUPatient(icuPt)));
-      steps.push(tryStep('calcQsofa', () => calcQsofa((icuPt.glasgow ?? 15) < 15, (icuPt.frIpm ?? 16) >= 22, (icuPt.pasMMHg ?? 120) <= 100)));
     }
     steps.push(tryStep('calcularBSA', () => calcularBSA(75, 170)));
     steps.push(tryStep('detectarConflitos', () => detectarConflitos(cat.toLowerCase())));

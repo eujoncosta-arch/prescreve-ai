@@ -111,6 +111,10 @@ describe('Privacidade e proteção de identificadores (e2e)', () => {
     refreshToken: { create: jest.fn().mockResolvedValue({}) },
     auditoria: { create: jest.fn().mockResolvedValue({}) },
   };
+  // RM-49 (RM41-017): ver comentário em authorization.e2e-spec.ts.
+  (prismaMock as unknown as { $transaction: jest.Mock }).$transaction = jest.fn(
+    (cb: (tx: unknown) => unknown) => cb(prismaMock),
+  );
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({

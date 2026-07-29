@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { AppShell } from '@/components/layout/AppShell';
 import { useApp } from '@/lib/store';
 import { AnamneseForm } from '@/components/modules/AnamneseForm';
@@ -19,18 +19,20 @@ import { Textarea } from '@/components/ui/textarea';
 import {
   ClipboardList, Stethoscope, Pill, Shield, FileText, CheckCircle2,
   ChevronRight, User, ArrowLeft, Brain, AlertTriangle, Activity,
-  BookOpen, ShieldCheck, GitBranch, Target, Zap, Eye, Award,
-  Heart, FlaskConical, TrendingUp, ChevronDown, ChevronUp, Info,
-  Layers, Scale, Lock, BarChart3, Microscope, MessageSquare,
-  AlertCircle, CheckCircle, XCircle, MinusCircle,
+  ShieldCheck, GitBranch, Target, Award,
+  Heart, FlaskConical, ChevronDown, ChevronUp, Info,
+  Lock, BarChart3, Microscope, MessageSquare,
+  
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { newIdempotencyKey } from '@/lib/sync-engine';
 
 // ── Engine imports ──────────────────────────────────────────────
-import { avaliarRiscoClinico, type AvaliacaoRiscoClinico, type NivelRisco } from '@/lib/clinical-risk-engine';
-import { detectarConflitos, type ConflitoGuideline, type GrauConflito } from '@/lib/guideline-conflict-engine';
+import type { AvaliacaoRiscoClinico, NivelRisco } from '@/lib/clinical-risk-engine';
+import type { ConflitoGuideline, GrauConflito } from '@/lib/guideline-conflict-engine';
+import { avaliarRiscoSeguro, avaliarConflitosSeguro } from '@/lib/clinical-panel-safety';
 import {
   calcularScoresPlano, scoreGlobalPlano,
   type MedicalTrustScore, type TrustClassification,
@@ -60,11 +62,15 @@ const STEPS: { id: Step; label: string; icon: React.ElementType; description: st
 
 // ── UI helpers ──────────────────────────────────────────────────
 
+// RM-52 (RM41-022): `NivelRisco` ganhou `intermediario` (renomeado de
+// `moderado`, para bater com o enum real do Prisma) e `critico` (valor do
+// backend que o frontend não modelava).
 const RISCO_COLOR: Record<NivelRisco, { bg: string; text: string; bar: string; label: string }> = {
-  baixo:     { bg: 'bg-green-50  border-green-200',  text: 'text-green-700',  bar: 'bg-green-500',  label: 'BAIXO' },
-  moderado:  { bg: 'bg-yellow-50 border-yellow-200', text: 'text-yellow-700', bar: 'bg-yellow-400', label: 'MODERADO' },
-  alto:      { bg: 'bg-orange-50 border-orange-200', text: 'text-orange-700', bar: 'bg-orange-500', label: 'ALTO' },
-  muito_alto:{ bg: 'bg-red-50    border-red-200',    text: 'text-red-700',    bar: 'bg-red-500',    label: 'CRÍTICO' },
+  baixo:        { bg: 'bg-green-50  border-green-200',  text: 'text-green-700',  bar: 'bg-green-500',  label: 'BAIXO' },
+  intermediario:{ bg: 'bg-yellow-50 border-yellow-200', text: 'text-yellow-700', bar: 'bg-yellow-400', label: 'INTERMEDIÁRIO' },
+  alto:         { bg: 'bg-orange-50 border-orange-200', text: 'text-orange-700', bar: 'bg-orange-500', label: 'ALTO' },
+  muito_alto:   { bg: 'bg-red-50    border-red-200',    text: 'text-red-700',    bar: 'bg-red-500',    label: 'MUITO ALTO' },
+  critico:      { bg: 'bg-red-100   border-red-300',    text: 'text-red-800',    bar: 'bg-red-700',    label: 'CRÍTICO' },
 };
 
 const CONFLITO_COLOR: Record<GrauConflito, { bg: string; text: string; dot: string; label: string }> = {
@@ -93,11 +99,13 @@ function hashCRM(crm: string): string {
 // ══════════════════════════════════════════════════════════════
 
 function IntelligencePanel({ onComplete }: { onComplete: () => void }) {
-  const { state } = useApp();
+  const { state, dispatch } = useApp();
   const consultation = state.activeConsultation;
   const anamnese = consultation?.anamnese;
-  const hipoteses = consultation?.apoio_diagnostico?.hipoteses ?? [];
-  const suggestions = consultation?.plano_terapeutico?.farmacologico ?? [];
+  const hipotesesRaw = consultation?.apoio_diagnostico?.hipoteses;
+  const hipoteses = useMemo(() => hipotesesRaw ?? [], [hipotesesRaw]);
+  const suggestionsRaw = consultation?.plano_terapeutico?.farmacologico;
+  const suggestions = useMemo(() => suggestionsRaw ?? [], [suggestionsRaw]);
   const diagnosticoSelecionado = consultation?.diagnostico_selecionado ?? '';
 
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -110,17 +118,20 @@ function IntelligencePanel({ onComplete }: { onComplete: () => void }) {
   const diagnosticoId = selectedHipotese?.id ?? '';
 
   // Compute engines (once, on mount)
-  const risco: AvaliacaoRiscoClinico | null = useMemo(() => {
-    if (!anamnese) return null;
-    try { return avaliarRiscoClinico(anamnese, suggestions); }
-    catch { return null; }
-  }, [anamnese, suggestions]);
+  //
+  // RM-46-01/02: `avaliarRiscoSeguro`/`avaliarConflitosSeguro`
+  // (`@/lib/clinical-panel-safety`) substituem os antigos `try { ... }
+  // catch { return null/[] }` inline — uma exceção do motor (bug interno,
+  // dado com formato inesperado) NÃO é mais indistinguível de "anamnese
+  // incompleta"/"sem conflitos entre diretrizes". Antes, um erro real
+  // fazia a UI mostrar um card VERDE afirmando "as principais sociedades
+  // científicas apresentam concordância" — fallback clínico silencioso,
+  // uma falha de cálculo disfarçada de afirmação de segurança positiva.
+  const riscoResultado = useMemo(() => avaliarRiscoSeguro(anamnese, suggestions), [anamnese, suggestions]);
+  const risco: AvaliacaoRiscoClinico | null = riscoResultado.status === 'ok' ? riscoResultado.dados : null;
 
-  const conflitos: ConflitoGuideline[] = useMemo(() => {
-    if (!diagnosticoId) return [];
-    try { return detectarConflitos(diagnosticoId); }
-    catch { return []; }
-  }, [diagnosticoId]);
+  const conflitosResultado = useMemo(() => avaliarConflitosSeguro(diagnosticoId), [diagnosticoId]);
+  const conflitos: ConflitoGuideline[] = conflitosResultado.status === 'ok' ? conflitosResultado.dados : [];
 
   const trustScores: MedicalTrustScore[] = useMemo(() => {
     if (!suggestions.length) return [];
@@ -179,7 +190,12 @@ function IntelligencePanel({ onComplete }: { onComplete: () => void }) {
 
         {/* ═══ TAB 1 — CLINICAL RISK ═══════════════════════════ */}
         <TabsContent value="risco" className="mt-4 space-y-3">
-          {!risco ? (
+          {riscoResultado.status === 'erro' ? (
+            <Alert variant="destructive">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertDescription className="text-sm">Erro ao calcular o risco clínico — não confie neste painel; revise manualmente os dados do paciente.</AlertDescription>
+            </Alert>
+          ) : !risco ? (
             <Alert><AlertDescription className="text-sm">Anamnese incompleta — dados insuficientes para avaliação de risco.</AlertDescription></Alert>
           ) : (
             <>
@@ -293,7 +309,12 @@ function IntelligencePanel({ onComplete }: { onComplete: () => void }) {
 
         {/* ═══ TAB 2 — GUIDELINE CONFLICTS ═════════════════════ */}
         <TabsContent value="conflitos" className="mt-4 space-y-3">
-          {conflitos.length === 0 ? (
+          {conflitosResultado.status === 'erro' ? (
+            <Alert variant="destructive">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertDescription className="text-sm">Não foi possível verificar conflitos entre diretrizes para este diagnóstico — a checagem falhou, revise manualmente antes de prescrever.</AlertDescription>
+            </Alert>
+          ) : conflitos.length === 0 ? (
             <Card className="border-green-200 bg-green-50">
               <CardContent className="pt-4 pb-3 flex items-center gap-3">
                 <CheckCircle2 className="w-5 h-5 text-green-600" />
@@ -555,7 +576,16 @@ function IntelligencePanel({ onComplete }: { onComplete: () => void }) {
       </Tabs>
 
       {/* Continue button */}
-      <Button className="w-full bg-blue-600 hover:bg-blue-700 gap-2" onClick={onComplete}>
+      <Button
+        className="w-full bg-blue-600 hover:bg-blue-700 gap-2"
+        onClick={() => {
+          // RM-53 (RM41-023): captura o risco calculado nesta etapa —
+          // despachado aqui (evento de clique), nunca num efeito, e só se
+          // o motor realmente calculou um resultado (nunca fabricado).
+          if (risco) dispatch({ type: 'SET_RISCO_CALCULADO', payload: risco });
+          onComplete();
+        }}
+      >
         <Pill className="w-4 h-4" />
         Continuar para Terapêutica
         <ChevronRight className="w-4 h-4" />
@@ -571,8 +601,10 @@ function IntelligencePanel({ onComplete }: { onComplete: () => void }) {
 function ValidacaoPanel({ onComplete }: { onComplete: () => void }) {
   const { state } = useApp();
   const consultation = state.activeConsultation;
-  const suggestions = consultation?.plano_terapeutico?.farmacologico ?? [];
-  const hipoteses = consultation?.apoio_diagnostico?.hipoteses ?? [];
+  const suggestionsRaw = consultation?.plano_terapeutico?.farmacologico;
+  const suggestions = useMemo(() => suggestionsRaw ?? [], [suggestionsRaw]);
+  const hipotesesRaw = consultation?.apoio_diagnostico?.hipoteses;
+  const hipoteses = useMemo(() => hipotesesRaw ?? [], [hipotesesRaw]);
   const diagnosticoSelecionado = consultation?.diagnostico_selecionado ?? '';
   const anamnese = consultation?.anamnese;
   const crm = state.settings.medico?.crm ?? 'CRM-UNKNOWN';
@@ -593,6 +625,7 @@ function ValidacaoPanel({ onComplete }: { onComplete: () => void }) {
   // Auto-register recommendations on mount
   useEffect(() => {
     if (!suggestions.length || registradas.length > 0) return;
+    let cancelado = false;
     const ids: string[] = [];
     for (const sug of suggestions) {
       try {
@@ -616,7 +649,12 @@ function ValidacaoPanel({ onComplete }: { onComplete: () => void }) {
         ids.push(rec.id);
       } catch { /* continue */ }
     }
-    setRegistradas(ids);
+    // RM-52 (react-hooks/set-state-in-effect): o registro em si (write
+    // externo via registrarRecomendacao) é o efeito legítimo; o setState que
+    // apenas espelha o resultado na UI é adiado para um microtask para não
+    // disparar um re-render síncrono dentro do próprio efeito.
+    queueMicrotask(() => { if (!cancelado) setRegistradas(ids); });
+    return () => { cancelado = true; };
   }, [suggestions, diagnosticoId, diagnosticoSelecionado, selectedHipotese, registradas.length]);
 
   const handleSave = () => {
@@ -825,7 +863,16 @@ export default function NovaConsulta() {
 
   const initConsultation = () => {
     if (!pacienteNome.trim()) return;
-    const id = Date.now().toString();
+    // RM-46-04: `Date.now().toString()` (resolução de milissegundo) podia
+    // colidir entre duas consultas criadas muito próximas no tempo (duplo
+    // clique, duplo disparo de evento) — como todo o pipeline de
+    // sync/merge (RM-42/44/45) usa `id` como identificador ESTÁVEL para
+    // deduplicar/localizar consultas, uma colisão faria duas consultas
+    // clínicas DISTINTAS serem tratadas como a mesma (edição de uma
+    // sobrescrevendo a outra no array, bloqueio cruzado de sincronização).
+    // Reutiliza `newIdempotencyKey()` (já testado para unicidade em
+    // `sync-engine.test.ts`) em vez de duplicar a lógica de geração de UUID.
+    const id = newIdempotencyKey();
     setConsultationId(id);
     dispatch({
       type: 'NEW_CONSULTATION',

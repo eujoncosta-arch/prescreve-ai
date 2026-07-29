@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import {
   Building2, Package, FlaskConical, BookOpen, FileText, Users,
-  Stethoscope, ClipboardList, CheckCircle, TrendingUp, Award,
-  BarChart3, Activity, ArrowRight, Globe, Star, Shield,
-  Zap, Brain, Heart, Pill, ChevronRight, ExternalLink,
+  Stethoscope, ClipboardList, CheckCircle, TrendingUp,
+  BarChart3, Activity, ArrowRight, Star, Shield,
+  Zap, Brain, Heart, Pill, ExternalLink,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { LABORATORIOS } from '@/lib/lab-showcase';
@@ -19,7 +19,6 @@ const TOTAL_MARCAS       = BIBLIOTECA_FARMACEUTICA.filter(p => p.laboratorio_id 
 const TOTAL_MOLECULAS    = new Set(BIBLIOTECA_FARMACEUTICA.filter(p => p.laboratorio_id === 'eurofarma').map(p => p.molecula.toLowerCase().split(' ')[0])).size;
 const TOTAL_BULAS        = BIBLIOTECA_FARMACEUTICA.filter(p => p.laboratorio_id === 'eurofarma').length * 2;
 const PRESCRICOES_MES    = LAB.marcas.reduce((s, m) => s + (m.prescricoes_mes_estimadas ?? 0), 0);
-const TOTAL_CENARIOS     = LAB.cenarios.length;
 
 // ─── Chart data ───────────────────────────────────────────────────────────────
 
@@ -130,13 +129,12 @@ function DonutChart({ data }: { data: { label: string; sublabel: string; valor: 
   const stroke = 20;
   const C = 2 * Math.PI * r;
 
-  let offset = 0;
-  const slices = data.map(d => {
+  const slices = data.reduce<Array<typeof data[number] & { offset: number; len: number }>>((acc, d) => {
+    const prevOffset = acc.length > 0 ? acc[acc.length - 1].offset + acc[acc.length - 1].len + 2 : 0;
     const len = (d.pct / 100) * C;
-    const s = { ...d, offset, len };
-    offset += len + 2;
-    return s;
-  });
+    acc.push({ ...d, offset: prevOffset, len });
+    return acc;
+  }, []);
 
   return (
     <div className="flex items-center gap-6">

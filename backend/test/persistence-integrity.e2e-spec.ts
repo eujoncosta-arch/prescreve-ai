@@ -83,6 +83,16 @@ describe('Integridade de persistência — idempotência (e2e)', () => {
     },
     auditoria: { create: jest.fn().mockResolvedValue({}) },
   };
+  // RM-49 (RM41-017): `ConsultaService` agora envolve escrita clínica +
+  // auditoria em `$transaction(async (tx) => ...)` — `tx` aqui é o próprio
+  // mock (mesmas chamadas/asserções desta suíte continuam válidas); uma
+  // exceção lançada dentro do callback ainda propaga normalmente (nada
+  // precisa ser revertido neste mock simplificado, já que `create` só
+  // grava em `prescricoesPorChave` quando de fato resolve com sucesso).
+  // Atribuído FORA do literal — ver comentário em authorization.e2e-spec.ts.
+  (prismaMock as unknown as { $transaction: jest.Mock }).$transaction = jest.fn(
+    (cb: (tx: unknown) => unknown) => cb(prismaMock),
+  );
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -133,9 +143,7 @@ describe('Integridade de persistência — idempotência (e2e)', () => {
 
   const medicamento = {
     molecula: 'Losartana',
-    dose: '50mg',
-    via: 'VO',
-    frequencia: '1x/dia',
+    dose: { valor: 50, unidade: 'mg', frequencia: '1x/dia', via: 'VO' },
     duracao: '30d',
   };
 

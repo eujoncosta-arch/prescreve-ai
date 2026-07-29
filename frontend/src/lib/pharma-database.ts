@@ -146,6 +146,7 @@ import { PHARMA_DB_GINECO } from './pharma-database-gineco';
 import { PHARMA_DB_ONCO } from './pharma-database-onco';
 import { PHARMA_DB_ICU } from './pharma-database-icu';
 import { PHARMA_DB_PALLIATIVE } from './pharma-database-palliative';
+import { PHARMA_DB_RM54_GAPS } from './pharma-database-rm54-gaps';
 
 function produtoToQuickBrand(p: ProdutoComercial): QuickBrand {
   const formas = [...new Set(p.apresentacoes.map((a: { forma_farmaceutica: string }) => {
@@ -1262,7 +1263,10 @@ export const PHARMA_DB: QuickDrug[] = [
     uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
     marcas: [
       { nome: 'Glif®', laboratorio: 'Eurofarma', concentracoes: ['10 mg'], formas: ['Comprimido revestido'], lab_id: 'eurofarma', produto_id: 'euro-glif', verificado: true },
-      { nome: 'Forxiga', laboratorio: 'AstraZeneca', concentracoes: ['10 mg'], formas: ['Comprimido'] },
+      // RM-52 (RM41-015): `produto_id`/`verificado` ligados ao registro
+      // ANVISA real em lab-catalog.ts (antes órfão por causa da grafia
+      // "Farxiga®" lá, já corrigida para "Forxiga®").
+      { nome: 'Forxiga', laboratorio: 'AstraZeneca', concentracoes: ['10 mg'], formas: ['Comprimido'], lab_id: 'astrazeneca', produto_id: 'az-forxiga-10', verificado: true },
     ],
   },
 
@@ -3081,11 +3085,11 @@ export function getDrugById(id: string): QuickDrug | undefined {
 // ─── BANCO UNIFICADO (PHARMA_DB + CARDIO + ENDO) ──────────────
 // getAllDrugs() agrega todas as extensões temáticas.
 // Use esta função em vez de PHARMA_DB diretamente nas engines de
-// safety-rules, drug-resolver e knowledge-graph.
+// safety-rules e knowledge-graph.
 let _allDrugs: QuickDrug[] | null = null;
 export function getAllDrugs(): QuickDrug[] {
   if (_allDrugs) return _allDrugs;
-  const raw = [...PHARMA_DB, ...PHARMA_DB_CARDIO, ...PHARMA_DB_ENDO, ...PHARMA_DB_INFECTOLOGY_AB, ...PHARMA_DB_INFECTOLOGY_AF, ...PHARMA_DB_PULMO_A, ...PHARMA_DB_PULMO_B, ...PHARMA_DB_NEURO_A, ...PHARMA_DB_NEURO_B, ...PHARMA_DB_GASTRO_A, ...PHARMA_DB_NEFRO, ...PHARMA_DB_PEDIATRIA, ...PHARMA_DB_GINECO, ...PHARMA_DB_ONCO, ...PHARMA_DB_ICU, ...PHARMA_DB_PALLIATIVE];
+  const raw = [...PHARMA_DB, ...PHARMA_DB_CARDIO, ...PHARMA_DB_ENDO, ...PHARMA_DB_INFECTOLOGY_AB, ...PHARMA_DB_INFECTOLOGY_AF, ...PHARMA_DB_PULMO_A, ...PHARMA_DB_PULMO_B, ...PHARMA_DB_NEURO_A, ...PHARMA_DB_NEURO_B, ...PHARMA_DB_GASTRO_A, ...PHARMA_DB_NEFRO, ...PHARMA_DB_PEDIATRIA, ...PHARMA_DB_GINECO, ...PHARMA_DB_ONCO, ...PHARMA_DB_ICU, ...PHARMA_DB_PALLIATIVE, ...PHARMA_DB_RM54_GAPS];
   // Deduplicate brands within each molecule: same nome (case-insensitive) → keep verificado:true or first
   _allDrugs = raw.map(drug => {
     const seen = new Map<string, QuickBrand>();

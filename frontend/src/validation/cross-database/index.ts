@@ -20,7 +20,8 @@ export function formatSyncMarkdown(report = buildSyncReport()): string {
   L.push('|---|---|');
   L.push(`| Total analisado | ${report.totalAnalisado} |`);
   L.push(`| Compatíveis | ${report.compativeis} |`);
-  L.push(`| Divergentes | ${report.divergentes} |`);
+  L.push(`| Divergentes (risco aberto) | ${report.divergentes} |`);
+  L.push(`| Aceitos (decisão de escopo documentada — RM-54) | ${report.aceitos} |`);
   L.push(`| Críticos | ${report.criticos} |`);
   L.push('');
   L.push('## Fontes comparadas');

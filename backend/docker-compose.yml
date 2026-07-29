@@ -1,0 +1,41 @@
+# ============================================================
+# PRESCREVE-AI — PostgreSQL local para desenvolvimento (RM-37)
+#
+# Não existia NENHUM Docker no repositório antes desta auditoria — cada
+# desenvolvedor apontava DATABASE_URL para o que tivesse à mão (Postgres
+# local instalado manualmente, ou o próprio Neon de produção/staging),
+# sem garantia de estar na mesma versão do Postgres usada em produção.
+# Este compose sobe um Postgres LOCAL, isolado, na mesma major version
+# usada em produção (Neon) — elimina "funciona na minha máquina" por
+# divergência de versão do banco.
+#
+# Uso:
+#   docker compose up -d
+#   DATABASE_URL="postgresql://prescreve:prescreve@localhost:5432/prescreve_ai?schema=public"
+#   npm run db:migrate:dev      # aplica as migrations versionadas
+#   npm run db:seed             # usuário de demonstração (opcional)
+#
+# Este arquivo é SOMENTE para desenvolvimento local — produção usa Neon
+# (serverless Postgres gerenciado), nunca este container.
+# ============================================================
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: prescreve
+      POSTGRES_PASSWORD: prescreve
+      POSTGRES_DB: prescreve_ai
+    ports:
+      - '5432:5432'
+    volumes:
+      - prescreve_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U prescreve -d prescreve_ai']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  prescreve_postgres_data:

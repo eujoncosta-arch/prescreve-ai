@@ -1,0 +1,119 @@
+name: CI
+
+# RM-49 (RM41-025): pipeline obrigatório antes deste RM não existia
+# (.github/workflows não existia no repositório). Todo gate abaixo é
+# BLOQUEANTE — nenhum job usa `continue-on-error`, e o lint roda sem
+# `--fix` (falha em vez de mascarar).
+#
+# RM-56.1: os testes agora rodam com `--coverage` em ambos os projetos.
+# Os thresholds por-arquivo em frontend/vitest.config.ts e no bloco
+# "jest.coverageThreshold" de backend/package.json passam a ser
+# REALMENTE aplicados aqui — antes, nenhum comando de CI passava a flag
+# de cobertura, então uma regressão de cobertura nos motores clínicos
+# críticos (safety-rules, dose-calculator, dosing-engine, icu-engine,
+# pediatric-engine, clinical-risk-engine, pharma-core) ou nos módulos de
+# segurança do backend (auth, mfa, identifier-hash, ownership de
+# consulta) nunca falhava o pipeline. Verificado nesta sessão: rebaixar
+# um threshold artificialmente e rodar `test:coverage`/`test:cov`
+# produz `exit code 1` com mensagem explícita de qual arquivo e qual
+# métrica não bateu a meta — não é apenas configuração inerte.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint (bloqueante — sem --fix)
+        run: npx eslint .
+
+      - name: Unit tests + coverage (bloqueante — thresholds por-arquivo em vitest.config.ts)
+        run: npm run test:coverage
+
+      - name: Build (inclui gates RM-23/RM-24/RM-49 de prebuild)
+        run: npm run build
+
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: prescreve
+          POSTGRES_PASSWORD: prescreve_ci
+          POSTGRES_DB: prescreve_ai_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U prescreve"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://prescreve:prescreve_ci@localhost:5432/prescreve_ai_ci?schema=public
+      JWT_SECRET: ci-test-secret-abcdefghijklmnopqrstuvwxyz-0123456789
+      JWT_REFRESH_SECRET: ci-test-refresh-secret-zyxwvutsrqponmlkjih-9876543210
+      MFA_ENCRYPTION_KEY: 'b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1'
+      IDENTIFIER_HMAC_KEY: 'c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1'
+      APP_ENV: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint (bloqueante — sem --fix)
+        run: npx eslint "{src,apps,libs,test}/**/*.ts"
+
+      - name: Aplicar migrations no Postgres real do serviço
+        run: npx prisma migrate deploy
+
+      - name: Unit tests + coverage (bloqueante — coverageThreshold no package.json)
+        run: npm run test:cov
+
+      - name: E2E tests (jest, inclui postgres-real.e2e-spec.ts contra o serviço acima)
+        run: npm run test:e2e
+
+      - name: Build
+        run: npm run build
+
+  # RM-49: gate agregador — usado como "required check" único no branch
+  # protection do GitHub, em vez de listar os dois jobs individualmente.
+  ci-ok:
+    needs: [frontend, backend]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Todos os gates de CI passaram."

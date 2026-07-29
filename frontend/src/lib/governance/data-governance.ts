@@ -52,6 +52,11 @@ const SALT_QUALIFIERS = [
   'di-hidrato', 'dihidrato', 'monoidratado', 'monoidratada', 'mononitrato', 'dinitrato',
   'acetato', 'succinato', 'tartarato', 'hemitartarato', 'valerato', 'dipropionato',
   'fosfato', 'mesilato', 'estolato', 'trometamol', 'medoxomila',
+  // RM-54: sufixos de éster/pró-fármaco — mesma convenção de "medoxomila"
+  // (ex.: "Dabigatrana Etexilato" e "Dabigatrana" devem canonicalizar para
+  // a MESMA molécula; sem isto, o gate RM-24 reportava um falso positivo
+  // de "medicamento ausente" para uma molécula que já existe no PHARMA_DB).
+  'etexilato', 'proxetila', 'axetila',
 ];
 
 /**

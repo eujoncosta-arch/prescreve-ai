@@ -4,11 +4,11 @@ import React, { useState, useMemo } from 'react';
 import {
   Share2, Download, Upload, CheckCircle2, AlertTriangle,
   Globe, Database, Zap, FileCode2, RefreshCw, Building2,
-  ChevronDown, ChevronRight, Copy, FlaskConical,
+  Copy,
 } from 'lucide-react';
 import {
   exportarFHIR, importarFHIR, simularIntegracao, converterHL7,
-  validarFHIR, mapearCID, mapearLOINC, gerarGuiaTISS,
+  validarFHIR, gerarGuiaTISS,
   CID_SNOMED_MAP, EXAME_LOINC_MAP,
   type DadosClinicos, type SimulacaoIntegracao,
 } from '@/lib/interoperability-engine';
@@ -380,7 +380,7 @@ export default function InteroperabilidadePage() {
                 return (
                   <div className="space-y-3">
                     <div className="bg-gray-900 text-green-400 text-xs p-3 rounded-lg font-mono">
-                      <p className="text-gray-400 mb-1">// Mensagem HL7 v2.x entrada (simplificada)</p>
+                      <p className="text-gray-400 mb-1">{'// Mensagem HL7 v2.x entrada (simplificada)'}</p>
                       <p>MSH|^~\&|{hl7msg.msh.sending_app}|{hl7msg.msh.receiving_app}</p>
                       <p>PID|1||{hl7msg.pid?.patient_id}||{hl7msg.pid?.name}||{hl7msg.pid?.dob}|{hl7msg.pid?.sex}</p>
                       {hl7msg.obx?.map((o, i) => (

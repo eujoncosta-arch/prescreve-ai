@@ -5,11 +5,10 @@
  */
 
 import { calcularDosagem, calcularBSA, getMedicamentoById, idadeDias } from './dosing-engine';
-import { screenPIMs, assessFrailty, calcAnticholinergicBurden, calcClCrCockcroft, generateDeprescribingPlan } from './geriatric-engine';
+import { screenPIMs, assessFrailty, calcAnticholinergicBurden, calcClCrCockcroft } from './geriatric-engine';
 import { detectarConflitos } from './guideline-conflict-engine';
-import { calcSofa, calcQsofa, assessICUPatient, calcVasopressorInfusion, calcPPI, calcVCAlvo, ICUPatient } from './icu-engine';
-import { calcBSAMosteller, calcMASCC, calcKhorana, assessOncologyPatient, OncologyPatient } from './oncology-engine';
-import { assessPalliativePatient, PalliativePatient } from './palliative-engine';
+import { assessICUPatient, ICUPatient } from './icu-engine';
+import { assessOncologyPatient, OncologyPatient } from './oncology-engine';
 import { calcDosePediatrica, PediatricPatient } from './pediatric-engine';
 import { screenObstetricSafety, ObstetricProfile } from './obstetric-engine';
 import { calcularNNT, calcularNNH } from './outcome-engine';
@@ -34,7 +33,7 @@ import { EVIDENCE_DB, getTotalEstudosByDiagnostico, getTotalPacientesByDiagnosti
 import { gerarTimeline, calcularPesoHistorico } from './evidence-timeline';
 import { gerarPrognostico, PerfilPrognostico } from './prognosis-engine';
 import { gerarDeltaClinico, listarAlertas, getEstadoMonitoramento } from './scientific-update-engine';
-import { gerarPainelRWE, registrarCaso as registrarCasoRWE, listarRWE } from './rwe-engine';
+import { gerarPainelRWE, listarRWE } from './rwe-engine';
 
 // ─── INFRA DE MEDIÇÃO ─────────────────────────────���───────────────────────────
 
@@ -198,17 +197,6 @@ function mkPed(i: number): PediatricPatient {
   return { pesoKg: age * 3 + 4, alturaCm: age * 5 + 75, idadeMeses: age * 12 };
 }
 
-function mkPaliativo(i: number): PalliativePatient {
-  return {
-    idadeAnos: 55 + (i % 30), pesoKg: 50 + (i % 30),
-    diagnosticoPrincipal: randOf(['ca_pulmao','ca_pancreas','ca_mama','icc_terminal','dpoc_terminal']),
-    pps: 10 + (i % 9) * 10,
-    opioideAtual: randOf(['morfina','oxicodona','fentanil','hidromorfona']),
-    doseOpioideAtual: 30 + (i % 10) * 10, viaAtual: 'VO',
-    funcaoRenal: randOf(['normal','moderada','grave']),
-  };
-}
-
 function mkPerfil(i: number): PerfilPrognostico {
   return {
     cid: randOf(['I50','J44','I10','E11','N18']),
@@ -265,7 +253,7 @@ log('=== PHASE 22.4 STRESS TEST: START ===');
 const phaseStart = performance.now();
 
 log('[1/9] Concurrency test — 100 simultaneous queries...');
-const concTests = await Promise.all([
+await Promise.all([
   benchAsync('concurrent_detectarConflitos', 100,
     () => detectarConflitos(randOf(DIAGS))),
   benchAsync('concurrent_calcClCrCockcroft', 100,
@@ -541,7 +529,7 @@ const coldMs = performance.now() - t0cold;
 
 // Second call (warm — should be cached)
 const t0warm = performance.now();
-const drugsWarm = getAllDrugs();
+getAllDrugs();
 const warmMs = performance.now() - t0warm;
 
 const cacheSpeedup = coldMs / Math.max(warmMs, 0.001);

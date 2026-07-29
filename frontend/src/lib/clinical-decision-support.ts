@@ -1068,11 +1068,6 @@ export function analyzeClinical(anamnesis: Anamnesis): DiagnosticSupport {
       'O diagnóstico final é de responsabilidade exclusiva do médico.';
   }
 
-  // Exames prioritários (união dos exames críticos das top 3 hipóteses)
-  const examesPrioritarios = Array.from(new Set(
-    resultados.slice(0, 3).flatMap(h => (h.exames_faltantes ?? []).slice(0, 3))
-  )).slice(0, 8);
-
   return {
     hipoteses: resultados,
     sintese_clinica: sintese,

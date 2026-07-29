@@ -8,13 +8,12 @@ import {
   IMPACTO_META,
   AUDIT_META,
   NIVEL_EVIDENCIA_LABEL,
-  GRAU_RECOMENDACAO_LABEL,
+  
   type Guideline,
   type GuidelineStatus,
-  type ReviewStatus,
+  
 } from '@/lib/governance';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   ShieldCheck,
@@ -44,7 +43,7 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import {
   gerarDashboardGovernanca,
-  ALERTA_META,
+  
   STATUS_MODULO_META,
   scoreGlobalCor,
 } from '@/lib/governance-dashboard';
@@ -548,7 +547,7 @@ function ReviewCard({ review: r, onApprove, onReject }: {
           {r.parecer && (
             <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg">
               <p className="text-[10px] font-semibold text-slate-500 mb-1">Parecer do especialista:</p>
-              <p className="text-xs text-slate-700 italic">"{r.parecer}"</p>
+              <p className="text-xs text-slate-700 italic">&quot;{r.parecer}&quot;</p>
             </div>
           )}
           {r.pendencias && r.pendencias.length > 0 && (

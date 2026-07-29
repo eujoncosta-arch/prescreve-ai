@@ -6,12 +6,11 @@ import {
   SCIENTIFIC_REPOSITORY,
   TIPO_LABELS,
   TIPO_COLORS,
-  getEvidenceForCondition,
-  getEvidenceByType,
+  
+  
 } from '@/lib/scientific-repository';
 import type { ScientificEntry } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {

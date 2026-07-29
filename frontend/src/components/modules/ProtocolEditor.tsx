@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import type { SmartProtocol, ProtocolCategoria, ProtocolDrug } from '@/lib/protocols';
 import { CATEGORIA_LABEL } from '@/lib/protocols';
 import {
@@ -28,37 +28,25 @@ interface Props {
   onSave: (data: Omit<SmartProtocol, 'id' | 'criado_em' | 'atualizado_em' | 'versao'>) => void;
 }
 
+// RM-52 (react-hooks/set-state-in-effect): o formulário sincronizava seu
+// estado local com a prop `initial` via useEffect+setState toda vez que
+// `initial`/`open` mudavam. Convertido para inicializadores lazy de
+// useState — o componente é remontado pelo chamador (via `key` baseada em
+// `initial?.id`/`open`, ver protocolos/page.tsx) sempre que o alvo de edição
+// muda, o que já garante o reset sem precisar de um efeito.
 export function ProtocolEditor({ open, onClose, initial, onSave }: Props) {
-  const [nome, setNome] = useState('');
-  const [condicao, setCondicao] = useState('');
-  const [categoria, setCategoria] = useState<ProtocolCategoria>('cronica');
-  const [drugs, setDrugs] = useState<ProtocolDrug[]>([{ ...EMPTY_DRUG }]);
-  const [naoFarm, setNaoFarm] = useState('');
-  const [seguimento, setSeguimento] = useState('');
-  const [monitorizacao, setMonitorizacao] = useState('');
-  const [notas, setNotas] = useState('');
-  const [tags, setTags] = useState('');
-  const [favorito, setFavorito] = useState(false);
-
-  useEffect(() => {
-    if (initial) {
-      setNome(initial.nome);
-      setCondicao(initial.condicao);
-      setCategoria(initial.categoria);
-      setDrugs(initial.farmacologico.length > 0 ? initial.farmacologico.map(d => ({ ...d })) : [{ ...EMPTY_DRUG }]);
-      setNaoFarm(initial.nao_farmacologico.join('\n'));
-      setSeguimento(initial.seguimento);
-      setMonitorizacao(initial.monitorizacao.join('\n'));
-      setNotas(initial.notas ?? '');
-      setTags(initial.tags.join(', '));
-      setFavorito(initial.favorito);
-    } else {
-      setNome(''); setCondicao(''); setCategoria('cronica');
-      setDrugs([{ ...EMPTY_DRUG }]);
-      setNaoFarm(''); setSeguimento(''); setMonitorizacao('');
-      setNotas(''); setTags(''); setFavorito(false);
-    }
-  }, [initial, open]);
+  const [nome, setNome] = useState(initial?.nome ?? '');
+  const [condicao, setCondicao] = useState(initial?.condicao ?? '');
+  const [categoria, setCategoria] = useState<ProtocolCategoria>(initial?.categoria ?? 'cronica');
+  const [drugs, setDrugs] = useState<ProtocolDrug[]>(
+    initial && initial.farmacologico.length > 0 ? initial.farmacologico.map(d => ({ ...d })) : [{ ...EMPTY_DRUG }],
+  );
+  const [naoFarm, setNaoFarm] = useState(initial?.nao_farmacologico.join('\n') ?? '');
+  const [seguimento, setSeguimento] = useState(initial?.seguimento ?? '');
+  const [monitorizacao, setMonitorizacao] = useState(initial?.monitorizacao.join('\n') ?? '');
+  const [notas, setNotas] = useState(initial?.notas ?? '');
+  const [tags, setTags] = useState(initial?.tags.join(', ') ?? '');
+  const [favorito, setFavorito] = useState(initial?.favorito ?? false);
 
   const updateDrug = (i: number, field: keyof ProtocolDrug, value: string) => {
     setDrugs(prev => prev.map((d, idx) => idx === i ? { ...d, [field]: value } : d));

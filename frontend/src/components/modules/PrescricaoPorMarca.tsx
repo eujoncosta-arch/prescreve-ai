@@ -4,11 +4,10 @@ import { useState } from 'react';
 import { useApp } from '@/lib/store';
 import { getProdutosByMolecula, EUROFARMA_CATALOG } from '@/lib/eurofarma-sync';
 import { BulaViewer } from './BulaViewer';
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
-  Building2, FlaskConical, CheckCircle2, AlertTriangle,
+  Building2, FlaskConical, CheckCircle2,
   ChevronDown, ChevronUp, BookOpen, Shield,
 } from 'lucide-react';
 

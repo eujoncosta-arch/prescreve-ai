@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import {
-  Network, Search, Filter, ZoomIn, ZoomOut, RotateCcw,
-  AlertTriangle, CheckCircle2, Info, TrendingUp, Target,
+  Network, Search, ZoomIn, ZoomOut, RotateCcw,
+  AlertTriangle, CheckCircle2, TrendingUp,
   Layers, GitBranch, Cpu, ChevronRight,
 } from 'lucide-react';
 import {
@@ -59,9 +59,15 @@ function GrafoSVG({
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const dragging = useRef(false);
   const lastMouse = useRef({ x: 0, y: 0 });
+  // RM-52 (react-hooks/refs): o cursor no JSX não pode ler `dragging.current`
+  // durante o render — espelhamos o mesmo valor num state só para exibição,
+  // mantendo o ref para a checagem síncrona em handleMouseMove (evita
+  // closures desatualizadas em movimentos rápidos do mouse).
+  const [isDragging, setIsDragging] = useState(false);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     dragging.current = true;
+    setIsDragging(true);
     lastMouse.current = { x: e.clientX, y: e.clientY };
   };
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -69,7 +75,7 @@ function GrafoSVG({
     setPan(p => ({ x: p.x + e.clientX - lastMouse.current.x, y: p.y + e.clientY - lastMouse.current.y }));
     lastMouse.current = { x: e.clientX, y: e.clientY };
   };
-  const handleMouseUp = () => { dragging.current = false; };
+  const handleMouseUp = () => { dragging.current = false; setIsDragging(false); };
 
   const nosMap = useMemo(() => new Map(dados.nos.map(n => [n.id, n])), [dados.nos]);
 
@@ -90,7 +96,7 @@ function GrafoSVG({
         viewBox="0 0 800 480"
         onMouseDown={handleMouseDown} onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp}
-        style={{ cursor: dragging.current ? 'grabbing' : 'grab' }}
+        style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
       >
         <g transform={`translate(${pan.x},${pan.y}) scale(${zoom})`}>
           {/* Arestas */}
@@ -384,7 +390,7 @@ export default function KnowledgeGraphPage() {
               </div>
             )}
             {buscaTermo.length >= 2 && resultadosBusca.length === 0 && (
-              <div className="text-center py-8 text-gray-400 text-sm">Nenhuma entidade encontrada para "{buscaTermo}"</div>
+              <div className="text-center py-8 text-gray-400 text-sm">Nenhuma entidade encontrada para &quot;{buscaTermo}&quot;</div>
             )}
           </div>
         )}

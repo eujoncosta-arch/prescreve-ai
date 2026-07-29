@@ -153,7 +153,6 @@ const DELTAS_DEMO: DeltaClinico[] = [
 // ══════════════════════════════════════════════════════════════
 
 const KEY_ALERTAS = 'prescreve_ai_alertas_atualizacao_v1';
-const KEY_MONITOR = 'prescreve_ai_monitoramento_estado_v1';
 
 function loadAlertas(): AlertaAtualizacao[] {
   if (typeof window === 'undefined') return [];
@@ -164,7 +163,12 @@ function saveAlertas(d: AlertaAtualizacao[]) {
   localStorage.setItem(KEY_ALERTAS, JSON.stringify(d.slice(-1000)));
 }
 
-function genId(p: string) { return `${p}-${Date.now().toString(36).toUpperCase()}`; }
+// Contador monotônico evita IDs duplicados quando várias chamadas ocorrem
+// dentro do mesmo milissegundo (ex.: seedScientificUpdateDemo() gerando
+// vários alertas em um laço síncrono) — Date.now() sozinho colidia nesse
+// caso, causando chaves React duplicadas na lista de alertas.
+let genIdCounter = 0;
+function genId(p: string) { return `${p}-${Date.now().toString(36).toUpperCase()}-${(genIdCounter++).toString(36)}`; }
 
 // ══════════════════════════════════════════════════════════════
 // API PÚBLICA

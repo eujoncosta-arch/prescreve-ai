@@ -1,24 +1,24 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   type PerformanceHospital,
-  listarHospitais, gerarRanking, gerarBenchmark,
+  gerarRanking,
   seedHospitalQualityDemo,
   STATUS_INDICADOR_META, CLASSIFICACAO_META, BENCHMARK_DB,
 } from '@/lib/hospital-quality';
 
-export default function QualidadeHospitalPage() {
-  const [hospitais, setHospitais] = useState<PerformanceHospital[]>([]);
-  const [selecionado, setSelecionado] = useState<PerformanceHospital | null>(null);
-  const [aba, setAba] = useState<'ranking' | 'indicadores' | 'benchmark'>('ranking');
+// RM-52 (react-hooks/set-state-in-effect): seed é idempotente — chamado
+// uma vez no escopo do módulo em vez de num useEffect de mount.
+seedHospitalQualityDemo();
+const RANKING_INICIAL = gerarRanking();
 
-  useEffect(() => {
-    seedHospitalQualityDemo();
-    const ranking = gerarRanking();
-    setHospitais(ranking);
-    if (ranking.length > 0) setSelecionado(ranking[0]);
-  }, []);
+export default function QualidadeHospitalPage() {
+  const [hospitais] = useState<PerformanceHospital[]>(RANKING_INICIAL);
+  const [selecionado, setSelecionado] = useState<PerformanceHospital | null>(
+    RANKING_INICIAL.length > 0 ? RANKING_INICIAL[0] : null,
+  );
+  const [aba, setAba] = useState<'ranking' | 'indicadores' | 'benchmark'>('ranking');
 
   return (
     <div className="p-6 space-y-6 max-w-6xl mx-auto">

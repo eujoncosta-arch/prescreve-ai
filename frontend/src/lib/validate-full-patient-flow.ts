@@ -164,7 +164,7 @@ async function main() {
 
   // ── Step 3: Guideline Conflict Detection ───────────────────────────────────
   console.log('Step 3: Guideline Conflicts...');
-  const conflicts = tryRecord(3, 'Guideline Conflict Detection',
+  tryRecord(3, 'Guideline Conflict Detection',
     'detectarConflitos("icc")',
     () => detectarConflitos('icc'));
 
@@ -176,7 +176,7 @@ async function main() {
 
   // ── Step 5: Knowledge Graph ────────────────────────────────────────────────
   console.log('Step 5: Knowledge Graph...');
-  const graph = tryRecord(5, 'Knowledge Graph + relacionamentos carvedilol',
+  tryRecord(5, 'Knowledge Graph + relacionamentos carvedilol',
     'gerarMapaConhecimento + buscarRelacionamentos(carvedilol)',
     () => {
       const mapa = gerarMapaConhecimento();
@@ -186,7 +186,7 @@ async function main() {
 
   // ── Step 6: Dose Calculation ───────────────────────────────────────────────
   console.log('Step 6: Dose Calculation...');
-  const doseResults = tryRecord(6, 'Dose Calculation (5 target molecules)',
+  tryRecord(6, 'Dose Calculation (5 target molecules)',
     'carvedilol, furosemida, sacubitril_valsartana, eplerenona, empagliflozina',
     () => ['carvedilol', 'furosemida', 'sacubitril_valsartana', 'eplerenona', 'empagliflozina'].map(molId => {
       const med = getMedicamentoById(molId);
@@ -199,7 +199,7 @@ async function main() {
 
   // ── Step 7: FHIR Bundle ────────────────────────────────────────────────────
   console.log('Step 7: FHIR Bundle Export...');
-  const fhirBundle = tryRecord(7, 'FHIR R4 Bundle — gerarBundleClinico',
+  tryRecord(7, 'FHIR R4 Bundle — gerarBundleClinico',
     'Patient IC-FEr + 2 meds + 3 labs',
     () => {
       const dados: DadosClinicos = {
@@ -234,21 +234,21 @@ async function main() {
     peso: 82,
   };
 
-  const soap          = tryRecord(8,  'Copilot — Nota SOAP',              'ContextoClinico IC-FEr', () => gerarSOAP(ctx));
-  const resumo        = tryRecord(9,  'Copilot — Resumo Consulta',        'ContextoClinico',         () => gerarResumoConsulta(ctx));
-  const segundaOp     = tryRecord(10, 'Copilot — Segunda Opinião',        'ContextoClinico',         () => gerarSegundaOpiniao(ctx));
-  const hipotesesDif  = tryRecord(11, 'Copilot — Hipóteses Diferenciais', 'ContextoClinico',         () => gerarHipotesesDiferenciais(ctx));
-  const justificativa = tryRecord(12, 'Copilot — Justificativa carvedilol','carvedilol + ctx',        () => gerarJustificativa('carvedilol', ctx));
+  tryRecord(8,  'Copilot — Nota SOAP',              'ContextoClinico IC-FEr', () => gerarSOAP(ctx));
+  tryRecord(9,  'Copilot — Resumo Consulta',        'ContextoClinico',         () => gerarResumoConsulta(ctx));
+  tryRecord(10, 'Copilot — Segunda Opinião',        'ContextoClinico',         () => gerarSegundaOpiniao(ctx));
+  tryRecord(11, 'Copilot — Hipóteses Diferenciais', 'ContextoClinico',         () => gerarHipotesesDiferenciais(ctx));
+  tryRecord(12, 'Copilot — Justificativa carvedilol','carvedilol + ctx',        () => gerarJustificativa('carvedilol', ctx));
 
   // ── Step 9: Medical Trust Score ───────────────────────────────────────────
   console.log('Step 9: Medical Trust Score...');
-  const trustScore = tryRecord(13, 'Medical Trust Score — carvedilol',
+  tryRecord(13, 'Medical Trust Score — carvedilol',
     'TherapeuticSuggestion carvedilol + Anamnese IC-FEr',
     () => calcularMedicalTrustScore(primarySuggestion, anamnese, explanacao ?? undefined, riskResult ?? undefined));
 
   // ── Step 10: Physician Validation ─────────────────────────────────────────
   console.log('Step 10: Physician Validation...');
-  const review = tryRecord(14, 'Physician Validation — registrarReview',
+  tryRecord(14, 'Physician Validation — registrarReview',
     'veredicto=concordo, IC-FEr, carvedilol',
     () => registrarReview({
       medico_crm_hash: gerarIdPacienteAnonimo('CRM-SP-12345'),
@@ -263,7 +263,7 @@ async function main() {
       perfil_paciente: 'IC-FEr FE=35%, 58 anos, HAS+DM2, DRC G3a',
     }));
 
-  const boardVal = tryRecord(15, 'Board Validation — registrarBoardValidation',
+  tryRecord(15, 'Board Validation — registrarBoardValidation',
     'status=aprovada, IC-FEr, carvedilol',
     () => registrarBoardValidation({
       medico_crm_hash: gerarIdPacienteAnonimo('CRM-SP-12345'),
@@ -280,7 +280,7 @@ async function main() {
 
   // ── Step 11: Recommendation Registry ──────────────────────────────────────
   console.log('Step 11: Recommendation Registry...');
-  const regResult = tryRecord(16, 'Recommendation Registry — registrar + verificar',
+  tryRecord(16, 'Recommendation Registry — registrar + verificar',
     'carvedilol I50.0/icc',
     () => {
       const rec = registrarRecomendacao({
@@ -306,7 +306,7 @@ async function main() {
 
   // ── Step 12: Prognosis Engine ──────────────────────────────────────────────
   console.log('Step 12: Prognosis Engine...');
-  const prognostico = tryRecord(17, 'Prognosis Engine — IC-FEr + DM2 + HAS',
+  tryRecord(17, 'Prognosis Engine — IC-FEr + DM2 + HAS',
     'gerarPrognostico I50.0 horizonte=6m',
     () => {
       const perfil: PerfilPrognostico = {
@@ -322,7 +322,7 @@ async function main() {
 
   // ── Step 13: Evidence Base ─────────────────────────────────────────────────
   console.log('Step 13: Evidence DB...');
-  const evidenceStats = tryRecord(18, 'Evidence DB — busca IC no EVIDENCE_DB',
+  tryRecord(18, 'Evidence DB — busca IC no EVIDENCE_DB',
     'EVIDENCE_DB.find IC/cardio',
     () => {
       const cardio = EVIDENCE_DB.find(d =>
@@ -336,7 +336,7 @@ async function main() {
 
   // ── Step 14: Scientific Update Alerts ─────────────────────────────────────
   console.log('Step 14: Scientific Update Alerts...');
-  const alertas = tryRecord(19, 'Scientific Update Engine — listarAlertas',
+  tryRecord(19, 'Scientific Update Engine — listarAlertas',
     'todos os alertas',
     () => {
       const todos    = listarAlertas();
@@ -347,7 +347,7 @@ async function main() {
 
   // ── Step 15: PharmDB coverage ──────────────────────────────────────────────
   console.log('Step 15: PharmDB — marcas disponíveis...');
-  const pharmCoverage = tryRecord(20, 'PharmDB — marcas IC molecules',
+  tryRecord(20, 'PharmDB — marcas IC molecules',
     'carvedilol, furosemida, sacubitril_valsartana, eplerenona',
     () => {
       return ['carvedilol', 'furosemida', 'sacubitril_valsartana', 'eplerenona', 'metformina'].map(mol => {

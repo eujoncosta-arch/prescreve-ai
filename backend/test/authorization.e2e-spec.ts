@@ -109,6 +109,15 @@ describe('Autorização (e2e)', () => {
     },
     riskScore: { create: jest.fn().mockResolvedValue({ id: 'risk-1' }) },
   };
+  // RM-49 (RM41-017): atribuído FORA do literal (não como propriedade
+  // dentro dele) — uma referência circular a `prismaMock` dentro do
+  // próprio literal degrada a inferência de tipo do TypeScript para todo
+  // o objeto (visto em `test/support/fake-prisma.ts`), o que dispara
+  // `no-unsafe-*` do ESLint em acessos completamente não relacionados mais
+  // abaixo neste arquivo. Atribuir depois evita o problema.
+  (prismaMock as unknown as { $transaction: jest.Mock }).$transaction = jest.fn(
+    (cb: (tx: unknown) => unknown) => cb(prismaMock),
+  );
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({

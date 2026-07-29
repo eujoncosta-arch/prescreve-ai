@@ -899,11 +899,16 @@ export function calcDosePediatrica(
   // profundidade: um chamador pode pedir uma indicação existente mas
   // inadequada para a idade do paciente).
   const alertas: string[] = [...(indicEntry.alertas ?? []), ...(entry.contraindPediatrica ?? [])];
+  // RM-41/RM-48: prefixo "🚨" (não "⚠") — mesma convenção já usada em
+  // dose-calculator.ts (UNIT-AUDIT-01), onde a UI (DoseCalcCard.tsx)
+  // desabilita o botão "Aplicar" checando especificamente esse prefixo.
+  // Um alerta de contraindicação com o prefixo errado deixaria o botão
+  // habilitado para aplicar uma dose fora da faixa etária segura.
   if (indicEntry.idadeMinMeses !== undefined && idadeEfetiva < indicEntry.idadeMinMeses) {
-    alertas.unshift(`⚠ CONTRAINDICADO: idade mínima ${indicEntry.idadeMinMeses} meses. Paciente tem ${idadeEfetiva} meses.`);
+    alertas.unshift(`🚨 CONTRAINDICADO: idade mínima ${indicEntry.idadeMinMeses} meses. Paciente tem ${idadeEfetiva} meses.`);
   }
   if (indicEntry.idadeMaxMeses !== undefined && idadeEfetiva > indicEntry.idadeMaxMeses) {
-    alertas.unshift(`⚠ CONTRAINDICADO: esta indicação é válida até ${indicEntry.idadeMaxMeses} meses. Paciente tem ${idadeEfetiva} meses — reavaliar indicação/dose apropriada para a idade.`);
+    alertas.unshift(`🚨 CONTRAINDICADO: esta indicação é válida até ${indicEntry.idadeMaxMeses} meses. Paciente tem ${idadeEfetiva} meses — reavaliar indicação/dose apropriada para a idade.`);
   }
 
   // Calcular dose
@@ -1026,18 +1031,43 @@ export function calcDosePediatrica(
   }
 
   // Calcular volume se formulação líquida
+  //
+  // RM-52 (RM41-008): duas correções.
+  // (1) O regex exigia um denominador NUMÉRICO explícito ("N mg/M mL") —
+  //     o padrão mais comum na própria base ("50 mg/mL", "10 mg/mL", sem
+  //     número antes de "mL", denominador implícito 1) nunca casava,
+  //     deixando `volumeCalculado` silenciosamente `undefined` para
+  //     qualquer formulação líquida escrita dessa forma. Corrigido para
+  //     aceitar denominador implícito de 1 mL.
+  // (2) Quando a própria concentração cadastrada sinaliza ambiguidade
+  //     real (ex.: domperidona — "1 mg/mL (10 mg/mL alguns frascos —
+  //     verificar)", um risco de superdose de 10× dependendo do frasco
+  //     dispensado), o cálculo automático NUNCA deve assumir uma das duas
+  //     concentrações silenciosamente — um alerta explícito de
+  //     "conversão indisponível" substitui o valor calculado.
   let volumeCalculado: string | undefined;
   if (doseUnitariaMg && formulacao.concentracao) {
-    const matchMgMl = formulacao.concentracao.match(/(\d+(?:\.\d+)?)\s*mg\/(\d+(?:\.\d+)?)\s*mL/);
-    const matchMgGota = formulacao.concentracao.match(/1\s*gota\s*=\s*(\d+(?:\.\d+)?)\s*mg/);
-    if (matchMgMl) {
-      const mgPerMl = parseFloat(matchMgMl[1]) / parseFloat(matchMgMl[2]);
-      const volume = doseUnitariaMg / mgPerMl;
-      volumeCalculado = `${volume.toFixed(1)} mL por dose`;
-    } else if (matchMgGota) {
-      const mgPerGota = parseFloat(matchMgGota[1]);
-      const gotas = doseUnitariaMg / mgPerGota;
-      volumeCalculado = `${gotas.toFixed(0)} gotas por dose`;
+    const concentracaoAmbigua =
+      /verificar/i.test(formulacao.concentracao) ||
+      (formulacao.concentracao.match(/mg\/(?:\d+(?:\.\d+)?\s*)?mL/gi)?.length ?? 0) > 1;
+
+    if (concentracaoAmbigua) {
+      alertas.push(
+        `⚠ Conversão para mL/gotas INDISPONÍVEL — concentração cadastrada é ambígua (${formulacao.concentracao}). ` +
+        `Confirmar a concentração real do frasco dispensado antes de orientar o volume ao responsável.`,
+      );
+    } else {
+      const matchMgMl = formulacao.concentracao.match(/(\d+(?:\.\d+)?)\s*mg\/(?:(\d+(?:\.\d+)?)\s*)?mL/);
+      const matchMgGota = formulacao.concentracao.match(/1\s*gota\s*=\s*(\d+(?:\.\d+)?)\s*mg/);
+      if (matchMgMl) {
+        const mgPerMl = parseFloat(matchMgMl[1]) / parseFloat(matchMgMl[2] ?? '1');
+        const volume = doseUnitariaMg / mgPerMl;
+        volumeCalculado = `${volume.toFixed(1)} mL por dose`;
+      } else if (matchMgGota) {
+        const mgPerGota = parseFloat(matchMgGota[1]);
+        const gotas = doseUnitariaMg / mgPerGota;
+        volumeCalculado = `${gotas.toFixed(0)} gotas por dose`;
+      }
     }
   }
 

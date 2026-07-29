@@ -28,7 +28,7 @@ interface AnamneseFormProps {
   onComplete: () => void;
 }
 
-export function AnamneseForm({ consultationId, onComplete }: AnamneseFormProps) {
+export function AnamneseForm({ onComplete }: AnamneseFormProps) {
   const { dispatch } = useApp();
   const [loading, setLoading] = useState(false);
   const [tab, setTab] = useState('queixa');

@@ -87,7 +87,6 @@ export interface PainelRWE {
 
 const KEY_RWE     = 'prescreve_ai_rwe_v1';
 const KEY_DESF    = 'prescreve_ai_rwe_desfechos_v1';
-const SISTEMA_VER = '3.0.0';
 
 function hashStr(s: string): string {
   let h = 5381;
@@ -338,7 +337,7 @@ export const TENDENCIA_META = {
 
 // ─── Cross-engine: Outcome + Evidence integration ────────────
 
-import { calcularNNT, OUTCOME_DB, type OutcomeCalculado } from './outcome-engine';
+import { calcularNNT, OUTCOME_DB } from './outcome-engine';
 import { EVIDENCE_DB } from './evidence-engine';
 
 export interface RWEvsEvidencia {

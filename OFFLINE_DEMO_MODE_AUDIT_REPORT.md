@@ -3,6 +3,22 @@
 Data: 2026-07-26
 Escopo: frontend Next.js — autenticação, criação de sessão, e a linha divisória entre PRODUCTION / DEVELOPMENT / DEMO MODE.
 
+> ⚠️ **Correção RM-38 (2026-07-27)**: a linha da tabela da §3 abaixo referente a
+> `consultaApi.criar/criarDiagnostico/criarPrescricao/salvarRisco/listar/buscar/
+> timeline` descrevia um comportamento que **não estava de fato implementado**.
+> O código real usava um único flag (`USE_REAL_BACKEND = !IS_DEMO_MODE &&
+> API_URL_CONFIGURED`) para decidir "backend real vs. dado fictício" — uma
+> implantação de produção/desenvolvimento real com `NEXT_PUBLIC_API_URL`
+> AUSENTE (configuração quebrada, não modo demo) caía no MESMO ramo do modo
+> demo intencional, retornando silenciosamente `{ id: 'demo-...' }` como se a
+> consulta/diagnóstico/prescrição tivesse sido persistida de verdade. Também
+> foram encontrados e corrigidos: `initialState.consultations` (store.tsx)
+> populado incondicionalmente com `MOCK_CONSULTATIONS` (3 pacientes fictícios)
+> mesmo fora do modo demo, e a página `/demo` (casos clínicos de exemplo)
+> injetando consultas fictícias em `state.consultations` sem NENHUMA checagem
+> de modo — alcançável e funcional em produção. Detalhes completos, matriz
+> corrigida e testes: ver `docs/rm-38-fallback-demo-mode.md`.
+
 ## 1. Resumo executivo
 
 O frontend tinha exatamente o padrão descrito no pedido: `backend indisponível → login simulado → offline-token → sessão criada`. A condição que decidia isso era `BACKEND_AVAILABLE = !!NEXT_PUBLIC_API_URL` — uma variável de **configuração ausente**, não uma decisão intencional de ninguém. Sempre que essa env var não estivesse definida (inclusive por engano numa implantação de produção), `authApi.login()` fabricava um token (`offline-${Date.now()}`) e criava uma sessão completa, com perfil `MEDICO`, **sem verificar nenhuma credencial**. Isso é fail-open: a ausência de configuração virava a porta de entrada.

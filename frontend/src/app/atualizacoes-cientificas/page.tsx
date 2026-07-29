@@ -1,34 +1,36 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
-  type AlertaAtualizacao, type VersaoDiretriz,
-  listarAlertas, marcarLido, detectarNovaDiretriz,
+  type VersaoDiretriz,
+  listarAlertas, marcarLido,
   getEstadoMonitoramento, seedScientificUpdateDemo,
-  URGENCIA_META, TIPO_ALTERACAO_META, SOCIEDADE_META,
+  URGENCIA_META, SOCIEDADE_META,
   DIRETRIZES_ATUAIS,
 } from '@/lib/scientific-update-engine';
 
 const URGENCIA_ORDEM = { imediata: 0, alta: 1, moderada: 2, informativa: 3 };
 
+// RM-52 (react-hooks/set-state-in-effect): seed é idempotente — chamado
+// uma vez no escopo do módulo em vez de num useEffect de mount.
+seedScientificUpdateDemo();
+
 export default function AtualizacoesCientificasPage() {
-  const [alertas, setAlertas] = useState<AlertaAtualizacao[]>([]);
-  const [diretrizes, setDiretrizes] = useState<VersaoDiretriz[]>([]);
   const [aba, setAba] = useState<'alertas' | 'diretrizes'>('alertas');
   const [filtroUrgencia, setFiltroUrgencia] = useState<string>('todos');
-  const [estado, setEstado] = useState<ReturnType<typeof getEstadoMonitoramento> | null>(null);
+  // `version` força o recálculo de `alertas`/`estado` sempre que `carregar()`
+  // é chamado após uma ação (ex.: marcar alerta como lido).
+  const [version, setVersion] = useState(0);
 
-  useEffect(() => {
-    seedScientificUpdateDemo();
-    carregar();
-  }, []);
+  const alertas = useMemo(() => {
+    void version;
+    return listarAlertas().sort((a, b) => URGENCIA_ORDEM[a.urgencia] - URGENCIA_ORDEM[b.urgencia]);
+  }, [version]);
+  const diretrizes: VersaoDiretriz[] = DIRETRIZES_ATUAIS;
+  const estado = useMemo(() => { void version; return getEstadoMonitoramento(); }, [version]);
 
   function carregar() {
-    setAlertas(listarAlertas().sort((a, b) =>
-      URGENCIA_ORDEM[a.urgencia] - URGENCIA_ORDEM[b.urgencia]
-    ));
-    setDiretrizes(DIRETRIZES_ATUAIS);
-    setEstado(getEstadoMonitoramento());
+    setVersion((v) => v + 1);
   }
 
   function lerAlerta(id: string) {

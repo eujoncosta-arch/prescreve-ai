@@ -3,7 +3,8 @@
 import { useState, useRef } from 'react';
 import { useApp } from '@/lib/store';
 import type { Prescription, PrescriptionItem } from '@/lib/types';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { mapFrequenciaParaContrato, mapUnidadeParaContrato } from '@/lib/dose-calculator';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -94,20 +95,43 @@ export function PrescriptionPanel({ onComplete }: PrescriptionPanelProps) {
   const plano = state.activeConsultation?.plano_terapeutico;
   const printRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
-  const [printed, setPrinted] = useState(false);
+  const [, setPrinted] = useState(false);
 
   const [prescricao, setPrescricao] = useState<Prescription>(() => {
-    const itens: PrescriptionItem[] = (plano?.farmacologico ?? []).map(m => ({
-      id: m.id,
-      medicamento: m.molecula,
-      concentracao: `${m.dose.dose_padrao} ${m.dose.unidade}`,
-      forma_farmaceutica: 'Comprimido',
-      quantidade: '30 comprimidos',
-      posologia: m.posologia_completa,
-      via: m.dose.via,
-      duracao: m.dose.duracao ?? 'Uso contínuo',
-      uso_continuo: m.dose.duracao === 'Contínuo',
-    }));
+    const itens: PrescriptionItem[] = (plano?.farmacologico ?? []).map(m => {
+      // RM-36: deriva a dose ESTRUTURADA (fonte de verdade para
+      // persistência) a partir da recomendação, quando o valor/unidade
+      // forem inequívocos. `dose.dose_padrao`/`dose.unidade` do motor de
+      // recomendação ainda são texto livre em alguns casos (ex.:
+      // "mg/kg/min" descrevendo um regime de infusão, não uma unidade
+      // simples) — nesses casos `mapUnidadeParaContrato` retorna `null`
+      // deliberadamente, e a dose estruturada fica indefinida em vez de
+      // adivinhada; o item precisa de confirmação manual do médico antes
+      // de poder ser sincronizado (ver `store.tsx`).
+      const valorNumerico = parseFloat(m.dose.dose_padrao.replace(',', '.'));
+      const unidadeEstruturada = mapUnidadeParaContrato(m.dose.unidade);
+      const doseEstruturada = Number.isFinite(valorNumerico) && valorNumerico > 0 && unidadeEstruturada
+        ? {
+            valor: valorNumerico,
+            unidade: unidadeEstruturada,
+            via: m.dose.via,
+            ...mapFrequenciaParaContrato(m.dose.frequencia),
+          }
+        : undefined;
+
+      return {
+        id: m.id,
+        medicamento: m.molecula,
+        concentracao: `${m.dose.dose_padrao} ${m.dose.unidade}`,
+        forma_farmaceutica: 'Comprimido',
+        quantidade: '30 comprimidos',
+        posologia: m.posologia_completa,
+        via: m.dose.via,
+        duracao: m.dose.duracao ?? 'Uso contínuo',
+        uso_continuo: m.dose.duracao === 'Contínuo',
+        dose_estruturada: doseEstruturada,
+      };
+    });
 
     return {
       tipo: 'simples',

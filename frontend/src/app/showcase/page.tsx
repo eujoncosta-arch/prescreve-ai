@@ -3,9 +3,9 @@
 import { useState, useMemo } from 'react';
 import { AppShell } from '@/components/layout/AppShell';
 import {
-  Building2, Package, FlaskConical, BookOpen, FileText, Users, Stethoscope,
+  Building2, Package, FlaskConical, BookOpen, FileText, Stethoscope,
   ClipboardList, CheckCircle2, TrendingUp, ChevronDown, ChevronUp,
-  ExternalLink, Star, Award, BarChart3, Activity, Layers, Globe,
+  Star, Award, BarChart3, Activity, Layers, Globe,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -21,40 +21,6 @@ import {
   getTotalPrescricoesMes,
   AreaEspecialidade,
 } from '@/lib/lab-showcase';
-
-// ─── KPI card ───────────────────────────────────────────────
-
-function KpiCard({ icon: Icon, label, valor, sub, cor }: {
-  icon: React.ElementType;
-  label: string;
-  valor: string;
-  sub: string;
-  cor: string;
-}) {
-  const colorMap: Record<string, { bg: string; text: string; ring: string }> = {
-    blue:    { bg: 'bg-blue-50   dark:bg-blue-900/20',   text: 'text-blue-600   dark:text-blue-400',   ring: 'ring-blue-200   dark:ring-blue-800' },
-    indigo:  { bg: 'bg-indigo-50 dark:bg-indigo-900/20', text: 'text-indigo-600 dark:text-indigo-400', ring: 'ring-indigo-200 dark:ring-indigo-800' },
-    purple:  { bg: 'bg-purple-50 dark:bg-purple-900/20', text: 'text-purple-600 dark:text-purple-400', ring: 'ring-purple-200 dark:ring-purple-800' },
-    teal:    { bg: 'bg-teal-50   dark:bg-teal-900/20',   text: 'text-teal-600   dark:text-teal-400',   ring: 'ring-teal-200   dark:ring-teal-800' },
-    green:   { bg: 'bg-green-50  dark:bg-green-900/20',  text: 'text-green-600  dark:text-green-400',  ring: 'ring-green-200  dark:ring-green-800' },
-    emerald: { bg: 'bg-emerald-50 dark:bg-emerald-900/20', text: 'text-emerald-600 dark:text-emerald-400', ring: 'ring-emerald-200 dark:ring-emerald-800' },
-    amber:   { bg: 'bg-amber-50  dark:bg-amber-900/20',  text: 'text-amber-600  dark:text-amber-400',  ring: 'ring-amber-200  dark:ring-amber-800' },
-    rose:    { bg: 'bg-rose-50   dark:bg-rose-900/20',   text: 'text-rose-600   dark:text-rose-400',   ring: 'ring-rose-200   dark:ring-rose-800' },
-  };
-  const c = colorMap[cor] ?? colorMap.blue;
-  return (
-    <div className={cn('rounded-xl p-4 ring-1 flex flex-col gap-3', c.bg, c.ring)}>
-      <div className={cn('w-9 h-9 rounded-lg flex items-center justify-center', 'bg-white/80 dark:bg-slate-900/50 ring-1', c.ring)}>
-        <Icon className={cn('w-4.5 h-4.5', c.text)} />
-      </div>
-      <div>
-        <p className={cn('text-2xl font-black leading-none', c.text)}>{valor}</p>
-        <p className="text-xs font-semibold text-slate-700 dark:text-slate-200 mt-1">{label}</p>
-        <p className="text-[10px] text-slate-500 dark:text-slate-400">{sub}</p>
-      </div>
-    </div>
-  );
-}
 
 // ─── Marca card ──────────────────────────────────────────────
 
@@ -114,7 +80,7 @@ function MarcaCard({ marca }: { marca: MarcaLab }) {
         <div className="border-t border-slate-100 dark:border-slate-800 px-4 pb-4 pt-3 space-y-3">
           {marca.destaque && (
             <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
-              <p className="text-xs text-blue-700 dark:text-blue-300 font-medium italic">"{marca.destaque}"</p>
+              <p className="text-xs text-blue-700 dark:text-blue-300 font-medium italic">&quot;{marca.destaque}&quot;</p>
             </div>
           )}
 

@@ -11,7 +11,7 @@ import {
   BEERS_CRITERIA_2023,
   CONTRAINDICADOS_GESTACAO,
   TFG_LIMITES,
-  type CenarioClinico,
+  
 } from '@/lib/clinical-validator';
 
 // ══════════════════════════════════════════════════════════════

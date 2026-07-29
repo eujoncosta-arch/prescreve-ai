@@ -1,0 +1,17 @@
+# dependencies
+/node_modules
+
+# build output (regenerado por `npm run build`; nunca deve ser versionado)
+/dist
+
+# test coverage (regenerado por `npm run test:cov`)
+/coverage
+
+# env files
+.env
+.env.local
+.env*.local
+
+# misc
+*.log
+.DS_Store

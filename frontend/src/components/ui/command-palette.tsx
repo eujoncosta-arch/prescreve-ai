@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import {
   LayoutDashboard, FilePlus2, History, FileText, BookOpen, ShieldCheck,
   Calculator, ClipboardList, GitBranch, TrendingUp, Sparkles, Zap,
-  Library, BookMarked, Settings, Stethoscope, Search, ArrowRight,
-  Pill, FlaskConical, Brain, Users, Microscope, Building2, UserCircle, Scale, Shield, Lightbulb, Baby,
+  Library, BookMarked, Settings, Search, ArrowRight,
+  Brain, Users, Microscope, Building2, UserCircle, Scale, Shield, Lightbulb, Baby,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -83,7 +83,10 @@ export function CommandPalette() {
   }, []);
 
   useEffect(() => {
-    if (open) { setTimeout(() => inputRef.current?.focus(), 50); setQuery(''); setSel(0); }
+    if (!open) return;
+    const t = setTimeout(() => inputRef.current?.focus(), 50);
+    queueMicrotask(() => { setQuery(''); setSel(0); });
+    return () => clearTimeout(t);
   }, [open]);
 
   const filtered = query.trim()
@@ -223,7 +226,7 @@ export function CommandPalette() {
             ))}
             {filtered.length === 0 && (
               <div className="text-center py-8 text-slate-400 text-sm">
-                Nenhum resultado para "{query}"
+                Nenhum resultado para &quot;{query}&quot;
               </div>
             )}
           </div>

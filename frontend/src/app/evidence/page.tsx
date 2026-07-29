@@ -20,8 +20,8 @@ import {
 } from '@/lib/evidence-engine';
 import {
   FlaskConical, Search, ChevronDown, ChevronUp, Users, BookOpen,
-  Shield, CheckCircle2, AlertTriangle, ArrowUpRight, Hash, Layers,
-  TrendingDown, BarChart2, Microscope, ChevronRight, X, Filter,
+  CheckCircle2, AlertTriangle, ArrowUpRight, Hash, Layers,
+  TrendingDown, BarChart2, Microscope, X, Filter,
   Zap, Info, Activity, Clock, Target,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';

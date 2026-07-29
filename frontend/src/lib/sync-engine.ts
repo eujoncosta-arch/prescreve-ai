@@ -34,6 +34,20 @@ export function syncStateLocal(): SyncState {
   return { status: 'local', attempts: 0 };
 }
 
+/**
+ * RM-38: identifica uma consulta lançada pela página de casos demo
+ * (`src/app/demo/page.tsx`, ids no formato `demo_<caso>_<timestamp>`) —
+ * usada como defesa em profundidade em `sincronizarConsulta` (store.tsx)
+ * para NUNCA enviar um caso fictício ao backend real, mesmo que o modo
+ * demo não esteja mais ativo no momento da tentativa de sincronização
+ * (ex.: build reconfigurado entre o lançamento do caso e o clique em
+ * "sincronizar"). Dado fabricado nunca se mistura com dado clínico real
+ * persistido.
+ */
+export function isDemoConsultationId(id: string): boolean {
+  return id.startsWith('demo_');
+}
+
 // ── Classificação de erro: retryable vs. definitivo ──────────────────
 
 /** Erro que NUNCA deve ser retentado (ex.: 400 de validação — reenviar o mesmo payload nunca funciona). */

@@ -5,7 +5,7 @@
 
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useSyncExternalStore } from 'react';
 
 // ─── Tipos ───────────────────────────────────────────────────
 
@@ -562,74 +562,87 @@ function newAudit(entry: Omit<AuditEntry, 'id'>): AuditEntry {
   return { ...entry, id: `aud_${Date.now()}` };
 }
 
+// ─── Stores ───────────────────────────────────────────────────
+// RM-52 (react-hooks/set-state-in-effect): os 4 stores eram carregados via
+// useEffect+setState no mount. Convertidos para o mesmo padrão de
+// useSyncExternalStore + factory já usado em comite.ts/protocols.ts — cada
+// store expõe getSnapshot/getServerSnapshot/subscribe/setValue, e os
+// handlers leem o valor atual via `store.getSnapshot()` em vez de depender
+// do valor de estado capturado em closures do hook.
+
+function createLocalStore<T>(key: string, seed: T[]) {
+  let cached: T[] | null = null;
+  const listeners = new Set<() => void>();
+  return {
+    getSnapshot: (): T[] => {
+      if (cached === null) cached = load(key, seed);
+      return cached;
+    },
+    getServerSnapshot: (): T[] => seed,
+    subscribe: (onStoreChange: () => void) => {
+      listeners.add(onStoreChange);
+      return () => listeners.delete(onStoreChange);
+    },
+    setValue: (next: T[]) => {
+      cached = next;
+      save(key, next);
+      listeners.forEach((l) => l());
+    },
+  };
+}
+
+const guidelinesStore = createLocalStore(KEY_GL, GUIDELINES_SEED);
+const reviewsStore    = createLocalStore(KEY_REV, REVIEWS_SEED);
+const updatesStore    = createLocalStore(KEY_UPD, UPDATES_SEED);
+const auditStore      = createLocalStore(KEY_AUD, AUDIT_SEED);
+
 // ─── Hook ─────────────────────────────────────────────────────
 
 export function useGovernance() {
-  const [guidelines, setGuidelines] = useState<Guideline[]>([]);
-  const [reviews,    setReviews]    = useState<ExpertReview[]>([]);
-  const [updates,    setUpdates]    = useState<ScientificUpdate[]>([]);
-  const [audit,      setAudit]      = useState<AuditEntry[]>([]);
-  const [loaded,     setLoaded]     = useState(false);
-
-  useEffect(() => {
-    setGuidelines(load(KEY_GL,  GUIDELINES_SEED));
-    setReviews(   load(KEY_REV, REVIEWS_SEED));
-    setUpdates(   load(KEY_UPD, UPDATES_SEED));
-    setAudit(     load(KEY_AUD, AUDIT_SEED));
-    setLoaded(true);
-  }, []);
+  const guidelines = useSyncExternalStore(guidelinesStore.subscribe, guidelinesStore.getSnapshot, guidelinesStore.getServerSnapshot);
+  const reviews    = useSyncExternalStore(reviewsStore.subscribe, reviewsStore.getSnapshot, reviewsStore.getServerSnapshot);
+  const updates    = useSyncExternalStore(updatesStore.subscribe, updatesStore.getSnapshot, updatesStore.getServerSnapshot);
+  const audit      = useSyncExternalStore(auditStore.subscribe, auditStore.getSnapshot, auditStore.getServerSnapshot);
+  const loaded     = useSyncExternalStore(guidelinesStore.subscribe, () => true, () => false);
 
   const addAudit = useCallback((entry: Omit<AuditEntry, 'id'>, currentAudit: AuditEntry[]) => {
     const next = [newAudit(entry), ...currentAudit];
-    setAudit(next);
-    save(KEY_AUD, next);
+    auditStore.setValue(next);
   }, []);
 
   const markUpdateRead = useCallback((id: string) => {
-    setUpdates(prev => {
-      const next = prev.map(u => u.id === id ? { ...u, lida: true } : u);
-      save(KEY_UPD, next);
-      return next;
-    });
+    const next = updatesStore.getSnapshot().map(u => u.id === id ? { ...u, lida: true } : u);
+    updatesStore.setValue(next);
   }, []);
 
   const updateReviewStatus = useCallback((id: string, status: ReviewStatus, parecer?: string) => {
-    setReviews(prev => {
-      const next = prev.map(r => r.id === id ? { ...r, status, parecer: parecer ?? r.parecer, data_resposta: new Date().toISOString() } : r);
-      save(KEY_REV, next);
-      return next;
+    const rev = reviewsStore.getSnapshot().find(r => r.id === id);
+    const nextReviews = reviewsStore.getSnapshot().map(r => r.id === id ? { ...r, status, parecer: parecer ?? r.parecer, data_resposta: new Date().toISOString() } : r);
+    reviewsStore.setValue(nextReviews);
+
+    const entry = newAudit({
+      tipo: status === 'aprovado' ? 'revisao_aprovada' : 'revisao_rejeitada',
+      guideline_id: rev?.guideline_id,
+      guideline_titulo: rev?.guideline_titulo,
+      descricao: `Revisão ${status === 'aprovado' ? 'aprovada' : 'rejeitada'} por ${rev?.especialista}`,
+      usuario: rev?.especialista ?? 'Especialista',
+      data: new Date().toISOString(),
     });
-    setAudit(prev => {
-      const rev = reviews.find(r => r.id === id);
-      const entry = newAudit({
-        tipo: status === 'aprovado' ? 'revisao_aprovada' : 'revisao_rejeitada',
-        guideline_id: rev?.guideline_id,
-        guideline_titulo: rev?.guideline_titulo,
-        descricao: `Revisão ${status === 'aprovado' ? 'aprovada' : 'rejeitada'} por ${rev?.especialista}`,
-        usuario: rev?.especialista ?? 'Especialista',
-        data: new Date().toISOString(),
-      });
-      const next = [entry, ...prev];
-      save(KEY_AUD, next);
-      return next;
-    });
-  }, [reviews]);
+    auditStore.setValue([entry, ...auditStore.getSnapshot()]);
+  }, []);
 
   const updateGuidelineStatus = useCallback((id: string, status: GuidelineStatus) => {
-    setGuidelines(prev => {
-      const next = prev.map(g => g.id === id ? { ...g, status } : g);
-      save(KEY_GL, next);
-      return next;
-    });
+    const nextGuidelines = guidelinesStore.getSnapshot().map(g => g.id === id ? { ...g, status } : g);
+    guidelinesStore.setValue(nextGuidelines);
     addAudit({
       tipo: 'guideline_atualizado',
       guideline_id: id,
-      guideline_titulo: guidelines.find(g => g.id === id)?.titulo,
+      guideline_titulo: guidelinesStore.getSnapshot().find(g => g.id === id)?.titulo,
       descricao: `Status alterado para "${status}"`,
       usuario: 'Equipe Científica',
       data: new Date().toISOString(),
-    }, audit);
-  }, [guidelines, audit, addAudit]);
+    }, auditStore.getSnapshot());
+  }, [addAudit]);
 
   const unreadCount   = updates.filter(u => !u.lida).length;
   const pendingReviews = reviews.filter(r => r.status === 'pendente').length;

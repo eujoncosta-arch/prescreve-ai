@@ -10,7 +10,7 @@
 
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 
 // ─── Especialidades ──────────────────────────────────────────
 
@@ -294,16 +294,11 @@ export function usePhysicianProfile() {
     });
   }, []);
 
-  // SSR: re-sync after hydration
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw) as PhysicianProfile;
-        setProfileState(p => ({ ...p, ...parsed }));
-      }
-    } catch { /* ignore */ }
-  }, []);
+  // RM-52 (react-hooks/set-state-in-effect): o efeito de "re-sync após
+  // hidratação" era redundante — o inicializador lazy de `useState` acima já
+  // lê o mesmo localStorage na primeira renderização real do cliente (o
+  // componente 'use client' roda seu próprio módulo no navegador, separado
+  // do SSR), então o valor já chega correto sem precisar de um efeito extra.
 
   return {
     profile,

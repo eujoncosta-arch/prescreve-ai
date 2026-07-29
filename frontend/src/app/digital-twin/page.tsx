@@ -1,11 +1,39 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState, useSyncExternalStore } from 'react';
 import {
   type DigitalTwin, type EstrategiaTratamento, type ComparacaoEstrategias,
   criarTwin, listarTwins, compararEstrategias,
   seedDigitalTwinDemo, ATIVIDADE_META,
 } from '@/lib/patient-digital-twin';
+
+// RM-52 (react-hooks/set-state-in-effect): twins vêm de localStorage (via
+// lib/patient-digital-twin), um "sistema externo" — usamos
+// useSyncExternalStore em vez de useEffect+setState no mount, no mesmo
+// padrão já aplicado em useLocalStorage/comite/protocols.
+let cachedTwins: DigitalTwin[] | null = null;
+const twinsListeners = new Set<() => void>();
+// Referência estável — getServerSnapshot precisa retornar o MESMO array em
+// chamadas repetidas (senão React entra em loop de re-render).
+const EMPTY_TWINS: DigitalTwin[] = [];
+function getTwinsSnapshot(): DigitalTwin[] {
+  if (cachedTwins === null) {
+    seedDigitalTwinDemo();
+    cachedTwins = listarTwins();
+  }
+  return cachedTwins;
+}
+function getTwinsServerSnapshot(): DigitalTwin[] {
+  return EMPTY_TWINS;
+}
+function subscribeTwins(onStoreChange: () => void): () => void {
+  twinsListeners.add(onStoreChange);
+  return () => twinsListeners.delete(onStoreChange);
+}
+function invalidateTwins(): void {
+  cachedTwins = null;
+  twinsListeners.forEach((l) => l());
+}
 
 const ESTRATEGIAS_HAS: EstrategiaTratamento[] = [
   { nome: 'IECA + Tiazídico (SUS)', moleculas: ['Enalapril', 'Clortalidona'],
@@ -17,15 +45,10 @@ const ESTRATEGIAS_HAS: EstrategiaTratamento[] = [
 ];
 
 export default function DigitalTwinPage() {
-  const [twins, setTwins] = useState<DigitalTwin[]>([]);
+  const twins = useSyncExternalStore(subscribeTwins, getTwinsSnapshot, getTwinsServerSnapshot);
   const [selecionado, setSelecionado] = useState<DigitalTwin | null>(null);
   const [comparacao, setComparacao] = useState<ComparacaoEstrategias | null>(null);
   const [view, setView] = useState<'lista' | 'detalhe'>('lista');
-
-  useEffect(() => {
-    seedDigitalTwinDemo();
-    setTwins(listarTwins());
-  }, []);
 
   function abrirTwin(twin: DigitalTwin) {
     setSelecionado(twin);
@@ -43,7 +66,7 @@ export default function DigitalTwinPage() {
       creatinina: 0.9, tfg: 82, fumante: false,
       atividade_fisica: 'irregular', adesao_estimada: 68,
     }, 'Hipertensão Arterial + DM2');
-    setTwins(listarTwins());
+    invalidateTwins();
     abrirTwin(t);
   }
 

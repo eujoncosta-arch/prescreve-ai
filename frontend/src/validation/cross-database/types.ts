@@ -24,6 +24,15 @@ export interface SyncFinding {
   fontes: string;
   detalhe: string;
   correcaoSugerida: string;
+  /**
+   * RM-54: `true` para um achado que é uma decisão de escopo EXPLÍCITA e
+   * permanente (não um risco em aberto) — ex.: uma combinação comercial
+   * fora do escopo do PHARMA_DB (que indexa só moléculas isoladas por
+   * design). Continua listado no relatório (nunca escondido), mas não
+   * conta para `divergentes` — que passa a refletir só divergências
+   * genuinamente abertas.
+   */
+  aceito?: boolean;
 }
 
 export interface SyncReport {
@@ -32,8 +41,10 @@ export interface SyncReport {
   totalAnalisado: number;
   /** presentes e consistentes em ≥ 2 fontes. */
   compativeis: number;
-  /** chaves com ≥ 1 divergência (não-crítica). */
+  /** chaves com ≥ 1 divergência (não-crítica, não-aceita) genuinamente aberta. */
   divergentes: number;
+  /** RM-54: chaves com achado(s) marcados `aceito` (decisão de escopo documentada, não um risco aberto). */
+  aceitos: number;
   /** total de achados críticos. */
   criticos: number;
   bySource: Record<string, number>;

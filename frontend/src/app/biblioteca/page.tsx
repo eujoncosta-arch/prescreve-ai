@@ -18,10 +18,10 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import {
-  Library, Search, Building2, FlaskConical, Pill, BookOpen,
+  Library, Search, Building2, FlaskConical, BookOpen,
   AlertTriangle, RefreshCw, Clock, Shield,
   ChevronDown, ChevronUp, ArrowRight, GitBranch, Microscope,
-  FileText, CheckCircle2,
+  FileText,
 } from 'lucide-react';
 
 // ─── FILTROS ──────────────────────────────────────────────────
@@ -441,7 +441,7 @@ export default function BibliotecaPage() {
 
             {searchQuery.length >= 2 ? (
               <div className="space-y-2">
-                <p className="text-xs text-slate-500 mb-2">{produtosFiltrados.length} resultado(s) para "{searchQuery}"</p>
+                <p className="text-xs text-slate-500 mb-2">{produtosFiltrados.length} resultado(s) para &quot;{searchQuery}&quot;</p>
                 {produtosFiltrados.length > 0 ? produtosFiltrados.map(p => <ProdutoCard key={p.id} produto={p} />) : (
                   <div className="text-center py-8 border-2 border-dashed border-slate-200 rounded-xl">
                     <Search className="w-6 h-6 text-slate-300 mx-auto mb-2" />

@@ -113,7 +113,6 @@ export function calcCHA2DS2VASc(p: CHA2DS2VAScInput): CalcResult & { stroke_risc
   if (p.sexo_feminino)                 { score += 1; passos.push('Sc: Sexo feminino = +1'); }
 
   // ESC 2020: anticoagular se ≥2 pontos em homens ou ≥3 em mulheres
-  const pontosHemostaticos = p.sexo_feminino ? score - 1 : score; // remove sexo feminino para decisão
   const anticoagular = p.sexo_feminino ? score >= 3 : score >= 2;
 
   const RISCO_ANUAL: Record<number, string> = {
@@ -309,8 +308,6 @@ export function calcNEWS2(p: NEWS2Input): CalcResult & { scores_parciais: Record
 
   // Alerta de escalona: qualquer parâmetro com 3 pts OU score total ≥ 7
   const alerta_escalona = score >= 7 || Object.values(scores_parciais).some(s => s === 3);
-  // Alerta 5-6 ou 3 em parâmetro único → monitoramento frequente
-  const alerta_intermediario = (score >= 5 && score <= 6) || Object.values(scores_parciais).some(s => s === 3);
 
   let classificacao: string;
   let recomendacao: string;

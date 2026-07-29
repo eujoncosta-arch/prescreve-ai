@@ -5,7 +5,7 @@
 
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useSyncExternalStore } from 'react';
 
 // ─── Tipos ───────────────────────────────────────────────────
 
@@ -226,20 +226,37 @@ function saveToStorage(protocols: SmartProtocol[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(protocols));
 }
 
+// RM-52 (RM41-036/react-hooks/set-state-in-effect): mesma correção já
+// aplicada em `lib/timeline.ts`/`lib/comite.ts` — `useSyncExternalStore`
+// em vez de `useEffect` + `setState` para sincronizar com `localStorage`.
+let cachedProtocols: SmartProtocol[] | null = null;
+const protocolsListeners = new Set<() => void>();
+// Referência estável — useSyncExternalStore exige que getServerSnapshot
+// retorne o MESMO array em chamadas repetidas, senão React entra em loop
+// de re-render tentando reconciliar "mudanças" que não existem de fato.
+const EMPTY_PROTOCOLS: SmartProtocol[] = [];
+function getProtocolsSnapshot(): SmartProtocol[] {
+  if (cachedProtocols === null) cachedProtocols = loadFromStorage();
+  return cachedProtocols;
+}
+function getProtocolsServerSnapshot(): SmartProtocol[] {
+  return EMPTY_PROTOCOLS;
+}
+function subscribeProtocols(onStoreChange: () => void): () => void {
+  protocolsListeners.add(onStoreChange);
+  return () => protocolsListeners.delete(onStoreChange);
+}
+
 // ─── Hook ────────────────────────────────────────────────────
 
 export function useProtocols() {
-  const [protocols, setProtocols] = useState<SmartProtocol[]>([]);
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    setProtocols(loadFromStorage());
-    setLoaded(true);
-  }, []);
+  const protocols = useSyncExternalStore(subscribeProtocols, getProtocolsSnapshot, getProtocolsServerSnapshot);
+  const loaded = useSyncExternalStore(subscribeProtocols, () => true, () => false);
 
   const persist = useCallback((next: SmartProtocol[]) => {
-    setProtocols(next);
+    cachedProtocols = next;
     saveToStorage(next);
+    protocolsListeners.forEach((l) => l());
   }, []);
 
   const create = useCallback((data: Omit<SmartProtocol, 'id' | 'criado_em' | 'atualizado_em' | 'versao'>): SmartProtocol => {

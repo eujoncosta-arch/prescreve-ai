@@ -110,6 +110,10 @@ describe('Ownership de recursos clínicos (e2e)', () => {
     riskScore: { create: jest.fn().mockResolvedValue({ id: 'risk-1' }) },
     auditoria: { create: jest.fn().mockResolvedValue({}) },
   };
+  // RM-49 (RM41-017): ver comentário em authorization.e2e-spec.ts.
+  (prismaMock as unknown as { $transaction: jest.Mock }).$transaction = jest.fn(
+    (cb: (tx: unknown) => unknown) => cb(prismaMock),
+  );
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -235,9 +239,7 @@ describe('Ownership de recursos clínicos (e2e)', () => {
     const medicamentos = [
       {
         molecula: 'Losartana',
-        dose: '50mg',
-        via: 'VO',
-        frequencia: '1x/dia',
+        dose: { valor: 50, unidade: 'mg', frequencia: '1x/dia', via: 'VO' },
         duracao: '30d',
       },
     ];

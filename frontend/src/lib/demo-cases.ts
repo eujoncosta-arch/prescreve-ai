@@ -88,7 +88,7 @@ export const DEMO_CASES: DemoCase[] = [
 // EVIDÊNCIAS EXPANDIDAS por caso
 // ============================================================
 
-import type { DiagnosticSupport, TherapeuticPlan, SafetyCheck } from './types';
+import type { DiagnosticSupport, TherapeuticPlan } from './types';
 import { MOCK_DIAGNOSTIC, MOCK_THERAPEUTIC, MOCK_SAFETY } from './mock-data';
 
 export const DEMO_DM2_DIAGNOSTIC: DiagnosticSupport = {

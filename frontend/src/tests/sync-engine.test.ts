@@ -5,6 +5,7 @@ import {
   withTimeout,
   isRetryable,
   newIdempotencyKey,
+  isDemoConsultationId,
   NonRetryableError,
   TimeoutError,
   type SyncState,
@@ -287,5 +288,27 @@ describe('syncResource() — orquestração completa (status + retry + timeout)'
     expect(retryManual.ok).toBe(true);
     expect(retryManual.state.status).toBe('synced');
     vi.useRealTimers();
+  });
+});
+
+// ============================================================
+// RM-38 — casos demo (src/app/demo/page.tsx) nunca sincronizam com o
+// backend real, identificados pelo prefixo de id `demo_`.
+// ============================================================
+describe('isDemoConsultationId() — identifica consultas de caso demo, nunca sincronizadas ao backend real', () => {
+  it('id no formato "demo_<caso>_<timestamp>" (gerado por src/app/demo/page.tsx) → true', () => {
+    expect(isDemoConsultationId('demo_hipertensao-resistente_1706000000000')).toBe(true);
+  });
+
+  it('id real de consulta (cuid do backend) → false', () => {
+    expect(isDemoConsultationId('clx1a2b3c4d5e6f7g8h9')).toBe(false);
+  });
+
+  it('id local temporário gerado no cliente (não demo) → false', () => {
+    expect(isDemoConsultationId('local-1706000000000')).toBe(false);
+  });
+
+  it('string vazia → false', () => {
+    expect(isDemoConsultationId('')).toBe(false);
   });
 });

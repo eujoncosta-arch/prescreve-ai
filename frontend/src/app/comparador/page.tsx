@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { AppShell } from '@/components/layout/AppShell';
 import {
-  Scale, Search, X, ChevronDown, ChevronUp, AlertTriangle,
+  Scale, Search, X, AlertTriangle,
   CheckCircle2, TrendingUp, DollarSign, Heart, Activity,
   FlaskConical, Shield, Zap, BookOpen, Info, ArrowRight,
   RotateCcw, Star, BarChart3, LayoutGrid, Table2, Layers,
@@ -73,17 +73,6 @@ function SafetyBadge({ value, label }: { value: boolean | 'evitar' | 'contraindi
   );
 }
 
-// ─── Score Bar ──────────────────────────────────────────────────
-
-function ScoreBar({ value, max = 5, color }: { value: number; max?: number; color: string }) {
-  const pct = Math.round((value / max) * 100);
-  return (
-    <div className="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-      <div className={cn('h-full rounded-full transition-all duration-500', color)} style={{ width: `${pct}%` }} />
-    </div>
-  );
-}
-
 // ─── SVG Radar Chart ────────────────────────────────────────────
 
 function RadarSVG({ scores, nomeA, nomeB }: { scores: ComparativoScore[]; nomeA: string; nomeB: string }) {
@@ -139,7 +128,6 @@ function RadarSVG({ scores, nomeA, nomeB }: { scores: ComparativoScore[]; nomeA:
           {/* Level 5 label */}
           {scores.map((s, i) => {
             const p5 = pt(R + 14, i);
-            const Icon = DIMENSAO_ICON[s.dimensao] ?? BookOpen;
             return (
               <text
                 key={s.dimensao}
@@ -232,15 +220,24 @@ function RadarSVG({ scores, nomeA, nomeB }: { scores: ComparativoScore[]; nomeA:
 
 // ─── Cards View ─────────────────────────────────────────────────
 
-function CardsView({ a, b, scores }: { a: MoleculaComparavel; b: MoleculaComparavel; scores: ComparativoScore[] }) {
-  const scoreMap = Object.fromEntries(scores.map(s => [s.dimensao, s]));
-
-  const MolCard = ({ mol, side, scoreKey }: { mol: MoleculaComparavel; side: 'A' | 'B'; scoreKey: 'score_a' | 'score_b' }) => {
-    const isA = side === 'A';
+// RM-51 (react-hooks/static-components): `MolCard` era definido DENTRO do
+// corpo de `CardsView` — React tratava isso como um tipo de componente
+// NOVO a cada render de `CardsView`, forçando desmontagem/remontagem
+// completa da subárvore (perda de estado local, flicker, custo de
+// reconciliação desnecessário). Movido para escopo de módulo; o único
+// dado que antes vinha do closure de `CardsView` (`scoreMap`) agora é
+// recebido como prop.
+function MolCard({
+  mol, side, scoreKey, scoreMap,
+}: {
+  mol: MoleculaComparavel;
+  side: 'A' | 'B';
+  scoreKey: 'score_a' | 'score_b';
+  scoreMap: Record<string, ComparativoScore>;
+}) {
+  const isA = side === 'A';
     const accent = isA ? 'from-blue-600 to-blue-700' : 'from-purple-600 to-purple-700';
-    const ring   = isA ? 'ring-blue-500' : 'ring-purple-500';
     const badgeBg = isA ? 'bg-blue-500/20' : 'bg-purple-500/20';
-    const scoreColor = isA ? 'bg-blue-500' : 'bg-purple-500';
     const dimColor   = isA ? 'text-blue-700 dark:text-blue-400' : 'text-purple-700 dark:text-purple-400';
 
     const venceu = (dim: string) => {
@@ -299,7 +296,7 @@ function CardsView({ a, b, scores }: { a: MoleculaComparavel; b: MoleculaCompara
 
           {/* Safety scores */}
           <div className="grid grid-cols-3 gap-2">
-            {scores.map(s => {
+            {Object.values(scoreMap).map(s => {
               const score = s[scoreKey];
               const winning = s.vantagem === side;
               return (
@@ -393,12 +390,15 @@ function CardsView({ a, b, scores }: { a: MoleculaComparavel; b: MoleculaCompara
         </div>
       </div>
     );
-  };
+}
+
+function CardsView({ a, b, scores }: { a: MoleculaComparavel; b: MoleculaComparavel; scores: ComparativoScore[] }) {
+  const scoreMap = Object.fromEntries(scores.map(s => [s.dimensao, s]));
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-      <MolCard mol={a} side="A" scoreKey="score_a" />
-      <MolCard mol={b} side="B" scoreKey="score_b" />
+      <MolCard mol={a} side="A" scoreKey="score_a" scoreMap={scoreMap} />
+      <MolCard mol={b} side="B" scoreKey="score_b" scoreMap={scoreMap} />
     </div>
   );
 }
@@ -406,6 +406,25 @@ function CardsView({ a, b, scores }: { a: MoleculaComparavel; b: MoleculaCompara
 // ─── Tabela comparativa detalhada ────────────────────────────────
 
 type CompTab = 'visao_geral' | 'eficacia' | 'seguranca' | 'doses' | 'interacoes' | 'marcas' | 'farmacocinetica';
+
+// RM-51 (react-hooks/static-components): mesma correção de `MolCard` acima —
+// `Row` era definido dentro de `TabelaComparativa` a cada render. É puro
+// (só usa as próprias props), então a extração não precisou de props novas.
+function Row({ label, valA, valB, highlight, sub }: {
+  label: string; valA: React.ReactNode; valB: React.ReactNode;
+  highlight?: 'A' | 'B' | 'igual'; sub?: string;
+}) {
+  return (
+    <div className="grid grid-cols-[170px_1fr_1fr] gap-3 py-3 border-b border-slate-100 dark:border-slate-800 last:border-0 items-start">
+      <div>
+        <p className="text-[10px] font-bold text-slate-500 uppercase">{label}</p>
+        {sub && <p className="text-[9px] text-slate-400 mt-0.5">{sub}</p>}
+      </div>
+      <div className={cn('text-xs text-slate-700 dark:text-slate-300', highlight === 'A' && 'font-semibold text-blue-700 dark:text-blue-400')}>{valA}</div>
+      <div className={cn('text-xs text-slate-700 dark:text-slate-300', highlight === 'B' && 'font-semibold text-purple-700 dark:text-purple-400')}>{valB}</div>
+    </div>
+  );
+}
 
 function TabelaComparativa({ a, b, scores }: { a: MoleculaComparavel; b: MoleculaComparavel; scores: ComparativoScore[] }) {
   const [tab, setTab] = useState<CompTab>('visao_geral');
@@ -421,20 +440,6 @@ function TabelaComparativa({ a, b, scores }: { a: MoleculaComparavel; b: Molecul
   ];
 
   const scoreMap = Object.fromEntries(scores.map(s => [s.dimensao, s]));
-
-  const Row = ({ label, valA, valB, highlight, sub }: {
-    label: string; valA: React.ReactNode; valB: React.ReactNode;
-    highlight?: 'A' | 'B' | 'igual'; sub?: string;
-  }) => (
-    <div className="grid grid-cols-[170px_1fr_1fr] gap-3 py-3 border-b border-slate-100 dark:border-slate-800 last:border-0 items-start">
-      <div>
-        <p className="text-[10px] font-bold text-slate-500 uppercase">{label}</p>
-        {sub && <p className="text-[9px] text-slate-400 mt-0.5">{sub}</p>}
-      </div>
-      <div className={cn('text-xs text-slate-700 dark:text-slate-300', highlight === 'A' && 'font-semibold text-blue-700 dark:text-blue-400')}>{valA}</div>
-      <div className={cn('text-xs text-slate-700 dark:text-slate-300', highlight === 'B' && 'font-semibold text-purple-700 dark:text-purple-400')}>{valB}</div>
-    </div>
-  );
 
   return (
     <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">

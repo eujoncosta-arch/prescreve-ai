@@ -8,8 +8,19 @@
 
 import type { Anamnesis } from './types';
 import type { TherapeuticSuggestion } from './types';
+import { stripAccents } from './safety-rules';
 
-export type NivelRisco = 'baixo' | 'moderado' | 'alto' | 'muito_alto';
+// RM-52 (RM41-022): antes era `'baixo' | 'moderado' | 'alto' | 'muito_alto'`
+// — divergia do enum `NivelRisco` real do Prisma
+// (`baixo | intermediario | alto | muito_alto | critico`, ver
+// `backend/prisma/schema.prisma`), validado por `@IsEnum` no DTO
+// (`RiskScorePayloadDto.risco_global`). Um `risco_global: 'moderado'`
+// enviado ao backend seria REJEITADO (400) por não existir no enum real —
+// hoje isso é latente (nenhum fluxo ainda envia risk score ao backend,
+// RM41-023), mas quebraria no dia em que essa persistência for ligada.
+// Renomeado para `'intermediario'` (mesmo texto do Prisma) e adicionado
+// `'critico'` (valor do backend que o frontend não modelava).
+export type NivelRisco = 'baixo' | 'intermediario' | 'alto' | 'muito_alto' | 'critico';
 
 export interface DimensaoRisco {
   nivel: NivelRisco;
@@ -54,7 +65,7 @@ export interface AvaliacaoRiscoClinico {
 function nivelPorScore(score: number): NivelRisco {
   if (score >= 75) return 'muito_alto';
   if (score >= 50) return 'alto';
-  if (score >= 25) return 'moderado';
+  if (score >= 25) return 'intermediario';
   return 'baixo';
 }
 
@@ -125,9 +136,17 @@ function avaliarRiscoCV(anamnese: Anamnesis): DimensaoRisco & { framingham?: Ris
   }
 
   // Laboratório
-  const ldl = parseFloat(lab['ldl'] ?? lab['ldl_c'] ?? '0');
-  if (ldl > 190) { fatores.push(`LDL ${ldl} mg/dL — muito alto`); score += 20; }
-  else if (ldl > 130) { fatores.push(`LDL ${ldl} mg/dL — acima da meta`); score += 10; }
+  // RM-39: `parseFloat(... ?? '0')` fazia LDL ausente virar "0 mg/dL" —
+  // um LDL de 0 nunca dispara os limiares de risco (>130/>190), então a
+  // AUSÊNCIA do exame era indistinguível de "sem dislipidemia". LDL não
+  // dosado permanece desconhecido — nenhuma contribuição de score,
+  // nenhuma afirmação de "normal".
+  const ldlRaw = lab['ldl'] ?? lab['ldl_c'];
+  const ldl = ldlRaw !== undefined ? parseFloat(ldlRaw) : undefined;
+  if (ldl !== undefined && !Number.isNaN(ldl)) {
+    if (ldl > 190) { fatores.push(`LDL ${ldl} mg/dL — muito alto`); score += 20; }
+    else if (ldl > 130) { fatores.push(`LDL ${ldl} mg/dL — acima da meta`); score += 10; }
+  }
 
   // Idade
   if (anos !== undefined) {
@@ -169,11 +188,19 @@ function estimarFramingham(anamnese: Anamnesis, scoreAcumulado: number): RiscoCV
   const sv = anamnese.sinais_vitais;
 
   // Estimativa simplificada em 10 anos (não substitui Framingham formal)
+  //
+  // RM-39: `(anos ?? 0)` e `(sv.pa_sistolica ?? 0)` assumiam,
+  // respectivamente, "paciente jovem" e "PA normal" sempre que o dado
+  // estivesse ausente — idade/PA desconhecidas NUNCA podem ser tratadas
+  // como "0"/"normal". Corrigido para só considerar esses critérios
+  // quando o dado realmente existe; na ausência, o critério
+  // correspondente simplesmente não se aplica (cai para o próximo da
+  // cadeia, terminando no fallback já existente `scoreAcumulado / 5`).
   let pct = 0;
   if (hasDCV) pct = 100; // DCV estabelecida = muito alto risco por definição
-  else if (hasDM && (anos ?? 0) >= 60) pct = 25;
+  else if (hasDM && anos !== undefined && anos >= 60) pct = 25;
   else if (hasDM) pct = 15;
-  else if ((sv.pa_sistolica ?? 0) >= 160) pct = 20;
+  else if (sv.pa_sistolica !== undefined && sv.pa_sistolica >= 160) pct = 20;
   else if (anamnese.habitos_vida.tabagismo === 'sim') pct = 12;
   else pct = scoreAcumulado / 5;
 
@@ -196,11 +223,11 @@ function estimarFramingham(anamnese: Anamnesis, scoreAcumulado: number): RiscoCV
   const fatoresMaj: string[] = [];
   if (hasDCV) fatoresMaj.push('DCV aterosclerótica estabelecida');
   if (hasDM) fatoresMaj.push('Diabetes mellitus');
-  if ((sv.pa_sistolica ?? 0) >= 160) fatoresMaj.push('HAS estágio 2 não controlada');
+  if (sv.pa_sistolica !== undefined && sv.pa_sistolica >= 160) fatoresMaj.push('HAS estágio 2 não controlada');
   if (anamnese.habitos_vida.tabagismo === 'sim') fatoresMaj.push('Tabagismo ativo');
 
   return {
-    nivel: pct >= 20 ? 'muito_alto' : pct >= 10 ? 'alto' : pct >= 5 ? 'moderado' : 'baixo',
+    nivel: pct >= 20 ? 'muito_alto' : pct >= 10 ? 'alto' : pct >= 5 ? 'intermediario' : 'baixo',
     score_10anos_pct: Math.round(pct),
     fatores_majorantes: fatoresMaj,
     meta_ldl,
@@ -246,11 +273,32 @@ function avaliarRiscoRenal(anamnese: Anamnesis, medicamentos: TherapeuticSuggest
     fatores.push('AINE prescrito — nefrotóxico em DRC'); score += 20;
     acoes.push('Evitar AINEs em TFG < 30. Usar paracetamol como alternativa analgésica.');
   }
+  // RM-39: `(tfg ?? 99)` assumia função renal NORMAL (TFG 99 mL/min) sempre
+  // que o dado estivesse ausente — TFG não medida NUNCA pode ser tratada
+  // como "provavelmente normal". Isso fazia com que o alerta de acidose
+  // lática por metformina/ineficácia de iSGLT2 NUNCA disparasse para um
+  // paciente cuja função renal simplesmente não foi registrada — o
+  // cenário exatamente oposto do que se quer de um motor de segurança
+  // (dado ausente mascarado como normal). Corrigido: TFG desconhecida
+  // gera seu próprio alerta explícito, pedindo o dado, em vez de assumir
+  // qualquer valor.
   if (classesMeds.some(c => c.includes('metformina') || c.includes('biguanida'))) {
-    if ((tfg ?? 99) < 30) { fatores.push('Metformina com TFG < 30 — risco de acidose lática'); score += 30; acoes.push('Suspender metformina se TFG < 30 mL/min.'); }
+    if (tfg !== undefined && tfg < 30) {
+      fatores.push('Metformina com TFG < 30 — risco de acidose lática'); score += 30; acoes.push('Suspender metformina se TFG < 30 mL/min.');
+    } else if (tfg === undefined) {
+      fatores.push('Metformina prescrita sem TFG conhecida — risco de acidose lática não pode ser descartado sem função renal medida');
+      score += 15;
+      acoes.push('Solicitar TFG (ou creatinina) antes de confirmar a segurança da metformina — não assumir função renal normal.');
+    }
   }
   if (classesMeds.some(c => c.includes('isglt2') || c.includes('sglt'))) {
-    if ((tfg ?? 99) < 20) { fatores.push('iSGLT2 com TFG < 20 — sem eficácia glicêmica'); score += 10; acoes.push('iSGLT2: não iniciar se TFG < 20 para DM2; manter com cautela em ICC até TFG 20.'); }
+    if (tfg !== undefined && tfg < 20) {
+      fatores.push('iSGLT2 com TFG < 20 — sem eficácia glicêmica'); score += 10; acoes.push('iSGLT2: não iniciar se TFG < 20 para DM2; manter com cautela em ICC até TFG 20.');
+    } else if (tfg === undefined) {
+      fatores.push('iSGLT2 prescrito sem TFG conhecida — eficácia/segurança na faixa de TFG não pode ser avaliada');
+      score += 10;
+      acoes.push('Solicitar TFG antes de confirmar a indicação de iSGLT2 — não assumir função renal normal.');
+    }
   }
 
   if (score >= 40) {
@@ -389,7 +437,7 @@ const PARES_INTERACAO: Array<{
   { a: 'ieca', b: 'bra', gravidade: 'alto', descricao: 'Duplo bloqueio do SRAA — hipercalemia e IRA', acao: 'Não combinar IECA + BRA. Usar apenas um.' },
   { a: 'ieca', b: 'aine', gravidade: 'alto', descricao: 'IECA + AINE — redução do efeito anti-hipertensivo e nefrotoxicidade', acao: 'Evitar combinação. Substituir AINE por paracetamol.' },
   { a: 'bra', b: 'aine', gravidade: 'alto', descricao: 'BRA + AINE — mesma interação renal que IECA + AINE', acao: 'Evitar combinação.' },
-  { a: 'ieca', b: 'espironolactona', gravidade: 'moderado', descricao: 'IECA + ARM — risco de hipercalemia', acao: 'Monitorar K+ em 1 semana após início.' },
+  { a: 'ieca', b: 'espironolactona', gravidade: 'intermediario', descricao: 'IECA + ARM — risco de hipercalemia', acao: 'Monitorar K+ em 1 semana após início.' },
   { a: 'metformina', b: 'contraste', gravidade: 'alto', descricao: 'Metformina + contraste iodado — risco de acidose lática', acao: 'Suspender metformina 48h antes e após contraste se TFG < 60.' },
   { a: 'varfarina', b: 'aine', gravidade: 'muito_alto', descricao: 'Varfarina + AINE — risco hemorrágico grave (TGI)', acao: 'Contraindicado. Substituir AINE por paracetamol.' },
   { a: 'isrs', b: 'tramadol', gravidade: 'alto', descricao: 'ISRS + Tramadol — risco de síndrome serotoninérgica', acao: 'Evitar combinação. Usar opioide alternativo ou analgésico não serotoninérgico.' },
@@ -398,22 +446,49 @@ const PARES_INTERACAO: Array<{
   { a: 'corticoide', b: 'aine', gravidade: 'alto', descricao: 'Corticoide + AINE — risco de úlcera péptica e sangramento TGI', acao: 'Associar IBP se combinação necessária.' },
 ];
 
+// RM-50: `contemTermo` original só batia se o texto livre do médico
+// contivesse LITERALMENTE a palavra da classe ("aine", "ieca", "bra",
+// "corticoide", "isrs") — um médico que digita "Diclofenaco" (um AINE real
+// e comum) sem escrever "AINE" explicitamente nunca disparava a interação
+// varfarina+AINE/IECA+AINE/BRA+AINE/corticoide+AINE, mesmo com o
+// medicamento certo em uso. Corrigido com uma lista mínima de sinônimos
+// por classe (mesmas moléculas já reconhecidas em `avaliarRiscoHemorragico`
+// para AINE, mais os representantes mais comuns de cada classe usada em
+// `PARES_INTERACAO`), sem inventar nenhuma classe/par novo.
+const SINONIMOS_CLASSE: Record<string, string[]> = {
+  aine: ['ibuprofeno', 'diclofenaco', 'naproxeno', 'cetoprofeno', 'nimesulida', 'meloxicam', 'celecoxibe'],
+  ieca: ['captopril', 'enalapril', 'lisinopril', 'ramipril', 'perindopril'],
+  bra: ['losartana', 'valsartana', 'candesartana', 'olmesartana', 'irbesartana', 'telmisartana'],
+  corticoide: ['prednisona', 'prednisolona', 'dexametasona', 'hidrocortisona', 'betametasona', 'metilprednisolona'],
+  isrs: ['fluoxetina', 'sertralina', 'paroxetina', 'citalopram', 'escitalopram'],
+};
+
 function avaliarRiscoInteracao(anamnese: Anamnesis, medicamentos: TherapeuticSuggestion[]): DimensaoRisco {
   const fatores: string[] = [];
   const protecoes: string[] = [];
   const acoes: string[] = [];
   let score = 0;
 
+  // RM-41/RM-48: normaliza acentos ANTES de comparar — "lítio" (nome
+  // canônico, com acento) nunca batia com "litio" (digitação sem acento,
+  // comum em `medicamentos_em_uso`, texto livre digitado pelo médico).
+  // Mesma correção já aplicada em safety-rules.ts (RM-36); reutilizada
+  // aqui em vez de duplicada, para as duas listas de pares nunca
+  // divergirem de novo neste ponto específico.
   const todosNomes = [
-    ...anamnese.medicamentos_em_uso.map(m => m.nome.toLowerCase()),
-    ...medicamentos.map(m => `${m.molecula.toLowerCase()} ${m.classe_terapeutica.toLowerCase()}`),
+    ...anamnese.medicamentos_em_uso.map(m => stripAccents(m.nome.toLowerCase())),
+    ...medicamentos.map(m => stripAccents(`${m.molecula.toLowerCase()} ${m.classe_terapeutica.toLowerCase()}`)),
   ];
 
-  const contemTermo = (termo: string) => todosNomes.some(n => n.includes(termo));
+  const contemTermo = (termo: string) => {
+    const termoNormalizado = stripAccents(termo);
+    const sinonimos = SINONIMOS_CLASSE[termoNormalizado] ?? [];
+    return todosNomes.some(n => n.includes(termoNormalizado) || sinonimos.some(s => n.includes(stripAccents(s))));
+  };
 
   PARES_INTERACAO.forEach(par => {
     if (contemTermo(par.a) && contemTermo(par.b)) {
-      const incremento = par.gravidade === 'muito_alto' ? 40 : par.gravidade === 'alto' ? 25 : par.gravidade === 'moderado' ? 15 : 8;
+      const incremento = par.gravidade === 'muito_alto' ? 40 : par.gravidade === 'alto' ? 25 : par.gravidade === 'intermediario' ? 15 : 8;
       fatores.push(`Interação ${par.a.toUpperCase()} + ${par.b.toUpperCase()}: ${par.descricao}`);
       acoes.push(par.acao);
       score += incremento;

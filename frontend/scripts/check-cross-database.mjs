@@ -18,7 +18,7 @@ fs.writeFileSync(out, formatSyncMarkdown(report));
 
 console.log(
   `[RM-24] cross-db: total=${report.totalAnalisado} compatíveis=${report.compativeis} ` +
-    `divergentes=${report.divergentes} críticos=${report.criticos}`,
+    `divergentes=${report.divergentes} aceitos=${report.aceitos} críticos=${report.criticos}`,
 );
 
 if (!report.publishOk) {

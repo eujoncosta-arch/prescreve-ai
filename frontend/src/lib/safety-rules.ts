@@ -54,7 +54,7 @@ function toSafeDrug(e: DrugEntity): SafeDrug {
  * decidir se dois tokens se referem à mesma substância.
  */
 const COMBINING_DIACRITICS_RE = new RegExp('[̀-ͯ]', 'g');
-function stripAccents(s: string): string {
+export function stripAccents(s: string): string {
   return s.normalize('NFD').replace(COMBINING_DIACRITICS_RE, '');
 }
 

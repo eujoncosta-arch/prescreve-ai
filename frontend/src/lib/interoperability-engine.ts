@@ -692,7 +692,7 @@ export function importarFHIR(jsonStr: string): ImportacaoFHIRResult {
   const avisos: string[] = [];
   const erros: string[] = [];
   const tipos_encontrados: FHIRResourceType[] = [];
-  let paciente: Partial<DadosClinicos> = {};
+  const paciente: Partial<DadosClinicos> = {};
   let recursos_importados = 0;
 
   let bundle: FHIRBundle;

@@ -4,7 +4,7 @@
 // Separação estrita: dados regulatórios ≠ evidência científica
 // ============================================================
 
-import type { ProdutoComercial, LabInfo } from './types';
+import type { ProdutoComercial } from './types';
 
 // ─── NORMALIZAÇÃO DE MOLÉCULA ─────────────────────────────────
 // Função canônica para comparar nomes de moléculas com robustez.
@@ -448,7 +448,6 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     link_bula_profissional: 'https://eurofarma.com.br/produtos/bulas/healthcare/pt/bula-metoprolol-eurofarma.pdf',
   },
 
-
   // ═══════════════════════════════════════════
   // DIABETES
   // ═══════════════════════════════════════════
@@ -811,7 +810,6 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     link_bula_profissional: 'https://eurofarma.com.br/produtos/bulas/healthcare/pt/bula-nortriptilina-eurofarma.pdf',
   },
 
-
   {
     id: 'euro-carbolitium-300',
     lab_id: 'eurofarma',
@@ -959,7 +957,6 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     link_bula_paciente: 'https://eurofarma.com.br/produtos/bulas/patient/pt/bula-omeprazol-eurofarma.pdf',
     link_bula_profissional: 'https://eurofarma.com.br/produtos/bulas/healthcare/pt/bula-omeprazol-eurofarma.pdf',
   },
-
 
   // ═══════════════════════════════════════════
   // ANALGÉSICOS / ANTITÉRMICOS

@@ -63,6 +63,10 @@ describe('Validação de entrada (e2e)', () => {
     riskScore: { create: jest.fn().mockResolvedValue({ id: 'risk-1' }) },
     auditoria: { create: jest.fn().mockResolvedValue({}) },
   };
+  // RM-49 (RM41-017): ver comentário em authorization.e2e-spec.ts.
+  (prismaMock as unknown as { $transaction: jest.Mock }).$transaction = jest.fn(
+    (cb: (tx: unknown) => unknown) => cb(prismaMock),
+  );
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -108,9 +112,7 @@ describe('Validação de entrada (e2e)', () => {
 
   const medicamentoValido = {
     molecula: 'Losartana',
-    dose: '50mg',
-    via: 'VO',
-    frequencia: '1x/dia',
+    dose: { valor: 50, unidade: 'mg', frequencia: '1x/dia', via: 'VO' },
     duracao: '30d',
   };
 
@@ -380,6 +382,437 @@ describe('Validação de entrada (e2e)', () => {
           validade_dias: 9999,
         })
         .expect(400);
+    });
+  });
+
+  // ============================================================
+  // RM-36 — Contrato estruturado de dose (ItemMedicamentoDto.dose)
+  //
+  // `dose` era texto livre — o backend aceitava "500 mg", "500 mL", "20
+  // gotas", "500 mg/kg/dia" ou qualquer string arbitrária, sem nenhuma
+  // validação semântica de unidade/valor/frequência. Substituído por
+  // DoseEstruturadaDto (valor/unidade/frequência/via tipados e
+  // validados, + dose_por_kg_dia/dose_por_tomada opcionais). Estes testes
+  // provam, na camada HTTP real, que o novo contrato é REALMENTE
+  // aplicado — não apenas declarado nos tipos TypeScript.
+  // ============================================================
+
+  describe('Contrato estruturado de dose (RM-36)', () => {
+    it('dose como STRING livre (formato antigo) é rejeitada (400) — texto livre nunca é mais a única representação da dose', async () => {
+      const t = await token();
+      const res = await request(app.getHttpServer())
+        .post('/api/prescricao')
+        .set('Authorization', `Bearer ${t}`)
+        .send({
+          consulta_id: CONSULTA_ID,
+          medicamentos: [
+            { molecula: 'Losartana', dose: '50mg', duracao: '30d' },
+          ],
+        })
+        .expect(400);
+      expect(JSON.stringify(res.body)).toMatch(/dose/i);
+    });
+
+    it.each([
+      'mg',
+      'mcg',
+      'g',
+      'mL',
+      'gotas',
+      'UI',
+      'comprimido',
+      'capsula',
+      'sache',
+      'ampola',
+      'jato',
+      'aplicacao',
+    ])('unidade "%s" (permitida) é aceita (201)', async (unidade) => {
+      const t = await token();
+      await request(app.getHttpServer())
+        .post('/api/prescricao')
+        .set('Authorization', `Bearer ${t}`)
+        .send({
+          consulta_id: CONSULTA_ID,
+          medicamentos: [
+            {
+              molecula: 'Losartana',
+              dose: { valor: 1, unidade, frequencia: '1x/dia', via: 'VO' },
+              duracao: '30d',
+            },
+          ],
+        })
+        .expect(201);
+    });
+
+    it('unidade desconhecida (ex.: "kg", "unidade_inventada") é rejeitada (400)', async () => {
+      const t = await token();
+      const res = await request(app.getHttpServer())
+        .post('/api/prescricao')
+        .set('Authorization', `Bearer ${t}`)
+        .send({
+          consulta_id: CONSULTA_ID,
+          medicamentos: [
+            {
+              molecula: 'Losartana',
+              dose: {
+                valor: 50,
+                unidade: 'kg',
+                frequencia: '1x/dia',
+                via: 'VO',
+              },
+              duracao: '30d',
+            },
+          ],
+        })
+        .expect(400);
+      expect(JSON.stringify(res.body)).toMatch(/unidade/i);
+    });
+
+    it('valor zero é rejeitado (400) — dose ausente/zero nunca deve ser representada como um valor calculado', async () => {
+      const t = await token();
+      await request(app.getHttpServer())
+        .post('/api/prescricao')
+        .set('Authorization', `Bearer ${t}`)
+        .send({
+          consulta_id: CONSULTA_ID,
+          medicamentos: [
+            {
+              molecula: 'Losartana',
+              dose: {
+                valor: 0,
+                unidade: 'mg',
+                frequencia: '1x/dia',
+                via: 'VO',
+              },
+              duracao: '30d',
+            },
+          ],
+        })
+        .expect(400);
+    });
+
+    it('valor negativo é rejeitado (400)', async () => {
+      const t = await token();
+      await request(app.getHttpServer())
+        .post('/api/prescricao')
+        .set('Authorization', `Bearer ${t}`)
+        .send({
+          consulta_id: CONSULTA_ID,
+          medicamentos: [
+            {
+              molecula: 'Losartana',
+              dose: {
+                valor: -50,
+                unidade: 'mg',
+                frequencia: '1x/dia',
+                via: 'VO',
+              },
+              duracao: '30d',
+            },
+          ],
+        })
+        .expect(400);
+    });
+
+    it('valor impossível (ex.: 999999999 mg) é rejeitado (400)', async () => {
+      const t = await token();
+      await request(app.getHttpServer())
+        .post('/api/prescricao')
+        .set('Authorization', `Bearer ${t}`)
+        .send({
+          consulta_id: CONSULTA_ID,
+          medicamentos: [
+            {
+              molecula: 'Losartana',
+              dose: {
+                valor: 999999999,
+                unidade: 'mg',
+                frequencia: '1x/dia',
+                via: 'VO',
+              },
+              duracao: '30d',
+            },
+          ],
+        })
+        .expect(400);
+    });
+
+    it.each([
+      '1x/dia',
+      '2x/dia',
+      '3x/dia',
+      '4x/dia',
+      'a_cada_4h',
+      'a_cada_6h',
+      'a_cada_8h',
+      'a_cada_12h',
+      'dose_unica',
+      'uso_continuo',
+      'sos',
+    ])(
+      'frequência "%s" (permitida, sem detalhe exigido) é aceita (201)',
+      async (frequencia) => {
+        const t = await token();
+        await request(app.getHttpServer())
+          .post('/api/prescricao')
+          .set('Authorization', `Bearer ${t}`)
+          .send({
+            consulta_id: CONSULTA_ID,
+            medicamentos: [
+              {
+                molecula: 'Losartana',
+                dose: { valor: 50, unidade: 'mg', frequencia, via: 'VO' },
+                duracao: '30d',
+              },
+            ],
+          })
+          .expect(201);
+      },
+    );
+
+    it('frequência desconhecida (texto livre não mapeado) é rejeitada (400)', async () => {
+      const t = await token();
+      const res = await request(app.getHttpServer())
+        .post('/api/prescricao')
+        .set('Authorization', `Bearer ${t}`)
+        .send({
+          consulta_id: CONSULTA_ID,
+          medicamentos: [
+            {
+              molecula: 'Losartana',
+              dose: {
+                valor: 50,
+                unidade: 'mg',
+                frequencia: 'sempre que der',
+                via: 'VO',
+              },
+              duracao: '30d',
+            },
+          ],
+        })
+        .expect(400);
+      expect(JSON.stringify(res.body)).toMatch(/frequencia/i);
+    });
+
+    it('frequência "outro" SEM frequencia_detalhe é rejeitada (400) — nunca um escape livre sem contexto', async () => {
+      const t = await token();
+      await request(app.getHttpServer())
+        .post('/api/prescricao')
+        .set('Authorization', `Bearer ${t}`)
+        .send({
+          consulta_id: CONSULTA_ID,
+          medicamentos: [
+            {
+              molecula: 'Losartana',
+              dose: {
+                valor: 50,
+                unidade: 'mg',
+                frequencia: 'outro',
+                via: 'VO',
+              },
+              duracao: '30d',
+            },
+          ],
+        })
+        .expect(400);
+    });
+
+    it('frequência "outro" COM frequencia_detalhe é aceita (201) — texto livre permitido apenas como complemento, nunca sozinho', async () => {
+      const t = await token();
+      await request(app.getHttpServer())
+        .post('/api/prescricao')
+        .set('Authorization', `Bearer ${t}`)
+        .send({
+          consulta_id: CONSULTA_ID,
+          medicamentos: [
+            {
+              molecula: 'Losartana',
+              dose: {
+                valor: 50,
+                unidade: 'mg',
+                frequencia: 'outro',
+                frequencia_detalhe: 'Titular conforme resposta pressórica',
+                via: 'VO',
+              },
+              duracao: '30d',
+            },
+          ],
+        })
+        .expect(201);
+    });
+
+    it('frequência "nao_diaria" SEM frequencia_detalhe é rejeitada (400)', async () => {
+      const t = await token();
+      await request(app.getHttpServer())
+        .post('/api/prescricao')
+        .set('Authorization', `Bearer ${t}`)
+        .send({
+          consulta_id: CONSULTA_ID,
+          medicamentos: [
+            {
+              molecula: 'Losartana',
+              dose: {
+                valor: 70,
+                unidade: 'mg',
+                frequencia: 'nao_diaria',
+                via: 'VO',
+              },
+              duracao: '90d',
+            },
+          ],
+        })
+        .expect(400);
+    });
+
+    it('dose_por_kg_dia com unidade PONDERÁVEL (mg) é aceita (201)', async () => {
+      const t = await token();
+      await request(app.getHttpServer())
+        .post('/api/prescricao')
+        .set('Authorization', `Bearer ${t}`)
+        .send({
+          consulta_id: CONSULTA_ID,
+          medicamentos: [
+            {
+              molecula: 'Amoxicilina',
+              dose: {
+                valor: 500,
+                unidade: 'mg',
+                frequencia: '3x/dia',
+                via: 'VO',
+                dose_por_kg_dia: 50,
+              },
+              duracao: '10d',
+            },
+          ],
+        })
+        .expect(201);
+    });
+
+    it('dose_por_kg_dia com unidade DISCRETA (comprimido) é rejeitada (400) — incoerência unidade × tipo de dose', async () => {
+      const t = await token();
+      const res = await request(app.getHttpServer())
+        .post('/api/prescricao')
+        .set('Authorization', `Bearer ${t}`)
+        .send({
+          consulta_id: CONSULTA_ID,
+          medicamentos: [
+            {
+              molecula: 'Amoxicilina',
+              dose: {
+                valor: 1,
+                unidade: 'comprimido',
+                frequencia: '3x/dia',
+                via: 'VO',
+                dose_por_kg_dia: 50,
+              },
+              duracao: '10d',
+            },
+          ],
+        })
+        .expect(400);
+      expect(JSON.stringify(res.body)).toMatch(
+        /dose_por_kg_dia|dose_por_tomada|ponder/i,
+      );
+    });
+
+    it('dose_por_tomada negativo é rejeitado (400)', async () => {
+      const t = await token();
+      await request(app.getHttpServer())
+        .post('/api/prescricao')
+        .set('Authorization', `Bearer ${t}`)
+        .send({
+          consulta_id: CONSULTA_ID,
+          medicamentos: [
+            {
+              molecula: 'Amoxicilina',
+              dose: {
+                valor: 500,
+                unidade: 'mg',
+                frequencia: '3x/dia',
+                via: 'VO',
+                dose_por_tomada: -10,
+              },
+              duracao: '10d',
+            },
+          ],
+        })
+        .expect(400);
+    });
+
+    it('campo desconhecido dentro de "dose" (whitelist) é rejeitado (400)', async () => {
+      const t = await token();
+      await request(app.getHttpServer())
+        .post('/api/prescricao')
+        .set('Authorization', `Bearer ${t}`)
+        .send({
+          consulta_id: CONSULTA_ID,
+          medicamentos: [
+            {
+              molecula: 'Losartana',
+              dose: {
+                valor: 50,
+                unidade: 'mg',
+                frequencia: '1x/dia',
+                via: 'VO',
+                campo_extra: 'x',
+              },
+              duracao: '30d',
+            },
+          ],
+        })
+        .expect(400);
+    });
+
+    it('persistência: a dose estruturada (não texto livre) é o que chega ao Prisma — prova de integração DTO → service → persistência', async () => {
+      const t = await token();
+      await request(app.getHttpServer())
+        .post('/api/prescricao')
+        .set('Authorization', `Bearer ${t}`)
+        .send({
+          consulta_id: CONSULTA_ID,
+          medicamentos: [
+            {
+              molecula: 'Amoxicilina',
+              dose: {
+                valor: 500,
+                unidade: 'mg',
+                frequencia: '3x/dia',
+                via: 'VO',
+                dose_por_kg_dia: 50,
+              },
+              duracao: '10d',
+              observacoes: 'Tomar com alimentos',
+            },
+          ],
+        })
+        .expect(201);
+
+      const ultimaChamada = prismaMock.prescricao.create.mock.calls.at(-1) as
+        | [
+            {
+              data: {
+                medicamentos: Array<{
+                  molecula: string;
+                  dose: Record<string, unknown>;
+                  observacoes?: string;
+                }>;
+              };
+            },
+          ]
+        | undefined;
+      const item = ultimaChamada?.[0].data.medicamentos[0];
+      expect(item).toBeDefined();
+      if (!item) return;
+      expect(item.molecula).toBe('Amoxicilina');
+      expect(item.dose).toEqual({
+        valor: 500,
+        unidade: 'mg',
+        frequencia: '3x/dia',
+        via: 'VO',
+        dose_por_kg_dia: 50,
+      });
+      expect(typeof item.dose).toBe('object');
+      expect(item.observacoes).toBe('Tomar com alimentos');
     });
   });
 

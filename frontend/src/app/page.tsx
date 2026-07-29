@@ -1,14 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useSyncExternalStore } from 'react';
 import { AppShell } from '@/components/layout/AppShell';
 import { useApp } from '@/lib/store';
 import { ClientDate } from '@/components/ui/client-date';
 import {
   FilePlus2, Users, FileText, AlertTriangle, BookOpen, Clock, CheckCircle2,
-  Activity, ChevronRight, Stethoscope, TrendingUp, Shield, Sparkles,
-  Building2, Award, Zap, Calculator, ClipboardList, GitBranch, FlaskConical,
-  Brain, ArrowUpRight, Circle,
+  Activity, ChevronRight, Stethoscope, TrendingUp, Sparkles,
+  Zap, Calculator, ClipboardList, GitBranch, FlaskConical,
+  Brain, ArrowUpRight,
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -37,12 +37,18 @@ const STATUS_CARD: Record<string, string> = {
 
 export default function Dashboard() {
   const { state } = useApp();
-  const [greeting, setGreeting] = useState('');
-
-  useEffect(() => {
-    const h = new Date().getHours();
-    setGreeting(h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite');
-  }, []);
+  // RM-52 (react-hooks/set-state-in-effect): a hora atual é lida de um
+  // "sistema externo" (relógio) só no cliente, evitando mismatch de
+  // hidratação com o SSR (que sempre renderiza ''). Sem `useEffect`+
+  // `setState`, no mesmo padrão já aplicado em useLocalStorage/comite/protocols.
+  const greeting = useSyncExternalStore(
+    () => () => {},
+    () => {
+      const h = new Date().getHours();
+      return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
+    },
+    () => '',
+  );
 
   const total       = state.consultations.length;
   const concluidas  = state.consultations.filter(c => c.status === 'concluida').length;

@@ -5,9 +5,30 @@
 // ============================================================
 
 import { NextRequest, NextResponse } from 'next/server';
+import crypto from 'node:crypto';
 import { SYNC_STATUS, AUDIT_TRAIL, EUROFARMA_CATALOG } from '@/lib/eurofarma-sync';
 
 export const dynamic = 'force-static';
+
+// RM-56-02: a checagem anterior só verificava se o header `Authorization`
+// existia (qualquer valor não-vazio passava) e só em produção — fora de
+// produção o endpoint ficava totalmente aberto. Comparação real, em
+// tempo constante, contra um segredo dedicado (`EUROFARMA_SYNC_TOKEN`,
+// nunca prefixado com `NEXT_PUBLIC_`, portanto nunca embutido no bundle
+// do cliente). Mesmo padrão fail-safe do resto do app: sem segredo
+// configurado, o gatilho fica BLOQUEADO em produção (nunca "aberto por
+// omissão"); fora de produção, sem segredo configurado, permanece aberto
+// para permitir uso local sem configuração adicional.
+function autorizado(request: NextRequest): boolean {
+  const token = process.env.EUROFARMA_SYNC_TOKEN;
+  if (!token) return process.env.NODE_ENV !== 'production';
+
+  const authHeader = request.headers.get('authorization') ?? '';
+  const fornecido = Buffer.from(authHeader.replace(/^Bearer\s+/i, ''), 'utf8');
+  const esperado = Buffer.from(token, 'utf8');
+  if (fornecido.length !== esperado.length) return false;
+  return crypto.timingSafeEqual(fornecido, esperado);
+}
 
 // GET /api/sync/eurofarma — retorna status atual do sync
 export async function GET() {
@@ -22,10 +43,7 @@ export async function GET() {
 // POST /api/sync/eurofarma — dispara sincronização manual
 // Em produção: scrape do portal Eurofarma + diff + persist no DB
 export async function POST(request: NextRequest) {
-  const authHeader = request.headers.get('authorization');
-
-  // Validação básica de autorização (em produção: JWT do médico admin)
-  if (!authHeader && process.env.NODE_ENV === 'production') {
+  if (!autorizado(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

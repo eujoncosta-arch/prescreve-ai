@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo } from 'react';
 import {
   MEDICAMENTOS_DOSAGEM,
   buscarMedicamento,
@@ -13,7 +13,7 @@ import {
   formatarDose,
   formatarVolume,
   type MedicamentoDosagem,
-  type FormulacaoMedicamento,
+  
   type ResultadoDosagem,
 } from '@/lib/dosing-engine';
 import {
@@ -26,23 +26,12 @@ import { cn } from '@/lib/utils';
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
 
-function r(n: number, dec = 1) {
-  return parseFloat(n.toFixed(dec));
-}
-
 function labelVia(via: string) {
   const M: Record<string, string> = {
     oral: 'Via oral', iv: 'Intravenoso', im: 'Intramuscular',
     sc: 'Subcutâneo', inalatorio: 'Inalatório', topico: 'Tópico', retal: 'Retal',
   };
   return M[via] ?? via;
-}
-
-function frequenciaLabel(h: number) {
-  const M: Record<number, string> = {
-    4: '4/4h', 6: '6/6h', 8: '8/8h', 12: '12/12h', 24: '1×/dia', 48: '1×/48h',
-  };
-  return M[h] ?? `${h}h/h`;
 }
 
 // ─── Paciente form ────────────────────────────────────────────────────────────

@@ -4,7 +4,7 @@
 
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useSyncExternalStore } from 'react';
 
 // ─── Tipos ───────────────────────────────────────────────────
 
@@ -192,20 +192,53 @@ function saveToStorage(events: TimelineEvent[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
 }
 
+// ─── Store externo (localStorage) ──────────────────────────────
+//
+// RM-51 (react-hooks/set-state-in-effect): a versão anterior carregava
+// `loadFromStorage()` num `useEffect` e chamava `setState` diretamente no
+// corpo do efeito — o antipadrão que a regra aponta. `localStorage` é
+// exatamente o tipo de "sistema externo" para o qual `useSyncExternalStore`
+// existe (é a API que o próprio texto da regra recomenda: "Subscribe for
+// updates from some external system"). Com ela, o React já resolve o
+// problema de hidratação (servidor não tem `localStorage` → usa
+// `getServerSnapshot`; cliente sincroniza com o valor real após o mount)
+// sem nenhum `useEffect` manual.
+let cachedEvents: TimelineEvent[] | null = null;
+const listeners = new Set<() => void>();
+const EMPTY_EVENTS: TimelineEvent[] = [];
+
+function getSnapshot(): TimelineEvent[] {
+  if (cachedEvents === null) cachedEvents = loadFromStorage();
+  return cachedEvents;
+}
+
+function getServerSnapshot(): TimelineEvent[] {
+  return EMPTY_EVENTS;
+}
+
+function subscribe(onStoreChange: () => void): () => void {
+  listeners.add(onStoreChange);
+  return () => listeners.delete(onStoreChange);
+}
+
+function setStoreEvents(next: TimelineEvent[]) {
+  cachedEvents = next;
+  saveToStorage(next);
+  listeners.forEach(l => l());
+}
+
 // ─── Hook ─────────────────────────────────────────────────────
 
 export function useTimeline() {
-  const [events, setEvents] = useState<TimelineEvent[]>([]);
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    setEvents(loadFromStorage());
-    setLoaded(true);
-  }, []);
+  const events = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  // `loaded` usa o MESMO mecanismo: no servidor (getServerSnapshot) o app
+  // ainda não teve chance de ler o localStorage real, então é `false`; no
+  // cliente, uma vez montado, `getSnapshot` já reflete o valor real — sem
+  // precisar de um segundo estado nem de um efeito para marcá-lo.
+  const loaded = useSyncExternalStore(subscribe, () => true, () => false);
 
   const persist = useCallback((next: TimelineEvent[]) => {
-    setEvents(next);
-    saveToStorage(next);
+    setStoreEvents(next);
   }, []);
 
   const addEvent = useCallback((data: Omit<TimelineEvent, 'id'>): TimelineEvent => {

@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CacheService, TTL } from '../cache/cache.service';
-import { AuditService } from '../audit/audit.service';
+import { AuditService, AuditoriaInput } from '../audit/audit.service';
 import {
   CriarConsultaDto,
   CriarDiagnosticoDto,
@@ -25,6 +25,156 @@ function toJson(
   value: Record<string, unknown> | undefined,
 ): Prisma.InputJsonValue {
   return (value ?? {}) as Prisma.InputJsonValue;
+}
+
+// ============================================================
+// RM-43 — Detalhe completo de consulta (recuperação de prescrição real)
+//
+// `buscarConsulta` já existia, já exige autenticação (JwtAuthGuard no
+// controller) e já filtra por `usuario_id` (nunca vaza consulta de
+// terceiro — ver ownership-authorization.e2e-spec.ts). O objeto Prisma
+// bruto retornado antes desta RM incluía campos puramente internos
+// (`usuario_id` redundante ao contexto de auth, `idempotency_key` e
+// `hash_integridade` — mecanismo de integridade/dedup do servidor, sem
+// valor para o cliente) — a resposta abaixo expõe explicitamente só os
+// campos que o frontend precisa para reconstruir o histórico clínico
+// real (incluindo `Prescricao.medicamentos`, a fonte de verdade da
+// prescrição — nunca reconstituída a partir de outro lugar).
+// ============================================================
+
+interface DiagnosticoDetalheResponse {
+  id: string;
+  cid: string;
+  descricao: string;
+  confianca: number;
+  selecionado: boolean;
+  criado_em: Date;
+}
+
+interface PrescricaoDetalheResponse {
+  id: string;
+  status: string;
+  /** Array real de `ItemMedicamentoDto` (molecula/dose estruturada/duração/observações) — nunca fabricado. */
+  medicamentos: Prisma.JsonValue;
+  orientacoes: string | null;
+  validade_dias: number;
+  diagnostico_id: string | null;
+  criado_em: Date;
+}
+
+// RM-53 (RM41-023): o risco clínico calculado no frontend nunca era
+// persistido nem recuperável — `salvarRiskScore` existia e já era testado
+// isoladamente, mas (a) nada no fluxo real da consulta o invocava e (b)
+// `buscarConsulta`/`mapConsultaDetalhe` nem sequer incluíam a relação
+// `risco_scores`, então mesmo se o frontend passasse a chamar o endpoint,
+// o dado nunca voltaria na recuperação do detalhe. Ambos os lados
+// corrigidos juntos — persistir sem poder recuperar não fecha o risco.
+interface RiscoScoreDetalheResponse {
+  id: string;
+  risco_global: string;
+  score_global: number;
+  alerta_vermelho: boolean;
+  risco_cardiovascular: Prisma.JsonValue;
+  risco_renal: Prisma.JsonValue;
+  risco_hemorragico: Prisma.JsonValue;
+  risco_farmacologico: Prisma.JsonValue;
+  risco_interacao: Prisma.JsonValue;
+  risco_terapeutico: Prisma.JsonValue;
+  recomendacoes: string[];
+  criado_em: Date;
+}
+
+export interface ConsultaDetalheResponse {
+  id: string;
+  status: string;
+  anamnese: Prisma.JsonValue;
+  criado_em: Date;
+  atualizado_em: Date;
+  diagnosticos: DiagnosticoDetalheResponse[];
+  prescricoes: PrescricaoDetalheResponse[];
+  risco_scores: RiscoScoreDetalheResponse[];
+}
+
+type ConsultaComRelacoes = {
+  id: string;
+  status: string;
+  anamnese?: Prisma.JsonValue;
+  criado_em?: Date;
+  atualizado_em?: Date;
+  diagnosticos?: {
+    id: string;
+    cid: string;
+    descricao: string;
+    confianca: number;
+    selecionado: boolean;
+    criado_em: Date;
+  }[];
+  prescricoes?: {
+    id: string;
+    status: string;
+    medicamentos: Prisma.JsonValue;
+    orientacoes: string | null;
+    validade_dias: number;
+    diagnostico_id: string | null;
+    criado_em: Date;
+  }[];
+  risco_scores?: {
+    id: string;
+    risco_global: string;
+    score_global: number;
+    alerta_vermelho: boolean;
+    risco_cardiovascular: Prisma.JsonValue;
+    risco_renal: Prisma.JsonValue;
+    risco_hemorragico: Prisma.JsonValue;
+    risco_farmacologico: Prisma.JsonValue;
+    risco_interacao: Prisma.JsonValue;
+    risco_terapeutico: Prisma.JsonValue;
+    recomendacoes: string[];
+    criado_em: Date;
+  }[];
+};
+
+function mapConsultaDetalhe(
+  consulta: ConsultaComRelacoes,
+): ConsultaDetalheResponse {
+  return {
+    id: consulta.id,
+    status: consulta.status,
+    anamnese: consulta.anamnese ?? null,
+    criado_em: consulta.criado_em as Date,
+    atualizado_em: consulta.atualizado_em as Date,
+    diagnosticos: (consulta.diagnosticos ?? []).map((d) => ({
+      id: d.id,
+      cid: d.cid,
+      descricao: d.descricao,
+      confianca: d.confianca,
+      selecionado: d.selecionado,
+      criado_em: d.criado_em,
+    })),
+    prescricoes: (consulta.prescricoes ?? []).map((p) => ({
+      id: p.id,
+      status: p.status,
+      medicamentos: p.medicamentos,
+      orientacoes: p.orientacoes,
+      validade_dias: p.validade_dias,
+      diagnostico_id: p.diagnostico_id,
+      criado_em: p.criado_em,
+    })),
+    risco_scores: (consulta.risco_scores ?? []).map((r) => ({
+      id: r.id,
+      risco_global: r.risco_global,
+      score_global: r.score_global,
+      alerta_vermelho: r.alerta_vermelho,
+      risco_cardiovascular: r.risco_cardiovascular,
+      risco_renal: r.risco_renal,
+      risco_hemorragico: r.risco_hemorragico,
+      risco_farmacologico: r.risco_farmacologico,
+      risco_interacao: r.risco_interacao,
+      risco_terapeutico: r.risco_terapeutico,
+      recomendacoes: r.recomendacoes,
+      criado_em: r.criado_em,
+    })),
+  };
 }
 
 @Injectable()
@@ -95,6 +245,56 @@ export class ConsultaService {
     }
   }
 
+  /**
+   * RM41-016/RM41-017/RM-49: fecha os dois achados críticos de auditoria
+   * do RM-41 numa única primitiva reutilizável.
+   *
+   * (016) toda escrita clínica passada aqui SEMPRE grava um registro de
+   * auditoria — não é mais possível persistir uma consulta/diagnóstico/
+   * prescrição/risk score sem trilha, como acontecia antes em
+   * `salvarRiskScore` (nenhuma chamada a `registrarAuditoria` existia).
+   *
+   * (017) a escrita clínica e a escrita de auditoria acontecem dentro do
+   * MESMO `prisma.$transaction(async (tx) => ...)` — uma commita com a
+   * outra, ou nenhuma das duas persiste. Isso resolve o gap real: antes,
+   * uma falha do processo (crash, timeout de conexão) entre o `create` da
+   * consulta e a chamada separada a `registrarAuditoria` deixava a
+   * consulta permanentemente sem trilha de auditoria, sem qualquer sinal.
+   *
+   * Nota sobre o retry de idempotência: se `criar` colidir com a unique
+   * constraint (P2002) — outra requisição concorrente com a MESMA
+   * `idempotency_key` venceu a corrida — a transação inteira é abortada
+   * (nada fica parcialmente persistido) e o registro do vencedor é
+   * buscado FORA da transação (ele já está garantidamente commitado: em
+   * Postgres, um conflito de unique constraint só é observável depois que
+   * a transação concorrente que o causou termina). Não se tenta reutilizar
+   * `tx` após um erro de constraint — Postgres aborta a transação inteira
+   * no primeiro erro; qualquer comando adicional na mesma tx falharia com
+   * "current transaction is aborted".
+   */
+  private async escreverComAuditoriaAtomica<T>(
+    criar: (tx: Prisma.TransactionClient) => Promise<T>,
+    montarAuditoria: (registro: T) => AuditoriaInput,
+    buscarExistenteAposColisao: () => Promise<T | null>,
+  ): Promise<T> {
+    try {
+      return await this.prisma.$transaction(async (tx) => {
+        const registro = await criar(tx);
+        await this.audit.registrarAuditoria(montarAuditoria(registro), tx);
+        return registro;
+      });
+    } catch (e) {
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2002'
+      ) {
+        const existente = await buscarExistenteAposColisao();
+        if (existente) return existente;
+      }
+      throw e;
+    }
+  }
+
   async criarConsulta(dto: CriarConsultaDto, usuarioId: string) {
     const existente = await this.buscarPorIdempotencyKey(
       (key) =>
@@ -133,9 +333,9 @@ export class ConsultaService {
       pacienteId = paciente.id;
     }
 
-    const consulta = await this.criarComIdempotenciaSobColisao(
-      () =>
-        this.prisma.consulta.create({
+    return this.escreverComAuditoriaAtomica(
+      (tx) =>
+        tx.consulta.create({
           data: {
             usuario_id: usuarioId,
             paciente_id: pacienteId,
@@ -143,6 +343,12 @@ export class ConsultaService {
             idempotency_key: dto.idempotency_key,
           },
         }),
+      (consulta) => ({
+        usuario_id: usuarioId,
+        tipo: 'consulta_criada',
+        acao: `Consulta ${consulta.id} criada`,
+        recurso: `consulta:${consulta.id}`,
+      }),
       () =>
         dto.idempotency_key
           ? this.prisma.consulta.findUnique({
@@ -150,15 +356,6 @@ export class ConsultaService {
             })
           : Promise.resolve(null),
     );
-
-    await this.audit.registrarAuditoria({
-      usuario_id: usuarioId,
-      tipo: 'consulta_criada',
-      acao: `Consulta ${consulta.id} criada`,
-      recurso: `consulta:${consulta.id}`,
-    });
-
-    return consulta;
   }
 
   async listarConsultas(usuarioId: string, pagina = 1, limite = 20) {
@@ -181,18 +378,20 @@ export class ConsultaService {
     return { total, pagina, limite, consultas };
   }
 
-  async buscarConsulta(id: string, usuarioId: string) {
+  async buscarConsulta(
+    id: string,
+    usuarioId: string,
+  ): Promise<ConsultaDetalheResponse> {
     const consulta = await this.prisma.consulta.findFirst({
       where: { id, usuario_id: usuarioId, deletado_em: null },
       include: {
         diagnosticos: true,
-        prescricoes: { include: { registros: true } },
-        risco_scores: { take: 1, orderBy: { criado_em: 'desc' } },
-        trust_scores: true,
+        prescricoes: true,
+        risco_scores: true,
       },
     });
     if (!consulta) throw new NotFoundException('Consulta não encontrada');
-    return consulta;
+    return mapConsultaDetalhe(consulta);
   }
 
   // ── DIAGNÓSTICO ───────────────────────────────────────────
@@ -212,9 +411,9 @@ export class ConsultaService {
     );
     if (existente) return existente;
 
-    const diagnostico = await this.criarComIdempotenciaSobColisao(
-      () =>
-        this.prisma.diagnostico.create({
+    return this.escreverComAuditoriaAtomica(
+      (tx) =>
+        tx.diagnostico.create({
           data: {
             consulta_id: dto.consulta_id,
             cid: dto.cid,
@@ -224,6 +423,13 @@ export class ConsultaService {
             idempotency_key: dto.idempotency_key,
           },
         }),
+      (diagnostico) => ({
+        usuario_id: usuarioId,
+        tipo: 'diagnostico_selecionado',
+        acao: `Diagnóstico ${dto.cid} registrado`,
+        recurso: `diagnostico:${diagnostico.id}`,
+        dados_entrada: { cid: dto.cid },
+      }),
       () =>
         dto.idempotency_key
           ? this.prisma.diagnostico.findUnique({
@@ -231,16 +437,6 @@ export class ConsultaService {
             })
           : Promise.resolve(null),
     );
-
-    await this.audit.registrarAuditoria({
-      usuario_id: usuarioId,
-      tipo: 'diagnostico_selecionado',
-      acao: `Diagnóstico ${dto.cid} registrado`,
-      recurso: `diagnostico:${diagnostico.id}`,
-      dados_entrada: { cid: dto.cid },
-    });
-
-    return diagnostico;
   }
 
   // ── PRESCRIÇÃO ────────────────────────────────────────────
@@ -290,19 +486,33 @@ export class ConsultaService {
       ts: Date.now(),
     });
 
-    const prescricao = await this.criarComIdempotenciaSobColisao(
-      () =>
-        this.prisma.prescricao.create({
+    return this.escreverComAuditoriaAtomica(
+      (tx) =>
+        tx.prescricao.create({
           data: {
             consulta_id: dto.consulta_id,
             diagnostico_id: dto.diagnostico_id,
-            medicamentos: dto.medicamentos.map((m) => ({ ...m })),
+            // `{...m}` (spread raso) preserva `dose` como instância de
+            // DoseEstruturadaDto — estruturalmente idêntica a um objeto
+            // plano em runtime, mas o TS não reconhece isso como
+            // atribuível a Prisma.InputJsonValue. Round-trip via JSON
+            // produz um objeto plano real, sem alterar o conteúdo.
+            medicamentos: JSON.parse(
+              JSON.stringify(dto.medicamentos),
+            ) as Prisma.InputJsonValue,
             orientacoes: dto.orientacoes,
             validade_dias: dto.validade_dias ?? 30,
             hash_integridade: hash,
             idempotency_key: dto.idempotency_key,
           },
         }),
+      (prescricao) => ({
+        usuario_id: usuarioId,
+        tipo: 'prescricao_gerada',
+        acao: `Prescrição ${prescricao.id} gerada`,
+        recurso: `prescricao:${prescricao.id}`,
+        dados_entrada: { moleculas: dto.medicamentos.map((m) => m.molecula) },
+      }),
       () =>
         dto.idempotency_key
           ? this.prisma.prescricao.findUnique({
@@ -310,16 +520,6 @@ export class ConsultaService {
             })
           : Promise.resolve(null),
     );
-
-    await this.audit.registrarAuditoria({
-      usuario_id: usuarioId,
-      tipo: 'prescricao_gerada',
-      acao: `Prescrição ${prescricao.id} gerada`,
-      recurso: `prescricao:${prescricao.id}`,
-      dados_entrada: { moleculas: dto.medicamentos.map((m) => m.molecula) },
-    });
-
-    return prescricao;
   }
 
   // ── RISK / TRUST ──────────────────────────────────────────
@@ -353,9 +553,9 @@ export class ConsultaService {
     );
     if (existente) return existente;
 
-    return this.criarComIdempotenciaSobColisao(
-      () =>
-        this.prisma.riskScore.create({
+    return this.escreverComAuditoriaAtomica(
+      (tx) =>
+        tx.riskScore.create({
           data: {
             consulta_id: consultaId,
             risco_global: score.risco_global,
@@ -371,6 +571,13 @@ export class ConsultaService {
             idempotency_key: idempotencyKey,
           },
         }),
+      (risk) => ({
+        usuario_id: usuarioId,
+        tipo: 'risk_score_calculado',
+        acao: `Risk score ${risk.id} gravado (global: ${score.risco_global})`,
+        recurso: `risk_score:${risk.id}`,
+        dados_entrada: { consulta_id: consultaId },
+      }),
       () =>
         idempotencyKey
           ? this.prisma.riskScore.findUnique({

@@ -67,6 +67,7 @@ enum TipoAuditoria {
   mfa_verificacao_falha
   mfa_recovery_usado
   mfa_bloqueado
+  risk_score_calculado
 }
 
 enum StatusValidacao {
@@ -234,7 +235,14 @@ model Consulta {
 model Diagnostico {
   id              String     @id @default(cuid())
   consulta_id     String
-  consulta        Consulta   @relation(fields: [consulta_id], references: [id], onDelete: Cascade)
+  // RM-52 (RM41-018): era `onDelete: Cascade` — um hard-delete futuro de
+  // uma Consulta destruiria silenciosamente todo o histórico clínico e de
+  // auditoria associado, inconsistente com o design de soft-delete
+  // (`deletado_em`) já adotado em todo o schema. `Restrict` força que
+  // qualquer exclusão real passe primeiro pelos registros dependentes —
+  // hoje não há endpoint de hard-delete, então isto não altera nenhum
+  // comportamento em produção, apenas fecha a mina de schema.
+  consulta        Consulta   @relation(fields: [consulta_id], references: [id], onDelete: Restrict)
   cid             String
   descricao       String
   confianca       Float      // 0–1
@@ -254,7 +262,8 @@ model Diagnostico {
 model Prescricao {
   id              String           @id @default(cuid())
   consulta_id     String
-  consulta        Consulta         @relation(fields: [consulta_id], references: [id], onDelete: Cascade)
+  // RM-52 (RM41-018): ver comentário em Diagnostico acima — mesma correção.
+  consulta        Consulta         @relation(fields: [consulta_id], references: [id], onDelete: Restrict)
   diagnostico_id  String?
   diagnostico     Diagnostico?     @relation(fields: [diagnostico_id], references: [id])
   status          StatusPrescricao @default(rascunho)
@@ -437,7 +446,8 @@ model Outcome {
 model RiskScore {
   id                       String     @id @default(cuid())
   consulta_id              String
-  consulta                 Consulta   @relation(fields: [consulta_id], references: [id], onDelete: Cascade)
+  // RM-52 (RM41-018): ver comentário em Diagnostico acima — mesma correção.
+  consulta                 Consulta   @relation(fields: [consulta_id], references: [id], onDelete: Restrict)
   risco_global             NivelRisco
   score_global             Float
   alerta_vermelho          Boolean    @default(false)
@@ -459,7 +469,8 @@ model RiskScore {
 model MedicalTrust {
   id                String   @id @default(cuid())
   consulta_id       String
-  consulta          Consulta @relation(fields: [consulta_id], references: [id], onDelete: Cascade)
+  // RM-52 (RM41-018): ver comentário em Diagnostico acima — mesma correção.
+  consulta          Consulta @relation(fields: [consulta_id], references: [id], onDelete: Restrict)
   molecula          String
   score_global      Float
   percentual        String
@@ -477,7 +488,8 @@ model MedicalTrust {
 model GuidelineConflict {
   id              String      @id @default(cuid())
   diagnostico_id  String
-  diagnostico     Diagnostico @relation(fields: [diagnostico_id], references: [id], onDelete: Cascade)
+  // RM-52 (RM41-018): ver comentário no model Diagnostico — mesma correção.
+  diagnostico     Diagnostico @relation(fields: [diagnostico_id], references: [id], onDelete: Restrict)
   diretriz_id     String?
   diretriz        Diretriz?   @relation(fields: [diretriz_id], references: [id])
   tipo_conflito   String
@@ -493,7 +505,8 @@ model GuidelineConflict {
 model RecommendationRegistry {
   id               String     @id @default(cuid())
   prescricao_id    String
-  prescricao       Prescricao @relation(fields: [prescricao_id], references: [id], onDelete: Cascade)
+  // RM-52 (RM41-018): ver comentário no model Diagnostico acima — mesma correção.
+  prescricao       Prescricao @relation(fields: [prescricao_id], references: [id], onDelete: Restrict)
   molecula         String
   cid              String
   diretriz         String
@@ -550,7 +563,12 @@ model Auditoria {
 model MedicalValidation {
   id                  String          @id @default(cuid())
   prescricao_id       String?
-  prescricao          Prescricao?     @relation(fields: [prescricao_id], references: [id])
+  // RM-52 (RM41-019): sem `onDelete` explícito, o padrão do Prisma para
+  // relação opcional é `SetNull` — um hard-delete futuro de uma
+  // Prescricao órfãa silenciosamente esta validação médica (o registro de
+  // auditoria de "qual prescrição foi validada" se perde, sem erro nem
+  // sinalização). `Restrict` bloqueia a exclusão em vez de mascará-la.
+  prescricao          Prescricao?     @relation(fields: [prescricao_id], references: [id], onDelete: Restrict)
   validador_id        String
   validador           Usuario         @relation(fields: [validador_id], references: [id])
   crm_hash            String

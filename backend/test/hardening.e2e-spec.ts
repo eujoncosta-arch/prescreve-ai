@@ -165,6 +165,7 @@ describe('Hardening de infraestrutura (e2e)', () => {
     });
 
     it('POST /auth/login tem limite próprio de 10/min — a 11ª requisição no mesmo minuto recebe 429', async () => {
+      // aumentado, a asserção em si não foi enfraquecida. // inteira roda junto (CPU compartilhada) — timeout do teste // cada uma) podem legitimamente passar de 5s quando a suíte e2e // RM-53: 12 requisições sequenciais reais (com bcrypt.compare em
       const payload = {
         email: 'medico@x.com',
         senha: 'senha-errada-de-proposito',
@@ -182,6 +183,6 @@ describe('Hardening de infraestrutura (e2e)', () => {
       // As primeiras 10 tentativas não devem ser 429 (o limite é 10) — elas
       // falham por credenciais inválidas (401), não por rate limit.
       expect(statuses.slice(0, 10).every((s) => s !== 429)).toBe(true);
-    });
+    }, 15000);
   });
 });

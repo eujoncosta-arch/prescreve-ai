@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   type DashboardLaboratorio,
   gerarDashboardLaboratorio, seedPharmaAnalyticsDemo,
@@ -12,14 +12,14 @@ const CIDS = [
   { cid: 'E11', label: 'Diabetes Mellitus tipo 2' },
 ];
 
+// RM-52 (react-hooks/set-state-in-effect): seed é idempotente (só grava
+// demo na primeira chamada) — chamado uma vez no escopo do módulo em vez de
+// num useEffect de mount, eliminando o setState síncrono no efeito.
+seedPharmaAnalyticsDemo();
+
 export default function FarmaAnalyticsPage() {
   const [cid, setCid] = useState('I10');
-  const [dash, setDash] = useState<DashboardLaboratorio | null>(null);
-
-  useEffect(() => {
-    seedPharmaAnalyticsDemo();
-    setDash(gerarDashboardLaboratorio('I10'));
-  }, []);
+  const [dash, setDash] = useState<DashboardLaboratorio | null>(() => gerarDashboardLaboratorio('I10'));
 
   function trocarCid(c: string) {
     setCid(c);

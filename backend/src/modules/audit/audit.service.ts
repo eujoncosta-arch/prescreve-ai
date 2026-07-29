@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../../prisma/prisma.service';
-import { TipoAuditoria } from '@prisma/client';
+import { Prisma, TipoAuditoria } from '@prisma/client';
 import {
   hmacIdentifier,
   validarChaveHmacConfigurada,
@@ -47,7 +47,23 @@ export class AuditService {
    * o IP real do usuário de forma reversível. Unificado para usar a mesma
    * função HMAC-SHA256 com chave server-side (IDENTIFIER_HMAC_KEY).
    */
-  async registrarAuditoria(input: AuditoriaInput) {
+  /**
+   * RM41-017/RM-49: aceita opcionalmente um cliente de transação Prisma
+   * (`tx`, o parâmetro do callback de `prisma.$transaction(async (tx) => ...)`)
+   * para que o registro de auditoria participe da MESMA transação atômica
+   * da escrita clínica que ele documenta. Sem isso, uma falha entre a
+   * escrita clínica e a chamada de auditoria (crash do processo, erro do
+   * banco) perdia permanentemente o registro de auditoria de uma escrita
+   * que já havia sido commitada — quebra de rastreabilidade sem qualquer
+   * sinalização. Chamadores que não estão dentro de uma transação passam
+   * `tx` como `undefined` e o comportamento é idêntico ao anterior (usa
+   * `this.prisma` diretamente).
+   */
+  async registrarAuditoria(
+    input: AuditoriaInput,
+    tx?: Prisma.TransactionClient,
+  ) {
+    const db = tx ?? this.prisma;
     const { ip, ...rest } = input;
     const ip_hash = ip ? hmacIdentifier(this.config, 'ip', ip) : undefined;
 
@@ -57,7 +73,7 @@ export class AuditService {
       .update(payload)
       .digest('hex');
 
-    return this.prisma.auditoria.create({
+    return db.auditoria.create({
       data: {
         usuario_id: input.usuario_id,
         crm_hash: input.crm_hash,

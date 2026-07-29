@@ -1,8 +1,10 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { AppShell } from '@/components/layout/AppShell';
 import { useApp } from '@/lib/store';
+import { IS_DEMO_MODE } from '@/lib/app-mode';
 import { DEMO_CASES, getCaseData } from '@/lib/demo-cases';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -18,16 +20,41 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
+// RM-52 (react-hooks/purity): extraída para fora do corpo do componente —
+// só é chamada a partir de um handler de clique (nunca durante o render),
+// mas a análise estática do lint não confirma isso quando a chamada de
+// `Date.now()` fica dentro da função do componente.
+function gerarIdCasoDemo(caseId: string): string {
+  return `demo_${caseId}_${Date.now()}`;
+}
+
 export default function DemoPage() {
   const router = useRouter();
   const { dispatch } = useApp();
 
-  const launchCase = (caseId: string) => {
+  const handleLaunchCase = (caseId: string) => {
+    // RM-38: casos demo interativos injetam um paciente/consulta
+    // completamente FICTÍCIOS diretamente em `state.consultations` — o
+    // MESMO array usado para pacientes reais — via `NEW_CONSULTATION`.
+    // Sem esta guarda, um usuário em produção (esta página não era
+    // filtrada por modo) podia lançar um caso demo, prosseguir até
+    // /consulta/nova e gerar uma "prescrição" a partir dele, que o fluxo
+    // de sincronização (`store.tsx`) tentaria enviar ao backend REAL como
+    // se fosse uma consulta genuína — misturando dado fabricado com dado
+    // clínico real, exatamente o que o modo demo nunca pode permitir.
+    // Interatividade completa (lançar caso → editar → "prescrever") só é
+    // permitida quando o modo demo está explicitamente ativo; fora dele,
+    // esta página permanece só informativa (lista de casos, sem ação).
+    if (!IS_DEMO_MODE) {
+      toast.error('Casos demo interativos só estão disponíveis em modo demonstração (NEXT_PUBLIC_DEMO_MODE). Nesta implantação, esta página é apenas informativa.');
+      return;
+    }
+
     const demoCase = DEMO_CASES.find(c => c.id === caseId);
     if (!demoCase) return;
 
     const { diagnostic, therapeutic, safety } = getCaseData(caseId);
-    const id = `demo_${caseId}_${Date.now()}`;
+    const id = gerarIdCasoDemo(caseId);
 
     dispatch({
       type: 'NEW_CONSULTATION',
@@ -118,7 +145,7 @@ export default function DemoPage() {
                   </span>
                   <Button
                     size="sm"
-                    onClick={() => launchCase(c.id)}
+                    onClick={() => handleLaunchCase(c.id)}
                     className="bg-blue-600 hover:bg-blue-700 gap-1.5 text-xs group-hover:gap-2 transition-all"
                   >
                     <PlayCircle className="w-3 h-3" />

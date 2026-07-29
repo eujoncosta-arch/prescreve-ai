@@ -6,7 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Progress } from '@/components/ui/progress';
 import {
   CheckCircle2,
   XCircle,
@@ -25,6 +24,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { MOCK_SAFETY } from '@/lib/mock-data';
+import { IS_DEMO_MODE } from '@/lib/app-mode';
 import { CDS_BASE_CONHECIMENTO } from '@/lib/clinical-decision-support';
 import { getTherapeuticForCondition } from '@/lib/clinical-therapeutics';
 import { eligibilityContextFromAnamnesis } from '@/lib/therapeutic-class-expansion';
@@ -79,10 +79,40 @@ export function DiagnosticPanel({ onComplete }: DiagnosticPanelProps) {
       getTherapeuticForCondition(hipotese.cid10 ?? '', diagnosticoLabel, eligibilityContext);
 
     dispatch({ type: 'SELECT_DIAGNOSIS', payload: diagnosticoLabel });
+    // RM-53 (RM41-023): guarda os campos estruturados (cid/descrição/
+    // confiança) que `POST /api/diagnostico` exige — nunca fabrica um CID
+    // ausente; hipóteses sem `cid10` simplesmente não têm diagnóstico
+    // estruturado sincronizável (o `diagnostico_selecionado` em texto
+    // continua funcionando normalmente para exibição).
+    if (hipotese.cid10) {
+      dispatch({
+        type: 'SET_DIAGNOSTICO_ESTRUTURADO',
+        payload: {
+          cid: hipotese.cid10,
+          descricao: hipotese.nome,
+          confianca: hipotese.grau_confianca !== undefined ? hipotese.grau_confianca / 100 : undefined,
+        },
+      });
+    }
     if (therapeutic) {
       dispatch({ type: 'UPDATE_THERAPEUTIC', payload: therapeutic });
     }
-    dispatch({ type: 'UPDATE_SAFETY', payload: MOCK_SAFETY });
+    // RM-38: `MOCK_SAFETY` é um exemplo fixo e fictício (paciente/fármacos
+    // hipotéticos) — antes era despachado INCONDICIONALMENTE, em todo
+    // modo (inclusive produção), fazendo qualquer médico ver um "check de
+    // segurança" fabricado e sem relação alguma com o paciente/prescrição
+    // reais. Um motor de safety-check real (`runSafetyCheck`,
+    // `src/lib/safety-rules.ts`) já existe mas ainda não está integrado a
+    // este fluxo (tipos de alerta divergentes — trabalho de integração
+    // separado). Até essa integração existir, o exemplo fictício só é
+    // mostrado em modo demo (rotulado, nunca confundido com dado real);
+    // fora do modo demo, nenhum safety-check fictício é exibido — a seção
+    // correspondente (`TherapeuticPanel`) já trata `seguranca` ausente
+    // graciosamente (não renderiza nada, em vez de mostrar um alerta
+    // fabricado).
+    if (IS_DEMO_MODE) {
+      dispatch({ type: 'UPDATE_SAFETY', payload: MOCK_SAFETY });
+    }
     setLoading(false);
     toast.success(`Hipótese selecionada: ${hipotese.nome}`);
     onComplete();

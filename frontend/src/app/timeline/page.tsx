@@ -31,7 +31,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
 import {
   Stethoscope,
   FlaskConical,
@@ -246,7 +245,16 @@ export default function TimelinePage() {
       )}
 
       {/* Editor */}
+      {/*
+        RM-51 (react-hooks/set-state-in-render): `key` força um NOVO
+        `EventEditor` a montar sempre que o evento sendo editado muda (ou
+        quando o editor abre para "novo evento") — o padrão oficial do
+        React para "resetar/ajustar estado quando uma prop muda" (ver
+        https://react.dev/learn/you-might-not-need-an-effect), em vez do
+        `useEffect` com múltiplos `setState` que existia antes.
+      */}
       <EventEditor
+        key={editorOpen ? (editing?.id ?? '__novo__') : '__fechado__'}
         open={editorOpen}
         onClose={() => { setEditorOpen(false); setEditing(null); }}
         initial={editing}
@@ -492,37 +500,20 @@ interface EditorProps {
 }
 
 function EventEditor({ open, onClose, initial, patients, onSave }: EditorProps) {
-  const [tipo,       setTipo]       = useState<TimelineEventType>('consulta');
-  const [titulo,     setTitulo]     = useState('');
-  const [descricao,  setDescricao]  = useState('');
-  const [data,       setData]       = useState('');
-  const [paciente,   setPaciente]   = useState('');
-  const [medico,     setMedico]     = useState('Dr. João Silva');
-  const [status,     setStatus]     = useState<TimelineStatus>('concluido');
-  const [tags,       setTags]       = useState('');
-
-  useMemo(() => {
-    if (!open) return;
-    if (initial) {
-      setTipo(initial.tipo);
-      setTitulo(initial.titulo);
-      setDescricao(initial.descricao ?? '');
-      setData(initial.data.slice(0, 16));
-      setPaciente(initial.paciente);
-      setMedico(initial.medico ?? 'Dr. João Silva');
-      setStatus(initial.status);
-      setTags((initial.tags ?? []).join(', '));
-    } else {
-      setTipo('consulta');
-      setTitulo('');
-      setDescricao('');
-      setData(new Date().toISOString().slice(0, 16));
-      setPaciente(patients[0] ?? '');
-      setMedico('Dr. João Silva');
-      setStatus('concluido');
-      setTags('');
-    }
-  }, [open, initial, patients]);
+  // RM-51 (react-hooks/set-state-in-render): o `key` no local de chamada
+  // (ver comentário lá) força este componente a remontar do zero sempre
+  // que `initial`/`open` mudam de forma relevante — os inicializadores
+  // preguiçosos abaixo rodam uma vez por montagem, já com os valores
+  // corretos, sem precisar de um `useEffect` + múltiplos `setState` para
+  // sincronizar o formulário depois do fato.
+  const [tipo,       setTipo]       = useState<TimelineEventType>(() => initial?.tipo ?? 'consulta');
+  const [titulo,     setTitulo]     = useState(() => initial?.titulo ?? '');
+  const [descricao,  setDescricao]  = useState(() => initial?.descricao ?? '');
+  const [data,       setData]       = useState(() => initial ? initial.data.slice(0, 16) : new Date().toISOString().slice(0, 16));
+  const [paciente,   setPaciente]   = useState(() => initial?.paciente ?? patients[0] ?? '');
+  const [medico,     setMedico]     = useState(() => initial?.medico ?? 'Dr. João Silva');
+  const [status,     setStatus]     = useState<TimelineStatus>(() => initial?.status ?? 'concluido');
+  const [tags,       setTags]       = useState(() => (initial?.tags ?? []).join(', '));
 
   const handleSave = () => {
     if (!titulo.trim() || !paciente.trim() || !data) return;

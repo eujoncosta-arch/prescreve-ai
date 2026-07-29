@@ -240,7 +240,7 @@ export function gerarPrognosticoComOutcome(
   const outcomeBase = OUTCOME_DB.find(o => o.cid === perfil.cid);
 
   let nnt_beneficio: number | null = null;
-  let nnt_dano: number | null = null;
+  const nnt_dano: number | null = null;
 
   if (outcomeBase) {
     nnt_beneficio = calcularNNT(outcomeBase.incidencia_tratamento, outcomeBase.incidencia_controle).nnt;

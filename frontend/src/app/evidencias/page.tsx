@@ -14,8 +14,8 @@ import {
   type GrauRecomendacao,
 } from '@/lib/governance';
 import {
-  BookOpen, Search, ExternalLink, Award, FlaskConical, ChevronDown, ChevronUp,
-  Shield, Clock, GitBranch, AlertTriangle, CheckCircle2, Circle, FileSearch,
+  BookOpen, Search, Award, FlaskConical, ChevronDown, ChevronUp,
+  Shield, Clock, GitBranch, AlertTriangle, FileSearch,
   Hash, Users, Calendar, Layers, TrendingUp, ArrowUpRight, Filter,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';

@@ -6,7 +6,7 @@
 'use client';
 
 import { gerarPrognostico, type PerfilPrognostico, type Prognostico } from './prognosis-engine';
-import { calcularNNT, type OutcomeCalculado } from './outcome-engine';
+import { calcularNNT } from './outcome-engine';
 import type { AvaliacaoRiscoClinico } from './clinical-risk-engine';
 
 // ══════════════════════════════════════════════════════════════

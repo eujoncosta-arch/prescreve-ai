@@ -720,7 +720,7 @@ export const RACIONAIS_CLINICOS: RacionalTerapeutico[] = [
   },
 ];
 
-export function gerarExplicacao(cids: string[], _condutas?: string[]): RacionalTerapeutico[] {
+export function gerarExplicacao(cids: string[]): RacionalTerapeutico[] {
   const cidsNorm = cids.map(c => c.toUpperCase().trim());
   return RACIONAIS_CLINICOS.filter(r =>
     r.cids.some(c => cidsNorm.includes(c.toUpperCase()))

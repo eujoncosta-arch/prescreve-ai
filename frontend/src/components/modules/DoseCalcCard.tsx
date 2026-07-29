@@ -7,7 +7,7 @@
 
 import { useMemo, useState } from 'react';
 import {
-  calcFullDose, classifyPopulation, parseConcentration,
+  calcFullDose, parseConcentration,
   type FullDoseInput, type FullDoseResult,
 } from '@/lib/dose-calculator';
 import { Badge } from '@/components/ui/badge';

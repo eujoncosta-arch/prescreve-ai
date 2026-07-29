@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo, useSyncExternalStore } from 'react';
 import {
-  Brain, TrendingUp, Pill, Activity, Shield, Users, BarChart3,
-  AlertTriangle, BookOpen, Search, Info, Layers, Sparkles,
+  Brain, TrendingUp, Pill, Activity, Shield, Users,
+  AlertTriangle, Search, Info, Layers, Sparkles,
   ChevronRight, ArrowUp, ArrowDown, Minus, Eye, EyeOff,
   Stethoscope, FlaskConical, Target, Zap, CircleDot,
 } from 'lucide-react';
@@ -279,18 +279,21 @@ function CondicaoSection({ condicao }: { condicao: InsightCondicao }) {
 type ActiveTab = 'condicoes' | 'combinacoes' | 'moleculas' | 'tendencias' | 'protocolos' | 'seguranca';
 
 export default function InsightsPage() {
-  const [insights, setInsights] = useState<InsightGeral | null>(null);
-  const [hydrated, setHydrated] = useState(false);
+  // RM-52 (react-hooks/set-state-in-effect): `insights` depende de
+  // localStorage (via medical-audit) — usamos useSyncExternalStore só para
+  // o gate de hidratação (mesmo padrão de auditoria/page.tsx), computando
+  // `insights` com useMemo em vez de useEffect+setState no mount.
+  const mounted = useSyncExternalStore(() => () => {}, () => true, () => false);
+  const hydrated = mounted;
   const [activeTab, setActiveTab] = useState<ActiveTab>('condicoes');
   const [searchCid, setSearchCid] = useState('');
   const [showPrivacyNote, setShowPrivacyNote] = useState(true);
 
-  useEffect(() => {
+  const insights = useMemo<InsightGeral | null>(() => {
+    if (!mounted) return null;
     seedInsightsDemo();
-    const entries = listarAudits();
-    setInsights(gerarInsights(entries));
-    setHydrated(true);
-  }, []);
+    return gerarInsights(listarAudits());
+  }, [mounted]);
 
   const condicoesFiltradas = useMemo(() => {
     if (!insights) return [];
@@ -321,7 +324,6 @@ export default function InsightsPage() {
 
   const meses = insights.tendencias_mensais;
   const ultMes  = meses[meses.length - 1];
-  const penMes  = meses[meses.length - 2];
 
   return (
     <div className="flex flex-col h-full min-h-0 overflow-y-auto">

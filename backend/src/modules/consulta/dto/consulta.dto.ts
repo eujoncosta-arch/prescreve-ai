@@ -9,6 +9,11 @@ import {
   IsEnum,
   IsNotEmpty,
   ValidateNested,
+  ValidateIf,
+  Validate,
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
+  ValidationArguments,
   MaxLength,
   MinLength,
   Min,
@@ -115,32 +120,166 @@ export class CriarDiagnosticoDto {
   idempotency_key?: string;
 }
 
-export class ItemMedicamentoDto {
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(200)
-  molecula: string;
+// ============================================================
+// PRESCREVE-AI — Contrato estruturado de dose (auditoria RM-36)
+//
+// PROBLEMA: `ItemMedicamentoDto.dose` era texto livre (`string`) — o
+// backend aceitava "500 mg", "500 mL", "20 gotas", "500 mg/kg/dia" ou
+// QUALQUER string arbitrária sem nenhuma validação semântica. A proteção
+// de unidade existia principalmente no frontend (parser de exibição), não
+// no contrato persistido — permitindo gravar uma dose semanticamente
+// inválida (unidade desconhecida, valor negativo/zero/absurdo, frequência
+// não reconhecida) que nenhum consumidor posterior (auditoria, relatório,
+// segunda opinião) consegue reconstituir com confiança.
+//
+// CORREÇÃO: `dose` passa a ser um objeto ESTRUTURADO
+// (`DoseEstruturadaDto`) com valor/unidade/frequência/via tipados e
+// validados, mais `dose_por_kg_dia`/`dose_por_tomada` opcionais quando a
+// dose foi calculada por peso. Texto livre nunca é mais a ÚNICA
+// representação da dose — sobrevive apenas como `observacoes` no item
+// (instrução/orientação adicional) e como `frequencia_detalhe` (só
+// quando `frequencia` é 'outro'/'nao_diaria', nunca substituindo os
+// campos estruturados).
+// ============================================================
 
+/** Unidades de dose aceitas — nunca uma string livre. */
+export enum UnidadeDose {
+  MG = 'mg',
+  MCG = 'mcg',
+  G = 'g',
+  ML = 'mL',
+  GOTAS = 'gotas',
+  UI = 'UI',
+  COMPRIMIDO = 'comprimido',
+  CAPSULA = 'capsula',
+  SACHE = 'sache',
+  AMPOLA = 'ampola',
+  JATO = 'jato',
+  APLICACAO = 'aplicacao',
+}
+
+/**
+ * Unidades cuja grandeza é uma massa/volume/atividade contínua —
+ * compatíveis com cálculo por peso (`dose_por_kg_dia`/`dose_por_tomada`).
+ * Formas farmacêuticas discretas (comprimido, cápsula, sachê, ampola,
+ * jato, aplicação) não são combináveis com mg/kg: "1 comprimido/kg" não é
+ * uma grandeza farmacológica válida — ver `CoerenciaDoseKgConstraint`.
+ */
+const UNIDADES_PONDERAVEIS = new Set<UnidadeDose>([
+  UnidadeDose.MG,
+  UnidadeDose.MCG,
+  UnidadeDose.G,
+  UnidadeDose.ML,
+  UnidadeDose.GOTAS,
+  UnidadeDose.UI,
+]);
+
+/** Frequências de administração aceitas — nunca uma string livre. */
+export enum FrequenciaDose {
+  UMA_X_DIA = '1x/dia',
+  DUAS_X_DIA = '2x/dia',
+  TRES_X_DIA = '3x/dia',
+  QUATRO_X_DIA = '4x/dia',
+  A_CADA_4H = 'a_cada_4h',
+  A_CADA_6H = 'a_cada_6h',
+  A_CADA_8H = 'a_cada_8h',
+  A_CADA_12H = 'a_cada_12h',
+  DOSE_UNICA = 'dose_unica',
+  USO_CONTINUO = 'uso_continuo',
+  SOS = 'sos',
+  /** Periodicidade não diária (semanal/mensal/a cada N dias) — detalhar em `frequencia_detalhe`. */
+  NAO_DIARIA = 'nao_diaria',
+  /** Esquema que não cabe nas opções acima — SEMPRE exige `frequencia_detalhe`; nunca um escape para dose inteira em texto livre. */
+  OUTRO = 'outro',
+}
+
+const FREQUENCIAS_QUE_EXIGEM_DETALHE = new Set<FrequenciaDose>([
+  FrequenciaDose.NAO_DIARIA,
+  FrequenciaDose.OUTRO,
+]);
+
+@ValidatorConstraint({ name: 'coerenciaDoseKg', async: false })
+class CoerenciaDoseKgConstraint implements ValidatorConstraintInterface {
+  validate(_value: unknown, args: ValidationArguments): boolean {
+    const obj = args.object as DoseEstruturadaDto;
+    return UNIDADES_PONDERAVEIS.has(obj.unidade);
+  }
+  defaultMessage(): string {
+    return 'dose_por_kg_dia/dose_por_tomada exigem uma unidade ponderável (mg, mcg, g, mL, gotas, UI) — incompatível com formas farmacêuticas discretas (comprimido, cápsula, sachê, ampola, jato, aplicação)';
+  }
+}
+
+export class DoseEstruturadaDto {
+  /** Valor numérico da dose — sempre positivo; teto evita erro de digitação/unidade grosseiro (ex.: "500000"). */
+  @IsNumber({ maxDecimalPlaces: 4 }, { message: 'valor deve ser um número' })
+  @Min(0.0001, {
+    message:
+      'valor deve ser positivo (dado ausente/zero nunca deve ser representado como 0 — omita o item em vez disso)',
+  })
+  @Max(100000, { message: 'valor excede o limite plausível para uma dose' })
+  valor: number;
+
+  @IsEnum(UnidadeDose, {
+    message: `unidade deve ser uma das: ${Object.values(UnidadeDose).join(', ')}`,
+  })
+  unidade: UnidadeDose;
+
+  @IsEnum(FrequenciaDose, {
+    message: `frequencia deve ser uma das: ${Object.values(FrequenciaDose).join(', ')}`,
+  })
+  frequencia: FrequenciaDose;
+
+  /** Obrigatório apenas quando `frequencia` é 'nao_diaria' ou 'outro' — nunca substitui os campos estruturados, apenas os complementa. */
+  @ValidateIf((o: DoseEstruturadaDto) =>
+    FREQUENCIAS_QUE_EXIGEM_DETALHE.has(o.frequencia),
+  )
   @IsString()
-  @IsNotEmpty()
-  @MaxLength(100)
-  dose: string;
+  @IsNotEmpty({
+    message:
+      'frequencia_detalhe é obrigatório quando frequencia é "nao_diaria" ou "outro"',
+  })
+  @MaxLength(200)
+  frequencia_detalhe?: string;
 
   @IsString()
   @IsNotEmpty()
   @MaxLength(50)
   via: string;
 
+  /** Dose por kg de peso corporal AO DIA — só quando a dose foi calculada por peso. */
+  @IsOptional()
+  @IsNumber({ maxDecimalPlaces: 4 })
+  @Min(0.0001, { message: 'dose_por_kg_dia deve ser positiva' })
+  @Max(10000, { message: 'dose_por_kg_dia excede o limite plausível' })
+  @Validate(CoerenciaDoseKgConstraint)
+  dose_por_kg_dia?: number;
+
+  /** Dose por kg de peso corporal POR TOMADA — só quando a dose foi calculada por peso. */
+  @IsOptional()
+  @IsNumber({ maxDecimalPlaces: 4 })
+  @Min(0.0001, { message: 'dose_por_tomada deve ser positiva' })
+  @Max(10000, { message: 'dose_por_tomada excede o limite plausível' })
+  @Validate(CoerenciaDoseKgConstraint)
+  dose_por_tomada?: number;
+}
+
+export class ItemMedicamentoDto {
   @IsString()
   @IsNotEmpty()
-  @MaxLength(100)
-  frequencia: string;
+  @MaxLength(200)
+  molecula: string;
+
+  @IsObject()
+  @ValidateNested()
+  @Type(() => DoseEstruturadaDto)
+  dose: DoseEstruturadaDto;
 
   @IsString()
   @IsNotEmpty()
   @MaxLength(100)
   duracao: string;
 
+  /** Texto livre — SOMENTE instrução/orientação adicional, nunca a única representação da dose. */
   @IsOptional()
   @IsString()
   @MaxLength(1000)

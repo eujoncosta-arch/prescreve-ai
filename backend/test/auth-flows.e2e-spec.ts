@@ -55,7 +55,7 @@ describe('Ciclo de vida de autenticação (e2e)', () => {
   });
 
   function buildPrismaMock() {
-    return {
+    const mock = {
       usuario: {
         findUnique: jest.fn(
           ({ where }: { where: { id?: string; email?: string } }) => {
@@ -134,6 +134,13 @@ describe('Ciclo de vida de autenticação (e2e)', () => {
         count: jest.fn().mockResolvedValue(0),
       },
     };
+    // RM-49 (RM41-017): atribuído FORA do literal — ver comentário em
+    // authorization.e2e-spec.ts (evita degradar a inferência de tipo de
+    // `mock` via referência circular dentro do próprio literal).
+    (mock as unknown as { $transaction: jest.Mock }).$transaction = jest.fn(
+      (cb: (tx: unknown) => unknown) => cb(mock),
+    );
+    return mock;
   }
 
   beforeAll(async () => {

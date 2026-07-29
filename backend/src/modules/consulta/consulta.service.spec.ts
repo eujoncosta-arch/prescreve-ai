@@ -7,6 +7,7 @@ import { ConsultaService } from './consulta.service';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CacheService } from '../cache/cache.service';
 import { AuditService } from '../audit/audit.service';
+import { UnidadeDose, FrequenciaDose } from './dto/consulta.dto';
 
 describe('ConsultaService — acesso horizontal (ownership) e IDOR', () => {
   let service: ConsultaService;
@@ -22,6 +23,7 @@ describe('ConsultaService — acesso horizontal (ownership) e IDOR', () => {
     prescricao: { create: jest.Mock; findUnique: jest.Mock };
     riskScore: { create: jest.Mock; findUnique: jest.Mock };
     paciente: { upsert: jest.Mock };
+    $transaction: jest.Mock;
   };
 
   const OUTRO_USUARIO_ID = 'usuario-victima-id';
@@ -52,6 +54,11 @@ describe('ConsultaService — acesso horizontal (ownership) e IDOR', () => {
       paciente: {
         upsert: jest.fn().mockResolvedValue({ id: 'paciente-1' }),
       },
+      // RM-49 (RM41-017): `$transaction(async (tx) => ...)` — nos testes
+      // unitários, `tx` é o mesmo objeto `prisma` mockado acima (mesmas
+      // chamadas/asserções continuam válidas), sem simular rollback real
+      // (isso é coberto pelos testes de integração com FakeDb).
+      $transaction: jest.fn((cb: (tx: typeof prisma) => unknown) => cb(prisma)),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -183,6 +190,156 @@ describe('ConsultaService — acesso horizontal (ownership) e IDOR', () => {
       );
       expect(resultado.id).toBe(CONSULTA_DA_VITIMA_ID);
     });
+
+    // RM-43: `buscarConsulta` é reutilizado como o endpoint de detalhe
+    // completo para hidratação sob demanda no frontend (recuperação da
+    // prescrição real de uma consulta histórica). A resposta precisa
+    // expor `Prescricao.medicamentos` (a fonte de verdade real da
+    // prescrição — nunca reconstituída de outro lugar) e NUNCA os campos
+    // puramente internos do servidor (`usuario_id`, `idempotency_key`,
+    // `hash_integridade`) que não agregam valor ao cliente.
+    it('expõe os medicamentos REAIS de cada prescrição vinculada (fonte de verdade para recuperação de prescrição — RM-43)', async () => {
+      const medicamentosReais = [
+        {
+          molecula: 'Amoxicilina',
+          dose: { valor: 500, unidade: 'mg', frequencia: '3x/dia', via: 'VO' },
+          duracao: '7 dias',
+        },
+      ];
+      prisma.consulta.findFirst.mockResolvedValueOnce({
+        id: CONSULTA_DA_VITIMA_ID,
+        usuario_id: OUTRO_USUARIO_ID,
+        status: 'concluida',
+        anamnese: { queixa_principal: 'Febre' },
+        criado_em: new Date('2026-01-01'),
+        atualizado_em: new Date('2026-01-02'),
+        diagnosticos: [],
+        prescricoes: [
+          {
+            id: 'presc-1',
+            status: 'emitida',
+            medicamentos: medicamentosReais,
+            orientacoes: 'Repouso',
+            validade_dias: 30,
+            diagnostico_id: null,
+            criado_em: new Date('2026-01-01'),
+            idempotency_key: 'chave-interna-nunca-deve-vazar',
+            hash_integridade: 'hash-interno-nunca-deve-vazar',
+          },
+        ],
+      });
+
+      const resultado = await service.buscarConsulta(
+        CONSULTA_DA_VITIMA_ID,
+        OUTRO_USUARIO_ID,
+      );
+
+      expect(resultado.prescricoes).toHaveLength(1);
+      expect(resultado.prescricoes[0].medicamentos).toEqual(medicamentosReais);
+      expect(resultado.prescricoes[0]).not.toHaveProperty('idempotency_key');
+      expect(resultado.prescricoes[0]).not.toHaveProperty('hash_integridade');
+    });
+
+    it('NUNCA expõe usuario_id/idempotency_key da consulta na resposta (só campos necessários ao cliente)', async () => {
+      prisma.consulta.findFirst.mockResolvedValueOnce({
+        id: CONSULTA_DA_VITIMA_ID,
+        usuario_id: OUTRO_USUARIO_ID,
+        status: 'em_andamento',
+        idempotency_key: 'chave-interna-da-consulta',
+        diagnosticos: [],
+        prescricoes: [],
+      });
+
+      const resultado = await service.buscarConsulta(
+        CONSULTA_DA_VITIMA_ID,
+        OUTRO_USUARIO_ID,
+      );
+
+      expect(resultado).not.toHaveProperty('usuario_id');
+      expect(resultado).not.toHaveProperty('idempotency_key');
+    });
+
+    it('consulta sem nenhuma prescrição retorna array vazio real — nunca omitido nem substituído por dado fabricado', async () => {
+      prisma.consulta.findFirst.mockResolvedValueOnce({
+        id: CONSULTA_DA_VITIMA_ID,
+        usuario_id: OUTRO_USUARIO_ID,
+        status: 'concluida',
+        diagnosticos: [],
+        prescricoes: [],
+      });
+
+      const resultado = await service.buscarConsulta(
+        CONSULTA_DA_VITIMA_ID,
+        OUTRO_USUARIO_ID,
+      );
+
+      expect(resultado.prescricoes).toEqual([]);
+    });
+
+    // RM-53 (RM41-023): `buscarConsulta` incluía `diagnosticos`/`prescricoes`
+    // mas NUNCA `risco_scores` — mesmo depois de o frontend passar a
+    // chamar `POST /api/risco`, o risco persistido jamais voltaria na
+    // recuperação do detalhe. Ambos os lados (persistir E recuperar)
+    // precisam estar corretos para o risco fechar de verdade.
+    it('inclui risco_scores no include do Prisma e expõe os campos reais na resposta (RM-53/RM41-023)', async () => {
+      prisma.consulta.findFirst.mockResolvedValueOnce({
+        id: CONSULTA_DA_VITIMA_ID,
+        usuario_id: OUTRO_USUARIO_ID,
+        status: 'concluida',
+        diagnosticos: [],
+        prescricoes: [],
+        risco_scores: [
+          {
+            id: 'risk-1',
+            risco_global: 'intermediario',
+            score_global: 42,
+            alerta_vermelho: false,
+            risco_cardiovascular: { nivel: 'intermediario' },
+            risco_renal: { nivel: 'baixo' },
+            risco_hemorragico: { nivel: 'baixo' },
+            risco_farmacologico: { nivel: 'baixo' },
+            risco_interacao: { nivel: 'baixo' },
+            risco_terapeutico: { nivel: 'baixo' },
+            recomendacoes: ['Monitorar PA'],
+            criado_em: new Date('2026-01-01'),
+            idempotency_key: 'chave-interna-nunca-deve-vazar',
+          },
+        ],
+      });
+
+      const resultado = await service.buscarConsulta(
+        CONSULTA_DA_VITIMA_ID,
+        OUTRO_USUARIO_ID,
+      );
+
+      expect(prisma.consulta.findFirst).toHaveBeenCalledWith(
+        expect.objectContaining({
+          include: expect.objectContaining({ risco_scores: true }),
+        }),
+      );
+      expect(resultado.risco_scores).toHaveLength(1);
+      expect(resultado.risco_scores[0].risco_global).toBe('intermediario');
+      expect(resultado.risco_scores[0].score_global).toBe(42);
+      expect(resultado.risco_scores[0].recomendacoes).toEqual(['Monitorar PA']);
+      expect(resultado.risco_scores[0]).not.toHaveProperty('idempotency_key');
+    });
+
+    it('consulta sem nenhum risk score retorna array vazio real — nunca omitido nem fabricado (RM-53/RM41-023)', async () => {
+      prisma.consulta.findFirst.mockResolvedValueOnce({
+        id: CONSULTA_DA_VITIMA_ID,
+        usuario_id: OUTRO_USUARIO_ID,
+        status: 'concluida',
+        diagnosticos: [],
+        prescricoes: [],
+        risco_scores: [],
+      });
+
+      const resultado = await service.buscarConsulta(
+        CONSULTA_DA_VITIMA_ID,
+        OUTRO_USUARIO_ID,
+      );
+      expect(resultado.risco_scores).toEqual([]);
+    });
   });
 
   describe('criarDiagnostico() — escrita vinculada a consulta de terceiro', () => {
@@ -208,9 +365,12 @@ describe('ConsultaService — acesso horizontal (ownership) e IDOR', () => {
             medicamentos: [
               {
                 molecula: 'Losartana',
-                dose: '50mg',
-                via: 'VO',
-                frequencia: '1x/dia',
+                dose: {
+                  valor: 50,
+                  unidade: UnidadeDose.MG,
+                  frequencia: FrequenciaDose.UMA_X_DIA,
+                  via: 'VO',
+                },
                 duracao: '30d',
               },
             ],
@@ -309,9 +469,12 @@ describe('ConsultaService — acesso horizontal (ownership) e IDOR', () => {
         medicamentos: [
           {
             molecula: 'Losartana',
-            dose: '50mg',
-            via: 'VO',
-            frequencia: '1x/dia',
+            dose: {
+              valor: 50,
+              unidade: UnidadeDose.MG,
+              frequencia: FrequenciaDose.UMA_X_DIA,
+              via: 'VO',
+            },
             duracao: '30d',
           },
         ],
@@ -460,9 +623,12 @@ describe('ConsultaService — acesso horizontal (ownership) e IDOR', () => {
           medicamentos: [
             {
               molecula: 'Losartana',
-              dose: '50mg',
-              via: 'VO',
-              frequencia: '1x/dia',
+              dose: {
+                valor: 50,
+                unidade: UnidadeDose.MG,
+                frequencia: FrequenciaDose.UMA_X_DIA,
+                via: 'VO',
+              },
               duracao: '30d',
             },
           ],

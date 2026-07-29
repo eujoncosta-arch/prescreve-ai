@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { AppShell } from '@/components/layout/AppShell';
 import {
   User, Stethoscope, BookOpen, Building2, ClipboardList,
@@ -147,8 +147,6 @@ function NeutralidadeAviso() {
 // ─── Aba: Identificação ──────────────────────────────────────
 
 function TabIdentificacao({ draft, set }: { draft: ReturnType<typeof usePhysicianProfile>['profile']; set: (k: string, v: unknown) => void }) {
-  const medicoSet = (k: string, v: string) => set('_medico_' + k, v);
-
   return (
     <div className="space-y-4">
       <SectionCard icon={User} title="Dados profissionais" color="blue">
@@ -643,13 +641,6 @@ export default function PerfilPage() {
   const [draft, setDraft] = useState({ ...profile });
   const [tab, setTab] = useState<Tab>('identificacao');
   const [saved, setSaved] = useState(false);
-
-  // Sync draft when profile loads from localStorage
-  const synced = useRef(false);
-  if (!synced.current) {
-    synced.current = true;
-    // draft already initialized from profile
-  }
 
   const set = (key: string, value: unknown) => {
     setDraft(prev => ({ ...prev, [key]: value }));

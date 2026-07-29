@@ -58,7 +58,9 @@ export class CacheService implements OnModuleDestroy {
     if (!this.enabled || !this.client) return;
     try {
       await this.client.del(key);
-    } catch {}
+    } catch (e) {
+      this.logger.warn(`Cache del error: ${(e as Error).message}`);
+    }
   }
 
   async delPattern(pattern: string): Promise<void> {
@@ -66,7 +68,9 @@ export class CacheService implements OnModuleDestroy {
     try {
       const keys = await this.client.keys(pattern);
       if (keys.length) await this.client.del(...keys);
-    } catch {}
+    } catch (e) {
+      this.logger.warn(`Cache delPattern error: ${(e as Error).message}`);
+    }
   }
 
   async onModuleDestroy() {

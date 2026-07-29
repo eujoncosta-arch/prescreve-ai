@@ -154,8 +154,9 @@ describe('calcularDosagem() — conversão para gotas exige fator explícito, nu
   it('formulação gotas COM gotas_por_mL explícito converte corretamente', () => {
     const resultado = calcularDosagem(10, undefined, 3 * 365, MEDICAMENTO_GOTAS_COM_FATOR, 'form-gotas');
     expect(resultado?.ok).toBe(true);
-    expect(resultado?.gotas_por_dose).toBeDefined();
-    expect(resultado?.gotas_por_dose).toBeGreaterThan(0);
+    // RM-54: valor real conferido (10mg/kg × 10kg ÷ 3 doses/dia = 33,33mg/dose;
+    // ÷ 100mg/mL = 0,333mL; × 20 gotas/mL = 6,67 → arredondado para 7 gotas).
+    expect(resultado?.gotas_por_dose).toBe(7);
   });
 
   it('formulação gotas SEM gotas_por_mL cadastrado BLOQUEIA o cálculo — nunca assume 20 gotas/mL', () => {
@@ -172,7 +173,9 @@ describe('calcularDosagem() — conversão para gotas exige fator explícito, nu
   it('suspensão 250 mg/5 mL (tipo "suspensao", não "gotas_oral") NUNCA é convertida automaticamente em gotas', () => {
     const resultado = calcularDosagem(15, undefined, 4 * 365, MEDICAMENTO_SUSPENSAO, 'form-susp');
     expect(resultado?.ok).toBe(true);
-    expect(resultado?.volume_por_dose_mL).toBeDefined();
+    // RM-54: valor real conferido (50mg/kg/dia × 15kg = 750mg/dia ÷ 3 doses =
+    // 250mg/dose; ÷ 50mg/mL = 5mL).
+    expect(resultado?.volume_por_dose_mL).toBe(5);
     expect(resultado?.gotas_por_dose).toBeUndefined();
     expect(resultado?.unidade_resultado).toBe('mL');
   });

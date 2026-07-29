@@ -14,9 +14,9 @@ import {
 } from '@/lib/comite';
 import {
   ShieldCheck, Users, CheckCircle2, Clock, XCircle, ChevronDown, ChevronUp,
-  Award, BookOpen, GitBranch, Star, ExternalLink, Building2, Hash,
-  RefreshCw, AlertTriangle, CheckCheck, Circle, Microscope, BadgeCheck,
-  ArrowUpRight, Filter, Search, User,
+  BookOpen, GitBranch, Star, ExternalLink, Hash,
+  AlertTriangle, CheckCheck, Microscope, BadgeCheck,
+  ArrowUpRight, Search,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -432,8 +432,6 @@ export default function ComitePage() {
     }
     return true;
   }), [validacoes, statusFil, areaFil, search]);
-
-  const totalRevisores = useMemo(() => new Set(validacoes.flatMap(v => v.revisores.map(r => r.especialista_id))).size, [validacoes]);
 
   return (
     <AppShell>

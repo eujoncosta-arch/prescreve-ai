@@ -898,29 +898,176 @@ export interface ICUPatient {
   intubado?: boolean;
 }
 
+/**
+ * Resolução do risco de defaults clínicos perigosos (auditoria RM-36):
+ * `assessICUPatient` usava `?? 0`/`?? 80`/`?? 37`/`?? 98`/`?? 120`/`?? 15`/
+ * `?? 16` sobre TODOS os sinais vitais/exames opcionais de `ICUPatient`
+ * antes de compará-los a limiares clínicos. "Dado não medido" e "valor
+ * fisiológico normal" são fatos clinicamente MUITO diferentes — um
+ * lactato não coletado não é o mesmo que um lactato de 0 mmol/L, uma PAM
+ * não medida não é o mesmo que uma PAM de 80 mmHg. Ao coalescer ausência
+ * para um valor normal, o motor NUNCA disparava os alertas críticos
+ * (🚨 lactato > 4, 🚨 PAM < 65, 🚨 SpO₂ < 90%, qSOFA) para um paciente cujos
+ * sinais vitais simplesmente não tinham sido registrados ainda — o risco
+ * clínico real ficava mascarado por trás de um "tudo normal" fabricado
+ * pelo próprio motor, não observado no paciente.
+ *
+ * Cada leitura agora é classificada explicitamente como:
+ *   - 'measured'  — valor informado e dentro da faixa fisiológica plausível;
+ *   - 'missing'   — campo não informado (`undefined`) — NUNCA tratado como
+ *                   normal; gera entrada em `dadosAusentes` e um alerta
+ *                   informativo quando o dado é necessário para um cálculo
+ *                   (qSOFA) ou para uma checagem de risco (lactato/PAM/
+ *                   SpO₂/temperatura);
+ *   - 'invalid'   — valor informado mas fisiologicamente implausível (ex.:
+ *                   temperatura de 5 °C, lactato negativo) — também NUNCA
+ *                   usado no cálculo, mas relatado separadamente de
+ *                   'missing' (é um problema de qualidade de dado, não
+ *                   ausência).
+ * ("unavailable" — instrumento/laboratório indisponível — chega hoje ao
+ * motor pelo mesmo caminho que "não informado ainda", já que `ICUPatient`
+ * não distingue a origem da ausência; ambos são tratados com a mesma
+ * cautela de 'missing'.)
+ */
+export type VitalStatus = 'measured' | 'missing' | 'invalid';
+
+export interface VitalReading {
+  status: VitalStatus;
+  valor?: number;
+}
+
+type VitalCampo = 'lactato' | 'pamMMHg' | 'spo2' | 'temperaturaC' | 'frIpm' | 'glasgow' | 'pasMMHg';
+
+// Faixas fisiologicamente PLAUSÍVEIS (não faixas "normais" — um choque
+// séptico tem PAM de 40 mmHg, que é plausível e crítico, não inválido).
+// Servem apenas para detectar erro de digitação/unidade grosseiro (ex.:
+// temperatura de 5 °C, PAM de 900 mmHg), nunca para julgar normalidade.
+const VITAL_PLAUSIBLE_RANGES: Record<VitalCampo, { min: number; max: number }> = {
+  lactato: { min: 0, max: 30 },       // mmol/L
+  pamMMHg: { min: 10, max: 250 },
+  pasMMHg: { min: 10, max: 300 },
+  spo2: { min: 0, max: 100 },
+  temperaturaC: { min: 20, max: 45 },
+  frIpm: { min: 0, max: 80 },
+  glasgow: { min: 3, max: 15 },
+};
+
+export function readVital(valor: number | undefined, campo: VitalCampo): VitalReading {
+  if (valor === undefined) return { status: 'missing' };
+  const range = VITAL_PLAUSIBLE_RANGES[campo];
+  if (Number.isNaN(valor) || valor < range.min || valor > range.max) {
+    return { status: 'invalid', valor };
+  }
+  return { status: 'measured', valor };
+}
+
+export interface QsofaAssessment {
+  status: 'calculado' | 'incompleto';
+  qsofa?: QsofaResult;
+  criteriosFaltantes: string[];
+}
+
+function assessQsofaFromICU(patient: ICUPatient): QsofaAssessment {
+  const glasgowR = readVital(patient.glasgow, 'glasgow');
+  const frR = readVital(patient.frIpm, 'frIpm');
+  const pasR = readVital(patient.pasMMHg, 'pasMMHg');
+
+  const criteriosFaltantes: string[] = [];
+  if (glasgowR.status !== 'measured') criteriosFaltantes.push('Escala de Glasgow');
+  if (frR.status !== 'measured') criteriosFaltantes.push('Frequência respiratória');
+  if (pasR.status !== 'measured') criteriosFaltantes.push('Pressão arterial sistólica');
+
+  // qSOFA exige os 3 critérios — nunca calculado com um critério
+  // substituído por um valor "normal" assumido.
+  if (criteriosFaltantes.length > 0) {
+    return { status: 'incompleto', criteriosFaltantes };
+  }
+
+  const qsofa = calcQsofa(glasgowR.valor! < 15, frR.valor! >= 22, pasR.valor! <= 100);
+  return { status: 'calculado', qsofa, criteriosFaltantes: [] };
+}
+
 export function assessICUPatient(patient: ICUPatient): {
-  qsofa: QsofaResult;
+  qsofaAssessment: QsofaAssessment;
   pao2fio2?: number;
   vcAlvo: ReturnType<typeof calcVCAlvo>;
   alertas: string[];
+  dadosAusentes: string[];
+  dadosInvalidos: string[];
 } {
   const alertas: string[] = [];
+  const dadosAusentes: string[] = [];
+  const dadosInvalidos: string[] = [];
 
-  const qsofa = calcQsofa(
-    (patient.glasgow ?? 15) < 15,
-    (patient.frIpm ?? 16) >= 22,
-    (patient.pasMMHg ?? 120) <= 100,
-  );
+  const qsofaAssessment = assessQsofaFromICU(patient);
+  if (qsofaAssessment.status === 'incompleto') {
+    dadosAusentes.push(...qsofaAssessment.criteriosFaltantes);
+    alertas.push(`ℹ qSOFA NÃO calculado — dado(s) ausente(s): ${qsofaAssessment.criteriosFaltantes.join(', ')}. Nunca assumido normal/ausente por padrão.`);
+  } else if (qsofaAssessment.qsofa!.alerta) {
+    alertas.push('⚠ qSOFA ≥ 2 — rastrear sepse (SOFA completo + hemoculturas + antibióticos)');
+  }
 
-  if (qsofa.alerta) alertas.push('⚠ qSOFA ≥ 2 — rastrear sepse (SOFA completo + hemoculturas + antibióticos)');
-  if ((patient.lactato ?? 0) > 2) alertas.push(`⚠ Lactato ${patient.lactato} mmol/L > 2 — hipoperfusão tecidual`);
-  if ((patient.lactato ?? 0) > 4) alertas.push('🚨 Lactato > 4 mmol/L — choque — bundle SSC 1h imediato');
-  if ((patient.pamMMHg ?? 80) < 65) alertas.push('🚨 PAM < 65 mmHg — iniciar vasopressor (norepinefrina)');
-  if ((patient.spo2 ?? 98) < 90) alertas.push('🚨 SpO₂ < 90% — suporte O₂ urgente / avaliar IOT');
-  if ((patient.temperaturaC ?? 37) >= 38.3) alertas.push('⚠ Febre — investigar foco infeccioso');
-  if ((patient.temperaturaC ?? 37) < 36) alertas.push('⚠ Hipotermia — considerar sepse, exposição ambiental');
+  const lactato = readVital(patient.lactato, 'lactato');
+  if (lactato.status === 'measured') {
+    if (lactato.valor! > 4) alertas.push('🚨 Lactato > 4 mmol/L — choque — bundle SSC 1h imediato');
+    else if (lactato.valor! > 2) alertas.push(`⚠ Lactato ${lactato.valor} mmol/L > 2 — hipoperfusão tecidual`);
+  } else if (lactato.status === 'invalid') {
+    dadosInvalidos.push(`Lactato (${patient.lactato} mmol/L — fora da faixa fisiológica plausível)`);
+    alertas.push(`🚨 Lactato informado (${patient.lactato} mmol/L) é fisiologicamente implausível — valor NÃO utilizado; verificar coleta/digitação/unidade.`);
+  } else {
+    dadosAusentes.push('Lactato');
+    alertas.push('ℹ Lactato não coletado — hipoperfusão tecidual não pode ser descartada apenas por ausência de dado; considerar coleta se suspeita de sepse/choque.');
+  }
 
-  const pao2fio2 = patient.pao2 && patient.fio2
+  const pam = readVital(patient.pamMMHg, 'pamMMHg');
+  if (pam.status === 'measured') {
+    if (pam.valor! < 65) alertas.push('🚨 PAM < 65 mmHg — iniciar vasopressor (norepinefrina)');
+  } else if (pam.status === 'invalid') {
+    dadosInvalidos.push(`PAM (${patient.pamMMHg} mmHg — fora da faixa fisiológica plausível)`);
+    alertas.push(`🚨 PAM informada (${patient.pamMMHg} mmHg) é fisiologicamente implausível — valor NÃO utilizado; verificar medição.`);
+  } else {
+    dadosAusentes.push('PAM');
+    alertas.push('ℹ PAM não informada — hipotensão não pode ser descartada apenas por ausência de dado.');
+  }
+
+  const spo2 = readVital(patient.spo2, 'spo2');
+  if (spo2.status === 'measured') {
+    if (spo2.valor! < 90) alertas.push('🚨 SpO₂ < 90% — suporte O₂ urgente / avaliar IOT');
+  } else if (spo2.status === 'invalid') {
+    dadosInvalidos.push(`SpO₂ (${patient.spo2}% — fora da faixa plausível)`);
+    alertas.push(`🚨 SpO₂ informada (${patient.spo2}%) é fisiologicamente implausível — valor NÃO utilizado; verificar oxímetro.`);
+  } else {
+    dadosAusentes.push('SpO₂');
+    alertas.push('ℹ SpO₂ não monitorada — hipoxemia não pode ser descartada apenas por ausência de dado.');
+  }
+
+  const temp = readVital(patient.temperaturaC, 'temperaturaC');
+  if (temp.status === 'measured') {
+    if (temp.valor! >= 38.3) alertas.push('⚠ Febre — investigar foco infeccioso');
+    else if (temp.valor! < 36) alertas.push('⚠ Hipotermia — considerar sepse, exposição ambiental');
+  } else if (temp.status === 'invalid') {
+    dadosInvalidos.push(`Temperatura (${patient.temperaturaC} °C — fora da faixa fisiológica plausível)`);
+    alertas.push(`🚨 Temperatura informada (${patient.temperaturaC} °C) é fisiologicamente implausível — valor NÃO utilizado; verificar medição.`);
+  } else {
+    dadosAusentes.push('Temperatura');
+    alertas.push('ℹ Temperatura não aferida — febre/hipotermia não podem ser descartadas apenas por ausência de dado.');
+  }
+
+  // RM-50 (RM41-005): FiO2 é uma FRAÇÃO (0,21 = ar ambiente a 1,0 = 100%
+  // O2), nunca uma porcentagem (40, 100 etc.). Sem esta validação, um FiO2
+  // digitado como porcentagem (ex.: 40 em vez de 0,4) produzia uma razão
+  // PaO₂/FiO₂ ~100× menor que a real, fabricando um alerta de "ARDS grave"
+  // a partir de um dado ambíguo/mal digitado. Valores fora de [0,21; 1,0]
+  // são tratados como implausíveis — a razão não é calculada nem um
+  // estágio de ARDS é fabricado a partir deles.
+  const fio2Implausivel =
+    patient.fio2 !== undefined && (patient.fio2 < 0.21 || patient.fio2 > 1);
+  if (fio2Implausivel) {
+    dadosInvalidos.push(`FiO₂ (${patient.fio2} — fora da faixa fisiológica 0,21–1,0; valor parece estar em porcentagem, não em fração)`);
+    alertas.push(`🚨 FiO₂ informada (${patient.fio2}) é implausível como fração (0,21–1,0) — PaO₂/FiO₂ NÃO calculado; verificar se o valor foi digitado como porcentagem.`);
+  }
+
+  const pao2fio2 = patient.pao2 !== undefined && patient.fio2 !== undefined && patient.pao2 > 0 && patient.fio2 > 0 && !fio2Implausivel
     ? Math.round(patient.pao2 / patient.fio2)
     : undefined;
 
@@ -931,9 +1078,11 @@ export function assessICUPatient(patient: ICUPatient): {
   }
 
   return {
-    qsofa,
+    qsofaAssessment,
     pao2fio2,
     vcAlvo: calcVCAlvo(patient.alturaCm, patient.sexo, 6),
     alertas,
+    dadosAusentes,
+    dadosInvalidos,
   };
 }

@@ -5,20 +5,18 @@ import { AppShell } from '@/components/layout/AppShell';
 import { useApp } from '@/lib/store';
 import { LABORATORIOS } from '@/lib/utils';
 import {
-  searchDrugs, getDrugById, getBrandsForLab, getPreferredBrandForPatient, getPreferredConcentration,
-  CATEGORIA_LABELS, GESTANTE_LABELS,
+  searchDrugs, getBrandsForLab, getPreferredBrandForPatient, getPreferredConcentration,
+  GESTANTE_LABELS,
   type QuickDrug, type QuickBrand,
 } from '@/lib/pharma-database';
 import {
   calcCrCl, calcBSA, calcIMC, calcWeightDose, convertDose,
   getAdjustmentForCrCl, checkBeersCriteria,
-  type PatientParams, type CrClResult, type FullDoseResult,
+  type CrClResult, type FullDoseResult,
 } from '@/lib/dose-calculator';
 import { DoseCalcCard } from '@/components/modules/DoseCalcCard';
 import { runSafetyCheck, SEVERITY_CONFIG, type QuickSafetyAlert } from '@/lib/safety-rules';
-import { getAllProductsForMolecule, getPreferredBrandName } from '@/lib/drug-resolver';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -30,8 +28,8 @@ import Link from 'next/link';
 import {
   Zap, Search, Pill, Calculator, Shield, Star, History,
   Plus, Trash2, Printer, ChevronDown, ChevronUp, AlertTriangle,
-  CheckCircle2, Building2, FlaskConical, User, BookOpen,
-  ArrowRight, RefreshCw, X, Copy, FileText, ExternalLink,
+  CheckCircle2, Building2, User, BookOpen,
+  X, FileText, ExternalLink,
   Library, FileCheck,
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -116,66 +114,87 @@ export default function PrescricaoRapida() {
   const [favorites, setFavorites] = useState<FavoriteProtocol[]>([]);
   const [activeTab, setActiveTab] = useState<'prescricao' | 'calculadora' | 'favoritos' | 'historico'>('prescricao');
   const [drugInfoExpanded, setDrugInfoExpanded] = useState(false);
-  const [calcResult, setCalcResult] = useState<string[]>([]);
+  const [, setCalcResult] = useState<string[]>([]);
   const [crclResult, setCrclResult] = useState<CrClResult | null>(null);
   const [showPrint, setShowPrint] = useState(false);
   const [convMg, setConvMg] = useState('');
   const [convConc, setConvConc] = useState('');
 
+  // RM-52 (react-hooks/set-state-in-effect): estes 5 efeitos sincronizam
+  // estado derivado (busca, marca/concentração preferidas, CrCl, alertas de
+  // segurança) a partir de outras props/estado. Como os alvos (`selectedBrand`
+  // etc.) também podem ser sobrescritos manualmente em handlers de clique
+  // (não são só derivados), não dá para virar useMemo puro — em vez disso, o
+  // setState de cada efeito é adiado para um microtask, removendo o
+  // "cascading render síncrono" que a regra aponta, sem mudar o
+  // comportamento (o auto-recálculo ainda ocorre sempre que as deps mudam).
+
   // ── Load favorites from localStorage ─────────────────────
   useEffect(() => {
+    let cancelado = false;
     try {
       const stored = localStorage.getItem('prescreve-ai-favoritos');
-      if (stored) setFavorites(JSON.parse(stored));
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        queueMicrotask(() => { if (!cancelado) setFavorites(parsed); });
+      }
     } catch {
       // ignore
     }
+    return () => { cancelado = true; };
   }, []);
 
   // ── Search ────────────────────────────────────────────────
   useEffect(() => {
-    if (searchQuery.length < 2) { setSearchResults([]); return; }
-    const results = searchDrugs(searchQuery, labPref);
-    setSearchResults(results.slice(0, 8));
+    let cancelado = false;
+    const results = searchQuery.length < 2 ? [] : searchDrugs(searchQuery, labPref).slice(0, 8);
+    queueMicrotask(() => { if (!cancelado) setSearchResults(results); });
+    return () => { cancelado = true; };
   }, [searchQuery, labPref]);
 
   // ── Re-selecionar forma líquida quando idade ou peso muda (paciente pediátrico) ─
   useEffect(() => {
     if (!selectedDrug) return;
+    let cancelado = false;
     const idadeAnos = patient.idade ? Number(patient.idade) : undefined;
     const preferred = getPreferredBrandForPatient(selectedDrug, labPref, idadeAnos);
-    setSelectedBrand(preferred);
-    if (preferred) {
-      setSelectedConcentration(getPreferredConcentration(preferred, selectedDrug, idadeAnos));
-    }
+    queueMicrotask(() => {
+      if (cancelado) return;
+      setSelectedBrand(preferred);
+      if (preferred) {
+        setSelectedConcentration(getPreferredConcentration(preferred, selectedDrug, idadeAnos));
+      }
+    });
+    return () => { cancelado = true; };
   }, [patient.idade, labPref, selectedDrug]);
 
   // ── CrCl auto-calc ────────────────────────────────────────
   useEffect(() => {
-    if (patient.idade && patient.peso && patient.creatinina && patient.sexo) {
-      const params: PatientParams = {
-        idade: Number(patient.idade),
-        sexo: patient.sexo as 'M' | 'F',
-        peso: Number(patient.peso),
-        creatinina: Number(patient.creatinina),
-      };
-      setCrclResult(calcCrCl(params));
-    } else {
-      setCrclResult(null);
-    }
+    let cancelado = false;
+    const result = (patient.idade && patient.peso && patient.creatinina && patient.sexo)
+      ? calcCrCl({
+          idade: Number(patient.idade),
+          sexo: patient.sexo as 'M' | 'F',
+          peso: Number(patient.peso),
+          creatinina: Number(patient.creatinina),
+        })
+      : null;
+    queueMicrotask(() => { if (!cancelado) setCrclResult(result); });
+    return () => { cancelado = true; };
   }, [patient.idade, patient.peso, patient.creatinina, patient.sexo]);
 
   // ── Safety check ─────────────────────────────────────────
   useEffect(() => {
-    if (rxItems.length < 1) { setSafetyAlerts([]); return; }
-    const alerts = runSafetyCheck({
+    let cancelado = false;
+    const alerts = rxItems.length < 1 ? [] : runSafetyCheck({
       moleculas: rxItems.map(i => i.molecula),
       gestante: patient.gestante,
       lactante: patient.lactante,
       idoso: Number(patient.idade) >= 65,
       crclValue: crclResult?.crcl,
     });
-    setSafetyAlerts(alerts);
+    queueMicrotask(() => { if (!cancelado) setSafetyAlerts(alerts); });
+    return () => { cancelado = true; };
   }, [rxItems, patient.gestante, patient.lactante, patient.idade, crclResult]);
 
   // ── Select drug ───────────────────────────────────────────
@@ -527,7 +546,7 @@ export default function PrescricaoRapida() {
                 )}
 
                 {searchQuery.length >= 2 && searchResults.length === 0 && !selectedDrug && (
-                  <p className="mt-2 text-xs text-center text-slate-400 py-2">Nenhum resultado para "{searchQuery}"</p>
+                  <p className="mt-2 text-xs text-center text-slate-400 py-2">Nenhum resultado para &quot;{searchQuery}&quot;</p>
                 )}
               </CardContent>
             </Card>
@@ -912,7 +931,7 @@ export default function PrescricaoRapida() {
                   <div className="text-center py-8 border-2 border-dashed border-slate-200 rounded-xl">
                     <Star className="w-7 h-7 text-slate-300 mx-auto mb-2" />
                     <p className="text-sm text-slate-400">Nenhum protocolo salvo</p>
-                    <p className="text-xs text-slate-300 mt-1">Monte uma prescrição e clique em "Salvar protocolo"</p>
+                    <p className="text-xs text-slate-300 mt-1">Monte uma prescrição e clique em &quot;Salvar protocolo&quot;</p>
                   </div>
                 ) : (
                   <div className="space-y-2">

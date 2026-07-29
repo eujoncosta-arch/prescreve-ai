@@ -7,19 +7,19 @@
 
 import { useState, useMemo } from 'react';
 import {
-  Users, Building2, FlaskConical, BarChart3, Star,
-  Trophy, TrendingUp, CheckCircle2, AlertTriangle,
-  Globe, Award, Target, ChevronUp, ChevronDown,
+  Users, Building2, FlaskConical, Star,
+  Trophy, CheckCircle2, AlertTriangle,
+  Globe, Award, Target, ChevronUp,
   Hospital, Stethoscope, BookOpen, ShieldCheck,
-  Activity, Brain,
+  Activity,
 } from 'lucide-react';
 import {
   gerarMedicalValidationReport,
   interpretarKappa,
   type MedicalValidationReport,
   type ComponenteEnterpriseScore,
-  type ResumoEspecialidade,
-  type ResumoInstituicao,
+  
+  
 } from '@/lib/multicentric-validation';
 
 // ══════════════════════════════════════════════════════════════
@@ -138,7 +138,7 @@ function AbaOverview({ r }: { r: MedicalValidationReport }) {
       <div className="bg-white border border-gray-200 rounded-2xl p-5">
         <div className="flex items-start justify-between mb-4">
           <div>
-            <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Concordância Global — Cohen's Kappa</p>
+            <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Concordância Global — Cohen&apos;s Kappa</p>
             <KappaBadge kappa={r.kappa_global} />
           </div>
           <div className="text-right">

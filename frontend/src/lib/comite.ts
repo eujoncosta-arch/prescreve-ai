@@ -4,7 +4,7 @@
 
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useSyncExternalStore } from "react";
 import type { NivelEvidencia, GrauRecomendacao } from "./governance";
 
 // ─── Tipos ───────────────────────────────────────────────────
@@ -119,50 +119,69 @@ function save<T>(key: string, data: T[]) {
   localStorage.setItem(key, JSON.stringify(data));
 }
 
+// RM-52 (RM41-036/react-hooks/set-state-in-effect): a versão anterior
+// carregava `localStorage` num `useEffect` e chamava `setState` (duas
+// vezes) diretamente no corpo do efeito — mesmo antipadrão já corrigido em
+// `lib/timeline.ts` (RM-51). Store externo mínimo reutilizável por chave,
+// com `useSyncExternalStore` (API oficial para sincronizar com sistemas
+// externos como `localStorage`), SSR-safe (servidor usa a seed).
+function createLocalStore<T>(key: string, seed: T[]) {
+  let cached: T[] | null = null;
+  const listeners = new Set<() => void>();
+  return {
+    getSnapshot: (): T[] => {
+      if (cached === null) cached = load(key, seed);
+      return cached;
+    },
+    getServerSnapshot: (): T[] => seed,
+    subscribe: (onStoreChange: () => void) => {
+      listeners.add(onStoreChange);
+      return () => listeners.delete(onStoreChange);
+    },
+    setValue: (next: T[]) => {
+      cached = next;
+      save(key, next);
+      listeners.forEach((l) => l());
+    },
+  };
+}
+
+const especialistasStore = createLocalStore(KEY_ESP, ESPECIALISTAS_SEED);
+const validacoesStore = createLocalStore(KEY_VAL, VALIDACOES_SEED);
+
 // ─── Hook ─────────────────────────────────────────────────────
 
 export function useComite() {
-  const [especialistas, setEspecialistas] = useState<Especialista[]>([]);
-  const [validacoes,    setValidacoes]    = useState<ValidacaoRecomendacao[]>([]);
-  const [loaded,        setLoaded]        = useState(false);
-
-  useEffect(() => {
-    setEspecialistas(load(KEY_ESP, ESPECIALISTAS_SEED));
-    setValidacoes(   load(KEY_VAL, VALIDACOES_SEED));
-    setLoaded(true);
-  }, []);
+  const especialistas = useSyncExternalStore(especialistasStore.subscribe, especialistasStore.getSnapshot, especialistasStore.getServerSnapshot);
+  const validacoes = useSyncExternalStore(validacoesStore.subscribe, validacoesStore.getSnapshot, validacoesStore.getServerSnapshot);
+  // `loaded` reflete se já passamos da primeira sincronização cliente —
+  // `getSnapshot` real só difere de `getServerSnapshot` (a seed) depois do
+  // mount; usamos o mesmo par subscribe/snapshot para decidir isso sem um
+  // segundo `useState`/efeito.
+  const loaded = useSyncExternalStore(especialistasStore.subscribe, () => true, () => false);
 
   const aprovarValidacao = useCallback((id: string) => {
-    setValidacoes(prev => {
-      const next = prev.map(v => v.id !== id ? v : {
-        ...v, status: "aprovado" as StatusValidacaoComite, data_conclusao: new Date().toISOString(),
-        historico_versoes: [{ versao: v.versao_recomendacao, data: new Date().toISOString(), status: "aprovado" as StatusValidacaoComite, responsavel: "Comite Cientifico", descricao: "Aprovado pelo comite" }, ...v.historico_versoes],
-      });
-      save(KEY_VAL, next);
-      return next;
+    const next = validacoesStore.getSnapshot().map(v => v.id !== id ? v : {
+      ...v, status: "aprovado" as StatusValidacaoComite, data_conclusao: new Date().toISOString(),
+      historico_versoes: [{ versao: v.versao_recomendacao, data: new Date().toISOString(), status: "aprovado" as StatusValidacaoComite, responsavel: "Comite Cientifico", descricao: "Aprovado pelo comite" }, ...v.historico_versoes],
     });
+    validacoesStore.setValue(next);
   }, []);
 
   const rejeitarValidacao = useCallback((id: string, motivo: string) => {
-    setValidacoes(prev => {
-      const next = prev.map(v => v.id !== id ? v : {
-        ...v, status: "rejeitado" as StatusValidacaoComite, parecer_coletivo: motivo,
-        historico_versoes: [{ versao: v.versao_recomendacao, data: new Date().toISOString(), status: "rejeitado" as StatusValidacaoComite, responsavel: "Comite Cientifico", descricao: motivo }, ...v.historico_versoes],
-      });
-      save(KEY_VAL, next);
-      return next;
+    const next = validacoesStore.getSnapshot().map(v => v.id !== id ? v : {
+      ...v, status: "rejeitado" as StatusValidacaoComite, parecer_coletivo: motivo,
+      historico_versoes: [{ versao: v.versao_recomendacao, data: new Date().toISOString(), status: "rejeitado" as StatusValidacaoComite, responsavel: "Comite Cientifico", descricao: motivo }, ...v.historico_versoes],
     });
+    validacoesStore.setValue(next);
   }, []);
 
   const solicitarRevisao = useCallback((id: string, pendencias: string[]) => {
-    setValidacoes(prev => {
-      const next = prev.map(v => v.id !== id ? v : {
-        ...v, status: "revisao_solicitada" as StatusValidacaoComite,
-        historico_versoes: [{ versao: v.versao_recomendacao, data: new Date().toISOString(), status: "revisao_solicitada" as StatusValidacaoComite, responsavel: "Comite Cientifico", descricao: `Revisao solicitada: ${pendencias.join("; ")}` }, ...v.historico_versoes],
-      });
-      save(KEY_VAL, next);
-      return next;
+    const next = validacoesStore.getSnapshot().map(v => v.id !== id ? v : {
+      ...v, status: "revisao_solicitada" as StatusValidacaoComite,
+      historico_versoes: [{ versao: v.versao_recomendacao, data: new Date().toISOString(), status: "revisao_solicitada" as StatusValidacaoComite, responsavel: "Comite Cientifico", descricao: `Revisao solicitada: ${pendencias.join("; ")}` }, ...v.historico_versoes],
     });
+    validacoesStore.setValue(next);
   }, []);
 
   const aprovadas  = validacoes.filter(v => v.status === "aprovado").length;

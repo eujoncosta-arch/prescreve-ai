@@ -14,7 +14,6 @@ import { getPrognosisForDiagnosis } from '@/lib/drug-database';
 import { getProductsByMolecule } from '@/lib/lab-catalog';
 import type { LaboratoryPreference, TherapeuticSuggestion } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -400,7 +399,7 @@ export function TherapeuticPanel({ onComplete }: TherapeuticPanelProps) {
                 <div className="p-3 bg-slate-50 rounded-lg">
                   <p className="text-xs text-slate-500">
                     As marcas do laboratório <strong>{LABORATORIOS[labPref]}</strong> serão exibidas
-                    na aba "Farmacológico" para cada medicamento quando disponíveis.
+                    na aba &quot;Farmacológico&quot; para cada medicamento quando disponíveis.
                   </p>
                 </div>
               )}

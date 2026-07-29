@@ -344,7 +344,6 @@ export interface CentralidadeResultado {
 
 export function calcularCentralidade(topN = 10): CentralidadeResultado[] {
   const grafo = gerarMapaConhecimento();
-  const nosMap = new Map(grafo.nos.map(n => [n.id, n]));
   const grauMap = new Map<string, { grau: number; peso: number }>();
 
   grafo.nos.forEach(n => grauMap.set(n.id, { grau: 0, peso: 0 }));
@@ -386,7 +385,6 @@ export interface LacunaConhecimento {
 export function encontrarLacunas(): LacunaConhecimento[] {
   const grafo = gerarMapaConhecimento();
   const lacunas: LacunaConhecimento[] = [];
-  const nosMap = new Map(grafo.nos.map(n => [n.id, n]));
   const nosComArestas = new Set([
     ...grafo.arestas.map(a => a.origem),
     ...grafo.arestas.map(a => a.destino),
@@ -463,7 +461,6 @@ export interface ConflitoGrafo {
 
 export function detectarConflitos(nosIds: string[]): ConflitoGrafo[] {
   const conflitos: ConflitoGrafo[] = [];
-  const grafo = gerarMapaConhecimento();
 
   // Conflito IECA + BRA simultâneos
   const temIECA = nosIds.includes('enalapril') || nosIds.includes('ramipril');

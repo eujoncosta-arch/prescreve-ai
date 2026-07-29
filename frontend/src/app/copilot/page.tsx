@@ -2,14 +2,14 @@
 
 import React, { useState, useMemo } from 'react';
 import {
-  Brain, FileText, MessageSquare, Users, BookOpen, Stethoscope,
+  Brain, FileText, MessageSquare, BookOpen,
   AlertTriangle, CheckCircle2, ChevronDown, ChevronRight,
-  ClipboardList, Lightbulb, Activity, ShieldCheck, Eye,
+  ClipboardList, Lightbulb, Activity, Eye,
 } from 'lucide-react';
 import {
   gerarSOAP, gerarResumoConsulta, gerarSegundaOpiniao,
   gerarHipotesesDiferenciais, gerarDiscussaoClinica, gerarEvolucao,
-  gerarJustificativa,
+  
   type ModoConsulta, type ContextoClinico,
 } from '@/lib/medical-copilot';
 

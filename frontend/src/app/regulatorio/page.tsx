@@ -15,22 +15,22 @@ import {
   revogarConsentimento,
   seedLogsDemo,
   VERSAO_SISTEMA,
-  BUILD_DATE,
+  
   IEC62304_CLASSE,
   SAMD_CLASSE_ANVISA,
   type ComplianceReport,
   type RegulatoryLog,
   type ConsentRecord,
-  type RequisitoRastreabilidade,
-  type RiscoSaMD,
-  type ControleSeguranca,
+  
+  
+  
   type StatusControle,
   type FinalidadeLGPD,
 } from '@/lib/regulatory';
 import {
   ShieldCheck, Lock, FileText, GitBranch, Microscope, ScrollText,
   AlertTriangle, CheckCircle2, Clock, XCircle, ChevronRight,
-  Download, RefreshCw, Eye, EyeOff, Info, Building2, Scale,
+  Download, RefreshCw, Info, Building2, Scale,
   Activity, Database, Key, Globe, Fingerprint, ClipboardList,
   BookOpen, BarChart3, Shield,
 } from 'lucide-react';
@@ -120,13 +120,23 @@ const TABS: { id: Tab; label: string; icon: React.ElementType }[] = [
 
 export default function RegulatorioPage() {
   const [tab, setTab]                 = useState<Tab>('overview');
-  const [report, setReport]           = useState<ComplianceReport | null>(null);
-  const [logs, setLogs]               = useState<RegulatoryLog[]>([]);
-  const [consentimentos, setConsentimentos] = useState<ConsentRecord[]>([]);
-  const [integridade, setIntegridade] = useState<{ total: number; corrompidos: number } | null>(null);
+  // RM-52 (react-hooks/set-state-in-effect): as partes SÍNCRONAS de
+  // `refresh()` (seed + leituras de localStorage) viram inicializadores
+  // lazy de useState — computadas no render, não num efeito. `loading`
+  // continua `true` até o teste ASSÍNCRONO de criptografia resolver, então
+  // a tela de carregamento (idêntica em SSR e no 1º render do cliente)
+  // esconde os valores reais até depois da hidratação — sem risco de
+  // mismatch. Só o `await testarCriptografia()` permanece num efeito, que é
+  // o uso legítimo de useEffect (busca assíncrona), não o antipadrão que a
+  // regra aponta.
+  const [report, setReport]           = useState<ComplianceReport | null>(() => { seedLogsDemo(); return avaliarCompliance(); });
+  const [logs, setLogs]               = useState<RegulatoryLog[]>(() => listarLogs({ limit: 100 }));
+  const [consentimentos, setConsentimentos] = useState<ConsentRecord[]>(() => listarConsentimentos());
+  const [integridade, setIntegridade] = useState<{ total: number; corrompidos: number } | null>(() => verificarIntegridadeLogs());
   const [cryptoOk, setCryptoOk]       = useState<boolean | null>(null);
   const [loading, setLoading]         = useState(true);
 
+  // Rebusca manual (clique no botão de refresh) — evento, não efeito.
   const refresh = useCallback(async () => {
     setLoading(true);
     seedLogsDemo();
@@ -138,7 +148,16 @@ export default function RegulatorioPage() {
     setLoading(false);
   }, []);
 
-  useEffect(() => { refresh(); }, [refresh]);
+  useEffect(() => {
+    let cancelado = false;
+    testarCriptografia().then((ok) => {
+      if (!cancelado) {
+        setCryptoOk(ok);
+        setLoading(false);
+      }
+    });
+    return () => { cancelado = true; };
+  }, []);
 
   const manifest    = getVersionManifest();
   const matriz      = getMatrizRastreabilidade();

@@ -83,7 +83,9 @@ describe('calcFullDose() — dose por m² SEM altura NUNCA cai para a dose adult
       false,
       1.1, // 1,1 m de altura
     );
-    expect(resultado.bsa_m2).toBeDefined();
+    // RM-52 (RM41-035): `toBeDefined()` nunca checava o valor calculado — um
+    // erro aritmético na fórmula Mosteller passaria sem detecção.
+    expect(resultado.bsa_m2).toBeCloseTo(0.74, 2);
     expect(resultado.dose_total_dia).toBeGreaterThan(0);
     expect(resultado.fonte).toBe('pediatrica_mg_m2');
     expect(resultado.alertas.some((a) => a.startsWith('🚨'))).toBe(false);
@@ -168,23 +170,23 @@ describe('parseConcentration() — gotas só reconhecidas com fator mg/gota expl
 });
 
 describe('calcFullDose() — gotas só calculadas com fator explícito; suspensão/xarope nunca convertidos automaticamente (regressão UNIT-AUDIT-03)', () => {
-  it('suspensão 250 mg/5 mL: calcula volume em mL normalmente, mas gotas_por_tomada permanece indefinido', () => {
+  it('suspensão 250 mg/5 mL: calcula volume em mL normalmente (500mg dose ÷ 50mg/mL = 10mL), mas gotas_por_tomada permanece indefinido', () => {
     const resultado = calcFullDose(AMOXICILINA_SUSPENSAO, 5, 20, '250 mg/5 mL');
-    expect(resultado.volume_por_tomada).toBeDefined();
+    // RM-52 (RM41-035): valor real conferido, não apenas "existe".
+    expect(resultado.volume_por_tomada).toBeCloseTo(10, 5);
     expect(resultado.gotas_por_tomada).toBeUndefined();
   });
 
-  it('xarope genérico "10 mg/mL": calcula volume em mL, mas NUNCA gotas (sem fator declarado)', () => {
+  it('xarope genérico "10 mg/mL": calcula volume em mL (10mg dose ÷ 10mg/mL = 1mL), mas NUNCA gotas (sem fator declarado)', () => {
     const resultado = calcFullDose(XAROPE_GENERICO, 30, 70, '10 mg/mL');
-    expect(resultado.volume_por_tomada).toBeDefined();
+    expect(resultado.volume_por_tomada).toBeCloseTo(1, 5);
     expect(resultado.gotas_por_tomada).toBeUndefined();
   });
 
   it('formulação com fator "1 mg/gota" EXPLICITAMENTE declarado converte gotas corretamente', () => {
     const resultado = calcFullDose(MEDICAMENTO_GOTAS_FATOR_EXPLICITO, 30, 70, '1 mg/gota');
-    expect(resultado.gotas_por_tomada).toBeDefined();
-    expect(resultado.gotas_por_tomada).toBeGreaterThan(0);
     // dose_por_tomada (10mg, dose adulta habitual) ÷ 1mg/gota = 10 gotas
+    // (valor exato conferido — RM41-035 já eliminou o "toBeDefined()" solto aqui)
     expect(resultado.gotas_por_tomada).toBe(10);
   });
 
@@ -193,7 +195,9 @@ describe('calcFullDose() — gotas só calculadas com fator explícito; suspens�
     // Para a suspensão (sem fator de gotas declarado), gotas_por_tomada deve
     // ser undefined — não `volume_por_tomada * 20`.
     expect(resultado.gotas_por_tomada).toBeUndefined();
-    expect(resultado.volume_por_tomada).toBeDefined();
+    // RM-52 (RM41-035): valor real (10 mL), não apenas "existe" — nunca
+    // `10 mL × 20 = 200` (o fallback fixo que esta correção eliminou).
+    expect(resultado.volume_por_tomada).toBeCloseTo(10, 5);
   });
 });
 

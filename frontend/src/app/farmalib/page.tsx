@@ -2,14 +2,14 @@
 
 import { useState, useMemo } from 'react';
 import {
-  LABORATORIOS, BIBLIOTECA_FARMACEUTICA, buscarBiblioteca, filtrarPorLab,
-  getAreasTerapeuticas, getClassesTerapeuticas, getProduto,
+  LABORATORIOS, BIBLIOTECA_FARMACEUTICA, filtrarPorLab,
+  getAreasTerapeuticas,
   FREQ_LABEL, FREQ_COR, GRAVIDEZ_COR,
-  type LaboratorioId, type MarcaFarmaceuticaEnterprise, type Laboratorio,
+  type LaboratorioId, type MarcaFarmaceuticaEnterprise,
 } from '@/lib/pharma-library';
 import {
   Building2, Search, X, ChevronDown, ChevronUp, ExternalLink,
-  AlertTriangle, Info, Pill, BookOpen, FlaskConical, Users,
+  AlertTriangle, Info, Pill, BookOpen, FlaskConical,
   CheckCircle, Shield, Clock, Stethoscope, Activity,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';

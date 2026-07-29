@@ -2,16 +2,16 @@
 
 import React, { useState, useMemo } from 'react';
 import {
-  Dna, AlertTriangle, CheckCircle2, Info, TrendingUp,
-  FlaskConical, ShieldCheck, BookOpen, ChevronDown, ChevronRight,
-  Target, Zap, Activity,
+  Dna, AlertTriangle, CheckCircle2, TrendingUp,
+  ShieldCheck, BookOpen, ChevronDown, ChevronRight,
+  Target, Activity,
 } from 'lucide-react';
 import {
-  avaliarFarmacogenomica, avaliarMetabolizador, avaliarRiscoRAM,
+  avaliarFarmacogenomica,
   calcularDoseGenotipada, calcularScoreFarmacogenomico, avaliarRespostaEsperada,
   FARMACOGENOMICA_DB,
-  type Gene, type FenotipoMetabolizador, type GenotipoPaciente,
-  type AvaliacaoFarmacogenomica,
+  type FenotipoMetabolizador, type GenotipoPaciente,
+
 } from '@/lib/precision-medicine';
 
 type Aba = 'genotipo' | 'avaliacao' | 'score' | 'cpic' | 'dose';
@@ -24,7 +24,6 @@ const ABAS = [
   { id: 'dose' as Aba,      label: 'Dose Genotipada', icon: <Target size={13} /> },
 ];
 
-const GENES_DISPONIVEIS: Gene[] = ['CYP2D6','CYP2C19','CYP2C9','CYP3A4','CYP2B6','VKORC1','SLCO1B1','HLA-B*57:01','HLA-B*15:02'];
 const FENOTIPOS: FenotipoMetabolizador[] = ['poor','intermediate','normal','rapid','ultrarapid'];
 const FENOTIPOS_LABEL: Record<FenotipoMetabolizador, string> = {
   poor: 'Metabolizador Lento (PM)', intermediate: 'Metabolizador Intermediário (IM)',
@@ -69,7 +68,6 @@ export default function MedicinaPresicaoPage() {
   const score = useMemo(() => calcularScoreFarmacogenomico(MEDICAMENTOS_DEMO, genotipos), [genotipos]);
   const resposta = useMemo(() => avaliarRespostaEsperada(medSelecionado, genotipos), [medSelecionado, genotipos]);
   const dose = useMemo(() => calcularDoseGenotipada(medSelecionado, '75mg 1x/dia', genotipos), [medSelecionado, genotipos]);
-  const risco = useMemo(() => avaliarRiscoRAM(medSelecionado, genotipos), [medSelecionado, genotipos]);
 
   const updateGenotipo = (idx: number, field: keyof GenotipoPaciente, value: string) => {
     setGenotipos(prev => {

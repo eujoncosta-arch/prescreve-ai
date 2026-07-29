@@ -39,6 +39,8 @@ const RM06_ALLOWLIST = [
   "src/lib/governance/**",
   // RM-24 Cross Database Validator — compara as fontes legadas entre si (read-only)
   "src/validation/cross-database/**",
+  // RM-40 Data Integrity Validator — audita a base legada diretamente (read-only)
+  "src/validation/data-integrity/**",
   // Testes
   "src/tests/**",
   // ── Acoplamento INTENCIONAL à fonte (navegadores especializados) ──
@@ -55,10 +57,10 @@ const RM06_ALLOWLIST = [
   // → já é consistente com o motor de decisão; migração é melhoria, não urgência.
   "src/app/prescricao-rapida/page.tsx",
   "src/app/dosagem/page.tsx",
-  // clinical-simulation-etapa8.ts — MIGRADO (drugRepository.count); delistado.
-  "src/lib/clinical-stress-etapa9.ts",
+  // clinical-simulation-etapa8.ts / clinical-stress-etapa9.ts / drug-resolver.ts
+  //   — RM-56.2: eram código morto (zero imports em todo o repo) e foram
+  //   arquivados em docs/archive/legacy-lib-modules/; delistados.
   // dose-calculator.ts — só importava dosing-engine (fora de escopo agora); delistado.
-  "src/lib/drug-resolver.ts",
   "src/lib/pharma-library.ts",
   // safety-rules.ts — MIGRADO para pharma-core (RM-06 piloto); delistado.
   // simulation-phase22-3.ts — MIGRADO (drugRepository.count); delistado.
@@ -81,6 +83,13 @@ const eslintConfig = defineConfig([
         "error",
         { patterns: [{ group: LEGACY_PHARMA_BASES, message: RM06_MESSAGE }] },
       ],
+      // RM-54: reconhece a convenção já usada no código (`const { x: _, ...rest }`
+      // para omitir um campo de uma desestruturação; parâmetros `_foo` para
+      // indicar "intencionalmente não lido") em vez de remover o padrão.
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_", destructuredArrayIgnorePattern: "^_" },
+      ],
     },
   },
   {
@@ -94,6 +103,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // RM-49: artefato gerado por `vitest run --coverage` — nunca código-fonte.
+    "coverage/**",
   ]),
 ]);
 

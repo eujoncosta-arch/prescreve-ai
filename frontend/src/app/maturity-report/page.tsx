@@ -7,10 +7,10 @@
 
 import React, { useState } from 'react';
 import {
-  Award, TrendingUp, ShieldCheck, Globe, Building2, FlaskConical,
-  CheckCircle2, AlertTriangle, Clock, ChevronRight, Target,
-  BookOpen, Users, Stethoscope, BarChart3, Zap, Star,
-  FileText, Scale, Activity, Network,
+  Award, ShieldCheck, Building2, FlaskConical,
+  CheckCircle2, AlertTriangle, Clock, Target,
+  Stethoscope, Zap, Star,
+  Scale, Activity,
 } from 'lucide-react';
 
 type AbaReport = 'scores' | 'gap' | 'roadmap_anvisa' | 'roadmap_cfm' | 'roadmap_lgpd' | 'roadmap_saas' | 'roadmap_hospital' | 'roadmap_farma';

@@ -8,10 +8,9 @@ import type { Anamnesis } from './types';
 import { getAllDrugs } from './pharma-database';
 import { EVIDENCE_DB } from './evidence-engine';
 import {
-  gerarMapaConhecimento, calcularCentralidade,
+  gerarMapaConhecimento,
 } from './medical-knowledge-graph';
-import { gerarTimeline, CIDS_TIMELINE } from './evidence-timeline';
-import { registrarRecomendacao, verificarIntegridade, listarRecomendacoes } from './recommendation-registry';
+import { registrarRecomendacao, verificarIntegridade } from './recommendation-registry';
 
 // ─── CHECK 1: MARCA ↔ MOLÉCULA ────────────────────────────────────────────────
 
@@ -144,7 +143,7 @@ function check5_Interactions() {
 
   let totalInteractions = 0;
   let resolvedByName = 0;
-  let unresolved: { mol: string; interacts_with: string }[] = [];
+  const unresolved: { mol: string; interacts_with: string }[] = [];
 
   for (const drug of drugs) {
     for (const inter of (drug.interacoes_importantes ?? [])) {

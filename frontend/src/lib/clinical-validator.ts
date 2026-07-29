@@ -4,7 +4,7 @@
 // CDSS — Suporte à decisão. Decisão médica soberana.
 // ============================================================
 
-import type { Anamnesis, TherapeuticSuggestion } from './types';
+import type { Anamnesis } from './types';
 
 // ══════════════════════════════════════════════════════════════
 // TIPOS
@@ -167,20 +167,6 @@ const DOSES_PEDIATRICAS: Record<string, { mg_kg_dia: number; max_dia: number; id
   'montelucaste':       { mg_kg_dia: 5,   max_dia: 10,   idade_min_anos: 1 },
   'salbutamol':         { mg_kg_dia: 0.1, max_dia: 10,   idade_min_anos: 0 },
   'budesonida_inalado': { mg_kg_dia: 0.2, max_dia: 0.8,  idade_min_anos: 0.5 },
-};
-
-// Evidência mínima por tipo de recomendação clínica
-const EVIDENCIA_MINIMA: Record<string, { nivel: string; classe: string }> = {
-  'I10': { nivel: 'A', classe: 'I' },
-  'E11': { nivel: 'A', classe: 'I' },
-  'I50': { nivel: 'A', classe: 'I' },
-  'J45': { nivel: 'A', classe: 'I' },
-  'I25': { nivel: 'A', classe: 'I' },
-  'J44': { nivel: 'A', classe: 'I' },
-  'E78': { nivel: 'A', classe: 'I' },
-  'F32': { nivel: 'B', classe: 'I' },
-  'G40': { nivel: 'A', classe: 'I' },
-  'N18': { nivel: 'B', classe: 'I' },
 };
 
 // ══════════════════════════════════════════════════════════════

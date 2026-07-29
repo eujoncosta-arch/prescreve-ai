@@ -15,7 +15,6 @@ import {
   type AreaEspecialidade,
   type ImpactoClinico,
 } from '@/lib/guideline-updates';
-import { Badge } from '@/components/ui/badge';
 import {
   ChevronDown,
   ChevronUp,

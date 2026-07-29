@@ -6,6 +6,51 @@
 'use client';
 
 import { IS_DEMO_MODE, IS_PRODUCTION_MODE, APP_MODE } from './app-mode';
+import { NonRetryableError } from './sync-engine';
+import type { MedicamentoPrescrito } from './types';
+
+// ============================================================
+// RM-43 — Formato real de `GET /api/consulta/:id`
+//
+// Espelha `ConsultaDetalheResponse` do backend
+// (`backend/src/modules/consulta/consulta.service.ts::mapConsultaDetalhe`)
+// — só os campos que o servidor de fato retorna. `medicamentos` de cada
+// prescrição é o array real de `MedicamentoPrescrito` originalmente
+// enviado a `POST /api/prescricao`; nunca reconstituído de outra fonte.
+// ============================================================
+export interface ConsultaDetalheResponse {
+  id: string;
+  status: string;
+  anamnese: unknown;
+  criado_em: string;
+  atualizado_em: string;
+  diagnosticos: {
+    id: string;
+    cid: string;
+    descricao: string;
+    confianca: number;
+    selecionado: boolean;
+    criado_em: string;
+  }[];
+  prescricoes: {
+    id: string;
+    status: string;
+    medicamentos: MedicamentoPrescrito[];
+    orientacoes: string | null;
+    validade_dias: number;
+    diagnostico_id: string | null;
+    criado_em: string;
+  }[];
+  /** RM-53 (RM41-023): risk scores reais persistidos para esta consulta. */
+  risco_scores: {
+    id: string;
+    risco_global: string;
+    score_global: number;
+    alerta_vermelho: boolean;
+    recomendacoes: string[];
+    criado_em: string;
+  }[];
+}
 
 // ══════════════════════════════════════════════════════════════
 // CONFIGURAÇÃO
@@ -153,12 +198,56 @@ export class ApiError extends Error {
   }
 }
 
-/** Lançado quando o backend é obrigatório (produção/desenvolvimento real) mas não está configurado/disponível — NUNCA silenciado em uma sessão falsa. */
-export class AuthConfigError extends Error {
+/**
+ * Lançado quando o backend é obrigatório (produção/desenvolvimento real)
+ * mas não está configurado/disponível — NUNCA silenciado em uma sessão
+ * falsa nem em um retorno de sucesso fabricado (RM-38). Estende
+ * `NonRetryableError`: reenviar a mesma chamada sem mudar a configuração
+ * nunca vai ter sucesso — não faz sentido o motor de sincronização
+ * retentar 3× algo que só uma mudança de configuração resolve.
+ */
+export class AuthConfigError extends NonRetryableError {
   constructor(message: string) {
     super(message);
     this.name = 'AuthConfigError';
   }
+}
+
+/**
+ * Mensagem padrão de bloqueio quando o backend real é obrigatório mas
+ * não está configurado — usada por TODOS os métodos de `consultaApi`/
+ * `migracaoApi` que antes retornavam dados fictícios (`demo-${Date.now()}`,
+ * arrays vazios) silenciosamente nesse cenário (RM-38). Nunca dispara em
+ * modo demo (ver `requireRealBackend` abaixo) — só quando a implantação
+ * deveria estar usando um backend real e ele está ausente/mal configurado.
+ */
+function backendObrigatorioMsg(acao: string): string {
+  return IS_PRODUCTION_MODE
+    ? `Backend não configurado nesta implantação de produção. ${acao} bloqueado(a) por segurança — nenhum dado é simulado.`
+    : `Backend não configurado (NEXT_PUBLIC_API_URL ausente). ${acao} bloqueado(a). Configure um backend real ou ative NEXT_PUBLIC_DEMO_MODE=true explicitamente para usar o modo demonstração.`;
+}
+
+/**
+ * Checagem usada por todo método de `consultaApi`/`migracaoApi` que tem
+ * um caminho de demonstração. Resolução do risco RM-38: a versão
+ * anterior usava um único flag (`USE_REAL_BACKEND = !IS_DEMO_MODE &&
+ * API_URL_CONFIGURED`) para decidir "usar backend real vs. retornar dado
+ * fictício" — isso significava que "produção mal configurada" (não é
+ * demo, mas API_URL ausente) caía no MESMO ramo que "modo demo
+ * intencional", retornando silenciosamente `{ id: 'demo-...' }` como se
+ * uma consulta/prescrição real tivesse sido persistida. Um médico
+ * autenticado com uma sessão válida antiga (JWT decodificado por
+ * `getCurrentUser()`, que não verifica configuração de backend) nunca
+ * saberia que nada foi salvo de verdade.
+ *
+ * Cada método agora distingue explicitamente os dois casos: `IS_DEMO_MODE`
+ * (explícito, nunca em produção — ver app-mode.ts) retorna o valor de
+ * demonstração rotulado; qualquer outra ausência de configuração de
+ * backend lança `AuthConfigError` via esta função — nunca um sucesso
+ * fabricado.
+ */
+function throwBackendObrigatorio(acao: string): never {
+  throw new AuthConfigError(backendObrigatorioMsg(acao));
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -269,47 +358,64 @@ export const consultaApi = {
   // usado) é enviado em texto puro por HTTPS e transformado em
   // HMAC-SHA256 server-side (ver backend/src/common/crypto/identifier-hash.util.ts).
   async criar(dados: { paciente_cpf?: string; anamnese?: object; idempotency_key?: string }) {
-    if (!USE_REAL_BACKEND) return { id: `demo-${Date.now()}`, status: 'em_andamento' };
+    if (IS_DEMO_MODE) return { id: `demo-${Date.now()}`, status: 'em_andamento' };
+    if (!API_URL_CONFIGURED) throwBackendObrigatorio('Criação de consulta');
     return apiFetch('/api/consulta', { method: 'POST', body: JSON.stringify(dados) });
   },
 
   async listar(pagina = 1, limite = 20) {
-    if (!USE_REAL_BACKEND) return { total: 0, consultas: [], pagina, limite };
+    if (IS_DEMO_MODE) return { total: 0, consultas: [], pagina, limite };
+    if (!API_URL_CONFIGURED) throwBackendObrigatorio('Listagem de consultas');
     return apiFetch(`/api/consultas?pagina=${pagina}&limite=${limite}`);
   },
 
-  async buscar(id: string) {
-    if (!USE_REAL_BACKEND) return null;
-    return apiFetch(`/api/consulta/${id}`);
+  /**
+   * Busca o detalhe completo de UMA consulta (RM-43) — usada para
+   * carregamento SOB DEMANDA (nunca em lote para toda a lista
+   * hidratada), quando a UI precisa efetivamente da prescrição real de
+   * uma consulta histórica. `null` em modo demo (nunca uma consulta real
+   * fictícia) — fora dele, qualquer falha (rede, 404 de ownership)
+   * propaga como exceção, nunca um objeto vazio fabricado.
+   */
+  async buscar(id: string): Promise<ConsultaDetalheResponse | null> {
+    if (IS_DEMO_MODE) return null;
+    if (!API_URL_CONFIGURED) throwBackendObrigatorio('Busca de consulta');
+    return apiFetch<ConsultaDetalheResponse>(`/api/consulta/${id}`);
   },
 
   async timeline() {
-    if (!USE_REAL_BACKEND) return [];
+    if (IS_DEMO_MODE) return [];
+    if (!API_URL_CONFIGURED) throwBackendObrigatorio('Busca de timeline');
     return apiFetch('/api/timeline');
   },
 
   async criarDiagnostico(dados: { consulta_id: string; cid: string; descricao: string; confianca?: number; selecionado?: boolean; idempotency_key?: string }) {
-    if (!USE_REAL_BACKEND) return { id: `demo-diag-${Date.now()}`, ...dados };
+    if (IS_DEMO_MODE) return { id: `demo-diag-${Date.now()}`, ...dados };
+    if (!API_URL_CONFIGURED) throwBackendObrigatorio('Criação de diagnóstico');
     return apiFetch('/api/diagnostico', { method: 'POST', body: JSON.stringify(dados) });
   },
 
-  async criarPrescricao(dados: { consulta_id: string; diagnostico_id?: string; medicamentos: object[]; orientacoes?: string; idempotency_key?: string }) {
-    if (!USE_REAL_BACKEND) return { id: `demo-rx-${Date.now()}`, ...dados };
+  async criarPrescricao(dados: { consulta_id: string; diagnostico_id?: string; medicamentos: MedicamentoPrescrito[]; orientacoes?: string; idempotency_key?: string }) {
+    if (IS_DEMO_MODE) return { id: `demo-rx-${Date.now()}`, ...dados };
+    if (!API_URL_CONFIGURED) throwBackendObrigatorio('Criação de prescrição');
     return apiFetch('/api/prescricao', { method: 'POST', body: JSON.stringify(dados) });
   },
 
   async salvarRisco(consulta_id: string, score: object, idempotency_key?: string) {
-    if (!USE_REAL_BACKEND) return { id: `demo-risk-${Date.now()}` };
+    if (IS_DEMO_MODE) return { id: `demo-risk-${Date.now()}` };
+    if (!API_URL_CONFIGURED) throwBackendObrigatorio('Cálculo/gravação de risco');
     return apiFetch('/api/risco', { method: 'POST', body: JSON.stringify({ consulta_id, score, idempotency_key }) });
   },
 
   async buscarEvidencias(cid: string) {
-    if (!USE_REAL_BACKEND) return [];
+    if (IS_DEMO_MODE) return [];
+    if (!API_URL_CONFIGURED) throwBackendObrigatorio('Busca de evidências');
     return apiFetch(`/api/evidence/${cid}`);
   },
 
   async buscarRWE(cid: string) {
-    if (!USE_REAL_BACKEND) return [];
+    if (IS_DEMO_MODE) return [];
+    if (!API_URL_CONFIGURED) throwBackendObrigatorio('Busca de RWE');
     return apiFetch(`/api/rwe/${cid}`);
   },
 };
@@ -320,7 +426,8 @@ export const consultaApi = {
 
 export const migracaoApi = {
   async verificarStatus() {
-    if (!USE_REAL_BACKEND) return { migrado: false, prescricoes: 0, validacoes: 0 };
+    if (IS_DEMO_MODE) return { migrado: false, prescricoes: 0, validacoes: 0 };
+    if (!API_URL_CONFIGURED) throwBackendObrigatorio('Verificação de status de migração');
     return apiFetch<{ migrado: boolean; prescricoes: number; validacoes: number }>('/api/migration/status');
   },
 
@@ -330,13 +437,25 @@ export const migracaoApi = {
     erros: string[];
     duracao_ms: number;
   }> {
-    if (!USE_REAL_BACKEND) {
+    // Diferente dos demais métodos: aqui um retorno "soft" (contagem 0 +
+    // motivo explícito em `erros`) é apropriado mesmo fora do modo demo,
+    // porque a operação em si é informativa por natureza — nenhuma
+    // consulta/prescrição/dado clínico é fabricado ou marcado como
+    // migrado com sucesso; o não-migrado permanece visivelmente
+    // não-migrado, nunca mascarado como concluído.
+    if (IS_DEMO_MODE) {
       return {
         prescricoes_migradas: 0,
         validacoes_migradas: 0,
-        erros: IS_DEMO_MODE
-          ? ['Migração desabilitada em modo demonstração — dados demo nunca são enviados a um backend real.']
-          : ['Backend não disponível'],
+        erros: ['Migração desabilitada em modo demonstração — dados demo nunca são enviados a um backend real.'],
+        duracao_ms: 0,
+      };
+    }
+    if (!API_URL_CONFIGURED) {
+      return {
+        prescricoes_migradas: 0,
+        validacoes_migradas: 0,
+        erros: [backendObrigatorioMsg('Migração de dados locais')],
         duracao_ms: 0,
       };
     }

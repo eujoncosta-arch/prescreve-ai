@@ -29,6 +29,15 @@ export interface RegraDoagem {
   ajuste_renal?: boolean;
   ajuste_hepatico?: boolean;
   contraindicado_em?: Populacao[];
+  /**
+   * RM-41/RM-48: `contraindicado_em` só opera na granularidade de bucket
+   * populacional (ex.: todo o bucket 'lactente', 28–364 dias) — insuficiente
+   * quando a contraindicação real é um corte em dias/meses que cai DENTRO de
+   * um bucket (ex.: "contraindicado < 3 meses" = 90 dias, mas 'lactente' vai
+   * até 364 dias). Quando presente, contraindica qualquer idade
+   * ESTRITAMENTE MENOR que este valor, independentemente do bucket.
+   */
+  contraindicado_ate_dias?: number;
 }
 
 export interface MedicamentoDosagem {
@@ -174,6 +183,20 @@ export function calcularDosagem(
     return {
       ok: false,
       erro: `Este medicamento é CONTRAINDICADO em ${labelPopulacao(populacao)}.`,
+      populacao, regra, formulacao,
+      dose_por_dose_mg: 0, dose_total_dia_mg: 0,
+      frequencia_horas: 0, doses_por_dia: 0,
+      excede_dose_maxima_dose: false, excede_dose_maxima_dia: false,
+      unidade_resultado: '', formula_texto: '',
+    };
+  }
+
+  // RM-41/RM-48: corte fino em dias — cobre contraindicações que caem DENTRO
+  // de um bucket populacional (ex.: "< 3 meses" dentro de 'lactente').
+  if (regra.contraindicado_ate_dias !== undefined && idade_dias < regra.contraindicado_ate_dias) {
+    return {
+      ok: false,
+      erro: `Este medicamento é CONTRAINDICADO em idade < ${regra.contraindicado_ate_dias} dias (paciente tem ${idade_dias} dias).`,
       populacao, regra, formulacao,
       dose_por_dose_mg: 0, dose_total_dia_mg: 0,
       frequencia_horas: 0, doses_por_dia: 0,
@@ -420,15 +443,14 @@ export const MEDICAMENTOS_DOSAGEM: MedicamentoDosagem[] = [
       { id: 'smxtmp-comp-forte', descricao: 'Comprimido Forte 800/160 mg',   tipo: 'comprimido', via: 'oral', concentracao_mg: 160, unidade_dispensa: 'comprimido' },
     ],
     regras: [
-      { populacoes: ['lactente', 'pediatrico'], dose: 8, unidade: 'mg/kg/dia', frequencia_horas: 12, via: 'oral', dose_maxima_por_dia_mg: 320, indicacao: 'Dose baseada em TMP. ITU/Infecções respiratórias', observacao: 'Evitar < 2 meses' },
+      { populacoes: ['lactente', 'pediatrico'], dose: 8, unidade: 'mg/kg/dia', frequencia_horas: 12, via: 'oral', dose_maxima_por_dia_mg: 320, indicacao: 'Dose baseada em TMP. ITU/Infecções respiratórias', observacao: 'Evitar < 2 meses', contraindicado_em: ['neonato'], contraindicado_ate_dias: 60 },
       { populacoes: ['adolescente', 'adulto'],  dose: 160, unidade: 'mg',      frequencia_horas: 12, via: 'oral', dose_maxima_por_dia_mg: 320, indicacao: 'ITU não complicada: 3–7 dias' },
       { populacoes: ['geriatrico'],             dose: 160, unidade: 'mg',      frequencia_horas: 12, via: 'oral', dose_maxima_por_dia_mg: 320, ajuste_renal: true, observacao: 'Risco de hiperpotassemia. Monitorar K+ e função renal.' },
     ],
     diretriz: 'IDSA UTI Guidelines 2010; SBU 2021',
     observacao_geral: 'Dose expressa em componente TMP. Contraindicado em < 2 meses (kernicterus). Evitar na gestação (1º e 3º trimestre).',
     alerta_especial: 'Contraindicado em < 2 meses de vida. Risco de hiperpotassemia em associação com BRA/IECA ou em idosos com DRC.',
-    contraindicacoes: ['neonato'],
-  } as MedicamentoDosagem,
+  },
 
   // ── ANALGÉSICOS / ANTIPIRÉTICOS ───────────────────────────────────────────
   {
@@ -484,7 +506,7 @@ export const MEDICAMENTOS_DOSAGEM: MedicamentoDosagem[] = [
       { id: 'dip-inj-500',  descricao: 'Solução injetável 500 mg/mL', tipo: 'injetavel', via: 'iv', concentracao_mg: 500, volume_ref_mL: 1, unidade_dispensa: 'mL' },
     ],
     regras: [
-      { populacoes: ['lactente', 'pediatrico'], dose: 15, unidade: 'mg/kg', frequencia_horas: 6, via: 'oral', dose_maxima_por_dose_mg: 1000, dose_maxima_por_dia_mg: 4000, contraindicado_em: ['neonato'], observacao: '> 3 meses (90 dias). Contraindicado < 3 meses ou < 5 kg. 1 gota = 25 mg (500mg/mL, 20 gotas/mL)' },
+      { populacoes: ['lactente', 'pediatrico'], dose: 15, unidade: 'mg/kg', frequencia_horas: 6, via: 'oral', dose_maxima_por_dose_mg: 1000, dose_maxima_por_dia_mg: 4000, contraindicado_em: ['neonato'], contraindicado_ate_dias: 90, observacao: '> 3 meses (90 dias). Contraindicado < 3 meses ou < 5 kg. 1 gota = 25 mg (500mg/mL, 20 gotas/mL)' },
       { populacoes: ['adolescente', 'adulto'],  dose: 500, unidade: 'mg',   frequencia_horas: 6, via: 'oral', dose_maxima_por_dose_mg: 1000, dose_maxima_por_dia_mg: 4000 },
       { populacoes: ['geriatrico'],             dose: 500, unidade: 'mg',   frequencia_horas: 8, via: 'oral', dose_maxima_por_dia_mg: 2000 },
       { populacoes: ['adolescente', 'adulto'],  dose: 1000, unidade: 'mg',  frequencia_horas: 8, via: 'iv', dose_maxima_por_dose_mg: 2500, dose_maxima_por_dia_mg: 5000, indicacao: 'Dor intensa hospitalar / IV lento (> 15 min)' },

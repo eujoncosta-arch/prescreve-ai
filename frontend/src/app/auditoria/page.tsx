@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useSyncExternalStore } from 'react';
 import {
   Shield, Search, Download, Eye, AlertTriangle, CheckCircle2,
   FileText, Pill, BookOpen, Activity, Filter, X, ChevronDown,
   Clock, User, Hash, RefreshCw, Calendar, Stethoscope,
-  TrendingUp, AlertOctagon, Zap, Database, BarChart3,
+  AlertOctagon, Database, BarChart3,
   ChevronRight, Lock, CheckCheck, XCircle, ClipboardCheck,
   FileJson, Table2, Info, Layers,
 } from 'lucide-react';
@@ -17,7 +17,7 @@ import {
   verificarIntegridade, exportarCSV, exportarJSON, downloadArquivo,
   seedAuditDemo, registrarAudit,
   TIPO_EVENTO_LABEL, STATUS_COR, SEVERIDADE_COR, TIPO_EVENTO_COR,
-  gerarIdPacienteAnonimo, hashConteudoPrescricao,
+  
 } from '@/lib/medical-audit';
 
 // ═══════════════════════════════════════════════════════════
@@ -25,6 +25,10 @@ import {
 // ═══════════════════════════════════════════════════════════
 
 type ViewMode = 'lista' | 'detalhe' | 'dashboard';
+
+// RM-52 (react-hooks/set-state-in-effect): seed é idempotente — chamado
+// uma vez no escopo do módulo em vez de num useEffect de mount.
+seedAuditDemo();
 
 // ═══════════════════════════════════════════════════════════
 // HELPERS
@@ -35,10 +39,6 @@ function fmtDate(iso: string) {
     day: '2-digit', month: '2-digit', year: 'numeric',
     hour: '2-digit', minute: '2-digit',
   });
-}
-
-function fmtDateShort(iso: string) {
-  return new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -816,27 +816,31 @@ function Dashboard({ stats, entries }: { stats: AuditStats; entries: AuditEntry[
 // ═══════════════════════════════════════════════════════════
 
 export default function AuditoriaPage() {
-  const [entries, setEntries]           = useState<AuditEntry[]>([]);
+  // RM-52 (react-hooks/set-state-in-effect): `entries` é derivado de um
+  // sistema externo (localStorage via medical-audit) — em vez de
+  // useEffect+setState no mount e a cada mudança de `filtros`, usamos
+  // useSyncExternalStore só para o gate de hidratação (`mounted`, mesmo
+  // truque de `page.tsx`/`comite.ts`) e useMemo para derivar `entries` de
+  // `filtros`/`version`. `version` é incrementado manualmente por `refresh()`
+  // sempre que uma ação (ex.: exportação) grava um novo registro de auditoria.
+  const mounted = useSyncExternalStore(() => () => {}, () => true, () => false);
   const [filtros, setFiltros]           = useState<FiltroAudit>({});
+  const [version, setVersion]           = useState(0);
   const [view, setView]                 = useState<ViewMode>('lista');
   const [selectedEntry, setSelected]    = useState<AuditEntry | null>(null);
   const [showFiltros, setShowFiltros]   = useState(false);
-  const [hydrated, setHydrated]         = useState(false);
   const [exportMsg, setExportMsg]       = useState<string | null>(null);
+  const hydrated = mounted;
 
-  useEffect(() => {
-    seedAuditDemo();
-    setEntries(listarAudits(filtros));
-    setHydrated(true);
-  }, []);
+  const entries = useMemo(() => {
+    void version; // força recálculo quando refresh() incrementa a versão
+    return mounted ? listarAudits(filtros) : [];
+  }, [mounted, filtros, version],
+  );
 
   const refresh = useCallback(() => {
-    setEntries(listarAudits(filtros));
-  }, [filtros]);
-
-  useEffect(() => {
-    if (hydrated) refresh();
-  }, [filtros, hydrated, refresh]);
+    setVersion((v) => v + 1);
+  }, []);
 
   const sumarios = useMemo(() => gerarSumarios(entries), [entries]);
   const stats    = useMemo(() => calcularEstatisticas(entries), [entries]);

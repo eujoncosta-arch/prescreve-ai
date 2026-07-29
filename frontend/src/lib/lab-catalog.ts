@@ -1036,10 +1036,17 @@ export const ASTRAZENECA_PRODUCTS: ProdutoComercial[] = [
     link_bula_profissional: 'https://www.astrazeneca.com.br/bulas/brilique-profissional.pdf',
   },
   {
-    id: 'az-farxiga-10',
+    // RM-52 (RM41-015): grafia corrigida de "Farxiga®" (nome comercial
+    // americano) para "Forxiga®" — o nome comercial real no Brasil/EU
+    // para esta mesma molécula (dapagliflozina). O registro ANVISA
+    // '1.0064.0295.001-1' abaixo é de fato do Forxiga, nunca alcançado
+    // pela aplicação antes desta correção porque `toBrandId` (que
+    // normaliza e compara nome comercial + laboratório) nunca casava
+    // "Farxiga" com a marca "Forxiga" já cadastrada em pharma-database.ts.
+    id: 'az-forxiga-10',
     lab_id: 'astrazeneca',
     molecula: 'Dapagliflozina',
-    nome_comercial: 'Farxiga®',
+    nome_comercial: 'Forxiga®',
     classe_terapeutica: 'Inibidor do SGLT-2 (Gliflozina)',
     cids_aprovados: ['E11', 'I50', 'N18'],
     apresentacoes: [

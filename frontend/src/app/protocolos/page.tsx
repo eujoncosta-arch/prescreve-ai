@@ -11,7 +11,6 @@ import {
 import { ProtocolEditor } from '@/components/modules/ProtocolEditor';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -214,6 +213,7 @@ export default function ProtocolosPage() {
 
       {/* Editor */}
       <ProtocolEditor
+        key={editorOpen ? (editing?.id ?? 'new') : 'closed'}
         open={editorOpen}
         onClose={() => { setEditorOpen(false); setEditing(null); }}
         initial={editing}

@@ -8,6 +8,7 @@ import { HttpLoggingInterceptor } from './common/interceptors/http-logging.inter
 import { validarSegredosDistintos } from './auth/jwt-secrets.util';
 import { validarChaveMfaConfigurada } from './auth/mfa-crypto.util';
 import { validarChaveHmacConfigurada } from './common/crypto/identifier-hash.util';
+import { validarDatabaseUrlConfigurada } from './config/database-url.util';
 import {
   resolveAllowedOrigins,
   buildCorsOriginHandler,
@@ -30,6 +31,11 @@ async function bootstrap() {
   // real batesse nesses fluxos. Movido para o mesmo fail-fast do startup.
   validarChaveMfaConfigurada(config);
   validarChaveHmacConfigurada(config);
+  // RM-37: sem DATABASE_URL, PrismaService antes construía um adapter
+  // `undefined` silenciosamente e só falhava (de forma confusa) na
+  // primeira query real — mesmo tipo de falha tardia já eliminado para
+  // os segredos acima.
+  validarDatabaseUrlConfigurada(config);
 
   // Correção NET-01 (auditoria de segurança final): a app roda atrás de um
   // proxy reverso em todo deploy real (Vercel). Sem `trust proxy`, o

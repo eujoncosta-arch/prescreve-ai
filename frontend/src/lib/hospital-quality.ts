@@ -129,15 +129,6 @@ function calcularClassificacao(score: number): PerformanceHospital['classificaca
   return 'D';
 }
 
-function calcularPercentil(valor: number, bench: BenchmarkSetorial): number {
-  const pontos = [bench.p10, bench.p25, bench.p50, bench.p75, bench.p90];
-  const percentis = [10, 25, 50, 75, 90];
-  for (let i = 0; i < pontos.length; i++) {
-    if (bench.menor_melhor ? valor <= pontos[i] : valor >= pontos[i]) return percentis[i];
-  }
-  return bench.menor_melhor ? 95 : 5;
-}
-
 // ══════════════════════════════════════════════════════════════
 // API PÚBLICA
 // ══════════════════════════════════════════════════════════════
@@ -283,7 +274,7 @@ export const CLASSIFICACAO_META: Record<PerformanceHospital['classificacao'], { 
 
 // ─── Cross-engine: Outcome + Medical Audit integration ───────
 
-import { gerarPainelOutcome, calcularNNT, OUTCOME_DB } from './outcome-engine';
+import { calcularNNT, OUTCOME_DB } from './outcome-engine';
 import { listarAudits, calcularEstatisticas, type AuditStats } from './medical-audit';
 
 export interface QualidadeIntegrada {
