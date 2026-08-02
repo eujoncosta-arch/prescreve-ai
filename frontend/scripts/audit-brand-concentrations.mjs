@@ -1,42 +1,31 @@
-// RM-58 — Detecta marcas de laboratórios DIFERENTES com arrays de
-// `concentracoes` byte-idênticos — forte indício de dado copiado sem
-// verificação por marca (o padrão exato do bug real relatado: Sinot Clav
-// exibindo as 4 concentrações do Clavulin, incluindo 2 que a Eurofarma
-// nunca vendeu sob essa marca).
-import { getAllDrugs } from '../src/lib/pharma-database.ts';
+// ============================================================
+// PRESCREVE-AI — RM-62: Gate de Integridade Comercial Farmacológica (CLI)
+//
+// Wrapper fino sobre `src/validation/brand-concentration-audit/` (mesmo
+// padrão de scripts/check-drug-consistency.mjs e
+// scripts/check-cross-database.mjs — a lógica testável vive em
+// `src/validation`, o script só executa e define o exit code).
+//
+// Histórico: RM-58 criou este script como auditoria MANUAL — sempre
+// retornava exit code 0 e classificava toda concentração idêntica entre
+// laboratórios como "suspeita" (incluindo casos de bioequivalência
+// regulatória legítima). RM-62 substitui isso por 3 classificações
+// determinísticas (BLOCKING_ERROR / REVIEW_REQUIRED / ACCEPTED_EXCEPTION)
+// — ver src/validation/brand-concentration-audit/types.ts.
+//
+// Executado via `npm run audit:brand-concentrations` (local, ad-hoc — mesma
+// convenção de `check:consistency`/`check:sync`/`check:text-integrity`) E
+// como parte do `prebuild` (mesma convenção de RM-23/RM-24/RM-49) — uma
+// ÚNICA execução por `npm run build`/CI, nunca duas: o job de CI chama só
+// `npm run build`, que já invoca este script via prebuild. Adicionar um
+// segundo step de CI chamando `npm run audit:brand-concentrations`
+// diretamente duplicaria a execução na mesma esteira — por isso NÃO existe
+// um step de CI separado, só o script dedicado disponível para uso local.
+// ============================================================
 
-const drugs = getAllDrugs();
-const suspeitos = [];
-let totalMarcas = 0;
-let naoVerificadas = 0;
+import { runBrandConcentrationAudit, formatBrandConcentrationReport } from '../src/validation/brand-concentration-audit/index.ts';
 
-for (const d of drugs) {
-  totalMarcas += d.marcas.length;
-  const porAssinatura = new Map();
-  for (const m of d.marcas) {
-    if (m.verificado === false) naoVerificadas++;
-    const chave = JSON.stringify([...m.concentracoes].sort());
-    if (!porAssinatura.has(chave)) porAssinatura.set(chave, []);
-    porAssinatura.get(chave).push(m);
-  }
-  for (const [chave, marcas] of porAssinatura) {
-    const labs = new Set(marcas.map((m) => m.laboratorio));
-    if (labs.size >= 2 && marcas.length >= 2) {
-      suspeitos.push({
-        molecula: d.molecula,
-        concentracoes: JSON.parse(chave),
-        marcas: marcas.map((m) => `${m.nome} (${m.laboratorio}, verificado=${m.verificado !== false})`),
-      });
-    }
-  }
-}
+const report = runBrandConcentrationAudit();
+console.log(formatBrandConcentrationReport(report));
 
-console.log(`Total de marcas no sistema: ${totalMarcas}`);
-console.log(`Marcas explicitamente marcadas verificado:false: ${naoVerificadas}`);
-console.log(`Grupos suspeitos (concentrações idênticas entre labs diferentes): ${suspeitos.length}\n`);
-
-for (const s of suspeitos) {
-  console.log(`[${s.molecula}] concentrações: ${s.concentracoes.join(' | ')}`);
-  for (const m of s.marcas) console.log(`   - ${m}`);
-  console.log('');
-}
+process.exit(report.buildOk ? 0 : 1);

@@ -41,6 +41,20 @@ const RM06_ALLOWLIST = [
   "src/validation/cross-database/**",
   // RM-40 Data Integrity Validator — audita a base legada diretamente (read-only)
   "src/validation/data-integrity/**",
+  // RM-62 Brand Concentration Audit — compara QuickBrand.concentracoes
+  // hardcoded contra EUROFARMA_CATALOG/lab-catalog (read-only). Precisa ler
+  // as fontes legadas diretamente porque pharma-core/migrate.ts já
+  // AUTO-CORRIGE `DrugEntity.presentations` a partir do catálogo quando o
+  // nome da marca casa com um produto (mascarando exatamente o tipo de
+  // divergência hardcoded-vs-catálogo que esta auditoria existe para pegar,
+  // como o bug real do Sinot Clav® que motivou a RM-58/RM-62).
+  "src/validation/brand-concentration-audit/**",
+  // RM-63 Search Coverage Contract — audita searchDrugs()/getAllDrugs()
+  // diretamente (read-only) para provar que a busca cobre o catálogo
+  // consolidado inteiro (RM-58: 78% do catálogo era invisível quando a
+  // busca só lia PHARMA_DB). DrugEntity/pharma-core não expõe sinônimos
+  // nem o `nome_generico` bruto usados pela busca — precisa da fonte real.
+  "src/validation/search-coverage/**",
   // Testes
   "src/tests/**",
   // ── Acoplamento INTENCIONAL à fonte (navegadores especializados) ──

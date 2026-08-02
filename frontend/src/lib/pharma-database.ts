@@ -3038,15 +3038,31 @@ export const PHARMA_DB: QuickDrug[] = [
 
 // ─── FUNÇÕES DE BUSCA ─────────────────────────────────────────
 
+/**
+ * RM-63: dobra acentos (NFD + remove marcas diacríticas) para permitir busca
+ * insensível a acento — "acido" deve encontrar "Ácido Acetilsalicílico",
+ * "ácido fólico" etc. Achado real desta auditoria: antes desta função,
+ * `searchDrugs('acido')` (sem acento — digitação comum em formulários web)
+ * não encontrava NENHUMA das ~10 moléculas cujo nome começa com "Ácido"/
+ * possui acentos, mesmo elas existindo corretamente em `getAllDrugs()`.
+ */
+function dobrarAcentos(s: string): string {
+  return s.normalize('NFD').replace(/[̀-ͯ]/g, '');
+}
+
+function normalizarBusca(s: string): string {
+  return dobrarAcentos(s.toLowerCase());
+}
+
 export function searchDrugs(query: string, labPreference?: string): QuickDrug[] {
   if (!query || query.length < 2) return [];
-  const q = query.toLowerCase().trim();
+  const q = normalizarBusca(query.trim());
 
   // Match apenas no início de palavras (após espaço, hífen, parêntese, + ou início de string).
   // Evita que "astro" retorne "Gastroparesia" ou "Antagonista".
   const esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const wordRe = new RegExp(`(?:^|[\\s\\-\\/+®,(\\[])${esc}`, 'i');
-  const wordMatch = (text: string) => wordRe.test(text);
+  const wordMatch = (text: string) => wordRe.test(normalizarBusca(text));
 
   // RM-58: buscava só em PHARMA_DB (80 moléculas — a base "core"), nunca em
   // getAllDrugs() (367 moléculas — base + as 16 extensões por especialidade:
@@ -3059,16 +3075,16 @@ export function searchDrugs(query: string, labPreference?: string): QuickDrug[] 
   // (que já usam getAllDrugs()).
   const results = getAllDrugs().filter(drug => {
     // Molécula e nome genérico — substring livre (nomes técnicos longos)
-    if (drug.molecula.toLowerCase().includes(q)) return true;
-    if (drug.nome_generico.toLowerCase().includes(q)) return true;
+    if (normalizarBusca(drug.molecula).includes(q)) return true;
+    if (normalizarBusca(drug.nome_generico).includes(q)) return true;
     // Sinonimos — word-start (evita falsos positivos entre sinônimos similares)
-    if (drug.sinonimos.some(s => wordMatch(s) || s.toLowerCase() === q)) return true;
+    if (drug.sinonimos.some(s => wordMatch(s) || normalizarBusca(s) === q)) return true;
     // Classe — word-start (impede "astro" → "Antagonista")
     if (wordMatch(drug.classe)) return true;
     // Marcas — substring livre (nomes comerciais podem ser partes de palavras)
     if (drug.marcas.some(b =>
-      b.nome.toLowerCase().includes(q) ||
-      b.laboratorio.toLowerCase().includes(q)
+      normalizarBusca(b.nome).includes(q) ||
+      normalizarBusca(b.laboratorio).includes(q)
     )) return true;
     // Indicações — word-start (impede "astro" → "Gastroparesia")
     if (drug.indicacoes_principais.some(i => wordMatch(i))) return true;
@@ -3078,10 +3094,10 @@ export function searchDrugs(query: string, labPreference?: string): QuickDrug[] 
   // Ordenar: correspondência na molécula > marca > sinonimo > lab preference
   const scored = results.map(drug => {
     let score = 0;
-    if (drug.molecula.toLowerCase().startsWith(q)) score += 100;
-    else if (drug.molecula.toLowerCase().includes(q)) score += 60;
-    if (drug.marcas.some(b => b.nome.toLowerCase().startsWith(q))) score += 80;
-    if (drug.sinonimos.some(s => s.toLowerCase().startsWith(q))) score += 50;
+    if (normalizarBusca(drug.molecula).startsWith(q)) score += 100;
+    else if (normalizarBusca(drug.molecula).includes(q)) score += 60;
+    if (drug.marcas.some(b => normalizarBusca(b.nome).startsWith(q))) score += 80;
+    if (drug.sinonimos.some(s => normalizarBusca(s).startsWith(q))) score += 50;
     if (labPreference && labPreference !== 'sem_preferencia') {
       if (drug.marcas.some(m => m.lab_id === labPreference)) score += 30;
     }

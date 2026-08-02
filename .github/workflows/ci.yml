@@ -17,6 +17,16 @@ name: CI
 # um threshold artificialmente e rodar `test:coverage`/`test:cov`
 # produz `exit code 1` com mensagem explícita de qual arquivo e qual
 # métrica não bateu a meta — não é apenas configuração inerte.
+#
+# RM-62: `audit-brand-concentrations.mjs` (auditoria de integridade
+# comercial de marcas/concentrações, criada na RM-58 após o bug do Sinot
+# Clav®) deixou de ser auditoria manual — agora roda no `prebuild` (dentro
+# do step "Build" abaixo) e falha o build com exit code 1 quando encontra
+# um BLOCKING_ERROR real (dado comercial hardcoded contradizendo uma fonte
+# verificada, ou marca duplicada em laboratórios incompatíveis). Um
+# REVIEW_REQUIRED (padrão suspeito pendente de revisão humana) ou
+# ACCEPTED_EXCEPTION (exceção documentada) NUNCA falha o build — só um
+# BLOCKING_ERROR bloqueia. Ver docs/RM-62-BRAND-INTEGRITY-CI-GATE.md.
 
 on:
   push:
@@ -51,7 +61,7 @@ jobs:
       - name: Unit tests + coverage (bloqueante — thresholds por-arquivo em vitest.config.ts)
         run: npm run test:coverage
 
-      - name: Build (inclui gates RM-23/RM-24/RM-49 de prebuild)
+      - name: Build (inclui gates RM-23/RM-24/RM-49/RM-62 de prebuild)
         run: npm run build
 
   backend:
