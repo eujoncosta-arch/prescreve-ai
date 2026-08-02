@@ -10,14 +10,23 @@ import {
 import { cn } from '@/lib/utils';
 import { LABORATORIOS } from '@/lib/lab-showcase';
 import { BIBLIOTECA_FARMACEUTICA } from '@/lib/pharma-library';
+import { toMoleculeId } from '@/lib/governance/data-governance';
 
 // ─── Static aggregate data (computed from full catalog) ──────────────────────
 
 const LAB = LABORATORIOS.find(l => l.id === 'eurofarma')!;
 
-const TOTAL_MARCAS       = BIBLIOTECA_FARMACEUTICA.filter(p => p.laboratorio_id === 'eurofarma').length;
-const TOTAL_MOLECULAS    = new Set(BIBLIOTECA_FARMACEUTICA.filter(p => p.laboratorio_id === 'eurofarma').map(p => p.molecula.toLowerCase().split(' ')[0])).size;
-const TOTAL_BULAS        = BIBLIOTECA_FARMACEUTICA.filter(p => p.laboratorio_id === 'eurofarma').length * 2;
+const PRODUTOS_EUROFARMA = BIBLIOTECA_FARMACEUTICA.filter(p => p.laboratorio_id === 'eurofarma');
+const TOTAL_MARCAS       = PRODUTOS_EUROFARMA.length;
+// RM-58: contava só a PRIMEIRA PALAVRA do nome da molécula como chave de
+// unicidade — "Ácido Acetilsalicílico", "Ácido Valproico" e "Ácido
+// Ibandrônico" (moléculas totalmente diferentes) todas colapsavam em
+// "ácido"; o mesmo ocorria com todo "Cloridrato de X"/"Sulfato de Y".
+// toMoleculeId() é a canonicalização real já usada pelo validador
+// cross-database (RM-24) — salt-agnóstica, mas nunca colide moléculas
+// distintas por acidente de primeira-palavra.
+const TOTAL_MOLECULAS    = new Set(PRODUTOS_EUROFARMA.map(p => toMoleculeId(p.molecula))).size;
+const TOTAL_BULAS        = PRODUTOS_EUROFARMA.length * 2;
 const PRESCRICOES_MES    = LAB.marcas.reduce((s, m) => s + (m.prescricoes_mes_estimadas ?? 0), 0);
 
 // ─── Chart data ───────────────────────────────────────────────────────────────

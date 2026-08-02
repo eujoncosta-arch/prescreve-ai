@@ -10,6 +10,7 @@
 
 import { EUROFARMA_CATALOG } from './eurofarma-sync';
 import type { ProdutoComercial } from './types';
+import { toMoleculeId } from './governance/data-governance';
 
 // ─── Lab IDs ─────────────────────────────────────────────────────────────────
 
@@ -324,12 +325,37 @@ export interface MarcaFarmaceuticaEnterprise {
 
 // ─── Adapter: ProdutoComercial → MarcaFarmaceuticaEnterprise ──────────────────
 
+// RM-58: `categoria_anvisa` era hardcoded 'etico' para TODO produto — inclusive
+// "Metformina" e "Enalapril Eurofarma" (linha similar/genérica real do próprio
+// laboratório), misturando-os indistintamente com marcas próprias diferenciadas
+// (ex.: "Sinot Clav®", "Zart®") em qualquer tela que use este campo para
+// destacar o portfólio ético. Heurística: nome com símbolo de marca registrada
+// (®) é produto ético diferenciado; "[Molécula] + Nome do Laboratório" sem ®
+// é a linha similar do próprio fabricante (classificação ANVISA "similar");
+// nome comercial igual (ou quase igual) ao princípio ativo, sem marca nem
+// sufixo de laboratório, é genérico puro.
+function classificarCategoriaAnvisa(nomeComercial: string, molecula: string): CategoriaRegulatoriaAnvisa {
+  if (/®/.test(nomeComercial)) return 'etico';
+  // Compara pela mesma canonicalização salt-agnóstica usada no validador
+  // cross-database (toMoleculeId) — "Metformina" (nome comercial) e
+  // "Cloridrato de Metformina" (molécula/sal real) precisam bater aqui,
+  // não só uma comparação de string crua.
+  const nomeEhMolecula = toMoleculeId(nomeComercial) === toMoleculeId(molecula);
+  if (nomeEhMolecula) return 'generico';
+  const nomeNormalizado = nomeComercial.trim().toLowerCase();
+  const moleculaNormalizada = molecula.trim().toLowerCase();
+  if (nomeNormalizado.startsWith(moleculaNormalizada)) return 'similar';
+  const primeiraPalavraMolecula = moleculaNormalizada.split(' ')[0];
+  if (nomeNormalizado.includes(primeiraPalavraMolecula) && nomeNormalizado.includes('eurofarma')) return 'similar';
+  return 'etico';
+}
+
 function adaptarProduto(p: ProdutoComercial): MarcaFarmaceuticaEnterprise {
   return {
     id: p.id,
     laboratorio_id: (p.lab_id as LaboratorioId) ?? 'eurofarma',
     nome_comercial: p.nome_comercial,
-    categoria_anvisa: 'etico',
+    categoria_anvisa: classificarCategoriaAnvisa(p.nome_comercial, p.molecula),
     status: 'ativo',
     classe_controle: 'livre',
     uso_hospitalar: false,

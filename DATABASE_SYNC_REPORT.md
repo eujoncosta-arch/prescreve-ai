@@ -1,13 +1,13 @@
 # DATABASE_SYNC_REPORT
 
-**Gerado:** 2026-07-29T01:46:38.641Z · **Publicação:** ✅ liberada
+**Gerado:** 2026-08-02T12:55:20.366Z · **Publicação:** ✅ liberada
 
 ## Resumo
 
 | Métrica | Valor |
 |---|---|
 | Total analisado | 367 |
-| Compatíveis | 116 |
+| Compatíveis | 117 |
 | Divergentes (risco aberto) | 0 |
 | Aceitos (decisão de escopo documentada — RM-54) | 14 |
 | Críticos | 0 |
@@ -17,7 +17,7 @@
 | Fonte | Princípios ativos |
 |---|---|
 | PHARMA_DB | 351 |
-| Eurofarma | 100 |
+| Eurofarma | 101 |
 | Clinical rules (pediatria) | 21 |
 | Prescription engine | 18 |
 | Lab catalog (ANVISA) | 32 |

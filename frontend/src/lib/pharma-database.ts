@@ -959,7 +959,11 @@ export const PHARMA_DB: QuickDrug[] = [
     alertas_especiais: ['Diarreia por C. difficile', 'Risco de icterícia colestática — hepatite colestática pode aparecer até 6 sem após suspensão', 'Tomar sempre com alimento'],
     uso_gestante: 'avaliar', uso_lactante: 'seguro',
     marcas: [
-      { nome: 'Sinot Clav®', laboratorio: 'Eurofarma', concentracoes: ['250/62,5 mg/5 mL', '400/57 mg/5 mL', '500/125 mg', '875/125 mg'], formas: ['Suspensão Oral', 'Comprimido'], lab_id: 'eurofarma', produto_id: 'euro-sinot-clav', verificado: false },
+      // RM-58: concentrações reais confirmadas (Eurofarma vende apenas estas 2
+      // apresentações de Sinot Clav — 250/62,5 e 500/125mg pertencem à linha
+      // Clavulin/genéricos, nunca existiram sob esta marca; a entrada anterior
+      // copiava as 4 concentrações do Clavulin sem verificação por marca).
+      { nome: 'Sinot Clav®', laboratorio: 'Eurofarma', concentracoes: ['400/57 mg/5 mL', '875/125 mg'], formas: ['Suspensão Oral', 'Comprimido'], lab_id: 'eurofarma', produto_id: 'euro-sinot-clav', verificado: true },
       { nome: 'Clavulin', laboratorio: 'GSK', concentracoes: ['250/62,5 mg/5 mL', '400/57 mg/5 mL', '500/125 mg', '875/125 mg'], formas: ['Suspensão Oral', 'Comprimido'] },
       { nome: 'Augmentin', laboratorio: 'GSK', concentracoes: ['400/57 mg/5 mL', '875/125 mg'], formas: ['Suspensão Oral', 'Comprimido'] },
     ],
@@ -3044,7 +3048,16 @@ export function searchDrugs(query: string, labPreference?: string): QuickDrug[] 
   const wordRe = new RegExp(`(?:^|[\\s\\-\\/+®,(\\[])${esc}`, 'i');
   const wordMatch = (text: string) => wordRe.test(text);
 
-  const results = PHARMA_DB.filter(drug => {
+  // RM-58: buscava só em PHARMA_DB (80 moléculas — a base "core"), nunca em
+  // getAllDrugs() (367 moléculas — base + as 16 extensões por especialidade:
+  // cardio, endo, infectologia, pulmo, neuro, gastro, nefro, pediatria,
+  // gineco, onco, icu, palliative, rm54-gaps). 287 moléculas (78% de todo o
+  // catálogo — Atenolol, Ramipril, Telmisartana, Nifedipino, Diltiazem,
+  // Verapamil, e toda marca cadastrada só nessas extensões) eram
+  // estruturalmente invisíveis para qualquer busca no motor de prescrição,
+  // mesmo aparecendo corretamente nos gates RM-23/RM-24 e nos dashboards
+  // (que já usam getAllDrugs()).
+  const results = getAllDrugs().filter(drug => {
     // Molécula e nome genérico — substring livre (nomes técnicos longos)
     if (drug.molecula.toLowerCase().includes(q)) return true;
     if (drug.nome_generico.toLowerCase().includes(q)) return true;
@@ -3521,13 +3534,17 @@ export const PHARMA_MONITORAMENTO: Record<string, string[]> = {
 
 /** Retorna o código ATC da molécula, priorizando campo inline; fallback para tabela. */
 export function getATCCode(id: string): string | undefined {
-  const drug = PHARMA_DB.find(d => d.id === id);
+  // RM-58: só olhava PHARMA_DB (base) — mesma lacuna de searchDrugs, aqui
+  // fazia o código ATC de moléculas das extensões cair silenciosamente
+  // no fallback da tabela (ou undefined) mesmo quando a entidade real
+  // tinha o campo inline preenchido.
+  const drug = getAllDrugs().find(d => d.id === id);
   return drug?.atc_code ?? PHARMA_ATC_CODES[id];
 }
 
 /** Retorna parâmetros de monitoramento da molécula, priorizando campo inline; fallback para tabela. */
 export function getMonitoramento(id: string): string[] {
-  const drug = PHARMA_DB.find(d => d.id === id);
+  const drug = getAllDrugs().find(d => d.id === id);
   if (drug?.monitoramento && drug.monitoramento.length > 0) return drug.monitoramento;
   return PHARMA_MONITORAMENTO[id] ?? [];
 }

@@ -928,7 +928,7 @@ export const PHARMA_DB_ENDO: QuickDrug[] = [
     uso_pediatrico: 'nao_aplicavel',
     molecula: 'Semaglutida 2,4 mg',
     nome_generico: 'Semaglutida (dose obesidade)',
-    sinonimos: ['wegovy', 'semaglutida obesidade', 'semaglutida 2.4', 'glp-1 obesidade', 'ar-glp1 anti-obesidade'],
+    sinonimos: ['wegovy', 'poviztra', 'semaglutida obesidade', 'semaglutida 2.4', 'glp-1 obesidade', 'ar-glp1 anti-obesidade'],
     categoria: 'outro',
     classe: 'AR-GLP-1',
     subclasse: 'Agonista GLP-1 em dose antiobesidade (dose superior à dose DM2 — Ozempic® 1 mg)',
@@ -973,6 +973,12 @@ export const PHARMA_DB_ENDO: QuickDrug[] = [
     uso_lactante: 'contraindicado',
     marcas: [
       { nome: 'Wegovy®', laboratorio: 'Novo Nordisk', concentracoes: ['0,25 mg/dose', '0,5 mg/dose', '1 mg/dose', '1,7 mg/dose', '2,4 mg/dose'], formas: ['Solução injetável autoaplicador'], lab_id: 'novo_nordisk' },
+      // RM-58: Poviztra™ (Eurofarma) nunca existia em nenhuma fonte do
+      // sistema — segunda marca de semaglutida da Eurofarma (licenciada
+      // da Novo Nordisk), mesma indicação/faixa de dose que Wegovy®
+      // (obesidade/sobrepeso). Confirmado via bula profissional Eurofarma/
+      // Novo Nordisk e listagens de rede (Panvel, Drogal, Droga Raia).
+      { nome: 'Poviztra™', laboratorio: 'Eurofarma', concentracoes: ['0,25 mg/dose', '0,5 mg/dose', '1 mg/dose', '1,7 mg/dose', '2,4 mg/dose'], formas: ['Solução injetável SC'], lab_id: 'eurofarma', produto_id: 'euro-poviztra', verificado: true },
     ],
   },
 

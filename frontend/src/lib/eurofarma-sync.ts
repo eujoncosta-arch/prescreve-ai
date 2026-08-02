@@ -1113,10 +1113,11 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     nome_comercial: 'Sinot Clav®',
     classe_terapeutica: 'Aminopenicilina + Inibidor de β-lactamase',
     cids_aprovados: ['J06', 'J18', 'J20', 'J31', 'J32', 'H66', 'L03'],
+    // RM-58: Sinot Clav real (confirmado em Drogasil/Drogariasp/CliqueFarma)
+    // vende SOMENTE estas 2 apresentações — 250/62,5 mg/5 mL e 500/125 mg
+    // pertencem à linha Clavulin/genéricos, nunca existiram sob esta marca.
     apresentacoes: [
-      { concentracao: '250/62,5 mg/5 mL', forma_farmaceutica: 'suspensao_oral', embalagem: 'Frasco 75 mL' },
       { concentracao: '400/57 mg/5 mL', forma_farmaceutica: 'suspensao_oral', embalagem: 'Frasco 70 mL + seringa dosadora' },
-      { concentracao: '500/125 mg', forma_farmaceutica: 'comprimido', embalagem: '21 comprimidos' },
       { concentracao: '875/125 mg', forma_farmaceutica: 'comprimido', embalagem: '14 comprimidos' },
     ],
     posologia_aprovada: 'Pediátrico: 45 mg/kg/dia (amoxicilina) em 2 doses (susp. 400/57 mg/5 mL). Ex. 27 kg: 27×45=1215 mg/dia ÷ 2 = 607 mg/dose ÷ 80 mg/mL = 7,6 mL 2x/dia. Adultos: 875/125 mg 2x/dia.',
@@ -1725,6 +1726,45 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     fonte_regulatoria: 'ANVISA',
     link_bula_paciente: 'https://eurofarma.com.br/produtos/bulas/patient/pt/bula-extensior.pdf',
     link_bula_profissional: 'https://eurofarma.com.br/produtos/bulas/healthcare/pt/bula-extensior.pdf',
+  },
+
+  // RM-58: Poviztra™ nunca existia em nenhuma fonte do sistema — segunda
+  // marca de semaglutida da Eurofarma (licenciada da Novo Nordisk),
+  // indicada para obesidade/sobrepeso (perda e manutenção de peso),
+  // distinta de Extensior® (indicação DM2). Confirmado via bula
+  // profissional Eurofarma/Novo Nordisk e listagens de rede (Panvel,
+  // Drogal, Droga Raia) — 5 concentrações do escalonamento oficial.
+  {
+    id: 'euro-poviztra',
+    lab_id: 'eurofarma',
+    // RM-58: "Semaglutida 2,4 mg" (não "Semaglutida" simples) — casa com o
+    // id/molécula da entidade de obesidade em pharma-database-endo.ts
+    // (semaglutida_obesidade), a mesma usada para Wegovy®. Poviztra é
+    // indicado para obesidade/sobrepeso, não para DM2 (essa é Extensior®/
+    // Ozempic, modelados na entidade "Semaglutida" separada) — usar o
+    // mesmo nome de molécula da entidade errada colidiria a marca entre
+    // 2 princípios ativos distintos no validador RM-23/RM-24.
+    molecula: 'Semaglutida 2,4 mg',
+    nome_comercial: 'Poviztra™',
+    classe_terapeutica: 'Agonista do Receptor GLP-1 (AR-GLP-1)',
+    cids_aprovados: ['E66', 'Z68'],
+    apresentacoes: [
+      { concentracao: '0,25 mg/dose', forma_farmaceutica: 'solucao_injetavel', embalagem: 'Caneta 1,5 mL (4 doses)' },
+      { concentracao: '0,5 mg/dose', forma_farmaceutica: 'solucao_injetavel', embalagem: 'Caneta 1,5 mL (4 doses)' },
+      { concentracao: '1 mg/dose', forma_farmaceutica: 'solucao_injetavel', embalagem: 'Caneta 3 mL (4 doses)' },
+      { concentracao: '1,7 mg/dose', forma_farmaceutica: 'solucao_injetavel', embalagem: 'Caneta 3 mL (4 doses)' },
+      { concentracao: '2,4 mg/dose', forma_farmaceutica: 'solucao_injetavel', embalagem: 'Caneta 3 mL (4 doses)' },
+    ],
+    posologia_aprovada: 'Obesidade/sobrepeso com comorbidade: iniciar 0,25 mg/semana SC por 4 semanas, escalonando a cada 4 semanas (0,5 → 1 → 1,7 → 2,4 mg/semana) conforme tolerância, associado a dieta e exercício.',
+    contraindicacoes_bula: ['Neoplasia endócrina múltipla tipo 2 (NEM2)', 'Histórico pessoal/familiar de carcinoma medular de tireoide', 'Hipersensibilidade', 'Gravidez'],
+    advertencias_principais: ['⚠ Retenção especial ANVISA', 'Náuseas/vômitos (dose-dependentes — transitórios)', 'Pancreatite aguda (suspender se suspeita)', 'Colelitíase', 'FC aumentada'],
+    interacoes_principais: ['Insulina/sulfonilureias (hipoglicemia se em uso concomitante)', 'Medicamentos orais (pode retardar absorção — tomar horário fixo)'],
+    uso_populacoes_especiais: { renal: 'Sem ajuste; cautela em IR grave (dados limitados)', gestante: 'CONTRAINDICADO', idoso: 'Sem ajuste; monitorar estado de hidratação' },
+    data_registro: '2024-01-01',
+    data_ultima_atualizacao: '2026-07-01',
+    versao_bula: 'v2026.1',
+    fonte_regulatoria: 'ANVISA',
+    link_bula_profissional: 'https://bulas.eurofarma.com.br/storage/media/19087/EiQ7d1CQXpjMvG6Hw4EkvfJXo7lanSbKBK3v3DMl.pdf',
   },
 
   {
