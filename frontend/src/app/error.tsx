@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import * as Sentry from '@sentry/nextjs';
 import { AlertTriangle, RotateCcw, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -15,6 +16,10 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
     // Log mínimo no console do navegador — nunca envia dado clínico/paciente
     // (este boundary não tem acesso a nenhum dado de anamnese/consulta).
     console.error('[error-boundary]', error);
+    // Reporta ao Sentry se NEXT_PUBLIC_SENTRY_DSN estiver configurado — se
+    // não estiver, Sentry.init nunca rodou (instrumentation-client.ts) e
+    // esta chamada é um no-op seguro.
+    Sentry.captureException(error);
   }, [error]);
 
   return (

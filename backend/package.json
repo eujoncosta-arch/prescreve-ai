@@ -40,6 +40,7 @@
     "@nestjs/throttler": "^6.5.0",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
+    "@sentry/nestjs": "^10.69.0",
     "@types/pg": "^8.20.0",
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
@@ -98,14 +99,54 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
     "coverageThreshold": {
-      "**/auth/jwt-secrets.util.ts": { "statements": 100, "branches": 100, "functions": 100, "lines": 100 },
-      "**/common/crypto/identifier-hash.util.ts": { "statements": 100, "branches": 100, "functions": 100, "lines": 100 },
-      "**/auth/auth.service.ts": { "statements": 75, "branches": 50, "functions": 75, "lines": 74 },
-      "**/auth/mfa.service.ts": { "statements": 90, "branches": 78, "functions": 100, "lines": 94 },
-      "**/auth/mfa-crypto.util.ts": { "statements": 88, "branches": 60, "functions": 100, "lines": 88 },
-      "**/config/cors.util.ts": { "statements": 88, "branches": 76, "functions": 100, "lines": 100 },
-      "**/config/environment.util.ts": { "statements": 100, "branches": 85, "functions": 100, "lines": 100 },
-      "**/modules/consulta/consulta.service.ts": { "statements": 80, "branches": 75, "functions": 77, "lines": 79 }
+      "**/auth/jwt-secrets.util.ts": {
+        "statements": 100,
+        "branches": 100,
+        "functions": 100,
+        "lines": 100
+      },
+      "**/common/crypto/identifier-hash.util.ts": {
+        "statements": 100,
+        "branches": 100,
+        "functions": 100,
+        "lines": 100
+      },
+      "**/auth/auth.service.ts": {
+        "statements": 75,
+        "branches": 50,
+        "functions": 75,
+        "lines": 74
+      },
+      "**/auth/mfa.service.ts": {
+        "statements": 90,
+        "branches": 78,
+        "functions": 100,
+        "lines": 94
+      },
+      "**/auth/mfa-crypto.util.ts": {
+        "statements": 88,
+        "branches": 60,
+        "functions": 100,
+        "lines": 88
+      },
+      "**/config/cors.util.ts": {
+        "statements": 88,
+        "branches": 76,
+        "functions": 100,
+        "lines": 100
+      },
+      "**/config/environment.util.ts": {
+        "statements": 100,
+        "branches": 85,
+        "functions": 100,
+        "lines": 100
+      },
+      "**/modules/consulta/consulta.service.ts": {
+        "statements": 80,
+        "branches": 75,
+        "functions": 77,
+        "lines": 79
+      }
     }
   }
 }

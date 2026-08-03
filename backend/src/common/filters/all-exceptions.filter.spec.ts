@@ -4,7 +4,16 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
+import * as Sentry from '@sentry/nestjs';
 import { AllExceptionsFilter } from './all-exceptions.filter';
+
+// `@sentry/nestjs` exporta `captureException` como propriedade não
+// configurável (getter de re-export) — `jest.spyOn` direto no namespace
+// falha com "Cannot redefine property". `jest.mock` no nível do módulo é
+// o jeito suportado de observar chamadas a ele.
+jest.mock('@sentry/nestjs', () => ({
+  captureException: jest.fn(),
+}));
 
 function buildHost(url = '/api/backend/consultas/123') {
   const json = jest.fn<void, [Record<string, unknown>]>();
@@ -110,5 +119,28 @@ describe('AllExceptionsFilter — produção nunca vaza detalhe interno de erro 
     const body = json.mock.calls[0][0] as { path: string; timestamp: string };
     expect(body.path).toBe('/api/backend/rwe/I10');
     expect(new Date(body.timestamp).toString()).not.toBe('Invalid Date');
+  });
+
+  it('erro não previsto é reportado ao Sentry (observabilidade) — no-op segura sem SENTRY_DSN configurado (não lança neste ambiente de teste)', () => {
+    const filter = new AllExceptionsFilter();
+    const { host } = buildHost();
+    const captureMock = Sentry.captureException as jest.Mock;
+    captureMock.mockClear();
+
+    const erro = new Error('falha real reportável');
+    filter.catch(erro, host);
+
+    expect(captureMock).toHaveBeenCalledWith(erro);
+  });
+
+  it('HttpException deliberada (ex.: NotFoundException) NÃO é reportada ao Sentry — não é um bug, é comportamento pretendido', () => {
+    const filter = new AllExceptionsFilter();
+    const { host } = buildHost();
+    const captureMock = Sentry.captureException as jest.Mock;
+    captureMock.mockClear();
+
+    filter.catch(new NotFoundException('Consulta não encontrada'), host);
+
+    expect(captureMock).not.toHaveBeenCalled();
   });
 });

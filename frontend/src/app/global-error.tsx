@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import * as Sentry from '@sentry/nextjs';
 
 // Production readiness: cobre o caso mais raro (erro dentro do PRÓPRIO layout
 // raiz — ex.: falha no ThemeProvider/AppProvider). Como substitui o layout
@@ -10,6 +11,7 @@ import { useEffect } from 'react';
 export default function GlobalError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   useEffect(() => {
     console.error('[global-error-boundary]', error);
+    Sentry.captureException(error);
   }, [error]);
 
   return (

@@ -7,6 +7,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import type { Request, Response } from 'express';
+import * as Sentry from '@sentry/nestjs';
 
 // ============================================================
 // PRESCREVE-AI — Filtro global de exceções (produção)
@@ -74,6 +75,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
       `${request.method} ${request.url} — exceção não tratada: ${err.message}`,
       err.stack,
     );
+    // Reporta ao Sentry se SENTRY_DSN estiver configurado (ver
+    // src/instrument.ts) — no-op segura quando não está. Só o caminho de
+    // erro NÃO PREVISTO é reportado — HttpException deliberadas
+    // (validação, 404, 403) já têm o comportamento pretendido e poluiriam
+    // o Sentry com "erros" que não são bugs.
+    Sentry.captureException(err);
 
     const body: ErrorResponseBody = {
       statusCode: HttpStatus.INTERNAL_SERVER_ERROR,

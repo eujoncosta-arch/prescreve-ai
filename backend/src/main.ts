@@ -1,3 +1,8 @@
+// DEVE ser a primeira linha do arquivo — Sentry precisa instrumentar
+// módulos ANTES deles serem importados por qualquer outra coisa (ver
+// instrument.ts).
+import './instrument';
+
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
