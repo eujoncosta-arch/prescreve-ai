@@ -386,25 +386,23 @@ describe('CJ-010 — caso ambíguo: hipótese fraca nunca é apresentada como ce
     expect(apoio.encaminhamento_urgente).toBe(false);
   });
 
-  it('LACUNA CLÍNICA (GAP-01): anamnese vazia ainda gera 1 hipótese de baixa probabilidade — critérios de AUSÊNCIA tratam campo vazio como "confirmado negativo"', () => {
-    // Comportamento REAL do software (não o esperado idealmente — ver
-    // docs/RM-64, GAP-01): a regra 'faringoamigdalite' (clinical-decision-
-    // support.ts:788-823) tem 2 critérios de AUSÊNCIA de sintoma
-    // ("Ausência de tosse", "Ausência de sintomas virais", peso 3+3=6) que
-    // usam `!has(queixa_principal, hda, '...')`. Com queixa_principal/hda
-    // vazios (string ''), `has()` retorna false e a negação vira `true` —
-    // ausência de DADO é indistinguível de ausência de SINTOMA, então uma
-    // anamnese totalmente vazia ainda cruza peso_minimo_para_incluir (5) e
-    // gera uma hipótese. Isto NÃO foi corrigido nesta RM (fora de escopo —
-    // RM-64 é uma suíte de ACEITAÇÃO, não uma RM de correção de motor
-    // clínico) — documentado como lacuna, não silenciosamente contornado.
+  it('GAP-01 CORRIGIDO: anamnese vazia não gera mais nenhuma hipótese espúria (regressão fechada — ver frontend/src/tests/gap-01-absence-criteria.test.ts para a suíte dedicada)', () => {
+    // Histórico: a regra 'faringoamigdalite' (clinical-decision-support.ts)
+    // tinha 2 critérios de AUSÊNCIA de sintoma ("Ausência de tosse",
+    // "Ausência de sintomas virais", peso 3+3=6) que usavam
+    // `!has(queixa_principal, hda, '...')`. Com queixa_principal/hda vazios,
+    // `has()` retornava false e a negação virava `true` — ausência de DADO
+    // era indistinguível de ausência de SINTOMA, e uma anamnese totalmente
+    // vazia cruzava peso_minimo_para_incluir (5) só com esses 2 critérios.
+    // Corrigido (RM dedicada, fora do escopo original da RM-64) trocando a
+    // negação direta por `absenceOf()`, que exige texto real preenchido
+    // antes de contar a ausência da palavra-chave como evidência. Nenhuma
+    // regra clínica nova foi criada — só a condição "dado não coletado"
+    // deixou de ser tratada como "sintoma negado".
     const anamneseVazia = baseAnamnesis();
     const apoio = analyzeClinical(anamneseVazia);
-    expect(apoio.hipoteses.length).toBeGreaterThan(0); // comportamento atual, documentado como GAP-01
+    expect(apoio.hipoteses).toEqual([]); // comportamento corrigido — antes era > 0
 
-    // O que a suíte de aceitação GARANTE apesar da lacuna (critério real de
-    // "sem certeza indevida"): mesmo essa hipótese espúria NUNCA tem
-    // probabilidade 'alta', e nunca gera encaminhamento urgente fabricado.
     expect(apoio.hipoteses.every((h) => h.probabilidade !== 'alta')).toBe(true);
     expect(apoio.encaminhamento_urgente).toBe(false);
   });
@@ -492,5 +490,80 @@ describe('CJ-011 — persistência/reabertura: máquina de estados real (reducer
 
   it('nota de fonte: a persistência REAL em Postgres (não apenas em memória) já é validada por backend/test/postgres-real.e2e-spec.ts (idempotência, ownership, cascade delete) — não duplicada aqui.', () => {
     expect(true).toBe(true);
+  });
+});
+
+// ================================================================
+// CJ-012 — Exames laboratoriais como dado clínico de decisão
+// Fonte: BASE_CLINICA['dm2'] (clinical-decision-support.ts:192-243, Diretriz
+// SBD 2023/ADA 2024, critérios glicemia≥126/HbA1c≥6,5%) + avaliarRiscoRenal
+// (clinical-risk-engine.ts:242-262, lê `funcao_renal.creatinina`) +
+// PROTOCOLOS['dm2'] (clinical-therapeutics.ts:71, Metformina 1ª linha) +
+// entidade real "Metformina" (pharma-database.ts:687-690,
+// ajuste_renal.tfg_60_30) + getAdjustmentForCrCl (dose-calculator.ts:315).
+//
+// Escopo desta RM: fechar a lacuna de cobertura da etapa "exames" da
+// jornada (RM-64, seção 7 — risco de cobertura, não lacuna clínica) SEM
+// construir um módulo novo de solicitação/interpretação de exames (que não
+// existe formalizado no sistema hoje). Em vez disso, prova que RESULTADOS
+// DE EXAME REAIS (não texto de anamnese, não sinais vitais) já fluem hoje
+// como dado clínico de decisão em 3 pontos distintos do motor: diagnóstico
+// objetivo (glicemia/HbA1c cruzam critério SEM nenhuma queixa textual),
+// estratificação de risco (creatinina do exame altera a dimensão renal) e
+// ajuste posológico (CrCl calculado a partir da MESMA creatinina do exame
+// determina o ajuste real de Metformina).
+// ================================================================
+describe('CJ-012 — exames laboratoriais como dado clínico de decisão (diagnóstico → risco → dose)', () => {
+  // Entrada: SEM nenhuma queixa/HDA textual de diabetes — só resultados de
+  // exame reais (glicemia de jejum 180 mg/dL, HbA1c 7,8%, ambos acima do
+  // critério diagnóstico da SBD 2023) e função renal moderadamente reduzida
+  // (creatinina 2,2 mg/dL) — o mesmo paciente segue para as 3 etapas.
+  const anamnese = baseAnamnesis({
+    laboratorio: { glicemia: '180', hba1c: '7.8' },
+    funcao_renal: { creatinina: 2.2 },
+  });
+
+  it('ação: submeter exames (glicemia+HbA1c) SEM nenhuma queixa textual de diabetes → hipótese de DM2 gerada só pelo dado objetivo do exame', () => {
+    const apoio = analyzeClinical(anamnese);
+    const dm2 = apoio.hipoteses.find((h) => h.cid10 === 'E11');
+    // Resultado esperado: hipótese presente — só o critério "Glicemia de
+    // jejum ≥ 126 mg/dL" (peso 10) já cruza peso_minimo_para_incluir (5),
+    // sem nenhuma evidência textual/sintoma.
+    expect(dm2).toBeDefined();
+    // Comportamento proibido: nenhuma certeza fabricada a partir de texto —
+    // o critério favorável real precisa citar o exame, não um sintoma
+    // textual inventado.
+    expect(dm2!.criterios_favoraveis.some((c) => c.toLowerCase().includes('glicemia'))).toBe(true);
+  });
+
+  it('ação: calcular estratificação de risco → a DIMENSÃO renal reflete a creatinina REAL do exame (não fabricada, não assumida como normal)', () => {
+    const risco = avaliarRiscoClinico(anamnese, []);
+    // Fonte: avaliarRiscoRenal — creatinina 2.2 mg/dL cai na faixa "> 2.0"
+    // (disfunção renal moderada, score += 40). O fator citado deve conter o
+    // valor real medido (rastreabilidade — nunca um número genérico).
+    expect(risco.risco_renal.fatores.some((f) => f.includes('2.2'))).toBe(true);
+    expect(risco.risco_renal.score).toBeGreaterThanOrEqual(40);
+  });
+
+  it('ação: calcular CrCl a partir da MESMA creatinina do exame → consultar ajuste renal real da Metformina (1ª linha de PROTOCOLOS.dm2) nesse CrCl', () => {
+    // Mesmo valor de creatinina do exame usado nos 2 testes anteriores —
+    // prova que as 3 etapas (diagnóstico, risco, dose) partem do MESMO dado
+    // objetivo, não de números inventados isoladamente por etapa.
+    const params: PatientParams = { idade: 65, sexo: 'M', peso: 70, creatinina: anamnese.funcao_renal.creatinina! };
+    const crcl = calcCrCl(params);
+    expect(crcl).not.toBeNull();
+    // Resultado esperado: CrCl na faixa 30-60 mL/min (redução de dose, não
+    // contraindicação total) — valor calculado, não assumido.
+    expect(crcl!.crcl).toBeGreaterThanOrEqual(30);
+    expect(crcl!.crcl).toBeLessThan(60);
+
+    const metformina = getAllDrugs().find((d) => d.id === 'metformina');
+    expect(metformina).toBeDefined();
+    const ajuste = getAdjustmentForCrCl(metformina!.ajuste_renal, crcl!.crcl);
+    // Resultado esperado: texto real da faixa 30-60 (reduzir/monitorar), não
+    // o texto de "Contraindicado" (que só se aplica abaixo de 30, cenário
+    // já coberto por CJ-004 com o perindopril).
+    expect(ajuste).toContain('TFG 30-60');
+    expect(ajuste.toLowerCase()).not.toContain('contraindicado');
   });
 });

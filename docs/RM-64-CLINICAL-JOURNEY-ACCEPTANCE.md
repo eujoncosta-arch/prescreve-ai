@@ -95,8 +95,8 @@ revertidos (`git checkout --`) para manter o diff desta RM restrito ao trabalho 
 
 | Métrica | Valor |
 |---|---|
-| Número de jornadas | 11 (CJ-001 a CJ-011) |
-| Número de etapas cobertas | 10 das 12 etapas da jornada descrita na RM ("exames" não tem cenário dedicado — ver seção 7; "persistência/reabertura" coberta por CJ-011 via reducer, não via Postgres real, que já tem cobertura própria) |
+| Número de jornadas | 11 (CJ-001 a CJ-011) — **12 (+CJ-012) em RM dedicada posterior**, ver seção 6 |
+| Número de etapas cobertas | 10 das 12 etapas da jornada descrita na RM ("exames" não tinha cenário dedicado — ver seção 7; "persistência/reabertura" coberta por CJ-011 via reducer, não via Postgres real, que já tem cobertura própria). **Atualização:** "exames" fechada por CJ-012 em RM dedicada posterior — 11/12 etapas cobertas |
 | Módulos envolvidos | `clinical-decision-support.ts`, `clinical-risk-engine.ts`, `clinical-therapeutics.ts`, `therapeutic-class-expansion.ts`, `safety-rules.ts`, `dose-calculator.ts`, `pediatric-engine.ts`, `pharma-database.ts` (+ `pharma-database-cardio.ts`/`-endo.ts`), `store.tsx` |
 | Cenários aprovados | 11/11 CJs, 24/24 testes |
 | Cenários pendentes | 0 cenários mínimos pendentes; 1 limitação de cobertura declarada (CJ-009, sub-teste de `dispatch` era nota de rastreabilidade, não asserção de componente) — **fechada em RM dedicada posterior** |
@@ -168,13 +168,17 @@ Ver `frontend/src/tests/cj-009-prescricao-rapida-dispatch.test.tsx`.
 
 ## 7. Riscos
 
-- **Cobertura de "exames"**: a etapa "exames" da jornada descrita na RM-64 não tem
+- ~~**Cobertura de "exames"**: a etapa "exames" da jornada descrita na RM-64 não tem
   um cenário dedicado — os cenários existentes usam dados de exame (creatinina, PA,
   IMC) como entrada de anamnese/dose, mas nenhum CJ testa uma tela ou fluxo de
   solicitação/interpretação de exames como conduta própria. Não foi encontrado
   módulo equivalente formalizado no sistema para reaproveitar (por isso não foi
   inventado um cenário) — registrado aqui como risco de cobertura, não como lacuna
-  clínica.
+  clínica.~~ **Concluído (com escopo reduzido, por decisão explícita)** — RM
+  dedicada posterior adicionou CJ-012, provando que resultados de exame já fluem
+  hoje como dado de decisão real (diagnóstico → risco → dose), SEM construir um
+  módulo novo de solicitação/interpretação de exames — esse módulo continua não
+  existindo no sistema; ver `docs/RM-64-CLINICAL-JOURNEY-MATRIX.md` (CJ-012).
 - **CJ-005 não fixa o `tipo` exato do alerta IECA+AINE** — a asserção verifica "pelo
   menos um alerta real", não a classificação fina. Suficiente para aceitação, mas uma
   regressão futura no `tipo` retornado não seria pega por este teste.
@@ -190,8 +194,11 @@ Ver `frontend/src/tests/cj-009-prescricao-rapida-dispatch.test.tsx`.
 
 ## 8. Próximos cenários prioritários
 
-1. Cenário dedicado a "exames" (etapa da jornada sem cobertura própria) — assim que
-   existir um módulo formalizado de solicitação/interpretação de exames a reaproveitar.
+1. ~~Cenário dedicado a "exames" (etapa da jornada sem cobertura própria) — assim que
+   existir um módulo formalizado de solicitação/interpretação de exames a reaproveitar.~~
+   **Concluído (escopo reduzido)** — CJ-012 fecha a cobertura de dado de exame
+   fluindo como decisão real, sem exigir um módulo de solicitação/interpretação
+   ainda não construído. Ver `docs/RM-64-CLINICAL-JOURNEY-MATRIX.md` (CJ-012).
 2. ~~Teste de componente (não integração) para CJ-009, montando `prescricao-rapida/page.tsx`
    e confirmando que `useApp().dispatch` nunca é chamado durante o fluxo — fecha a
    limitação declarada na seção 5.~~ **Concluído** — ver seção 6 (nota estrutural

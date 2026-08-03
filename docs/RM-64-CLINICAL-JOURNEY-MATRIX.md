@@ -226,3 +226,24 @@ coletado" deixou de ser tratada como "sintoma negado". Comportamento atual
 delete) já é coberta por `backend/test/postgres-real.e2e-spec.ts` — **não duplicada
 aqui**; CJ-011 garante especificamente a integridade da máquina de estados do
 frontend com as funções reais (reducer real, não mock).
+
+---
+
+## CJ-012 — Exames laboratoriais como dado clínico de decisão (RM dedicada, posterior à RM-64)
+
+| Campo | Conteúdo |
+|---|---|
+| Dados de entrada | `laboratorio: { glicemia: '180', hba1c: '7.8' }` + `funcao_renal: { creatinina: 2.2 }` — SEM nenhuma queixa/HDA textual de diabetes |
+| Ação do usuário | Submete exames → `analyzeClinical` gera hipótese DM2 → `avaliarRiscoClinico` calcula dimensão renal → `calcCrCl`+`getAdjustmentForCrCl` determinam ajuste posológico da Metformina |
+| Resultado esperado | Hipótese DM2 (CID E11) presente com critério favorável citando a glicemia; dimensão `risco_renal` reflete a creatinina 2.2 (score ≥ 40); CrCl calculado cai na faixa 30-60 mL/min; ajuste real da Metformina é "TFG 30-60: Reduzir, monitorar" (não "Contraindicado") |
+| Alertas esperados | N/A (etapa de exame → diagnóstico/risco/dose, não de alerta de segurança) |
+| Alertas que não devem aparecer | Nenhuma hipótese/risco/ajuste fabricado a partir de dado textual — tudo rastreável ao valor numérico do exame |
+| Comportamento permitido | O mesmo valor de creatinina do exame alimenta 2 etapas distintas (risco renal e CrCl) sem divergir |
+| Comportamento proibido | Diagnóstico/risco/dose gerados sem o dado objetivo do exame (ex.: por texto de queixa) |
+| Fonte da expectativa | `clinical-decision-support.ts:192-243` (BASE_CLINICA['dm2'], SBD 2023/ADA 2024); `clinical-risk-engine.ts:242-262` (avaliarRiscoRenal); `clinical-therapeutics.ts:71` (PROTOCOLOS.dm2, Metformina 1ª linha); `pharma-database.ts:687-690` (ajuste_renal real da Metformina); `dose-calculator.ts:315` (getAdjustmentForCrCl) |
+| Classificação | Regra clínica confirmada (critérios diagnósticos objetivos) + comportamento atual do software (motor de risco/dose) |
+
+**Nota de escopo:** fecha a lacuna de cobertura da etapa "exames" registrada na RM-64
+(seção 7) SEM construir um módulo novo de solicitação/interpretação de exames (que
+não existe formalizado no sistema) — prova que resultados de exame já fluem hoje
+como dado clínico de decisão real em 3 pontos do motor (diagnóstico, risco, dose).
