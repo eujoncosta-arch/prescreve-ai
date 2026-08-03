@@ -95,7 +95,7 @@ revertidos (`git checkout --`) para manter o diff desta RM restrito ao trabalho 
 
 | Métrica | Valor |
 |---|---|
-| Número de jornadas | 11 (CJ-001 a CJ-011) — **12 (+CJ-012) em RM dedicada posterior**, ver seção 6 |
+| Número de jornadas | 11 (CJ-001 a CJ-011) — **13 (+CJ-012, +CJ-013) em RMs dedicadas posteriores**, ver seção 6 e seção 8 (item 5) |
 | Número de etapas cobertas | 10 das 12 etapas da jornada descrita na RM ("exames" não tinha cenário dedicado — ver seção 7; "persistência/reabertura" coberta por CJ-011 via reducer, não via Postgres real, que já tem cobertura própria). **Atualização:** "exames" fechada por CJ-012 em RM dedicada posterior — 11/12 etapas cobertas |
 | Módulos envolvidos | `clinical-decision-support.ts`, `clinical-risk-engine.ts`, `clinical-therapeutics.ts`, `therapeutic-class-expansion.ts`, `safety-rules.ts`, `dose-calculator.ts`, `pediatric-engine.ts`, `pharma-database.ts` (+ `pharma-database-cardio.ts`/`-endo.ts`), `store.tsx` |
 | Cenários aprovados | 11/11 CJs, 24/24 testes |
@@ -209,9 +209,13 @@ Ver `frontend/src/tests/cj-009-prescricao-rapida-dispatch.test.tsx`.
 4. ~~Avaliar (em RM futura, fora do escopo de aceitação) corrigir GAP-01 no motor de
    `clinical-decision-support.ts`, distinguindo "campo vazio" de "sintoma negativo
    confirmado" nos critérios de ausência.~~ **Concluído** — ver seção 6 (GAP-01).
-5. Cenário de gestante/lactante com contraindicação farmacológica (não coberto pelos
+5. ~~Cenário de gestante/lactante com contraindicação farmacológica (não coberto pelos
    10 cenários mínimos, mas `eligibilityContextFromAnamnesis` e `EligibilityContext`
-   já suportam `gestante`/`lactante` — reaproveitável sem inventar regra nova).
+   já suportam `gestante`/`lactante` — reaproveitável sem inventar regra nova).~~
+   **Concluído** — CJ-013, ver `docs/RM-64-CLINICAL-JOURNEY-MATRIX.md`. Achado
+   documentado: o protocolo curado (ex.: Enalapril em HAS) não é re-filtrado por
+   gestante/lactante — a proteção real acontece em `runSafetyCheck`, não na geração
+   do plano.
 
 ---
 

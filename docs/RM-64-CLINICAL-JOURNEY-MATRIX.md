@@ -247,3 +247,26 @@ frontend com as funções reais (reducer real, não mock).
 (seção 7) SEM construir um módulo novo de solicitação/interpretação de exames (que
 não existe formalizado no sistema) — prova que resultados de exame já fluem hoje
 como dado clínico de decisão real em 3 pontos do motor (diagnóstico, risco, dose).
+
+---
+
+## CJ-013 — Gestante/lactante com contraindicação farmacológica real (RM dedicada, posterior à RM-64)
+
+| Campo | Conteúdo |
+|---|---|
+| Dados de entrada | `gestante: true` (contexto via `eligibilityContextFromAnamnesis`); reaproveita `PROTOCOLOS.has` (Enalapril, já usado em CJ-001) e `CONDITION_CLASS_KEYS['has']` (BRA — já existente, RM-30) |
+| Ação do usuário | `getTherapeuticForCondition('has', ..., ctxGestante)` → `runSafetyCheck` real com Enalapril/Losartana + `gestante`/`lactante` |
+| Resultado esperado | (1) O protocolo curado ainda inclui Enalapril (âncora não re-filtrada pela expansão); (2) `opcoes_excluidas` lista Losartana (classe BRA) com motivo real "Contraindicado na gestação"; (3) `runSafetyCheck` com Enalapril+gestante gera alerta `tipo:'gestante'`, `severidade:'critical'`; (4) `runSafetyCheck` com Losartana+lactante gera alerta `tipo:'lactante'`, `severidade:'danger'` |
+| Alertas esperados | `gestante` (critical, Enalapril); `lactante` (danger, Losartana) |
+| Alertas que não devem aparecer | Nenhum alerta rebaixado para severidade menor que a real (`uso_gestante`/`uso_lactante === 'contraindicado'` sempre gera `critical`/alerta real, nunca `info`) |
+| Comportamento permitido | A âncora curada do protocolo pode conter uma molécula contraindicada em gestante/lactante — a proteção real acontece em `runSafetyCheck`, não na geração do protocolo |
+| Comportamento proibido | `runSafetyCheck` silenciar ou rebaixar o alerta quando `gestante`/`lactante` está associado a molécula com `uso_gestante`/`uso_lactante === 'contraindicado'` |
+| Fonte da expectativa | `therapeutic-class-expansion.ts:42-68,237-248` (EligibilityContext/isEligible); `pharma-database.ts` (Enalapril `uso_gestante:'contraindicado'`; Losartana `uso_gestante`/`uso_lactante:'contraindicado'`); `safety-rules.ts:173-211` (alertas reais `gestante`/`lactante`) |
+| Classificação | Regra clínica confirmada (contraindicação farmacológica real) + comportamento atual do software (defesa em profundidade: protocolo não filtra a âncora, `runSafetyCheck` sim) |
+
+**Nota de escopo:** fecha o item "cenário de gestante/lactante" do roadmap pós-RM-64
+(seção 8, item 5) reaproveitando `eligibilityContextFromAnamnesis`/`EligibilityContext`
+já existentes — nenhuma regra clínica nova foi criada. Documenta explicitamente que
+a proteção real para a molécula ANCORADA no protocolo (não descoberta por expansão de
+classe) é `runSafetyCheck` em tempo de prescrição, não a geração do plano terapêutico
+— o mesmo padrão de defesa em profundidade já confirmado por CJ-004/CJ-005/CJ-006.

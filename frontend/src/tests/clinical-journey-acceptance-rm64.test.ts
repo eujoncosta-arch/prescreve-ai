@@ -567,3 +567,57 @@ describe('CJ-012 — exames laboratoriais como dado clínico de decisão (diagn�
     expect(ajuste.toLowerCase()).not.toContain('contraindicado');
   });
 });
+
+// ================================================================
+// CJ-013 — Gestante/lactante com contraindicação farmacológica real
+// Fonte: EligibilityContext/isEligible (therapeutic-class-expansion.ts:42-68,
+// 237-248, `uso_gestante`/`uso_lactante === 'contraindicado'`) + entidades
+// reais Enalapril (pharma-database.ts, `uso_gestante: 'contraindicado'`) e
+// Losartana (BRA, `uso_gestante: 'contraindicado'`, `uso_lactante:
+// 'contraindicado'`) + runSafetyCheck (safety-rules.ts:173-211, alertas
+// 'gestante'/'lactante' reais). Reaproveita PROTOCOLOS.has (Enalapril, já
+// usado em CJ-001) e CONDITION_CLASS_KEYS['has'] (BRA, já existente).
+//
+// Nenhuma regra clínica nova foi criada — este cenário só encadeia funções
+// já existentes que já suportavam gestante/lactante (RM-64, seção 8, item 5).
+// ================================================================
+describe('CJ-013 — gestante/lactante: contraindicação farmacológica real (defesa em profundidade)', () => {
+  const ctxGestante = eligibilityContextFromAnamnesis(baseAnamnesis({ gestante: true }));
+
+  it('ação: gestante com HAS → o protocolo CURADO (PROTOCOLOS.has) ainda inclui Enalapril — a expansão por classe não re-filtra a âncora, só as moléculas descobertas por classe (comportamento atual do software, não regra clínica ideal)', () => {
+    const plano = getTherapeuticForCondition('has', 'Hipertensão Arterial Sistêmica', ctxGestante);
+    expect(plano).not.toBeNull();
+    // Comportamento confirmado (não endossado como ideal): a âncora curada
+    // do protocolo não passa por `isEligible` — só as moléculas descobertas
+    // pela expansão de classe passam. A camada real de proteção para a
+    // âncora é `runSafetyCheck` em tempo de prescrição (ver 3º teste).
+    expect(plano!.farmacologico.some((s) => s.molecula === 'Enalapril')).toBe(true);
+  });
+
+  it('ação: expansão por classe (BRA, mesma classe do Enalapril) exclui Losartana com motivo real de contraindicação em gestação — rastreável em opcoes_excluidas', () => {
+    const plano = getTherapeuticForCondition('has', 'Hipertensão Arterial Sistêmica', ctxGestante);
+    const excluida = plano!.opcoes_excluidas?.find((o) => o.molecula === 'Losartana');
+    // Resultado esperado: presente, com o motivo REAL retornado por
+    // `isEligible` (não um texto genérico inventado para o teste).
+    expect(excluida).toBeDefined();
+    expect(excluida!.motivo.toLowerCase()).toContain('gesta');
+  });
+
+  it('ação: runSafetyCheck real com Enalapril + gestante:true → alerta CRÍTICO de contraindicação em gestação — a camada de segurança em tempo de prescrição PROTEGE mesmo quando o protocolo curado oferece a molécula contraindicada', () => {
+    const alertas = runSafetyCheck({ moleculas: ['enalapril'], gestante: true });
+    const alertaGestante = alertas.find((a) => a.tipo === 'gestante');
+    expect(alertaGestante).toBeDefined();
+    // Alerta esperado: severidade 'critical' (safety-rules.ts:180), ação
+    // explícita de substituição — nunca um alerta informativo silencioso.
+    expect(alertaGestante!.severidade).toBe('critical');
+    expect(alertaGestante!.acao.toLowerCase()).toContain('substituir');
+  });
+
+  it('ação: lactante em uso de Losartana (mesma classe BRA, contraindicada também na lactação) → runSafetyCheck real → alerta de risco na amamentação', () => {
+    const alertas = runSafetyCheck({ moleculas: ['losartana'], lactante: true });
+    const alertaLactante = alertas.find((a) => a.tipo === 'lactante');
+    expect(alertaLactante).toBeDefined();
+    expect(alertaLactante!.severidade).toBe('danger');
+    expect(alertaLactante!.descricao.toLowerCase()).toContain('amamenta');
+  });
+});
