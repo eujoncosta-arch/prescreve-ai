@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import { json, urlencoded, type Application } from 'express';
 import { AppModule } from './app.module';
 import { HttpLoggingInterceptor } from './common/interceptors/http-logging.interceptor';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { validarSegredosDistintos } from './auth/jwt-secrets.util';
 import { validarChaveMfaConfigurada } from './auth/mfa-crypto.util';
 import { validarChaveHmacConfigurada } from './common/crypto/identifier-hash.util';
@@ -82,6 +83,11 @@ async function bootstrap() {
 
   // Logging HTTP global
   app.useGlobalInterceptors(new HttpLoggingInterceptor());
+
+  // Filtro global de exceções — produção nunca deve responder com o
+  // formato/mensagem padrão de um erro não previsto (podendo incluir
+  // stack trace/mensagem interna do Node); ver all-exceptions.filter.ts.
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   // CORS — allowlist explícita por ambiente (ver src/config/cors.util.ts).
   // NUNCA uma regex/wildcard: a configuração anterior (`/\.vercel\.app$/`

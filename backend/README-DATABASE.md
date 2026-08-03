@@ -98,6 +98,70 @@ automaticamente. Estratégias práticas:
 2. **Emergência** (dado já corrompido/perdido): restore point-in-time do Neon
    (recurso nativo do provedor), fora do escopo do Prisma.
 
+## Backup e Restore (produção)
+
+**Gap de prontidão de produção fechado nesta seção**: não havia, em nenhum lugar do
+repositório, um registro de como restaurar o banco de produção em caso de perda ou
+corrupção de dado. O mecanismo abaixo já existe na infraestrutura (Neon), mas nunca
+tinha sido documentado nem verificado.
+
+- **Mecanismo nativo do Neon**: recuperação point-in-time (PITR) — o Neon mantém um
+  histórico de mudanças do banco e permite restaurar (ou criar um branch a partir de)
+  qualquer instante dentro da janela de retenção do plano contratado. Isso cobre o
+  cenário mais comum de emergência ("um deploy/migration ruim corrompeu dado às
+  14:32, restaurar para 14:30").
+- **Ação pendente, fora do escopo desta RM** (requer acesso ao painel Neon do projeto
+  real, que este agente não tem): confirmar qual é a janela de retenção efetivamente
+  contratada (varia por plano — pode ser tão curta quanto 24h nos planos de entrada)
+  e decidir se essa janela é suficiente para o RPO (Recovery Point Objective) clínico
+  aceitável deste sistema. Se não for, complementar com o backup lógico abaixo.
+- **Backup lógico complementar recomendado** (independe do plano do Neon, cobre
+  retenção mais longa e permite restaurar em QUALQUER Postgres, não só Neon):
+  ```bash
+  # Dump completo (schema + dados), rodar contra a produção com uma connection
+  # string de leitura — nunca a partir de uma máquina de desenvolvedor sem
+  # controle de acesso; preferir um job agendado com credenciais de serviço.
+  pg_dump "$DATABASE_URL" --format=custom --file="backup-$(date +%Y%m%d).dump"
+
+  # Restore (para um banco NOVO — nunca sobrescrever produção diretamente
+  # sem antes validar o dump num ambiente isolado):
+  pg_restore --dbname="$DATABASE_URL_DESTINO" --clean --if-exists backup-XXXXXXXX.dump
+  ```
+  Isso ainda não está automatizado (nenhum cron/job agendado existe hoje) — registrar
+  como pendência explícita para uma RM futura de infraestrutura, não coberta por este
+  repositório de aplicação.
+- **Nunca testado neste projeto**: um restore real (nem do PITR do Neon, nem de um
+  `pg_dump`) nunca foi exercitado de ponta a ponta. Um plano de backup nunca verificado
+  por um restore real é, na prática, não confiável — recomendação: agendar um "restore
+  drill" (restaurar para um banco de teste e validar integridade) antes de depender
+  deste mecanismo numa emergência real.
+
+## Connection Pooling (produção serverless)
+
+**Gap de prontidão de produção fechado nesta seção**: `PrismaService`
+(`src/prisma/prisma.service.ts`) cria seu próprio `pg.Pool` (via `@prisma/adapter-pg`)
+dentro do processo Node — isso agrupa conexões DENTRO de uma única instância do
+backend, mas não protege contra o Postgres ficar sem conexões disponíveis quando
+MÚLTIPLAS instâncias/invocações rodam ao mesmo tempo (o caso normal em produção na
+Vercel, que pode escalar o serviço backend horizontalmente).
+
+- **Connection string atual** (`DATABASE_URL`, ver `.env.example`) deve ser, em
+  produção, a **string de conexão pooled do Neon** (endpoint com `-pooler` no host,
+  modo `transaction` do PgBouncer gerenciado pelo próprio Neon) — não a connection
+  string direta ao Postgres. Isso deixa o Neon responsável por multiplexar muitas
+  conexões lógicas de aplicação sobre um número pequeno de conexões físicas reais ao
+  Postgres, que é o recurso finito.
+- **Ação pendente, fora do escopo desta RM** (requer confirmar no painel Neon/nas
+  variáveis de ambiente reais de produção, inacessíveis a este agente): verificar se
+  `DATABASE_URL` de produção já aponta para o endpoint pooled ou para o direto. Se for
+  o direto, trocar para o pooled é a mudança de maior impacto/menor risco disponível
+  para este gap.
+- **Migrations continuam precisando da connection direta** (não pooled) em alguns
+  cenários — o modo `transaction` do PgBouncer não suporta certas operações de sessão
+  que `prisma migrate deploy` pode exigir. Se a string pooled causar falha específica
+  em `migrate deploy`, usar a string direta apenas para esse comando pontual (nunca
+  para o tráfego normal da aplicação).
+
 ## Seed
 
 ```bash
