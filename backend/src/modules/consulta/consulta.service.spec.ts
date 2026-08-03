@@ -666,3 +666,88 @@ describe('ConsultaService — acesso horizontal (ownership) e IDOR', () => {
     });
   });
 });
+
+// ============================================================
+// buscarRWE() — auditoria de fronteira demo vs. real (RM dedicada,
+// posterior à RM-64/RM-59)
+//
+// Contexto: `frontend/src/lib/rwe-engine.ts` (consumido por `/rwe`, já
+// classificado `demonstracao` na RM-59) gera estatísticas de Real World
+// Evidence inteiramente FABRICADAS (gerador pseudoaleatório determinístico).
+// Este endpoint (`GET /api/rwe/:cid` → `buscarRWE()`) é um caminho
+// COMPLETAMENTE SEPARADO e real, apoiado na tabela `RWE` do Postgres — mas
+// não é chamado por nenhuma página hoje (confirmado por grep:
+// `consultaApi.buscarRWE` só aparece em teste de fallback do api-client,
+// nunca em um componente React) e a tabela nunca é populada por
+// `prisma/seed.ts`.
+//
+// Este teste documenta e trava esse comportamento: `buscarRWE()` é um
+// PASS-THROUGH puro do Prisma via cache — nunca fabrica, nunca preenche
+// lacunas, nunca inventa estatística quando a tabela está vazia. Se algum
+// dia `/rwe` for reconectado a este endpoint real (RM futura), este teste
+// garante que a função em si continua honesta — nenhuma estatística
+// aparece a menos que exista uma linha real na tabela `RWE`.
+// ============================================================
+describe('ConsultaService.buscarRWE() — nunca fabrica estatística de RWE (pass-through puro do Prisma)', () => {
+  let service: ConsultaService;
+  let prisma: { rWE: { findMany: jest.Mock } };
+  let cache: { key: jest.Mock; getOrSet: jest.Mock };
+
+  beforeEach(async () => {
+    prisma = { rWE: { findMany: jest.fn() } };
+    cache = {
+      key: jest.fn((...parts: string[]) => parts.join(':')),
+      // Simula cache miss real: sempre executa o factory (a mesma query
+      // real que rodaria em produção na ausência de cache quente).
+      getOrSet: jest.fn(async (_key: string, factory: () => Promise<unknown>) =>
+        factory(),
+      ),
+    };
+
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        ConsultaService,
+        { provide: PrismaService, useValue: prisma },
+        { provide: CacheService, useValue: cache },
+        {
+          provide: AuditService,
+          useValue: { registrarAuditoria: jest.fn().mockResolvedValue({}) },
+        },
+        {
+          provide: ConfigService,
+          useValue: { get: jest.fn(() => undefined) },
+        },
+      ],
+    }).compile();
+
+    service = module.get(ConsultaService);
+  });
+
+  it('tabela RWE vazia para o CID (comportamento real hoje — prisma/seed.ts nunca a popula) → retorna [] — nunca fabrica uma estatística de fallback', async () => {
+    prisma.rWE.findMany.mockResolvedValue([]);
+    const resultado = await service.buscarRWE('I10');
+    expect(resultado).toEqual([]);
+  });
+
+  it('consulta o Prisma filtrando pelo CID exato e ordenando por criado_em desc — nunca por outro critério que pudesse priorizar um resultado "mais favorável"', async () => {
+    prisma.rWE.findMany.mockResolvedValue([]);
+    await service.buscarRWE('E11');
+    expect(prisma.rWE.findMany).toHaveBeenCalledWith({
+      where: { cid: 'E11' },
+      orderBy: { criado_em: 'desc' },
+    });
+  });
+
+  it('quando existem linhas reais na tabela, retorna exatamente o que o Prisma devolveu — nenhum campo é recalculado, arredondado "para melhor" ou substituído', async () => {
+    const linhaReal = {
+      id: 'rwe-1',
+      cid: 'I10',
+      total_casos: 42,
+      taxa_sucesso: 0.71,
+      mortalidade: 0.02,
+    };
+    prisma.rWE.findMany.mockResolvedValue([linhaReal]);
+    const resultado = await service.buscarRWE('I10');
+    expect(resultado).toEqual([linhaReal]);
+  });
+});
