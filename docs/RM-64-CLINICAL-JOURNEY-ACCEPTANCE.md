@@ -87,7 +87,9 @@ revertidos (`git checkout --`) para manter o diff desta RM restrito ao trabalho 
     `risco_global` — corrigida e complementada com um teste de ACHADO dedicado.
   - CJ-010: assertiva inicial esperava zero hipóteses para anamnese vazia — o
     comportamento real (GAP-01) foi investigado, documentado e testado como é, não
-    silenciosamente contornado.
+    silenciosamente contornado. **Atualização:** GAP-01 foi corrigido numa RM
+    dedicada posterior — a assertiva original (zero hipóteses) hoje reflete o
+    comportamento real do software; ver seção 6.
 
 ## 5. Métricas (RM-64, seção "Métricas")
 
@@ -98,7 +100,7 @@ revertidos (`git checkout --`) para manter o diff desta RM restrito ao trabalho 
 | Módulos envolvidos | `clinical-decision-support.ts`, `clinical-risk-engine.ts`, `clinical-therapeutics.ts`, `therapeutic-class-expansion.ts`, `safety-rules.ts`, `dose-calculator.ts`, `pediatric-engine.ts`, `pharma-database.ts` (+ `pharma-database-cardio.ts`/`-endo.ts`), `store.tsx` |
 | Cenários aprovados | 11/11 CJs, 24/24 testes |
 | Cenários pendentes | 0 cenários mínimos pendentes; 1 limitação de cobertura declarada (CJ-009, sub-teste de `dispatch` é nota de rastreabilidade, não asserção de componente) |
-| Lacunas clínicas identificadas | GAP-01 (hipótese espúria de anamnese vazia); ACHADO-01 (risco_global dilui dimensão CV elevada); nota estrutural (prescrição rápida não integra com `store`) |
+| Lacunas clínicas identificadas | GAP-01 (hipótese espúria de anamnese vazia) — **corrigido em RM dedicada posterior**; ACHADO-01 (risco_global dilui dimensão CV elevada) — **protegido na UX em RM dedicada posterior**; nota estrutural (prescrição rápida não integra com `store`) — ainda aberta |
 
 Número de testes (24) é reportado apenas como unidade de execução — a métrica de
 qualidade real é a cobertura de jornada (11/11) e de lacunas identificadas (3), não
@@ -106,27 +108,42 @@ a contagem de `it()`.
 
 ## 6. Lacunas
 
-### GAP-01 — Hipótese espúria em anamnese vazia (motor clínico, não corrigido nesta RM)
+### GAP-01 — Hipótese espúria em anamnese vazia — **CORRIGIDO** (RM dedicada, posterior à RM-64)
 
-`clinical-decision-support.ts:788-823` (regra `faringoamigdalite`) usa critérios de
-**ausência** de sintoma (`!has(queixa_principal, hda, 'tosse')`) que tratam campo
-vazio como "sintoma confirmadamente ausente". Uma anamnese totalmente vazia cruza
-`peso_minimo_para_incluir` e gera 1 hipótese (`grau_confianca=22`, `'baixa'`). Fora de
-escopo de correção nesta RM (suíte de aceitação, não RM de motor clínico) — a suíte
-garante que, apesar do gap, nenhuma certeza indevida escapa (`probabilidade` nunca
-`'alta'`, `encaminhamento_urgente` sempre `false`). **Risco:** baixo por si só (nunca
-vira certeza), mas indica que o motor não distingue "dado não coletado" de "sintoma
-negativo" — pode compor com outros gaps futuros.
+`clinical-decision-support.ts` (regra `faringoamigdalite`) usava critérios de
+**ausência** de sintoma (`!has(queixa_principal, hda, 'tosse')`) que tratavam campo
+vazio como "sintoma confirmadamente ausente". Uma anamnese totalmente vazia cruzava
+`peso_minimo_para_incluir` e gerava 1 hipótese (`grau_confianca=22`, `'baixa'`). Fora
+do escopo de correção da RM-64 original (suíte de aceitação, não RM de motor
+clínico) — permaneceu documentado como lacuna até uma RM dedicada introduzir o
+helper `absenceOf()`, que exige texto real preenchido antes de contar a ausência da
+palavra-chave como evidência de sintoma negado. Nenhuma regra clínica nova foi
+criada. Comportamento atual: anamnese vazia → `hipoteses: []`. Teste `CJ-010`
+atualizado para refletir o comportamento corrigido; suíte de regressão dedicada em
+`frontend/src/tests/gap-01-absence-criteria.test.ts`.
 
-### ACHADO-01 — `risco_global` dilui uma dimensão CV elevada
+### ACHADO-01 — `risco_global` dilui uma dimensão CV elevada — **PROTEGIDO NA UX** (RM dedicada, posterior à RM-64)
 
 Confirmado em CJ-001: com `risco_cardiovascular.nivel === 'alto'` (score ≥ 50) mas
 as demais 5 dimensões ainda em zero nesta etapa da jornada, `risco_global` calcula
 `'baixo'` pela média ponderada (`clinical-risk-engine.ts:576-583`). Comportamento
-atual do software, não um bug — mas é uma **expectativa de UX não atendida**: o
-rótulo agregado, se exibido com destaque isolado, pode levar um médico a subestimar
-um risco cardiovascular já real. **Risco:** médio — depende de como a UI apresenta
-`risco_global` vs. as dimensões individuais (fora do escopo desta RM auditar a UI).
+atual do software, não um bug — mas era uma **expectativa de UX não atendida**: o
+rótulo agregado, se exibido com destaque isolado, podia levar um médico a subestimar
+um risco cardiovascular já real.
+
+Corrigido exclusivamente na camada de UX, por decisão explícita: a fórmula de
+`score_global`/`risco_global` em `avaliarRiscoClinico` **permanece inalterada**, até
+haver decisão formal de produto sobre a fórmula em si. Nova função pura e exportada
+`dimensoesAcimaDoRiscoGlobal(avaliacao)` (`clinical-risk-engine.ts`) identifica quais
+dimensões têm nível individual estritamente maior que o `risco_global` agregado. A
+UI (`frontend/src/app/consulta/nova/page.tsx`, componente `IntelligencePanel`) usa o
+resultado para nunca exibir o rótulo agregado sozinho: um badge/alerta de atenção
+aparece tanto no banner superior quanto no card "Score Global de Risco" da aba Risco
+Clínico sempre que a lista não está vazia. Testes: suíte dedicada em
+`frontend/src/tests/achado-01-risco-global-protecao.test.ts`, incluindo o cenário
+real do CJ-001. Limitação de cobertura declarada (mesmo padrão do CJ-009): o projeto
+não usa `@testing-library/react`, então a renderização condicional em `page.tsx` não
+é testada por montagem de componente — a função pura que decide a proteção é.
 
 ### Nota estrutural — `prescricao-rapida` não integra com o `store`
 
@@ -152,8 +169,9 @@ limitação arquitetural real, não uma lacuna clínica.
 - **CJ-009 (`dispatch` não é chamado)** é documentado por investigação de código, não
   testado diretamente — uma futura mudança que integrasse acidentalmente o
   `dispatch` ao fluxo rápido não quebraria este teste.
-- **ACHADO-01** é um risco de leitura clínica na UI, não coberto por este teste de
-  integração (que só vê os dados, não a apresentação visual).
+- **ACHADO-01** era um risco de leitura clínica na UI, não coberto por este teste de
+  integração (que só vê os dados, não a apresentação visual). **Atualização:**
+  protegido em RM dedicada posterior — ver seção 6.
 
 ## 8. Próximos cenários prioritários
 
@@ -162,12 +180,12 @@ limitação arquitetural real, não uma lacuna clínica.
 2. Teste de componente (não integração) para CJ-009, montando `prescricao-rapida/page.tsx`
    e confirmando que `useApp().dispatch` nunca é chamado durante o fluxo — fecha a
    limitação declarada na seção 5.
-3. Teste de UI/apresentação para o ACHADO-01: garantir que a tela de risco nunca
+3. ~~Teste de UI/apresentação para o ACHADO-01: garantir que a tela de risco nunca
    exiba só `risco_global` sem as dimensões individuais quando alguma delas estiver
-   `'alto'`/`'muito_alto'`/`'critico'`.
-4. Avaliar (em RM futura, fora do escopo de aceitação) corrigir GAP-01 no motor de
+   `'alto'`/`'muito_alto'`/`'critico'`.~~ **Concluído** — ver seção 6 (ACHADO-01).
+4. ~~Avaliar (em RM futura, fora do escopo de aceitação) corrigir GAP-01 no motor de
    `clinical-decision-support.ts`, distinguindo "campo vazio" de "sintoma negativo
-   confirmado" nos critérios de ausência.
+   confirmado" nos critérios de ausência.~~ **Concluído** — ver seção 6 (GAP-01).
 5. Cenário de gestante/lactante com contraindicação farmacológica (não coberto pelos
    10 cenários mínimos, mas `eligibilityContextFromAnamnesis` e `EligibilityContext`
    já suportam `gestante`/`lactante` — reaproveitável sem inventar regra nova).

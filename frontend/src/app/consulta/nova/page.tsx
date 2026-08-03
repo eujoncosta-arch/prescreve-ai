@@ -31,6 +31,7 @@ import { newIdempotencyKey } from '@/lib/sync-engine';
 
 // ── Engine imports ──────────────────────────────────────────────
 import type { AvaliacaoRiscoClinico, NivelRisco } from '@/lib/clinical-risk-engine';
+import { dimensoesAcimaDoRiscoGlobal } from '@/lib/clinical-risk-engine';
 import type { ConflitoGuideline, GrauConflito } from '@/lib/guideline-conflict-engine';
 import { avaliarRiscoSeguro, avaliarConflitosSeguro } from '@/lib/clinical-panel-safety';
 import {
@@ -152,6 +153,17 @@ function IntelligencePanel({ onComplete }: { onComplete: () => void }) {
   const riscoGlobal: NivelRisco | undefined = risco?.risco_global;
   const riscoColors = riscoGlobal ? RISCO_COLOR[riscoGlobal] : null;
 
+  // ACHADO-01 (RM-64): `risco_global` é uma média ponderada das 6 dimensões
+  // — uma dimensão isoladamente elevada (ex.: cardiovascular) pode ficar
+  // diluída no rótulo agregado. `dimensoesAcimaDoRiscoGlobal` (motor real,
+  // não recalculado aqui) identifica isso; a UI nunca exibe `risco_global`
+  // sozinho quando a lista não está vazia. O cálculo de `risco_global` em
+  // si permanece inalterado — só a apresentação ganhou essa proteção.
+  const dimensoesElevadas = useMemo(
+    () => (risco ? dimensoesAcimaDoRiscoGlobal(risco) : []),
+    [risco],
+  );
+
   return (
     <div className="space-y-4">
 
@@ -165,6 +177,14 @@ function IntelligencePanel({ onComplete }: { onComplete: () => void }) {
         {riscoGlobal && (
           <Badge className={cn('text-[10px] font-bold border', riscoColors?.bg, riscoColors?.text)}>
             Risco Global: {riscoColors?.label}
+          </Badge>
+        )}
+        {/* ACHADO-01: nunca deixar o rótulo agregado sozinho quando alguma
+            dimensão individual está em nível mais alto — visível já no
+            banner mais proeminente da página, antes de abrir qualquer aba. */}
+        {dimensoesElevadas.length > 0 && (
+          <Badge className="text-[10px] font-bold border bg-red-100 text-red-800 border-red-300">
+            ⚠ {dimensoesElevadas.map(d => `${d.label}: ${RISCO_COLOR[d.nivel].label}`).join(' · ')}
           </Badge>
         )}
       </div>
@@ -212,6 +232,18 @@ function IntelligencePanel({ onComplete }: { onComplete: () => void }) {
                     </Badge>
                   </div>
                   <Progress value={risco.score_global} className="h-2 mb-2" />
+                  {/* ACHADO-01: mesma proteção do banner, mas visível a quem só abre a
+                      aba Risco Clínico sem reparar no banner superior — o rótulo
+                      agregado nunca aparece sozinho quando uma dimensão individual
+                      está em nível mais alto que ele. */}
+                  {dimensoesElevadas.length > 0 && (
+                    <Alert className="border-red-300 bg-red-100 mt-2">
+                      <AlertTriangle className="h-3 w-3 text-red-600" />
+                      <AlertDescription className="text-xs text-red-700 font-semibold">
+                        Atenção: o risco global ({riscoColors?.label}) não reflete a dimensão mais grave — {dimensoesElevadas.map(d => `${d.label}: ${RISCO_COLOR[d.nivel].label}`).join(' · ')}
+                      </AlertDescription>
+                    </Alert>
+                  )}
                   {risco.alerta_vermelho && (
                     <Alert className="border-red-300 bg-red-100 mt-2">
                       <AlertTriangle className="h-3 w-3 text-red-600" />

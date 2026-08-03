@@ -26,15 +26,19 @@ toda expectativa cita o arquivo:linha do sistema que a implementa.
 | Fonte da expectativa | `clinical-decision-support.ts:74-166` (BASE_CLINICA['has'], 7ª Diretriz SBC 2020); `clinical-therapeutics.ts:24` (PROTOCOLOS.has); `clinical-risk-engine.ts` (avaliarRiscoCV, nivelPorScore:65-70) |
 | Classificação | Regra clínica confirmada (critérios HAS) + comportamento atual do software (score ponderado) |
 
-**ACHADO-01 (mesmo cenário, teste separado):** `risco_cardiovascular.nivel === 'alto'`
-mas `risco_global === 'baixo'`, porque `risco_global` é média ponderada de 6 dimensões
-(CV 25%, Renal 20%, Hemorrágico 15%, Farmacológico 20%, Interação 10%, Terapêutico 10% —
+**ACHADO-01 (mesmo cenário, teste separado) — PROTEGIDO NA UX (RM dedicada, posterior
+à RM-64):** `risco_cardiovascular.nivel === 'alto'` mas `risco_global === 'baixo'`,
+porque `risco_global` é média ponderada de 6 dimensões (CV 25%, Renal 20%,
+Hemorrágico 15%, Farmacológico 20%, Interação 10%, Terapêutico 10% —
 `clinical-risk-engine.ts:576-583`). Com as outras 5 dimensões ainda em zero nesta etapa
 da jornada, o agregado dilui o risco CV real. **Não é bug — é o design documentado do
-motor —, mas é uma expectativa de UX não atendida**: um médico que leia só o rótulo
-`risco_global` pode subestimar um risco CV já elevado. Classificado como
-comportamento atual do software + expectativa de UX (gap de leitura), não como regra
-clínica incorreta.
+motor** — a fórmula permanece inalterada. Era uma expectativa de UX não atendida: um
+médico que lesse só o rótulo `risco_global` podia subestimar um risco CV já elevado.
+Corrigido na camada de apresentação: `dimensoesAcimaDoRiscoGlobal()`
+(`clinical-risk-engine.ts`) identifica dimensões acima do agregado; a UI
+(`consulta/nova/page.tsx`) nunca exibe `risco_global` sozinho quando a lista não está
+vazia. Ver `docs/ACHADO-01-RISCO-GLOBAL-UX-PROTECTION.md` e
+`frontend/src/tests/achado-01-risco-global-protecao.test.ts`.
 
 ---
 
@@ -185,18 +189,22 @@ integração desta suíte). Ver "Cenários pendentes" no relatório.
 | Fonte da expectativa | `clinical-decision-support.ts:1002-1006` (gradesFromScore, corte pct<35→'baixa') |
 | Classificação | Regra clínica confirmada (corte de confiança) |
 
-**GAP-01 (lacuna clínica documentada, não corrigida nesta RM):** uma anamnese
-**totalmente vazia** ainda gera 1 hipótese espúria (`faringoamigdalite`,
+**GAP-01 — CORRIGIDO (RM dedicada, posterior à RM-64):** uma anamnese
+**totalmente vazia** gerava 1 hipótese espúria (`faringoamigdalite`,
 `grau_confianca=22`, `probabilidade='baixa'`). Causa raiz: a regra
-`clinical-decision-support.ts:788-823` usa critérios de **ausência** de sintoma
-(`!has(queixa_principal, hda, 'tosse')` etc.) que tratam "campo vazio" como
-"sintoma confirmadamente ausente" — os dois são indistinguíveis hoje, e a soma de
-pesos (3+3=6) cruza o `peso_minimo_para_incluir` (5). **Não corrigido nesta RM**
-(RM-64 é suíte de aceitação, não correção de motor clínico) — a suíte documenta o
-comportamento real e garante que, apesar do gap, nenhuma certeza indevida é gerada
-(`probabilidade !== 'alta'`, `encaminhamento_urgente === false` sempre seguram).
-Classificado como comportamento atual do software divergente da regra clínica
-esperada (uma anamnese vazia não deveria gerar nenhuma hipótese).
+`clinical-decision-support.ts` usava critérios de **ausência** de sintoma
+(`!has(queixa_principal, hda, 'tosse')` etc.) que tratavam "campo vazio" como
+"sintoma confirmadamente ausente" — os dois eram indistinguíveis, e a soma de
+pesos (3+3=6) cruzava o `peso_minimo_para_incluir` (5). **Não foi corrigido
+dentro do escopo original da RM-64** (suíte de aceitação, não correção de
+motor clínico) — permaneceu documentado como lacuna até uma RM dedicada
+("start GAP-01 as its own RM") introduzir o helper `absenceOf()`, que exige
+texto real preenchido antes de contar a ausência da palavra-chave como
+evidência. Nenhuma regra clínica nova foi criada — só a condição "dado não
+coletado" deixou de ser tratada como "sintoma negado". Comportamento atual
+(já correto): anamnese vazia → `hipoteses: []`. Regressão coberta por
+`frontend/src/tests/gap-01-absence-criteria.test.ts` e pelo teste
+`CJ-010` atualizado nesta mesma suíte.
 
 ---
 

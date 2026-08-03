@@ -624,3 +624,62 @@ export function avaliarRiscoClinico(
     recomendacoes_prioritarias,
   };
 }
+
+// ──────────────────────────────────────────────────────────────
+// ACHADO-01 (RM-64) — proteção de leitura do risco agregado
+//
+// `risco_global` é uma MÉDIA PONDERADA das 6 dimensões (CV 25% + Renal 20%
+// + Hemorrágico 15% + Farmacológico 20% + Interação 10% + Terapêutico
+// 10%) — por design, não um bug. Mas isso significa que uma dimensão
+// isoladamente elevada (ex.: cardiovascular em 'alto') pode ficar diluída
+// no rótulo agregado exibido em destaque ('baixo'), se as demais
+// dimensões estiverem em zero. Confirmado empiricamente pela RM-64 (CJ-001)
+// e registrado como ACHADO-01: risco de leitura clínica, não de cálculo.
+//
+// Esta função NÃO altera `avaliarRiscoClinico`/`score_global`/`risco_global`
+// — o cálculo é preservado exatamente como está, por decisão explícita,
+// até haver decisão formal de produto sobre a fórmula em si. Ela só
+// identifica, de forma pura e testável, quais dimensões estão em um nível
+// de risco MAIOR que o rótulo agregado — a camada de UI usa isto para
+// nunca exibir `risco_global` sozinho quando isso acontecer.
+// ──────────────────────────────────────────────────────────────
+
+const ORDEM_NIVEL_RISCO: Record<NivelRisco, number> = {
+  baixo: 0,
+  intermediario: 1,
+  alto: 2,
+  muito_alto: 3,
+  critico: 4,
+};
+
+export interface DimensaoAcimaDoGlobal {
+  chave: 'risco_cardiovascular' | 'risco_renal' | 'risco_hemorragico' | 'risco_farmacologico' | 'risco_interacao' | 'risco_terapeutico';
+  label: string;
+  nivel: NivelRisco;
+}
+
+const LABEL_DIMENSAO: Record<DimensaoAcimaDoGlobal['chave'], string> = {
+  risco_cardiovascular: 'Cardiovascular',
+  risco_renal: 'Renal',
+  risco_hemorragico: 'Hemorrágico',
+  risco_farmacologico: 'Farmacológico',
+  risco_interacao: 'Interação',
+  risco_terapeutico: 'Terapêutico',
+};
+
+/**
+ * Retorna as dimensões cujo `nivel` individual é estritamente MAIOR que o
+ * `risco_global` agregado — nunca vazio quando a leitura do rótulo agregado
+ * sozinho seria enganosa. Lista vazia = o rótulo agregado já reflete
+ * corretamente a pior dimensão (nenhuma proteção adicional necessária).
+ */
+export function dimensoesAcimaDoRiscoGlobal(avaliacao: AvaliacaoRiscoClinico): DimensaoAcimaDoGlobal[] {
+  const ordemGlobal = ORDEM_NIVEL_RISCO[avaliacao.risco_global];
+  const dimensoes: DimensaoAcimaDoGlobal['chave'][] = [
+    'risco_cardiovascular', 'risco_renal', 'risco_hemorragico',
+    'risco_farmacologico', 'risco_interacao', 'risco_terapeutico',
+  ];
+  return dimensoes
+    .filter((chave) => ORDEM_NIVEL_RISCO[avaliacao[chave].nivel] > ordemGlobal)
+    .map((chave) => ({ chave, label: LABEL_DIMENSAO[chave], nivel: avaliacao[chave].nivel }));
+}
