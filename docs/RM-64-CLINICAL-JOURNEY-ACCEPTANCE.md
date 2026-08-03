@@ -99,7 +99,7 @@ revertidos (`git checkout --`) para manter o diff desta RM restrito ao trabalho 
 | Número de etapas cobertas | 10 das 12 etapas da jornada descrita na RM ("exames" não tem cenário dedicado — ver seção 7; "persistência/reabertura" coberta por CJ-011 via reducer, não via Postgres real, que já tem cobertura própria) |
 | Módulos envolvidos | `clinical-decision-support.ts`, `clinical-risk-engine.ts`, `clinical-therapeutics.ts`, `therapeutic-class-expansion.ts`, `safety-rules.ts`, `dose-calculator.ts`, `pediatric-engine.ts`, `pharma-database.ts` (+ `pharma-database-cardio.ts`/`-endo.ts`), `store.tsx` |
 | Cenários aprovados | 11/11 CJs, 24/24 testes |
-| Cenários pendentes | 0 cenários mínimos pendentes; 1 limitação de cobertura declarada (CJ-009, sub-teste de `dispatch` é nota de rastreabilidade, não asserção de componente) |
+| Cenários pendentes | 0 cenários mínimos pendentes; 1 limitação de cobertura declarada (CJ-009, sub-teste de `dispatch` era nota de rastreabilidade, não asserção de componente) — **fechada em RM dedicada posterior** |
 | Lacunas clínicas identificadas | GAP-01 (hipótese espúria de anamnese vazia) — **corrigido em RM dedicada posterior**; ACHADO-01 (risco_global dilui dimensão CV elevada) — **protegido na UX em RM dedicada posterior**; nota estrutural (prescrição rápida não integra com `store`) — ainda aberta |
 
 Número de testes (24) é reportado apenas como unidade de execução — a métrica de
@@ -145,14 +145,26 @@ real do CJ-001. Limitação de cobertura declarada (mesmo padrão do CJ-009): o 
 não usa `@testing-library/react`, então a renderização condicional em `page.tsx` não
 é testada por montagem de componente — a função pura que decide a proteção é.
 
-### Nota estrutural — `prescricao-rapida` não integra com o `store`
+### Nota estrutural — `prescricao-rapida` não integra com o `store` — **PROVADO POR TESTE DE COMPONENTE** (RM dedicada, posterior à RM-64)
 
-Confirmado por investigação de código (não por teste de componente): o fluxo de
-prescrição rápida opera inteiramente fora de `Consultation`/`Anamnesis`/`dispatch`.
-Isso é **intencional e documentado** no próprio fluxo (uso rápido sem anamnese
-completa é o requisito do cenário CJ-009), mas significa que nenhuma prescrição
-emitida por esse caminho é persistida ou fica disponível para reabertura — uma
-limitação arquitetural real, não uma lacuna clínica.
+Confirmado originalmente por investigação de código (não por teste de componente):
+o fluxo de prescrição rápida opera inteiramente fora de
+`Consultation`/`Anamnesis`/`dispatch`. Isso é **intencional e documentado** no
+próprio fluxo (uso rápido sem anamnese completa é o requisito do cenário CJ-009),
+mas significa que nenhuma prescrição emitida por esse caminho é persistida ou fica
+disponível para reabertura — uma limitação arquitetural real, não uma lacuna
+clínica.
+
+**Atualização:** a suposição foi confirmada por instrumentação real. Nova
+dependência de teste `@testing-library/react` adicionada ao projeto (sem impacto em
+runtime/produção); `PrescricaoRapida` é montada dentro do `AppProvider` real (mesmo
+reducer, mesmo Context) e o fluxo completo é percorrido via interação de usuário
+simulada (buscar → selecionar medicamento → preencher dados do paciente incl.
+gestante/lactante → adicionar à prescrição → remover item → salvar favorito → gerar
+receita). Um `dispatch` real é instrumentado (interceptando apenas a chamada cujo
+reducer é o `reducer` exportado por `@/lib/store`, nunca outros usos de
+`useReducer`) e provado, por 4 testes, nunca ser chamado em nenhum desses passos.
+Ver `frontend/src/tests/cj-009-prescricao-rapida-dispatch.test.tsx`.
 
 ## 7. Riscos
 
@@ -166,9 +178,12 @@ limitação arquitetural real, não uma lacuna clínica.
 - **CJ-005 não fixa o `tipo` exato do alerta IECA+AINE** — a asserção verifica "pelo
   menos um alerta real", não a classificação fina. Suficiente para aceitação, mas uma
   regressão futura no `tipo` retornado não seria pega por este teste.
-- **CJ-009 (`dispatch` não é chamado)** é documentado por investigação de código, não
+- ~~**CJ-009 (`dispatch` não é chamado)** é documentado por investigação de código, não
   testado diretamente — uma futura mudança que integrasse acidentalmente o
-  `dispatch` ao fluxo rápido não quebraria este teste.
+  `dispatch` ao fluxo rápido não quebraria este teste.~~ **Concluído** — ver seção 6
+  (nota estrutural `prescricao-rapida`). Agora testado diretamente por montagem de
+  componente; uma integração acidental futura do `dispatch` ao fluxo rápido
+  QUEBRARIA `cj-009-prescricao-rapida-dispatch.test.tsx`.
 - **ACHADO-01** era um risco de leitura clínica na UI, não coberto por este teste de
   integração (que só vê os dados, não a apresentação visual). **Atualização:**
   protegido em RM dedicada posterior — ver seção 6.
@@ -177,9 +192,10 @@ limitação arquitetural real, não uma lacuna clínica.
 
 1. Cenário dedicado a "exames" (etapa da jornada sem cobertura própria) — assim que
    existir um módulo formalizado de solicitação/interpretação de exames a reaproveitar.
-2. Teste de componente (não integração) para CJ-009, montando `prescricao-rapida/page.tsx`
+2. ~~Teste de componente (não integração) para CJ-009, montando `prescricao-rapida/page.tsx`
    e confirmando que `useApp().dispatch` nunca é chamado durante o fluxo — fecha a
-   limitação declarada na seção 5.
+   limitação declarada na seção 5.~~ **Concluído** — ver seção 6 (nota estrutural
+   `prescricao-rapida`).
 3. ~~Teste de UI/apresentação para o ACHADO-01: garantir que a tela de risco nunca
    exiba só `risco_global` sem as dimensões individuais quando alguma delas estiver
    `'alto'`/`'muito_alto'`/`'critico'`.~~ **Concluído** — ver seção 6 (ACHADO-01).
