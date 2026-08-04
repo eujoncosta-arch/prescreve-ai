@@ -148,13 +148,15 @@ export const MOCK_THERAPEUTIC: TherapeuticPlan = {
         'Anlodipino 5 mg (alternativa em monoterapia)',
         'Hidroclorotiazida 12,5 mg (complemento ou alternativa)',
       ],
+      // RM-76: citação atualizada da 7ª (2020) para a 8ª edição (2024) —
+      // ver mesma correção em clinical-therapeutics.ts.
       evidencia: {
-        diretriz: '7ª Diretriz Brasileira de Hipertensão Arterial',
+        diretriz: '8ª Diretriz Brasileira de Hipertensão Arterial',
         sociedade: 'Sociedade Brasileira de Cardiologia (SBC)',
-        ano: 2020,
+        ano: 2024,
         nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'Múltiplos ECRs e meta-análises' },
-        citacao: 'Barroso WKS et al. Arq Bras Cardiol. 2021;116(3):516-658.',
-        doi: '10.36660/abc.20201238',
+        citacao: 'Sociedade Brasileira de Cardiologia. Arq Bras Cardiol. 2024.',
+        doi: '10.36660/abc.20240209',
       },
       marcas: [
         { laboratorio: 'Eurofarma', nome_comercial: 'Renitec', apresentacoes: ['5 mg', '10 mg', '20 mg'] },
@@ -198,13 +200,15 @@ export const MOCK_THERAPEUTIC: TherapeuticPlan = {
       ],
       monitoramento: ['Eletrólitos, creatinina e glicemia em 4 semanas', 'Ácido úrico se história de gota'],
       alternativas: ['Clortalidona 12,5 mg (preferível por maior duração de ação)', 'Indapamida 1,5 mg SR'],
+      // RM-76: citação atualizada da 7ª (2020) para a 8ª edição (2024) —
+      // ver mesma correção em clinical-therapeutics.ts.
       evidencia: {
-        diretriz: '7ª Diretriz Brasileira de Hipertensão Arterial',
+        diretriz: '8ª Diretriz Brasileira de Hipertensão Arterial',
         sociedade: 'Sociedade Brasileira de Cardiologia (SBC)',
-        ano: 2020,
+        ano: 2024,
         nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'Múltiplos ECRs e meta-análises (ALLHAT)' },
-        citacao: 'Barroso WKS et al. Arq Bras Cardiol. 2021;116(3):516-658.',
-        doi: '10.36660/abc.20201238',
+        citacao: 'Sociedade Brasileira de Cardiologia. Arq Bras Cardiol. 2024.',
+        doi: '10.36660/abc.20240209',
       },
       marcas: [
         { laboratorio: 'EMS', nome_comercial: 'HCTZ EMS', apresentacoes: ['12,5 mg', '25 mg'] },

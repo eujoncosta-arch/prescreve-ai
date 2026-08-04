@@ -35,7 +35,12 @@ const PROTOCOLOS: Record<string, Omit<TherapeuticPlan, 'diagnostico_selecionado'
         efeitos_adversos: ['Tosse seca (10–15%)', 'Hipotensão na 1ª dose', 'Hipercalemia', 'Angioedema (raro)'],
         monitoramento: ['Creatinina e K+ em 1–2 semanas após início', 'PA após 1ª dose'],
         alternativas: ['Losartana 50 mg se tosse por IECA (BRA)', 'Anlodipino 5 mg (BCC)', 'Clortalidona 12,5 mg'],
-        evidencia: { diretriz: '7ª Diretriz Brasileira de Hipertensão Arterial', sociedade: 'SBC', ano: 2020, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'Múltiplos ECRs' }, citacao: 'Barroso WKS et al. Arq Bras Cardiol. 2021;116(3):516-658.', doi: '10.36660/abc.20201238' },
+        // RM-76: citação atualizada da 7ª (2020) para a 8ª edição (2024) —
+        // a recomendação clínica em si (enalapril como IECA de 1ª linha)
+        // não muda entre edições; só a referência de diretriz estava
+        // desatualizada. Metadados alinhados com `EVIDENCE_DB['has']` em
+        // `evidence-engine.ts`, que já indexava a 8ª edição.
+        evidencia: { diretriz: '8ª Diretriz Brasileira de Hipertensão Arterial', sociedade: 'SBC', ano: 2024, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'Múltiplos ECRs' }, citacao: 'Sociedade Brasileira de Cardiologia. Arq Bras Cardiol. 2024.', doi: '10.36660/abc.20240209' },
       }),
       sug({
         id: 'hctz',
@@ -49,7 +54,8 @@ const PROTOCOLOS: Record<string, Omit<TherapeuticPlan, 'diagnostico_selecionado'
         efeitos_adversos: ['Hipocalemia', 'Hiperuricemia', 'Hiperglicemia', 'Fotossensibilidade'],
         monitoramento: ['Eletrólitos e creatinina em 4 semanas', 'Ácido úrico se histórico de gota'],
         alternativas: ['Clortalidona 12,5 mg (preferível — maior duração)', 'Indapamida 1,5 mg SR'],
-        evidencia: { diretriz: '7ª Diretriz Brasileira de Hipertensão Arterial', sociedade: 'SBC', ano: 2020, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'ECR ALLHAT e meta-análises' }, citacao: 'Barroso WKS et al. Arq Bras Cardiol. 2021;116(3):516-658.' },
+        // RM-76: mesma correção de citação da 7ª para a 8ª edição (2024) — ver nota acima.
+        evidencia: { diretriz: '8ª Diretriz Brasileira de Hipertensão Arterial', sociedade: 'SBC', ano: 2024, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'ECR ALLHAT e meta-análises' }, citacao: 'Sociedade Brasileira de Cardiologia. Arq Bras Cardiol. 2024.', doi: '10.36660/abc.20240209' },
       }),
     ],
     nao_farmacologico: [

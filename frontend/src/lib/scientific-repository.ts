@@ -12,20 +12,26 @@ export const SCIENTIFIC_REPOSITORY: ScientificEntry[] = [
   // HIPERTENSÃO ARTERIAL (I10)
   // ══════════════════════════════════════════════════════════
   {
-    id: 'sci-sbchi-2020',
-    titulo: '7ª Diretriz Brasileira de Hipertensão Arterial',
+    // RM-76: substituída a 7ª edição (2020, DOI 10.36660/abc.20201238) pela
+    // 8ª edição (2024) — a 7ª estava desatualizada e potencialmente
+    // enganosa se apresentada como diretriz vigente (achado da reconciliação
+    // contra `evidence-engine.ts`, que já indexava a DBHA-8/2024 como
+    // `dbha8` desde antes desta correção). Metadados (título/ano/DOI)
+    // alinhados 1:1 com a entrada já curada em `EVIDENCE_DB['has'].diretrizes`.
+    id: 'sci-sbchi-2024',
+    titulo: '8ª Diretriz Brasileira de Hipertensão Arterial',
     tipo: 'diretriz',
     sociedade_ou_journal: 'Sociedade Brasileira de Cardiologia (SBC)',
-    ano: 2020,
-    doi: '10.36660/abc.20201238',
+    ano: 2024,
+    doi: '10.36660/abc.20240209',
     cids_relacionados: ['I10', 'I11', 'I12', 'I13'],
     moleculas_relacionadas: ['Losartana', 'Enalapril', 'Anlodipino', 'Hidroclorotiazida', 'Clortalidona', 'Carvedilol'],
     classes_relacionadas: ['BRA', 'IECA', 'BCC', 'Diurético Tiazídico', 'Beta-bloqueador'],
     nivel_evidencia: 'A',
     grau_recomendacao: 'I',
-    resumo: 'Atualiza metas pressóricas para < 130/80 mmHg na maioria dos pacientes de alto risco. Recomenda terapia de início com combinações fixas para hipertensão estágio 2 ou > 20/10 mmHg acima da meta. Inclui escore de risco cardiovascular global e recomendações sobre proteção de órgão-alvo.',
-    data_inclusao: '2021-03-01',
-    data_proxima_revisao: '2025-01-01',
+    resumo: 'Mantém a meta pressórica < 130/80 mmHg para a maioria dos adultos com base em evidências de alto nível, com escore de risco cardiovascular global e recomendações sobre proteção de órgão-alvo. Edição vigente — substitui a 7ª Diretriz (2020).',
+    data_inclusao: '2024-01-01',
+    data_proxima_revisao: '2029-01-01',
   },
   {
     id: 'sci-esc-2018-has',
