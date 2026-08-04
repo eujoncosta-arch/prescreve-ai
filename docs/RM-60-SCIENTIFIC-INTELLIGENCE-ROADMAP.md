@@ -199,17 +199,19 @@ Da mesma forma, `explicar` e `explicabilidade`, e `atualizacoes`/`atualizacoes-c
 
 ## 10. Decisões que precisam do proprietário do produto
 
-1. `comite`: remover credenciais fabricadas (CRM/ORCID) ou arquivar a página inteira?
-2. `validacao-real`: arquivar, ou investir no programa real de validação multicêntrica que a página finge existir?
-3. `qualidade-hospital`: arquivar, ou redesenhar sem nomes/rankings que soem institucionais reais?
-4. `validacao-clinica`: mover para rota interna/QA, fora do menu do médico, ou manter como está?
+_Legenda: ✅ = decidido e executado, com RM e data. Itens sem marca continuam em aberto._
+
+1. ✅ `comite`: remover credenciais fabricadas (CRM/ORCID) ou arquivar a página inteira? → **Remover credenciais fabricadas, manter a página.** Executado em `docs/RM-70-DEMO-PAGE-DECISIONS.md` (2026-08-04).
+2. ✅ `validacao-real`: arquivar, ou investir no programa real de validação multicêntrica que a página finge existir? → **Arquivar do menu clínico.** Executado em RM-70 (2026-08-04).
+3. ✅ `qualidade-hospital`: arquivar, ou redesenhar sem nomes/rankings que soem institucionais reais? → **Arquivar do menu clínico.** Executado em RM-70 (2026-08-04).
+4. ✅ `validacao-clinica`: mover para rota interna/QA, fora do menu do médico, ou manter como está? → **Removida do menu clínico.** Executado em RM-70 (2026-08-04).
 5. Consolidar `repositorio`/`biblioteca`/`evidencias`/`evidence`/`farmalib`/`eurofarma` (6 páginas de catálogo/evidência sobrepostas) em quantas páginas?
 6. Fundir ou diferenciar explicitamente `explicar` vs. `explicabilidade`?
 7. Fundir ou diferenciar explicitamente `atualizacoes` vs. `atualizacoes-cientificas`?
 8. Investir em coleta de dado longitudinal real para eventualmente integrar `digital-twin`, ou mantê-lo demonstrativo permanentemente?
 9. Investir em integração com laboratório de genotipagem para eventualmente integrar `medicina-precisao`, ou mantê-lo demonstrativo permanentemente?
 10. Definir explicitamente o escopo de `copilot` (ferramenta de auxílio à redação vs. algo mais autônomo) antes de qualquer integração futura.
-11. Aprovar (ou não) a integração piloto de `/explicabilidade` descrita nesta RM, incluindo se o seletor manual de CID deve ou não ser removido após a integração.
+11. ✅ Aprovar (ou não) a integração piloto de `/explicabilidade` descrita nesta RM, incluindo se o seletor manual de CID deve ou não ser removido após a integração. → **Aprovado.** A integração já havia sido implementada e testada em `docs/RM-65-REAL-CLINICAL-PAGE-INTEGRATION.md` (14 testes dedicados, todos os 8 critérios de aceite do §6 cumpridos), mas ficava formalmente pendente da aprovação explícita exigida pelo critério de aceite 8. Dono do produto aprovou em 2026-08-04, incluindo manter o seletor manual de CID como override (não removido).
 
 ---
 
