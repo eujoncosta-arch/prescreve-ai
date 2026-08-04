@@ -42,6 +42,16 @@
 // `hibrido`). A sobreposição era só de nome/framing, não de motor ou
 // dado — resolvida trocando os labels do menu (`Racional por Condição` /
 // `Explicabilidade da Consulta`) e os títulos das próprias páginas.
+//
+// RM-60 (§10, item 7) → RM-72: `/atualizacoes-cientificas` foi removida
+// deste registro — aqui a sobreposição com `/atualizacoes` era REAL, não
+// só de nome: a aba "Diretrizes ativas" duplicava (de forma mais rasa,
+// sem DOI/evidência por mudança) o que `/atualizacoes` já cobre melhor; a
+// aba "Alertas" simulava monitoramento contínuo de 15 sociedades médicas
+// (`DELTAS_DEMO`) sem nenhuma integração real de feed por trás — risco de
+// o médico achar que existe vigilância ativa de diretrizes que não existe.
+// `/atualizacoes` (curada, com DOI e evidência por mudança) permanece como
+// única página do tópico.
 // ============================================================
 
 import type { LucideIcon } from 'lucide-react';
@@ -50,7 +60,7 @@ import {
   Sparkles, Settings, ShieldCheck, Library, BookMarked, Zap,
   Calculator, ClipboardList, GitBranch, TrendingUp, Users, Microscope,
   Building2, UserCircle, Scale, Brain, Lightbulb, Globe, Dna, Network,
-  BarChart3, Activity, Clock, FlaskConical, Bell, Share2, Bot,
+  BarChart3, Activity, Clock, FlaskConical, Share2, Bot,
   Pill, HelpCircle, Package, Beaker,
 } from 'lucide-react';
 
@@ -128,7 +138,6 @@ export const NAV_GROUPS: NavGroup[] = [
       { href: '/prognostico',              label: 'Prognose Preditiva',    icon: Activity,     badge: 'P12', classification: 'demonstracao' },
       { href: '/evidence-timeline',        label: 'Timeline Evidências',   icon: Clock,        badge: 'P12', classification: 'referencia' },
       { href: '/farma-analytics',          label: 'Farma Analytics',       icon: FlaskConical, badge: 'P12', classification: 'demonstracao' },
-      { href: '/atualizacoes-cientificas', label: 'Atualizações Cientif.', icon: Bell,         badge: 'P12', classification: 'demonstracao' },
       { href: '/explicabilidade',          label: 'Explicabilidade da Consulta',   icon: Brain,        badge: 'P14', classification: 'hibrido' },
       { href: '/interoperabilidade',         label: 'Interoperabilidade',    icon: Share2,       badge: 'P17', classification: 'demonstracao' },
       { href: '/medicina-precisao',          label: 'Precision Medicine',    icon: Dna,          badge: 'P18', classification: 'demonstracao' },
