@@ -19,8 +19,8 @@ import {
   toSlug,
   toMoleculeId,
   toBrandId,
-  
   resolveLaboratory,
+  deriveVerificationStatus,
 } from '../governance/data-governance';
 import type { DataProvenance, ConfidenceLevel, DataOrigin } from '../governance/data-governance';
 import type {
@@ -149,6 +149,8 @@ function toEntity(d: QuickDrug, prodByBrandId: Map<string, ProdutoComercial>): D
   const concentrationSet = new Set<string>();
   let anyAnvisa = false;
   let anyVerified = false;
+  /** RM-61: versão da bula/fonte da primeira marca que a tiver — só disponível quando o produto correspondente está no catálogo (Eurofarma/lab-catalog). */
+  let sourceVersion: string | undefined;
 
   for (const b of d.marcas ?? []) {
     const slug = labSlugOf(b);
@@ -174,6 +176,7 @@ function toEntity(d: QuickDrug, prodByBrandId: Map<string, ProdutoComercial>): D
     });
 
     const prod = prodByBrandId.get(brandId);
+    if (prod?.versao_bula && !sourceVersion) sourceVersion = prod.versao_bula;
     if (prod && prod.apresentacoes?.length) {
       for (const a of prod.apresentacoes) {
         if (a.registro_anvisa) anyAnvisa = true;
@@ -202,13 +205,17 @@ function toEntity(d: QuickDrug, prodByBrandId: Map<string, ProdutoComercial>): D
   }));
 
   const origem: DataOrigin = anyAnvisa ? 'ANVISA' : anyVerified ? 'BULA_FABRICANTE' : 'LEGADO';
+  const data_atualizacao = '1970-01-01T00:00:00.000Z';
+  const nivel_confianca = inferConfidence(anyAnvisa, anyVerified, !!atc);
   const provenance: DataProvenance = {
     origem,
     fonte_url: d.marcas?.find((b) => b.bula_profissional || b.bula_paciente)?.bula_profissional,
-    data_atualizacao: '1970-01-01T00:00:00.000Z',
+    data_atualizacao,
     responsavel: 'rm06:migracao',
-    nivel_confianca: inferConfidence(anyAnvisa, anyVerified, !!atc),
+    nivel_confianca,
     observacao: `Migrado de PHARMA_DB (id legado: ${d.id})`,
+    verificationStatus: deriveVerificationStatus({ origem, nivel_confianca, data_atualizacao }),
+    sourceVersion,
   };
 
   return {

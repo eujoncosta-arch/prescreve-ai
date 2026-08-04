@@ -120,6 +120,24 @@ export type DataOrigin =
 export type ConfidenceLevel = 'ALTA' | 'MEDIA' | 'BAIXA' | 'NAO_VERIFICADO';
 
 /**
+ * RM-61: status explícito do dado no ciclo de vida de verificação —
+ * ortogonal a `nivel_confianca` (que mede CONFIANÇA no dado) e a `origem`
+ * (que mede DE ONDE o dado veio). `verificationStatus` responde "este dado
+ * já passou por um processo de revisão?", não "o quão bom é o dado".
+ *
+ * - 'draft'      — dado recém-inserido, sem qualquer verificação.
+ * - 'review'     — tem alguma fonte/sinal, mas ainda pendente de revisão
+ *                   humana ou de processo formal antes de ser confiável.
+ * - 'verified'   — passou por revisão e tem fonte formal + confiança ALTA.
+ * - 'deprecated' — foi verificado no passado, mas está superado (substituído
+ *                   por um dado mais novo, produto descontinuado, etc.).
+ *
+ * `deprecated` NUNCA é inferido automaticamente por `deriveVerificationStatus`
+ * — só uma decisão humana/editorial explícita marca um dado como obsoleto.
+ */
+export type VerificationStatus = 'draft' | 'review' | 'verified' | 'deprecated';
+
+/**
  * Envelope de proveniência anexado a todo registro governado.
  * Preparado para auditoria futura (RM-00 → auditabilidade).
  */
@@ -138,16 +156,69 @@ export interface DataProvenance {
   observacao?: string;
   /** Hash de integridade do registro (preenchido por RM futura de auditoria). */
   hash_integridade?: string;
+  /**
+   * RM-61: status explícito no ciclo de vida de verificação. Opcional para
+   * não quebrar nenhum construtor de `DataProvenance` já existente — quando
+   * ausente, trate como equivalente a `deriveVerificationStatus(...)` sobre
+   * os demais campos do envelope (nunca como "verified" por omissão).
+   */
+  verificationStatus?: VerificationStatus;
+  /**
+   * RM-61: versão ou data do documento-fonte, quando disponível (ex.: bula
+   * "rev. 04/2024", "RENAME 2024"). Distinto de `data_atualizacao` (quando
+   * ESTE registro foi validado) — este campo é sobre a fonte em si.
+   */
+  sourceVersion?: string;
+  /**
+   * RM-61: próxima data de revisão prevista (ISO), preenchida SOMENTE
+   * quando há uma cadência de revisão real conhecida (ex.: renovação de
+   * registro ANVISA). Nunca inventar uma data arbitrária só para preencher
+   * o campo — ausência é o valor honesto quando não há cadência conhecida.
+   */
+  proximaRevisao?: string;
+}
+
+/**
+ * RM-61: deriva um `verificationStatus` padrão a partir dos sinais que já
+ * existem no envelope de proveniência (origem, confiança, data placeholder),
+ * para que registros construídos ANTES desta RM (ou por qualquer código que
+ * ainda não seja atualizado) recebam uma classificação coerente sem exigir
+ * reescrita manual de cada `DataProvenance` já existente no sistema.
+ *
+ * `deprecated` nunca é retornado aqui — é um status que só um processo
+ * humano/editorial pode atribuir explicitamente (não é derivável de sinais
+ * estruturais como origem/confiança/data).
+ */
+export function deriveVerificationStatus(
+  p: Pick<DataProvenance, 'origem' | 'nivel_confianca' | 'data_atualizacao'>,
+): Exclude<VerificationStatus, 'deprecated'> {
+  const FONTES_FORMAIS: DataOrigin[] = [
+    'BULA_FABRICANTE', 'BULA_PROFISSIONAL', 'BULA_PACIENTE', 'ANVISA', 'DIRETRIZ_OFICIAL',
+  ];
+  const dataPlaceholder = p.data_atualizacao === '1970-01-01T00:00:00.000Z' || !p.data_atualizacao;
+
+  if (FONTES_FORMAIS.includes(p.origem) && p.nivel_confianca === 'ALTA' && !dataPlaceholder) {
+    return 'verified';
+  }
+  const FONTES_CRUAS: DataOrigin[] = ['NAO_VERIFICADO', 'LEGADO'];
+  if (FONTES_CRUAS.includes(p.origem) && p.nivel_confianca === 'NAO_VERIFICADO' && dataPlaceholder) {
+    return 'draft';
+  }
+  return 'review';
 }
 
 /** Provência-padrão para dados legados ainda não auditados. */
 export function provenanceLegado(observacao?: string): DataProvenance {
+  const origem: DataOrigin = 'LEGADO';
+  const nivel_confianca: ConfidenceLevel = 'NAO_VERIFICADO';
+  const data_atualizacao = '1970-01-01T00:00:00.000Z';
   return {
-    origem: 'LEGADO',
-    data_atualizacao: '1970-01-01T00:00:00.000Z',
+    origem,
+    data_atualizacao,
     responsavel: 'sistema:legado',
-    nivel_confianca: 'NAO_VERIFICADO',
+    nivel_confianca,
     observacao,
+    verificationStatus: deriveVerificationStatus({ origem, nivel_confianca, data_atualizacao }),
   };
 }
 
@@ -303,16 +374,21 @@ export function fromProdutoComercial(p: ProdutoComercial): GovernedDrugRecord {
   const brand_id = toBrandId(p.nome_comercial, p.lab_id);
   const drug_id = toDrugId(p.nome_comercial, p.lab_id);
 
+  const origem: DataOrigin = p.fonte_regulatoria === 'ANVISA' ? 'ANVISA' : 'LEGADO';
+  const data_atualizacao = p.data_ultima_atualizacao || p.data_registro || '1970-01-01T00:00:00.000Z';
+  const nivel_confianca = inferConfianca({
+    fonteRegulatoria: p.fonte_regulatoria === 'ANVISA',
+    temRegistro: !!p.registro_anvisa || p.apresentacoes.some(a => !!a.registro_anvisa),
+  });
   const provenance: DataProvenance = {
-    origem: p.fonte_regulatoria === 'ANVISA' ? 'ANVISA' : 'LEGADO',
+    origem,
     fonte_url: p.link_bula_profissional ?? p.link_bula_paciente,
-    data_atualizacao: p.data_ultima_atualizacao || p.data_registro || '1970-01-01T00:00:00.000Z',
+    data_atualizacao,
     responsavel: 'auditoria:eurofarma-23.1',
-    nivel_confianca: inferConfianca({
-      fonteRegulatoria: p.fonte_regulatoria === 'ANVISA',
-      temRegistro: !!p.registro_anvisa || p.apresentacoes.some(a => !!a.registro_anvisa),
-    }),
+    nivel_confianca,
     observacao: p.registro_anvisa ? undefined : 'registro ANVISA de nível produto ausente',
+    verificationStatus: deriveVerificationStatus({ origem, nivel_confianca, data_atualizacao }),
+    sourceVersion: p.versao_bula,
   };
 
   return {
@@ -371,6 +447,9 @@ export function fromQuickDrug(d: QuickDrug): GovernedDrugRecord[] {
     const labSlug = toSlug(b.lab_id || b.laboratorio || 'generico');
     const lab = resolveLaboratory(labSlug);
     const brand_id = toBrandId(b.nome, labSlug);
+    const origem: DataOrigin = b.verificado ? 'BULA_FABRICANTE' : 'LEGADO';
+    const nivel_confianca = inferConfianca({ verificado: b.verificado });
+    const data_atualizacao = '1970-01-01T00:00:00.000Z';
     return {
       drug_id: toDrugId(b.nome, labSlug),
       molecule_id, brand_id, laboratory_id: lab.laboratory_id,
@@ -385,11 +464,12 @@ export function fromQuickDrug(d: QuickDrug): GovernedDrugRecord[] {
       classe_terapeutica: d.classe,
       cids_aprovados: [],
       _governanca: {
-        origem: b.verificado ? 'BULA_FABRICANTE' : 'LEGADO',
+        origem,
         fonte_url: b.bula_profissional ?? b.bula_paciente,
-        data_atualizacao: '1970-01-01T00:00:00.000Z',
+        data_atualizacao,
         responsavel: 'sistema:pharma-db',
-        nivel_confianca: inferConfianca({ verificado: b.verificado }),
+        nivel_confianca,
+        verificationStatus: deriveVerificationStatus({ origem, nivel_confianca, data_atualizacao }),
       },
     };
   });

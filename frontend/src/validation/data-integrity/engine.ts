@@ -176,6 +176,20 @@ export function checarBaseCanonica(entities: DrugEntity[] = drugRepository.getAl
         correcaoSugerida: 'Preencher com a data real de validação/atualização do dado, ou tratar como "nunca validado" em qualquer UI que leia este campo.',
       });
     }
+    // RM-61: `verificationStatus: 'verified'` é uma afirmação forte — "este
+    // dado passou por revisão e é confiável" — que nenhuma UI futura deveria
+    // exibir (ex.: selo "verificado") se o resto do envelope não sustenta
+    // essa afirmação. Sem esta regra, um `verified` atribuído manualmente de
+    // forma incorreta (ou por um bug de migração futuro) nunca seria pego.
+    if (e.provenance?.verificationStatus === 'verified' && e.provenance?.nivel_confianca !== 'ALTA') {
+      achados.push({
+        regra: 'VERIFICATION_STATUS_INCONSISTENTE',
+        nivel: 'erro',
+        entidade: e.id,
+        mensagem: `provenance.verificationStatus é 'verified', mas nivel_confianca é '${e.provenance?.nivel_confianca}' (esperado 'ALTA') — a proveniência é internamente inconsistente.`,
+        correcaoSugerida: "Corrigir verificationStatus para 'review' ou elevar nivel_confianca para 'ALTA' com base em fonte formal real.",
+      });
+    }
 
     // Regime sem população definida — checagem em tempo de execução
     // (o tipo já exige `population`, mas dados vindos de import/migração

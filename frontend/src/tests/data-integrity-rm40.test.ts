@@ -171,6 +171,42 @@ describe('checarBaseCanonica() — ATC, fonte, proveniência, população, dupli
     expect(r.some((a) => a.regra === 'PROVENIENCIA_DATA_PLACEHOLDER')).toBe(false);
   });
 
+  // RM-61: `verificationStatus: 'verified'` é uma afirmação forte o
+  // suficiente para, no futuro, virar um selo visível ao médico — não pode
+  // conviver com `nivel_confianca` diferente de 'ALTA' sem que isso seja
+  // sinalizado como um erro de proveniência.
+  it("verificationStatus 'verified' com nivel_confianca diferente de ALTA gera erro VERIFICATION_STATUS_INCONSISTENTE", () => {
+    const r = checarBaseCanonica([baseEntity({
+      provenance: {
+        origem: 'BULA_FABRICANTE', data_atualizacao: '2024-03-15T00:00:00.000Z',
+        responsavel: 'teste', nivel_confianca: 'MEDIA', verificationStatus: 'verified',
+      },
+    })]);
+    expect(r.some((a) => a.regra === 'VERIFICATION_STATUS_INCONSISTENTE' && a.nivel === 'erro')).toBe(true);
+  });
+
+  it("verificationStatus 'verified' com nivel_confianca ALTA NÃO gera VERIFICATION_STATUS_INCONSISTENTE", () => {
+    const r = checarBaseCanonica([baseEntity({
+      provenance: {
+        origem: 'BULA_FABRICANTE', data_atualizacao: '2024-03-15T00:00:00.000Z',
+        responsavel: 'teste', nivel_confianca: 'ALTA', verificationStatus: 'verified',
+      },
+    })]);
+    expect(r.some((a) => a.regra === 'VERIFICATION_STATUS_INCONSISTENTE')).toBe(false);
+  });
+
+  it("verificationStatus 'review'/'draft'/undefined nunca dispara VERIFICATION_STATUS_INCONSISTENTE, mesmo com confiança baixa", () => {
+    for (const verificationStatus of ['review', 'draft', undefined] as const) {
+      const r = checarBaseCanonica([baseEntity({
+        provenance: {
+          origem: 'LEGADO', data_atualizacao: '1970-01-01T00:00:00.000Z',
+          responsavel: 'teste', nivel_confianca: 'BAIXA', verificationStatus,
+        },
+      })]);
+      expect(r.some((a) => a.regra === 'VERIFICATION_STATUS_INCONSISTENTE')).toBe(false);
+    }
+  });
+
   it('regime sem população válida (valor fora do enum, simulando dado malformado vindo de I/O) gera erro REGIME_SEM_POPULACAO', () => {
     const r = checarBaseCanonica([baseEntity({ dosageRules: [{ population: 'invalida' as never, summary: 'x' }] })]);
     expect(r.some((a) => a.regra === 'REGIME_SEM_POPULACAO' && a.nivel === 'erro')).toBe(true);
