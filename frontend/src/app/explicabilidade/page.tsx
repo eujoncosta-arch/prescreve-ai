@@ -669,7 +669,7 @@ export default function ExplicabilidadePage() {
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-2">
               <Brain size={20} className="text-violet-600" />
-              <h1 className="text-lg font-bold text-gray-900">Explainable AI 2.0</h1>
+              <h1 className="text-lg font-bold text-gray-900">Explicabilidade da Consulta</h1>
               <span className="px-2 py-0.5 text-xs font-bold bg-violet-100 text-violet-700 rounded">Phase 14</span>
             </div>
             <select
@@ -685,7 +685,11 @@ export default function ExplicabilidadePage() {
               ))}
             </select>
           </div>
-          <p className="text-xs text-gray-500">Transparência clínica total — WHY · WHY NOT · WHAT IF · ALTERNATIVAS · EVIDÊNCIAS · CONFIANÇA</p>
+          <p className="text-xs text-gray-500">
+            Explicação personalizada para o paciente desta consulta (ou demonstração, quando não há consulta
+            ativa) — WHY · WHY NOT · WHAT IF · ALTERNATIVAS · EVIDÊNCIAS · CONFIANÇA. Para o racional clínico
+            geral de uma condição, veja <strong>Racional por Condição</strong>.
+          </p>
         </div>
       </div>
 

@@ -399,9 +399,13 @@ export default function ExplicarPage() {
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-1">
             <Heart size={20} className="text-indigo-500" />
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Por que esta recomendação?</h1>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Racional Clínico por Condição</h1>
           </div>
-          <p className="text-slate-500 dark:text-slate-400 text-sm">Racional clínico baseado em evidências para cada conduta</p>
+          <p className="text-slate-500 dark:text-slate-400 text-sm">
+            Biblioteca de referência — racional clínico geral por condição, baseado em evidências. Não usa
+            dados de nenhum paciente específico (para explicabilidade personalizada da consulta em
+            atendimento, veja <strong>Explicabilidade da Consulta</strong>).
+          </p>
         </div>
 
         {/* back button */}

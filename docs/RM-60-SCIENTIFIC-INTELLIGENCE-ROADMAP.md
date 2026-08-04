@@ -206,7 +206,7 @@ _Legenda: ✅ = decidido e executado, com RM e data. Itens sem marca continuam e
 3. ✅ `qualidade-hospital`: arquivar, ou redesenhar sem nomes/rankings que soem institucionais reais? → **Arquivar do menu clínico.** Executado em RM-70 (2026-08-04).
 4. ✅ `validacao-clinica`: mover para rota interna/QA, fora do menu do médico, ou manter como está? → **Removida do menu clínico.** Executado em RM-70 (2026-08-04).
 5. Consolidar `repositorio`/`biblioteca`/`evidencias`/`evidence`/`farmalib`/`eurofarma` (6 páginas de catálogo/evidência sobrepostas) em quantas páginas?
-6. Fundir ou diferenciar explicitamente `explicar` vs. `explicabilidade`?
+6. ✅ Fundir ou diferenciar explicitamente `explicar` vs. `explicabilidade`? → **Diferenciar** — investigação mostrou que resolvem problemas diferentes (biblioteca por condição vs. explicabilidade por paciente), a sobreposição era só de nome. Executado em `docs/RM-71-EXPLICAR-VS-EXPLICABILIDADE.md` (2026-08-04): labels de menu e títulos de página ajustados, nenhum motor tocado.
 7. Fundir ou diferenciar explicitamente `atualizacoes` vs. `atualizacoes-cientificas`?
 8. Investir em coleta de dado longitudinal real para eventualmente integrar `digital-twin`, ou mantê-lo demonstrativo permanentemente?
 9. Investir em integração com laboratório de genotipagem para eventualmente integrar `medicina-precisao`, ou mantê-lo demonstrativo permanentemente?

@@ -31,6 +31,17 @@
 // navegação. `/comite` permanece (classificação `demonstracao` inalterada),
 // mas suas credenciais fabricadas (CRM/ORCID/instituições reais) foram
 // removidas em `lib/comite.ts` na mesma RM.
+//
+// RM-60 (§10, item 6) → RM-71: `/explicar` e `/explicabilidade` NÃO foram
+// fundidas — investigação mostrou que resolvem problemas diferentes:
+// `/explicar` é uma biblioteca de racional clínico POR CONDIÇÃO (busca/
+// navega, nunca lê `useApp()`, sempre o mesmo conteúdo estático,
+// classificação `referencia`); `/explicabilidade` é explicabilidade
+// PERSONALIZADA por paciente (lê a consulta ativa real desde o RM-65,
+// WHY NOT verifica contraindicação contra o perfil real, classificação
+// `hibrido`). A sobreposição era só de nome/framing, não de motor ou
+// dado — resolvida trocando os labels do menu (`Racional por Condição` /
+// `Explicabilidade da Consulta`) e os títulos das próprias páginas.
 // ============================================================
 
 import type { LucideIcon } from 'lucide-react';
@@ -101,7 +112,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { href: '/dosagem',       label: 'Cálculo de Doses',    icon: Pill,        badge: 'NOVO', classification: 'referencia' },
       { href: '/farmalib',      label: 'Farmacoteca',         icon: Package,     badge: 'NOVO', classification: 'referencia' },
       { href: '/eurofarma',     label: 'Eurofarma',           icon: Beaker,      badge: 'EURO', classification: 'referencia' },
-      { href: '/explicar',      label: 'Explicar Conduta',    icon: HelpCircle,  badge: 'NOVO', classification: 'referencia' },
+      { href: '/explicar',      label: 'Racional por Condição', icon: HelpCircle,  badge: 'NOVO', classification: 'referencia' },
       { href: '/governanca',    label: 'Governança',          icon: ShieldCheck, badge: null,   classification: 'demonstracao' },
       { href: '/comite',        label: 'Comitê Científico',   icon: Users,       badge: 'NOVO', classification: 'demonstracao' },
       { href: '/atualizacoes',  label: 'Guideline Updates',   icon: TrendingUp,  badge: '2025', classification: 'referencia' },
@@ -118,7 +129,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { href: '/evidence-timeline',        label: 'Timeline Evidências',   icon: Clock,        badge: 'P12', classification: 'referencia' },
       { href: '/farma-analytics',          label: 'Farma Analytics',       icon: FlaskConical, badge: 'P12', classification: 'demonstracao' },
       { href: '/atualizacoes-cientificas', label: 'Atualizações Cientif.', icon: Bell,         badge: 'P12', classification: 'demonstracao' },
-      { href: '/explicabilidade',          label: 'Explainable AI 2.0',   icon: Brain,        badge: 'P14', classification: 'hibrido' },
+      { href: '/explicabilidade',          label: 'Explicabilidade da Consulta',   icon: Brain,        badge: 'P14', classification: 'hibrido' },
       { href: '/interoperabilidade',         label: 'Interoperabilidade',    icon: Share2,       badge: 'P17', classification: 'demonstracao' },
       { href: '/medicina-precisao',          label: 'Precision Medicine',    icon: Dna,          badge: 'P18', classification: 'demonstracao' },
       { href: '/copilot',                    label: 'AI Medical Copilot',    icon: Bot,          badge: 'P19', classification: 'demonstracao' },
