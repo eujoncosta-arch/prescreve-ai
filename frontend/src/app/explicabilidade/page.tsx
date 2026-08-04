@@ -11,18 +11,19 @@ import {
   Brain, ShieldAlert, GitCompareArrows, ListChecks,
   BookOpen, BarChart3, ChevronRight, Info,
   CheckCircle2, XCircle, AlertTriangle, TrendingDown,
-  FlaskConical, Package, DollarSign, Star
+  FlaskConical, Package, DollarSign, Star, Loader2, User
 } from 'lucide-react';
 import {
-  gerarExplainableAIv2,
   type ExplainableAIv2Result,
   type CenarioClinco,
   type AlternativaClinica,
   type ComponenteScore,
 } from '@/lib/explainable-ai-v2';
-import { getTherapeuticForCondition } from '@/lib/clinical-therapeutics';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { useApp } from '@/lib/store';
 import type { Anamnesis } from '@/lib/types';
+import { DemoDataNotice } from '@/components/clinical/DemoDataNotice';
+import { resolverContextoExplicabilidade, computarExplicabilidade } from '@/lib/explicabilidade-context';
 
 // ══════════════════════════════════════════════════════════════
 // TIPOS
@@ -559,55 +560,112 @@ function AbaCONFIANCA({ result }: { result: ExplainableAIv2Result }) {
 // PÁGINA PRINCIPAL
 // ══════════════════════════════════════════════════════════════
 
+const CIDs_DISPONIVEIS = [
+  { cid: 'I10', label: 'I10 — Hipertensão' },
+  { cid: 'E11', label: 'E11 — Diabetes Mellitus 2' },
+  { cid: 'I50', label: 'I50 — Insuficiência Cardíaca' },
+  { cid: 'J45', label: 'J45 — Asma' },
+];
+
+/** Sentinela do seletor manual: "seguir a consulta ativa" (sem override). Nunca colide com um CID real (CIDs reais nunca começam com `__`). */
+const SEGUIR_CONSULTA_ATIVA = '__consulta_ativa__';
+
+function FonteBadge({ fonte, cid }: { fonte: 'consulta_ativa' | 'anamnese_salva' | 'demonstracao'; cid: string }) {
+  if (fonte !== 'consulta_ativa') return null;
+  return (
+    <div
+      role="note"
+      data-fonte-explicabilidade="consulta_ativa"
+      className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200"
+    >
+      <User aria-hidden="true" size={14} className="flex-shrink-0 text-emerald-600 dark:text-emerald-400" />
+      <span>
+        <span className="font-semibold">Consulta ativa.</span> Diagnóstico (CID {cid}) e conduta terapêutica desta explicação são os da consulta em atendimento — não demonstrativos.
+      </span>
+    </div>
+  );
+}
+
 export default function ExplicabilidadePage() {
   const [abaAtiva, setAbaAtiva] = useState<Aba>('why');
-  const [anamnese] = useLocalStorage<Anamnesis | null>('prescreve_ai_anamnese', null);
-  const [cidSelecionado, setCidSelecionado] = useState('I10');
+  const { state } = useApp();
+  const [anamneseLS] = useLocalStorage<Anamnesis | null>('prescreve_ai_anamnese', null);
+  const [cidOverride, setCidOverride] = useState<string | null>(null);
 
-  // Usa anamnese real do localStorage se disponível, senão usa demo
-  const anamneseUsada = anamnese ?? DEMO_ANAMNESE;
+  const contexto = useMemo(
+    () => resolverContextoExplicabilidade({
+      activeConsultation: state.activeConsultation,
+      anamneseLocalStorage: anamneseLS,
+      anamneseDemo: DEMO_ANAMNESE,
+      cidOverride,
+    }),
+    [state.activeConsultation, anamneseLS, cidOverride],
+  );
 
-  const result = useMemo<ExplainableAIv2Result | null>(() => {
-    try {
-      const CID_CONDITION_MAP: Record<string, string> = {
-        I10: 'has', E11: 'dm2', I50: 'ic', J45: 'asma',
-        I25: 'dac', J44: 'dpoc', E03: 'hipotireoidismo', E78: 'dislipidemia',
-      };
-      const condId = CID_CONDITION_MAP[cidSelecionado] ?? cidSelecionado.toLowerCase();
-      const plano = getTherapeuticForCondition(condId, cidSelecionado);
-      if (!plano) return null;
+  const computado = useMemo(() => computarExplicabilidade(contexto), [contexto]);
 
-      const med = plano.farmacologico[0];
-      if (!med) return null;
+  const temConsultaAtivaComCid = !!state.activeConsultation?.diagnostico_estruturado?.cid;
+  const selectorValue = temConsultaAtivaComCid && !cidOverride ? SEGUIR_CONSULTA_ATIVA : contexto.cid;
 
-      return gerarExplainableAIv2(med, cidSelecionado, anamneseUsada);
-    } catch {
-      return null;
-    }
-  }, [anamneseUsada, cidSelecionado]);
-
-  const CIDs_DISPONIVEIS = [
-    { cid: 'I10', label: 'I10 — Hipertensão' },
-    { cid: 'E11', label: 'E11 — Diabetes Mellitus 2' },
-    { cid: 'I50', label: 'I50 — Insuficiência Cardíaca' },
-    { cid: 'J45', label: 'J45 — Asma' },
-  ];
-
-  if (!result) {
+  // Estado de carregamento: reflete o carregamento global real do app
+  // (`useApp().state.loading`, ex.: sincronização de consultas em curso) —
+  // nunca um spinner fabricado sem sinal real por trás.
+  if (state.loading) {
     return (
       <div className="p-8 text-center">
-        <Brain size={48} className="text-gray-300 mx-auto mb-3" />
-        <p className="text-sm text-gray-500">Nenhuma recomendação disponível.</p>
-        <p className="text-xs text-gray-400 mt-1">Preencha a anamnese na aba Consulta ou selecione um CID de demonstração.</p>
+        <Loader2 size={32} className="text-violet-400 mx-auto mb-3 animate-spin" />
+        <p className="text-sm text-gray-500">Carregando dados clínicos...</p>
       </div>
     );
   }
+
+  if (computado.status === 'erro') {
+    return (
+      <div className="p-8 text-center space-y-4">
+        <div role="alert" className="max-w-xl mx-auto text-left rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+          <p className="font-semibold">Erro ao gerar a explicação clínica.</p>
+          <p className="text-xs mt-1 text-red-700">{computado.mensagem}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (computado.status === 'sem_plano') {
+    return (
+      <div className="p-8 text-center space-y-4">
+        {contexto.fonte === 'consulta_ativa' ? (
+          <div role="note" className="max-w-xl mx-auto text-left rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700">
+            <p className="font-semibold">Sem conduta terapêutica mapeada para esta consulta ainda.</p>
+            <p className="text-xs mt-1 text-gray-500">
+              O diagnóstico (CID {contexto.cid}) está registrado, mas esta consulta ainda não tem um plano
+              terapêutico definido — conclua a etapa Terapêutica na consulta, ou não há protocolo mapeado
+              para este CID no motor. Nenhum dado demonstrativo é exibido para não sugerir uma conduta que
+              não é a real desta consulta.
+            </p>
+          </div>
+        ) : (
+          <DemoDataNotice variant={contexto.fonte === 'anamnese_salva' ? 'hybrid' : 'demo'} className="max-w-xl mx-auto text-left" />
+        )}
+        <div>
+          <Brain size={48} className="text-gray-300 mx-auto mb-3" />
+          <p className="text-sm text-gray-500">Nenhuma recomendação disponível.</p>
+          <p className="text-xs text-gray-400 mt-1">Preencha a anamnese na aba Consulta ou selecione um CID de demonstração.</p>
+        </div>
+      </div>
+    );
+  }
+
+  const result = computado.result;
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto space-y-3">
+          <FonteBadge fonte={contexto.fonte} cid={contexto.cid} />
+          {contexto.fonte !== 'consulta_ativa' && (
+            <DemoDataNotice variant={contexto.fonte === 'anamnese_salva' ? 'hybrid' : 'demo'} />
+          )}
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-2">
               <Brain size={20} className="text-violet-600" />
@@ -615,19 +673,19 @@ export default function ExplicabilidadePage() {
               <span className="px-2 py-0.5 text-xs font-bold bg-violet-100 text-violet-700 rounded">Phase 14</span>
             </div>
             <select
-              value={cidSelecionado}
-              onChange={e => setCidSelecionado(e.target.value)}
+              value={selectorValue}
+              onChange={e => setCidOverride(e.target.value === SEGUIR_CONSULTA_ATIVA ? null : e.target.value)}
               className="text-xs border border-gray-300 rounded-lg px-3 py-1.5 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-violet-500"
             >
+              {temConsultaAtivaComCid && (
+                <option value={SEGUIR_CONSULTA_ATIVA}>Consulta ativa (CID {state.activeConsultation!.diagnostico_estruturado!.cid})</option>
+              )}
               {CIDs_DISPONIVEIS.map(c => (
-                <option key={c.cid} value={c.cid}>{c.label}</option>
+                <option key={c.cid} value={c.cid}>{c.label}{temConsultaAtivaComCid ? ' (override manual)' : ''}</option>
               ))}
             </select>
           </div>
           <p className="text-xs text-gray-500">Transparência clínica total — WHY · WHY NOT · WHAT IF · ALTERNATIVAS · EVIDÊNCIAS · CONFIANÇA</p>
-          {!anamnese && (
-            <p className="text-xs text-amber-600 mt-1 bg-amber-50 px-2 py-1 rounded inline-block">Modo demonstração — dados simulados</p>
-          )}
         </div>
       </div>
 
