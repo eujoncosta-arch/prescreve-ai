@@ -19,6 +19,18 @@
 // e se o conteúdo é referência curada real (base de evidência com
 // citação de estudo real, ex. "ALLHAT 2002") ou simulação de atividade
 // institucional fabricada.
+//
+// RM-60 (inventário) → RM-70 (decisão do dono do produto): `/validacao-real`
+// e `/qualidade-hospital` foram removidas deste registro — maior risco de
+// interpretação enganosa do levantamento (Kappa/IC95% e ranking hospitalar
+// inteiramente fabricados, apresentados com rigor estatístico/institucional
+// real). `/validacao-clinica` também foi removida — é um dashboard de
+// execução de testes automatizados (QA), não uma ferramenta de apoio à
+// decisão clínica, e não deveria estar ao lado de ferramentas reais no menu
+// do médico. Nenhuma rota foi excluída do código-fonte, apenas desta
+// navegação. `/comite` permanece (classificação `demonstracao` inalterada),
+// mas suas credenciais fabricadas (CRM/ORCID/instituições reais) foram
+// removidas em `lib/comite.ts` na mesma RM.
 // ============================================================
 
 import type { LucideIcon } from 'lucide-react';
@@ -27,7 +39,7 @@ import {
   Sparkles, Settings, ShieldCheck, Library, BookMarked, Zap,
   Calculator, ClipboardList, GitBranch, TrendingUp, Users, Microscope,
   Building2, UserCircle, Scale, Brain, Lightbulb, Globe, Dna, Network,
-  BarChart3, Activity, Clock, FlaskConical, Hospital, Bell, Share2, Bot,
+  BarChart3, Activity, Clock, FlaskConical, Bell, Share2, Bot,
   Pill, HelpCircle, Package, Beaker,
 } from 'lucide-react';
 
@@ -105,11 +117,8 @@ export const NAV_GROUPS: NavGroup[] = [
       { href: '/prognostico',              label: 'Prognose Preditiva',    icon: Activity,     badge: 'P12', classification: 'demonstracao' },
       { href: '/evidence-timeline',        label: 'Timeline Evidências',   icon: Clock,        badge: 'P12', classification: 'referencia' },
       { href: '/farma-analytics',          label: 'Farma Analytics',       icon: FlaskConical, badge: 'P12', classification: 'demonstracao' },
-      { href: '/qualidade-hospital',       label: 'Qualidade Hospital',    icon: Hospital,     badge: 'P12', classification: 'demonstracao' },
       { href: '/atualizacoes-cientificas', label: 'Atualizações Cientif.', icon: Bell,         badge: 'P12', classification: 'demonstracao' },
       { href: '/explicabilidade',          label: 'Explainable AI 2.0',   icon: Brain,        badge: 'P14', classification: 'hibrido' },
-      { href: '/validacao-clinica',         label: 'Clinical Validation',   icon: FlaskConical, badge: 'P15', classification: 'demonstracao' },
-      { href: '/validacao-real',            label: 'Validação Real World',  icon: Globe,        badge: 'P16', classification: 'demonstracao' },
       { href: '/interoperabilidade',         label: 'Interoperabilidade',    icon: Share2,       badge: 'P17', classification: 'demonstracao' },
       { href: '/medicina-precisao',          label: 'Precision Medicine',    icon: Dna,          badge: 'P18', classification: 'demonstracao' },
       { href: '/copilot',                    label: 'AI Medical Copilot',    icon: Bot,          badge: 'P19', classification: 'demonstracao' },

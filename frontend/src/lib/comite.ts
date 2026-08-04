@@ -20,21 +20,22 @@ export type Titulacao =
 
 export type StatusValidacaoComite = "pendente" | "em_revisao" | "aprovado" | "rejeitado" | "revisao_solicitada";
 
+// RM-70: campos de credencial/identidade formal verificável (CRM, UF do
+// CRM, ORCID, Lattes, e-mail institucional, contagem de publicações
+// indexadas) foram removidos — a versão anterior os apresentava com
+// especialistas inteiramente fictícios, o que simulava registro
+// profissional e afiliação acadêmica reais (achado RM-60 §8, maior risco
+// de interpretação enganosa do levantamento). `instituicao` deixou de
+// referenciar hospitais/universidades reais nomeados — ver `ESPECIALISTAS_SEED`.
 export interface Especialista {
   id: string;
   nome: string;
   especialidade: string;
   sub_especialidade?: string;
-  crm: string;
-  uf_crm: string;
   titulacao: Titulacao;
   instituicao: string;
   departamento?: string;
   area_atuacao: string[];
-  orcid?: string;
-  lattes_url?: string;
-  email_institucional?: string;
-  publicacoes_indexadas?: number;
   membro_desde: string;
   ativo: boolean;
   initials: string;
@@ -83,12 +84,12 @@ export interface ValidacaoRecomendacao {
 // ─── Seeds ───────────────────────────────────────────────────
 
 const ESPECIALISTAS_SEED: Especialista[] = [
-  { id: "e1", nome: "Dr. Carlos Eduardo Pereira", especialidade: "Cardiologia", sub_especialidade: "Insuficiencia Cardiaca", crm: "123456", uf_crm: "SP", titulacao: "Doutor", instituicao: "InCor - Instituto do Coracao FMUSP", departamento: "Unidade de IC e Transplante", area_atuacao: ["Insuficiencia Cardiaca", "HAS", "Dislipidemia", "Cardiologia Preventiva"], orcid: "0000-0002-1234-5678", publicacoes_indexadas: 87, membro_desde: "2022-01-01", ativo: true, initials: "CE", cor_avatar: "bg-blue-600" },
-  { id: "e2", nome: "Dra. Ana Paula Souza", especialidade: "Nefrologia", sub_especialidade: "Doenca Renal Cronica", crm: "234567", uf_crm: "SP", titulacao: "Doutora", instituicao: "Hospital das Clinicas FMUSP", departamento: "Divisao de Nefrologia", area_atuacao: ["DRC", "HAS renovascular", "Nefropatia diabetica"], orcid: "0000-0003-2345-6789", publicacoes_indexadas: 54, membro_desde: "2022-01-01", ativo: true, initials: "AP", cor_avatar: "bg-teal-600" },
-  { id: "e3", nome: "Dra. Fernanda Lima", especialidade: "Endocrinologia", sub_especialidade: "Diabetes e Obesidade", crm: "345678", uf_crm: "RJ", titulacao: "Livre-Docente", instituicao: "UERJ - Universidade do Estado do Rio de Janeiro", departamento: "Departamento de Medicina Interna", area_atuacao: ["DM2", "Obesidade", "Sindrome Metabolica", "Tireoide"], orcid: "0000-0001-3456-7890", publicacoes_indexadas: 112, membro_desde: "2021-06-01", ativo: true, initials: "FL", cor_avatar: "bg-purple-600" },
-  { id: "e4", nome: "Dr. Roberto Nunes", especialidade: "Pneumologia", sub_especialidade: "Asma e DPOC", crm: "456789", uf_crm: "SP", titulacao: "Doutor", instituicao: "Universidade Federal de Sao Paulo (UNIFESP)", departamento: "Disciplina de Pneumologia", area_atuacao: ["Asma", "DPOC", "Tabagismo", "Sono e Respiracao"], publicacoes_indexadas: 63, membro_desde: "2022-03-01", ativo: true, initials: "RN", cor_avatar: "bg-sky-600" },
-  { id: "e5", nome: "Dr. Paulo Mendes", especialidade: "Cardiologia", sub_especialidade: "Aterosclerose e Lipides", crm: "567890", uf_crm: "MG", titulacao: "Professor Titular", instituicao: "UFMG - Universidade Federal de Minas Gerais", departamento: "Departamento de Clinica Medica", area_atuacao: ["Dislipidemia", "Risco Cardiovascular", "Prevencao Primaria e Secundaria"], orcid: "0000-0004-5678-9012", publicacoes_indexadas: 145, membro_desde: "2021-01-01", ativo: true, initials: "PM", cor_avatar: "bg-rose-600" },
-  { id: "e6", nome: "Dra. Mariana Costa", especialidade: "Farmacologia Clinica", crm: "678901", uf_crm: "SP", titulacao: "Doutora", instituicao: "Anvisa - Consultora Tecnica", departamento: "Farmacovigilancia", area_atuacao: ["Seguranca de medicamentos", "Interacoes farmacologicas", "Farmacovigilancia"], publicacoes_indexadas: 38, membro_desde: "2023-01-01", ativo: true, initials: "MC", cor_avatar: "bg-emerald-600" },
+  { id: "e1", nome: "Especialista fictício — Cardiologia", especialidade: "Cardiologia", sub_especialidade: "Insuficiencia Cardiaca", titulacao: "Doutor", instituicao: "Comitê científico de demonstração (Prescreve-AI)", departamento: "Unidade de IC e Transplante (fictícia)", area_atuacao: ["Insuficiencia Cardiaca", "HAS", "Dislipidemia", "Cardiologia Preventiva"], membro_desde: "2022-01-01", ativo: true, initials: "CE", cor_avatar: "bg-blue-600" },
+  { id: "e2", nome: "Especialista fictício — Nefrologia", especialidade: "Nefrologia", sub_especialidade: "Doenca Renal Cronica", titulacao: "Doutora", instituicao: "Comitê científico de demonstração (Prescreve-AI)", departamento: "Divisao de Nefrologia (fictícia)", area_atuacao: ["DRC", "HAS renovascular", "Nefropatia diabetica"], membro_desde: "2022-01-01", ativo: true, initials: "AP", cor_avatar: "bg-teal-600" },
+  { id: "e3", nome: "Especialista fictício — Endocrinologia", especialidade: "Endocrinologia", sub_especialidade: "Diabetes e Obesidade", titulacao: "Livre-Docente", instituicao: "Comitê científico de demonstração (Prescreve-AI)", departamento: "Departamento de Medicina Interna (fictício)", area_atuacao: ["DM2", "Obesidade", "Sindrome Metabolica", "Tireoide"], membro_desde: "2021-06-01", ativo: true, initials: "FL", cor_avatar: "bg-purple-600" },
+  { id: "e4", nome: "Especialista fictício — Pneumologia", especialidade: "Pneumologia", sub_especialidade: "Asma e DPOC", titulacao: "Doutor", instituicao: "Comitê científico de demonstração (Prescreve-AI)", departamento: "Disciplina de Pneumologia (fictícia)", area_atuacao: ["Asma", "DPOC", "Tabagismo", "Sono e Respiracao"], membro_desde: "2022-03-01", ativo: true, initials: "RN", cor_avatar: "bg-sky-600" },
+  { id: "e5", nome: "Especialista fictício — Cardiologia (Lipídios)", especialidade: "Cardiologia", sub_especialidade: "Aterosclerose e Lipides", titulacao: "Professor Titular", instituicao: "Comitê científico de demonstração (Prescreve-AI)", departamento: "Departamento de Clinica Medica (fictício)", area_atuacao: ["Dislipidemia", "Risco Cardiovascular", "Prevencao Primaria e Secundaria"], membro_desde: "2021-01-01", ativo: true, initials: "PM", cor_avatar: "bg-rose-600" },
+  { id: "e6", nome: "Especialista fictício — Farmacologia Clínica", especialidade: "Farmacologia Clinica", titulacao: "Doutora", instituicao: "Comitê científico de demonstração (Prescreve-AI)", departamento: "Farmacovigilancia (fictícia)", area_atuacao: ["Seguranca de medicamentos", "Interacoes farmacologicas", "Farmacovigilancia"], membro_desde: "2023-01-01", ativo: true, initials: "MC", cor_avatar: "bg-emerald-600" },
 ];
 
 const VALIDACOES_SEED: ValidacaoRecomendacao[] = [

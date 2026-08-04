@@ -14,9 +14,9 @@ import {
 } from '@/lib/comite';
 import {
   ShieldCheck, Users, CheckCircle2, Clock, XCircle, ChevronDown, ChevronUp,
-  BookOpen, GitBranch, Star, ExternalLink, Hash,
+  BookOpen, GitBranch, Star,
   AlertTriangle, CheckCheck, Microscope, BadgeCheck,
-  ArrowUpRight, Search,
+  Search,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -91,7 +91,7 @@ function ValidadoPorPanel({ validacao, especialistas }: {
                   : <XCircle className="w-3 h-3 text-red-500 flex-shrink-0" />
                 }
               </div>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400">{r.esp.especialidade} · {r.esp.crm}/{r.esp.uf_crm}</p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400">{r.esp.especialidade}</p>
               <p className="text-[10px] text-slate-400 dark:text-slate-500 truncate">{r.esp.instituicao}</p>
               <ScoreBar score={r.score} />
             </div>
@@ -226,7 +226,7 @@ function ValidacaoCard({ v, especialistas, onAprovar, onRejeitar }: {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap mb-0.5">
                             <span className="text-xs font-bold text-slate-900 dark:text-slate-100">{esp.nome}</span>
-                            <span className="text-[10px] text-slate-400">{esp.especialidade} · CRM-{esp.uf_crm} {esp.crm}</span>
+                            <span className="text-[10px] text-slate-400">{esp.especialidade}</span>
                             {r.aprovado
                               ? <span className="text-[9px] font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 px-1.5 py-0.5 rounded-full">Aprovou</span>
                               : <span className="text-[9px] font-bold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 px-1.5 py-0.5 rounded-full">Pendências</span>
@@ -336,14 +336,6 @@ function EspecialistaCard({ e }: { e: Especialista }) {
               <span className="text-[9px] font-bold bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-1.5 py-0.5 rounded">
                 {e.titulacao}
               </span>
-              <span className="text-[9px] text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">
-                CRM-{e.uf_crm} {e.crm}
-              </span>
-              {e.publicacoes_indexadas && (
-                <span className="text-[9px] text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">
-                  {e.publicacoes_indexadas} publicações
-                </span>
-              )}
             </div>
           </div>
           <div className="flex-shrink-0">
@@ -357,11 +349,9 @@ function EspecialistaCard({ e }: { e: Especialista }) {
           {/* Dados completos */}
           <div className="grid grid-cols-2 gap-2">
             {[
-              { label: 'CRM', value: `${e.crm}/${e.uf_crm}` },
               { label: 'Titulação', value: e.titulacao },
               { label: 'Instituição', value: e.instituicao },
               e.departamento ? { label: 'Departamento', value: e.departamento } : null,
-              e.publicacoes_indexadas ? { label: 'Publicações indexadas', value: String(e.publicacoes_indexadas) } : null,
               { label: 'Membro desde', value: new Date(e.membro_desde).toLocaleDateString('pt-BR') },
             ].filter(Boolean).map((item, i) => (
               <div key={i} className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-2">
@@ -383,29 +373,6 @@ function EspecialistaCard({ e }: { e: Especialista }) {
             </div>
           </div>
 
-          {/* Links */}
-          <div className="flex gap-2">
-            {e.orcid && (
-              <a
-                href={`https://orcid.org/${e.orcid}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1 text-[10px] text-green-700 dark:text-green-400 hover:underline bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded-lg border border-green-200 dark:border-green-800"
-              >
-                <Hash className="w-3 h-3" /> ORCID <ArrowUpRight className="w-3 h-3" />
-              </a>
-            )}
-            {e.lattes_url && (
-              <a
-                href={e.lattes_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1 text-[10px] text-blue-700 dark:text-blue-400 hover:underline bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded-lg border border-blue-200 dark:border-blue-800"
-              >
-                <ExternalLink className="w-3 h-3" /> Lattes
-              </a>
-            )}
-          </div>
         </div>
       )}
     </div>
@@ -589,7 +556,7 @@ export default function ComitePage() {
               <div className="grid grid-cols-3 gap-3 border-t border-slate-700 pt-4">
                 {[
                   { label: 'Especialistas ativos', value: especialistas.filter(e => e.ativo).length },
-                  { label: 'Publicações totais', value: especialistas.reduce((a, e) => a + (e.publicacoes_indexadas ?? 0), 0) },
+                  { label: 'Validações aprovadas', value: validacoes.filter(v => v.status === 'aprovado').length },
                   { label: 'Recomendações revisadas', value: validacoes.reduce((a, v) => a + v.revisores.length, 0) },
                 ].map(({ label, value }) => (
                   <div key={label} className="text-center">

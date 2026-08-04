@@ -45,7 +45,11 @@ describe('RM-59 — clinical-nav-registry', () => {
     expect(requerAvisoDeDemonstracao('referencia')).toBe(false);
   });
 
-  it('a lista de páginas que exigem aviso corresponde ao levantamento desta RM (17 páginas)', () => {
+  // RM-70: /validacao-real, /qualidade-hospital e /validacao-clinica foram
+  // removidas do registro (decisão do dono do produto — RM-60 §10, maior
+  // risco de interpretação enganosa e/ou página que não é de apoio à
+  // decisão clínica). Lista cai de 17 para 14.
+  it('a lista de páginas que exigem aviso corresponde ao levantamento desta RM (14 páginas)', () => {
     const exigemAviso = todosItens.filter(i => requerAvisoDeDemonstracao(i.classification)).map(i => i.href).sort();
     expect(exigemAviso).toEqual([
       '/atualizacoes-cientificas',
@@ -60,11 +64,8 @@ describe('RM-59 — clinical-nav-registry', () => {
       '/interoperabilidade',
       '/medicina-precisao',
       '/prognostico',
-      '/qualidade-hospital',
       '/rede-medica',
       '/rwe',
-      '/validacao-clinica',
-      '/validacao-real',
     ].sort());
   });
 
