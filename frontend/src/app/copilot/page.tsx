@@ -9,9 +9,10 @@ import {
 import {
   gerarSOAP, gerarResumoConsulta, gerarSegundaOpiniao,
   gerarHipotesesDiferenciais, gerarDiscussaoClinica, gerarEvolucao,
-  
+
   type ModoConsulta, type ContextoClinico,
 } from '@/lib/medical-copilot';
+import { DemoDataNotice } from '@/components/clinical/DemoDataNotice';
 
 type Aba = 'soap' | 'resumo' | 'diferenciais' | 'segunda_opiniao' | 'discussao' | 'evolucao';
 
@@ -101,6 +102,7 @@ export default function CopilotPage() {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 py-6 space-y-5">
+        <DemoDataNotice />
 
         {/* SOAP */}
         {aba === 'soap' && (

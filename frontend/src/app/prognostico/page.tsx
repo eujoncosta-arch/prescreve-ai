@@ -6,6 +6,7 @@ import {
   gerarPrognostico, gerarCurvaRisco,
   HORIZONTE_LABEL, CLASSE_META, CONDICOES_PROGNOSE,
 } from '@/lib/prognosis-engine';
+import { DemoDataNotice } from '@/components/clinical/DemoDataNotice';
 
 const HORIZONTES: HorizontePrognostico[] = ['30d', '6m', '1a', '5a'];
 
@@ -36,6 +37,7 @@ export default function PrognosticoPage() {
 
   return (
     <div className="p-6 space-y-6 max-w-5xl mx-auto">
+      <DemoDataNotice />
       <div>
         <h1 className="text-2xl font-bold text-slate-900">Prognose Preditiva</h1>
         <p className="text-sm text-slate-500 mt-1">Predição de desfechos a 30d · 6m · 1a · 5a baseada no perfil clínico</p>

@@ -18,6 +18,7 @@ import {
   type ResultadoCenario,
   type Especialidade,
 } from '@/lib/clinical-validator';
+import { DemoDataNotice } from '@/components/clinical/DemoDataNotice';
 
 // ══════════════════════════════════════════════════════════════
 // CONSTANTES
@@ -197,6 +198,7 @@ export default function ValidacaoClinicaPage() {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-6">
+        <DemoDataNotice className="mb-5" />
         {!resultado ? (
           /* Estado inicial */
           <div className="bg-white border border-gray-200 rounded-2xl p-12 text-center">

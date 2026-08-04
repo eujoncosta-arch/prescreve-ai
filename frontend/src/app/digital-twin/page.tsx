@@ -6,6 +6,7 @@ import {
   criarTwin, listarTwins, compararEstrategias,
   seedDigitalTwinDemo, ATIVIDADE_META,
 } from '@/lib/patient-digital-twin';
+import { DemoDataNotice } from '@/components/clinical/DemoDataNotice';
 
 // RM-52 (react-hooks/set-state-in-effect): twins vêm de localStorage (via
 // lib/patient-digital-twin), um "sistema externo" — usamos
@@ -73,6 +74,7 @@ export default function DigitalTwinPage() {
   if (view === 'detalhe' && selecionado && comparacao) {
     return (
       <div className="p-6 space-y-6 max-w-6xl mx-auto">
+        <DemoDataNotice />
         <div className="flex items-center gap-3">
           <button onClick={() => setView('lista')} className="text-sm text-blue-600 hover:underline">← Voltar</button>
           <h1 className="text-xl font-bold text-slate-900">Twin: {selecionado.diagnostico_principal}</h1>
@@ -180,6 +182,7 @@ export default function DigitalTwinPage() {
 
   return (
     <div className="p-6 space-y-6 max-w-4xl mx-auto">
+      <DemoDataNotice />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Gêmeo Digital do Paciente</h1>

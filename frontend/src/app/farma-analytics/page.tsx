@@ -6,6 +6,7 @@ import {
   gerarDashboardLaboratorio, seedPharmaAnalyticsDemo,
   CLASSE_META,
 } from '@/lib/pharma-analytics';
+import { DemoDataNotice } from '@/components/clinical/DemoDataNotice';
 
 const CIDS = [
   { cid: 'I10', label: 'Hipertensão Arterial' },
@@ -28,6 +29,7 @@ export default function FarmaAnalyticsPage() {
 
   return (
     <div className="p-6 space-y-6 max-w-6xl mx-auto">
+      <DemoDataNotice />
       <div>
         <h1 className="text-2xl font-bold text-slate-900">Analytics Farmacêutico</h1>
         <p className="text-sm text-slate-500 mt-1">

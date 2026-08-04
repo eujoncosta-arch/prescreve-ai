@@ -8,6 +8,7 @@ import {
   URGENCIA_META, SOCIEDADE_META,
   DIRETRIZES_ATUAIS,
 } from '@/lib/scientific-update-engine';
+import { DemoDataNotice } from '@/components/clinical/DemoDataNotice';
 
 const URGENCIA_ORDEM = { imediata: 0, alta: 1, moderada: 2, informativa: 3 };
 
@@ -46,6 +47,7 @@ export default function AtualizacoesCientificasPage() {
 
   return (
     <div className="p-6 space-y-6 max-w-5xl mx-auto">
+      <DemoDataNotice />
       <div>
         <h1 className="text-2xl font-bold text-slate-900">Atualizações Científicas</h1>
         <p className="text-sm text-slate-500 mt-1">

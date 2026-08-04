@@ -19,6 +19,7 @@ import {
   Shield,
 } from 'lucide-react';
 import Link from 'next/link';
+import { DemoDataNotice } from '@/components/clinical/DemoDataNotice';
 
 // RM-52 (react-hooks/purity): extraída para fora do corpo do componente —
 // só é chamada a partir de um handler de clique (nunca durante o render),
@@ -76,6 +77,10 @@ export default function DemoPage() {
   return (
     <AppShell>
       <div className="p-8 max-w-5xl mx-auto">
+        <DemoDataNotice
+          className="mb-6"
+          description="Estes casos clínicos são inteiramente fictícios (paciente, diagnóstico e conduta simulados) e não refletem o paciente em atendimento. Servem apenas para demonstrar o fluxo do sistema."
+        />
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-2">

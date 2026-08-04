@@ -12,6 +12,7 @@ import {
   CID_SNOMED_MAP, EXAME_LOINC_MAP,
   type DadosClinicos, type SimulacaoIntegracao,
 } from '@/lib/interoperability-engine';
+import { DemoDataNotice } from '@/components/clinical/DemoDataNotice';
 
 type Aba = 'fhir' | 'tiss' | 'mapeamento' | 'simulador' | 'hl7';
 
@@ -114,6 +115,7 @@ export default function InteroperabilidadePage() {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 py-6 space-y-5">
+        <DemoDataNotice />
 
         {/* ABA FHIR */}
         {aba === 'fhir' && (

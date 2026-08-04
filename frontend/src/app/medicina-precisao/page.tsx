@@ -13,6 +13,7 @@ import {
   type FenotipoMetabolizador, type GenotipoPaciente,
 
 } from '@/lib/precision-medicine';
+import { DemoDataNotice } from '@/components/clinical/DemoDataNotice';
 
 type Aba = 'genotipo' | 'avaliacao' | 'score' | 'cpic' | 'dose';
 
@@ -117,6 +118,7 @@ export default function MedicinaPresicaoPage() {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 py-6 space-y-5">
+        <DemoDataNotice />
 
         {/* GENÓTIPO */}
         {aba === 'genotipo' && (

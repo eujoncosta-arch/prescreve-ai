@@ -6,6 +6,7 @@ import {
   calcularConsenso, calcularVariabilidade, detectarMudancaDePadrao,
   seedPhysicianLearningNetworkDemo,
 } from '@/lib/physician-learning-network';
+import { DemoDataNotice } from '@/components/clinical/DemoDataNotice';
 
 const CIDS = [
   { cid: 'I10', label: 'Hipertensão Arterial' },
@@ -32,6 +33,7 @@ export default function RedeMedicaPage() {
 
   return (
     <div className="p-6 space-y-6 max-w-6xl mx-auto">
+      <DemoDataNotice />
       <div>
         <h1 className="text-2xl font-bold text-slate-900">Rede de Aprendizado Médico</h1>
         <p className="text-sm text-slate-500 mt-1">Inteligência coletiva anônima — padrões de conduta e variabilidade da prática</p>

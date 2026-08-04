@@ -43,10 +43,11 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import {
   gerarDashboardGovernanca,
-  
+
   STATUS_MODULO_META,
   scoreGlobalCor,
 } from '@/lib/governance-dashboard';
+import { DemoDataNotice } from '@/components/clinical/DemoDataNotice';
 
 // ─── Helpers ─────────────────────────────────────────────────
 
@@ -90,6 +91,7 @@ export default function GovernancaPage() {
 
   return (
     <div className="space-y-5">
+      <DemoDataNotice />
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>

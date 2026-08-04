@@ -7,6 +7,7 @@ import {
   seedHospitalQualityDemo,
   STATUS_INDICADOR_META, CLASSIFICACAO_META, BENCHMARK_DB,
 } from '@/lib/hospital-quality';
+import { DemoDataNotice } from '@/components/clinical/DemoDataNotice';
 
 // RM-52 (react-hooks/set-state-in-effect): seed é idempotente — chamado
 // uma vez no escopo do módulo em vez de num useEffect de mount.
@@ -22,6 +23,7 @@ export default function QualidadeHospitalPage() {
 
   return (
     <div className="p-6 space-y-6 max-w-6xl mx-auto">
+      <DemoDataNotice />
       <div>
         <h1 className="text-2xl font-bold text-slate-900">Qualidade Hospitalar</h1>
         <p className="text-sm text-slate-500 mt-1">Indicadores de qualidade, metas e benchmarking setorial</p>

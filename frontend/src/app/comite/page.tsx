@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { DemoDataNotice } from '@/components/clinical/DemoDataNotice';
 
 // ─── Avatar ───────────────────────────────────────────────────
 
@@ -436,6 +437,7 @@ export default function ComitePage() {
   return (
     <AppShell>
       <div className="max-w-5xl mx-auto space-y-6">
+        <DemoDataNotice />
 
         {/* Header */}
         <div>

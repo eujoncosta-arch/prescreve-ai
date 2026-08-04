@@ -6,6 +6,7 @@ import {
   gerarPainelRWE, listarRWE, seedRWEDemo,
   ORIGEM_META, TENDENCIA_META,
 } from '@/lib/rwe-engine';
+import { DemoDataNotice } from '@/components/clinical/DemoDataNotice';
 
 const CIDS = [
   { cid: 'I10', label: 'Hipertensão Arterial (I10)' },
@@ -34,6 +35,7 @@ export default function RWEPage() {
 
   return (
     <div className="p-6 space-y-6 max-w-6xl mx-auto">
+      <DemoDataNotice />
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-slate-900">Real World Evidence</h1>

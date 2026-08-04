@@ -15,6 +15,7 @@ import {
   NIVEL_EV_COR, CLASSE_COR,
   normalizarMolecula,
 } from '@/lib/clinical-insights';
+import { DemoDataNotice } from '@/components/clinical/DemoDataNotice';
 
 // ═══════════════════════════════════════════════════════════
 // HELPERS
@@ -409,6 +410,7 @@ export default function InsightsPage() {
 
       {/* ── Conteúdo ── */}
       <div className="flex-1 p-6 space-y-5">
+        <DemoDataNotice />
 
         {/* ══ ABA: Por condição ══ */}
         {activeTab === 'condicoes' && (

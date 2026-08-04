@@ -18,9 +18,10 @@ import {
   interpretarKappa,
   type MedicalValidationReport,
   type ComponenteEnterpriseScore,
-  
-  
+
+
 } from '@/lib/multicentric-validation';
+import { DemoDataNotice } from '@/components/clinical/DemoDataNotice';
 
 // ══════════════════════════════════════════════════════════════
 // HELPERS
@@ -568,6 +569,7 @@ export default function ValidacaoRealPage() {
 
       {/* Conteúdo */}
       <div className="max-w-5xl mx-auto px-4 py-6">
+        <DemoDataNotice className="mb-5" />
         {abaAtiva === 'overview'    && <AbaOverview r={report} />}
         {abaAtiva === 'kappa'       && <AbaKappa r={report} />}
         {abaAtiva === 'hospitais'   && <AbaInstituicoes r={report} />}
