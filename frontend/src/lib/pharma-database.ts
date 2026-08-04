@@ -147,6 +147,7 @@ import { PHARMA_DB_ONCO } from './pharma-database-onco';
 import { PHARMA_DB_ICU } from './pharma-database-icu';
 import { PHARMA_DB_PALLIATIVE } from './pharma-database-palliative';
 import { PHARMA_DB_RM54_GAPS } from './pharma-database-rm54-gaps';
+import { PHARMA_DB_RM69_COMBOS } from './pharma-database-rm69-combos';
 
 function produtoToQuickBrand(p: ProdutoComercial): QuickBrand {
   const formas = [...new Set(p.apresentacoes.map((a: { forma_farmaceutica: string }) => {
@@ -3118,7 +3119,7 @@ export function getDrugById(id: string): QuickDrug | undefined {
 let _allDrugs: QuickDrug[] | null = null;
 export function getAllDrugs(): QuickDrug[] {
   if (_allDrugs) return _allDrugs;
-  const raw = [...PHARMA_DB, ...PHARMA_DB_CARDIO, ...PHARMA_DB_ENDO, ...PHARMA_DB_INFECTOLOGY_AB, ...PHARMA_DB_INFECTOLOGY_AF, ...PHARMA_DB_PULMO_A, ...PHARMA_DB_PULMO_B, ...PHARMA_DB_NEURO_A, ...PHARMA_DB_NEURO_B, ...PHARMA_DB_GASTRO_A, ...PHARMA_DB_NEFRO, ...PHARMA_DB_PEDIATRIA, ...PHARMA_DB_GINECO, ...PHARMA_DB_ONCO, ...PHARMA_DB_ICU, ...PHARMA_DB_PALLIATIVE, ...PHARMA_DB_RM54_GAPS];
+  const raw = [...PHARMA_DB, ...PHARMA_DB_CARDIO, ...PHARMA_DB_ENDO, ...PHARMA_DB_INFECTOLOGY_AB, ...PHARMA_DB_INFECTOLOGY_AF, ...PHARMA_DB_PULMO_A, ...PHARMA_DB_PULMO_B, ...PHARMA_DB_NEURO_A, ...PHARMA_DB_NEURO_B, ...PHARMA_DB_GASTRO_A, ...PHARMA_DB_NEFRO, ...PHARMA_DB_PEDIATRIA, ...PHARMA_DB_GINECO, ...PHARMA_DB_ONCO, ...PHARMA_DB_ICU, ...PHARMA_DB_PALLIATIVE, ...PHARMA_DB_RM54_GAPS, ...PHARMA_DB_RM69_COMBOS];
   // Deduplicate brands within each molecule: same nome (case-insensitive) → keep verificado:true or first
   _allDrugs = raw.map(drug => {
     const seen = new Map<string, QuickBrand>();

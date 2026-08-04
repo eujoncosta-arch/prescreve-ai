@@ -46,20 +46,30 @@ describe('RM-24 · Cross Database Validator', () => {
     expect(mediumAusentes, JSON.stringify(mediumAusentes)).toHaveLength(0);
   });
 
-  // RM-54: achado #2 (baixo) — combinações comerciais fora do escopo do
-  // PHARMA_DB (moléculas isoladas) são uma decisão de escopo documentada,
-  // não um risco em aberto — marcadas `aceito: true` e excluídas de
-  // `divergentes`, mas continuam listadas em `findings` (nunca escondidas).
-  it('RM-54: achados de combinação comercial (low) são marcados aceito=true e não contam em divergentes', () => {
+  // RM-54: achado #2 (baixo) — o mecanismo `aceito: true` (combinação
+  // comercial fora do escopo do PHARMA_DB de moléculas isoladas) continua
+  // válido para casos futuros: qualquer achado assim marcado nunca conta
+  // em `divergentes`, mas continua 100% visível em `findings`.
+  it('RM-54: qualquer achado de combinação comercial (low, aceito=true) nunca conta em divergentes', () => {
     const combos = report.findings.filter((f) => f.tipo === 'medicamento_ausente' && f.gravidade === 'low');
-    expect(combos.length).toBeGreaterThan(0);
     expect(combos.every((f) => f.aceito === true)).toBe(true);
-    // Todas as chaves 'low' aceitas não devem estar entre as divergentes.
     const chavesLow = new Set(combos.map((f) => f.chave));
     const chavesDivergentesNaoAceitas = report.findings
       .filter((f) => f.gravidade !== 'critical' && !f.aceito)
       .map((f) => f.chave);
     for (const k of chavesLow) expect(chavesDivergentesNaoAceitas).not.toContain(k);
+  });
+
+  // RM-66 (achado da Seção 6) → RM-69: a heurística "+" auto-aceitava 13
+  // combinações comerciais reais sem revisão individual, mascarando o
+  // mesmo tipo de gap estrutural do achado RM-58 (produto real invisível
+  // ao motor de prescrição). Revisão manual (mesma régua de curadoria do
+  // piloto RM-66/Zart H®) mostrou que as 13 têm dados de bula reais e
+  // completos — todas foram promovidas ao PHARMA_DB
+  // (`pharma-database-rm69-combos.ts`). Nenhuma "aceitação" automática
+  // deve permanecer sem revisão individual documentada.
+  it('RM-69: as 13 combinações antes aceitas automaticamente foram revisadas e promovidas — nenhuma pendência de revisão restante', () => {
+    expect(report.aceitos).toBe(0);
   });
 
   it('cada achado traz tipo, gravidade, chave, fontes e correção sugerida', () => {
