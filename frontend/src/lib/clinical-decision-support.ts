@@ -17,6 +17,26 @@ const txt = (...fields: (string | undefined)[]) =>
 const has = (text: string, ...keywords: string[]) =>
   keywords.some(k => text.includes(k.toLowerCase()));
 
+/**
+ * GAP-01 (achado RM-64, corrigido aqui): critérios de AUSÊNCIA de sintoma
+ * (`!has(...)`) não podem usar `text` vazio como evidência de "sintoma
+ * negado" — `''.includes(qualquerCoisa)` é sempre `false`, então a negação
+ * de um campo simplesmente não preenchido (`queixa_principal`/`hda` vazios)
+ * virava `true` e pontuava como se o médico tivesse ativamente descartado o
+ * sintoma. Uma anamnese totalmente vazia chegava a cruzar
+ * `peso_minimo_para_incluir` só com critérios de ausência, gerando uma
+ * hipótese espúria sem nenhum dado real de suporte.
+ *
+ * `absenceOf` exige que HAJA texto real preenchido antes de contar a
+ * ausência da palavra-chave como evidência — "dado não coletado" nunca é
+ * tratado como "sintoma explicitamente negado". Não muda o que conta como
+ * evidência A FAVOR de uma hipótese (só os critérios de ausência, que já
+ * eram uma inferência sobre o que falta no texto, nunca uma checklist
+ * estruturada de negação) — nenhuma regra clínica nova foi criada.
+ */
+const absenceOf = (text: string, ...keywords: string[]) =>
+  text.trim().length > 0 && !has(text, ...keywords);
+
 const lab = (a: Anamnesis, key: string): number | undefined => {
   const v = a.laboratorio?.[key];
   return v !== undefined && v !== '' ? parseFloat(v) : undefined;
@@ -812,12 +832,12 @@ const BASE_CLINICA: ConditionRule[] = [
       },
       {
         descricao: 'Ausência de tosse (critério de Centor — aumenta probabilidade bacteriana)',
-        check: a => !has(txt(a.queixa_principal, a.hda), 'tosse'),
+        check: a => absenceOf(txt(a.queixa_principal, a.hda), 'tosse'),
         peso: 3,
       },
       {
         descricao: 'Ausência de sintomas virais (coriza, conjuntivite, úlceras orais)',
-        check: a => !has(txt(a.queixa_principal, a.hda), 'coriza', 'conjuntivite', 'úlcera', 'afta', 'herpes'),
+        check: a => absenceOf(txt(a.queixa_principal, a.hda), 'coriza', 'conjuntivite', 'úlcera', 'afta', 'herpes'),
         peso: 3,
       },
     ],
