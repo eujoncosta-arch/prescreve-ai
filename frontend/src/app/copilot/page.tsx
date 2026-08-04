@@ -73,10 +73,13 @@ export default function CopilotPage() {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <Brain size={18} className="text-indigo-600" />
-              <h1 className="text-lg font-bold text-gray-900">AI Medical Copilot</h1>
+              <h1 className="text-lg font-bold text-gray-900">Copiloto — Rascunho Assistido</h1>
               <span className="px-2 py-0.5 text-xs font-bold bg-indigo-100 text-indigo-700 rounded">Phase 19</span>
             </div>
-            <p className="text-xs text-gray-500">SOAP · Resumo Clínico · Diferenciais · 2ª Opinião · Discussão · Evolução</p>
+            <p className="text-xs text-gray-500">
+              Gera RASCUNHO de SOAP · Resumo Clínico · Diferenciais · 2ª Opinião · Discussão · Evolução — para revisão
+              e edição do médico, nunca para uso direto
+            </p>
           </div>
           <div className="flex items-center gap-1.5 flex-wrap justify-end">
             {MODOS.map(m => (
@@ -103,6 +106,17 @@ export default function CopilotPage() {
 
       <div className="max-w-5xl mx-auto px-4 py-6 space-y-5">
         <DemoDataNotice />
+
+        {/* RM-73: banner de escopo — ferramenta de auxílio à redação, nunca
+            uso direto sem revisão médica completa (RM-60 §10, item 10). */}
+        <div className="flex items-start gap-2 bg-amber-50 border border-amber-300 rounded-xl px-4 py-3">
+          <AlertTriangle size={16} className="text-amber-600 flex-shrink-0 mt-0.5" />
+          <p className="text-xs text-amber-800">
+            <strong>Ferramenta de auxílio à redação.</strong> Todo o conteúdo abaixo é um rascunho gerado
+            automaticamente — o médico deve revisar e editar cada seção antes de qualquer uso clínico real.
+            Nunca aplique este conteúdo diretamente a um prontuário ou prescrição sem revisão médica completa.
+          </p>
+        </div>
 
         {/* SOAP */}
         {aba === 'soap' && (

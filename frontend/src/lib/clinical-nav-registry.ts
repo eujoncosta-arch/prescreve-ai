@@ -52,6 +52,15 @@
 // o médico achar que existe vigilância ativa de diretrizes que não existe.
 // `/atualizacoes` (curada, com DOI e evidência por mudança) permanece como
 // única página do tópico.
+//
+// RM-60 (§10, item 10) → RM-73: escopo do `/copilot` definido formalmente
+// como ferramenta de AUXÍLIO À REDAÇÃO — gera rascunho (SOAP, resumo,
+// diferenciais, 2ª opinião, discussão, evolução) que o médico DEVE revisar
+// e editar por completo antes de qualquer uso real; nunca populariza
+// prescrição/prontuário automaticamente. Label do menu e banner de aviso
+// na própria página reforçam isso explicitamente (nenhuma mudança de
+// motor). Consistente com o restante do sistema (CDSS, decisão médica
+// soberana).
 // ============================================================
 
 import type { LucideIcon } from 'lucide-react';
@@ -141,7 +150,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { href: '/explicabilidade',          label: 'Explicabilidade da Consulta',   icon: Brain,        badge: 'P14', classification: 'hibrido' },
       { href: '/interoperabilidade',         label: 'Interoperabilidade',    icon: Share2,       badge: 'P17', classification: 'demonstracao' },
       { href: '/medicina-precisao',          label: 'Precision Medicine',    icon: Dna,          badge: 'P18', classification: 'demonstracao' },
-      { href: '/copilot',                    label: 'AI Medical Copilot',    icon: Bot,          badge: 'P19', classification: 'demonstracao' },
+      { href: '/copilot',                    label: 'Copiloto — Rascunho Assistido',    icon: Bot,          badge: 'P19', classification: 'demonstracao' },
       { href: '/knowledge-graph',            label: 'Knowledge Graph',       icon: Network,      badge: 'P20', classification: 'referencia' },
     ],
   },
