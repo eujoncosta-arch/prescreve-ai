@@ -70,8 +70,11 @@ describe('RM-59 — clinical-nav-registry', () => {
     ].sort());
   });
 
-  it('apenas /explicabilidade está classificada como "hibrido" nesta rodada', () => {
-    const hibridas = todosItens.filter(i => i.classification === 'hibrido').map(i => i.href);
-    expect(hibridas).toEqual(['/explicabilidade']);
+  // RM-75: /medicina-precisao reclassificada de 'demonstracao' para
+  // 'hibrido' — genótipo inicial editável + evidência CPIC real (DOI),
+  // só falta importação automática de laboratório.
+  it('exatamente /explicabilidade e /medicina-precisao estão classificadas como "hibrido" nesta rodada', () => {
+    const hibridas = todosItens.filter(i => i.classification === 'hibrido').map(i => i.href).sort();
+    expect(hibridas).toEqual(['/explicabilidade', '/medicina-precisao'].sort());
   });
 });

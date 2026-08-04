@@ -118,7 +118,13 @@ export default function MedicinaPresicaoPage() {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 py-6 space-y-5">
-        <DemoDataNotice />
+        {/* RM-75: genótipo inicial é só um ponto de partida de exemplo —
+            totalmente editável na aba Genótipo. A base de evidência
+            (FARMACOGENOMICA_DB) é real, com DOIs de guidelines CPIC. */}
+        <DemoDataNotice
+          variant="hybrid"
+          description="O genótipo exibido inicialmente é um exemplo de demonstração, mas totalmente editável na aba Genótipo abaixo — a base de evidência (guidelines CPIC, com DOI citável) é real. Falta apenas a importação automática de um laboratório de genotipagem; edite os alelos manualmente para refletir o paciente real."
+        />
 
         {/* GENÓTIPO */}
         {aba === 'genotipo' && (

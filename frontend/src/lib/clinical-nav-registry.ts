@@ -61,6 +61,19 @@
 // na própria página reforçam isso explicitamente (nenhuma mudança de
 // motor). Consistente com o restante do sistema (CDSS, decisão médica
 // soberana).
+//
+// RM-60 (§10, itens 8/9) → RM-75: `/digital-twin` fica demonstrativo
+// permanentemente — investigação confirmou que não há caminho de baixo
+// esforço (precisaria de persistência de série temporal de sinais
+// vitais/labs por paciente, infraestrutura que não existe hoje).
+// `/medicina-precisao` foi RECLASSIFICADA de `demonstracao` para
+// `hibrido` — diferente do digital-twin, esta já é uma calculadora real:
+// o genótipo inicial é só um ponto de partida editável (o usuário altera
+// alelo/fenótipo de cada gene na própria UI) e a base de evidência
+// (`FARMACOGENOMICA_DB`) tem DOIs reais de guidelines CPIC. O único gap
+// é a importação automática de um laboratório de genotipagem — não a
+// funcionalidade em si, que já funciona com entrada manual (mesmo
+// padrão de `/dosagem`, `referencia`).
 // ============================================================
 
 import type { LucideIcon } from 'lucide-react';
@@ -149,7 +162,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { href: '/farma-analytics',          label: 'Farma Analytics',       icon: FlaskConical, badge: 'P12', classification: 'demonstracao' },
       { href: '/explicabilidade',          label: 'Explicabilidade da Consulta',   icon: Brain,        badge: 'P14', classification: 'hibrido' },
       { href: '/interoperabilidade',         label: 'Interoperabilidade',    icon: Share2,       badge: 'P17', classification: 'demonstracao' },
-      { href: '/medicina-precisao',          label: 'Precision Medicine',    icon: Dna,          badge: 'P18', classification: 'demonstracao' },
+      { href: '/medicina-precisao',          label: 'Precision Medicine',    icon: Dna,          badge: 'P18', classification: 'hibrido' },
       { href: '/copilot',                    label: 'Copiloto — Rascunho Assistido',    icon: Bot,          badge: 'P19', classification: 'demonstracao' },
       { href: '/knowledge-graph',            label: 'Knowledge Graph',       icon: Network,      badge: 'P20', classification: 'referencia' },
     ],
