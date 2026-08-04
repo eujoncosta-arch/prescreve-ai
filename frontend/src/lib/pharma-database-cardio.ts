@@ -1450,4 +1450,58 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
     ],
   },
 
+  // ── RM-66 (lote piloto do framework de expansão controlada): combinação
+  // já existente no catálogo comercial Eurofarma (`eurofarma-sync.ts`,
+  // entrada `euro-zart-h`, ANVISA/bula reais) mas ausente do PHARMA_DB —
+  // exatamente o padrão estrutural do achado RM-58 (produto real invisível
+  // ao motor de busca/prescrição por existir em só uma das fontes). Dados
+  // clínicos (contraindicações, ajuste renal, monitoramento) reaproveitados
+  // 1:1 da bula já curada em `eurofarma-sync.ts`, não inventados aqui.
+  // Verificação externa adicional (WebSearch, 2026): bula profissional/
+  // paciente Eurofarma (eurofarma.com.br/produtos/bulas/.../bula-zart-h.pdf)
+  // e bulas de genéricos Medley/Geolab confirmam as mesmas 2 apresentações
+  // (50/12,5 mg e 100/25 mg, comprimido revestido).
+  {
+    id: 'losartana_hidroclorotiazida',
+    guidelines_referencia: ['7ª Diretriz Brasileira de Hipertensão Arterial (SBC 2020) — combinação BRA + tiazídico para HAS não controlada em monoterapia'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
+    uso_pediatrico: 'nao_aplicavel',
+    molecula: 'Losartana Potássica + Hidroclorotiazida',
+    nome_generico: 'Losartana Potássica + Hidroclorotiazida',
+    sinonimos: ['losartana + hidroclorotiazida', 'losartana hidroclorotiazida', 'zart h', 'losartana hctz'],
+    categoria: 'antihipertensivo',
+    classe: 'BRA + Diurético Tiazídico (Associação)',
+    subclasse: 'Bloqueador do Receptor AT1 + Diurético tiazídico',
+    indicacoes_principais: ['HAS não controlada em monoterapia com BRA ou tiazídico isolados'],
+    dose_adulto: {
+      habitual: '50/12,5', min: '50/12,5', max: '100/25', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia'],
+      instrucoes: 'Iniciar pela menor apresentação (50/12,5 mg) 1x/dia. Aumentar para 100/25 mg 1x/dia se PA não controlada.',
+    },
+    ajuste_renal: {
+      normal: '50/12,5–100/25 mg/dia', tfg_60_30: 'Cautela — monitorar eletrólitos e função renal',
+      tfg_30_15: 'Evitar (componente tiazídico perde eficácia e agrava risco de hipopotassemia/hiperazotemia)',
+      tfg_lt_15: 'Evitar', dialisavel: false,
+    },
+    ajuste_hepatico: {
+      child_a: 'Sem ajuste formal — monitorar eletrólitos',
+      child_b: 'Cautela — iniciar pela menor apresentação (50/12,5 mg)',
+      child_c: 'Evitar — componente tiazídico pode precipitar coma hepático em alterações do equilíbrio hidroeletrolítico',
+    },
+    contraindicacoes_rapidas: ['Gravidez', 'Anúria', 'Hipersensibilidade a sulfonamidas (hidroclorotiazida)', 'Uso concomitante de alisquireno em DM/DRC'],
+    interacoes_importantes: [
+      { com: 'AINEs', severidade: 'moderada', descricao: 'Reduzem o efeito anti-hipertensivo de ambos os componentes' },
+      { com: 'Poupadores de potássio/suplementos de K+', severidade: 'moderada', descricao: 'Risco de hipercalemia pelo componente BRA (contrapõe a hipocalemia do tiazídico — monitorar K+)' },
+      { com: 'Lítio', severidade: 'grave', descricao: 'Aumento de litemia — risco de toxicidade' },
+      { com: 'Digitálicos', severidade: 'moderada', descricao: 'Hipocalemia pelo componente tiazídico pode potencializar toxicidade digitálica' },
+    ],
+    alertas_especiais: ['Monitorar eletrólitos (K+, Na+) e função renal periodicamente', 'Risco de hipotensão em pacientes hipovolêmicos/depletados de sódio', 'Iniciar pela menor apresentação disponível, nunca pela maior'],
+    uso_gestante: 'contraindicado', uso_lactante: 'avaliar',
+    marcas: [
+      { nome: 'Zart H®', laboratorio: 'Eurofarma', concentracoes: ['50/12,5 mg', '100/25 mg'], formas: ['Comprimido revestido'], lab_id: 'eurofarma' },
+      { nome: 'Losartana + Hidroclorotiazida Medley', laboratorio: 'Medley', concentracoes: ['50/12,5 mg', '100/25 mg'], formas: ['Comprimido revestido'] },
+    ],
+  },
+
 ];
