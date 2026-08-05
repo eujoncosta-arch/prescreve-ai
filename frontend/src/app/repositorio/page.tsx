@@ -88,7 +88,9 @@ export default function Repositorio() {
             <div>
               <h1 className="text-2xl font-bold text-slate-900">Repositório Científico</h1>
               <p className="text-sm text-slate-500">
-                Diretrizes, meta-análises, RCTs e consensos que fundamentam as recomendações do PRESCREVE-AI
+                Diretrizes, meta-análises, RCTs e consensos — cobertura ampla por condição. Para análise em
+                profundidade (conflitos entre diretrizes, estudos completos) das 12 condições mais prevalentes,
+                veja <strong>Evidence Engine</strong>.
               </p>
             </div>
           </div>

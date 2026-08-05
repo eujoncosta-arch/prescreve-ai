@@ -583,7 +583,9 @@ export default function EvidencePage() {
             Evidence Engine
           </h1>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-            Diagnóstico → Diretriz → Terapia → Estudos · Racional científico em segundos
+            Diagnóstico → Diretriz → Terapia → Estudos · Análise em profundidade das 12 condições mais
+            prevalentes, incluindo conflitos entre diretrizes. Para outras condições, veja{' '}
+            <strong>Repositório</strong>.
           </p>
         </div>
 

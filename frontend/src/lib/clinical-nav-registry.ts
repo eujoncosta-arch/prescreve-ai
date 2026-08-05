@@ -74,6 +74,31 @@
 // é a importação automática de um laboratório de genotipagem — não a
 // funcionalidade em si, que já funciona com entrada manual (mesmo
 // padrão de `/dosagem`, `referencia`).
+//
+// RM-60 (§10, item 5) → RM-80: `/repositorio` e `/evidence` NÃO foram
+// fundidas, mesmo após reconciliação item a item (14 citações de
+// `scientific-repository.ts` comparadas contra `EVIDENCE_DB`) — a
+// investigação revelou que `/repositorio` NÃO é um subconjunto de
+// `/evidence`: cobre uma condição inteira (Pneumonia/J18, diretriz SBPT)
+// ausente em `/evidence`, e cita estudos reais (UKPDS 33, COPERNICUS)
+// sem equivalente estruturado lá. Migrar essas condições/estudos exigiria
+// criar categorias de diagnóstico novas com dados de estudo (N, NNT, HR)
+// que não têm fonte verificada disponível nesta sessão — risco real de
+// fabricar estatística clínica. Mantidas separadas e diferenciadas por
+// escopo (`/repositorio` = mais condições, mais raso; `/evidence` = 12
+// condições, mais profundo — inclui conflitos entre diretrizes), mesmo
+// padrão de decisão do RM-71 (`/explicar` vs. `/explicabilidade`). Duas
+// citações estavam desatualizadas (7ª→8ª diretriz de HAS, ESC-HF
+// 2021→2023) — corrigidas nos RM-76/77, não uma questão de fusão.
+//
+// RM-60 (§10, item 5) → RM-80 (continuação): `/farmalib` foi removida
+// deste registro — diferente de `/repositorio`/`/evidence`, aqui a fusão
+// era segura: `pharma-library.ts` já importa `EUROFARMA_CATALOG` de
+// `eurofarma-sync.ts` (não duplica dado), e `/biblioteca` já tinha uma
+// seção "outros laboratórios" própria (lista hardcoded incompleta, 8 de
+// 10 nomes, com nota de implementação desatualizada) — substituída pelo
+// dado real de `LABORATORIOS`. Nenhum conteúdo único de `/farmalib` ficou
+// para trás.
 // ============================================================
 
 import type { LucideIcon } from 'lucide-react';
@@ -83,7 +108,7 @@ import {
   Calculator, ClipboardList, GitBranch, TrendingUp, Users, Microscope,
   Building2, UserCircle, Scale, Brain, Lightbulb, Globe, Dna, Network,
   BarChart3, Activity, Clock, FlaskConical, Share2, Bot,
-  Pill, HelpCircle, Package, Beaker,
+  Pill, HelpCircle, Beaker,
 } from 'lucide-react';
 
 /**
@@ -134,15 +159,14 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     label: 'Científico',
     items: [
-      { href: '/repositorio',   label: 'Repositório',         icon: BookMarked,  badge: null,   classification: 'referencia' },
+      { href: '/repositorio',   label: 'Repositório (todas as condições)',         icon: BookMarked,  badge: null,   classification: 'referencia' },
       { href: '/biblioteca',    label: 'Farmacológica',       icon: Library,     badge: 'EURO', classification: 'referencia' },
       { href: '/evidencias',    label: 'Evidências',          icon: BookOpen,    badge: null,   classification: 'referencia' },
-      { href: '/evidence',      label: 'Evidence Engine',     icon: Microscope,  badge: 'NOVO', classification: 'referencia' },
+      { href: '/evidence',      label: 'Evidence Engine (12 condições, em profundidade)',     icon: Microscope,  badge: 'NOVO', classification: 'referencia' },
       { href: '/comparador',       label: 'Comparador',          icon: Scale,       badge: 'NOVO', classification: 'referencia' },
       { href: '/insights',         label: 'Clinical Insights',   icon: Brain,       badge: 'NOVO', classification: 'demonstracao' },
       { href: '/segunda-opiniao',  label: 'Segunda Opinião',     icon: Lightbulb,   badge: 'NOVO', classification: 'referencia' },
       { href: '/dosagem',       label: 'Cálculo de Doses',    icon: Pill,        badge: 'NOVO', classification: 'referencia' },
-      { href: '/farmalib',      label: 'Farmacoteca',         icon: Package,     badge: 'NOVO', classification: 'referencia' },
       { href: '/eurofarma',     label: 'Eurofarma',           icon: Beaker,      badge: 'EURO', classification: 'referencia' },
       { href: '/explicar',      label: 'Racional por Condição', icon: HelpCircle,  badge: 'NOVO', classification: 'referencia' },
       { href: '/governanca',    label: 'Governança',          icon: ShieldCheck, badge: null,   classification: 'demonstracao' },

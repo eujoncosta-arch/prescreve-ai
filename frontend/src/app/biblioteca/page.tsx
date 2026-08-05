@@ -11,6 +11,7 @@ import {
   getCatalogoPorClasse,
 } from '@/lib/eurofarma-sync';
 import { BulaViewer } from '@/components/modules/BulaViewer';
+import { LABORATORIOS } from '@/lib/pharma-library';
 import type { ProdutoComercial } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -497,19 +498,29 @@ export default function BibliotecaPage() {
           </TabsContent>
         </Tabs>
 
-        {/* Outros laboratórios */}
+        {/* RM-80: seção migrada de /farmalib (removida do menu) — dado real
+            de LABORATORIOS (pharma-library.ts), não mais uma lista fixa de
+            8 nomes com nota de implementação desatualizada. */}
         <div className="mt-6 p-4 bg-slate-50 border border-slate-200 rounded-xl">
           <p className="text-xs font-semibold text-slate-600 mb-3 flex items-center gap-1">
             <Building2 className="w-3.5 h-3.5" />
-            Outros laboratórios (em desenvolvimento):
+            Outros laboratórios parceiros (em breve):
           </p>
           <div className="grid grid-cols-4 gap-2">
-            {['EMS', 'Aché', 'Libbs', 'Biolab', 'Bayer', 'Pfizer', 'AstraZeneca', 'Novartis'].map(lab => (
-              <div key={lab} className="text-xs text-slate-400 p-2 border border-dashed border-slate-200 rounded text-center opacity-60">{lab}</div>
+            {LABORATORIOS.filter(lab => lab.status === 'em_breve').map(lab => (
+              <div
+                key={lab.id}
+                title={lab.descricao}
+                className="text-xs text-slate-400 p-2 border border-dashed border-slate-200 rounded text-center opacity-60"
+              >
+                {lab.nome_abreviado}
+              </div>
             ))}
           </div>
           <p className="text-[10px] text-slate-400 mt-2">
-            Arquitetura multi-lab pronta — cada laboratório é ativado via <code className="bg-slate-100 px-1 rounded">LABS[id].ativo = true</code>
+            Arquitetura multi-laboratório pronta ({LABORATORIOS.length} laboratórios cadastrados,{' '}
+            {LABORATORIOS.filter(l => l.status === 'ativo').length} ativo) — cada laboratório é ativado
+            quando o catálogo de produtos correspondente é sincronizado.
           </p>
         </div>
       </div>
