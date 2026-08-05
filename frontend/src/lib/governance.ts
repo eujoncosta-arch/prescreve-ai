@@ -150,23 +150,60 @@ export interface AuditEntry {
 
 const GUIDELINES_SEED: Guideline[] = [
   {
+    // RM-81: `titulo`/`sigla`/`ano_publicacao`/`url_oficial`/`doi_referencia`
+    // atualizados para a diretriz real e vigente. A entrada anterior aqui
+    // ("7ª Diretriz... 2020" como `status: 'vigente'`) estava desatualizada
+    // desde 2025 — exatamente o tipo de falha que este módulo de governança
+    // existe para prevenir (uma diretriz superada apresentada como vigente).
+    // A versão "8ª/2024" citada alhures no código (RM-76, já corrigida no
+    // RM-81) nunca existiu de verdade; a real diretriz seguinte à DBHA 2020
+    // é a DBHA 2025 (Arq Bras Cardiol. 2025;122(9):e20250624, SBC/SBN/SBH),
+    // verificada por leitura do PDF oficial fornecido pelo usuário. Nova
+    // entrada de versão (`g1v3`, abaixo) documenta as mudanças reais
+    // extraídas do documento — `g1v2`/`g1v1` (2020/2010) preservadas como
+    // histórico real, não alteradas.
     id: 'g1',
-    titulo: '7ª Diretriz Brasileira de Hipertensão Arterial',
-    sigla: 'DBHA-7',
-    sociedade: 'Sociedade Brasileira de Cardiologia (SBC)',
+    titulo: 'Diretriz Brasileira de Hipertensão Arterial – 2025',
+    sigla: 'DBHA 2025',
+    sociedade: 'Sociedade Brasileira de Cardiologia (SBC), Sociedade Brasileira de Nefrologia (SBN), Sociedade Brasileira de Hipertensão (SBH)',
     area: 'cardiologia',
     condicao: 'HAS',
     status: 'vigente',
-    versao_atual: '7.0',
-    ano_publicacao: 2020,
-    url_oficial: 'https://doi.org/10.36660/abc.20201238',
-    doi_referencia: '10.36660/abc.20201238',
-    data_ultima_revisao: '2024-03-01',
-    data_proxima_revisao: '2026-01-01',
+    versao_atual: '2025',
+    ano_publicacao: 2025,
+    url_oficial: 'https://doi.org/10.36660/abc.20250624',
+    doi_referencia: '10.36660/abc.20250624',
+    data_ultima_revisao: '2026-08-05',
+    data_proxima_revisao: '2030-01-01',
     nivel_validacao: 'validado',
     responsavel_interno: 'Comitê de Cardiologia',
     tags: ['HAS', 'hipertensão', 'anti-hipertensivo', 'meta pressórica'],
     versoes: [
+      {
+        id: 'g1v3',
+        numero: '2025',
+        data_publicacao: '2025-09-01',
+        data_insercao_sistema: '2026-08-05',
+        resumo: 'Meta pressórica < 130/80 mmHg estendida a TODOS os hipertensos (antes reservada a pacientes de maior risco CV). Reclassificação da pré-hipertensão (remove "PA ótima", absorvida em "PA normal"; nova faixa 120–139/80–89 mmHg). Adoção do escore de risco PREVENT. Três classes preferenciais explícitas (tiazídico/similar, IECA ou BRA, BCC); associação dupla em dose baixa como início para a maioria. Espironolactona (ou eplerenona) formalizada para HA resistente/refratária. Primeira edição com capítulo dedicado ao manejo da HA no SUS.',
+        alteracoes: [
+          { campo: 'Meta pressórica', anterior: '< 130/80 mmHg em pacientes de alto risco CV (DBHA 2020)', novo: '< 130/80 mmHg para todos os hipertensos, independentemente do risco CV ser baixo, moderado ou alto', justificativa: 'DBHA 2025, Cap. 5 — recomendação FORTE, certeza ALTA' },
+          { campo: 'Classificação da PA', anterior: '"PA ótima" e "Pré-hipertensão" como categorias separadas (DBHA 2020)', novo: '"PA ótima" removida (absorvida em "PA normal", PAS < 120 e PAD < 80); "Pré-hipertensão" passa a abranger PAS 120–139 e/ou PAD 80–89 mmHg', justificativa: 'DBHA 2025, Cap. 3 — identificação precoce de risco e intervenção proativa' },
+          { campo: 'Escore de risco cardiovascular', anterior: 'não especificado nesta base', novo: 'Escore PREVENT (Predicting Risk of Cardiovascular Disease Events)', justificativa: 'DBHA 2025, Cap. 4 — recomendação FORTE, certeza ALTA' },
+          { campo: 'Classes preferenciais de 1ª linha', anterior: 'não detalhado nesta base', novo: 'Diuréticos tiazídicos ou similares, IECA ou BRA, e BCC; betabloqueador reservado a situações específicas (IC, FA, arritmias, DAC, HD, entre outras)', justificativa: 'DBHA 2025, Cap. 7 — recomendação FORTE, certeza ALTA' },
+          { campo: 'Início do tratamento', anterior: 'não detalhado nesta base', novo: 'Associação dupla em dose baixa (preferencialmente comprimido único) para a maioria dos pacientes; monoterapia reservada a subgrupos específicos (PA 130–139/80–89 + alto risco, estágio 1 de baixo risco, idosos frágeis/muito idosos ≥ 80 anos, hipotensão ortostática sintomática)', justificativa: 'DBHA 2025, Cap. 7 — recomendação FORTE, certeza MODERADA' },
+          { campo: 'Hipertensão resistente/refratária', anterior: 'não detalhado nesta base', novo: 'Espironolactona (ou eplerenona em caso de intolerância) recomendada quando a meta não é atingida com as três classes iniciais', justificativa: 'DBHA 2025, Cap. 7 — recomendação FORTE, certeza ALTA' },
+          { campo: 'Escopo do documento', anterior: 'sem capítulo dedicado ao SUS', novo: 'Primeira edição com capítulo inteiramente dedicado às especificidades do manejo da HA no SUS (~75% dos pacientes hipertensos no Brasil são tratados no SUS)', justificativa: 'DBHA 2025, Introdução' },
+        ],
+        autor_insercao: 'Equipe Científica PRESCREVE-AI',
+        revisores: [],
+        status_revisao: 'aprovado',
+        // RM-81: nenhuma entrada de `Estudo` nova foi adicionada aqui — as
+        // mudanças acima são citadas diretamente ao corpo da própria DBHA
+        // 2025 (fonte primária, sem DOI de trial individual associado no
+        // PDF para cada recomendação). Evitado inventar N/NNT/HR de estudo
+        // que o documento não atribui explicitamente a um único ensaio.
+        evidencias: [],
+      },
       {
         id: 'g1v2',
         numero: '7.0',

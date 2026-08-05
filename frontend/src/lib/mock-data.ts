@@ -148,15 +148,17 @@ export const MOCK_THERAPEUTIC: TherapeuticPlan = {
         'Anlodipino 5 mg (alternativa em monoterapia)',
         'Hidroclorotiazida 12,5 mg (complemento ou alternativa)',
       ],
-      // RM-76: citação atualizada da 7ª (2020) para a 8ª edição (2024) —
-      // ver mesma correção em clinical-therapeutics.ts.
+      // RM-81: a citação "8ª Diretriz... 2024" (RM-76) não correspondia a
+      // nenhuma diretriz real localizável — corrigida para a Diretriz
+      // Brasileira de Hipertensão Arterial 2025 real (verificada por PDF
+      // oficial fornecido pelo usuário).
       evidencia: {
-        diretriz: '8ª Diretriz Brasileira de Hipertensão Arterial',
-        sociedade: 'Sociedade Brasileira de Cardiologia (SBC)',
-        ano: 2024,
+        diretriz: 'Diretriz Brasileira de Hipertensão Arterial – 2025',
+        sociedade: 'SBC/SBN/SBH',
+        ano: 2025,
         nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'Múltiplos ECRs e meta-análises' },
-        citacao: 'Sociedade Brasileira de Cardiologia. Arq Bras Cardiol. 2024.',
-        doi: '10.36660/abc.20240209',
+        citacao: 'Sociedade Brasileira de Cardiologia, Sociedade Brasileira de Nefrologia, Sociedade Brasileira de Hipertensão. Arq Bras Cardiol. 2025;122(9):e20250624.',
+        doi: '10.36660/abc.20250624',
       },
       marcas: [
         { laboratorio: 'Eurofarma', nome_comercial: 'Renitec', apresentacoes: ['5 mg', '10 mg', '20 mg'] },
@@ -200,15 +202,17 @@ export const MOCK_THERAPEUTIC: TherapeuticPlan = {
       ],
       monitoramento: ['Eletrólitos, creatinina e glicemia em 4 semanas', 'Ácido úrico se história de gota'],
       alternativas: ['Clortalidona 12,5 mg (preferível por maior duração de ação)', 'Indapamida 1,5 mg SR'],
-      // RM-76: citação atualizada da 7ª (2020) para a 8ª edição (2024) —
-      // ver mesma correção em clinical-therapeutics.ts.
+      // RM-81: a citação "8ª Diretriz... 2024" (RM-76) não correspondia a
+      // nenhuma diretriz real localizável — corrigida para a Diretriz
+      // Brasileira de Hipertensão Arterial 2025 real (verificada por PDF
+      // oficial fornecido pelo usuário).
       evidencia: {
-        diretriz: '8ª Diretriz Brasileira de Hipertensão Arterial',
-        sociedade: 'Sociedade Brasileira de Cardiologia (SBC)',
-        ano: 2024,
+        diretriz: 'Diretriz Brasileira de Hipertensão Arterial – 2025',
+        sociedade: 'SBC/SBN/SBH',
+        ano: 2025,
         nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'Múltiplos ECRs e meta-análises (ALLHAT)' },
-        citacao: 'Sociedade Brasileira de Cardiologia. Arq Bras Cardiol. 2024.',
-        doi: '10.36660/abc.20240209',
+        citacao: 'Sociedade Brasileira de Cardiologia, Sociedade Brasileira de Nefrologia, Sociedade Brasileira de Hipertensão. Arq Bras Cardiol. 2025;122(9):e20250624.',
+        doi: '10.36660/abc.20250624',
       },
       marcas: [
         { laboratorio: 'EMS', nome_comercial: 'HCTZ EMS', apresentacoes: ['12,5 mg', '25 mg'] },

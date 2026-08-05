@@ -35,12 +35,13 @@ const PROTOCOLOS: Record<string, Omit<TherapeuticPlan, 'diagnostico_selecionado'
         efeitos_adversos: ['Tosse seca (10–15%)', 'Hipotensão na 1ª dose', 'Hipercalemia', 'Angioedema (raro)'],
         monitoramento: ['Creatinina e K+ em 1–2 semanas após início', 'PA após 1ª dose'],
         alternativas: ['Losartana 50 mg se tosse por IECA (BRA)', 'Anlodipino 5 mg (BCC)', 'Clortalidona 12,5 mg'],
-        // RM-76: citação atualizada da 7ª (2020) para a 8ª edição (2024) —
-        // a recomendação clínica em si (enalapril como IECA de 1ª linha)
-        // não muda entre edições; só a referência de diretriz estava
-        // desatualizada. Metadados alinhados com `EVIDENCE_DB['has']` em
-        // `evidence-engine.ts`, que já indexava a 8ª edição.
-        evidencia: { diretriz: '8ª Diretriz Brasileira de Hipertensão Arterial', sociedade: 'SBC', ano: 2024, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'Múltiplos ECRs' }, citacao: 'Sociedade Brasileira de Cardiologia. Arq Bras Cardiol. 2024.', doi: '10.36660/abc.20240209' },
+        // RM-81: a citação "8ª Diretriz... 2024" (RM-76) não correspondia a
+        // nenhuma diretriz real localizável — corrigida para a Diretriz
+        // Brasileira de Hipertensão Arterial 2025 (DBHA 2025, SBC/SBN/SBH),
+        // verificada a partir do PDF oficial fornecido pelo usuário
+        // (Arq Bras Cardiol. 2025;122(9):e20250624). A recomendação clínica
+        // em si (enalapril como IECA de 1ª linha) não muda.
+        evidencia: { diretriz: 'Diretriz Brasileira de Hipertensão Arterial – 2025', sociedade: 'SBC/SBN/SBH', ano: 2025, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'Múltiplos ECRs' }, citacao: 'Sociedade Brasileira de Cardiologia, Sociedade Brasileira de Nefrologia, Sociedade Brasileira de Hipertensão. Arq Bras Cardiol. 2025;122(9):e20250624.', doi: '10.36660/abc.20250624' },
       }),
       sug({
         id: 'hctz',
@@ -54,8 +55,8 @@ const PROTOCOLOS: Record<string, Omit<TherapeuticPlan, 'diagnostico_selecionado'
         efeitos_adversos: ['Hipocalemia', 'Hiperuricemia', 'Hiperglicemia', 'Fotossensibilidade'],
         monitoramento: ['Eletrólitos e creatinina em 4 semanas', 'Ácido úrico se histórico de gota'],
         alternativas: ['Clortalidona 12,5 mg (preferível — maior duração)', 'Indapamida 1,5 mg SR'],
-        // RM-76: mesma correção de citação da 7ª para a 8ª edição (2024) — ver nota acima.
-        evidencia: { diretriz: '8ª Diretriz Brasileira de Hipertensão Arterial', sociedade: 'SBC', ano: 2024, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'ECR ALLHAT e meta-análises' }, citacao: 'Sociedade Brasileira de Cardiologia. Arq Bras Cardiol. 2024.', doi: '10.36660/abc.20240209' },
+        // RM-81: mesma correção de citação — ver nota acima (DBHA 2025 real, não a "8ª/2024" fabricada do RM-76).
+        evidencia: { diretriz: 'Diretriz Brasileira de Hipertensão Arterial – 2025', sociedade: 'SBC/SBN/SBH', ano: 2025, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'ECR ALLHAT e meta-análises' }, citacao: 'Sociedade Brasileira de Cardiologia, Sociedade Brasileira de Nefrologia, Sociedade Brasileira de Hipertensão. Arq Bras Cardiol. 2025;122(9):e20250624.', doi: '10.36660/abc.20250624' },
       }),
     ],
     nao_farmacologico: [

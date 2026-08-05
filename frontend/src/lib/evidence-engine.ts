@@ -134,15 +134,22 @@ export const EVIDENCE_DB: DiagnosticoEvidencia[] = [
     area: 'cardiologia',
     prevalencia_br: '32,5% dos adultos (~36 milhões)',
     mortalidade: 'Principal fator de risco CV — 40% dos óbitos por AVC e 25% por IAM',
-    resumo_clinico: 'Principal fator de risco modificável para doenças cardiovasculares, AVC, DRC e IC. Meta pressórica < 130/80 mmHg para maioria dos adultos com base em evidências de alto nível.',
+    // RM-81: a citação anterior ("8ª Diretriz Brasileira de Hipertensão
+    // Arterial", SBC 2024, DOI 10.36660/abc.20240209) não corresponde a
+    // nenhuma diretriz real localizável — o documento real fornecido pelo
+    // usuário (Diretriz Brasileira de Hipertensão Arterial – 2025, Arq Bras
+    // Cardiol. 2025;122(9):e20250624) compara-se explicitamente à "DBHA de
+    // 2020" como sua predecessora direta, nunca a uma edição de 2024.
+    // Citação corrigida para a diretriz real verificada (PDF fornecido).
+    resumo_clinico: 'Principal fator de risco modificável para doenças cardiovasculares, AVC, DRC e IC. Meta pressórica < 130/80 mmHg para todos os hipertensos, independentemente do risco cardiovascular ser baixo, moderado ou alto (DBHA 2025).',
     diretrizes: [
       {
-        id: 'dbha8',
-        sigla: 'DBHA-8 / SBC 2024',
-        titulo: '8ª Diretriz Brasileira de Hipertensão Arterial',
-        sociedade: 'Sociedade Brasileira de Cardiologia (SBC)',
-        ano: 2024,
-        url_oficial: 'https://doi.org/10.36660/abc.20240209',
+        id: 'dbha2025',
+        sigla: 'DBHA 2025',
+        titulo: 'Diretriz Brasileira de Hipertensão Arterial – 2025',
+        sociedade: 'Sociedade Brasileira de Cardiologia (SBC), Sociedade Brasileira de Nefrologia (SBN), Sociedade Brasileira de Hipertensão (SBH)',
+        ano: 2025,
+        url_oficial: 'https://doi.org/10.36660/abc.20250624',
         terapias: [
           {
             id: 'ieca-has',
@@ -313,8 +320,8 @@ export const EVIDENCE_DB: DiagnosticoEvidencia[] = [
       {
         id: 'has-meta-geral',
         tema: 'Meta pressórica — adultos em geral',
-        guideline_a: 'ACC/AHA 2017 + SBC/DBHA-8 2024',
-        posicao_a: 'Meta < 130/80 mmHg para maioria dos adultos com HAS. Tratamento farmacológico a partir de PAS ≥ 130 ou PAD ≥ 80 em pacientes de risco moderado-alto.',
+        guideline_a: 'ACC/AHA 2017 + SBC/DBHA 2025',
+        posicao_a: 'Meta < 130/80 mmHg para TODOS os hipertensos, independentemente do risco CV ser baixo, moderado ou alto (DBHA 2025). Tratamento farmacológico inicia-se em PA ≥ 140/90 mmHg em geral, ou já a partir de 130–139/80–89 mmHg após 3 meses de MNM se risco CV alto.',
         classe_a: 'I',
         nivel_ev_a: 'A',
         guideline_b: 'ESC/ESH 2018 (revisão 2023)',
@@ -322,26 +329,32 @@ export const EVIDENCE_DB: DiagnosticoEvidencia[] = [
         classe_b: 'I',
         nivel_ev_b: 'A',
         grau_conflito: 'moderado',
-        nota_clinica: 'No Brasil, adota-se a recomendação SBC/DBHA-8 (meta < 130/80). Em pacientes idosos frágeis, aceitar meta ESC (< 140/90) para evitar hipotensão ortostática. A diferença prática: pacientes com PA 130–139/80–89 mmHg serão medicados pela diretriz americana/brasileira, mas não pela europeia.',
+        nota_clinica: 'No Brasil, adota-se a recomendação SBC/DBHA 2025 (meta < 130/80 para todos). Em pacientes idosos frágeis, aceitar meta ESC (< 140/90) para evitar hipotensão ortostática. A diferença prática: pacientes com PA 130–139/80–89 mmHg serão medicados pela diretriz americana/brasileira, mas não pela europeia.',
       },
       {
         id: 'has-meta-idosos',
         tema: 'Meta pressórica — idosos ≥ 80 anos',
-        guideline_a: 'ACC/AHA 2017',
-        posicao_a: 'Meta < 130/80 mmHg se tolerado, incluindo ≥ 80 anos. SPRINT mostrou benefício em ≥ 75 anos.',
+        // RM-81: DBHA 2025 diverge da agrupada anteriormente com ESC/ESH
+        // para idosos — recomenda < 130/80 para a MAIORIA dos idosos
+        // (incluindo ≥ 80 anos), reservando "reduzir até o menor valor
+        // tolerado" apenas para idosos frágeis/muito idosos. Isso alinha
+        // a DBHA 2025 com o ACC/AHA (guideline_a), não com o ESC/ESH —
+        // reagrupado para refletir a posição real da diretriz brasileira.
+        guideline_a: 'ACC/AHA 2017 + SBC/DBHA 2025',
+        posicao_a: 'Meta < 130/80 mmHg para a maioria dos idosos, incluindo ≥ 80 anos, se tolerado. Para idosos frágeis, muito idosos, ou com condições que comprometam a expectativa de vida, reduzir a PA até o menor valor tolerado (DBHA 2025). SPRINT mostrou benefício em ≥ 75 anos.',
         classe_a: 'I',
         nivel_ev_a: 'A',
-        guideline_b: 'ESC/ESH 2018 + DBHA-8 2024',
+        guideline_b: 'ESC/ESH 2018',
         posicao_b: 'Meta < 150/90 mmHg em ≥ 80 anos. Considerar < 140/90 se bem tolerado. Evitar PAS < 120 mmHg pelo risco de eventos adversos.',
         classe_b: 'IIa',
         nivel_ev_b: 'B',
         grau_conflito: 'moderado',
-        nota_clinica: 'Para pacientes ≥ 80 anos, seguir abordagem individualizada: se funcionalmente independentes (sem fragilidade), meta < 140/90 é razoável. Não forçar < 130/80 em idosos frágeis — risco de quedas, hipotensão, síncope e piora cognitiva. SPRINT excluiu pacientes com demência e institucionalizados.',
+        nota_clinica: 'A DBHA 2025 e o ACC/AHA convergem em meta < 130/80 para a maioria dos idosos (individualizando para frágeis/muito idosos), mais agressiva que o ESC/ESH. Para pacientes ≥ 80 anos frágeis, seguir abordagem individualizada: não forçar < 130/80 se houver risco de quedas, hipotensão, síncope e piora cognitiva. SPRINT excluiu pacientes com demência e institucionalizados.',
       },
       {
         id: 'has-estadio-1',
         tema: 'Definição de estágio 1 — limiar de tratamento farmacológico',
-        guideline_a: 'ACC/AHA 2017 + SBC/DBHA-8 2024',
+        guideline_a: 'ACC/AHA 2017 + SBC/DBHA 2025',
         posicao_a: 'Estágio 1: PAS 130–139 ou PAD 80–89. Iniciar fármaco em estágio 1 + risco CV de 10 anos ≥ 10% (pooled cohort). Para baixo risco: mudança de estilo de vida por 3–6 meses antes do fármaco.',
         classe_a: 'I',
         nivel_ev_a: 'A',
@@ -355,7 +368,7 @@ export const EVIDENCE_DB: DiagnosticoEvidencia[] = [
       {
         id: 'has-primeira-linha',
         tema: 'Classe farmacológica de 1ª linha em HAS sem comorbidades',
-        guideline_a: 'ACC/AHA 2017 + SBC/DBHA-8 2024',
+        guideline_a: 'ACC/AHA 2017 + SBC/DBHA 2025',
         posicao_a: 'Quatro classes equivalentes: tiazídico (ou tiazídico-like), BCC dihidropiridinídico, IECA ou BRA. Escolha individualizada por perfil do paciente.',
         classe_a: 'I',
         nivel_ev_a: 'A',

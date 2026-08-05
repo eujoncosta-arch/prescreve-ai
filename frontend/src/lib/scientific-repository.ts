@@ -12,26 +12,29 @@ export const SCIENTIFIC_REPOSITORY: ScientificEntry[] = [
   // HIPERTENSÃO ARTERIAL (I10)
   // ══════════════════════════════════════════════════════════
   {
-    // RM-76: substituída a 7ª edição (2020, DOI 10.36660/abc.20201238) pela
-    // 8ª edição (2024) — a 7ª estava desatualizada e potencialmente
-    // enganosa se apresentada como diretriz vigente (achado da reconciliação
-    // contra `evidence-engine.ts`, que já indexava a DBHA-8/2024 como
-    // `dbha8` desde antes desta correção). Metadados (título/ano/DOI)
-    // alinhados 1:1 com a entrada já curada em `EVIDENCE_DB['has'].diretrizes`.
-    id: 'sci-sbchi-2024',
-    titulo: '8ª Diretriz Brasileira de Hipertensão Arterial',
+    // RM-81: a correção do RM-76 (7ª edição/2020 → "8ª edição/2024") citava
+    // uma diretriz que não corresponde a nenhuma publicação real localizável
+    // — o "DOI" e o título já estavam em `evidence-engine.ts` antes de
+    // qualquer RM desta sessão, nunca verificados contra uma fonte real.
+    // O documento real fornecido pelo usuário (Diretriz Brasileira de
+    // Hipertensão Arterial – 2025, Arq Bras Cardiol. 2025;122(9):e20250624,
+    // DOI 10.36660/abc.20250624) compara-se explicitamente à "DBHA de 2020"
+    // como sua predecessora direta — nunca a uma edição de 2024. Corrigido
+    // para a diretriz real, verificada por leitura do PDF oficial.
+    id: 'sci-dbha-2025',
+    titulo: 'Diretriz Brasileira de Hipertensão Arterial – 2025',
     tipo: 'diretriz',
-    sociedade_ou_journal: 'Sociedade Brasileira de Cardiologia (SBC)',
-    ano: 2024,
-    doi: '10.36660/abc.20240209',
+    sociedade_ou_journal: 'Sociedade Brasileira de Cardiologia (SBC), Sociedade Brasileira de Nefrologia (SBN), Sociedade Brasileira de Hipertensão (SBH)',
+    ano: 2025,
+    doi: '10.36660/abc.20250624',
     cids_relacionados: ['I10', 'I11', 'I12', 'I13'],
-    moleculas_relacionadas: ['Losartana', 'Enalapril', 'Anlodipino', 'Hidroclorotiazida', 'Clortalidona', 'Carvedilol'],
-    classes_relacionadas: ['BRA', 'IECA', 'BCC', 'Diurético Tiazídico', 'Beta-bloqueador'],
+    moleculas_relacionadas: ['Losartana', 'Enalapril', 'Anlodipino', 'Hidroclorotiazida', 'Clortalidona', 'Espironolactona'],
+    classes_relacionadas: ['BRA', 'IECA', 'BCC', 'Diurético Tiazídico', 'ARM'],
     nivel_evidencia: 'A',
     grau_recomendacao: 'I',
-    resumo: 'Mantém a meta pressórica < 130/80 mmHg para a maioria dos adultos com base em evidências de alto nível, com escore de risco cardiovascular global e recomendações sobre proteção de órgão-alvo. Edição vigente — substitui a 7ª Diretriz (2020).',
-    data_inclusao: '2024-01-01',
-    data_proxima_revisao: '2029-01-01',
+    resumo: 'Meta pressórica < 130/80 mmHg para todos os hipertensos, independentemente do risco cardiovascular ser baixo, moderado ou alto (mudança em relação à DBHA 2020, que reservava essa meta a pacientes de maior risco). Reclassifica a pré-hipertensão (PAS 120–139 e/ou PAD 80–89 mmHg, absorvendo a antiga categoria "PA ótima"). Recomenda diuréticos tiazídicos/similares, IECA ou BRA e BCC como classes preferenciais; associação dupla em dose baixa como início para a maioria dos pacientes. Primeira edição com capítulo dedicado ao manejo da HA no SUS (~75% dos pacientes hipertensos no Brasil).',
+    data_inclusao: '2025-01-01',
+    data_proxima_revisao: '2030-01-01',
   },
   {
     id: 'sci-esc-2018-has',
