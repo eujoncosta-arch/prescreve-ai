@@ -88,7 +88,7 @@ const BASE_CLINICA: ConditionRule[] = [
 
   // ══════════════════════════════════════════════════════════
   // 1. HIPERTENSÃO ARTERIAL SISTÊMICA — I10
-  // Referência: 7ª Diretriz Brasileira de Hipertensão — SBC 2020
+  // Referência: Diretriz Brasileira de Hipertensão Arterial – 2025 (DBHA 2025)
   // ══════════════════════════════════════════════════════════
   {
     id: 'has',
@@ -98,12 +98,12 @@ const BASE_CLINICA: ConditionRule[] = [
     criterios: [
       {
         descricao: 'PA sistólica ≥ 140 mmHg',
-        check: a => (sv(a).pa_sistolica ?? 0) >= 140,
+        check: a => { const s = sv(a).pa_sistolica; return s !== undefined && s >= 140; },
         peso: 10,
       },
       {
         descricao: 'PA diastólica ≥ 90 mmHg',
-        check: a => (sv(a).pa_diastolica ?? 0) >= 90,
+        check: a => { const d = sv(a).pa_diastolica; return d !== undefined && d >= 90; },
         peso: 10,
       },
       {
@@ -118,7 +118,7 @@ const BASE_CLINICA: ConditionRule[] = [
       },
       {
         descricao: 'IMC ≥ 30 kg/m² (obesidade)',
-        check: a => (a.imc ?? 0) >= 30 || has(txt(a.hda), 'obesidade'),
+        check: a => (a.imc !== undefined && a.imc >= 30) || has(txt(a.hda), 'obesidade'),
         peso: 3,
       },
       {
@@ -140,17 +140,21 @@ const BASE_CLINICA: ConditionRule[] = [
     red_flags: [
       {
         descricao: 'PA ≥ 180/110 mmHg — urgência/emergência hipertensiva',
-        check: a => (sv(a).pa_sistolica ?? 0) >= 180 || (sv(a).pa_diastolica ?? 0) >= 110,
+        check: a => {
+          const s = sv(a).pa_sistolica;
+          const d = sv(a).pa_diastolica;
+          return (s !== undefined && s >= 180) || (d !== undefined && d >= 110);
+        },
         urgente: true,
       },
       {
         descricao: 'Sintomas neurológicos com PA elevada — suspeitar AVC',
-        check: a => (sv(a).pa_sistolica ?? 0) >= 160 && has(txt(a.queixa_principal, a.hda), 'neurológico', 'hemiplegia', 'afasia', 'visão dupla', 'desvio', 'fraqueza facial'),
+        check: a => { const s = sv(a).pa_sistolica; return s !== undefined && s >= 160 && has(txt(a.queixa_principal, a.hda), 'neurológico', 'hemiplegia', 'afasia', 'visão dupla', 'desvio', 'fraqueza facial'); },
         urgente: true,
       },
       {
         descricao: 'Dor precordial com PA elevada — suspeitar SCA',
-        check: a => (sv(a).pa_sistolica ?? 0) >= 140 && has(txt(a.queixa_principal, a.hda), 'peito', 'precordial', 'opressão', 'angina'),
+        check: a => { const s = sv(a).pa_sistolica; return s !== undefined && s >= 140 && has(txt(a.queixa_principal, a.hda), 'peito', 'precordial', 'opressão', 'angina'); },
         urgente: false,
       },
     ],
@@ -174,15 +178,15 @@ const BASE_CLINICA: ConditionRule[] = [
     ],
     diferenciais: ['Hipertensão do avental branco', 'Hipertensão secundária (renal, endócrina)', 'Ansiedade com elevação pressórica episódica'],
     guideline: {
-      diretriz: '7ª Diretriz Brasileira de Hipertensão Arterial',
-      sociedade: 'Sociedade Brasileira de Cardiologia (SBC)',
-      ano: 2020,
+      diretriz: 'Diretriz Brasileira de Hipertensão Arterial – 2025',
+      sociedade: 'Sociedade Brasileira de Cardiologia (SBC), Sociedade Brasileira de Nefrologia (SBN), Sociedade Brasileira de Hipertensão (SBH)',
+      ano: 2025,
       nivel_evidencia: 'A',
       grau_recomendacao: 'I',
-      link: 'http://publicacoes.cardiol.br/portal/abc/portugues/2021/v11601/pdf/11601027.pdf',
+      link: 'https://doi.org/10.36660/abc.20250624',
     },
     raciocinio_base:
-      'Diagnóstico confirmado por PA ≥ 140/90 mmHg em duas ou mais aferições em ocasiões distintas, conforme 7ª Diretriz SBC 2020. A presença de fatores de risco cardiovascular associados (dislipidemia, DM, tabagismo, obesidade, HF) estratifica o risco e orienta a meta pressórica e a escolha do esquema anti-hipertensivo.',
+      'Diagnóstico confirmado por PA ≥ 140/90 mmHg em duas ou mais aferições em ocasiões distintas, conforme DBHA 2025. A presença de fatores de risco cardiovascular associados (dislipidemia, DM, tabagismo, obesidade, HF) estratifica o risco; a meta pressórica é < 130/80 mmHg para todos os hipertensos, independentemente do risco cardiovascular, e orienta a escolha do esquema anti-hipertensivo (diurético tiazídico/similar, IECA/BRA, ou BCC como classes preferenciais).',
   },
 
   // ══════════════════════════════════════════════════════════
@@ -197,12 +201,12 @@ const BASE_CLINICA: ConditionRule[] = [
     criterios: [
       {
         descricao: 'Glicemia de jejum ≥ 126 mg/dL (critério diagnóstico)',
-        check: a => (lab(a, 'glicemia') ?? 0) >= 126,
+        check: a => { const g = lab(a, 'glicemia'); return g !== undefined && g >= 126; },
         peso: 10,
       },
       {
         descricao: 'HbA1c ≥ 6,5% (critério diagnóstico)',
-        check: a => (lab(a, 'hba1c') ?? 0) >= 6.5,
+        check: a => { const h = lab(a, 'hba1c'); return h !== undefined && h >= 6.5; },
         peso: 10,
       },
       {
@@ -222,7 +226,7 @@ const BASE_CLINICA: ConditionRule[] = [
       },
       {
         descricao: 'IMC ≥ 30 kg/m² (obesidade — fator de risco major)',
-        check: a => (a.imc ?? 0) >= 30,
+        check: a => a.imc !== undefined && a.imc >= 30,
         peso: 4,
       },
       {
@@ -244,12 +248,12 @@ const BASE_CLINICA: ConditionRule[] = [
     red_flags: [
       {
         descricao: 'Glicemia > 300 mg/dL — risco de descompensação hiperosmolar ou cetoacidose',
-        check: a => (lab(a, 'glicemia') ?? 0) > 300,
+        check: a => { const g = lab(a, 'glicemia'); return g !== undefined && g > 300; },
         urgente: true,
       },
       {
         descricao: 'Sintomas de cetoacidose (náusea, vômito, dor abdominal, hálito cetônico)',
-        check: a => has(txt(a.queixa_principal, a.hda), 'cetoacidose', 'náusea', 'vômito', 'dor abdominal') && (lab(a, 'glicemia') ?? 0) > 250,
+        check: a => { const g = lab(a, 'glicemia'); return has(txt(a.queixa_principal, a.hda), 'cetoacidose', 'náusea', 'vômito', 'dor abdominal') && g !== undefined && g > 250; },
         urgente: true,
       },
     ],
@@ -293,22 +297,22 @@ const BASE_CLINICA: ConditionRule[] = [
     criterios: [
       {
         descricao: 'LDL-c ≥ 130 mg/dL',
-        check: a => (lab(a, 'ldl') ?? 0) >= 130,
+        check: a => { const v = lab(a, 'ldl'); return v !== undefined && v >= 130; },
         peso: 8,
       },
       {
         descricao: 'Colesterol total ≥ 200 mg/dL',
-        check: a => (lab(a, 'col_total') ?? 0) >= 200,
+        check: a => { const v = lab(a, 'col_total'); return v !== undefined && v >= 200; },
         peso: 7,
       },
       {
         descricao: 'Triglicerídeos ≥ 150 mg/dL',
-        check: a => (lab(a, 'tg') ?? 0) >= 150,
+        check: a => { const v = lab(a, 'tg'); return v !== undefined && v >= 150; },
         peso: 6,
       },
       {
         descricao: 'HDL-c baixo (< 40 mg/dL H / < 50 mg/dL M)',
-        check: a => (lab(a, 'hdl') ?? 99) < 40,
+        check: a => { const v = lab(a, 'hdl'); return v !== undefined && v < 40; },
         peso: 6,
       },
       {
@@ -318,7 +322,7 @@ const BASE_CLINICA: ConditionRule[] = [
       },
       {
         descricao: 'Obesidade (IMC ≥ 30)',
-        check: a => (a.imc ?? 0) >= 30,
+        check: a => a.imc !== undefined && a.imc >= 30,
         peso: 3,
       },
       {
@@ -335,7 +339,7 @@ const BASE_CLINICA: ConditionRule[] = [
     red_flags: [
       {
         descricao: 'TG > 500 mg/dL — risco de pancreatite aguda',
-        check: a => (lab(a, 'tg') ?? 0) > 500,
+        check: a => { const v = lab(a, 'tg'); return v !== undefined && v > 500; },
         urgente: true,
       },
     ],
@@ -398,7 +402,7 @@ const BASE_CLINICA: ConditionRule[] = [
       },
       {
         descricao: 'SpO2 reduzida < 95%',
-        check: a => (sv(a).spo2 ?? 100) < 95,
+        check: a => { const s = sv(a).spo2; return s !== undefined && s < 95; },
         peso: 4,
       },
       {
@@ -415,12 +419,12 @@ const BASE_CLINICA: ConditionRule[] = [
     red_flags: [
       {
         descricao: 'SpO2 < 90% — risco de insuficiência respiratória',
-        check: a => (sv(a).spo2 ?? 100) < 90,
+        check: a => { const s = sv(a).spo2; return s !== undefined && s < 90; },
         urgente: true,
       },
       {
         descricao: 'FR > 25 irpm — crise asmática grave',
-        check: a => (sv(a).fr ?? 0) > 25,
+        check: a => { const fr = sv(a).fr; return fr !== undefined && fr > 25; },
         urgente: true,
       },
       {
@@ -495,19 +499,23 @@ const BASE_CLINICA: ConditionRule[] = [
       },
       {
         descricao: 'SpO2 reduzida < 95%',
-        check: a => (sv(a).spo2 ?? 100) < 95,
+        check: a => { const s = sv(a).spo2; return s !== undefined && s < 95; },
         peso: 3,
       },
     ],
     red_flags: [
       {
         descricao: 'SpO2 < 88% — hipoxemia grave, avaliar suporte ventilatório',
-        check: a => (sv(a).spo2 ?? 100) < 88,
+        check: a => { const s = sv(a).spo2; return s !== undefined && s < 88; },
         urgente: true,
       },
       {
         descricao: 'Exacerbação grave: FR > 25, uso de musculatura acessória, confusão mental',
-        check: a => (sv(a).fr ?? 0) > 25 || (sv(a).glasgow ?? 15) < 13 || has(txt(a.exame_fisico, a.hda), 'confusão', 'sonolência', 'tiragem', 'musculatura acessória'),
+        check: a => {
+          const fr = sv(a).fr;
+          const gcs = sv(a).glasgow;
+          return (fr !== undefined && fr > 25) || (gcs !== undefined && gcs < 13) || has(txt(a.exame_fisico, a.hda), 'confusão', 'sonolência', 'tiragem', 'musculatura acessória');
+        },
         urgente: true,
       },
     ],
@@ -583,22 +591,26 @@ const BASE_CLINICA: ConditionRule[] = [
       },
       {
         descricao: 'SpO2 < 95%',
-        check: a => (sv(a).spo2 ?? 100) < 95,
+        check: a => { const s = sv(a).spo2; return s !== undefined && s < 95; },
         peso: 4,
       },
     ],
     red_flags: [
       {
         descricao: 'SpO2 < 90% — descompensação grave',
-        check: a => (sv(a).spo2 ?? 100) < 90,
+        check: a => { const s = sv(a).spo2; return s !== undefined && s < 90; },
         urgente: true,
       },
       {
         descricao: 'Edema agudo de pulmão (EAP) — ortopneia intensa + crepitações + SpO2 < 90%',
-        check: a =>
-          (sv(a).spo2 ?? 100) < 90 &&
-          has(txt(a.hda, a.exame_fisico), 'ortopneia', 'crepitação', 'estertores') &&
-          has(txt(a.queixa_principal, a.hda), 'falta de ar'),
+        check: a => {
+          const s = sv(a).spo2;
+          return (
+            s !== undefined && s < 90 &&
+            has(txt(a.hda, a.exame_fisico), 'ortopneia', 'crepitação', 'estertores') &&
+            has(txt(a.queixa_principal, a.hda), 'falta de ar')
+          );
+        },
         urgente: true,
       },
     ],
@@ -670,7 +682,7 @@ const BASE_CLINICA: ConditionRule[] = [
       },
       {
         descricao: 'PA alterada (muito elevada ou hipotensão)',
-        check: a => (sv(a).pa_sistolica ?? 120) > 180 || (sv(a).pa_sistolica ?? 120) < 90,
+        check: a => { const s = sv(a).pa_sistolica; return s !== undefined && (s > 180 || s < 90); },
         peso: 4,
       },
     ],
@@ -684,12 +696,12 @@ const BASE_CLINICA: ConditionRule[] = [
       },
       {
         descricao: 'Hipotensão (PAS < 90) com dor torácica — choque cardiogênico',
-        check: a => (sv(a).pa_sistolica ?? 120) < 90 && has(txt(a.queixa_principal, a.hda), 'peito', 'dor'),
+        check: a => { const s = sv(a).pa_sistolica; return s !== undefined && s < 90 && has(txt(a.queixa_principal, a.hda), 'peito', 'dor'); },
         urgente: true,
       },
       {
         descricao: 'FC > 100 bpm com dor torácica — instabilidade hemodinâmica',
-        check: a => (sv(a).fc ?? 0) > 100 && has(txt(a.queixa_principal, a.hda), 'peito', 'dor'),
+        check: a => { const fc = sv(a).fc; return fc !== undefined && fc > 100 && has(txt(a.queixa_principal, a.hda), 'peito', 'dor'); },
         urgente: true,
       },
     ],
@@ -733,7 +745,7 @@ const BASE_CLINICA: ConditionRule[] = [
     criterios: [
       {
         descricao: 'TSH elevado (> 4,5 mUI/L)',
-        check: a => (lab(a, 'tsh') ?? 0) > 4.5,
+        check: a => { const t = lab(a, 'tsh'); return t !== undefined && t > 4.5; },
         peso: 10,
       },
       {
@@ -759,20 +771,31 @@ const BASE_CLINICA: ConditionRule[] = [
       },
       {
         descricao: 'Sinais: mixedema, bradicardia, reflexos lentos, pele seca',
-        check: a => has(txt(a.exame_fisico), 'mixedema', 'bradicardia', 'pele seca', 'edema periorbitário', 'reflexo') ||
-          (sv(a).fc ?? 70) < 60,
+        check: a => {
+          const fc = sv(a).fc;
+          return has(txt(a.exame_fisico), 'mixedema', 'bradicardia', 'pele seca', 'edema periorbitário', 'reflexo') ||
+            (fc !== undefined && fc < 60);
+        },
         peso: 6,
       },
       {
         descricao: 'Dislipidemia associada (hipotireoidismo causa secundária)',
-        check: a => (lab(a, 'col_total') ?? 0) > 200 || (lab(a, 'ldl') ?? 0) > 130,
+        check: a => {
+          const ct = lab(a, 'col_total');
+          const ldl = lab(a, 'ldl');
+          return (ct !== undefined && ct > 200) || (ldl !== undefined && ldl > 130);
+        },
         peso: 3,
       },
     ],
     red_flags: [
       {
         descricao: 'Coma mixedematoso — hipotermia + bradicardia + alteração do nível de consciência',
-        check: a => (sv(a).glasgow ?? 15) < 13 && (sv(a).fc ?? 70) < 50,
+        check: a => {
+          const gcs = sv(a).glasgow;
+          const fc = sv(a).fc;
+          return gcs !== undefined && gcs < 13 && fc !== undefined && fc < 50;
+        },
         urgente: true,
       },
     ],
@@ -817,7 +840,7 @@ const BASE_CLINICA: ConditionRule[] = [
       },
       {
         descricao: 'Febre ≥ 38°C (critério de Centor)',
-        check: a => (sv(a).temperatura ?? 36) >= 38,
+        check: a => { const t = sv(a).temperatura; return t !== undefined && t >= 38; },
         peso: 5,
       },
       {
@@ -892,12 +915,12 @@ const BASE_CLINICA: ConditionRule[] = [
       },
       {
         descricao: 'Febre ≥ 38°C',
-        check: a => (sv(a).temperatura ?? 36) >= 38,
+        check: a => { const t = sv(a).temperatura; return t !== undefined && t >= 38; },
         peso: 7,
       },
       {
         descricao: 'Dispneia e/ou taquipneia (FR ≥ 22 irpm)',
-        check: a => (sv(a).fr ?? 0) >= 22 || has(txt(a.queixa_principal, a.hda), 'dispneia', 'falta de ar'),
+        check: a => { const fr = sv(a).fr; return (fr !== undefined && fr >= 22) || has(txt(a.queixa_principal, a.hda), 'dispneia', 'falta de ar'); },
         peso: 6,
       },
       {
@@ -907,17 +930,17 @@ const BASE_CLINICA: ConditionRule[] = [
       },
       {
         descricao: 'SpO2 < 95%',
-        check: a => (sv(a).spo2 ?? 100) < 95,
+        check: a => { const s = sv(a).spo2; return s !== undefined && s < 95; },
         peso: 5,
       },
       {
         descricao: 'Leucocitose > 12.000/mm³',
-        check: a => (lab(a, 'leuco') ?? 0) > 12,
+        check: a => { const l = lab(a, 'leuco'); return l !== undefined && l > 12; },
         peso: 5,
       },
       {
         descricao: 'PCR elevada (> 10 mg/L)',
-        check: a => (lab(a, 'pcr') ?? 0) > 10,
+        check: a => { const p = lab(a, 'pcr'); return p !== undefined && p > 10; },
         peso: 4,
       },
       {
@@ -929,15 +952,21 @@ const BASE_CLINICA: ConditionRule[] = [
     red_flags: [
       {
         descricao: 'SpO2 < 90% — hipoxemia grave, avaliar internação + suporte O2',
-        check: a => (sv(a).spo2 ?? 100) < 90,
+        check: a => { const s = sv(a).spo2; return s !== undefined && s < 90; },
         urgente: true,
       },
       {
         descricao: 'CURB-65 ≥ 3 — mortalidade elevada, avaliar internação em UTI',
-        check: a =>
-          [(sv(a).fr ?? 0) >= 30,
-           (sv(a).pa_sistolica ?? 120) < 90 || (sv(a).pa_diastolica ?? 80) <= 60,
-           has(txt(a.hda, a.exame_fisico), 'confusão', 'desorientação')].filter(Boolean).length >= 2,
+        check: a => {
+          const fr = sv(a).fr;
+          const sis = sv(a).pa_sistolica;
+          const dia = sv(a).pa_diastolica;
+          return [
+            fr !== undefined && fr >= 30,
+            (sis !== undefined && sis < 90) || (dia !== undefined && dia <= 60),
+            has(txt(a.hda, a.exame_fisico), 'confusão', 'desorientação'),
+          ].filter(Boolean).length >= 2;
+        },
         urgente: true,
       },
       {
