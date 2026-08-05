@@ -149,19 +149,25 @@ export const SCIENTIFIC_REPOSITORY: ScientificEntry[] = [
   // INSUFICIÊNCIA CARDÍACA (I50)
   // ══════════════════════════════════════════════════════════
   {
-    id: 'sci-esc-ic-2021',
-    titulo: 'ESC Guidelines for the diagnosis and treatment of acute and chronic heart failure 2021',
+    // RM-76 (continuação): substituída a edição-base de 2021 (DOI
+    // 10.1093/eurheartj/ehab368) pela "2023 Focused Update" (DOI
+    // 10.1093/eurheartj/ehad195) — mesmo padrão do achado da diretriz de
+    // HAS. `evidence-engine.ts` já indexava o update de 2023 como
+    // `esc-hf-2023` desde antes desta correção. Conteúdo clínico
+    // (quarteto terapêutico) inalterado entre as duas versões.
+    id: 'sci-esc-ic-2023',
+    titulo: 'ESC Guidelines for Heart Failure — 2023 Focused Update',
     tipo: 'diretriz',
     sociedade_ou_journal: 'European Society of Cardiology (ESC)',
-    ano: 2021,
-    doi: '10.1093/eurheartj/ehab368',
+    ano: 2023,
+    doi: '10.1093/eurheartj/ehad195',
     cids_relacionados: ['I50', 'I11.0', 'I42'],
     moleculas_relacionadas: ['Carvedilol', 'Metoprolol', 'Bisoprolol', 'Enalapril', 'Sacubitril/Valsartana', 'Espironolactona', 'Eplerenona', 'Empagliflozina', 'Dapagliflozina', 'Furosemida'],
     classes_relacionadas: ['Beta-bloqueador', 'IECA', 'ARNI', 'ARM', 'SGLT-2', 'Diurético de Alça'],
     nivel_evidencia: 'A',
     grau_recomendacao: 'I',
-    resumo: 'Quarteto terapêutico obrigatório na IC-FEr (FE ≤ 40%): IECA/ARNI + beta-bloqueador + ARM + SGLT-2. ARNI (sacubitril/valsartana) como Classe I, substituindo IECA se tolerado. SGLT-2 incluídos formalmente no quarteto. Meta de FC < 70 bpm. ICD em FE ≤ 35% com NYHA ≥ II.',
-    data_inclusao: '2021-08-27',
+    resumo: 'Quarteto terapêutico obrigatório na IC-FEr (FE ≤ 40%): IECA/ARNI + beta-bloqueador + ARM + SGLT-2. ARNI (sacubitril/valsartana) como Classe I, substituindo IECA se tolerado. SGLT-2 incluídos formalmente no quarteto. Meta de FC < 70 bpm. ICD em FE ≤ 35% com NYHA ≥ II. Edição vigente — atualização focada da diretriz de 2021.',
+    data_inclusao: '2023-08-25',
     data_proxima_revisao: '2026-01-01',
   },
   {
