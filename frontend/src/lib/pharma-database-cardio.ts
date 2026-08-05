@@ -1504,4 +1504,57 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
     ],
   },
 
+  // Achado reportado pelo usuário: o card de Olmesartana (`pharma-database.ts`,
+  // id `olmesartana`) só exibia a monoterapia — a associação Holmes H®
+  // (olmesartana + hidroclorotiazida) não existia em nenhuma fonte do
+  // PHARMA_DB, mesmo padrão estrutural da Zart H® acima (produto real
+  // ausente do motor por existir em só uma fonte, RM-58/RM-66). Confirmado
+  // como produto real Eurofarma (WebSearch/WebFetch, 2026-08):
+  // consultaremedios.com.br/holmes-h/bula e eurofarma.com.br/produtos/
+  // holmes-h — 3 apresentações reais (20/12,5 mg, 40/12,5 mg, 40/25 mg).
+  // Dados clínicos (posologia, contraindicações, interações, populações
+  // especiais) portados 1:1 da bula já curada em `eurofarma-sync.ts`
+  // (id `euro-holmes-h`), não inventados aqui.
+  {
+    id: 'olmesartana_hidroclorotiazida',
+    guidelines_referencia: ['Diretriz Brasileira de Hipertensão Arterial – 2025 (DBHA 2025) — associação BRA + tiazídico para HAS não controlada em monoterapia'],
+    nivel_evidencia: 'A',
+    grau_recomendacao: 'I',
+    uso_pediatrico: 'nao_aplicavel',
+    molecula: 'Olmesartana Medoxomila + Hidroclorotiazida',
+    nome_generico: 'Olmesartana Medoxomila + Hidroclorotiazida',
+    sinonimos: ['olmesartana + hidroclorotiazida', 'olmesartana hidroclorotiazida', 'holmes h', 'olmesartana hctz'],
+    categoria: 'antihipertensivo',
+    classe: 'BRA + Diurético Tiazídico (Associação)',
+    subclasse: 'Bloqueador do Receptor AT1 + Diurético tiazídico',
+    indicacoes_principais: ['HAS não controlada em monoterapia com BRA ou tiazídico isolados (PA > 140/90 mmHg)'],
+    dose_adulto: {
+      habitual: '20/12,5', min: '20/12,5', max: '40/25', unidade: 'mg', via: 'VO',
+      frequencias: ['1x/dia'],
+      instrucoes: 'Iniciar pela menor apresentação (20/12,5 mg) 1x/dia. Ajustes possíveis a intervalos de 2–4 semanas até 40/25 mg/dia, se necessário. Não partir/mastigar o comprimido.',
+    },
+    ajuste_renal: {
+      normal: '20/12,5–40/25 mg/dia', tfg_60_30: 'Cautela — monitorar função renal de perto',
+      tfg_30_15: 'Evitar (componente tiazídico perde eficácia e agrava risco de hipopotassemia/hiperazotemia)',
+      tfg_lt_15: 'Evitar — contraindicado em IR grave/anúria', dialisavel: false,
+    },
+    ajuste_hepatico: {
+      child_a: 'Sem ajuste formal — monitorar eletrólitos',
+      child_b: 'Cautela — iniciar pela menor apresentação (20/12,5 mg)',
+      child_c: 'Evitar — componente tiazídico pode precipitar coma hepático em alterações do equilíbrio hidroeletrolítico',
+    },
+    contraindicacoes_rapidas: ['Gravidez (especialmente 2º/3º trimestre)', 'Insuficiência renal grave ou anúria', 'Hipersensibilidade a sulfonamidas (hidroclorotiazida)', 'Uso concomitante de alisquireno em DM/DRC'],
+    interacoes_importantes: [
+      { com: 'AINEs', severidade: 'moderada', descricao: 'Reduzem o efeito anti-hipertensivo e podem prejudicar a função renal' },
+      { com: 'Lítio', severidade: 'grave', descricao: 'Aumento de litemia — risco de toxicidade' },
+      { com: 'Barbitúricos/narcóticos/álcool', severidade: 'moderada', descricao: 'Potencializam a hipotensão, principalmente no início do tratamento' },
+      { com: 'Corticosteroides', severidade: 'moderada', descricao: 'Perda adicional de eletrólitos (componente tiazídico)' },
+    ],
+    alertas_especiais: ['Hipotensão sintomática, principalmente no início do tratamento', 'Monitorar eletrólitos e função renal periodicamente', 'Efeitos metabólicos: hiperglicemia, aumento de colesterol/TG, hiperuricemia', 'Fotossensibilidade — orientar fotoproteção em uso prolongado', 'Pode agravar ou desencadear lúpus eritematoso', 'Iniciar pela menor apresentação disponível, nunca pela maior'],
+    uso_gestante: 'contraindicado', uso_lactante: 'contraindicado',
+    marcas: [
+      { nome: 'Holmes H®', laboratorio: 'Eurofarma', concentracoes: ['20/12,5 mg', '40/12,5 mg', '40/25 mg'], formas: ['Comprimido revestido'], lab_id: 'eurofarma' },
+    ],
+  },
+
 ];

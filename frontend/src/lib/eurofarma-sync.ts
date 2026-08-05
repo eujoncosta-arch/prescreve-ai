@@ -175,6 +175,41 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
     link_bula_profissional: 'https://eurofarma.com.br/produtos/bulas/healthcare/pt/bula-holmes.pdf',
   },
 
+  // Achado reportado pelo usuário (nova varredura pós-RM-82): a monoterapia
+  // Holmes® (acima) estava cadastrada, mas a associação Holmes H®
+  // (olmesartana + hidroclorotiazida) — mesmo padrão da Zart H® já presente
+  // neste arquivo — estava totalmente ausente. Confirmado como produto real
+  // Eurofarma via WebSearch/WebFetch (consultaremedios.com.br/holmes-h/bula,
+  // eurofarma.com.br/produtos/holmes-h): 3 apresentações reais (20/12,5 mg,
+  // 40/12,5 mg, 40/25 mg), indicação HAS não controlada em monoterapia.
+  // registro_anvisa omitido (mesmo padrão de euro-zart-h) — os números
+  // encontrados na busca não vieram no formato ANVISA verificável por
+  // apresentação individual.
+  {
+    id: 'euro-holmes-h',
+    lab_id: 'eurofarma',
+    molecula: 'Olmesartana Medoxomila + Hidroclorotiazida',
+    nome_comercial: 'Holmes H®',
+    classe_terapeutica: 'BRA + Diurético Tiazídico (Associação)',
+    cids_aprovados: ['I10'],
+    apresentacoes: [
+      { concentracao: '20/12,5 mg', forma_farmaceutica: 'comprimido', embalagem: '10 ou 30 comprimidos (revestido)' },
+      { concentracao: '40/12,5 mg', forma_farmaceutica: 'comprimido', embalagem: '10 ou 30 comprimidos (revestido)' },
+      { concentracao: '40/25 mg', forma_farmaceutica: 'comprimido', embalagem: '10 ou 30 comprimidos (revestido)' },
+    ],
+    posologia_aprovada: 'HAS não controlada com monoterapia (PA > 140/90 mmHg): 1 comprimido 1x/dia. Iniciar pela menor apresentação (20/12,5 mg); ajustes possíveis a intervalos de 2–4 semanas. Não mastigar/partir o comprimido. Sem ajuste formal em insuficiência hepática.',
+    contraindicacoes_bula: ['Hipersensibilidade a olmesartana, hidroclorotiazida ou sulfonamidas', 'Gravidez (especialmente 2º/3º trimestre)', 'Insuficiência renal grave ou anúria', 'Uso com alisquireno em DM/IR'],
+    advertencias_principais: ['Hipotensão sintomática, principalmente no início do tratamento', 'Deterioração da função renal', 'Efeitos metabólicos: hiperglicemia, aumento de colesterol/TG, hiperuricemia', 'Distúrbios eletrolíticos', 'Fotossensibilidade/risco de câncer de pele com uso prolongado em alta dose — orientar fotoproteção', 'Pode agravar ou desencadear lúpus eritematoso'],
+    interacoes_principais: ['AINEs (reduzem eficácia e podem prejudicar função renal)', 'Lítio (aumento da litemia)', 'Barbitúricos, narcóticos, álcool (potencializam hipotensão)', 'Sequestrantes de ácidos biliares (administrar com 4h de intervalo)', 'Corticosteroides (perda adicional de eletrólitos)', 'Antidiabéticos (pode exigir ajuste de dose)'],
+    uso_populacoes_especiais: { renal: 'Cautela — monitorar função renal de perto; evitar em IR grave/anúria', hepatico: 'Sem ajuste formal — usar com cautela', gestante: 'CONTRAINDICADO', idoso: 'Sem diferença relevante de eficácia/segurança observada' },
+    data_registro: '2020-06-10',
+    data_ultima_atualizacao: '2026-08-05',
+    versao_bula: 'v2025.2',
+    fonte_regulatoria: 'ANVISA',
+    link_bula_paciente: 'https://eurofarma.com.br/produtos/bulas/patient/pt/bula-holmes-h.pdf',
+    link_bula_profissional: 'https://eurofarma.com.br/produtos/bulas/healthcare/pt/bula-holmes-h.pdf',
+  },
+
   {
     id: 'euro-valsartana-80',
     lab_id: 'eurofarma',
@@ -3129,7 +3164,7 @@ export const CORRELACAO_TERAPEUTICA: CorrelacaoTerapeutica[] = [
         posicao_terapeutica: '1ª linha — alternativa ao IECA (especialmente tosse)',
         moleculas: [
           { nome: 'Losartana', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: ['euro-zart-50', 'euro-zart-h'] },
-          { nome: 'Olmesartana', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: ['euro-holmes-20'] },
+          { nome: 'Olmesartana', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: ['euro-holmes-20', 'euro-holmes-h'] },
           { nome: 'Valsartana', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: ['euro-valsartana-80'] },
           { nome: 'Irbesartana', grau_recomendacao: 'I', nivel_evidencia: 'A', produtos_eurofarma: ['euro-irbesartana-150'] },
         ],
