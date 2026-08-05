@@ -232,9 +232,12 @@ export const CLASS_ROLE_OVERRIDES: ClassRoleValidation[] = [
       'ARNI (sacubitril/valsartana) reduz mortalidade cardiovascular e hospitalização por IC em IC-FEr, com superioridade demonstrada sobre IECA no desfecho composto — recomendação Classe I preferencial quando tolerado. Terapia modificadora de prognóstico, não apenas controle sintomático.',
     fonte: {
       organizacao: 'European Society of Cardiology (ESC)',
-      titulo: '2021 ESC Guidelines for the diagnosis and treatment of acute and chronic heart failure (PARADIGM-HF)',
-      ano: 2021,
-      identificador: 'doi.org/10.1093/eurheartj/ehab368',
+      // RM-79: citação atualizada da edição-base de 2021 para o "2023
+      // Focused Update" (mesma correção do RM-77 em scientific-repository.ts)
+      // — alinhada com a entrada IECA acima, já correta neste arquivo.
+      titulo: '2023 Focused Update of the 2021 ESC Guidelines for the diagnosis and treatment of acute and chronic heart failure (PARADIGM-HF)',
+      ano: 2023,
+      identificador: 'doi.org/10.1093/eurheartj/ehad195',
     },
     status_validacao: 'confirmado',
   },
@@ -247,9 +250,10 @@ export const CLASS_ROLE_OVERRIDES: ClassRoleValidation[] = [
       'BRA (ex.: candesartana, valsartana) reduz mortalidade/hospitalização em IC-FEr (CHARM-Alternative, Val-HeFT) — terapia modificadora de prognóstico, usada preferencialmente como ALTERNATIVA quando IECA/ARNI não são tolerados (ex.: tosse, angioedema), não como substituto de rotina de IECA/ARNI quando estes são tolerados.',
     fonte: {
       organizacao: 'European Society of Cardiology (ESC)',
-      titulo: '2021 ESC Guidelines for the diagnosis and treatment of acute and chronic heart failure',
-      ano: 2021,
-      identificador: 'doi.org/10.1093/eurheartj/ehab368',
+      // RM-79: citação atualizada de 2021 para o "2023 Focused Update" — ver nota na entrada ARNI acima.
+      titulo: '2023 Focused Update of the 2021 ESC Guidelines for the diagnosis and treatment of acute and chronic heart failure',
+      ano: 2023,
+      identificador: 'doi.org/10.1093/eurheartj/ehad195',
     },
     status_validacao: 'confirmado',
   },
@@ -262,9 +266,10 @@ export const CLASS_ROLE_OVERRIDES: ClassRoleValidation[] = [
       'Betabloqueadores com evidência específica em IC-FEr (bisoprolol — CIBIS-II; succinato de metoprolol — MERIT-HF; carvedilol — COPERNICUS/US-Carvedilol) reduzem mortalidade — terapia modificadora de prognóstico. O benefício é de MOLÉCULA específica, não de toda a classe (ex.: atenolol não possui esse desfecho estudado em IC) — distinção já aplicada pelo RM-25.1 via indicação própria da molécula, não duplicada aqui.',
     fonte: {
       organizacao: 'European Society of Cardiology (ESC)',
-      titulo: '2021 ESC Guidelines for the diagnosis and treatment of acute and chronic heart failure',
-      ano: 2021,
-      identificador: 'doi.org/10.1093/eurheartj/ehab368',
+      // RM-79: citação atualizada de 2021 para o "2023 Focused Update" — ver nota na entrada ARNI acima.
+      titulo: '2023 Focused Update of the 2021 ESC Guidelines for the diagnosis and treatment of acute and chronic heart failure',
+      ano: 2023,
+      identificador: 'doi.org/10.1093/eurheartj/ehad195',
     },
     status_validacao: 'confirmado',
   },
@@ -277,9 +282,10 @@ export const CLASS_ROLE_OVERRIDES: ClassRoleValidation[] = [
       'Antagonistas da aldosterona (espironolactona — RALES; eplerenona — EMPHASIS-HF) reduzem mortalidade/hospitalização em IC-FEr sintomática — terapia modificadora de prognóstico, tipicamente adicionada a IECA/ARNI + betabloqueador.',
     fonte: {
       organizacao: 'European Society of Cardiology (ESC)',
-      titulo: '2021 ESC Guidelines for the diagnosis and treatment of acute and chronic heart failure',
-      ano: 2021,
-      identificador: 'doi.org/10.1093/eurheartj/ehab368',
+      // RM-79: citação atualizada de 2021 para o "2023 Focused Update" — ver nota na entrada ARNI acima.
+      titulo: '2023 Focused Update of the 2021 ESC Guidelines for the diagnosis and treatment of acute and chronic heart failure',
+      ano: 2023,
+      identificador: 'doi.org/10.1093/eurheartj/ehad195',
     },
     status_validacao: 'confirmado',
   },
@@ -292,9 +298,10 @@ export const CLASS_ROLE_OVERRIDES: ClassRoleValidation[] = [
       'Diuréticos de alça (furosemida) são recomendados (Classe I) para alívio de sinais/sintomas de congestão em IC, mas NÃO possuem evidência robusta de redução de mortalidade em ensaios randomizados — não devem ser apresentados como terapia modificadora de prognóstico equivalente a IECA/ARNI/betabloqueador/ARM/ARNI. Indicação e dose são guiadas pelo status volêmico, não pela fração de ejeção isoladamente.',
     fonte: {
       organizacao: 'European Society of Cardiology (ESC)',
-      titulo: '2021 ESC Guidelines for the diagnosis and treatment of acute and chronic heart failure',
-      ano: 2021,
-      identificador: 'doi.org/10.1093/eurheartj/ehab368',
+      // RM-79: citação atualizada de 2021 para o "2023 Focused Update" — ver nota na entrada ARNI acima.
+      titulo: '2023 Focused Update of the 2021 ESC Guidelines for the diagnosis and treatment of acute and chronic heart failure',
+      ano: 2023,
+      identificador: 'doi.org/10.1093/eurheartj/ehad195',
     },
     status_validacao: 'reclassificado',
   },
@@ -319,9 +326,10 @@ export const CLASS_ROLE_OVERRIDES: ClassRoleValidation[] = [
       'Inibidores de SGLT2 (dapagliflozina — DAPA-HF; empagliflozina — EMPEROR-Reduced) reduzem mortalidade cardiovascular e hospitalização por IC em IC-FEr, independentemente da presença de DM2 — recomendação Classe I. Terapia modificadora de prognóstico, adicionada a IECA/ARNI + betabloqueador + ARM. A evidência pivotal (DAPA-HF, EMPEROR-Reduced) é em IC-FEr — extensão para IC-FEp/IC-FElr (ex.: EMPEROR-Preserved) não é generalizada aqui automaticamente; ver limitação de fenótipo no relatório do RM-28.',
     fonte: {
       organizacao: 'European Society of Cardiology (ESC)',
-      titulo: '2021 ESC Guidelines for the diagnosis and treatment of acute and chronic heart failure (DAPA-HF, EMPEROR-Reduced)',
-      ano: 2021,
-      identificador: 'doi.org/10.1093/eurheartj/ehab368',
+      // RM-79: citação atualizada de 2021 para o "2023 Focused Update" — ver nota na entrada ARNI acima.
+      titulo: '2023 Focused Update of the 2021 ESC Guidelines for the diagnosis and treatment of acute and chronic heart failure (DAPA-HF, EMPEROR-Reduced)',
+      ano: 2023,
+      identificador: 'doi.org/10.1093/eurheartj/ehad195',
     },
     status_validacao: 'confirmado',
   },
