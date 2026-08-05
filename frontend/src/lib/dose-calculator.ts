@@ -779,6 +779,13 @@ export interface FullDoseResult {
   ajuste_renal_texto?: string;
   ajuste_hepatico_texto?: string;
   limitado_por_dose_max: boolean;
+  // RM-78: distingue "dose_total_dia é 0 porque a frequência não pôde ser
+  // determinada com segurança" (PRN/contínuo/variável/texto não reconhecido)
+  // de "dose_total_dia foi limitada por exceder o máximo diário" — as duas
+  // situações setavam a MESMA flag (`limitado_por_dose_max`), fazendo a UI
+  // rotular "0 mL/dia" incorretamente como "(limitado ao máximo)" quando na
+  // verdade o cálculo nunca ocorreu por falta de frequência confiável.
+  frequencia_indeterminada: boolean;
   fonte: 'pediatrica_mg_kg' | 'pediatrica_mg_m2' | 'pediatrica_mcg_kg' | 'pediatrica_UI_kg' | 'pediatrica_fixa' | 'adulto_fixo' | 'adulto_mg_kg' | 'bsa';
 }
 
@@ -837,6 +844,7 @@ export function calcFullDose(
   let tomadas: number;
   let doseTotalDia: number;
   let limitado = false;
+  let frequenciaIndeterminada = false;
   let fonte: FullDoseResult['fonte'];
 
   // Helper: converte max_dose_dia para mg absoluto conforme a unidade declarada
@@ -972,6 +980,7 @@ export function calcFullDose(
       tomadas = 0;
       doseTotalDia = 0;
       limitado = true;
+      frequenciaIndeterminada = true;
       passos.push(`🚨 Frequência "${freqStr || '(não informada)'}" não pôde ser determinada automaticamente (tipo: ${freqParsed.tipo}) — dose TOTAL DIÁRIA NÃO calculada.`);
       if (freqParsed.motivo) passos.push(freqParsed.motivo);
       passos.push(`Dose por administração: ${dosePorTomada} ${doseUnidade} (frequência a confirmar antes de aplicar)`);
@@ -1041,6 +1050,7 @@ export function calcFullDose(
     ajuste_renal_texto: ajusteRenalTexto,
     ajuste_hepatico_texto: ajusteHepaticoTexto,
     limitado_por_dose_max: limitado,
+    frequencia_indeterminada: frequenciaIndeterminada,
     fonte,
   };
 }

@@ -199,6 +199,7 @@ describe('calcFullDose() — dose total diária NUNCA calculada quando a frequê
     expect(r.dose_total_dia).toBe(1000);
     expect(r.tomadas_dia).toBe(2);
     expect(r.alertas.some(a => a.startsWith('🚨'))).toBe(false);
+    expect(r.frequencia_indeterminada).toBe(false);
   });
 
   it('frequência PRN: dose total diária fica em 0 (NUNCA calculada com tomadas assumidas), alerta 🚨 crítico presente', () => {
@@ -207,6 +208,11 @@ describe('calcFullDose() — dose total diária NUNCA calculada quando a frequê
     expect(r.tomadas_dia).toBe(0);
     expect(r.alertas.some(a => a.startsWith('🚨'))).toBe(true);
     expect(r.limitado_por_dose_max).toBe(true);
+    // RM-78: distingue "não calculado por frequência ambígua" de "limitado
+    // por exceder a dose máxima" — a UI (DoseCalcCard) usa este campo para
+    // nunca rotular a ausência de cálculo como "0x/dia = 0 mL/dia" nem como
+    // "(limitado ao máximo)", que seriam ambos enganosos aqui.
+    expect(r.frequencia_indeterminada).toBe(true);
   });
 
   it('frequência não reconhecida (texto não estruturado): dose total diária fica em 0, NUNCA 500 (que seria o resultado de assumir 1 tomada)', () => {
@@ -214,12 +220,14 @@ describe('calcFullDose() — dose total diária NUNCA calculada quando a frequê
     expect(r.dose_total_dia).toBe(0);
     expect(r.dose_total_dia).not.toBe(500);
     expect(r.alertas.some(a => a.startsWith('🚨'))).toBe(true);
+    expect(r.frequencia_indeterminada).toBe(true);
   });
 
   it('frequência variável ("3-4x/dia"): dose total diária fica em 0, nunca escolhe silenciosamente 3 ou 4', () => {
     const r = calcFullDose(baseDrug('3-4x/dia'), 40, 70, '500 mg');
     expect(r.dose_total_dia).toBe(0);
     expect(r.alertas.some(a => a.startsWith('🚨'))).toBe(true);
+    expect(r.frequencia_indeterminada).toBe(true);
   });
 
   it('uso contínuo: dose total diária fica em 0, alerta 🚨 presente', () => {

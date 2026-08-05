@@ -214,7 +214,9 @@ export function DoseCalcCard({
             {result.volume_por_tomada !== undefined && !mostrarGotas && (
               <div className="flex items-center gap-2 pl-5">
                 <p className="text-xs text-slate-600">
-                  {result.volume_por_tomada} mL por dose × {result.tomadas_dia}x/dia = {Math.round(result.volume_por_tomada * result.tomadas_dia * 10) / 10} mL/dia
+                  {result.frequencia_indeterminada
+                    ? `${result.volume_por_tomada} mL por dose (frequência a confirmar — total diário não calculado)`
+                    : `${result.volume_por_tomada} mL por dose × ${result.tomadas_dia}x/dia = ${Math.round(result.volume_por_tomada * result.tomadas_dia * 10) / 10} mL/dia`}
                 </p>
               </div>
             )}
@@ -223,15 +225,23 @@ export function DoseCalcCard({
               <div className="flex items-center gap-2 pl-5">
                 <Droplets className="w-3 h-3 text-blue-500 flex-shrink-0" />
                 <p className="text-xs text-blue-700 font-semibold">
-                  {result.gotas_por_tomada} gotas por dose × {result.tomadas_dia}x/dia
+                  {result.frequencia_indeterminada
+                    ? `${result.gotas_por_tomada} gotas por dose (frequência a confirmar)`
+                    : `${result.gotas_por_tomada} gotas por dose × ${result.tomadas_dia}x/dia`}
                 </p>
               </div>
             )}
 
             <div className="flex items-center gap-2 pl-5 mt-1">
               <p className="text-[11px] text-slate-500">
-                Total diário: <strong>{result.dose_total_dia} {result.dose_unidade}</strong>
-                {result.limitado_por_dose_max && <span className="text-amber-600 ml-1">(limitado ao máximo)</span>}
+                {result.frequencia_indeterminada ? (
+                  <span className="text-amber-600 font-semibold">Total diário não calculado — confirme a frequência antes de aplicar</span>
+                ) : (
+                  <>
+                    Total diário: <strong>{result.dose_total_dia} {result.dose_unidade}</strong>
+                    {result.limitado_por_dose_max && <span className="text-amber-600 ml-1">(limitado ao máximo)</span>}
+                  </>
+                )}
               </p>
             </div>
           </div>
