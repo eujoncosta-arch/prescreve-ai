@@ -3147,7 +3147,8 @@ export const CORRELACAO_TERAPEUTICA: CorrelacaoTerapeutica[] = [
     cid10: ['I10'],
     diagnostico: 'Hipertensão Arterial Sistêmica (HAS)',
     diretrizes: [
-      { nome: 'VII Diretriz Brasileira de HAS', sociedade: 'SBC/SBH/SBN', ano: 2016, nivel_evidencia: 'A', grau_recomendacao: 'I' },
+      // RM-85: citação desatualizada ("VII Diretriz... 2016") corrigida para DBHA 2025 (RM-81).
+      { nome: 'Diretriz Brasileira de Hipertensão Arterial – 2025 (DBHA 2025)', sociedade: 'SBC/SBN/SBH', ano: 2025, nivel_evidencia: 'A', grau_recomendacao: 'I' },
       { nome: '2023 ESH Guidelines for HBP', sociedade: 'ESH', ano: 2023, nivel_evidencia: 'A', grau_recomendacao: 'I' },
     ],
     classes: [

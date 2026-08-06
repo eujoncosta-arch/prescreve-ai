@@ -393,30 +393,54 @@ export function calcBreakthroughDose(
   };
 }
 
+export type OpioidRoute = 'VO' | 'SC' | 'IV' | 'TD';
+
+// Tabela de conversão para morfina oral equivalente — única fonte de fatores
+// desta calculadora. Cada opioide só lista as vias com fator real conhecido.
+const TO_MORFINA_ORAL: Partial<Record<OpioidName, Partial<Record<OpioidRoute, number>>>> = {
+  morfina:     { VO: 1,    SC: 3,    IV: 3 },
+  oxicodona:   { VO: 1.5,  SC: 3,    IV: 3 },
+  hidromorfona:{ VO: 7.5,  SC: 20,   IV: 20 },
+  fentanil:    { TD: 100,  IV: 100 },
+  codeina:     { VO: 0.15 },
+  tramadol:    { VO: 0.1,  SC: 0.1 },
+  buprenorfina:{ TD: 1.5 },
+  metadona:    { VO: 5 },
+};
+
 // Calculadora de rotação de opioide
 export function calcOpioidRotation(
   opioideAtual: OpioidName,
   doseAtual24h: number,
-  viaAtual: 'VO' | 'SC' | 'IV',
+  viaAtual: OpioidRoute,
   opioideAlvo: OpioidName,
-  viaAlvo: 'VO' | 'SC' | 'IV',
-): { dose_equi_mg: number; dose_ajustada_mg: number; instrucoes: string[] } {
-  // Converter tudo para morfina oral equivalente
-  const toMorfinaOral: Partial<Record<OpioidName, Partial<Record<string, number>>>> = {
-    morfina:     { VO: 1,    SC: 3,    IV: 3 },
-    oxicodona:   { VO: 1.5,  SC: 3,    IV: 3 },
-    hidromorfona:{ VO: 7.5,  SC: 20,   IV: 20 },
-    fentanil:    { TD: 100,  IV: 100 },
-    codeina:     { VO: 0.15 },
-    tramadol:    { VO: 0.1,  SC: 0.1 },
-    buprenorfina:{ TD: 1.5 },
-    metadona:    { VO: 5 },
-  };
+  viaAlvo: OpioidRoute,
+): { dose_equi_mg: number; dose_ajustada_mg: number; instrucoes: string[]; bloqueado: boolean } {
+  const fatorAtual = TO_MORFINA_ORAL[opioideAtual]?.[viaAtual];
+  const fatorAlvo = TO_MORFINA_ORAL[opioideAlvo]?.[viaAlvo];
 
-  const fatorAtual = (toMorfinaOral[opioideAtual] as Record<string, number>)?.[viaAtual] ?? 1;
+  // RM-85: fatores de conversão só existem para combinações opioide/via
+  // realmente documentadas na tabela acima (ex.: fentanil só tem TD/IV,
+  // buprenorfina só TD). Uma via sem fator NUNCA pode ser tratada como
+  // equipotente à morfina oral (fator 1) — para fentanil (fator real ~100)
+  // isso subestimaria a dose equianalgésica em ~100x. Bloqueia o cálculo e
+  // exige que o médico informe a via correta, em vez de arriscar uma dose
+  // silenciosamente errada (mesmo padrão de "nunca assumir dado ausente
+  // como normal/neutro" já aplicado em dose-calculator.ts/safety-rules.ts).
+  if (fatorAtual === undefined || fatorAlvo === undefined) {
+    const semFator = fatorAtual === undefined ? `${opioideAtual} via ${viaAtual}` : `${opioideAlvo} via ${viaAlvo}`;
+    return {
+      dose_equi_mg: 0,
+      dose_ajustada_mg: 0,
+      bloqueado: true,
+      instrucoes: [
+        `🚨 BLOQUEADO: não há fator de conversão para morfina oral equivalente cadastrado para ${semFator} — a rotação NUNCA assume equipotência com morfina oral por padrão.`,
+        `Vias com fator conhecido — morfina: VO/SC/IV; oxicodona: VO/SC/IV; hidromorfona: VO/SC/IV; fentanil: TD/IV; codeína: VO; tramadol: VO/SC; buprenorfina: TD; metadona: VO.`,
+      ],
+    };
+  }
+
   const morfinaOral24h = doseAtual24h * fatorAtual;
-
-  const fatorAlvo = (toMorfinaOral[opioideAlvo] as Record<string, number>)?.[viaAlvo] ?? 1;
   const doseEqui = morfinaOral24h / fatorAlvo;
 
   // Redução de 20–30% por tolerância cruzada incompleta
@@ -425,6 +449,7 @@ export function calcOpioidRotation(
   return {
     dose_equi_mg: Math.round(doseEqui * 10) / 10,
     dose_ajustada_mg: doseAjustada,
+    bloqueado: false,
     instrucoes: [
       `Morfina oral equivalente 24h: ${Math.round(morfinaOral24h)} mg`,
       `Dose equianalgesica de ${opioideAlvo} ${viaAlvo}: ${Math.round(doseEqui * 10) / 10} mg/24h`,

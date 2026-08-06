@@ -107,7 +107,8 @@ export const RACIONAIS_CLINICOS: RacionalTerapeutico[] = [
       { sociedade: 'KDIGO', ano: 2024, titulo: 'KDIGO 2024 Clinical Practice Guideline for CKD', classe: 'I', nivel: 'A' },
       { sociedade: 'ADA', ano: 2024, titulo: 'Standards of Care in Diabetes 2024', classe: 'I', nivel: 'A' },
       { sociedade: 'ESC/ESH', ano: 2023, titulo: 'ESC/ESH 2023 Guidelines for Hypertension', classe: 'I', nivel: 'A' },
-      { sociedade: 'SBC', ano: 2023, titulo: 'Diretrizes Brasileiras de HAS 2023', classe: 'I', nivel: 'A' },
+      // RM-85: citação desatualizada ("Diretrizes Brasileiras de HAS 2023") corrigida para DBHA 2025 (RM-81).
+      { sociedade: 'SBC/SBN/SBH', ano: 2025, titulo: 'Diretriz Brasileira de Hipertensão Arterial – 2025 (DBHA 2025)', classe: 'I', nivel: 'A' },
     ],
     estudos_principais: [
       { nome: 'DECLARE-TIMI 58', ano: 2019, revista: 'NEJM', nnt: 67, descricao: 'Dapagliflozina reduziu hospitalização por IC e morte cardiovascular em DM2' },
@@ -158,7 +159,8 @@ export const RACIONAIS_CLINICOS: RacionalTerapeutico[] = [
     ],
     diretrizes: [
       { sociedade: 'ESC/ESH', ano: 2023, titulo: 'ESC/ESH 2023 Guidelines for Hypertension', classe: 'I', nivel: 'A' },
-      { sociedade: 'SBC', ano: 2023, titulo: 'Diretrizes Brasileiras de HAS 2023', classe: 'I', nivel: 'A' },
+      // RM-85: citação desatualizada ("Diretrizes Brasileiras de HAS 2023") corrigida para DBHA 2025 (RM-81).
+      { sociedade: 'SBC/SBN/SBH', ano: 2025, titulo: 'Diretriz Brasileira de Hipertensão Arterial – 2025 (DBHA 2025)', classe: 'I', nivel: 'A' },
       { sociedade: 'JNC 8', ano: 2014, titulo: 'Evidence-Based Guideline for Management of HTN in Adults', classe: 'I', nivel: 'A' },
     ],
     estudos_principais: [

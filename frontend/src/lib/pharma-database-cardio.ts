@@ -1463,7 +1463,10 @@ export const PHARMA_DB_CARDIO: QuickDrug[] = [
   // (50/12,5 mg e 100/25 mg, comprimido revestido).
   {
     id: 'losartana_hidroclorotiazida',
-    guidelines_referencia: ['7ª Diretriz Brasileira de Hipertensão Arterial (SBC 2020) — combinação BRA + tiazídico para HAS não controlada em monoterapia'],
+    // RM-85: citação desatualizada ("7ª Diretriz... SBC 2020") corrigida para
+    // DBHA 2025, alinhando com a entrada irmã (Holmes H®, abaixo) e com o
+    // resto da base já corrigida no RM-81.
+    guidelines_referencia: ['Diretriz Brasileira de Hipertensão Arterial – 2025 (DBHA 2025) — associação BRA + tiazídico para HAS não controlada em monoterapia'],
     nivel_evidencia: 'A',
     grau_recomendacao: 'I',
     uso_pediatrico: 'nao_aplicavel',

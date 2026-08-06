@@ -865,7 +865,8 @@ const EUROFARMA_ENRICHED: Partial<MarcaFarmaceuticaEnterprise>[] = [
     id: 'euro-holmes-20',
     diretrizes_associadas: [
       { nome: 'ESC/ESH 2023 Guidelines for Hypertension', sociedade: 'ESC/ESH', ano: 2023, classe_recomendacao: 'I', nivel_evidencia: 'A' },
-      { nome: 'Diretrizes Brasileiras de HAS 2023', sociedade: 'SBC', ano: 2023, classe_recomendacao: 'I', nivel_evidencia: 'A' },
+      // RM-85: citação desatualizada ("Diretrizes Brasileiras de HAS 2023") corrigida para DBHA 2025 (RM-81).
+      { nome: 'Diretriz Brasileira de Hipertensão Arterial – 2025 (DBHA 2025)', sociedade: 'SBC/SBN/SBH', ano: 2025, classe_recomendacao: 'I', nivel_evidencia: 'A' },
       { nome: 'KDIGO 2024 Clinical Practice Guideline for CKD', sociedade: 'KDIGO', ano: 2024, classe_recomendacao: 'I', nivel_evidencia: 'A' },
     ],
     nivel_evidencia_geral: 'A',
