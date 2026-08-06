@@ -81,11 +81,25 @@ export function DoseCalcCard({
 
   const [mostrarGotas, setMostrarGotas] = useState(false);
   const [duracao, setDuracao] = useState(duracaoDefault);
+  // RM-84: frequência confirmada manualmente pelo médico quando a frequência
+  // cadastrada é uma faixa (ex.: "3–4x/dia") e não pode ser assumida
+  // automaticamente. Reseta sempre que o medicamento/concentração muda —
+  // nunca deve "vazar" a confirmação de um medicamento para outro.
+  const [freqConfirmada, setFreqConfirmada] = useState<number | undefined>(undefined);
+  // RM-84: reseta a confirmação manual quando o medicamento/concentração muda
+  // (padrão React de "ajustar estado quando props mudam" — setState direto
+  // no corpo do render, não em efeito, para não disparar re-render em cascata).
+  const doseKey = `${drug.molecula}|${concentracaoSelecionada}`;
+  const [prevDoseKey, setPrevDoseKey] = useState(doseKey);
+  if (doseKey !== prevDoseKey) {
+    setPrevDoseKey(doseKey);
+    setFreqConfirmada(undefined);
+  }
 
   const result = useMemo(() => calcFullDose(
     drug, idadeAnos, pesoKg, concentracaoSelecionada,
-    crcl, childPugh, gestante, lactante, alturaM,
-  ), [drug, idadeAnos, pesoKg, concentracaoSelecionada, crcl, childPugh, gestante, lactante, alturaM]);
+    crcl, childPugh, gestante, lactante, alturaM, freqConfirmada,
+  ), [drug, idadeAnos, pesoKg, concentracaoSelecionada, crcl, childPugh, gestante, lactante, alturaM, freqConfirmada]);
 
   const conc = useMemo(() => parseConcentration(concentracaoSelecionada), [concentracaoSelecionada]);
 
@@ -229,6 +243,27 @@ export function DoseCalcCard({
                     ? `${result.gotas_por_tomada} gotas por dose (frequência a confirmar)`
                     : `${result.gotas_por_tomada} gotas por dose × ${result.tomadas_dia}x/dia`}
                 </p>
+              </div>
+            )}
+
+            {/* RM-84: frequência cadastrada é uma faixa (ex.: "3–4x/dia") — o médico
+                confirma explicitamente qual valor usar; nunca escolhido automaticamente. */}
+            {result.frequencia_indeterminada && result.tomadas_faixa && (
+              <div className="flex items-center gap-2 pl-5 flex-wrap">
+                <Clock className="w-3 h-3 text-amber-500 flex-shrink-0" />
+                <p className="text-[11px] text-amber-700 font-semibold">Confirmar frequência real:</p>
+                {Array.from(
+                  { length: result.tomadas_faixa[1] - result.tomadas_faixa[0] + 1 },
+                  (_, i) => result.tomadas_faixa![0] + i,
+                ).map(n => (
+                  <button
+                    key={n}
+                    onClick={() => setFreqConfirmada(n)}
+                    className="text-[11px] px-2 py-0.5 rounded-full border border-amber-300 bg-white text-amber-700 hover:bg-amber-100 transition-colors font-medium"
+                  >
+                    {n}x/dia
+                  </button>
+                ))}
               </div>
             )}
 

@@ -248,3 +248,76 @@ describe('calcFullDose() — dose total diária NUNCA calculada quando a frequê
     expect(r.frequencia).not.toMatch(/0x\/dia/);
   });
 });
+
+// ============================================================
+// RM-84 — achado do usuário: para líquidos com frequência em FAIXA (ex.:
+// Hidroxizina/Pergo® "3–4x/dia"), o volume em mL por dose já era calculado
+// (independe da frequência), mas ficava escondido — a linha de POSOLOGIA
+// principal só mostrava "X mg", nunca o volume em mL, e não havia NENHUMA
+// forma de o médico confirmar manualmente qual frequência real usar (3x ou
+// 4x) para destravar o cálculo do total diário. `tomadas_faixa` expõe a
+// faixa reconhecida por `parseFrequencia()` para a UI oferecer botões de
+// confirmação; `frequenciaConfirmadaTomadasDia` (11º parâmetro de
+// `calcFullDose`) aceita a escolha do médico — nunca escolhida sozinho pelo
+// motor.
+// ============================================================
+
+describe('calcFullDose() — volume em mL visível mesmo com frequência indeterminada (RM-84)', () => {
+  const baseLiquido = (frequencia: string): FullDoseInput => ({
+    molecula: 'Hidroxizina',
+    dose_adulto: {
+      habitual: '25–50 mg VO 3–4×/dia',
+      max: '400 mg/dia',
+      unidade: 'mg',
+      via: 'VO',
+      frequencias: [frequencia],
+    },
+    alertas_especiais: [],
+    uso_gestante: 'risco',
+    uso_lactante: 'contraindicado',
+  });
+
+  it('formulação líquida com frequência variável: volume_por_tomada é calculado normalmente (independe da frequência)', () => {
+    const r = calcFullDose(baseLiquido('3–4x/dia'), 8, 24, '2 mg/mL solução oral');
+    expect(r.frequencia_indeterminada).toBe(true);
+    expect(r.volume_por_tomada).toBe(12.5); // 25 mg ÷ 2 mg/mL
+  });
+
+  it('a posologia sugerida (linha principal) MOSTRA o volume em mL, não só "X mg" — achado do usuário: volume não aparecia', () => {
+    const r = calcFullDose(baseLiquido('3–4x/dia'), 8, 24, '2 mg/mL solução oral');
+    expect(r.posologia_sugerida).toMatch(/12\.5 mL/);
+  });
+
+  it('tomadas_faixa expõe [3,4] para a UI oferecer confirmação manual de frequência', () => {
+    const r = calcFullDose(baseLiquido('3–4x/dia'), 8, 24, '2 mg/mL solução oral');
+    expect(r.tomadas_faixa).toEqual([3, 4]);
+  });
+
+  it('sem confirmação manual: dose total diária continua bloqueada (0), nenhuma frequência é assumida', () => {
+    const r = calcFullDose(baseLiquido('3–4x/dia'), 8, 24, '2 mg/mL solução oral');
+    expect(r.dose_total_dia).toBe(0);
+    expect(r.tomadas_dia).toBe(0);
+  });
+
+  it('médico confirma manualmente "4x/dia": dose total diária passa a ser calculada (25 × 4 = 100mg), frequencia_indeterminada vira false', () => {
+    const r = calcFullDose(baseLiquido('3–4x/dia'), 8, 24, '2 mg/mL solução oral', undefined, undefined, undefined, undefined, undefined, 4);
+    expect(r.frequencia_indeterminada).toBe(false);
+    expect(r.tomadas_dia).toBe(4);
+    expect(r.dose_total_dia).toBe(100);
+    expect(r.alertas.some(a => a.startsWith('🚨'))).toBe(false);
+  });
+
+  it('médico confirma manualmente "3x/dia": dose total diária = 75mg (25 × 3), diferente da confirmação de 4x/dia', () => {
+    const r = calcFullDose(baseLiquido('3–4x/dia'), 8, 24, '2 mg/mL solução oral', undefined, undefined, undefined, undefined, undefined, 3);
+    expect(r.tomadas_dia).toBe(3);
+    expect(r.dose_total_dia).toBe(75);
+  });
+
+  it('confirmação manual não é aceita quando a frequência JÁ é calculável normalmente (parâmetro é ignorado, não sobrepõe um valor real)', () => {
+    const drug = baseLiquido('2x/dia');
+    const semConfirmacao = calcFullDose(drug, 8, 24, '2 mg/mL solução oral');
+    const comConfirmacaoIrrelevante = calcFullDose(drug, 8, 24, '2 mg/mL solução oral', undefined, undefined, undefined, undefined, undefined, 4);
+    expect(semConfirmacao.tomadas_dia).toBe(2);
+    expect(comConfirmacaoIrrelevante.tomadas_dia).toBe(2); // ignora o "4" — 2x/dia já era calculável
+  });
+});

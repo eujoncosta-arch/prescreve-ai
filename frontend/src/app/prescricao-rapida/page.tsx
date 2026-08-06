@@ -90,6 +90,17 @@ const BLANK_ITEM: Omit<RxItem, 'id'> = {
   tipo_receita: 'simples',
 };
 
+// Extrai só a porção numérica/fração inicial de uma concentração (ex.:
+// "40/12,5 mg" → "40/12,5"; "40 mg" → "40"; "2 mg/mL" → "2"), descartando
+// a unidade — usado para sincronizar o campo Dose com a concentração
+// selecionada quando o valor de dose exibido ainda é o "auto" (número puro
+// que reflete a concentração), nunca sobrescrevendo uma dose editada
+// manualmente pelo médico.
+function stripUnit(s: string): string {
+  const m = s.match(/^[\d.,/]+/);
+  return m ? m[0].trim() : s;
+}
+
 const FREQUENCIAS = ['1x/dia', '2x/dia (12/12h)', '3x/dia (8/8h)', '4x/dia (6/6h)', 'A cada 8h', 'A cada 12h', 'Dose única', 'Se necessário', 'À noite', 'Pela manhã', 'Com as refeições'];
 const DURACOES = ['3 dias', '5 dias', '7 dias', '10 dias', '14 dias', '30 dias', '60 dias', '90 dias', 'Uso contínuo', 'Até retorno'];
 const VIAS = ['VO', 'Sublingual', 'Inalatório', 'Tópico', 'IV', 'IM', 'SC', 'Retal', 'Ocular'];
@@ -649,7 +660,11 @@ export default function PrescricaoRapida() {
                       <p className="text-xs font-semibold text-slate-700 mb-1.5">Concentração</p>
                       <div className="flex flex-wrap gap-1.5">
                         {selectedBrand.concentracoes.map(c => (
-                          <button key={c} onClick={() => setSelectedConcentration(c)}
+                          <button key={c} onClick={() => {
+                            const doseAindaAuto = customDose === stripUnit(selectedConcentration);
+                            setSelectedConcentration(c);
+                            if (doseAindaAuto) setCustomDose(stripUnit(c));
+                          }}
                             className={`text-xs px-2.5 py-1 rounded border transition-all ${
                               selectedConcentration === c
                                 ? 'bg-slate-800 text-white border-slate-800'

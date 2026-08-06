@@ -772,6 +772,8 @@ export interface FullDoseResult {
   bsa_m2?: number;                 // superfície corporal, se calculada
   frequencia: string;
   tomadas_dia: number;
+  /** RM-84: faixa candidata (ex.: [3,4] para "3–4x/dia") quando a frequência cadastrada é uma faixa reconhecida — usada pela UI para oferecer confirmação manual, nunca para adivinhar automaticamente. */
+  tomadas_faixa?: [number, number];
   dose_total_dia: number;
   posologia_sugerida: string;
   passo_a_passo: string[];
@@ -799,6 +801,11 @@ export function calcFullDose(
   gestante?: boolean,
   lactante?: boolean,
   alturaM?: number,  // opcional: habilita cálculo BSA para mg/m²
+  // RM-84: quando a frequência cadastrada é uma faixa/variável (ex.: "3–4x/dia")
+  // e não pode ser determinada automaticamente (ver `frequencia_indeterminada`
+  // abaixo), o médico pode CONFIRMAR explicitamente qual valor usar — isso
+  // nunca é adivinhado pelo motor, só aceito quando informado aqui.
+  frequenciaConfirmadaTomadasDia?: number,
 ): FullDoseResult {
   const profile = classifyPopulation(idadeAnos);
   const conc = parseConcentration(concentracaoSelecionada);
@@ -845,6 +852,7 @@ export function calcFullDose(
   let doseTotalDia: number;
   let limitado = false;
   let frequenciaIndeterminada = false;
+  let tomadasFaixa: [number, number] | undefined;
   let fonte: FullDoseResult['fonte'];
 
   // Helper: converte max_dose_dia para mg absoluto conforme a unidade declarada
@@ -964,11 +972,23 @@ export function calcFullDose(
 
     const freqStr = drug.dose_adulto.frequencias[0] ?? '';
     const freqParsed = parseFrequencia(freqStr);
+    tomadasFaixa = freqParsed.tomadasFaixa;
 
     if (freqParsed.calculavel && freqParsed.tomadasDia !== null) {
       tomadas = freqParsed.tomadasDia;
       doseTotalDia = dosePorTomada * tomadas;
       passos.push(`Dose habitual: ${dosePorTomada} ${doseUnidade} — ${freqStr || '1x/dia'}`);
+      passos.push(`Máximo: ${drug.dose_adulto.max} ${doseUnidade}`);
+    } else if (frequenciaConfirmadaTomadasDia && frequenciaConfirmadaTomadasDia > 0) {
+      // RM-84: o médico confirmou explicitamente qual valor usar dentro da
+      // faixa/variável cadastrada — a dose por administração continua a
+      // mesma (já calculada acima), só a MULTIPLICAÇÃO pela frequência deixa
+      // de estar bloqueada. Nunca aceito silenciosamente: só chega aqui
+      // quando o chamador (UI) passou um valor que o médico escolheu.
+      tomadas = frequenciaConfirmadaTomadasDia;
+      doseTotalDia = dosePorTomada * tomadas;
+      passos.push(`Dose habitual: ${dosePorTomada} ${doseUnidade} — ${freqStr || '1x/dia'}`);
+      passos.push(`✓ Frequência confirmada manualmente: ${tomadas}x/dia (cadastro original: "${freqStr}")`);
       passos.push(`Máximo: ${drug.dose_adulto.max} ${doseUnidade}`);
     } else {
       // Resolução do risco de fallback silencioso de frequência (auditoria
@@ -1025,7 +1045,13 @@ export function calcFullDose(
   const viaText = drug.dose_adulto.via;
   let posologia: string;
   if (tomadas === 0) {
-    posologia = `⚠ ${dosePorTomada} ${doseUnidade} ${viaText} por administração — frequência não determinada automaticamente, confirme manualmente antes de aplicar`;
+    // RM-84: quando o líquido permite converter para mL, o volume por
+    // administração já foi calculado acima (independe da frequência) —
+    // mostrá-lo aqui evita a impressão de que "nada foi calculado" quando
+    // na verdade só a MULTIPLICAÇÃO pela frequência ficou bloqueada.
+    posologia = volumePorTomada !== undefined
+      ? `⚠ ${volumePorTomada} mL (${dosePorTomada} ${doseUnidade}) ${viaText} por administração — frequência não determinada automaticamente, confirme manualmente antes de aplicar`
+      : `⚠ ${dosePorTomada} ${doseUnidade} ${viaText} por administração — frequência não determinada automaticamente, confirme manualmente antes de aplicar`;
   } else if (volumePorTomada !== undefined) {
     posologia = `${volumePorTomada} mL ${viaText} ${freqText} (= ${dosePorTomada} ${doseUnidade}/dose)`;
   } else {
@@ -1043,6 +1069,7 @@ export function calcFullDose(
     bsa_m2: bsaM2,
     frequencia: freqText,
     tomadas_dia: tomadas,
+    tomadas_faixa: tomadasFaixa,
     dose_total_dia: Math.round(doseTotalDia * 10) / 10,
     posologia_sugerida: posologia,
     passo_a_passo: passos,

@@ -114,6 +114,7 @@ const CLASS_KEY_MAP: Record<string, string> = {
   'Hormônio Tireoidiano Sintético (T4)': 'HORMONIO_TIREOIDIANO',
   'Penicilina de Amplo Espectro': 'AMINOPENICILINA',
   'Aminopenicilina': 'AMINOPENICILINA',
+  'BRA + Diurético Tiazídico (Associação)': 'BRA_TIAZIDICO_FIXO',
 };
 
 /** Exportado para reuso pelo motor de priorização (RM-26.1). */
@@ -143,6 +144,7 @@ export const CLASS_LABELS: Record<string, string> = {
   ANTIAGREGANTE: 'Antiagregante Plaquetário',
   HORMONIO_TIREOIDIANO: 'Hormônio Tireoidiano Sintético',
   AMINOPENICILINA: 'Aminopenicilina',
+  BRA_TIAZIDICO_FIXO: 'Associação Fixa BRA + Diurético Tiazídico',
 };
 
 /** Exportado para reuso pelo motor de priorização (RM-26.1) — evita duplicar o mapa de classes. */
@@ -432,6 +434,37 @@ function cardiovascularIndicationContext(ctx?: EligibilityContext): boolean {
 }
 
 /**
+ * Achado do usuário (2026-08): Holmes H® e Zart H® (associações fixas
+ * BRA + tiazídico já cadastradas na base — `pharma-database-cardio.ts`)
+ * nunca apareciam como sugestão em nenhum lugar do sistema, mesmo sendo
+ * a própria indicação sourced da molécula ("HAS não controlada em
+ * monoterapia com BRA ou tiazídico isolados").
+ *
+ * Mesmo raciocínio do RM-30: adicionar a classe estaticamente a
+ * `CONDITION_CLASS_KEYS['has']` a apresentaria a TODO paciente com HAS,
+ * inclusive o recém-diagnosticado sem nenhuma tentativa de monoterapia —
+ * clinicamente errado (diretriz reserva a associação fixa para quem já
+ * não atingiu meta em monoterapia). Habilitada só quando o paciente já
+ * tem, na lista estruturada e pré-existente de medicamentos em uso
+ * (`Anamnesis.medicamentos_em_uso`, nenhum campo novo), um IECA/BRA ou um
+ * diurético tiazídico — sinal real de monoterapia em curso, não uma
+ * heurística inferida (ex.: contagem de medicamentos).
+ */
+function hasMonotherapyInUseContext(ctx?: EligibilityContext): boolean {
+  const emUso = (ctx?.medicamentosEmUso ?? []).map(normalize);
+  if (emUso.length === 0) return false;
+  const tokens = [
+    // IECA
+    'enalapril', 'captopril', 'lisinopril', 'ramipril',
+    // BRA
+    'losartana', 'valsartana', 'olmesartana', 'irbesartana', 'candesartana', 'telmisartana',
+    // Tiazídico/tiazídico-símile
+    'hidroclorotiazida', 'clortalidona', 'indapamida',
+  ];
+  return emUso.some((m) => tokens.some((t) => m.includes(t)));
+}
+
+/**
  * RM-30 — Resolve as classes adicionais habilitadas EXCLUSIVAMENTE pelo
  * contexto clínico do paciente para uma condição (hoje, apenas HAS). Fora do
  * contexto documentado, retorna lista vazia — comportamento idêntico ao
@@ -443,6 +476,7 @@ function resolveContextualClassKeys(conditionId: string, ctx?: EligibilityContex
   if (hasResistantHypertensionContext(ctx)) extra.push('ARM');
   if (advancedCkdContext(ctx)) extra.push('DIURETICO_ALCA');
   if (cardiovascularIndicationContext(ctx)) extra.push('BETABLOQUEADOR');
+  if (hasMonotherapyInUseContext(ctx)) extra.push('BRA_TIAZIDICO_FIXO');
   return extra;
 }
 
