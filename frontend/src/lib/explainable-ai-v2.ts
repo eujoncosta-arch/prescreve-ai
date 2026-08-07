@@ -777,12 +777,27 @@ export function calcularExplainabilityScore(
       : `${whyNot.restricoes.length} restrição(ões) identificada(s)`,
   };
 
-  const medTrustScore = ((med as unknown as Record<string, unknown>).trust_score as number | undefined) ?? 70;
+  // RM-86: `TherapeuticSuggestion` (types.ts) nunca teve campo `trust_score`
+  // — o cast `as unknown as Record<string, unknown>` mascarava isso,
+  // fazendo `medTrustScore` cair SEMPRE no fallback 70, para toda
+  // sugestão, sempre, rotulado como "Trust Score do motor de evidência"
+  // (texto que sugere um valor calculado por paciente, quando na verdade
+  // era uma constante fixa nunca alimentada por dado real). Substituído
+  // pela prioridade clínica real já calculada por paciente (RM-26,
+  // `med.prioridade`) — sinal real, não fabricado, que efetivamente mede
+  // "adequação ao paciente" (o que o nome do componente promete).
+  const prioridadeTier = med.prioridade?.tier;
+  const adequacaoScore = prioridadeTier === 'preferencial' ? 100
+    : prioridadeTier === 'primeira_linha' ? 75
+    : prioridadeTier === 'contextual' ? 55
+    : 65; // não classificado para este contexto — neutro, nem penaliza nem beneficia
   const c_adequacao: ComponenteScore = {
     nome: 'Adequação ao Paciente',
     peso: 20,
-    valor: medTrustScore,
-    descricao: `Trust Score do motor de evidência: ${medTrustScore}/100`,
+    valor: adequacaoScore,
+    descricao: med.prioridade
+      ? `Prioridade clínica (RM-26): ${prioridadeTier} — ${med.prioridade.motivo}`
+      : 'Prioridade clínica não classificada para este contexto',
   };
 
   // Dados clínicos preenchidos → mais confiança
