@@ -9,16 +9,22 @@
 // catálogo do comparador (`MOLECULES_DB`) por nome exato de molécula
 // (DCI) — nunca por substring, para não casar "Valsartana" com a
 // combinação "Sacubitril + Valsartana".
+//
+// RM-88: `resolverPreenchimentoComparador` é genérica sobre o tipo do
+// catálogo (em vez de importar `MoleculaComparavel` de `drug-comparator`)
+// porque esse módulo está na lista restrita do guard RM-06
+// (`no-restricted-imports`, `src/lib/**` novo não entra na allowlist —
+// só `src/app/comparador/page.tsx`, que já lê o catálogo diretamente).
+// Função genérica evita o import proibido sem duplicar o tipo.
 // ============================================================
 
 import type { Consultation, TherapeuticSuggestion } from './types';
-import type { MoleculaComparavel } from './drug-comparator';
 
 export type FonteComparador = 'consulta_ativa' | 'nenhuma';
 
-export interface PreenchimentoComparador {
-  molA: MoleculaComparavel | null;
-  molB: MoleculaComparavel | null;
+export interface PreenchimentoComparador<T> {
+  molA: T | null;
+  molB: T | null;
   fonte: FonteComparador;
 }
 
@@ -62,10 +68,10 @@ function ordenarPorPrioridade(sugestoes: TherapeuticSuggestion[]): TherapeuticSu
  * 'nenhuma' }` — o comparador permanece exatamente como hoje, vazio,
  * para o médico escolher manualmente.
  */
-export function resolverPreenchimentoComparador(
+export function resolverPreenchimentoComparador<T extends { id: string; molecula: string }>(
   activeConsultation: Consultation | null | undefined,
-  moleculesDb: readonly MoleculaComparavel[],
-): PreenchimentoComparador {
+  moleculesDb: readonly T[],
+): PreenchimentoComparador<T> {
   const sugestoes = activeConsultation?.plano_terapeutico?.farmacologico ?? [];
   if (sugestoes.length === 0) {
     return { molA: null, molB: null, fonte: 'nenhuma' };
@@ -74,7 +80,7 @@ export function resolverPreenchimentoComparador(
   const porNome = new Map(moleculesDb.map(m => [normalize(m.molecula), m]));
   const ordenadas = ordenarPorPrioridade(sugestoes);
 
-  const encontradas: MoleculaComparavel[] = [];
+  const encontradas: T[] = [];
   for (const s of ordenadas) {
     const match = porNome.get(normalize(s.molecula));
     if (match && !encontradas.some(m => m.id === match.id)) {

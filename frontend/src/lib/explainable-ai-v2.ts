@@ -326,6 +326,24 @@ const EVIDENCIA_DB: Record<string, DadosEvidencia> = {
   },
 };
 
+// RM-88: chaves de combinação em EVIDENCIA_DB usam "/" (ex.:
+// "sacubitril/valsartana", "budesonida/formoterol"), mas o motor real de
+// terapêutica (`clinical-therapeutics.ts`) grava `molecula` com "+" (ex.:
+// "Sacubitril + Valsartana", "Budesonida + Formoterol") — a normalização
+// anterior de `gerarWHY` só removia espaços, nunca casando "+" com "/".
+// Resultado: as entradas curadas dessas 2 combinações eram inatingíveis
+// para qualquer `TherapeuticSuggestion` real, caindo sempre no fallback
+// genérico. Exposto ao escrever os testes dedicados desta RM. Corrigido
+// normalizando os dois lados para o mesmo formato (só letras/dígitos),
+// em vez de comparar strings com pontuação diferente.
+function normalizeMolecula(s: string): string {
+  return s.toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+const EVIDENCIA_DB_NORMALIZADO: Record<string, DadosEvidencia> = Object.fromEntries(
+  Object.entries(EVIDENCIA_DB).map(([chave, dados]) => [normalizeMolecula(chave), dados]),
+);
+
 // ── Alternativas clínicas por CID ─────────────────────────────
 
 interface AlternativasDB {
@@ -526,8 +544,7 @@ export function gerarWHY(
   med: TherapeuticSuggestion,
   _anamnese?: Anamnesis,
 ): RespostaWHY {
-  const molLower = med.molecula.toLowerCase().replace(/\s+/g, '');
-  const base = EVIDENCIA_DB[molLower] ?? EVIDENCIA_DB[med.molecula.toLowerCase()] ?? null;
+  const base = EVIDENCIA_DB_NORMALIZADO[normalizeMolecula(med.molecula)] ?? null;
 
   const diretrizLib: JustificativaDiretriz = {
     diretriz: base?.diretriz ?? med.evidencia.diretriz,
@@ -646,11 +663,19 @@ export function gerarWHYNOT(
     }
   }
 
-  // ── Trust score baixo ────────────────────────────────────────
-  const trustScore = (med as unknown as Record<string, unknown>).trust_score as number | undefined;
-  if (trustScore !== undefined && trustScore < 50) {
-    restricoes.push({ tipo: 'guideline', descricao: `Trust Score baixo (${trustScore}/100) — evidência limitada para este perfil de paciente`, criterio_ativado: `Trust Score: ${trustScore}`, fonte: 'Motor de evidência Prescreve-AI', acao_recomendada: 'Considerar alternativa com maior grau de evidência para este perfil.', gravidade: 'leve' });
-  }
+  // RM-88: removido o bloco "Trust score baixo" que lia
+  // `(med as unknown as Record<string, unknown>).trust_score` — o mesmo
+  // antipadrão corrigido no componente "Adequação ao Paciente" pelo RM-86,
+  // só que nesta função (`gerarWHYNOT`) em vez de
+  // `calcularExplainabilityScore`, e não detectado naquela RM.
+  // `TherapeuticSuggestion` nunca teve campo `trust_score`, então
+  // `trustScore` era sempre `undefined` — este bloco era código morto
+  // desde sempre, nunca executou em produção. Confirmado via escrita dos
+  // testes dedicados desta RM (cobertura completa de `gerarWHYNOT` expôs
+  // o branch como inatingível). Removido em vez de corrigido: não existe
+  // hoje um "trust score" real por sugestão terapêutica para substituir —
+  // inventar um fabricaria um dado inexistente. Comportamento observável
+  // é idêntico ao de antes (o branch nunca disparava).
 
   // ── Ajuste de dose renal/hepático se indicado ────────────────
   if (med.dose.ajuste_renal && tfg !== undefined && tfg < 60 && !restricoes.some(r => r.tipo === 'ajuste_dose')) {
