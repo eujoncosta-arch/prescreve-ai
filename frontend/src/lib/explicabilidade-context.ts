@@ -37,6 +37,7 @@ export const CID_CONDITION_MAP: Record<string, string> = {
   J44: 'dpoc',
   E03: 'hipotireoidismo',
   E78: 'dislipidemia',
+  G43: 'enxaqueca', // RM-90
 };
 
 export interface ContextoExplicabilidade {

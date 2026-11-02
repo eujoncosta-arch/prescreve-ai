@@ -1002,6 +1002,108 @@ const BASE_CLINICA: ConditionRule[] = [
       'Diagnóstico clínico-radiológico: tosse + febre + dispneia + síndrome de condensação + infiltrado radiológico novo. CURB-65 (Confusão, Ureia > 7, FR ≥ 30, PAS < 90 ou PAD ≤ 60, idade ≥ 65) estratifica gravidade: 0-1 ambulatorial, 2 considerar internação, ≥ 3 internação ± UTI.',
   },
 
+  // ══════════════════════════════════════════════════════════
+  // 11. ENXAQUECA — G43 — RM-90
+  // Referência: critérios diagnósticos ICHD-3 (International Classification
+  // of Headache Disorders, 3ª edição) — critérios clínicos estáveis e
+  // amplamente adotados, sem substituto nacional divergente.
+  // ══════════════════════════════════════════════════════════
+  {
+    id: 'enxaqueca',
+    cid10: 'G43',
+    nome: 'Enxaqueca (Migrânea)',
+    peso_minimo_para_incluir: 6,
+    criterios: [
+      {
+        descricao: 'Diagnóstico prévio de enxaqueca/migrânea',
+        check: a => temComorbidade(a, 'enxaqueca', 'migrânea', 'migranea'),
+        peso: 10,
+      },
+      {
+        descricao: 'Cefaleia pulsátil/latejante referida',
+        check: a => has(txt(a.queixa_principal, a.hda), 'pulsátil', 'pulsatil', 'latejante', 'throbbing'),
+        peso: 6,
+      },
+      {
+        descricao: 'Cefaleia unilateral (hemicrania)',
+        check: a => has(txt(a.queixa_principal, a.hda), 'unilateral', 'hemicrania', 'um lado da cabeça', 'um lado da cabeca'),
+        peso: 5,
+      },
+      {
+        descricao: 'Náusea ou vômito associados à cefaleia',
+        check: a => has(txt(a.queixa_principal, a.hda), 'náusea', 'nausea', 'vômito', 'vomito', 'enjoo'),
+        peso: 5,
+      },
+      {
+        descricao: 'Fotofobia e/ou fonofobia (piora com luz/som)',
+        check: a => has(txt(a.queixa_principal, a.hda), 'fotofobia', 'fonofobia', 'incomoda a luz', 'incomoda o barulho', 'piora com luz', 'piora com som', 'piora com barulho'),
+        peso: 5,
+      },
+      {
+        descricao: 'Piora com atividade física rotineira',
+        check: a => has(txt(a.queixa_principal, a.hda), 'piora com esforço', 'piora ao se movimentar', 'piora com atividade'),
+        peso: 3,
+      },
+      {
+        descricao: 'Aura visual referida (escotomas, luzes, linhas em zigue-zague) antes ou durante a crise',
+        check: a => has(txt(a.queixa_principal, a.hda), 'aura', 'escotoma', 'luzes piscando', 'visão turva antes da dor', 'visao turva antes da dor'),
+        peso: 4,
+      },
+      {
+        descricao: 'Padrão episódico recorrente (crises prévias semelhantes)',
+        check: a => has(txt(a.queixa_principal, a.hda), 'crises recorrentes', 'episódios semelhantes', 'episodios semelhantes', 'já teve antes', 'ja teve antes', 'de novo'),
+        peso: 2,
+      },
+    ],
+    red_flags: [
+      {
+        descricao: 'Início após os 50 anos (SNOOP) — investigar causa secundária antes de tratar como enxaqueca primária',
+        check: a => has(txt(a.hpp, a.hda), 'início após os 50', 'inicio apos os 50', 'primeira crise aos'),
+        urgente: false,
+      },
+      {
+        descricao: 'Cefaleia de início súbito/thunderclap ("pior dor de cabeça da vida")',
+        check: a => has(txt(a.queixa_principal, a.hda), 'pior dor de cabeça da vida', 'pior dor de cabeca da vida', 'início súbito', 'inicio subito', 'thunderclap', 'explosão'),
+        urgente: true,
+      },
+      {
+        descricao: 'Déficit neurológico focal associado (fraqueza, alteração de fala, confusão)',
+        check: a => has(txt(a.queixa_principal, a.hda, a.exame_fisico), 'déficit neurológico', 'deficit neurologico', 'fraqueza em', 'dificuldade para falar', 'confusão mental', 'confusao mental'),
+        urgente: true,
+      },
+      {
+        descricao: 'Febre, rigidez de nuca ou sinais meníngeos associados',
+        check: a => has(txt(a.queixa_principal, a.hda, a.exame_fisico), 'rigidez de nuca', 'sinais meníngeos', 'sinais meningeos', 'febre') && has(txt(a.queixa_principal, a.hda), 'cefaleia', 'dor de cabeça', 'dor de cabeca'),
+        urgente: true,
+      },
+      {
+        descricao: 'Mudança de padrão ou piora progressiva de cefaleia crônica prévia',
+        check: a => has(txt(a.hda), 'piora progressiva', 'mudou o padrão', 'mudou o padrao', 'diferente das outras vezes'),
+        urgente: false,
+      },
+    ],
+    exames_confirmatorios: [
+      'Diagnóstico clínico — não há exame confirmatório para enxaqueca primária (critérios ICHD-3)',
+      'Neuroimagem (RM ou TC de crânio) reservada para sinais de alarme ou exame neurológico anormal — não é rotina em enxaqueca típica',
+    ],
+    exames_para_excluir_diferenciais: [
+      'RM de crânio (excluir lesão expansiva, malformação vascular em aura atípica ou red flag)',
+      'Angio-RM/Angio-TC (se suspeita de hemorragia subaracnóidea em cefaleia thunderclap)',
+      'PCR/VHS (excluir arterite temporal em > 50 anos com cefaleia nova)',
+    ],
+    diferenciais: ['Cefaleia tensional', 'Cefaleia em salvas (cluster)', 'Cefaleia por uso excessivo de medicação (MOH)', 'Cefaleia secundária (hemorragia subaracnóidea, hipertensão intracraniana, arterite temporal, sinusite)'],
+    guideline: {
+      diretriz: 'International Classification of Headache Disorders, 3rd edition (ICHD-3)',
+      sociedade: 'International Headache Society (IHS) / Sociedade Brasileira de Cefaleia (SBCe)',
+      ano: 2018,
+      nivel_evidencia: 'A',
+      grau_recomendacao: 'I',
+      link: 'https://ichd-3.org/1-migraine/',
+    },
+    raciocinio_base:
+      'Diagnóstico clínico baseado nos critérios ICHD-3 para enxaqueca sem aura: ≥ 5 crises, duração 4–72h sem tratamento, ≥ 2 de (unilateral, pulsátil, intensidade moderada-grave, piora com atividade física rotineira), e ≥ 1 de (náusea/vômito, fotofobia E fonofobia). Sinais de alarme (SNOOP) obrigam investigar causa secundária antes de tratar como enxaqueca primária.',
+  },
+
 ];
 
 // ─── MOTOR DE DECISÃO ─────────────────────────────────────────

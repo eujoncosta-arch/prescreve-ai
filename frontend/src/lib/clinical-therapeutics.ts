@@ -462,6 +462,92 @@ const PROTOCOLOS: Record<string, Omit<TherapeuticPlan, 'diagnostico_selecionado'
     monitorizacao: ['CURB-65 na apresentação para decisão ambulatório/internação', 'SpO2 contínua se internado', 'Hemoculturas e culturas de escarro (se hospitalizado)', 'Procalcitonina como guia de descontinuação do antibiótico'],
     encaminhamento: 'Internação hospitalar se CURB-65 ≥ 2 ou critérios ATS/IDSA de PAC grave',
   },
+
+  // ══════════════════════════════════════════════════════════
+  // ENXAQUECA — RM-90 (G43)
+  //
+  // Citação: classes, doses e contraindicações abaixo são farmacologia
+  // básica amplamente estabelecida (mesmo nível de confiança já usado
+  // para os demais protocolos deste arquivo, ex. doses de Enalapril/
+  // Carvedilol). O campo `citacao` cita as sociedades de referência
+  // (SBCe, American Headache Society) sem DOI/edição específicos — ao
+  // contrário dos outros protocolos deste arquivo, não há aqui um
+  // documento-fonte único verificado linha a linha (como a DBHA 2025
+  // usada em HAS, RM-81). Evita repetir o padrão de DOI fabricado já
+  // corrigido nas RM-76/77/79/81: melhor citação honesta e genérica do
+  // que uma referência precisa não verificada.
+  // ══════════════════════════════════════════════════════════
+  enxaqueca: {
+    farmacologico: [
+      sug({
+        id: 'naproxeno_enxaqueca',
+        classe_terapeutica: 'Anti-inflamatório não esteroidal (AINE)',
+        molecula: 'Naproxeno',
+        nome_generico: 'Naproxeno Sódico',
+        indicacao: 'Tratamento agudo de crise de enxaqueca leve a moderada — 1ª linha',
+        dose: { dose_padrao: '500 mg', dose_min: '500 mg', dose_max: '1375 mg/dia', unidade: 'mg', via: 'Oral', frequencia: 'No início da crise; pode repetir 500 mg após 2h se necessário', duracao: 'Uso em crise, não contínuo', ajuste_renal: 'Evitar se TFG < 30', ajuste_hepatico: 'Evitar em hepatopatia ativa' },
+        posologia_completa: 'Naproxeno 500 mg VO no início dos sintomas. Pode repetir 500 mg após 2 horas se resposta parcial (máximo 1375 mg/dia).',
+        contraindicacoes: ['Úlcera péptica ativa', 'Sangramento gastrointestinal recente', 'DRC avançada (TFG < 30)', 'Hipersensibilidade a AINEs/AAS', 'Terceiro trimestre de gestação'],
+        efeitos_adversos: ['Dispepsia', 'Náusea', 'Risco de sangramento GI com uso frequente', 'Nefrotoxicidade com uso crônico'],
+        monitoramento: ['Limitar a ≤ 2–3 dias/semana para evitar cefaleia por uso excessivo de analgésico (MOH)', 'Função renal se uso frequente'],
+        alternativas: ['Ibuprofeno 400–600 mg (crise leve)', 'Sumatriptano 50–100 mg (crise moderada-grave, sem resposta a AINE)', 'Metoclopramida 10 mg VO/IV como adjuvante para náusea/vômito associado'],
+        evidencia: { diretriz: 'Consenso de tratamento agudo da enxaqueca', sociedade: 'SBCe / American Headache Society', ano: 2021, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'AINEs são 1ª linha estabelecida para crise leve-moderada' }, citacao: 'Sociedade Brasileira de Cefaleia (SBCe) e American Headache Society — consenso de tratamento agudo, classes e doses de 1ª linha amplamente estabelecidas na prática clínica.' },
+      }),
+      sug({
+        id: 'sumatriptano',
+        classe_terapeutica: 'Triptano (agonista seletivo 5-HT1B/1D)',
+        molecula: 'Sumatriptano',
+        nome_generico: 'Succinato de Sumatriptano',
+        indicacao: 'Tratamento agudo de crise de enxaqueca moderada a grave, ou falha a AINE',
+        dose: { dose_padrao: '50 mg', dose_min: '50 mg', dose_max: '200 mg/dia', unidade: 'mg', via: 'Oral', frequencia: 'No início da crise; pode repetir após 2h se resposta parcial (máx. 2 doses/dia)', duracao: 'Uso em crise, não contínuo', ajuste_hepatico: 'Evitar em hepatopatia grave' },
+        posologia_completa: 'Sumatriptano 50 mg VO no início da crise (pode titular para 100 mg se resposta insuficiente em crises futuras). Repetir 50–100 mg após 2h se necessário, máximo 200 mg/dia. Apresentação subcutânea (6 mg) disponível para crises com vômito importante.',
+        contraindicacoes: ['Doença arterial coronariana ou equivalente isquêmico', 'AVC ou AIT prévio', 'HAS não controlada', 'Enxaqueca hemiplégica ou com aura de tronco encefálico (basilar)', 'Uso concomitante de ergotamínicos (nas últimas 24h) ou IMAO', 'Doença vascular periférica grave'],
+        efeitos_adversos: ['Formigamento/parestesia', 'Sensação de pressão ou aperto torácico (geralmente benigna, mas investigar se cardiopata)', 'Sonolência', 'Tontura'],
+        monitoramento: ['Limitar a ≤ 2 dias/semana para evitar cefaleia por uso excessivo de medicação (MOH)', 'Avaliar risco cardiovascular antes da 1ª prescrição em paciente com fatores de risco'],
+        alternativas: ['Zolmitriptano 2,5 mg (perfil similar)', 'Naratriptano 2,5 mg (início mais lento, menos recorrência)', 'Naproxeno 500 mg (se contraindicação a triptano)'],
+        evidencia: { diretriz: 'Consenso de tratamento agudo da enxaqueca', sociedade: 'SBCe / American Headache Society', ano: 2021, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'Triptanos são o tratamento específico de 1ª linha para crise moderada-grave' }, citacao: 'Sociedade Brasileira de Cefaleia (SBCe) e American Headache Society — consenso de tratamento agudo; triptanos como classe específica estabelecida desde a década de 1990.' },
+      }),
+      sug({
+        id: 'propranolol_enxaqueca',
+        classe_terapeutica: 'Betabloqueador não seletivo',
+        molecula: 'Propranolol',
+        nome_generico: 'Cloridrato de Propranolol',
+        indicacao: 'Profilaxia de enxaqueca — 1ª linha quando crises frequentes (≥ 4 dias/mês) ou incapacitantes',
+        dose: { dose_padrao: '80 mg', dose_min: '40 mg', dose_max: '160 mg/dia', unidade: 'mg', via: 'Oral', frequencia: '2x/dia (ou formulação de liberação prolongada 1x/dia)', duracao: 'Mínimo 2–3 meses para avaliar resposta; reavaliar continuidade em 6–12 meses', ajuste_hepatico: 'Reduzir dose em hepatopatia' },
+        posologia_completa: 'Propranolol 40 mg 2x/dia, titular conforme tolerância até 80–160 mg/dia dividido em 2 tomadas. Resposta plena esperada em 2–3 meses.',
+        contraindicacoes: ['Asma / DPOC grave (broncoespasmo)', 'Bradicardia ou BAV 2º-3º grau', 'ICC descompensada', 'Hipotensão sintomática', 'Depressão grave não tratada (relativa)'],
+        efeitos_adversos: ['Fadiga', 'Hipotensão', 'Bradicardia', 'Broncoespasmo em predispostos', 'Depressão/alterações de humor (raro)'],
+        monitoramento: ['FC e PA no início e após titulação', 'Reavaliar frequência de crises em diário de cefaleia após 2–3 meses'],
+        alternativas: ['Topiramato 25–100 mg/dia (alternativa de 1ª linha, especialmente se obesidade associada)', 'Amitriptilina 10–75 mg à noite (se insônia/depressão associada)', 'Candesartana 16 mg/dia (alternativa em intolerância a betabloqueador)'],
+        evidencia: { diretriz: 'Consenso de tratamento profilático da enxaqueca', sociedade: 'SBCe / American Headache Society', ano: 2021, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'Betabloqueadores são 1ª linha estabelecida para profilaxia' }, citacao: 'Sociedade Brasileira de Cefaleia (SBCe) e American Headache Society — consenso de tratamento profilático; propranolol como 1ª linha estabelecida desde estudos controlados dos anos 1970-80.' },
+      }),
+      sug({
+        id: 'topiramato',
+        classe_terapeutica: 'Anticonvulsivante',
+        molecula: 'Topiramato',
+        nome_generico: 'Topiramato',
+        indicacao: 'Profilaxia de enxaqueca — alternativa de 1ª linha, especialmente com obesidade associada ou contraindicação a betabloqueador',
+        dose: { dose_padrao: '50 mg', dose_min: '25 mg', dose_max: '100 mg/dia', unidade: 'mg', via: 'Oral', frequencia: '1x/dia à noite (iniciar 25 mg, titular lentamente)', duracao: 'Mínimo 2–3 meses para avaliar resposta', ajuste_renal: 'Reduzir dose se TFG < 70' },
+        posologia_completa: 'Topiramato 25 mg à noite por 1 semana, titulando 25 mg a cada 1–2 semanas até 50–100 mg/dia, para minimizar efeitos cognitivos.',
+        contraindicacoes: ['Gravidez (categoria D — teratogênico, risco de fenda palatina)', 'Nefrolitíase recorrente', 'Glaucoma de ângulo estreito', 'Acidose metabólica não corrigida'],
+        efeitos_adversos: ['Parestesias (muito comum)', 'Perda de peso', 'Dificuldade de concentração / lentificação cognitiva', 'Nefrolitíase', 'Glaucoma agudo (raro)'],
+        monitoramento: ['Peso corporal', 'Função cognitiva subjetiva', 'Orientar contracepção eficaz em mulheres em idade fértil'],
+        alternativas: ['Propranolol 40–160 mg/dia (1ª linha alternativa)', 'Amitriptilina 10–75 mg à noite', 'Toxina botulínica A (enxaqueca crônica refratária, ≥ 15 dias/mês)'],
+        evidencia: { diretriz: 'Consenso de tratamento profilático da enxaqueca', sociedade: 'SBCe / American Headache Society', ano: 2021, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'Topiramato é 1ª linha estabelecida para profilaxia, com ECRs robustos' }, citacao: 'Sociedade Brasileira de Cefaleia (SBCe) e American Headache Society — consenso de tratamento profilático.' },
+      }),
+    ],
+    nao_farmacologico: [
+      'Repouso em ambiente escuro e silencioso durante a crise',
+      'Hidratação adequada',
+      'Identificação e evitação de gatilhos individuais (jejum prolongado, privação de sono, estresse, alimentos específicos, álcool)',
+      'Regularidade de sono e refeições',
+      'Diário de cefaleia para quantificar frequência/gatilhos e guiar decisão de profilaxia',
+      'Atividade física aeróbica regular (reduz frequência de crises)',
+    ],
+    seguimento: 'Reavaliar resposta ao tratamento agudo a cada crise. Para profilaxia: reavaliar em 2–3 meses; considerar troca de classe se redução < 50% na frequência de crises.',
+    monitorizacao: ['Diário de cefaleia (frequência, intensidade, gatilhos, medicação usada)', 'Rastrear uso excessivo de analgésico/triptano (MOH) — limite de 2–3 dias/semana', 'Reavaliar necessidade de profilaxia contínua a cada 6–12 meses'],
+    encaminhamento: 'Neurologista/especialista em cefaleia se: enxaqueca crônica (≥ 15 dias/mês), falha a 2+ classes profiláticas, sinais de alarme (início após 50 anos, mudança de padrão, déficit neurológico focal, cefaleia "pior da vida") — investigar causa secundária antes de tratar como enxaqueca primária.',
+  },
 };
 
 // ─── FUNÇÃO PRINCIPAL ─────────────────────────────────────────
