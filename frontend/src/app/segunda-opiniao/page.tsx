@@ -10,10 +10,12 @@ import {
   type CondutaOpcao,
   type SegundaOpiniao,
 } from '@/lib/second-opinion';
+import { resolverPreenchimentoSegundaOpiniao } from '@/lib/second-opinion-context';
+import { useApp } from '@/lib/store';
 import {
   CheckCircle2, ChevronRight, AlertTriangle, BookOpen,
   Microscope, ShieldCheck, Info, ChevronDown, ChevronUp,
-  Stethoscope, Lightbulb, ArrowRight, RotateCcw, FlaskConical,
+  Stethoscope, Lightbulb, ArrowRight, RotateCcw, FlaskConical, User,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -319,10 +321,44 @@ function CondutaCard({
 // ─── Main Page ───────────────────────────────────────────────────────────────
 
 export default function SegundaOpiniaoPage() {
+  const { state } = useApp();
   const [passo, setPasso]             = useState<1 | 2 | 3>(1);
   const [condicaoId, setCondicaoId]   = useState<string>('');
   const [condutaId, setCondutaId]     = useState<string>('');
   const [resultado, setResultado]     = useState<SegundaOpiniao | null>(null);
+
+  // RM-89 — pré-preenchimento a partir da consulta ativa. Ajuste de estado
+  // durante o render (não `useEffect`, mesmo padrão do RM-87): dispara uma
+  // única vez por consulta — `consultaIdPreenchida` só muda quando o
+  // médico troca de paciente, nunca ao clicar "Nova consulta" (reiniciar)
+  // na mesma consulta, que não altera o id da consulta ativa.
+  const [consultaIdPreenchida, setConsultaIdPreenchida] = useState<string | null>(null);
+  const [autoPreenchido, setAutoPreenchido] = useState<{ condicaoId: string; condutaId: string | null } | null>(null);
+  const consultaAtivaId = state.activeConsultation?.id ?? null;
+  if (consultaAtivaId !== consultaIdPreenchida) {
+    setConsultaIdPreenchida(consultaAtivaId);
+    const preenchimento = resolverPreenchimentoSegundaOpiniao(state.activeConsultation, CONDICOES);
+    if (preenchimento.fonte === 'consulta_ativa' && preenchimento.condicaoId) {
+      setCondicaoId(preenchimento.condicaoId);
+      setAutoPreenchido({ condicaoId: preenchimento.condicaoId, condutaId: preenchimento.condutaId });
+      if (preenchimento.condutaId) {
+        setCondutaId(preenchimento.condutaId);
+        const r = gerarSegundaOpiniao(preenchimento.condicaoId, preenchimento.condutaId);
+        if (r) {
+          setResultado(r);
+          setPasso(3);
+        }
+      } else {
+        setPasso(2);
+      }
+    }
+  }
+  // O selo só aparece enquanto condição/conduta continuam exatamente os que
+  // foram pré-preenchidos — some sozinho assim que o médico muda a seleção
+  // manualmente ou clica "Nova consulta", sem precisar de flag separada.
+  const mostrarSeloConsultaAtiva = !!autoPreenchido
+    && condicaoId === autoPreenchido.condicaoId
+    && (condutaId || null) === autoPreenchido.condutaId;
 
   const condicaoSelecionada: CondicaoClinica | undefined =
     CONDICOES.find(c => c.id === condicaoId);
@@ -410,6 +446,23 @@ export default function SegundaOpiniaoPage() {
               </div>
             ))}
           </div>
+
+          {/* RM-89 — selo de pré-preenchimento a partir da consulta ativa */}
+          {mostrarSeloConsultaAtiva && (
+            <div
+              role="note"
+              data-fonte-segunda-opiniao="consulta_ativa"
+              className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200 mt-4"
+            >
+              <User aria-hidden="true" size={14} className="flex-shrink-0 text-emerald-600 dark:text-emerald-400" />
+              <span>
+                <span className="font-semibold">Pré-preenchido da consulta ativa.</span>{' '}
+                {condutaId
+                  ? 'Condição e conduta desta consulta — escolha outra opção livremente para comparar.'
+                  : 'Condição desta consulta — escolha a conduta para gerar a segunda opinião.'}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Passo 1 — Selecionar condição */}
