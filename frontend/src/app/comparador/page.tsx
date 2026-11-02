@@ -7,7 +7,7 @@ import {
   CheckCircle2, TrendingUp, DollarSign, Heart, Activity,
   FlaskConical, Shield, Zap, BookOpen, Info, ArrowRight,
   RotateCcw, Star, BarChart3, LayoutGrid, Table2, Layers,
-  CheckCircle, Ban, AlertCircle, Stethoscope, Pill,
+  CheckCircle, Ban, AlertCircle, Stethoscope, Pill, User,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -24,6 +24,8 @@ import {
   CategoriaComparacao,
   getMoleculesByCategoria,
 } from '@/lib/drug-comparator';
+import { useApp } from '@/lib/store';
+import { resolverPreenchimentoComparador } from '@/lib/comparador-context';
 
 // ─── Tipos e constantes ─────────────────────────────────────────
 
@@ -883,11 +885,37 @@ const QUICK_PAIRS = [
 // ─── Page ────────────────────────────────────────────────────────
 
 export default function ComparadorPage() {
+  const { state } = useApp();
   const [molA,         setMolA]         = useState<MoleculaComparavel | null>(null);
   const [molB,         setMolB]         = useState<MoleculaComparavel | null>(null);
   const [viewMode,     setViewMode]     = useState<ViewMode>('cards');
   const [modoComp,     setModoComp]     = useState<ModoComparacao>('molecula');
   const [activeCateg,  setActiveCateg]  = useState<CategoriaComparacao | 'todas'>('todas');
+
+  // RM-87 — pré-preenchimento a partir da consulta ativa. Ajuste de estado
+  // durante o render (não `useEffect`, mesmo padrão já usado no RM-84 para
+  // evitar o lint `set-state-in-effect`): dispara uma única vez por
+  // consulta (`consultaIdPreenchida` muda só quando o médico troca de
+  // paciente), nunca de novo após o médico clicar "Limpar" na mesma
+  // consulta — `Limpar` não muda o id da consulta ativa.
+  const [consultaIdPreenchida, setConsultaIdPreenchida] = useState<string | null>(null);
+  const [autoPreenchido, setAutoPreenchido] = useState<{ aId: string; bId: string | null } | null>(null);
+  const consultaAtivaId = state.activeConsultation?.id ?? null;
+  if (consultaAtivaId !== consultaIdPreenchida) {
+    setConsultaIdPreenchida(consultaAtivaId);
+    const preenchimento = resolverPreenchimentoComparador(state.activeConsultation, MOLECULES_DB);
+    if (preenchimento.fonte === 'consulta_ativa' && preenchimento.molA) {
+      setMolA(preenchimento.molA);
+      setMolB(preenchimento.molB);
+      setAutoPreenchido({ aId: preenchimento.molA.id, bId: preenchimento.molB?.id ?? null });
+    }
+  }
+  // O selo só aparece enquanto A/B continuam exatamente os que foram
+  // pré-preenchidos — some sozinho assim que o médico troca qualquer lado
+  // manualmente, sem precisar de uma flag separada para manter em sincronia.
+  const mostrarSeloConsultaAtiva = !!autoPreenchido
+    && molA?.id === autoPreenchido.aId
+    && (molB?.id ?? null) === autoPreenchido.bId;
 
   const scores = useMemo(() => {
     if (!molA || !molB) return [];
@@ -977,6 +1005,21 @@ export default function ComparadorPage() {
             A hierarquia clínica obrigatória: <strong>Diretriz → Classe → Molécula → Marca</strong>.
           </p>
         </div>
+
+        {/* RM-87 — selo de pré-preenchimento a partir da consulta ativa */}
+        {mostrarSeloConsultaAtiva && (
+          <div
+            role="note"
+            data-fonte-comparador="consulta_ativa"
+            className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200"
+          >
+            <User aria-hidden="true" size={14} className="flex-shrink-0 text-emerald-600 dark:text-emerald-400" />
+            <span>
+              <span className="font-semibold">Pré-preenchido da consulta ativa.</span> Moléculas da conduta
+              terapêutica desta consulta — troque A ou B livremente para comparar outra opção.
+            </span>
+          </div>
+        )}
 
         {/* ── MODO CLASSE ── */}
         {modoComp === 'classe' && <ClasseComparacao />}
