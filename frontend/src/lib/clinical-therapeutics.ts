@@ -491,7 +491,7 @@ const PROTOCOLOS: Record<string, Omit<TherapeuticPlan, 'diagnostico_selecionado'
         efeitos_adversos: ['Dispepsia', 'Náusea', 'Risco de sangramento GI com uso frequente', 'Nefrotoxicidade com uso crônico'],
         monitoramento: ['Limitar a ≤ 2–3 dias/semana para evitar cefaleia por uso excessivo de analgésico (MOH)', 'Função renal se uso frequente'],
         alternativas: ['Ibuprofeno 400–600 mg (crise leve)', 'Sumatriptano 50–100 mg (crise moderada-grave, sem resposta a AINE)', 'Metoclopramida 10 mg VO/IV como adjuvante para náusea/vômito associado'],
-        evidencia: { diretriz: 'Consenso de tratamento agudo da enxaqueca', sociedade: 'SBCe / American Headache Society', ano: 2021, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'AINEs são 1ª linha estabelecida para crise leve-moderada' }, citacao: 'Sociedade Brasileira de Cefaleia (SBCe) e American Headache Society — consenso de tratamento agudo, classes e doses de 1ª linha amplamente estabelecidas na prática clínica.' },
+        evidencia: { diretriz: 'AHS Consensus Statement: Update on Integrating New Migraine Treatments into Clinical Practice', sociedade: 'American Headache Society (AHS)', ano: 2021, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'AINEs são 1ª linha estabelecida para crise leve-moderada' }, citacao: 'Ailani J, Burch RC, Robbins MS; Board of Directors of the American Headache Society. Headache. 2021;61(7):1021-1039.', doi: '10.1111/head.14153' },
       }),
       sug({
         id: 'sumatriptano',
@@ -505,7 +505,7 @@ const PROTOCOLOS: Record<string, Omit<TherapeuticPlan, 'diagnostico_selecionado'
         efeitos_adversos: ['Formigamento/parestesia', 'Sensação de pressão ou aperto torácico (geralmente benigna, mas investigar se cardiopata)', 'Sonolência', 'Tontura'],
         monitoramento: ['Limitar a ≤ 2 dias/semana para evitar cefaleia por uso excessivo de medicação (MOH)', 'Avaliar risco cardiovascular antes da 1ª prescrição em paciente com fatores de risco'],
         alternativas: ['Zolmitriptano 2,5 mg (perfil similar)', 'Naratriptano 2,5 mg (início mais lento, menos recorrência)', 'Naproxeno 500 mg (se contraindicação a triptano)'],
-        evidencia: { diretriz: 'Consenso de tratamento agudo da enxaqueca', sociedade: 'SBCe / American Headache Society', ano: 2021, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'Triptanos são o tratamento específico de 1ª linha para crise moderada-grave' }, citacao: 'Sociedade Brasileira de Cefaleia (SBCe) e American Headache Society — consenso de tratamento agudo; triptanos como classe específica estabelecida desde a década de 1990.' },
+        evidencia: { diretriz: 'AHS Consensus Statement: Update on Integrating New Migraine Treatments into Clinical Practice', sociedade: 'American Headache Society (AHS)', ano: 2021, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'Triptanos são o tratamento específico de 1ª linha para crise moderada-grave' }, citacao: 'Ailani J, Burch RC, Robbins MS; Board of Directors of the American Headache Society. Headache. 2021;61(7):1021-1039. Eficácia também revisada em: Derry CJ, Derry S, Moore RA. Cochrane Database Syst Rev. 2012. doi: 10.1002/14651858.CD008615.pub2 (sumatriptano oral).', doi: '10.1111/head.14153' },
       }),
       sug({
         id: 'propranolol_enxaqueca',
@@ -519,7 +519,7 @@ const PROTOCOLOS: Record<string, Omit<TherapeuticPlan, 'diagnostico_selecionado'
         efeitos_adversos: ['Fadiga', 'Hipotensão', 'Bradicardia', 'Broncoespasmo em predispostos', 'Depressão/alterações de humor (raro)'],
         monitoramento: ['FC e PA no início e após titulação', 'Reavaliar frequência de crises em diário de cefaleia após 2–3 meses'],
         alternativas: ['Topiramato 25–100 mg/dia (alternativa de 1ª linha, especialmente se obesidade associada)', 'Amitriptilina 10–75 mg à noite (se insônia/depressão associada)', 'Candesartana 16 mg/dia (alternativa em intolerância a betabloqueador)'],
-        evidencia: { diretriz: 'Consenso de tratamento profilático da enxaqueca', sociedade: 'SBCe / American Headache Society', ano: 2021, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'Betabloqueadores são 1ª linha estabelecida para profilaxia' }, citacao: 'Sociedade Brasileira de Cefaleia (SBCe) e American Headache Society — consenso de tratamento profilático; propranolol como 1ª linha estabelecida desde estudos controlados dos anos 1970-80.' },
+        evidencia: { diretriz: 'Evidence-based guideline update: pharmacologic treatment for episodic migraine prevention in adults', sociedade: 'American Academy of Neurology (AAN) / American Headache Society (AHS)', ano: 2012, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'Betabloqueadores são 1ª linha estabelecida para profilaxia' }, citacao: 'Silberstein SD, Holland S, Freitag F, Dodick DW, Argoff C, Ashman E; Quality Standards Subcommittee of the American Academy of Neurology and American Headache Society. Neurology. 2012;78(17):1337-1345.', doi: '10.1212/WNL.0b013e3182535d20' },
       }),
       sug({
         id: 'topiramato',
@@ -533,7 +533,7 @@ const PROTOCOLOS: Record<string, Omit<TherapeuticPlan, 'diagnostico_selecionado'
         efeitos_adversos: ['Parestesias (muito comum)', 'Perda de peso', 'Dificuldade de concentração / lentificação cognitiva', 'Nefrolitíase', 'Glaucoma agudo (raro)'],
         monitoramento: ['Peso corporal', 'Função cognitiva subjetiva', 'Orientar contracepção eficaz em mulheres em idade fértil'],
         alternativas: ['Propranolol 40–160 mg/dia (1ª linha alternativa)', 'Amitriptilina 10–75 mg à noite', 'Toxina botulínica A (enxaqueca crônica refratária, ≥ 15 dias/mês)'],
-        evidencia: { diretriz: 'Consenso de tratamento profilático da enxaqueca', sociedade: 'SBCe / American Headache Society', ano: 2021, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'Topiramato é 1ª linha estabelecida para profilaxia, com ECRs robustos' }, citacao: 'Sociedade Brasileira de Cefaleia (SBCe) e American Headache Society — consenso de tratamento profilático.' },
+        evidencia: { diretriz: 'Evidence-based guideline update: pharmacologic treatment for episodic migraine prevention in adults', sociedade: 'American Academy of Neurology (AAN) / American Headache Society (AHS)', ano: 2012, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'Topiramato é 1ª linha estabelecida para profilaxia, com ECRs robustos (MIGR-001/MIGR-002)' }, citacao: 'Silberstein SD et al. Neurology. 2012;78(17):1337-1345 (doi: 10.1212/WNL.0b013e3182535d20). ECRs pivotais: Brandes JL et al. JAMA. 2004;291(8):965-973 (MIGR-002, n=483); Silberstein SD et al. Arch Neurol. 2004;61(4):490-495 (MIGR-001).', doi: '10.1212/WNL.0b013e3182535d20' },
       }),
     ],
     nao_farmacologico: [
@@ -571,7 +571,7 @@ const PROTOCOLOS: Record<string, Omit<TherapeuticPlan, 'diagnostico_selecionado'
         efeitos_adversos: ['Diarreia e dor abdominal (dose-dependente)', 'Náusea', 'Neuromiopatia com uso crônico/superdosagem', 'Mielossupressão (raro, superdosagem)'],
         monitoramento: ['Função renal e hepática antes do início', 'Revisar interações medicamentosas (CYP3A4) antes de prescrever'],
         alternativas: ['Naproxeno 500 mg 2x/dia (AINE, se sem contraindicação)', 'Prednisona 30–35 mg/dia × 5 dias (se contraindicação a AINE/colchicina ou DRC)'],
-        evidencia: { diretriz: 'ACR Guideline for Management of Gout', sociedade: 'ACR / EULAR / Sociedade Brasileira de Reumatologia (SBR)', ano: 2020, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'Colchicina em baixa dose é 1ª linha estabelecida para crise aguda (AGREE trial)' }, citacao: 'American College of Rheumatology (ACR) / EULAR / Sociedade Brasileira de Reumatologia — diretriz de manejo da gota.' },
+        evidencia: { diretriz: '2020 American College of Rheumatology Guideline for the Management of Gout', sociedade: 'American College of Rheumatology (ACR)', ano: 2020, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'Colchicina em baixa dose é 1ª linha estabelecida para crise aguda — esquema validado pelo AGREE Trial' }, citacao: 'FitzGerald JD, Dalbeth N, Mikuls T, et al. Arthritis Care Res (Hoboken). 2020;72(6):744-760. Esquema de baixa dose validado por: Terkeltaub RA et al. Arthritis Rheum. 2010;62(4):1060-1068 (AGREE Trial, n=185) — resposta ≥50% redução da dor: 37,8% baixa dose vs. 32,7% alta dose vs. 15,5% placebo; diarreia 23% vs. 76,9%.', doi: '10.1002/acr.24180' },
       }),
       sug({
         id: 'naproxeno_gota',
@@ -585,7 +585,7 @@ const PROTOCOLOS: Record<string, Omit<TherapeuticPlan, 'diagnostico_selecionado'
         efeitos_adversos: ['Dispepsia', 'Risco de sangramento GI', 'Nefrotoxicidade', 'Retenção hídrica/piora de HAS'],
         monitoramento: ['Função renal se uso prolongado ou DRC prévia', 'PA em hipertensos'],
         alternativas: ['Colchicina 1 mg + 0,5 mg (esquema de baixa dose)', 'Prednisona 30–35 mg/dia × 5 dias (se contraindicação a AINE)'],
-        evidencia: { diretriz: 'ACR Guideline for Management of Gout', sociedade: 'ACR / EULAR / Sociedade Brasileira de Reumatologia (SBR)', ano: 2020, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'AINEs são 1ª linha estabelecida para crise aguda sem contraindicação' }, citacao: 'American College of Rheumatology (ACR) / EULAR / Sociedade Brasileira de Reumatologia — diretriz de manejo da gota.' },
+        evidencia: { diretriz: '2020 American College of Rheumatology Guideline for the Management of Gout', sociedade: 'American College of Rheumatology (ACR)', ano: 2020, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'AINEs são 1ª linha estabelecida para crise aguda sem contraindicação' }, citacao: 'FitzGerald JD, Dalbeth N, Mikuls T, et al. Arthritis Care Res (Hoboken). 2020;72(6):744-760.', doi: '10.1002/acr.24180' },
       }),
       sug({
         id: 'alopurinol',
@@ -599,7 +599,7 @@ const PROTOCOLOS: Record<string, Omit<TherapeuticPlan, 'diagnostico_selecionado'
         efeitos_adversos: ['Rash cutâneo (geralmente leve)', 'Síndrome de hipersensibilidade ao alopurinol (rara, grave — DRESS)', 'Elevação de transaminases', 'Diarreia'],
         monitoramento: ['Ácido úrico sérico a cada 2–4 semanas durante titulação, depois a cada 6 meses', 'Função renal e hepática periódicas', 'Considerar genotipagem HLA-B*5801 em populações de maior risco (ex.: ascendência asiática) antes do início'],
         alternativas: ['Febuxostate 40–80 mg/dia (alternativa se intolerância/hipersensibilidade ao alopurinol — atenção a risco cardiovascular em pacientes com DCV estabelecida, FDA/CARES trial)', 'Probenecida (uricosúrico, se TFG preservada e subexcreção de urato)'],
-        evidencia: { diretriz: 'ACR Guideline for Management of Gout', sociedade: 'ACR / EULAR / Sociedade Brasileira de Reumatologia (SBR)', ano: 2020, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'Alopurinol é 1ª linha estabelecida para terapia hipouricemiante' }, citacao: 'American College of Rheumatology (ACR) / EULAR / Sociedade Brasileira de Reumatologia — diretriz de manejo da gota.' },
+        evidencia: { diretriz: '2020 American College of Rheumatology Guideline for the Management of Gout', sociedade: 'American College of Rheumatology (ACR)', ano: 2020, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'Alopurinol é 1ª linha estabelecida para terapia hipouricemiante (treat-to-target)' }, citacao: 'FitzGerald JD, Dalbeth N, Mikuls T, et al. Arthritis Care Res (Hoboken). 2020;72(6):744-760.', doi: '10.1002/acr.24180' },
       }),
     ],
     nao_farmacologico: [
@@ -633,7 +633,7 @@ const PROTOCOLOS: Record<string, Omit<TherapeuticPlan, 'diagnostico_selecionado'
         efeitos_adversos: ['Cefaleia', 'Diarreia ou constipação', 'Uso prolongado (> 1 ano): risco aumentado de fratura óssea, deficiência de B12/magnésio, infecção entérica (incluindo C. difficile), nefrite intersticial (raro)'],
         monitoramento: ['Reavaliar necessidade de uso contínuo vs. "sob demanda" após controle inicial', 'Considerar magnésio/B12 em uso muito prolongado (> 1 ano) ou em idosos'],
         alternativas: ['Pantoprazol 40 mg/dia (perfil similar, menos interações via CYP2C19)', 'Famotidina 20–40 mg à noite (antagonista H2 — adjuvante para sintomas noturnos refratários ao IBP, ou alternativa de curto prazo)', 'Domperidona 10 mg antes das refeições (procinético adjuvante em casos selecionados)'],
-        evidencia: { diretriz: 'ACG Clinical Guideline for the Diagnosis and Management of GERD', sociedade: 'American College of Gastroenterology (ACG) / Federação Brasileira de Gastroenterologia (FBG)', ano: 2022, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'IBP é 1ª linha estabelecida para DRGE, com ECRs robustos' }, citacao: 'American College of Gastroenterology (ACG) / Federação Brasileira de Gastroenterologia — diretriz de diagnóstico e manejo da DRGE.' },
+        evidencia: { diretriz: 'ACG Clinical Guideline for the Diagnosis and Management of Gastroesophageal Reflux Disease', sociedade: 'American College of Gastroenterology (ACG)', ano: 2022, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'IBP é 1ª linha estabelecida para DRGE, com ECRs robustos' }, citacao: 'Katz PO, Dunbar KB, Schnoll-Sussman FH, Greer KB, Yadlapati R, Spechler SJ. Am J Gastroenterol. 2022;117(1):27-56.', doi: '10.14309/ajg.0000000000001538' },
       }),
     ],
     nao_farmacologico: [

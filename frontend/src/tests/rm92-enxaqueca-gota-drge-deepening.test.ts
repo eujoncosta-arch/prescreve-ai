@@ -41,11 +41,25 @@ describe('RM-92 — second-opinion.ts: novas CondicaoClinica', () => {
     expect(buscarCondicao('drge')?.cid10).toBe('K21');
   });
 
-  it('nenhuma opção das 3 condições cita um estudo específico (sem trial/n/resultado não verificado)', () => {
-    for (const id of ['enxaqueca', 'gota', 'drge']) {
-      const condicao = buscarCondicao(id)!;
+  it('RM-93: opções com trial verificado (Sumatriptano, Topiramato, Colchicina) agora citam estudos reais; as demais continuam sem estudo não verificado', () => {
+    const sumatriptano = buscarCondicao('enxaqueca')!.opcoes.find(o => o.id === 'sumatriptano')!;
+    expect(sumatriptano.evidencia.estudos.length).toBeGreaterThan(0);
+    expect(sumatriptano.evidencia.estudos[0].nome).toMatch(/Cochrane/);
+
+    const topiramato = buscarCondicao('enxaqueca')!.opcoes.find(o => o.id === 'topiramato')!;
+    expect(topiramato.evidencia.estudos.some(e => e.nome.includes('MIGR-002') && e.n === 483)).toBe(true);
+
+    const colchicina = buscarCondicao('gota')!.opcoes.find(o => o.id === 'colchicina')!;
+    expect(colchicina.evidencia.estudos.some(e => e.nome.includes('AGREE') && e.n === 185)).toBe(true);
+
+    // Opções sem trial individual verificado (Naproxeno, Propranolol, Alopurinol, Omeprazol, Famotidina) continuam sem estudo fabricado.
+    const semEstudoVerificado = ['naproxeno_enxaqueca', 'propranolol_enxaqueca', 'naproxeno_gota', 'alopurinol', 'omeprazol', 'famotidina'];
+    for (const condId of ['enxaqueca', 'gota', 'drge']) {
+      const condicao = buscarCondicao(condId)!;
       for (const opcao of condicao.opcoes) {
-        expect(opcao.evidencia.estudos).toEqual([]);
+        if (semEstudoVerificado.includes(opcao.id)) {
+          expect(opcao.evidencia.estudos).toEqual([]);
+        }
       }
     }
   });

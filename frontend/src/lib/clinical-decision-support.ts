@@ -1094,11 +1094,11 @@ const BASE_CLINICA: ConditionRule[] = [
     diferenciais: ['Cefaleia tensional', 'Cefaleia em salvas (cluster)', 'Cefaleia por uso excessivo de medicação (MOH)', 'Cefaleia secundária (hemorragia subaracnóidea, hipertensão intracraniana, arterite temporal, sinusite)'],
     guideline: {
       diretriz: 'International Classification of Headache Disorders, 3rd edition (ICHD-3)',
-      sociedade: 'International Headache Society (IHS) / Sociedade Brasileira de Cefaleia (SBCe)',
+      sociedade: 'International Headache Society (IHS)',
       ano: 2018,
       nivel_evidencia: 'A',
       grau_recomendacao: 'I',
-      link: 'https://ichd-3.org/1-migraine/',
+      link: 'https://doi.org/10.1177/0333102417738202',
     },
     raciocinio_base:
       'Diagnóstico clínico baseado nos critérios ICHD-3 para enxaqueca sem aura: ≥ 5 crises, duração 4–72h sem tratamento, ≥ 2 de (unilateral, pulsátil, intensidade moderada-grave, piora com atividade física rotineira), e ≥ 1 de (náusea/vômito, fotofobia E fonofobia). Sinais de alarme (SNOOP) obrigam investigar causa secundária antes de tratar como enxaqueca primária.',
@@ -1177,11 +1177,11 @@ const BASE_CLINICA: ConditionRule[] = [
     diferenciais: ['Artrite séptica', 'Pseudogota (condrocalcinose)', 'Celulite', 'Artrite reumatoide (quadro poliarticular)', 'Trauma/fratura por estresse'],
     guideline: {
       diretriz: 'ACR/EULAR Classification Criteria for Gout + ACR Guideline for Management of Gout',
-      sociedade: 'American College of Rheumatology (ACR) / EULAR / Sociedade Brasileira de Reumatologia (SBR)',
+      sociedade: 'American College of Rheumatology (ACR) — critérios de classificação em colaboração com EULAR (2015)',
       ano: 2020,
       nivel_evidencia: 'A',
       grau_recomendacao: 'I',
-      link: 'https://www.rheumatology.org/Practice-Quality/Clinical-Support/Clinical-Practice-Guidelines/Gout',
+      link: 'https://doi.org/10.1002/acr.24180',
     },
     raciocinio_base:
       'Diagnóstico clínico de alta probabilidade com podagra + início súbito + sinais inflamatórios articulares, confirmado idealmente por análise do líquido sinovial (cristais de urato). Hiperuricemia sérica isolada não confirma nem exclui o diagnóstico durante a crise aguda. Febre associada a monoartrite exige excluir artrite séptica antes de tratar como gota.',
@@ -1265,11 +1265,11 @@ const BASE_CLINICA: ConditionRule[] = [
     diferenciais: ['Dispepsia funcional', 'Úlcera péptica', 'Esofagite eosinofílica', 'Acalasia/distúrbio motor esofágico', 'Doença coronariana (dor torácica atípica)', 'Gastrite'],
     guideline: {
       diretriz: 'ACG Clinical Guideline for the Diagnosis and Management of Gastroesophageal Reflux Disease',
-      sociedade: 'American College of Gastroenterology (ACG) / Federação Brasileira de Gastroenterologia (FBG)',
+      sociedade: 'American College of Gastroenterology (ACG)',
       ano: 2022,
       nivel_evidencia: 'A',
       grau_recomendacao: 'I',
-      link: 'https://journals.lww.com/ajg/fulltext/2022/01000/acg_clinical_guideline_for_the_diagnosis_and.14.aspx',
+      link: 'https://doi.org/10.14309/ajg.0000000000001538',
     },
     raciocinio_base:
       'Diagnóstico clínico em quadro típico (pirose + regurgitação, piora pós-prandial/decúbito) permite teste terapêutico empírico com IBP sem exame prévio. Sinais de alarme (disfagia, perda de peso, sangramento, idade > 60 com sintomas novos) exigem EDA antes de tratar empiricamente, para excluir neoplasia ou complicação.',

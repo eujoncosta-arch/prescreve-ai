@@ -85,9 +85,9 @@ describe('RM-91 — Gota: motor terapêutico', () => {
     expect(colchicina.contraindicacoes.some(c => c.toLowerCase().includes('cyp3a4'))).toBe(true);
   });
 
-  it('nenhuma sugestão desta RM tem DOI fabricado', () => {
+  it('RM-93: todas as sugestões agora citam DOI real e verificado (ACR 2020) — upgrade do estado "sem DOI" original desta RM', () => {
     for (const s of plano!.farmacologico) {
-      expect(s.evidencia.doi).toBeUndefined();
+      expect(s.evidencia.doi).toBe('10.1002/acr.24180'); // FitzGerald JD et al., Arthritis Care Res 2020
     }
   });
 });
@@ -151,9 +151,9 @@ describe('RM-91 — DRGE: motor terapêutico', () => {
     expect(plano!.nao_farmacologico.some(m => m.toLowerCase().includes('elevação') || m.toLowerCase().includes('elevacao'))).toBe(true);
   });
 
-  it('nenhuma sugestão desta RM tem DOI fabricado', () => {
+  it('RM-93: todas as sugestões agora citam DOI real e verificado (ACG 2022) — upgrade do estado "sem DOI" original desta RM', () => {
     for (const s of plano!.farmacologico) {
-      expect(s.evidencia.doi).toBeUndefined();
+      expect(s.evidencia.doi).toBe('10.14309/ajg.0000000000001538'); // Katz PO et al., Am J Gastroenterol 2022
     }
   });
 });
