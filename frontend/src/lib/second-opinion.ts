@@ -932,6 +932,166 @@ const CONDICOES: CondicaoClinica[] = [
       },
     ],
   },
+
+  // ─── ENXAQUECA — RM-92 ──────────────────────────────────────────────────
+  //
+  // RM-92: diferente das demais condições deste arquivo (que citam estudos
+  // pivotais específicos com n/resultado, ex. FLOW/LEADER acima), as
+  // condições adicionadas aqui (Enxaqueca, Gota, DRGE) deixam `estudos: []`
+  // — mesmo limite de confiança já aplicado em `clinical-therapeutics.ts`
+  // (RM-90/91): sem documento-fonte único verificado linha a linha, não há
+  // confiança suficiente para citar números específicos (n_pacientes,
+  // resultado quantificado) de ensaios individuais sem risco de repetir o
+  // padrão de dado fabricado já corrigido nas RM-76/77/79/81. `diretriz`
+  // cita as sociedades de referência de forma honesta e geral.
+  {
+    id: 'enxaqueca',
+    label: 'Enxaqueca (Migrânea)',
+    cid10: 'G43',
+    grupo: 'Neurologia',
+    descricao: 'Enxaqueca episódica — tratamento agudo de crise e indicação de profilaxia',
+    opcoes: [
+      {
+        id: 'naproxeno_enxaqueca',
+        label: 'AINE (Naproxeno) — crise leve-moderada',
+        classe: 'AINE',
+        moleculas: ['Naproxeno', 'Ibuprofeno'],
+        indicacao: 'Tratamento agudo de crise de enxaqueca leve a moderada',
+        evidencia: { nivel: 'A', grau: 'I', estudos: [] },
+        beneficios: ['1ª linha estabelecida para crise leve-moderada', 'Baixo custo e ampla disponibilidade', 'Sem risco cardiovascular (ao contrário do triptano)'],
+        riscos: ['Dispepsia e risco de sangramento GI com uso frequente', 'Nefrotoxicidade com uso crônico', 'Risco de cefaleia por uso excessivo de analgésico (MOH) se usado > 2–3 dias/semana'],
+        contraindicacoes: ['Úlcera péptica ativa', 'DRC avançada (TFG < 30)', 'Hipersensibilidade a AINEs/AAS', 'Terceiro trimestre de gestação'],
+        diretriz: { orgao: 'SBCe / American Headache Society', ano: 2021, recomendacao: 'AINEs são 1ª linha para crise leve-moderada, limitados a ≤ 2–3 dias/semana para evitar MOH.', grau: 'I', nivel: 'A' },
+        perfil_ideal: 'Crise leve-moderada, sem contraindicação a AINE, sem fator de risco cardiovascular relevante',
+      },
+      {
+        id: 'sumatriptano',
+        label: 'Triptano (Sumatriptano) — crise moderada-grave',
+        classe: 'Triptano',
+        moleculas: ['Sumatriptano', 'Zolmitriptano', 'Naratriptano'],
+        indicacao: 'Tratamento agudo específico de crise de enxaqueca moderada a grave, ou falha a AINE',
+        evidencia: { nivel: 'A', grau: 'I', estudos: [] },
+        beneficios: ['Tratamento específico (agonista 5-HT1B/1D), não só analgésico inespecífico', 'Eficaz mesmo em crises intensas', 'Boa resposta mesmo tardiamente no curso da crise'],
+        riscos: ['Formigamento/pressão torácica (geralmente benignos)', 'Risco de MOH se usado > 2 dias/semana', 'Contraindicado em doença cardiovascular'],
+        contraindicacoes: ['Doença arterial coronariana ou equivalente isquêmico', 'AVC/AIT prévio', 'HAS não controlada', 'Enxaqueca hemiplégica ou basilar', 'Uso concomitante de ergotamínicos ou IMAO'],
+        diretriz: { orgao: 'SBCe / American Headache Society', ano: 2021, recomendacao: 'Triptanos são o tratamento específico de 1ª linha para crise moderada-grave, com avaliação de risco cardiovascular obrigatória antes da 1ª prescrição.', grau: 'I', nivel: 'A' },
+        perfil_ideal: 'Crise moderada-grave, sem risco cardiovascular, falha ou contraindicação a AINE',
+      },
+      {
+        id: 'propranolol_enxaqueca',
+        label: 'Betabloqueador (Propranolol) — profilaxia',
+        classe: 'Betabloqueador',
+        moleculas: ['Propranolol', 'Metoprolol'],
+        indicacao: 'Profilaxia de enxaqueca — 1ª linha quando crises frequentes (≥ 4 dias/mês) ou incapacitantes',
+        evidencia: { nivel: 'A', grau: 'I', estudos: [] },
+        beneficios: ['1ª linha estabelecida para profilaxia, décadas de uso', 'Baixo custo', 'Útil se comorbidade com HAS ou ansiedade'],
+        riscos: ['Fadiga, hipotensão, bradicardia', 'Broncoespasmo em predispostos', 'Resposta plena só após 2–3 meses'],
+        contraindicacoes: ['Asma/DPOC grave', 'Bradicardia ou BAV 2º-3º grau', 'ICC descompensada', 'Depressão grave não tratada (relativa)'],
+        diretriz: { orgao: 'SBCe / American Headache Society', ano: 2021, recomendacao: 'Betabloqueadores são 1ª linha estabelecida para profilaxia, junto com topiramato.', grau: 'I', nivel: 'A' },
+        perfil_ideal: 'Crises frequentes (≥ 4 dias/mês), comorbidade com HAS, sem contraindicação a betabloqueador',
+      },
+      {
+        id: 'topiramato',
+        label: 'Anticonvulsivante (Topiramato) — profilaxia',
+        classe: 'Anticonvulsivante',
+        moleculas: ['Topiramato'],
+        indicacao: 'Profilaxia de enxaqueca — alternativa de 1ª linha, especialmente com obesidade associada ou contraindicação a betabloqueador',
+        evidencia: { nivel: 'A', grau: 'I', estudos: [] },
+        beneficios: ['1ª linha estabelecida para profilaxia', 'Perda de peso associada (útil se obesidade)', 'Sem restrição cardiovascular'],
+        riscos: ['Parestesias (muito comum)', 'Lentificação cognitiva', 'Nefrolitíase', 'Teratogênico — exige contracepção eficaz'],
+        contraindicacoes: ['Gravidez (categoria D)', 'Nefrolitíase recorrente', 'Glaucoma de ângulo estreito'],
+        diretriz: { orgao: 'SBCe / American Headache Society', ano: 2021, recomendacao: 'Topiramato é 1ª linha estabelecida para profilaxia, com ECRs robustos.', grau: 'I', nivel: 'A' },
+        perfil_ideal: 'Crises frequentes com obesidade associada, contraindicação a betabloqueador, mulher sem desejo gestacional',
+      },
+    ],
+  },
+
+  // ─── GOTA — RM-92 ───────────────────────────────────────────────────────
+  {
+    id: 'gota',
+    label: 'Gota (Artrite Gotosa)',
+    cid10: 'M10',
+    grupo: 'Reumatologia',
+    descricao: 'Crise aguda de gota e terapia hipouricemiante (ULT) para profilaxia de crises recorrentes',
+    opcoes: [
+      {
+        id: 'colchicina',
+        label: 'Colchicina — crise aguda (esquema de baixa dose)',
+        classe: 'Inibidor de microtúbulos',
+        moleculas: ['Colchicina'],
+        indicacao: 'Tratamento agudo de crise de gota, especialmente se iniciada nas primeiras 36h',
+        evidencia: { nivel: 'A', grau: 'I', estudos: [] },
+        beneficios: ['Esquema de baixa dose tão eficaz quanto alta dose, com muito menos efeitos adversos GI (estudo AGREE)', '1ª linha junto com AINE', 'Também usada em profilaxia durante titulação de alopurinol'],
+        riscos: ['Diarreia e dor abdominal (dose-dependente)', 'Interação grave com inibidores potentes de CYP3A4/P-gp', 'Neuromiopatia com uso crônico/superdosagem'],
+        contraindicacoes: ['TFG < 10 ou diálise', 'Hepatopatia grave', 'Uso concomitante de inibidores potentes de CYP3A4 (claritromicina, itraconazol, ciclosporina)'],
+        diretriz: { orgao: 'ACR / EULAR / SBR', ano: 2020, recomendacao: 'Colchicina em baixa dose é 1ª linha para crise aguda, junto com AINE e corticoide.', grau: 'I', nivel: 'A' },
+        perfil_ideal: 'Crise aguda iniciada há < 36h, sem contraindicação renal/hepática ou interação medicamentosa relevante',
+      },
+      {
+        id: 'naproxeno_gota',
+        label: 'AINE (Naproxeno) — crise aguda',
+        classe: 'AINE',
+        moleculas: ['Naproxeno', 'Indometacina'],
+        indicacao: 'Tratamento agudo de crise de gota em paciente sem contraindicação a AINE',
+        evidencia: { nivel: 'A', grau: 'I', estudos: [] },
+        beneficios: ['1ª linha junto com colchicina', 'Eficaz e de baixo custo', 'Sem necessidade de ajuste complexo de dose'],
+        riscos: ['Dispepsia, risco de sangramento GI', 'Nefrotoxicidade', 'Retenção hídrica/piora de HAS'],
+        contraindicacoes: ['Úlcera péptica ativa', 'DRC avançada (TFG < 30)', 'ICC descompensada', 'Uso concomitante de anticoagulante'],
+        diretriz: { orgao: 'ACR / EULAR / SBR', ano: 2020, recomendacao: 'AINEs são 1ª linha para crise aguda sem contraindicação.', grau: 'I', nivel: 'A' },
+        perfil_ideal: 'Crise aguda sem DRC, úlcera péptica ou uso de anticoagulante',
+      },
+      {
+        id: 'alopurinol',
+        label: 'Alopurinol — terapia hipouricemiante (ULT)',
+        classe: 'Inibidor da xantina oxidase',
+        moleculas: ['Alopurinol'],
+        indicacao: 'Profilaxia de crises recorrentes, tofos ou nefrolitíase úrica — NUNCA iniciar durante crise aguda',
+        evidencia: { nivel: 'A', grau: 'I', estudos: [] },
+        beneficios: ['1ª linha estabelecida para ULT, décadas de uso', 'Baixo custo', 'Reduz frequência de crises e regride tofos a longo prazo'],
+        riscos: ['Rash cutâneo (geralmente leve)', 'Síndrome de hipersensibilidade ao alopurinol (rara, grave — DRESS)', 'Pode prolongar ou precipitar crise se iniciado durante episódio agudo'],
+        contraindicacoes: ['Hipersensibilidade prévia ao alopurinol', 'Não iniciar durante crise aguda de gota'],
+        diretriz: { orgao: 'ACR / EULAR / SBR', ano: 2020, recomendacao: 'Alopurinol é 1ª linha para ULT, titulado até meta de ácido úrico < 6 mg/dL. Associar profilaxia com colchicina em baixa dose nos primeiros 3–6 meses de titulação.', grau: 'I', nivel: 'A' },
+        perfil_ideal: 'Crises recorrentes (≥ 2/ano), tofos, nefrolitíase úrica — sempre iniciado fora da crise aguda',
+      },
+    ],
+  },
+
+  // ─── DRGE — RM-92 ───────────────────────────────────────────────────────
+  {
+    id: 'drge',
+    label: 'Doença do Refluxo Gastroesofágico (DRGE)',
+    cid10: 'K21',
+    grupo: 'Gastroenterologia',
+    descricao: 'Pirose e regurgitação típicas de refluxo gastroesofágico — tratamento clínico de 1ª linha',
+    opcoes: [
+      {
+        id: 'omeprazol',
+        label: 'Inibidor de Bomba de Prótons (Omeprazol)',
+        classe: 'IBP',
+        moleculas: ['Omeprazol', 'Pantoprazol', 'Esomeprazol'],
+        indicacao: 'Tratamento de DRGE — 1ª linha para controle de sintomas e cicatrização de esofagite',
+        evidencia: { nivel: 'A', grau: 'I', estudos: [] },
+        beneficios: ['1ª linha estabelecida, décadas de uso e ampla evidência', 'Alta eficácia em controle sintomático e cicatrização de esofagite', 'Baixo custo e ampla disponibilidade'],
+        riscos: ['Uso prolongado (> 1 ano): risco aumentado de fratura óssea, deficiência de B12/magnésio, infecção entérica', 'Cefaleia, diarreia ou constipação'],
+        contraindicacoes: ['Hipersensibilidade a IBP', 'Uso concomitante de nelfinavir ou rilpivirina'],
+        diretriz: { orgao: 'ACG / FBG', ano: 2022, recomendacao: 'IBP é 1ª linha estabelecida para DRGE; reavaliar necessidade de manutenção contínua vs. sob demanda após controle inicial.', grau: 'I', nivel: 'A' },
+        perfil_ideal: 'Quadro típico (pirose + regurgitação), sem sinais de alarme — tratamento empírico inicial',
+      },
+      {
+        id: 'famotidina',
+        label: 'Antagonista H2 (Famotidina) — alternativa/adjuvante',
+        classe: 'Antagonista H2',
+        moleculas: ['Famotidina'],
+        indicacao: 'Alternativa de curto prazo ao IBP, ou adjuvante para sintomas noturnos refratários (bedtime H2RA)',
+        evidencia: { nivel: 'B', grau: 'IIa', estudos: [] },
+        beneficios: ['Início de ação mais rápido que IBP (útil para alívio pontual)', 'Opção quando IBP não é tolerado ou disponível', 'Perfil de segurança bem estabelecido em uso prolongado'],
+        riscos: ['Eficácia inferior ao IBP para cicatrização de esofagite', 'Taquifilaxia com uso contínuo prolongado', 'Cefaleia, tontura (raros)'],
+        contraindicacoes: ['Hipersensibilidade a antagonistas H2'],
+        diretriz: { orgao: 'ACG / FBG', ano: 2022, recomendacao: 'Antagonista H2 é opção de 2ª linha ou adjuvante noturno em sintomas refratários ao IBP; não é 1ª linha isolada em esofagite erosiva.', grau: 'IIa', nivel: 'B' },
+        perfil_ideal: 'Sintomas leves intermitentes, intolerância a IBP, ou sintomas noturnos refratários como adjuvante ao IBP',
+      },
+    ],
+  },
 ];
 
 // ─── Engine ──────────────────────────────────────────────────────────────────
