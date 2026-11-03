@@ -1104,6 +1104,177 @@ const BASE_CLINICA: ConditionRule[] = [
       'Diagnóstico clínico baseado nos critérios ICHD-3 para enxaqueca sem aura: ≥ 5 crises, duração 4–72h sem tratamento, ≥ 2 de (unilateral, pulsátil, intensidade moderada-grave, piora com atividade física rotineira), e ≥ 1 de (náusea/vômito, fotofobia E fonofobia). Sinais de alarme (SNOOP) obrigam investigar causa secundária antes de tratar como enxaqueca primária.',
   },
 
+  // ══════════════════════════════════════════════════════════
+  // 12. GOTA — M10 — RM-91
+  // Referência: critérios de classificação ACR/EULAR 2015 — critérios
+  // clínicos estáveis, amplamente adotados.
+  // ══════════════════════════════════════════════════════════
+  {
+    id: 'gota',
+    cid10: 'M10',
+    nome: 'Gota (Artrite Gotosa)',
+    peso_minimo_para_incluir: 6,
+    criterios: [
+      {
+        descricao: 'Diagnóstico prévio de gota',
+        check: a => temComorbidade(a, 'gota', 'artrite gotosa', 'hiperuricemia'),
+        peso: 10,
+      },
+      {
+        descricao: 'Podagra — dor/inflamação no 1º metatarsofalangeano (hálux/dedão do pé)',
+        check: a => has(txt(a.queixa_principal, a.hda), 'podagra', 'hálux', 'halux', 'dedão do pé', 'dedao do pe', '1º metatarso', 'primeiro metatarso'),
+        peso: 9,
+      },
+      {
+        descricao: 'Dor articular aguda monoarticular de início súbito',
+        check: a => has(txt(a.queixa_principal, a.hda), 'dor articular súbita', 'dor articular subita', 'monoarticular', 'articulação única', 'articulacao unica', 'início súbito na articulação', 'inicio subito na articulacao'),
+        peso: 6,
+      },
+      {
+        descricao: 'Sinais inflamatórios articulares (rubor, calor, edema)',
+        check: a => has(txt(a.queixa_principal, a.hda, a.exame_fisico), 'rubor', 'calor articular', 'edema articular', 'vermelhidão na articulação', 'vermelhidao na articulacao', 'articulação quente', 'articulacao quente'),
+        peso: 5,
+      },
+      {
+        descricao: 'Tofos (depósitos de urato) referidos ou ao exame',
+        check: a => has(txt(a.queixa_principal, a.hda, a.exame_fisico), 'tofo', 'tofos'),
+        peso: 6,
+      },
+      {
+        descricao: 'Hiperuricemia laboratorial (ácido úrico > 6,8 mg/dL)',
+        check: a => { const v = lab(a, 'acido_urico'); return v !== undefined && v > 6.8; },
+        peso: 5,
+      },
+      {
+        descricao: 'Fatores de risco: etilismo, uso de diurético, obesidade',
+        check: a => a.habitos_vida?.etilismo === 'abusivo' || has(txt(a.medicamentos_em_uso?.map(m => m.nome).join(' ')), 'hidroclorotiazida', 'furosemida', 'clortalidona') || temComorbidade(a, 'obesidade'),
+        peso: 2,
+      },
+    ],
+    red_flags: [
+      {
+        descricao: 'Monoartrite aguda + febre — investigar artrite séptica antes de tratar como gota (aspiração articular obrigatória)',
+        check: a => has(txt(a.queixa_principal, a.hda), 'febre') && has(txt(a.queixa_principal, a.hda), 'articulação', 'articulacao', 'podagra'),
+        urgente: true,
+      },
+      {
+        descricao: 'Poliartrite com comprometimento sistêmico grave',
+        check: a => has(txt(a.queixa_principal, a.hda), 'várias articulações', 'varias articulacoes', 'poliarticular') && has(txt(a.queixa_principal, a.hda), 'mal-estar geral', 'mal estar geral', 'prostração', 'prostracao'),
+        urgente: true,
+      },
+    ],
+    exames_confirmatorios: [
+      'Análise do líquido sinovial — cristais de urato monossódico com birrefringência negativa (padrão-ouro)',
+      'Ácido úrico sérico (pode estar normal durante a crise aguda — não exclui o diagnóstico)',
+      'Radiografia da articulação (erosões "em saca-bocado" em doença crônica)',
+      'Ultrassonografia articular (sinal do "duplo contorno")',
+    ],
+    exames_para_excluir_diferenciais: [
+      'Líquido sinovial com Gram e cultura (excluir artrite séptica)',
+      'Líquido sinovial com cristais de pirofosfato de cálcio (excluir pseudogota/condrocalcinose)',
+      'Fator reumatoide, anti-CCP (excluir artrite reumatoide em quadro poliarticular atípico)',
+    ],
+    diferenciais: ['Artrite séptica', 'Pseudogota (condrocalcinose)', 'Celulite', 'Artrite reumatoide (quadro poliarticular)', 'Trauma/fratura por estresse'],
+    guideline: {
+      diretriz: 'ACR/EULAR Classification Criteria for Gout + ACR Guideline for Management of Gout',
+      sociedade: 'American College of Rheumatology (ACR) / EULAR / Sociedade Brasileira de Reumatologia (SBR)',
+      ano: 2020,
+      nivel_evidencia: 'A',
+      grau_recomendacao: 'I',
+      link: 'https://www.rheumatology.org/Practice-Quality/Clinical-Support/Clinical-Practice-Guidelines/Gout',
+    },
+    raciocinio_base:
+      'Diagnóstico clínico de alta probabilidade com podagra + início súbito + sinais inflamatórios articulares, confirmado idealmente por análise do líquido sinovial (cristais de urato). Hiperuricemia sérica isolada não confirma nem exclui o diagnóstico durante a crise aguda. Febre associada a monoartrite exige excluir artrite séptica antes de tratar como gota.',
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // 13. DOENÇA DO REFLUXO GASTROESOFÁGICO (DRGE) — K21 — RM-91
+  // Referência: ACG Clinical Guideline for GERD — critérios clínicos e
+  // sinais de alarme (alarm features) amplamente adotados.
+  // ══════════════════════════════════════════════════════════
+  {
+    id: 'drge',
+    cid10: 'K21',
+    nome: 'Doença do Refluxo Gastroesofágico (DRGE)',
+    peso_minimo_para_incluir: 6,
+    criterios: [
+      {
+        descricao: 'Diagnóstico prévio de DRGE',
+        check: a => temComorbidade(a, 'drge', 'refluxo', 'esofagite'),
+        peso: 10,
+      },
+      {
+        descricao: 'Pirose/azia retroesternal',
+        check: a => has(txt(a.queixa_principal, a.hda), 'pirose', 'azia', 'queimação no peito', 'queimacao no peito', 'queimação retroesternal', 'queimacao retroesternal', 'queimação no estômago', 'queimacao no estomago'),
+        peso: 8,
+      },
+      {
+        descricao: 'Regurgitação ácida',
+        check: a => has(txt(a.queixa_principal, a.hda), 'regurgitação', 'regurgitacao', 'gosto amargo na boca', 'gosto ácido', 'gosto acido', 'retorno de alimento', 'retorno de comida'),
+        peso: 6,
+      },
+      {
+        descricao: 'Piora pós-prandial ou ao deitar/à noite',
+        check: a => has(txt(a.queixa_principal, a.hda), 'piora ao deitar', 'piora à noite', 'piora a noite', 'piora após comer', 'piora apos comer', 'piora depois das refeições', 'piora depois das refeicoes'),
+        peso: 4,
+      },
+      {
+        descricao: 'Sintomas atípicos associados (tosse crônica, rouquidão, pigarro)',
+        check: a => has(txt(a.queixa_principal, a.hda), 'tosse crônica', 'tosse cronica', 'rouquidão', 'rouquidao', 'pigarro'),
+        peso: 2,
+      },
+      {
+        descricao: 'Dor torácica não cardíaca associada a sintomas típicos de refluxo',
+        check: a => has(txt(a.queixa_principal, a.hda), 'dor no peito') && has(txt(a.queixa_principal, a.hda), 'pirose', 'azia', 'queimação', 'queimacao'),
+        peso: 2,
+      },
+    ],
+    red_flags: [
+      {
+        descricao: 'Disfagia ou odinofagia — investigar EDA urgente (excluir estenose/neoplasia)',
+        check: a => has(txt(a.queixa_principal, a.hda), 'disfagia', 'dificuldade para engolir', 'odinofagia', 'dor para engolir'),
+        urgente: true,
+      },
+      {
+        descricao: 'Perda de peso não intencional associada',
+        check: a => has(txt(a.queixa_principal, a.hda, a.hpp), 'perda de peso', 'emagrecimento não intencional', 'emagrecimento nao intencional'),
+        urgente: true,
+      },
+      {
+        descricao: 'Sinais de sangramento gastrointestinal (hematêmese, melena, anemia)',
+        check: a => has(txt(a.queixa_principal, a.hda, a.exame_fisico), 'hematêmese', 'hematemese', 'melena', 'sangue nas fezes', 'vômito com sangue', 'vomito com sangue'),
+        urgente: true,
+      },
+      {
+        descricao: 'Vômitos recorrentes ou idade > 60 anos com sintomas novos',
+        check: a => has(txt(a.hda), 'vômitos recorrentes', 'vomitos recorrentes'),
+        urgente: false,
+      },
+    ],
+    exames_confirmatorios: [
+      'Diagnóstico clínico em quadro típico — teste terapêutico com IBP é aceitável sem exame confirmatório inicial',
+      'Endoscopia digestiva alta (EDA) — se sinais de alarme, falha terapêutica ou sintomas atípicos predominantes',
+      'pHmetria esofágica de 24h (casos refratários ou atípicos, antes de considerar cirurgia)',
+      'Manometria esofágica (excluir distúrbio motor antes de cirurgia antirrefluxo)',
+    ],
+    exames_para_excluir_diferenciais: [
+      'EDA com biópsia (excluir esôfago de Barrett, neoplasia, esofagite eosinofílica)',
+      'ECG/troponina (excluir origem cardíaca em dor torácica atípica)',
+      'Teste para H. pylori (dispepsia associada)',
+    ],
+    diferenciais: ['Dispepsia funcional', 'Úlcera péptica', 'Esofagite eosinofílica', 'Acalasia/distúrbio motor esofágico', 'Doença coronariana (dor torácica atípica)', 'Gastrite'],
+    guideline: {
+      diretriz: 'ACG Clinical Guideline for the Diagnosis and Management of Gastroesophageal Reflux Disease',
+      sociedade: 'American College of Gastroenterology (ACG) / Federação Brasileira de Gastroenterologia (FBG)',
+      ano: 2022,
+      nivel_evidencia: 'A',
+      grau_recomendacao: 'I',
+      link: 'https://journals.lww.com/ajg/fulltext/2022/01000/acg_clinical_guideline_for_the_diagnosis_and.14.aspx',
+    },
+    raciocinio_base:
+      'Diagnóstico clínico em quadro típico (pirose + regurgitação, piora pós-prandial/decúbito) permite teste terapêutico empírico com IBP sem exame prévio. Sinais de alarme (disfagia, perda de peso, sangramento, idade > 60 com sintomas novos) exigem EDA antes de tratar empiricamente, para excluir neoplasia ou complicação.',
+  },
+
 ];
 
 // ─── MOTOR DE DECISÃO ─────────────────────────────────────────

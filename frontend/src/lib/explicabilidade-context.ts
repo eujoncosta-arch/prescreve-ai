@@ -38,6 +38,8 @@ export const CID_CONDITION_MAP: Record<string, string> = {
   E03: 'hipotireoidismo',
   E78: 'dislipidemia',
   G43: 'enxaqueca', // RM-90
+  M10: 'gota', // RM-91
+  K21: 'drge', // RM-91
 };
 
 export interface ContextoExplicabilidade {

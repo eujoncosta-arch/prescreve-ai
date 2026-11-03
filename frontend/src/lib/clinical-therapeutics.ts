@@ -548,6 +548,107 @@ const PROTOCOLOS: Record<string, Omit<TherapeuticPlan, 'diagnostico_selecionado'
     monitorizacao: ['Diário de cefaleia (frequência, intensidade, gatilhos, medicação usada)', 'Rastrear uso excessivo de analgésico/triptano (MOH) — limite de 2–3 dias/semana', 'Reavaliar necessidade de profilaxia contínua a cada 6–12 meses'],
     encaminhamento: 'Neurologista/especialista em cefaleia se: enxaqueca crônica (≥ 15 dias/mês), falha a 2+ classes profiláticas, sinais de alarme (início após 50 anos, mudança de padrão, déficit neurológico focal, cefaleia "pior da vida") — investigar causa secundária antes de tratar como enxaqueca primária.',
   },
+
+  // ══════════════════════════════════════════════════════════
+  // GOTA — RM-91 (M10)
+  //
+  // Mesmo limite de confiança em citação já aplicado ao protocolo de
+  // Enxaqueca (RM-90): sem documento-fonte único verificado linha a
+  // linha, citação cita as sociedades de referência (ACR/EULAR/SBR) sem
+  // DOI específico.
+  // ══════════════════════════════════════════════════════════
+  gota: {
+    farmacologico: [
+      sug({
+        id: 'colchicina',
+        classe_terapeutica: 'Anti-inflamatório (inibidor de microtúbulos)',
+        molecula: 'Colchicina',
+        nome_generico: 'Colchicina',
+        indicacao: 'Tratamento agudo de crise de gota — 1ª linha, especialmente se iniciada nas primeiras 36h',
+        dose: { dose_padrao: '1 mg', dose_min: '0,5 mg', dose_max: '1,8 mg no dia 1', unidade: 'mg', via: 'Oral', frequencia: '1 mg no início, seguido de 0,5 mg 1h depois (esquema de baixa dose); manutenção 0,5 mg 2–3x/dia se necessário', duracao: 'Uso em crise, não contínuo', ajuste_renal: 'Reduzir dose se TFG < 60; evitar se TFG < 10 ou diálise', ajuste_hepatico: 'Reduzir dose em hepatopatia moderada-grave' },
+        posologia_completa: 'Colchicina 1 mg VO no início da crise, seguida de 0,5 mg após 1 hora (esquema de baixa dose — AGREE trial, superior em segurança ao esquema antigo de altas doses). Manutenção 0,5 mg 2–3x/dia até resolução.',
+        contraindicacoes: ['TFG < 10 ou diálise', 'Hepatopatia grave', 'Uso concomitante de inibidores potentes de CYP3A4/P-glicoproteína (claritromicina, itraconazol, ciclosporina — risco de toxicidade grave/rabdomiólise)', 'Discrasias sanguíneas'],
+        efeitos_adversos: ['Diarreia e dor abdominal (dose-dependente)', 'Náusea', 'Neuromiopatia com uso crônico/superdosagem', 'Mielossupressão (raro, superdosagem)'],
+        monitoramento: ['Função renal e hepática antes do início', 'Revisar interações medicamentosas (CYP3A4) antes de prescrever'],
+        alternativas: ['Naproxeno 500 mg 2x/dia (AINE, se sem contraindicação)', 'Prednisona 30–35 mg/dia × 5 dias (se contraindicação a AINE/colchicina ou DRC)'],
+        evidencia: { diretriz: 'ACR Guideline for Management of Gout', sociedade: 'ACR / EULAR / Sociedade Brasileira de Reumatologia (SBR)', ano: 2020, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'Colchicina em baixa dose é 1ª linha estabelecida para crise aguda (AGREE trial)' }, citacao: 'American College of Rheumatology (ACR) / EULAR / Sociedade Brasileira de Reumatologia — diretriz de manejo da gota.' },
+      }),
+      sug({
+        id: 'naproxeno_gota',
+        classe_terapeutica: 'Anti-inflamatório não esteroidal (AINE)',
+        molecula: 'Naproxeno',
+        nome_generico: 'Naproxeno Sódico',
+        indicacao: 'Tratamento agudo de crise de gota — 1ª linha em paciente sem contraindicação a AINE',
+        dose: { dose_padrao: '500 mg', dose_min: '500 mg', dose_max: '1000 mg/dia', unidade: 'mg', via: 'Oral', frequencia: '500 mg 2x/dia até resolução dos sintomas (geralmente 5–7 dias)', duracao: 'Uso em crise, não contínuo', ajuste_renal: 'Evitar se TFG < 30', ajuste_hepatico: 'Evitar em hepatopatia ativa' },
+        posologia_completa: 'Naproxeno 500 mg VO 2x/dia desde o início da crise até resolução completa dos sintomas (tipicamente 5–7 dias).',
+        contraindicacoes: ['Úlcera péptica ativa', 'DRC avançada (TFG < 30)', 'ICC descompensada', 'Hipersensibilidade a AINEs/AAS', 'Uso concomitante de anticoagulante (risco de sangramento)'],
+        efeitos_adversos: ['Dispepsia', 'Risco de sangramento GI', 'Nefrotoxicidade', 'Retenção hídrica/piora de HAS'],
+        monitoramento: ['Função renal se uso prolongado ou DRC prévia', 'PA em hipertensos'],
+        alternativas: ['Colchicina 1 mg + 0,5 mg (esquema de baixa dose)', 'Prednisona 30–35 mg/dia × 5 dias (se contraindicação a AINE)'],
+        evidencia: { diretriz: 'ACR Guideline for Management of Gout', sociedade: 'ACR / EULAR / Sociedade Brasileira de Reumatologia (SBR)', ano: 2020, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'AINEs são 1ª linha estabelecida para crise aguda sem contraindicação' }, citacao: 'American College of Rheumatology (ACR) / EULAR / Sociedade Brasileira de Reumatologia — diretriz de manejo da gota.' },
+      }),
+      sug({
+        id: 'alopurinol',
+        classe_terapeutica: 'Inibidor da xantina oxidase',
+        molecula: 'Alopurinol',
+        nome_generico: 'Alopurinol',
+        indicacao: 'Terapia hipouricemiante (ULT) — profilaxia de crises recorrentes, tofos ou nefrolitíase úrica. NUNCA iniciar durante crise aguda.',
+        dose: { dose_padrao: '100 mg', dose_min: '100 mg', dose_max: '800 mg/dia', unidade: 'mg', via: 'Oral', frequencia: '1x/dia, titulação gradual a cada 2–4 semanas até meta de ácido úrico < 6 mg/dL (< 5 mg/dL se tofos)', duracao: 'Contínuo', ajuste_renal: 'Iniciar com dose reduzida (50–100 mg) e titular mais lentamente se TFG < 60' },
+        posologia_completa: 'Alopurinol 100 mg/dia (50–100 mg se DRC), titulando a cada 2–4 semanas conforme ácido úrico sérico, até meta < 6 mg/dL (< 5 mg/dL em tofos). Iniciar SOMENTE após resolução completa da crise aguda — início durante a crise pode prolongá-la ou precipitar nova crise. Associar profilaxia com colchicina em baixa dose (0,5 mg/dia) nos primeiros 3–6 meses de titulação.',
+        contraindicacoes: ['Hipersensibilidade prévia ao alopurinol (risco de DRESS/Stevens-Johnson/necrólise epidérmica tóxica — risco maior em portadores de HLA-B*5801)', 'Não iniciar durante crise aguda de gota'],
+        efeitos_adversos: ['Rash cutâneo (geralmente leve)', 'Síndrome de hipersensibilidade ao alopurinol (rara, grave — DRESS)', 'Elevação de transaminases', 'Diarreia'],
+        monitoramento: ['Ácido úrico sérico a cada 2–4 semanas durante titulação, depois a cada 6 meses', 'Função renal e hepática periódicas', 'Considerar genotipagem HLA-B*5801 em populações de maior risco (ex.: ascendência asiática) antes do início'],
+        alternativas: ['Febuxostate 40–80 mg/dia (alternativa se intolerância/hipersensibilidade ao alopurinol — atenção a risco cardiovascular em pacientes com DCV estabelecida, FDA/CARES trial)', 'Probenecida (uricosúrico, se TFG preservada e subexcreção de urato)'],
+        evidencia: { diretriz: 'ACR Guideline for Management of Gout', sociedade: 'ACR / EULAR / Sociedade Brasileira de Reumatologia (SBR)', ano: 2020, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'Alopurinol é 1ª linha estabelecida para terapia hipouricemiante' }, citacao: 'American College of Rheumatology (ACR) / EULAR / Sociedade Brasileira de Reumatologia — diretriz de manejo da gota.' },
+      }),
+    ],
+    nao_farmacologico: [
+      'Repouso e elevação do membro afetado durante a crise',
+      'Crioterapia local (gelo) na articulação afetada',
+      'Redução de peso corporal se sobrepeso/obesidade',
+      'Redução de consumo de álcool, especialmente cerveja',
+      'Redução de alimentos ricos em purina (carnes vermelhas, frutos do mar) — impacto modesto isolado, mas recomendado como medida geral',
+      'Hidratação adequada',
+      'Revisar necessidade de diuréticos tiazídicos/de alça em uso crônico (podem ser substituídos se não essenciais)',
+    ],
+    seguimento: 'Reavaliar resposta ao tratamento agudo em 48–72h. Para terapia hipouricemiante: ácido úrico a cada 2–4 semanas durante titulação, depois semestral após atingir meta.',
+    monitorizacao: ['Ácido úrico sérico', 'Função renal', 'Frequência de crises (diário de crises)', 'Presença/evolução de tofos ao exame físico'],
+    encaminhamento: 'Reumatologista se: crises recorrentes (≥ 2/ano) apesar de ULT otimizada, tofos extensos, gota de início precoce (< 40 anos), nefrolitíase recorrente, ou dúvida diagnóstica com indicação de artrocentese.',
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // DRGE — RM-91 (K21)
+  // ══════════════════════════════════════════════════════════
+  drge: {
+    farmacologico: [
+      sug({
+        id: 'omeprazol',
+        classe_terapeutica: 'Inibidor de bomba de prótons (IBP)',
+        molecula: 'Omeprazol',
+        nome_generico: 'Omeprazol',
+        indicacao: 'Tratamento de DRGE — 1ª linha para controle de sintomas e cicatrização de esofagite',
+        dose: { dose_padrao: '20 mg', dose_min: '20 mg', dose_max: '40 mg/dia (20 mg 2x/dia)', unidade: 'mg', via: 'Oral', frequencia: '1x/dia, 30–60 min antes do café da manhã', duracao: '4–8 semanas (sintomas típicos); reavaliar manutenção após esse período', ajuste_hepatico: 'Reduzir dose em hepatopatia grave' },
+        posologia_completa: 'Omeprazol 20 mg VO 1x/dia, 30–60 minutos antes do desjejum, por 4–8 semanas. Se resposta parcial, dobrar para 20 mg 2x/dia (antes do café e antes do jantar). Reavaliar necessidade de manutenção contínua ou "sob demanda" após controle inicial.',
+        contraindicacoes: ['Hipersensibilidade a IBP', 'Uso concomitante de nelfinavir ou rilpivirina (interação)'],
+        efeitos_adversos: ['Cefaleia', 'Diarreia ou constipação', 'Uso prolongado (> 1 ano): risco aumentado de fratura óssea, deficiência de B12/magnésio, infecção entérica (incluindo C. difficile), nefrite intersticial (raro)'],
+        monitoramento: ['Reavaliar necessidade de uso contínuo vs. "sob demanda" após controle inicial', 'Considerar magnésio/B12 em uso muito prolongado (> 1 ano) ou em idosos'],
+        alternativas: ['Pantoprazol 40 mg/dia (perfil similar, menos interações via CYP2C19)', 'Famotidina 20–40 mg à noite (antagonista H2 — adjuvante para sintomas noturnos refratários ao IBP, ou alternativa de curto prazo)', 'Domperidona 10 mg antes das refeições (procinético adjuvante em casos selecionados)'],
+        evidencia: { diretriz: 'ACG Clinical Guideline for the Diagnosis and Management of GERD', sociedade: 'American College of Gastroenterology (ACG) / Federação Brasileira de Gastroenterologia (FBG)', ano: 2022, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'IBP é 1ª linha estabelecida para DRGE, com ECRs robustos' }, citacao: 'American College of Gastroenterology (ACG) / Federação Brasileira de Gastroenterologia — diretriz de diagnóstico e manejo da DRGE.' },
+      }),
+    ],
+    nao_farmacologico: [
+      'Elevação da cabeceira da cama (15–20 cm)',
+      'Evitar deitar nas 2–3 horas após as refeições',
+      'Redução de peso corporal se sobrepeso/obesidade',
+      'Evitar refeições volumosas; preferir porções menores e mais frequentes',
+      'Reduzir/evitar gatilhos individuais: café, álcool, chocolate, menta, alimentos gordurosos/picantes, bebidas gaseificadas',
+      'Cessação do tabagismo',
+      'Evitar roupas apertadas na região abdominal',
+    ],
+    seguimento: 'Reavaliar resposta em 4–8 semanas de IBP. Sintomas refratários ou sinais de alarme: encaminhar para endoscopia digestiva alta antes de escalar tratamento.',
+    monitorizacao: ['Resposta sintomática (frequência/intensidade de pirose e regurgitação)', 'Sinais de alarme a cada consulta (disfagia, perda de peso, sangramento)', 'Reavaliar indicação de manutenção contínua vs. sob demanda após controle inicial'],
+    encaminhamento: 'Gastroenterologista/endoscopia digestiva alta se: sinais de alarme (disfagia, odinofagia, perda de peso, sangramento, idade > 60 com sintomas novos), falha a IBP em dose otimizada por 8 semanas, sintomas atípicos predominantes, ou consideração de tratamento cirúrgico (refratariedade, dependência de IBP em jovens).',
+  },
 };
 
 // ─── FUNÇÃO PRINCIPAL ─────────────────────────────────────────
