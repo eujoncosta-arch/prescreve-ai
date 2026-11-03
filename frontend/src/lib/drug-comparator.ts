@@ -1267,11 +1267,11 @@ export const MOLECULES_DB: MoleculaComparavel[] = [
     seguro_gestante: 'evitar',
     seguro_lactante: true,
     uso_idoso: 'Maior sensibilidade a bradicardia/hipotensão — iniciar com dose menor',
-    nivel_evidencia: 'A',
+    nivel_evidencia: 'B',
     grau_recomendacao: 'I',
-    diretriz_principal: 'AAN/AHS 2012 (Silberstein) — profilaxia de enxaqueca',
+    diretriz_principal: 'AAN/AHS 2026 (Potrebic) — profilaxia de enxaqueca',
     eficacia: [
-      { desfecho: 'Redução da frequência de crises de enxaqueca', reducao: '1ª linha estabelecida para profilaxia (Nível A)', estudo: 'Silberstein SD et al., Neurology 2012 (AAN/AHS guideline)' },
+      { desfecho: 'Redução da frequência de crises de enxaqueca', reducao: 'Recomendado para oferecer na profilaxia da enxaqueca episódica (Nível B; evidência de confiança moderada)', estudo: 'Potrebic S et al., Neurology 2026 (AAN/AHS guideline)' },
       { desfecho: 'Redução ≥50% na frequência de crises (enxaqueca episódica)', reducao: 'RR 1,4 (IC 95% 1,1–1,7) vs. placebo; −1,5 crises/mês em 8 semanas; NNT 5,3 (IC 95% 3,4–11,4)', estudo: 'Jackson JL et al., PLoS One 2019 (meta-análise de 108 ECRs)', nnt: 6 },
     ],
     interacoes: [
@@ -1328,9 +1328,9 @@ export const MOLECULES_DB: MoleculaComparavel[] = [
     seguro_gestante: 'contraindicado',
     seguro_lactante: 'evitar',
     uso_idoso: 'Maior sensibilidade a efeitos cognitivos — titular ainda mais lentamente',
-    nivel_evidencia: 'A',
+    nivel_evidencia: 'B',
     grau_recomendacao: 'I',
-    diretriz_principal: 'AAN/AHS 2012 (Silberstein) — profilaxia de enxaqueca',
+    diretriz_principal: 'AAN/AHS 2026 (Potrebic) — profilaxia de enxaqueca',
     eficacia: [
       { desfecho: 'Resposta ≥50% na frequência mensal de crises (MIGR-002)', reducao: '49% (100 mg/dia) vs. 23% (placebo)', estudo: 'Brandes JL et al., JAMA 2004', n_pacientes: 483, nnt: 4 },
       { desfecho: 'Resposta ≥50% na frequência mensal de crises (MIGR-001)', reducao: '54,0% (100 mg/dia) vs. 22,6% (placebo)', estudo: 'Silberstein SD et al., Arch Neurol 2004', n_pacientes: 487, nnt: 4 },

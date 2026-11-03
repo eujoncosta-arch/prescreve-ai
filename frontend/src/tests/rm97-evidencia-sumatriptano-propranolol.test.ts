@@ -63,12 +63,13 @@ describe('RM-97 — Propranolol: gerarWHY() usa a entrada curada', () => {
     expect(why.beneficio_risco.nnt).toBe(6);
   });
 
-  it('guideline AAN/AHS 2012 (Nível A) e DOIs verificados', () => {
-    expect(why.justificativas_diretriz[0].doi).toBe('10.1212/WNL.0b013e3182535d20');
-    expect(why.justificativas_diretriz[0].ano).toBe(2012);
+  it('guideline AAN/AHS 2026 (Nível B, RM-98) e DOIs verificados', () => {
+    expect(why.justificativas_diretriz[0].doi).toBe('10.1212/WNL.0000000000214881');
+    expect(why.justificativas_diretriz[0].ano).toBe(2026);
     expect(why.estudos_pivotais.map(e => e.doi)).toEqual([
       '10.1371/journal.pone.0212785',
       '10.1007/s00415-004-0464-6',
+      '10.1212/WNL.0000000000218112',
     ]);
   });
 

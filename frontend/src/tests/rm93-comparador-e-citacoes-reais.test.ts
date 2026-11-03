@@ -101,7 +101,7 @@ describe('RM-93 — /comparador: 8 novas moléculas (Enxaqueca/Gota/DRGE)', () =
 });
 
 describe('RM-93 — clinical-therapeutics.ts: DOIs reais e verificados', () => {
-  it('Enxaqueca: Naproxeno/Sumatriptano citam Ailani 2021; Propranolol/Topiramato citam Silberstein 2012', () => {
+  it('Enxaqueca: Naproxeno/Sumatriptano citam Ailani 2021; Propranolol/Topiramato citam Potrebic 2026', () => {
     const plano = getTherapeuticForCondition('enxaqueca', 'Enxaqueca (G43)')!;
     const naproxeno = plano.farmacologico.find(s => s.molecula === 'Naproxeno')!;
     const sumatriptano = plano.farmacologico.find(s => s.molecula === 'Sumatriptano')!;
@@ -110,8 +110,9 @@ describe('RM-93 — clinical-therapeutics.ts: DOIs reais e verificados', () => {
 
     expect(naproxeno.evidencia.doi).toBe('10.1111/head.14153');
     expect(sumatriptano.evidencia.doi).toBe('10.1111/head.14153');
-    expect(propranolol.evidencia.doi).toBe('10.1212/WNL.0b013e3182535d20');
-    expect(topiramato.evidencia.doi).toBe('10.1212/WNL.0b013e3182535d20');
+    // RM-98: a diretriz AAN/AHS 2026 (Potrebic) substituiu a de 2012 (Silberstein)
+    expect(propranolol.evidencia.doi).toBe('10.1212/WNL.0000000000214881');
+    expect(topiramato.evidencia.doi).toBe('10.1212/WNL.0000000000214881');
     expect(topiramato.evidencia.citacao).toMatch(/MIGR-002/);
   });
 

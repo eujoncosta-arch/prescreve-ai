@@ -111,14 +111,14 @@ describe('RM-90 — Enxaqueca: motor terapêutico (clinical-therapeutics.ts)', (
     expect(topiramato.contraindicacoes.some(c => c.toLowerCase().includes('gravidez'))).toBe(true);
   });
 
-  it('RM-93: todas as sugestões agora citam DOI real e verificado (AHS 2021 / AAN-AHS 2012) — upgrade do estado "sem DOI" original desta RM', () => {
+  it('RM-93: todas as sugestões agora citam DOI real e verificado (AHS 2021 / AAN-AHS 2026) — upgrade do estado "sem DOI" original desta RM', () => {
     for (const s of plano!.farmacologico) {
       expect(s.evidencia.doi).toMatch(/^10\.\d{4,}/); // formato real de DOI, nunca string vazia/fabricada
     }
     const naproxeno = plano!.farmacologico.find(s => s.molecula === 'Naproxeno')!;
     expect(naproxeno.evidencia.doi).toBe('10.1111/head.14153'); // Ailani J et al., Headache 2021
     const topiramato = plano!.farmacologico.find(s => s.molecula === 'Topiramato')!;
-    expect(topiramato.evidencia.doi).toBe('10.1212/WNL.0b013e3182535d20'); // Silberstein SD et al., Neurology 2012
+    expect(topiramato.evidencia.doi).toBe('10.1212/WNL.0000000000214881'); // Potrebic S et al., Neurology 2026 (RM-98; substitui Silberstein 2012)
   });
 
   it('CID não reconhecido (ex.: "G44") continua retornando null — nenhuma regressão no fallback padrão', () => {

@@ -347,22 +347,26 @@ const EVIDENCIA_DB: Record<string, DadosEvidencia> = {
   //   MIGR-002 (100 mg): ARR = 49% − 23%   = 26,0 pp → NNT 3,85
   //   MIGR-001 (100 mg): ARR = 54,0% − 22,6% = 31,4 pp → NNT 3,18
   // Adotado NNT 4 (arredondado para cima, convenção conservadora).
+  // RM-98: a diretriz de referência passou a ser a AAN/AHS 2026 (Potrebic, Neurology,
+  // doi 10.1212/WNL.0000000000214881), que substitui a de 2012: topiramato = Nível B,
+  // evidência de confiança moderada na revisão sistemática (Pringsheim 2026).
   topiramato: {
-    diretriz: 'Evidence-based guideline update: pharmacologic treatment for episodic migraine prevention in adults',
+    diretriz: 'Pharmacologic Treatment for Migraine Prevention in Adults Practice Guideline Recommendations',
     sociedade: 'American Academy of Neurology (AAN) / American Headache Society (AHS)',
-    ano: 2012,
+    ano: 2026,
     classe: 'I',
-    nivel: 'A',
-    doi: '10.1212/WNL.0b013e3182535d20',
-    resumo: 'Topiramato é recomendado como profilaxia de enxaqueca episódica com Nível A de evidência (recomendação reforçada na atualização de 2012). Dose-alvo 100 mg/dia, com titulação lenta.',
+    nivel: 'B',
+    doi: '10.1212/WNL.0000000000214881',
+    resumo: 'A diretriz AAN/AHS 2026 recomenda oferecer topiramato na enxaqueca episódica e crônica (Nível B; evidência de confiança moderada na revisão sistemática) a quem prioriza eficácia ou teme danos de longo prazo, e especificamente se o IMC está elevado. É teratogênico (evitar se possível em pessoas com potencial de engravidar; Nível A) e pode reduzir a eficácia de contraceptivo hormonal acima de 200 mg/dia (Nível A). Dose-alvo 100 mg/dia, com titulação lenta.',
     mecanismo: 'Múltiplos mecanismos: bloqueio de canais de sódio voltagem-dependentes, potenciação GABAérgica (GABA-A), antagonismo de receptores glutamatérgicos AMPA/kainato e inibição da anidrase carbônica.',
-    por_que_classe: 'Anticonvulsivantes com ação moduladora da excitabilidade neuronal reduzem a frequência de crises de enxaqueca; topiramato e divalproato têm o corpo de evidência mais robusto da classe.',
+    por_que_classe: 'Anticonvulsivantes com ação moduladora da excitabilidade neuronal reduzem a frequência de crises de enxaqueca; na revisão sistemática AAN/AHS 2026, topiramato e valproato têm evidência de confiança moderada na enxaqueca episódica.',
     por_que_molecula: 'Topiramato tem dois ECRs pivotais independentes de grande porte (MIGR-001 e MIGR-002), ambos com taxa de resposta ≥50% de aproximadamente o dobro do placebo na dose de 100 mg/dia.',
     estudos: [
       { nome: 'MIGR-002', doi: '10.1001/jama.291.8.965', n_pacientes: 483, desfecho_primario: 'Redução ≥50% na frequência mensal de crises de enxaqueca', resultado: 'Taxa de resposta 49% (100 mg/dia) vs. 23% (placebo); 39% com 50 mg/dia e 47% com 200 mg/dia', nnt: 4, rar: 26 },
       { nome: 'MIGR-001', doi: '10.1001/archneur.61.4.490', n_pacientes: 487, desfecho_primario: 'Redução ≥50% na frequência mensal de crises de enxaqueca', resultado: 'Taxa de resposta 54,0% (100 mg/dia) vs. 22,6% (placebo); 35,9% com 50 mg/dia e 52,3% com 200 mg/dia', nnt: 4, rar: 31.4 },
+      { nome: 'Pringsheim 2026 (Neurology) — revisão sistemática AAN/AHS, 217 estudos', doi: '10.1212/WNL.0000000000218112', desfecho_primario: 'Dias de cefaleia/mês, resposta ≥50% e qualidade de vida', resultado: 'Topiramato: evidência de confiança moderada de benefício na enxaqueca episódica e na crônica; melhora de qualidade de vida em instrumentos validados. Comparações entre ativos: evidência de confiança baixa ou muito baixa' },
     ],
-    beneficio: { beneficio_absoluto: 'Aproximadamente dobra a chance de resposta (≥50% de redução na frequência mensal de crises): 49–54% vs. 23% com placebo, na dose de 100 mg/dia', nnt: 4, horizonte_tempo: '26 semanas (MIGR-002)', forca_evidencia: 'A' },
+    beneficio: { beneficio_absoluto: 'Aproximadamente dobra a chance de resposta (≥50% de redução na frequência mensal de crises): 49–54% vs. 23% com placebo, na dose de 100 mg/dia', nnt: 4, horizonte_tempo: '26 semanas (MIGR-002)', forca_evidencia: 'B' },
   },
   // ── Sumatriptano — RM-97 ──────────────────────────────────────
   // Fontes de alta relevância, conferidas no PubMed/Crossref:
@@ -399,8 +403,13 @@ const EVIDENCIA_DB: Record<string, DadosEvidencia> = {
   },
   // ── Propranolol — RM-97 ───────────────────────────────────────
   // Fontes de alta relevância, conferidas no PubMed/Crossref:
-  //   AAN/AHS 2012 (Silberstein, Neurology): propranolol, metoprolol, timolol,
-  //     topiramato e divalproato têm Nível A e devem ser oferecidos.
+  //   AAN/AHS 2026 (Potrebic, Neurology, doi 10.1212/WNL.0000000000214881) —
+  //     substitui a de 2012 (Silberstein, Nível A): propranolol = Nível B para
+  //     quem prioriza eficácia ou teme danos de longo prazo; Nível C na gestação
+  //     se o nifedipino não servir. Revisão sistemática (Pringsheim 2026, doi
+  //     10.1212/WNL.0000000000218112): propranolol com confiança MODERADA.
+  //     Texto completo bloqueado (403); níveis conferidos em Guideline Central e
+  //     NeurologyLive, que concordam entre si.
   //   Jackson 2019 (PLoS One): 108 ECRs; propranolol vs placebo em enxaqueca
   //     episódica: −1,5 crises/mês em 8 semanas (IC 95% −2,3 a −0,65) e redução
   //     ≥50% mais provável (RR 1,4; IC 95% 1,1–1,7), evidência de alta qualidade.
@@ -412,21 +421,22 @@ const EVIDENCIA_DB: Record<string, DadosEvidencia> = {
   //     as taxas de resposta, então nenhum número é extraído dele.
   // A Cochrane do propranolol (Linde, CD003225) foi RETIRADA em 2017 e não é usada.
   propranolol: {
-    diretriz: 'Evidence-based guideline update: pharmacologic treatment for episodic migraine prevention in adults',
+    diretriz: 'Pharmacologic Treatment for Migraine Prevention in Adults Practice Guideline Recommendations',
     sociedade: 'American Academy of Neurology (AAN) / American Headache Society (AHS)',
-    ano: 2012,
+    ano: 2026,
     classe: 'I',
-    nivel: 'A',
-    doi: '10.1212/WNL.0b013e3182535d20',
-    resumo: 'Propranolol é efetivo na profilaxia da enxaqueca episódica e deve ser oferecido a pacientes com enxaqueca para reduzir a frequência e a gravidade das crises (Nível A, junto com metoprolol, timolol, topiramato e divalproato).',
+    nivel: 'B',
+    doi: '10.1212/WNL.0000000000214881',
+    resumo: 'A diretriz AAN/AHS 2026 recomenda oferecer propranolol na enxaqueca episódica (Nível B; evidência de confiança moderada na revisão sistemática) a quem prioriza eficácia ou teme danos de longo prazo (fármaco de uso prolongado, observando as contraindicações). Na gestação, se o nifedipino não for opção ou for ineficaz, pode-se oferecer propranolol ou metoprolol (Nível C), pesando riscos e benefícios.',
     mecanismo: 'Betabloqueador não seletivo; o mecanismo da ação antienxaqueca não está totalmente esclarecido (possível modulação central noradrenérgica/serotoninérgica e redução da excitabilidade cortical).',
-    por_que_classe: 'Betabloqueadores têm Nível A na profilaxia da enxaqueca episódica; a rede de meta-análise de 108 ECRs sugere que o benefício pode ser um efeito de classe (atenolol, metoprolol, timolol e propranolol).',
+    por_que_classe: 'Betabloqueadores têm benefício documentado na profilaxia da enxaqueca episódica (AAN/AHS 2026: propranolol com confiança moderada, metoprolol com confiança baixa); a rede de meta-análise de 108 ECRs sugere que o benefício pode ser um efeito de classe (atenolol, metoprolol, timolol e propranolol).',
     por_que_molecula: 'Propranolol é o betabloqueador mais estudado, com evidência de alta qualidade vs placebo na enxaqueca episódica e eficácia similar à do topiramato 100 mg na comparação direta (MIGR-003). Custo baixo e disponível no SUS.',
     estudos: [
-      { nome: 'Jackson 2019 (PLoS One) — meta-análise de 108 ECRs', doi: '10.1371/journal.pone.0212785', desfecho_primario: 'Frequência mensal de crises e redução ≥50% (propranolol vs placebo, enxaqueca episódica)', resultado: 'Redução de 1,5 crises/mês em 8 semanas (IC 95% −2,3 a −0,65); redução ≥50% mais provável (RR 1,4; IC 95% 1,1–1,7); NNT 5,3 (IC 95% 3,4–11,4); evidência de alta qualidade', nnt: 6 },
+      { nome: 'Jackson 2019 (PLoS One) — meta-análise de 108 ECRs', doi: '10.1371/journal.pone.0212785', desfecho_primario: 'Frequência mensal de crises e redução ≥50% (propranolol vs placebo, enxaqueca episódica)', resultado: 'Redução de 1,5 crises/mês em 8 semanas (IC 95% −2,3 a −0,65); redução ≥50% mais provável (RR 1,4; IC 95% 1,1–1,7); NNT 5,3 (IC 95% 3,4–11,4); evidência de alta qualidade segundo os autores (a revisão AAN/AHS 2026 classifica a confiança como moderada)', nnt: 6 },
       { nome: 'MIGR-003 (Diener 2004)', doi: '10.1007/s00415-004-0464-6', n_pacientes: 575, desfecho_primario: 'Variação da frequência mensal de crises (topiramato 100 e 200 mg vs placebo, com propranolol 160 mg como controle ativo)', resultado: 'Topiramato 100 mg superior ao placebo; topiramato 100 mg e propranolol 160 mg tiveram eficácia similar (frequência de crises, taxa de resposta ≥50%, dias de enxaqueca e uso de resgate) e tolerabilidade geralmente comparável' },
+      { nome: 'Pringsheim 2026 (Neurology) — revisão sistemática AAN/AHS, 217 estudos', doi: '10.1212/WNL.0000000000218112', desfecho_primario: 'Dias de cefaleia/mês, resposta ≥50% e qualidade de vida', resultado: 'Propranolol: evidência de confiança moderada de benefício na enxaqueca episódica; metoprolol, bisoprolol e outros orais com confiança baixa. Comparações entre ativos: evidência de confiança baixa ou muito baixa' },
     ],
-    beneficio: { beneficio_absoluto: 'Aumenta a chance de redução ≥50% na frequência de crises (RR 1,4 vs placebo) e reduz cerca de 1,5 crises/mês em 8 semanas; NNT ≈ 5 (IC 95% 3,4–11,4)', nnt: 6, horizonte_tempo: '8–12 semanas', forca_evidencia: 'A' },
+    beneficio: { beneficio_absoluto: 'Aumenta a chance de redução ≥50% na frequência de crises (RR 1,4 vs placebo) e reduz cerca de 1,5 crises/mês em 8 semanas; NNT ≈ 5 (IC 95% 3,4–11,4)', nnt: 6, horizonte_tempo: '8–12 semanas', forca_evidencia: 'B' },
   },
 };
 
@@ -602,12 +612,12 @@ const ALTERNATIVAS_DB: Record<string, AlternativasDB> = {
   // `clinical-therapeutics.ts` e `second-opinion.ts` (RM-90/91/92).
   G43: {
     condicao: 'Enxaqueca (Migrânea)',
-    nota: 'Tratamento agudo por intensidade da crise (AINE para leve-moderada, triptano para moderada-grave). Profilaxia indicada se ≥ 4 dias de crise/mês ou crises incapacitantes — betabloqueador e topiramato são 1ª linha equivalentes.',
+    nota: 'Tratamento agudo por intensidade da crise (AINE para leve-moderada, triptano para moderada-grave). Profilaxia indicada se ≥ 4 dias de crise/mês ou crises incapacitantes — propranolol e topiramato são ambos recomendados (AAN/AHS 2026, Nível B).',
     alternativas: [
-      { linha: '1a_linha', molecula: 'Naproxeno 500mg', classe: 'AINE', indicacao: 'Crise aguda leve-moderada', forca_evidencia: 'A', diretriz: 'AHS 2021 (Ailani, doi:10.1111/head.14153) / AAN-AHS 2012 (Silberstein, doi:10.1212/WNL.0b013e3182535d20)', disponivel_sus: true, custo_estimado_mes: 15, vantagem_principal: '1ª linha estabelecida para crise leve-moderada. Baixo custo. Sem risco cardiovascular', desvantagem_principal: 'Risco de MOH se usado > 2–3 dias/semana. Risco GI com uso frequente', contraindicacoes_principais: ['Úlcera péptica ativa', 'DRC avançada', 'Hipersensibilidade a AINEs'], quando_preferir: 'Crise leve-moderada, sem contraindicação a AINE' },
-      { linha: '1a_linha', molecula: 'Sumatriptano 50–100mg', classe: 'Triptano', indicacao: 'Crise moderada-grave ou falha a AINE', forca_evidencia: 'A', diretriz: 'AHS 2021 (Ailani, doi:10.1111/head.14153) / AAN-AHS 2012 (Silberstein, doi:10.1212/WNL.0b013e3182535d20)', disponivel_sus: false, custo_estimado_mes: 60, vantagem_principal: 'Tratamento específico (agonista 5-HT1B/1D), eficaz mesmo em crises intensas', desvantagem_principal: 'Contraindicado em doença cardiovascular. Risco de MOH se uso frequente', contraindicacoes_principais: ['Doença coronariana', 'AVC/AIT prévio', 'HAS não controlada', 'Enxaqueca hemiplégica/basilar'], quando_preferir: 'Crise moderada-grave, sem risco cardiovascular' },
-      { linha: '2a_linha', molecula: 'Propranolol 40–160mg/dia', classe: 'Betabloqueador', indicacao: 'Profilaxia — crises frequentes (≥ 4 dias/mês)', forca_evidencia: 'A', diretriz: 'AHS 2021 (Ailani, doi:10.1111/head.14153) / AAN-AHS 2012 (Silberstein, doi:10.1212/WNL.0b013e3182535d20)', disponivel_sus: true, custo_estimado_mes: 10, vantagem_principal: '1ª linha de profilaxia, décadas de uso. Baixo custo. Útil se HAS associada', desvantagem_principal: 'Resposta plena só após 2–3 meses. Fadiga, hipotensão', contraindicacoes_principais: ['Asma/DPOC grave', 'Bradicardia/BAV', 'ICC descompensada'], quando_preferir: 'Profilaxia com HAS associada, sem contraindicação a betabloqueador' },
-      { linha: '2a_linha', molecula: 'Topiramato 25–100mg/dia', classe: 'Anticonvulsivante', indicacao: 'Profilaxia — alternativa de 1ª linha', forca_evidencia: 'A', diretriz: 'AHS 2021 (Ailani, doi:10.1111/head.14153) / AAN-AHS 2012 (Silberstein, doi:10.1212/WNL.0b013e3182535d20)', disponivel_sus: false, custo_estimado_mes: 40, vantagem_principal: '1ª linha de profilaxia. Perda de peso associada (útil se obesidade)', desvantagem_principal: 'Parestesias, lentificação cognitiva. Teratogênico', contraindicacoes_principais: ['Gravidez', 'Nefrolitíase recorrente', 'Glaucoma de ângulo estreito'], quando_preferir: 'Profilaxia com obesidade associada ou contraindicação a betabloqueador' },
+      { linha: '1a_linha', molecula: 'Naproxeno 500mg', classe: 'AINE', indicacao: 'Crise aguda leve-moderada', forca_evidencia: 'A', diretriz: 'AHS 2021 (Ailani, doi:10.1111/head.14153)', disponivel_sus: true, custo_estimado_mes: 15, vantagem_principal: '1ª linha estabelecida para crise leve-moderada. Baixo custo. Sem risco cardiovascular', desvantagem_principal: 'Risco de MOH se usado > 2–3 dias/semana. Risco GI com uso frequente', contraindicacoes_principais: ['Úlcera péptica ativa', 'DRC avançada', 'Hipersensibilidade a AINEs'], quando_preferir: 'Crise leve-moderada, sem contraindicação a AINE' },
+      { linha: '1a_linha', molecula: 'Sumatriptano 50–100mg', classe: 'Triptano', indicacao: 'Crise moderada-grave ou falha a AINE', forca_evidencia: 'A', diretriz: 'AHS 2021 (Ailani, doi:10.1111/head.14153)', disponivel_sus: false, custo_estimado_mes: 60, vantagem_principal: 'Tratamento específico (agonista 5-HT1B/1D), eficaz mesmo em crises intensas', desvantagem_principal: 'Contraindicado em doença cardiovascular. Risco de MOH se uso frequente', contraindicacoes_principais: ['Doença coronariana', 'AVC/AIT prévio', 'HAS não controlada', 'Enxaqueca hemiplégica/basilar'], quando_preferir: 'Crise moderada-grave, sem risco cardiovascular' },
+      { linha: '2a_linha', molecula: 'Propranolol 40–160mg/dia', classe: 'Betabloqueador', indicacao: 'Profilaxia — crises frequentes (≥ 4 dias/mês)', forca_evidencia: 'B', diretriz: 'AAN/AHS 2026 (Potrebic, doi:10.1212/WNL.0000000000214881)', disponivel_sus: true, custo_estimado_mes: 10, vantagem_principal: 'Recomendado pela AAN/AHS 2026 (Nível B), décadas de uso. Baixo custo. Útil se HAS associada', desvantagem_principal: 'Resposta plena só após 2–3 meses. Fadiga, hipotensão', contraindicacoes_principais: ['Asma/DPOC grave', 'Bradicardia/BAV', 'ICC descompensada'], quando_preferir: 'Profilaxia com HAS associada, sem contraindicação a betabloqueador' },
+      { linha: '2a_linha', molecula: 'Topiramato 25–100mg/dia', classe: 'Anticonvulsivante', indicacao: 'Profilaxia — alternativa de 1ª linha', forca_evidencia: 'B', diretriz: 'AAN/AHS 2026 (Potrebic, doi:10.1212/WNL.0000000000214881)', disponivel_sus: false, custo_estimado_mes: 40, vantagem_principal: 'Recomendado pela AAN/AHS 2026 (Nível B), inclusive com IMC elevado. Perda de peso associada (útil se obesidade)', desvantagem_principal: 'Parestesias, lentificação cognitiva. Teratogênico; reduz a eficácia de contraceptivo hormonal acima de 200 mg/dia', contraindicacoes_principais: ['Gravidez', 'Nefrolitíase recorrente', 'Glaucoma de ângulo estreito'], quando_preferir: 'Profilaxia com obesidade associada ou contraindicação a betabloqueador' },
     ],
   },
   M10: {

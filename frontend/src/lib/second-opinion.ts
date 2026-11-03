@@ -994,7 +994,7 @@ const CONDICOES: CondicaoClinica[] = [
         beneficios: ['1ª linha estabelecida para profilaxia, décadas de uso', 'Baixo custo', 'Útil se comorbidade com HAS ou ansiedade'],
         riscos: ['Fadiga, hipotensão, bradicardia', 'Broncoespasmo em predispostos', 'Resposta plena só após 2–3 meses'],
         contraindicacoes: ['Asma/DPOC grave', 'Bradicardia ou BAV 2º-3º grau', 'ICC descompensada', 'Depressão grave não tratada (relativa)'],
-        diretriz: { orgao: 'American Academy of Neurology (AAN) / American Headache Society (AHS)', ano: 2012, recomendacao: 'Betabloqueadores são 1ª linha estabelecida para profilaxia, junto com topiramato. Silberstein SD et al., Neurology 2012;78(17):1337-1345, doi: 10.1212/WNL.0b013e3182535d20.', grau: 'I', nivel: 'A' },
+        diretriz: { orgao: 'American Academy of Neurology (AAN) / American Headache Society (AHS)', ano: 2026, recomendacao: 'Oferecer propranolol na enxaqueca episódica (Nível B; evidência de confiança moderada) a quem prioriza eficácia ou teme danos de longo prazo; na gestação, se o nifedipino não servir, pode-se oferecer propranolol ou metoprolol (Nível C). Potrebic S et al., Neurology 2026;107(7):e214881, doi: 10.1212/WNL.0000000000214881.', grau: 'I', nivel: 'B' },
         perfil_ideal: 'Crises frequentes (≥ 4 dias/mês), comorbidade com HAS, sem contraindicação a betabloqueador',
       },
       {
@@ -1010,7 +1010,7 @@ const CONDICOES: CondicaoClinica[] = [
         beneficios: ['1ª linha estabelecida para profilaxia', 'Perda de peso associada (útil se obesidade)', 'Sem restrição cardiovascular'],
         riscos: ['Parestesias (muito comum)', 'Lentificação cognitiva', 'Nefrolitíase', 'Teratogênico — exige contracepção eficaz'],
         contraindicacoes: ['Gravidez (categoria D)', 'Nefrolitíase recorrente', 'Glaucoma de ângulo estreito'],
-        diretriz: { orgao: 'American Academy of Neurology (AAN) / American Headache Society (AHS)', ano: 2012, recomendacao: 'Topiramato é 1ª linha estabelecida para profilaxia, com ECRs robustos (MIGR-001/MIGR-002). Silberstein SD et al., Neurology 2012;78(17):1337-1345, doi: 10.1212/WNL.0b013e3182535d20.', grau: 'I', nivel: 'A' },
+        diretriz: { orgao: 'American Academy of Neurology (AAN) / American Headache Society (AHS)', ano: 2026, recomendacao: 'Oferecer topiramato na enxaqueca episódica e crônica (Nível B; evidência de confiança moderada), inclusive com IMC elevado; evitar se possível em pessoas com potencial de engravidar (Nível A, teratogênico) e avisar que reduz a eficácia de contraceptivo hormonal acima de 200 mg/dia (Nível A). ECRs: MIGR-001/MIGR-002. Potrebic S et al., Neurology 2026;107(7):e214881, doi: 10.1212/WNL.0000000000214881.', grau: 'I', nivel: 'B' },
         perfil_ideal: 'Crises frequentes com obesidade associada, contraindicação a betabloqueador, mulher sem desejo gestacional',
       },
     ],
