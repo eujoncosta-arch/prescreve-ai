@@ -999,8 +999,8 @@ const CONDICOES: CondicaoClinica[] = [
         moleculas: ['Topiramato'],
         indicacao: 'Profilaxia de enxaqueca — alternativa de 1ª linha, especialmente com obesidade associada ou contraindicação a betabloqueador',
         evidencia: { nivel: 'A', grau: 'I', estudos: [
-          { nome: 'MIGR-002 (Brandes et al.)', ano: 2004, n: 483, resultado: 'Redução significativa da frequência mensal de crises vs. placebo nas doses de 100 e 200 mg/dia (JAMA 2004;291(8):965-973, doi: 10.1001/jama.291.8.965)' },
-          { nome: 'MIGR-001 (Silberstein et al.)', ano: 2004, resultado: 'Topiramato 100–200 mg/dia eficaz como profilaxia (Arch Neurol 2004;61(4):490-495, doi: 10.1001/archneur.61.4.490)' },
+          { nome: 'MIGR-002 (Brandes et al.)', ano: 2004, n: 483, resultado: 'Resposta ≥50% na frequência mensal de crises: 49% (100 mg/dia) vs. 23% (placebo); NNT ≈ 4 (JAMA 2004;291(8):965-973, doi: 10.1001/jama.291.8.965)' },
+          { nome: 'MIGR-001 (Silberstein et al.)', ano: 2004, n: 487, resultado: 'Resposta ≥50% na frequência mensal de crises: 54,0% (100 mg/dia) vs. 22,6% (placebo); NNT ≈ 4 (Arch Neurol 2004;61(4):490-495, doi: 10.1001/archneur.61.4.490)' },
         ] },
         beneficios: ['1ª linha estabelecida para profilaxia', 'Perda de peso associada (útil se obesidade)', 'Sem restrição cardiovascular'],
         riscos: ['Parestesias (muito comum)', 'Lentificação cognitiva', 'Nefrolitíase', 'Teratogênico — exige contracepção eficaz'],

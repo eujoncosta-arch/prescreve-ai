@@ -1330,8 +1330,8 @@ export const MOLECULES_DB: MoleculaComparavel[] = [
     grau_recomendacao: 'I',
     diretriz_principal: 'AAN/AHS 2012 (Silberstein) — profilaxia de enxaqueca',
     eficacia: [
-      { desfecho: 'Redução da frequência mensal de crises de enxaqueca (MIGR-002)', reducao: 'Redução significativa vs. placebo nas doses de 100 e 200 mg/dia', estudo: 'Brandes JL et al., JAMA 2004', n_pacientes: 483 },
-      { desfecho: 'Redução da frequência mensal de crises de enxaqueca (MIGR-001)', reducao: 'Topiramato 100–200 mg/dia eficaz como profilaxia', estudo: 'Silberstein SD et al., Arch Neurol 2004' },
+      { desfecho: 'Resposta ≥50% na frequência mensal de crises (MIGR-002)', reducao: '49% (100 mg/dia) vs. 23% (placebo)', estudo: 'Brandes JL et al., JAMA 2004', n_pacientes: 483, nnt: 4 },
+      { desfecho: 'Resposta ≥50% na frequência mensal de crises (MIGR-001)', reducao: '54,0% (100 mg/dia) vs. 22,6% (placebo)', estudo: 'Silberstein SD et al., Arch Neurol 2004', n_pacientes: 487, nnt: 4 },
     ],
     interacoes: [
       { farmaco: 'Ácido valproico', mecanismo: 'Risco aumentado de hiperamonemia/encefalopatia e hipotermia', severidade: 'grave' },

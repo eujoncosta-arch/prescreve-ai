@@ -341,6 +341,29 @@ const EVIDENCIA_DB: Record<string, DadosEvidencia> = {
     ],
     beneficio: { beneficio_absoluto: 'Aumenta em ~22 pontos percentuais a chance de resposta (≥50% redução da dor) vs. placebo, no esquema de baixa dose', nnt: 5, horizonte_tempo: '24h (crise aguda)', forca_evidencia: 'A' },
   },
+  // ── Topiramato — RM-94 ────────────────────────────────────────
+  // Números confirmados em fonte primária (PubMed) para os DOIS ensaios
+  // pivotais independentes. NNT computado, nunca inventado:
+  //   MIGR-002 (100 mg): ARR = 49% − 23%   = 26,0 pp → NNT 3,85
+  //   MIGR-001 (100 mg): ARR = 54,0% − 22,6% = 31,4 pp → NNT 3,18
+  // Adotado NNT 4 (arredondado para cima, convenção conservadora).
+  topiramato: {
+    diretriz: 'Evidence-based guideline update: pharmacologic treatment for episodic migraine prevention in adults',
+    sociedade: 'American Academy of Neurology (AAN) / American Headache Society (AHS)',
+    ano: 2012,
+    classe: 'I',
+    nivel: 'A',
+    doi: '10.1212/WNL.0b013e3182535d20',
+    resumo: 'Topiramato é recomendado como profilaxia de enxaqueca episódica com Nível A de evidência (recomendação reforçada na atualização de 2012). Dose-alvo 100 mg/dia, com titulação lenta.',
+    mecanismo: 'Múltiplos mecanismos: bloqueio de canais de sódio voltagem-dependentes, potenciação GABAérgica (GABA-A), antagonismo de receptores glutamatérgicos AMPA/kainato e inibição da anidrase carbônica.',
+    por_que_classe: 'Anticonvulsivantes com ação moduladora da excitabilidade neuronal reduzem a frequência de crises de enxaqueca; topiramato e divalproato têm o corpo de evidência mais robusto da classe.',
+    por_que_molecula: 'Topiramato tem dois ECRs pivotais independentes de grande porte (MIGR-001 e MIGR-002), ambos com taxa de resposta ≥50% de aproximadamente o dobro do placebo na dose de 100 mg/dia.',
+    estudos: [
+      { nome: 'MIGR-002', doi: '10.1001/jama.291.8.965', n_pacientes: 483, desfecho_primario: 'Redução ≥50% na frequência mensal de crises de enxaqueca', resultado: 'Taxa de resposta 49% (100 mg/dia) vs. 23% (placebo); 39% com 50 mg/dia e 47% com 200 mg/dia', nnt: 4, rar: 26 },
+      { nome: 'MIGR-001', doi: '10.1001/archneur.61.4.490', n_pacientes: 487, desfecho_primario: 'Redução ≥50% na frequência mensal de crises de enxaqueca', resultado: 'Taxa de resposta 54,0% (100 mg/dia) vs. 22,6% (placebo); 35,9% com 50 mg/dia e 52,3% com 200 mg/dia', nnt: 4, rar: 31.4 },
+    ],
+    beneficio: { beneficio_absoluto: 'Aproximadamente dobra a chance de resposta (≥50% de redução na frequência mensal de crises): 49–54% vs. 23% com placebo, na dose de 100 mg/dia', nnt: 4, horizonte_tempo: '26 semanas (MIGR-002)', forca_evidencia: 'A' },
+  },
 };
 
 // RM-88: chaves de combinação em EVIDENCIA_DB usam "/" (ex.:
