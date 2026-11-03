@@ -218,11 +218,11 @@ describe('RM-88 — gerarWHATIF()', () => {
 
     const empaSem = semDm2.cenarios.find(c => c.molecula === 'Empagliflozina')!;
     const empaCom = comDm2.cenarios.find(c => c.molecula === 'Empagliflozina')!;
-    expect(empaCom.trust_score).toBeGreaterThan(empaSem.trust_score);
+    expect(empaCom.trust_score!).toBeGreaterThan(empaSem.trust_score!);
 
     const metfSem = semDm2.cenarios.find(c => c.molecula === 'Metformina')!;
     const metfCom = comDm2.cenarios.find(c => c.molecula === 'Metformina')!;
-    expect(metfSem.trust_score).toBeLessThan(metfCom.trust_score);
+    expect(metfSem.trust_score!).toBeLessThan(metfCom.trust_score!);
   });
 
   it('trust_score de cenário nunca ultrapassa 100 mesmo somando todos os bônus', () => {

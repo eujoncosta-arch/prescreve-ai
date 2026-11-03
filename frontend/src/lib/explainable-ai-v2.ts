@@ -29,7 +29,7 @@ export interface JustificativaDiretriz {
 export interface EstudoPivotal {
   nome: string;
   doi?: string;
-  n_pacientes: number;
+  n_pacientes?: number;         // omitido quando a fonte (ex.: meta-análise) não informa o total
   desfecho_primario: string;
   resultado: string;
   nnt?: number;
@@ -88,7 +88,7 @@ export interface CenarioClinco {
   nnh?: number;
   custo_mensal_brl: number;
   disponivel_sus: boolean;
-  trust_score: number;          // 0–100
+  trust_score?: number;         // 0–100; omitido quando não há método publicado para a nota
   forca_evidencia: ForcaEvidencia;
   vantagens: string[];
   desvantagens: string[];
@@ -364,6 +364,70 @@ const EVIDENCIA_DB: Record<string, DadosEvidencia> = {
     ],
     beneficio: { beneficio_absoluto: 'Aproximadamente dobra a chance de resposta (≥50% de redução na frequência mensal de crises): 49–54% vs. 23% com placebo, na dose de 100 mg/dia', nnt: 4, horizonte_tempo: '26 semanas (MIGR-002)', forca_evidencia: 'A' },
   },
+  // ── Sumatriptano — RM-97 ──────────────────────────────────────
+  // Fontes de alta relevância, conferidas no PubMed/Crossref:
+  //   Cochrane CD008615 (Derry 2012): 61 estudos, 37.250 participantes.
+  //     NNT vs placebo para "livre de dor em 2 h": 6,1 (50 mg) e 4,7 (100 mg);
+  //     alívio da cefaleia em 2 h: 4,0 (50 mg) e 3,5 (100 mg).
+  //   Cochrane CD009108 (Derry 2014, overview): 50 mg → 28% vs 11% (placebo),
+  //     NNT 6,1 (IC 95% 5,5–6,9; 6.447 participantes) — dá as taxas absolutas.
+  //   Ferrari 2001 (Lancet): meta-análise independente de 53 ECRs (24.089
+  //     pacientes); 100 mg → 29% livres de dor em 2 h. O resumo não traz a taxa
+  //     do placebo, então NENHUM NNT é derivado dela.
+  //   Karlsson 2024 (BMJ): rede de 137 ECRs; todas as intervenções ativas
+  //     superaram o placebo. Só odds ratio, sem NNT.
+  // NNT adotado = ceil(6,1) = 7 (50 mg, dose inicial do protocolo; mesma
+  // convenção conservadora de arredondar para cima usada nas demais entradas).
+  sumatriptano: {
+    diretriz: 'The American Headache Society Consensus Statement: Update on integrating new migraine treatments into clinical practice',
+    sociedade: 'American Headache Society (AHS)',
+    ano: 2021,
+    classe: 'Consenso',
+    nivel: 'A',
+    doi: '10.1111/head.14153',
+    resumo: 'O consenso da AHS (2021) — publicado, nas palavras do próprio documento, "na ausência de uma diretriz formal" — afirma que as bases do tratamento agudo da enxaqueca não mudaram. O nível A refere-se à evidência de revisões Cochrane e meta-análises de ECRs para o triptano, não à classificação do consenso.',
+    mecanismo: 'Agonista seletivo dos receptores serotoninérgicos 5-HT1B/1D: vasoconstrição craniana e inibição da liberação de neuropeptídeos pró-inflamatórios trigeminais.',
+    por_que_classe: 'Triptanos são agonistas 5-HT1B/1D com fundamento científico bem estabelecido e eficácia comprovada no tratamento agudo da enxaqueca (Ferrari 2001); na rede de 137 ECRs do BMJ 2024, eletriptano, rizatriptano, sumatriptano e zolmitriptano tiveram o melhor perfil global.',
+    por_que_molecula: 'O sumatriptano oral tem a maior base de evidência do grupo (61 ECRs, 37.250 participantes, Cochrane) e é o único triptano na Lista de Medicamentos Essenciais da OMS segundo o BMJ 2024; a dose de 100 mg é superior à de 50 mg, às custas de mais eventos adversos.',
+    estudos: [
+      { nome: 'Cochrane — sumatriptano oral (Derry 2012)', doi: '10.1002/14651858.CD008615.pub2', n_pacientes: 37250, desfecho_primario: 'Livre de dor em 2 h e alívio da cefaleia em 2 h (vs placebo)', resultado: 'NNT para livre de dor em 2 h: 6,1 (50 mg) e 4,7 (100 mg); para alívio da cefaleia em 2 h: 4,0 (50 mg) e 3,5 (100 mg). 100 mg superior a 50 mg; tratar com dor ainda leve melhora o resultado; eventos adversos mais frequentes que com placebo, com relação dose-resposta', nnt: 7 },
+      { nome: 'Cochrane — overview de sumatriptano (Derry 2014)', doi: '10.1002/14651858.CD009108.pub2', n_pacientes: 6447, desfecho_primario: 'Livre de dor em 2 h (50 mg oral)', resultado: '28% com sumatriptano 50 mg vs 11% com placebo (NNT 6,1; IC 95% 5,5–6,9); alívio da cefaleia em 2 h com 100 mg: NNT 3,5 (IC 95% 3,2–3,7; 7.811 participantes)', nnt: 7 },
+      { nome: 'Ferrari 2001 (Lancet) — meta-análise de 53 ECRs', doi: '10.1016/S0140-6736(01)06711-3', n_pacientes: 24089, desfecho_primario: 'Livre de dor e resposta da cefaleia em 2 h (sumatriptano 100 mg)', resultado: '29% livres de dor em 2 h (IC 95% 27–30) e 59% com resposta da cefaleia (IC 95% 57–60); resposta consistente em 2 de 3 crises: 67%; excesso de eventos adversos de 13% sobre o placebo' },
+      { nome: 'Karlsson 2024 (BMJ) — rede de 137 ECRs', doi: '10.1136/bmj-2024-080107', n_pacientes: 89445, desfecho_primario: 'Livre de dor em 2 h e dor livre sustentada de 2 a 24 h', resultado: 'Todas as intervenções ativas superaram o placebo para livre de dor em 2 h (odds ratio de 1,73 a 5,19); sumatriptano entre os 4 triptanos de melhor perfil, mais eficaz que lasmiditana, rimegepante e ubrogepante' },
+    ],
+    beneficio: { beneficio_absoluto: 'Em crise moderada a grave, 28% ficam livres de dor em 2 h com 50 mg vs 11% com placebo (≈17 pontos percentuais); com 100 mg o NNT é 4,7', nnt: 7, horizonte_tempo: '2 horas (crise aguda)', forca_evidencia: 'A' },
+  },
+  // ── Propranolol — RM-97 ───────────────────────────────────────
+  // Fontes de alta relevância, conferidas no PubMed/Crossref:
+  //   AAN/AHS 2012 (Silberstein, Neurology): propranolol, metoprolol, timolol,
+  //     topiramato e divalproato têm Nível A e devem ser oferecidos.
+  //   Jackson 2019 (PLoS One): 108 ECRs; propranolol vs placebo em enxaqueca
+  //     episódica: −1,5 crises/mês em 8 semanas (IC 95% −2,3 a −0,65) e redução
+  //     ≥50% mais provável (RR 1,4; IC 95% 1,1–1,7), evidência de alta qualidade.
+  //     NNT 5,3 (IC 95% 3,4–11,4) na Tabela 3. O texto do mesmo artigo cita NNT
+  //     4,5 (IC 2,8–12,9) em 12 semanas — inconsistência interna; adotado o
+  //     maior (5,3), que arredondado para cima dá NNT 6 (convenção conservadora).
+  //   Diener 2004 (MIGR-003, J Neurol): 575 pacientes; propranolol 160 mg como
+  //     controle ativo, eficácia similar à do topiramato 100 mg. O resumo não traz
+  //     as taxas de resposta, então nenhum número é extraído dele.
+  // A Cochrane do propranolol (Linde, CD003225) foi RETIRADA em 2017 e não é usada.
+  propranolol: {
+    diretriz: 'Evidence-based guideline update: pharmacologic treatment for episodic migraine prevention in adults',
+    sociedade: 'American Academy of Neurology (AAN) / American Headache Society (AHS)',
+    ano: 2012,
+    classe: 'I',
+    nivel: 'A',
+    doi: '10.1212/WNL.0b013e3182535d20',
+    resumo: 'Propranolol é efetivo na profilaxia da enxaqueca episódica e deve ser oferecido a pacientes com enxaqueca para reduzir a frequência e a gravidade das crises (Nível A, junto com metoprolol, timolol, topiramato e divalproato).',
+    mecanismo: 'Betabloqueador não seletivo; o mecanismo da ação antienxaqueca não está totalmente esclarecido (possível modulação central noradrenérgica/serotoninérgica e redução da excitabilidade cortical).',
+    por_que_classe: 'Betabloqueadores têm Nível A na profilaxia da enxaqueca episódica; a rede de meta-análise de 108 ECRs sugere que o benefício pode ser um efeito de classe (atenolol, metoprolol, timolol e propranolol).',
+    por_que_molecula: 'Propranolol é o betabloqueador mais estudado, com evidência de alta qualidade vs placebo na enxaqueca episódica e eficácia similar à do topiramato 100 mg na comparação direta (MIGR-003). Custo baixo e disponível no SUS.',
+    estudos: [
+      { nome: 'Jackson 2019 (PLoS One) — meta-análise de 108 ECRs', doi: '10.1371/journal.pone.0212785', desfecho_primario: 'Frequência mensal de crises e redução ≥50% (propranolol vs placebo, enxaqueca episódica)', resultado: 'Redução de 1,5 crises/mês em 8 semanas (IC 95% −2,3 a −0,65); redução ≥50% mais provável (RR 1,4; IC 95% 1,1–1,7); NNT 5,3 (IC 95% 3,4–11,4); evidência de alta qualidade', nnt: 6 },
+      { nome: 'MIGR-003 (Diener 2004)', doi: '10.1007/s00415-004-0464-6', n_pacientes: 575, desfecho_primario: 'Variação da frequência mensal de crises (topiramato 100 e 200 mg vs placebo, com propranolol 160 mg como controle ativo)', resultado: 'Topiramato 100 mg superior ao placebo; topiramato 100 mg e propranolol 160 mg tiveram eficácia similar (frequência de crises, taxa de resposta ≥50%, dias de enxaqueca e uso de resgate) e tolerabilidade geralmente comparável' },
+    ],
+    beneficio: { beneficio_absoluto: 'Aumenta a chance de redução ≥50% na frequência de crises (RR 1,4 vs placebo) e reduz cerca de 1,5 crises/mês em 8 semanas; NNT ≈ 5 (IC 95% 3,4–11,4)', nnt: 6, horizonte_tempo: '8–12 semanas', forca_evidencia: 'A' },
+  },
 };
 
 // RM-88: chaves de combinação em EVIDENCIA_DB usam "/" (ex.:
@@ -583,6 +647,14 @@ const WHATIF_DB: Record<string, CenarioClinco[]> = {
     { nome: 'Sacubitril/Valsartana (ARNI)', molecula: 'Sacubitril/Valsartana', classe: 'ARNI', mortalidade_relativa: '↓ 20% vs enalapril + ↓ 16% morte CV', nnt: 21, nnh: 50, custo_mensal_brl: 420, disponivel_sus: false, trust_score: 92, forca_evidencia: 'B', vantagens: ['Superior ao IECA', 'Remodelamento reverso', 'PARADIGM-HF'], desvantagens: ['Custo', 'Washout IECA'], perfil_ideal: 'IC-FEr estável já em IECA, tolerante', estudos: ['PARADIGM-HF'] },
     { nome: 'ARNI + iSGLT2 + ARM + BB (4 pilares)', molecula: 'Combinação 4 pilares', classe: 'ARNI + iSGLT2 + ARM + BB', mortalidade_relativa: 'Estimativa: ↓ 40-50% mortalidade vs nenhum tratamento', nnt: 7, nnh: 30, custo_mensal_brl: 680, disponivel_sus: false, trust_score: 88, forca_evidencia: 'A', vantagens: ['4 pilares: máxima redução de mortalidade e hospitalização', 'Alvo terapêutico completo ESC 2023'], desvantagens: ['Custo elevado', 'Complexidade', 'Monitoramento K+/Cr/PA'], perfil_ideal: 'IC-FEr NYHA II-III estável, alto risco, sem contraindicação', estudos: ['PARADIGM-HF', 'DAPA-HF', 'RALES', 'COPERNICUS'] },
   ],
+  // RM-97: só 2 cenários, ambos de PROFILAXIA (agudo × preventivo não se compara). NNT,
+  // custo e disponibilidade no SUS vêm das mesmas bases do projeto (EVIDENCIA_DB e
+  // ALTERNATIVAS_DB). `trust_score` é omitido de propósito: é uma nota editorial sem
+  // método publicado e não será atribuída sem base.
+  G43: [
+    { nome: 'Topiramato 100mg/dia', molecula: 'Topiramato', classe: 'Anticonvulsivante', mortalidade_relativa: 'Resposta ≥50% nas crises: 49–54% vs 23% com placebo (MIGR-002 e MIGR-001)', nnt: 4, custo_mensal_brl: 40, disponivel_sus: false, forca_evidencia: 'A', vantagens: ['Dois ECRs pivotais independentes', 'Perda de peso associada (útil se obesidade)'], desvantagens: ['Parestesias e lentificação cognitiva', 'Teratogênico', 'NNT menor que o do propranolol vem de comparação indireta entre ensaios; na comparação direta (MIGR-003) as eficácias foram similares'], perfil_ideal: 'Profilaxia com obesidade associada ou contraindicação a betabloqueador', estudos: ['MIGR-002', 'MIGR-001', 'MIGR-003'] },
+    { nome: 'Propranolol 40–160mg/dia', molecula: 'Propranolol', classe: 'Betabloqueador', mortalidade_relativa: 'Redução ≥50% das crises: RR 1,4 vs placebo (meta-análise de 108 ECRs)', nnt: 6, custo_mensal_brl: 10, disponivel_sus: true, forca_evidencia: 'A', vantagens: ['Baixo custo e disponível no SUS', 'Útil se HAS associada', 'Eficácia similar à do topiramato 100 mg na comparação direta (MIGR-003)'], desvantagens: ['Resposta plena só após 2–3 meses', 'Fadiga, hipotensão e bradicardia', 'Contraindicado em asma/DPOC grave e bradicardia'], perfil_ideal: 'Profilaxia com HAS associada, sem contraindicação a betabloqueador', estudos: ['Jackson 2019 (meta-análise)', 'MIGR-003'] },
+  ],
 };
 
 // ══════════════════════════════════════════════════════════════
@@ -799,12 +871,14 @@ export function gerarWHATIF(
     }
     if (molLower.includes('metformina') && !temComorbidade(anamnese, 'diabetes', 'dm2')) bonus -= 20;
     if (c.disponivel_sus && bonus >= 0) bonus += 5;
+    if (c.trust_score === undefined) return c;
     return { ...c, trust_score: Math.min(100, c.trust_score + bonus) };
   });
 
   const melhor_evidencia = cenariosScorados.reduce((a, b) => (b.nnt < a.nnt ? b : a), cenariosScorados[0])?.nome ?? '';
   const melhor_custo = cenariosScorados.reduce((a, b) => (b.custo_mensal_brl < a.custo_mensal_brl ? b : a), cenariosScorados[0])?.nome ?? '';
-  const melhor_paciente = cenariosScorados.reduce((a, b) => (b.trust_score > a.trust_score ? b : a), cenariosScorados[0])?.nome ?? '';
+  const comNota = cenariosScorados.filter(c => c.trust_score !== undefined);
+  const melhor_paciente = comNota.reduce((a, b) => ((b.trust_score ?? 0) > (a.trust_score ?? 0) ? b : a), comNota[0])?.nome ?? '';
 
   return {
     pergunta: `O que acontece se eu escolher diferentes tratamentos para ${cid0}?`,

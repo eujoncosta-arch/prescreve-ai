@@ -41,7 +41,7 @@ describe('RM-92 — second-opinion.ts: novas CondicaoClinica', () => {
     expect(buscarCondicao('drge')?.cid10).toBe('K21');
   });
 
-  it('RM-93: opções com trial verificado (Sumatriptano, Topiramato, Colchicina) agora citam estudos reais; as demais continuam sem estudo não verificado', () => {
+  it('RM-93/97: opções com fonte verificada (Sumatriptano, Propranolol, Topiramato, Colchicina) citam estudos reais; as demais continuam sem estudo não verificado', () => {
     const sumatriptano = buscarCondicao('enxaqueca')!.opcoes.find(o => o.id === 'sumatriptano')!;
     expect(sumatriptano.evidencia.estudos.length).toBeGreaterThan(0);
     expect(sumatriptano.evidencia.estudos[0].nome).toMatch(/Cochrane/);
@@ -52,8 +52,12 @@ describe('RM-92 — second-opinion.ts: novas CondicaoClinica', () => {
     const colchicina = buscarCondicao('gota')!.opcoes.find(o => o.id === 'colchicina')!;
     expect(colchicina.evidencia.estudos.some(e => e.nome.includes('AGREE') && e.n === 185)).toBe(true);
 
-    // Opções sem trial individual verificado (Naproxeno, Propranolol, Alopurinol, Omeprazol, Famotidina) continuam sem estudo fabricado.
-    const semEstudoVerificado = ['naproxeno_enxaqueca', 'propranolol_enxaqueca', 'naproxeno_gota', 'alopurinol', 'omeprazol', 'famotidina'];
+    // RM-97: o propranolol passou a citar a meta-análise Jackson 2019 (PLoS One) e MIGR-003.
+    const propranolol = buscarCondicao('enxaqueca')!.opcoes.find(o => o.id === 'propranolol_enxaqueca')!;
+    expect(propranolol.evidencia.estudos.some(e => e.nome.includes('Jackson') && e.ano === 2019)).toBe(true);
+
+    // Opções sem fonte verificada (Naproxeno, Alopurinol, Omeprazol, Famotidina) continuam sem estudo fabricado.
+    const semEstudoVerificado = ['naproxeno_enxaqueca', 'naproxeno_gota', 'alopurinol', 'omeprazol', 'famotidina'];
     for (const condId of ['enxaqueca', 'gota', 'drge']) {
       const condicao = buscarCondicao(condId)!;
       for (const opcao of condicao.opcoes) {

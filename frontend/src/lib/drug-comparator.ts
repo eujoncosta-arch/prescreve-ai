@@ -1208,7 +1208,8 @@ export const MOLECULES_DB: MoleculaComparavel[] = [
     grau_recomendacao: 'I',
     diretriz_principal: 'AHS Consensus 2021 · Cochrane Review (Derry 2012)',
     eficacia: [
-      { desfecho: 'Alívio da dor e sintomas associados (náusea, foto/fonofobia) na crise aguda', reducao: 'Eficaz como tratamento abortivo, com aumento de eventos adversos', estudo: 'Derry CJ et al., Cochrane Database Syst Rev 2012 (sumatriptano oral)' },
+      { desfecho: 'Livre de dor em 2 h na crise aguda (50 mg oral)', reducao: '28% vs. 11% com placebo; NNT 6,1 (IC 95% 5,5–6,9); com 100 mg o NNT é 4,7 (Cochrane 2012)', estudo: 'Derry CJ et al., Cochrane Database Syst Rev 2014 (overview) e 2012 (sumatriptano oral)', n_pacientes: 6447, nnt: 7 },
+      { desfecho: 'Livre de dor e resposta da cefaleia em 2 h (100 mg oral)', reducao: '29% livres de dor e 59% com resposta da cefaleia em 2 h', estudo: 'Ferrari MD et al., Lancet 2001 (meta-análise de 53 ECRs)', n_pacientes: 24089 },
     ],
     interacoes: [
       { farmaco: 'Ergotamínicos', mecanismo: 'Vasoespasmo aditivo — contraindicado dentro de 24h', severidade: 'contraindicada' },
@@ -1271,6 +1272,7 @@ export const MOLECULES_DB: MoleculaComparavel[] = [
     diretriz_principal: 'AAN/AHS 2012 (Silberstein) — profilaxia de enxaqueca',
     eficacia: [
       { desfecho: 'Redução da frequência de crises de enxaqueca', reducao: '1ª linha estabelecida para profilaxia (Nível A)', estudo: 'Silberstein SD et al., Neurology 2012 (AAN/AHS guideline)' },
+      { desfecho: 'Redução ≥50% na frequência de crises (enxaqueca episódica)', reducao: 'RR 1,4 (IC 95% 1,1–1,7) vs. placebo; −1,5 crises/mês em 8 semanas; NNT 5,3 (IC 95% 3,4–11,4)', estudo: 'Jackson JL et al., PLoS One 2019 (meta-análise de 108 ECRs)', nnt: 6 },
     ],
     interacoes: [
       { farmaco: 'Verapamil/Diltiazem', mecanismo: 'Bradicardia e depressão de condução AV aditivas', severidade: 'grave' },

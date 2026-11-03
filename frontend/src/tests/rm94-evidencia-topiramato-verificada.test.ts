@@ -6,11 +6,8 @@
 // 2+ fontes independentes. Resultado da verificação:
 //   ENTROU    Topiramato — MIGR-001 (PMID 15096395) e MIGR-002
 //             (PMID 14982912), dois ensaios independentes.
-//   NÃO ENTROU Propranolol — 2 meta-análises concordam no efeito, mas o
-//             NNT diverge (≈6 vs ≈9) e uma tem contagem de pacientes
-//             inconsistente (592 vs 982).
-//   NÃO ENTROU Sumatriptano — NNT 6,1 vem de um único documento
-//             (revisão Cochrane CD008615).
+//   (RM-97: Propranolol e Sumatriptano passaram a ter entrada curada, após o
+//   usuário aceitar fontes de alta relevância — ver rm97-*.test.ts.)
 //   NÃO ENTROU Alopurinol — CONFIRMS compara com febuxostate, não com
 //             placebo: não há NNT calculável.
 //   NÃO ENTROU Omeprazol/Famotidina — Cochrane CD002095 só traz RR, sem
@@ -67,7 +64,7 @@ describe('RM-94 — consistência entre as 3 camadas que citam MIGR-001/002', ()
 });
 
 describe('RM-94 — o que NÃO entrou continua no fallback honesto (nunca NNT fabricado)', () => {
-  it.each(['Sumatriptano', 'Propranolol', 'Naproxeno'])('%s (enxaqueca) não tem entrada curada: gerarWHY() cai no fallback genérico', (nome) => {
+  it.each(['Naproxeno'])('%s (enxaqueca) não tem entrada curada: gerarWHY() cai no fallback genérico', (nome) => {
     const why = gerarWHY(molecula(nome));
     expect(why.estudos_pivotais).toEqual([]);
     expect(why.beneficio_risco.nnt).toBe(25); // placeholder documentado do fallback, não um NNT real
@@ -82,8 +79,8 @@ describe('RM-94 — o que NÃO entrou continua no fallback honesto (nunca NNT fa
     expect(why.estudos_pivotais).toEqual([]);
   });
 
-  it('WHATIF_DB continua sem entrada para G43/M10/K21: só 1 cenário verificável por condição não forma uma comparação honesta', () => {
-    for (const cid of ['G43', 'M10', 'K21']) {
+  it('WHATIF_DB continua sem entrada para M10/K21 (G43 passou a ter 2 cenários na RM-97): só 1 cenário verificável por condição não forma uma comparação honesta', () => {
+    for (const cid of ['M10', 'K21']) {
       expect(gerarWHATIF(cid).cenarios).toEqual([]);
     }
   });

@@ -971,7 +971,9 @@ const CONDICOES: CondicaoClinica[] = [
         moleculas: ['Sumatriptano', 'Zolmitriptano', 'Naratriptano'],
         indicacao: 'Tratamento agudo específico de crise de enxaqueca moderada a grave, ou falha a AINE',
         evidencia: { nivel: 'A', grau: 'I', estudos: [
-          { nome: 'Cochrane Review — Sumatriptano oral (Derry et al.)', ano: 2012, resultado: 'Eficaz como tratamento abortivo da crise, aliviando dor, náusea, fotofobia, fonofobia e incapacidade funcional, com aumento de eventos adversos vs. placebo (doi: 10.1002/14651858.CD008615.pub2)' },
+          { nome: 'Cochrane Review — Sumatriptano oral (Derry et al.)', ano: 2012, n: 37250, resultado: 'Livre de dor em 2 h: NNT 6,1 (50 mg) e 4,7 (100 mg) vs. placebo; alívio da cefaleia em 2 h: NNT 4,0 (50 mg) e 3,5 (100 mg); eventos adversos mais frequentes que com placebo (Cochrane Database Syst Rev 2012;(2):CD008615, doi: 10.1002/14651858.CD008615.pub2)' },
+          { nome: 'Cochrane Overview — Sumatriptano (Derry et al.)', ano: 2014, n: 6447, resultado: 'Livre de dor em 2 h com 50 mg oral: 28% vs. 11% com placebo (NNT 6,1; IC 95% 5,5–6,9) (Cochrane Database Syst Rev 2014;(5):CD009108, doi: 10.1002/14651858.CD009108.pub2)' },
+          { nome: 'Ferrari et al. — meta-análise de 53 ECRs de triptanos orais', ano: 2001, n: 24089, resultado: 'Sumatriptano 100 mg: 29% livres de dor e 59% com resposta da cefaleia em 2 h (Lancet 2001;358(9294):1668-1675, doi: 10.1016/S0140-6736(01)06711-3)' },
         ] },
         beneficios: ['Tratamento específico (agonista 5-HT1B/1D), não só analgésico inespecífico', 'Eficaz mesmo em crises intensas', 'Boa resposta mesmo tardiamente no curso da crise'],
         riscos: ['Formigamento/pressão torácica (geralmente benignos)', 'Risco de MOH se usado > 2 dias/semana', 'Contraindicado em doença cardiovascular'],
@@ -985,7 +987,10 @@ const CONDICOES: CondicaoClinica[] = [
         classe: 'Betabloqueador',
         moleculas: ['Propranolol', 'Metoprolol'],
         indicacao: 'Profilaxia de enxaqueca — 1ª linha quando crises frequentes (≥ 4 dias/mês) ou incapacitantes',
-        evidencia: { nivel: 'A', grau: 'I', estudos: [] },
+        evidencia: { nivel: 'A', grau: 'I', estudos: [
+          { nome: 'Jackson et al. — meta-análise de 108 ECRs de betabloqueadores', ano: 2019, resultado: 'Propranolol vs. placebo na enxaqueca episódica: −1,5 crises/mês em 8 semanas (IC 95% −2,3 a −0,65) e redução ≥50% mais provável (RR 1,4; IC 95% 1,1–1,7); NNT 5,3 (IC 95% 3,4–11,4); evidência de alta qualidade (PLoS One 2019;14(3):e0212785, doi: 10.1371/journal.pone.0212785)' },
+          { nome: 'MIGR-003 (Diener et al.)', ano: 2004, n: 575, resultado: 'Propranolol 160 mg/dia (controle ativo) com eficácia similar à do topiramato 100 mg/dia, que superou o placebo (J Neurol 2004;251(8):943-950, doi: 10.1007/s00415-004-0464-6)' },
+        ] },
         beneficios: ['1ª linha estabelecida para profilaxia, décadas de uso', 'Baixo custo', 'Útil se comorbidade com HAS ou ansiedade'],
         riscos: ['Fadiga, hipotensão, bradicardia', 'Broncoespasmo em predispostos', 'Resposta plena só após 2–3 meses'],
         contraindicacoes: ['Asma/DPOC grave', 'Bradicardia ou BAV 2º-3º grau', 'ICC descompensada', 'Depressão grave não tratada (relativa)'],

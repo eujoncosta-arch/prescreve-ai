@@ -326,10 +326,12 @@ function AbaWHATIF({ result }: { result: ExplainableAIv2Result }) {
                 <p className="text-xs text-blue-600">Custo/mês</p>
                 <p className="text-sm font-bold text-blue-700">R$ {c.custo_mensal_brl}</p>
               </div>
-              <div className="text-center bg-violet-50 rounded-lg p-2">
-                <p className="text-xs text-violet-600">Trust</p>
-                <p className="text-sm font-bold text-violet-700">{c.trust_score}/100</p>
-              </div>
+              {c.trust_score !== undefined && (
+                <div className="text-center bg-violet-50 rounded-lg p-2">
+                  <p className="text-xs text-violet-600">Trust</p>
+                  <p className="text-sm font-bold text-violet-700">{c.trust_score}/100</p>
+                </div>
+              )}
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div>
@@ -468,7 +470,9 @@ function AbaEVIDENCIAS({ result }: { result: ExplainableAIv2Result }) {
             <p className="text-sm font-bold text-gray-800">{e.nome}</p>
             <span className="text-xs text-blue-500 font-mono">{e.doi ?? ''}</span>
           </div>
-          <p className="text-xs text-gray-500 mb-2">n = {e.n_pacientes.toLocaleString('pt-BR')} pacientes</p>
+          {e.n_pacientes !== undefined && (
+            <p className="text-xs text-gray-500 mb-2">n = {e.n_pacientes.toLocaleString('pt-BR')} pacientes</p>
+          )}
           <div className="bg-blue-50 rounded-lg p-2 mb-2">
             <p className="text-xs font-semibold text-blue-700">Desfecho primário</p>
             <p className="text-xs text-blue-600">{e.desfecho_primario}</p>
