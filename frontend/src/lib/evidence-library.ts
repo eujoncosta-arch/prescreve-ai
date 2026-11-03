@@ -316,7 +316,7 @@ export const ESTUDOS_CHAVE: Record<string, EstudoChave[]> = {
       n_pacientes: 464000,
       desfecho_primario: 'Eventos cardiovasculares maiores',
       resultado_principal: 'Cada redução de 10 mmHg em PAS associa-se a 22% de redução de DCV, independente da classe de anti-hipertensivo',
-      doi: '10.1136/bmj.b2840',
+      doi: '10.1136/bmj.b1665',
     },
   ],
 
@@ -360,7 +360,7 @@ export const ESTUDOS_CHAVE: Record<string, EstudoChave[]> = {
       n_pacientes: 507,
       desfecho_primario: 'Regressão de aterosclerose coronária (IVUS)',
       resultado_principal: 'Rosuvastatina 40 mg: primeira vez que estatina demonstrou regressão de aterosclerose coronária em análise IVUS',
-      doi: '10.1001/jama.295.13.1556',
+      doi: '10.1001/jama.295.13.jpc60002',
     },
   ],
 
@@ -372,17 +372,17 @@ export const ESTUDOS_CHAVE: Record<string, EstudoChave[]> = {
       ano: 2018,
       n_pacientes: 3849,
       desfecho_primario: 'Semanas com controle de asma bem controlada',
-      resultado_principal: 'Budesonida/formoterol conforme necessidade superior a terbutalina e não inferior a budesonida diária para prevenção de exacerbações',
-      doi: '10.1056/NEJMoa1715222',
+      resultado_principal: 'Budesonida/formoterol conforme necessidade superior à terbutalina em semanas bem controladas, porém inferior à budesonida diária nesse desfecho; exacerbações graves semelhantes às da budesonida diária (RR 0,83; IC 95% 0,59–1,16) e menores que com terbutalina (RR 0,36)',
+      doi: '10.1056/NEJMoa1715274',
     },
     {
       nome: 'SYGMA 2',
-      tipo: 'ECR aberto multicêntrico (fase 3)',
+      tipo: 'ECR duplo-cego multicêntrico (fase 3)',
       ano: 2018,
       n_pacientes: 4215,
       desfecho_primario: 'Taxa anual de exacerbações graves',
-      resultado_principal: 'Budesonida/formoterol MART não inferior a budesonida+formoterol fixo para taxa de exacerbações graves (diferença 0,96; IC 95% 0,82–1,11)',
-      doi: '10.1056/NEJMoa1715224',
+      resultado_principal: 'Budesonida/formoterol conforme necessidade não inferior à budesonida de manutenção 2x/dia para exacerbações graves (taxa anualizada 0,11 vs 0,12; razão de taxas 0,97; limite superior unilateral 1,16)',
+      doi: '10.1056/NEJMoa1715275',
     },
     {
       nome: 'Novel START',
@@ -391,7 +391,7 @@ export const ESTUDOS_CHAVE: Record<string, EstudoChave[]> = {
       n_pacientes: 668,
       desfecho_primario: 'Taxa anual de exacerbações graves',
       resultado_principal: 'Budesonida/formoterol conforme necessidade reduziu exacerbações graves 64% vs salbutamol; equivalente a budesonida de manutenção',
-      doi: '10.1056/NEJMoa1906801',
+      doi: '10.1056/NEJMoa1901963',
     },
   ],
   salbutamol_resgate: [
@@ -444,7 +444,7 @@ export const ESTUDOS_CHAVE: Record<string, EstudoChave[]> = {
       n_pacientes: 2289,
       desfecho_primario: 'Mortalidade total',
       resultado_principal: 'Carvedilol reduziu mortalidade 34% em IC grave (FEVE < 25%) e hospitalização por IC 20%',
-      doi: '10.1056/NEJMoa010130',
+      doi: '10.1056/NEJM200105313442201',
     },
   ],
   furosemida: [
@@ -468,7 +468,7 @@ export const ESTUDOS_CHAVE: Record<string, EstudoChave[]> = {
       n_pacientes: 17187,
       desfecho_primario: 'Mortalidade vascular em 5 semanas',
       resultado_principal: 'AAS 160 mg reduziu mortalidade vascular 23% no IAM agudo; em combinação com estreptoquinase, redução de 42%',
-      doi: '10.1016/S0140-6736(88)90114-9',
+      doi: '10.1016/S0140-6736(88)92833-4',
     },
     {
       nome: 'PLATO',

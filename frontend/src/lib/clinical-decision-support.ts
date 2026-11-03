@@ -900,7 +900,7 @@ const BASE_CLINICA: ConditionRule[] = [
 
   // ══════════════════════════════════════════════════════════
   // 10. PNEUMONIA ADQUIRIDA NA COMUNIDADE — J18
-  // Referência: Diretriz SBPT/AMIB PAC 2022 + CURB-65
+  // Referência: Diretriz SBPT 2018 de PAC (Corrêa et al.) + CURB-65
   // ══════════════════════════════════════════════════════════
   {
     id: 'pac',
@@ -991,12 +991,12 @@ const BASE_CLINICA: ConditionRule[] = [
     ],
     diferenciais: ['DPOC exacerbado', 'ICC descompensada', 'TEP com infarto pulmonar', 'Tuberculose pulmonar', 'Neoplasia pulmonar com pneumonia obstrutiva'],
     guideline: {
-      diretriz: 'Diretrizes Brasileiras para Pneumonia Adquirida na Comunidade (PAC) em Adultos Imunocompetentes',
-      sociedade: 'Sociedade Brasileira de Pneumologia e Tisiologia (SBPT) / AMIB',
-      ano: 2022,
-      nivel_evidencia: 'A',
+      diretriz: 'Recomendações para o manejo da pneumonia adquirida na comunidade 2018',
+      sociedade: 'Sociedade Brasileira de Pneumologia e Tisiologia (SBPT)',
+      ano: 2018,
+      nivel_evidencia: 'C',
       grau_recomendacao: 'I',
-      link: 'https://www.scielo.br/j/jbpneu/a/YxWDfzSLbZ6VbdsmKnpF4cJ/',
+      link: 'https://doi.org/10.1590/S1806-37562018000000130',
     },
     raciocinio_base:
       'Diagnóstico clínico-radiológico: tosse + febre + dispneia + síndrome de condensação + infiltrado radiológico novo. CURB-65 (Confusão, Ureia > 7, FR ≥ 30, PAS < 90 ou PAD ≤ 60, idade ≥ 65) estratifica gravidade: 0-1 ambulatorial, 2 considerar internação, ≥ 3 internação ± UTI.',

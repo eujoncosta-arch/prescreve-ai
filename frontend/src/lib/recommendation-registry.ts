@@ -350,8 +350,8 @@ export function seedRecomendacoesDemo(): void {
       guideline_sociedade: 'Global Initiative for Asthma (GINA)',
       guideline_ano: 2023,
       evidencias: [
-        { estudo: 'SYGMA 1', doi: '10.1056/NEJMoa1715222', pmid: '29768140', nivel: 'A', grau: 'I', n_pacientes: 3836, reducao_risco_relativo: '64% exacerbações vs. SABA', nnt: 16 },
-        { estudo: 'SYGMA 2', doi: '10.1056/NEJMoa1715368', pmid: '29768142', nivel: 'A', grau: 'I', n_pacientes: 4215 },
+        { estudo: 'SYGMA 1', doi: '10.1056/NEJMoa1715274', pmid: '29768149', nivel: 'A', grau: 'I', n_pacientes: 3836, reducao_risco_relativo: '64% exacerbações graves vs. terbutalina SOS (RR 0,36)' },
+        { estudo: 'SYGMA 2', doi: '10.1056/NEJMoa1715275', pmid: '29768147', nivel: 'A', grau: 'I', n_pacientes: 4215 },
       ],
       engine: 'clinical-therapeutics',
       score_confianca: 87,

@@ -69,7 +69,7 @@ export const FARMACOGENOMICA_DB: EntradaFarmacogeonomica[] = [
     evidencia_cpic: 'A',
     classe_cpic: 'Strong',
     evidencia_dpwg: 'A',
-    doi_referencia: '10.1002/cpt.1750',
+    doi_referencia: '10.1002/cpt.2526',
   },
   {
     molecula: 'varfarina',
@@ -85,7 +85,7 @@ export const FARMACOGENOMICA_DB: EntradaFarmacogeonomica[] = [
     evidencia_cpic: 'A',
     classe_cpic: 'Strong',
     evidencia_dpwg: 'A',
-    doi_referencia: '10.1002/cpt.1652',
+    doi_referencia: '10.1002/cpt.668',
   },
   {
     molecula: 'codeina',
@@ -101,7 +101,7 @@ export const FARMACOGENOMICA_DB: EntradaFarmacogeonomica[] = [
     evidencia_cpic: 'A',
     classe_cpic: 'Strong',
     evidencia_dpwg: 'A',
-    doi_referencia: '10.1002/cpt.1718',
+    doi_referencia: '10.1002/cpt.2149',
   },
   {
     molecula: 'sinvastatina',
@@ -117,7 +117,7 @@ export const FARMACOGENOMICA_DB: EntradaFarmacogeonomica[] = [
     evidencia_cpic: 'A',
     classe_cpic: 'Strong',
     evidencia_dpwg: 'B',
-    doi_referencia: '10.1002/cpt.1639',
+    doi_referencia: '10.1002/cpt.2557',
   },
   {
     molecula: 'carbamazepina',
@@ -133,7 +133,7 @@ export const FARMACOGENOMICA_DB: EntradaFarmacogeonomica[] = [
     evidencia_cpic: 'A',
     classe_cpic: 'Strong',
     evidencia_dpwg: 'A',
-    doi_referencia: '10.1002/cpt.1617',
+    doi_referencia: '10.1002/cpt.1004',
     aviso_hla: 'Testar HLA-B*15:02 antes de iniciar carbamazepina em pacientes de ancestralidade Han chinesa, tailandesa, malaiana, vietnamita ou coreana. Prevalência do alelo: Han chinesa ~6–8%.',
   },
   {
@@ -150,7 +150,7 @@ export const FARMACOGENOMICA_DB: EntradaFarmacogeonomica[] = [
     evidencia_cpic: 'A',
     classe_cpic: 'Strong',
     evidencia_dpwg: 'A',
-    doi_referencia: '10.1002/cpt.1728',
+    doi_referencia: '10.1038/clpt.2014.38',
     aviso_hla: 'Rastreio HLA-B*57:01 obrigatório antes de iniciar abacavir (padrão de cuidado internacional — DHHS, EACS). Prevalência do alelo em caucasianos: ~5–8%.',
   },
   {

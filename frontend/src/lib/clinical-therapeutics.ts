@@ -431,7 +431,7 @@ const PROTOCOLOS: Record<string, Omit<TherapeuticPlan, 'diagnostico_selecionado'
   },
 
   // ══════════════════════════════════════════════════════════
-  // PAC — Diretriz SBPT/AMIB 2022
+  // PAC — Diretriz SBPT 2018 (Corrêa et al.)
   // ══════════════════════════════════════════════════════════
   pac: {
     farmacologico: [
@@ -447,7 +447,7 @@ const PROTOCOLOS: Record<string, Omit<TherapeuticPlan, 'diagnostico_selecionado'
         efeitos_adversos: ['Diarreia', 'Rash cutâneo', 'Candidíase'],
         monitoramento: ['Reavaliação em 48–72h', 'Radiografia de tórax controle em 6–8 semanas (excluir neoplasia subjacente em > 50 anos)'],
         alternativas: ['Azitromicina 500 mg/dia × 5 dias (atípicos, alergia a betalactâmicos)', 'Amoxicilina-Clavulanato 875/125 mg 2x/dia (PAC com comorbidades)', 'Levofloxacino 750 mg/dia × 5 dias (PAC de risco, falha à amoxicilina)'],
-        evidencia: { diretriz: 'Diretrizes Brasileiras para Pneumonia Adquirida na Comunidade (PAC)', sociedade: 'SBPT / AMIB', ano: 2022, nivel_evidencia: { nivel: 'A', grau: 'I', descricao: 'ECRs e meta-análises — amoxicilina é 1ª linha em PAC leve' }, citacao: 'Corrêa RA et al. J Bras Pneumol. 2022;48(1):e20210406.' },
+        evidencia: { diretriz: 'Recomendações para o manejo da pneumonia adquirida na comunidade 2018', sociedade: 'SBPT', ano: 2018, nivel_evidencia: { nivel: 'C', grau: 'I', descricao: 'Consenso de especialistas com revisão não sistemática da literatura — amoxicilina, amoxicilina-clavulanato ou macrolídeo para PAC ambulatorial sem comorbidades' }, citacao: 'Corrêa RA et al. J Bras Pneumol. 2018;44(5):405-423. doi:10.1590/S1806-37562018000000130', doi: '10.1590/S1806-37562018000000130' },
       }),
     ],
     nao_farmacologico: [

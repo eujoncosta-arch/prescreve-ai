@@ -74,7 +74,7 @@ function sugestaoComContraindicacoes(contraindicacoes: string[]): TherapeuticSug
 describe('RM-88 — gerarWHY()', () => {
   it('molécula com entrada curada em EVIDENCIA_DB (Enalapril) → usa diretriz/estudos/mecanismo curados, não o fallback genérico', () => {
     const why = gerarWHY(ENALAPRIL);
-    expect(why.justificativas_diretriz[0].sociedade).toBe('SBC / ESC');
+    expect(why.justificativas_diretriz[0].sociedade).toBe('European Society of Cardiology (ESC)');
     expect(why.estudos_pivotais.length).toBeGreaterThan(0);
     expect(why.estudos_pivotais.some(e => e.nome === 'SOLVD-Treatment')).toBe(true);
     expect(why.mecanismo_acao).toMatch(/enzima conversora de angiotensina/i);
@@ -82,7 +82,7 @@ describe('RM-88 — gerarWHY()', () => {
 
   it('molécula de combinação (Budesonida + Formoterol, nome com "+") → casa com a entrada curada "budesonida/formoterol" (RM-88, bug de normalização corrigido)', () => {
     const why = gerarWHY(BUDESONIDA_FORMOTEROL);
-    expect(why.justificativas_diretriz[0].sociedade).toBe('GINA / SBPT');
+    expect(why.justificativas_diretriz[0].sociedade).toBe('Global Initiative for Asthma (GINA)'); // RM-95: SBPT não é coautora do relatório GINA
     expect(why.estudos_pivotais.some(e => e.nome === 'SYGMA 2')).toBe(true);
   });
 
@@ -337,7 +337,7 @@ describe('RM-88 — calcularExplainabilityScore()', () => {
   it('componente "Custo-Efetividade (NNT)" usa os limiares corretos (≤10, ≤25, ≤50, >50)', () => {
     // gerarWHY deriva o NNT de EVIDENCIA_DB/fallback — testamos via o resultado real do Enalapril (NNT 14 → bucket ≤25 → 80).
     const why = gerarWHY(ENALAPRIL);
-    expect(why.beneficio_risco.nnt).toBe(14);
+    expect(why.beneficio_risco.nnt).toBe(23); // SOLVD: 39,7% vs 35,2% → ARR 4,5 pp → NNT 22,2 → 23
     const whyNot = gerarWHYNOT(ENALAPRIL, baseAnamnesis());
     const score = calcularExplainabilityScore(why, whyNot, ENALAPRIL, baseAnamnesis());
     const cNnt = score.componentes.find(c => c.nome === 'Custo-Efetividade (NNT)')!;

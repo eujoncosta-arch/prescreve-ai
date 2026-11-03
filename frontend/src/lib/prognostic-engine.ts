@@ -197,9 +197,9 @@ const curb65: ScoreDefinition = {
     return         { pontuacao: r, interpretacao: `PAC muito grave — mortalidade ~${r >= 4 ? '41' : '57'}%`, risco: 'muito_alto', cor: 'red', conduta: 'Internação em UTI. Antibioticoterapia IV de amplo espectro. Avaliação para ventilação mecânica.' };
   },
   evidencia: 'Derivado e validado em coortes prospectivas multicêntricas — Lim WS et al. (2003)',
-  diretriz: 'Diretrizes Brasileiras de PAC — SBPT/AMIB 2022',
+  diretriz: 'Recomendações para o manejo da PAC — SBPT 2018 (CURB-65 recomendado para decisão do local de cuidado)',
   sociedade: 'SBPT / BTS',
-  ano: 2022,
+  ano: 2018,
   referencia: 'Lim WS et al. Thorax. 2003;58(5):377-382.',
 };
 

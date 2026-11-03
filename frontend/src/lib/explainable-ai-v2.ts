@@ -39,7 +39,7 @@ export interface EstudoPivotal {
 
 export interface BeneficioRisco {
   beneficio_absoluto: string;   // ex: "Reduz morte CV em 3,2% ao ano"
-  nnt: number;
+  nnt?: number;                 // omitido quando não há NNT verificável em fonte primária
   nnh?: number;
   horizonte_tempo: string;      // ex: "5 anos"
   forca_evidencia: ForcaEvidencia;
@@ -187,8 +187,8 @@ interface DadosEvidencia {
 const EVIDENCIA_DB: Record<string, DadosEvidencia> = {
   // ── IECA ────────────────────────────────────────────────────
   enalapril: {
-    diretriz: 'VI Diretrizes Brasileiras de Hipertensão / ESC 2024',
-    sociedade: 'SBC / ESC',
+    diretriz: '2024 ESC Guidelines for the management of elevated blood pressure and hypertension',
+    sociedade: 'European Society of Cardiology (ESC)',
     ano: 2024,
     classe: 'I',
     nivel: 'A',
@@ -198,14 +198,14 @@ const EVIDENCIA_DB: Record<string, DadosEvidencia> = {
     por_que_classe: 'IECAs são a única classe com benefício simultâneo em PA, função renal, remodelamento cardíaco e mortalidade cardiovascular — indicados em quase todos os fenótipos de alto risco.',
     por_que_molecula: 'Enalapril é o IECA com maior número de estudos randomizados em IC (CONSENSUS, SOLVD) e o mais acessível no SUS. Referência histórica da classe.',
     estudos: [
-      { nome: 'CONSENSUS', n_pacientes: 253, desfecho_primario: 'Mortalidade em IC NYHA IV', resultado: 'Redução de 40% na mortalidade em 6 meses', nnt: 4, rrr: 40, rar: 22 },
-      { nome: 'SOLVD-Treatment', doi: '10.1056/NEJM199108013250501', n_pacientes: 2569, desfecho_primario: 'Mortalidade + hospitalização por IC', resultado: 'Redução de 16% na mortalidade, 26% nas hospitalizações', nnt: 14, rrr: 16, rar: 4 },
+      { nome: 'CONSENSUS', n_pacientes: 253, doi: '10.1056/NEJM198706043162301', desfecho_primario: 'Mortalidade em 6 meses (IC NYHA IV)', resultado: 'Mortalidade 26% com enalapril vs 44% com placebo (redução relativa de 40%; p=0,002)', nnt: 6, rrr: 40, rar: 18 },
+      { nome: 'SOLVD-Treatment', doi: '10.1056/NEJM199108013250501', n_pacientes: 2569, desfecho_primario: 'Mortalidade por qualquer causa (FE ≤ 35%)', resultado: 'Mortalidade 35,2% vs 39,7% com placebo (redução de risco de 16%; IC 95% 5–26%); morte ou hospitalização por IC reduzida em 26%', nnt: 23, rrr: 16, rar: 4.5 },
     ],
-    beneficio: { beneficio_absoluto: 'Reduz mortalidade CV em ~16% e hospitalização por IC em ~26%', nnt: 14, nnh: 50, horizonte_tempo: '3,5 anos', forca_evidencia: 'A' },
+    beneficio: { beneficio_absoluto: 'Reduz a mortalidade por qualquer causa em 16% (35,2% vs 39,7%) e morte ou hospitalização por IC em 26% (SOLVD)', nnt: 23, horizonte_tempo: '3,5 anos', forca_evidencia: 'A' },
   },
   ramipril: {
-    diretriz: 'ESC 2024 Guidelines for CVD prevention',
-    sociedade: 'ESC',
+    diretriz: '2024 ESC Guidelines for the management of elevated blood pressure and hypertension',
+    sociedade: 'European Society of Cardiology (ESC)',
     ano: 2024,
     classe: 'I',
     nivel: 'A',
@@ -213,12 +213,12 @@ const EVIDENCIA_DB: Record<string, DadosEvidencia> = {
     resumo: 'Ramipril demonstrou redução de eventos cardiovasculares maiores em pacientes de alto risco (HOPE). Indicado em HAS, pós-IAM, nefropatia diabética.',
     mecanismo: 'Inibição da enzima conversora de angiotensina → redução de angiotensina II → vasodilatação + natriurese + redução do remodelamento cardíaco.',
     por_que_classe: 'IECAs têm benefício simultâneo em PA, função renal, remodelamento cardíaco e mortalidade cardiovascular.',
-    por_que_molecula: 'Ramipril é o IECA com melhor evidência em prevenção primária e secundária de alto risco cardiovascular (HOPE: 25% redução de morte CV, IAM, AVC).',
+    por_que_molecula: 'Ramipril é o IECA com melhor evidência em prevenção primária e secundária de alto risco cardiovascular (HOPE: redução de 22% no desfecho composto de morte CV, IAM ou AVC).',
     estudos: [
-      { nome: 'HOPE', doi: '10.1056/NEJM200001203420301', n_pacientes: 9297, desfecho_primario: 'Morte CV + IAM + AVC', resultado: 'Redução de 22% no desfecho primário', nnt: 26, rrr: 22, rar: 3.8 },
-      { nome: 'MICRO-HOPE', n_pacientes: 3577, desfecho_primario: 'Nefropatia diabética', resultado: 'Redução de 24% no risco de nefropatia', nnt: 30, rrr: 24, rar: 3.2 },
+      { nome: 'HOPE', doi: '10.1056/NEJM200001203420301', n_pacientes: 9297, desfecho_primario: 'Morte CV + IAM + AVC', resultado: 'Desfecho composto em 14,0% com ramipril vs 17,8% com placebo (RR 0,78; IC 95% 0,70–0,86; p<0,001)', nnt: 27, rrr: 22, rar: 3.8 },
+      { nome: 'MICRO-HOPE', doi: '10.1016/S0140-6736(99)12323-7', n_pacientes: 3577, desfecho_primario: 'Nefropatia manifesta (substudo em diabéticos)', resultado: 'Redução de 24% no risco de nefropatia manifesta (IC 95% 3–40; p=0,027); desfecho composto CV reduzido em 25%', rrr: 24 },
     ],
-    beneficio: { beneficio_absoluto: 'Reduz morte CV + IAM + AVC em 22% em pacientes de alto risco', nnt: 26, nnh: 80, horizonte_tempo: '5 anos', forca_evidencia: 'A' },
+    beneficio: { beneficio_absoluto: 'Reduz morte CV + IAM + AVC em 22% (14,0% vs 17,8%) em pacientes de alto risco sem disfunção ventricular (HOPE)', nnt: 27, horizonte_tempo: '5 anos', forca_evidencia: 'A' },
   },
   // ── iSGLT2 ─────────────────────────────────────────────────
   empagliflozina: {
@@ -291,12 +291,12 @@ const EVIDENCIA_DB: Record<string, DadosEvidencia> = {
   },
   // ── Estatina ────────────────────────────────────────────────
   rosuvastatina: {
-    diretriz: 'ESC/EAS Guidelines for Dyslipidaemias 2024',
-    sociedade: 'ESC / EAS / SBC',
-    ano: 2024,
+    diretriz: 'ESC/EAS Guidelines for the management of dyslipidaemias: lipid modification to reduce cardiovascular risk (2019)',
+    sociedade: 'European Society of Cardiology (ESC) / European Atherosclerosis Society (EAS)',
+    ano: 2019,
     classe: 'I',
     nivel: 'A',
-    doi: '10.1093/eurheartj/ehae497',
+    doi: '10.1093/eurheartj/ehz455',
     resumo: 'Estatina de alta potência. Indicada em alto e muito alto risco cardiovascular. Meta LDL-c < 55 mg/dL (muito alto risco) ou < 70 mg/dL (alto risco).',
     mecanismo: 'Inibição da HMG-CoA redutase → redução síntese hepática de colesterol → upregulation receptores LDL → clearance aumentado de LDL-c.',
     por_que_classe: 'Estatinas são os fármacos com maior corpo de evidência em prevenção cardiovascular. A relação redução de LDL-c com redução de eventos é linear.',
@@ -310,19 +310,19 @@ const EVIDENCIA_DB: Record<string, DadosEvidencia> = {
   // ── Budesonida/Formoterol ────────────────────────────────────
   'budesonida/formoterol': {
     diretriz: 'GINA 2025',
-    sociedade: 'GINA / SBPT',
+    sociedade: 'Global Initiative for Asthma (GINA)',
     ano: 2025,
     classe: 'I',
     nivel: 'A',
-    doi: '10.1183/13993003.congress-2025',
     resumo: 'CI+LABA é o tratamento de manutenção preferido em asma moderada-grave. Budesonida/Formoterol pode ser usado como terapia MART (manutenção + alívio).',
     mecanismo: 'Budesonida (CI): reduz inflamação eosinofílica via receptores GR. Formoterol (LABA): broncodilatação rápida e prolongada via β2-AR.',
     por_que_classe: 'Combinação CI+LABA é superior ao CI isolado em controle de sintomas e prevenção de exacerbações graves (GOAL, FACET studies).',
-    por_que_molecula: 'Budesonida/formoterol tem início de ação rápido do formoterol, permitindo uso MART — esquema que reduz exacerbações em 45-47% vs. CI fixo + SABA.',
+    por_que_molecula: 'Budesonida/formoterol tem início de ação rápido do formoterol, permitindo uso como alívio e manutenção (MART/SMART) — a revisão Cochrane (13 ECRs) mostrou menos exacerbações que exigem corticoide oral vs. melhor prática (OR 0,83) e vs. CI em dose maior (OR 0,54).',
     estudos: [
-      { nome: 'SYGMA 2', doi: '10.1056/NEJMoa1715275', n_pacientes: 4215, desfecho_primario: 'Exacerbações anuais', resultado: 'Não inferior a CI diário + SABA resgate; 45% redução vs. SABA isolado', nnt: 8, rrr: 45, rar: 12 },
+      { nome: 'SYGMA 2', doi: '10.1056/NEJMoa1715275', n_pacientes: 4215, desfecho_primario: 'Taxa anualizada de exacerbações graves', resultado: 'Budesonida-formoterol conforme necessidade não inferior à budesonida de manutenção + terbutalina: 0,11 vs 0,12 exacerbações/ano (razão de taxas 0,97; limite superior unilateral 1,16); controle de sintomas inferior (ACQ-5 0,11 a favor da manutenção)' },
+      { nome: 'SYGMA 1', doi: '10.1056/NEJMoa1715274', n_pacientes: 3836, desfecho_primario: 'Semanas com asma bem controlada', resultado: 'Exacerbações graves 0,07/ano vs 0,20 com terbutalina SOS (razão de taxas 0,36; IC 95% 0,27–0,49); semelhantes à budesonida de manutenção (0,09/ano)', rrr: 64 },
     ],
-    beneficio: { beneficio_absoluto: 'Reduz exacerbações graves em 45-64% vs. SABA isolado', nnt: 8, nnh: 200, horizonte_tempo: '1 ano', forca_evidencia: 'A' },
+    beneficio: { beneficio_absoluto: 'Reduz exacerbações graves em 64% vs. terbutalina isolada (SYGMA 1) e é não inferior à budesonida de manutenção com cerca de um quarto da dose de CI (SYGMA 2)', horizonte_tempo: '1 ano', forca_evidencia: 'A' },
   },
   // ── Colchicina — RM-93 ────────────────────────────────────────
   colchicina: {
@@ -915,12 +915,14 @@ export function calcularExplainabilityScore(
     descricao: `${camposPreenchidos}/7 parâmetros clínicos informados`,
   };
 
-  const nntScore = why.beneficio_risco.nnt <= 10 ? 100 : why.beneficio_risco.nnt <= 25 ? 80 : why.beneficio_risco.nnt <= 50 ? 60 : 40;
+  const nnt = why.beneficio_risco.nnt;
+  // NNT ausente (sem valor verificável em fonte primária): pontuação neutra, nunca um valor presumido favorável
+  const nntScore = nnt === undefined ? 50 : nnt <= 10 ? 100 : nnt <= 25 ? 80 : nnt <= 50 ? 60 : 40;
   const c_nnt: ComponenteScore = {
     nome: 'Custo-Efetividade (NNT)',
     peso: 10,
     valor: nntScore,
-    descricao: `NNT ${why.beneficio_risco.nnt} — ${why.beneficio_risco.horizonte_tempo}`,
+    descricao: nnt === undefined ? 'NNT não disponível em fonte verificada — pontuação neutra' : `NNT ${nnt} — ${why.beneficio_risco.horizonte_tempo}`,
   };
 
   const componentes = [c_evidencia, c_seguranca, c_adequacao, c_dados_clinicos, c_nnt];

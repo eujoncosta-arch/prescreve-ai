@@ -149,11 +149,13 @@ function AbaWHY({ result }: { result: ExplainableAIv2Result }) {
       <div className="bg-white border border-gray-200 rounded-xl p-4">
         <p className="text-xs font-semibold text-gray-500 uppercase mb-3">Benefício / Risco Absoluto</p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div className="text-center bg-emerald-50 rounded-lg p-3">
-            <p className="text-xs text-emerald-600 font-semibold mb-1">NNT</p>
-            <p className="text-2xl font-bold text-emerald-700">{why.beneficio_risco.nnt}</p>
-            <p className="text-xs text-gray-500">{why.beneficio_risco.horizonte_tempo}</p>
-          </div>
+          {why.beneficio_risco.nnt && (
+            <div className="text-center bg-emerald-50 rounded-lg p-3">
+              <p className="text-xs text-emerald-600 font-semibold mb-1">NNT</p>
+              <p className="text-2xl font-bold text-emerald-700">{why.beneficio_risco.nnt}</p>
+              <p className="text-xs text-gray-500">{why.beneficio_risco.horizonte_tempo}</p>
+            </div>
+          )}
           {why.beneficio_risco.nnh && (
             <div className="text-center bg-amber-50 rounded-lg p-3">
               <p className="text-xs text-amber-600 font-semibold mb-1">NNH</p>
