@@ -78,4 +78,4 @@ codifiquei os totais do dia (1750 e 1500 mg) para o resultado sair certo sob a c
 
 ---
 
-Não foi feito commit, push ou deploy nesta RM.
+Commit `a0110f2` (RM-100/101/102) enviado ao `main`; deploy automático na Vercel.

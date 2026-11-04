@@ -60,4 +60,4 @@ Mesmos da [RM-100](RM-100-AMOXICILINA-CLAVULANATO-POSOLOGIA-POR-APRESENTACAO.md)
 
 ---
 
-Não foi feito commit, push ou deploy nesta RM.
+Commit `a0110f2` (RM-100/101/102) enviado ao `main`; deploy automático na Vercel.
