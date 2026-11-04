@@ -156,32 +156,36 @@ export const FARMACOGENOMICA_DB: EntradaFarmacogeonomica[] = [
   {
     molecula: 'metoprolol',
     gene: 'CYP2D6',
-    mecanismo: 'CYP2D6 metaboliza metoprolol; metabolizadores lentos têm exposição aumentada',
+    mecanismo: 'CYP2D6 metaboliza o metoprolol em metabólitos majoritariamente inativos; metabolizadores lentos têm meia-vida > 2× maior e AUC quase 5× maior (CPIC 2024)',
     impacto_por_fenotipo: {
-      poor:         { descricao: 'Exposição sistêmica 5× maior; risco de bradicardia e hipotensão', recomendacao: 'Iniciar com dose 25–50% menor; titular lentamente com monitoramento de FC e PA', ajuste_dose: 'Iniciar 12,5–25mg; titular', impacto: 'maior' },
-      intermediate: { descricao: 'Exposição moderadamente aumentada', recomendacao: 'Iniciar dose padrão menor; monitorar', ajuste_dose: 'Iniciar 25mg', impacto: 'moderado' },
-      normal:       { descricao: 'Metabolismo normal', recomendacao: 'Dose padrão conforme indicação', impacto: 'sem_impacto' },
-      rapid:        { descricao: 'Metabolismo levemente acelerado', recomendacao: 'Dose padrão; verificar resposta terapêutica', impacto: 'menor' },
-      ultrarapid:   { descricao: 'Metabolismo muito acelerado — possível subdose', recomendacao: 'Aumentar frequência de dosagem ou dose; monitorar FC-alvo', impacto: 'moderado' },
+      poor:         { descricao: 'AUC quase 5× maior e meia-vida > 2× maior; maiores reduções de FC e PA (risco de bradicardia)', recomendacao: 'Iniciar com a menor dose inicial recomendada; titular cuidadosamente até o efeito clínico ou a dose recomendada pelas diretrizes; monitorar mais de perto a bradicardia (CPIC 2024, recomendação moderada)', ajuste_dose: 'Menor dose inicial recomendada; titular', impacto: 'maior' },
+      intermediate: { descricao: 'Concentrações aumentadas, sem mudança clinicamente significativa de FC, PA ou desfechos', recomendacao: 'Iniciar a dose padrão (CPIC 2024, recomendação moderada)', impacto: 'menor' },
+      normal:       { descricao: 'Metabolismo normal', recomendacao: 'Iniciar a dose padrão (CPIC 2024)', impacto: 'sem_impacto' },
+      rapid:        { descricao: 'Metabolismo normal a levemente acelerado', recomendacao: 'Iniciar a dose padrão (CPIC 2024); verificar resposta terapêutica', impacto: 'menor' },
+      ultrarapid:   { descricao: 'Evidência insuficiente de que haja diferença clinicamente significativa de exposição ou resposta', recomendacao: 'Sem recomendação específica da CPIC 2024 (evidência insuficiente); individualizar pela resposta clínica e pela FC-alvo', impacto: 'moderado' },
     },
     evidencia_cpic: 'B',
     classe_cpic: 'Moderate',
     evidencia_dpwg: 'B',
+    // RM-102: CPIC Guideline for CYP2D6, ADRB1, ADRB2, ADRA2C, GRK4 and GRK5 Genotypes and Beta-Blocker Therapy (Duarte JD et al., CPT 2024).
+    doi_referencia: '10.1002/cpt.3351',
   },
   {
     molecula: 'omeprazol',
     gene: 'CYP2C19',
-    mecanismo: 'CYP2C19 metaboliza IBPs; metabolizadores lentos têm maior exposição e maior eficácia supressora de ácido',
+    mecanismo: 'CYP2C19 metaboliza os IBPs (omeprazol, lansoprazol, pantoprazol, dexlansoprazol); metabolizadores lentos têm maior exposição e maior eficácia supressora de ácido',
     impacto_por_fenotipo: {
-      poor:         { descricao: 'Exposição 10× maior; alta supressão ácida — resposta potencializada', recomendacao: 'Dose padrão é suficiente — não elevar; monitorar efeitos de supressão prolongada', impacto: 'moderado' },
-      intermediate: { descricao: 'Exposição moderadamente aumentada', recomendacao: 'Dose padrão — eficácia preservada', impacto: 'menor' },
-      normal:       { descricao: 'Metabolismo normal; eficácia padrão', recomendacao: 'Dose conforme indicação', impacto: 'sem_impacto' },
-      rapid:        { descricao: 'Metabolismo aumentado — possível redução de eficácia', recomendacao: 'Dose padrão 2× ao dia ou aumentar para 40mg; ou preferir pantoprazol', ajuste_dose: '40mg ou 2×/dia', impacto: 'moderado' },
-      ultrarapid:   { descricao: 'Exposição muito reduzida — resposta clínica comprometida', recomendacao: 'Substituir por IBP com menor dependência de CYP2C19 (pantoprazol, dexlansoprazol)', alternativa: 'Pantoprazol 40mg', impacto: 'maior' },
+      poor:         { descricao: 'Exposição aumentada; maior supressão ácida', recomendacao: 'Iniciar a dose diária padrão. Em terapia crônica (> 12 semanas) com eficácia alcançada, considerar reduzir a dose diária em 50% (CPIC)', ajuste_dose: '↓ 50% se > 12 semanas e eficácia alcançada', impacto: 'moderado' },
+      intermediate: { descricao: 'Exposição moderadamente aumentada', recomendacao: 'Iniciar a dose diária padrão. Em terapia crônica (> 12 semanas) com eficácia alcançada, considerar reduzir a dose diária em 50% (CPIC)', ajuste_dose: '↓ 50% se > 12 semanas e eficácia alcançada', impacto: 'menor' },
+      normal:       { descricao: 'Metabolismo normal; eficácia padrão', recomendacao: 'Iniciar a dose diária padrão. Considerar aumentar a dose em 50–100% no tratamento de H. pylori e de esofagite erosiva (CPIC)', impacto: 'sem_impacto' },
+      rapid:        { descricao: 'Metabolismo aumentado — possível redução de eficácia', recomendacao: 'Iniciar a dose diária padrão. Considerar aumentar a dose em 50–100% no tratamento de H. pylori e de esofagite erosiva (CPIC)', ajuste_dose: '↑ 50–100% (H. pylori / esofagite erosiva)', impacto: 'moderado' },
+      ultrarapid:   { descricao: 'Exposição muito reduzida — resposta clínica comprometida', recomendacao: 'Aumentar a dose diária inicial em 100%; a dose diária pode ser fracionada (CPIC, recomendação opcional). Pantoprazol e dexlansoprazol também dependem da CYP2C19: a CPIC não recomenda trocar de IBP', ajuste_dose: '↑ 100% da dose diária inicial', impacto: 'maior' },
     },
     evidencia_cpic: 'B',
     classe_cpic: 'Moderate',
     evidencia_dpwg: 'B',
+    // RM-102: CPIC Guideline for CYP2C19 and Proton Pump Inhibitor Dosing (Lima JJ et al., CPT 2021;109(6):1417-1423).
+    doi_referencia: '10.1002/cpt.2015',
   },
 ];
 

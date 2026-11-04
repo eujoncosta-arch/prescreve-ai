@@ -82,16 +82,16 @@ export const CONFLITOS_DIRETRIZES: ConflitoGuideline[] = [
     diagnostico_id: 'dm2',
     classe_terapeutica: 'Biguanida / GLP-1 RA / iSGLT2',
     grau_conflito: 'divergencia_moderada',
-    resumo: 'ADA 2026 eleva GLP-1 RA a primeira linha em DM2 + obesidade independente de HbA1c. SBD e ESC/EASD mantêm metformina como base, adicionando GLP-1/iSGLT2 conforme perfil de risco.',
+    resumo: 'O Summary of Revisions da ADA 2026 (doi 10.2337/dc26-SREV) não registra GLP-1 RA como primeira linha em DM2 + obesidade independente da HbA1c (a versão anterior deste item atribuía isso à ADA sem fonte). SBD e ESC/EASD mantêm metformina como base, adicionando GLP-1/iSGLT2 conforme perfil de risco.',
     diretrizes: [
-      { sigla: 'ADA 2026', sociedade: 'American Diabetes Association', ano: 2026, posicao: 'GLP-1 RA como 1ª linha em DM2 + IMC ≥ 30, independente da HbA1c. Metformina como adjuvante.', nivel: 'A', grau: 'I' },
+      { sigla: 'ADA 2026', sociedade: 'American Diabetes Association', ano: 2026, posicao: 'Escolha individualizada conforme comorbidades (ICFEp, MASH, DRC) e metas de peso; as revisões de 2026 tratam de GLP-1 RA/dual GIP–GLP-1 RA em ICFEp (Rec. 9.9a/b) e MASH (Rec. 9.12, 9.13a) e de dose individualizada na obesidade (Rec. 8.20). Sem recomendação registrada de GLP-1 RA como 1ª linha independente da HbA1c', nivel: 'A', grau: 'I' },
       { sigla: 'ESC/EASD 2023', sociedade: 'European Society of Cardiology', ano: 2023, posicao: 'Metformina + iSGLT2 ou GLP-1 RA como 1ª linha em DM2 + DCV estabelecida ou alto risco CV', nivel: 'A', grau: 'I' },
       { sigla: 'SBD 2024', sociedade: 'Sociedade Brasileira de Diabetes', ano: 2024, posicao: 'Metformina como base; GLP-1 e iSGLT2 como 2ª linha mandatória em DM2 + DCV/ICC/DRC', nivel: 'A', grau: 'I' },
     ],
     guideline_preferida: 'SBD 2024',
     justificativa_preferencia: 'No contexto do SUS e farmacoeconomia brasileira, metformina permanece como base pelo custo/benefício superior. GLP-1 e iSGLT2 têm cobertura restrita — recomendar quando há DCV/ICC/DRC ou na saúde suplementar.',
     impacto_clinico: 'Pacientes com DM2 + obesidade sem DCV: início com GLP-1 RA vs. metformina com titulação.',
-    recomendacao_pratica: 'Iniciar metformina em todos os pacientes sem contraindicação. Adicionar iSGLT2 ou GLP-1 RA se DCV, ICC ou DRC. Em DM2 + obesidade sem DCV na saúde suplementar: considerar GLP-1 como 1ª linha (ADA 2026).',
+    recomendacao_pratica: 'Iniciar metformina em todos os pacientes sem contraindicação. Adicionar iSGLT2 ou GLP-1 RA se DCV, ICC ou DRC. Em DM2 + obesidade sem DCV: a escolha do GLP-1 RA é individualizada (comorbidades, metas de peso, acesso); não há, no resumo de revisões da ADA 2026, recomendação de GLP-1 RA como 1ª linha independente da HbA1c.',
   },
 
   {
@@ -99,9 +99,9 @@ export const CONFLITOS_DIRETRIZES: ConflitoGuideline[] = [
     topico: 'Meta de HbA1c em idosos e pacientes frágeis',
     diagnostico_id: 'dm2',
     grau_conflito: 'concordancia',
-    resumo: 'Todas as diretrizes convergem: meta de HbA1c deve ser individualizada em idosos frágeis. ADA/EASD/SBD recomendam meta 7,5–8,5% em frágeis; < 7% apenas em jovens sem complicações.',
+    resumo: 'Todas as diretrizes convergem: meta de HbA1c deve ser individualizada em idosos frágeis. As metas numéricas por perfil vêm de EASD e SBD (não conferidas nesta revisão); da ADA 2026 só foi conferido que as metas são individualizadas (Figura 6.1) e que o Summary of Revisions não registra mudança nos alvos de HbA1c.',
     diretrizes: [
-      { sigla: 'ADA 2026', sociedade: 'American Diabetes Association', ano: 2026, posicao: 'Meta HbA1c < 7% em jovens; 7–8% em idosos com comorbidades; 8–8,5% em frágeis', nivel: 'A', grau: 'I' },
+      { sigla: 'ADA 2026', sociedade: 'American Diabetes Association', ano: 2026, posicao: 'Metas individualizadas (Figura 6.1); o Summary of Revisions de 2026 não registra mudança nos alvos de HbA1c e acrescenta metas individualizadas de métricas de MCG', nivel: 'A', grau: 'I' },
       { sigla: 'EASD 2023', sociedade: 'European Association for the Study of Diabetes', ano: 2023, posicao: 'Individualizar: 6,5–7% em jovens saudáveis; 7,5–8% em idosos; 8–9% em frágeis com alto risco de hipoglicemia', nivel: 'B', grau: 'I' },
       { sigla: 'SBD 2024', sociedade: 'Sociedade Brasileira de Diabetes', ano: 2024, posicao: 'Meta < 7% em adultos sem fragilidade; 7–8% em idosos; evitar tratamento intensivo se fragilidade moderada-grave', nivel: 'A', grau: 'I' },
     ],
@@ -201,7 +201,7 @@ export const CONFLITOS_DIRETRIZES: ConflitoGuideline[] = [
     resumo: 'KDIGO 2024 recomenda iSGLT2 + IECA/BRA como combinação padrão em DRC + DM2, com iSGLT2 iniciando já com TFG ≥ 20. Diretrizes anteriores baseavam-se apenas em IECA/BRA.',
     diretrizes: [
       { sigla: 'KDIGO 2024', sociedade: 'Kidney Disease Improving Global Outcomes', ano: 2024, posicao: 'Combinação IECA/BRA + iSGLT2 como padrão em DRC G2–G4 + DM2. Iniciar iSGLT2 com TFG ≥ 20 mL/min', nivel: 'A', grau: 'I' },
-      { sigla: 'ADA 2026', sociedade: 'American Diabetes Association', ano: 2026, posicao: 'iSGLT2 mandatório em DM2 + DRC (TFG 20–45). Finerenona como 3ª opção com IECA + iSGLT2 se proteinúria persistente', nivel: 'A', grau: 'I' },
+      { sigla: 'ADA 2026', sociedade: 'American Diabetes Association', ano: 2026, posicao: 'Rec. 11.11a: iSGLT2 em quem não está em diálise para reduzir a progressão da DRC; Rec. 11.9 (nova): início simultâneo de iSGLT2 e nsMRA pode ser considerado em DM2 com RAC ≥ 100 mg/g e TFGe 30–90 mL/min/1,73 m² sob inibidor do SRAA (Summary of Revisions 2026)', nivel: 'A', grau: 'I' },
       { sigla: 'SBD/SBN 2023', sociedade: 'SBD + Sociedade Brasileira de Nefrologia', ano: 2023, posicao: 'IECA/BRA como base; adicionar iSGLT2 (dapagliflozina/empagliflozina) se TFG ≥ 25 mL/min', nivel: 'A', grau: 'I' },
     ],
     guideline_preferida: 'KDIGO 2024',

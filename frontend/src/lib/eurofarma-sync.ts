@@ -1155,7 +1155,7 @@ export const EUROFARMA_CATALOG: ProdutoComercial[] = [
       { concentracao: '400/57 mg/5 mL', forma_farmaceutica: 'suspensao_oral', embalagem: 'Frasco 70 mL + seringa dosadora' },
       { concentracao: '875/125 mg', forma_farmaceutica: 'comprimido', embalagem: '14 comprimidos' },
     ],
-    posologia_aprovada: 'Pediátrico: 45 mg/kg/dia (amoxicilina) em 2 doses (susp. 400/57 mg/5 mL). Ex. 27 kg: 27×45=1215 mg/dia ÷ 2 = 607 mg/dose ÷ 80 mg/mL = 7,6 mL 2x/dia. Adultos: 875/125 mg 2x/dia.',
+    posologia_aprovada: 'Pediátrico: 45 mg/kg/dia (amoxicilina) em 2 doses (susp. 400/57 mg/5 mL). Ex. 27 kg: 27×45=1215 mg/dia ÷ 2 = 607 mg/dose ÷ 80 mg/mL = 7,6 mL 2x/dia. Dose alta (infecções graves): 45–70 mg/kg/dia em 2 doses (bula; uso a partir de 2 meses). Adultos: 875/125 mg 12/12h. TFG < 30 mL/min: não recomendável.',
     contraindicacoes_bula: ['Hipersensibilidade a penicilinas', 'Histórico de icterícia colestática por amoxicilina+clavulanato', 'Mononucleose infecciosa'],
     advertencias_principais: ['Icterícia colestática pode aparecer até 6 sem após suspensão', 'Tomar sempre com alimento', 'Diarreia por C. difficile'],
     interacoes_principais: ['Varfarina', 'Metotrexato'],

@@ -28,6 +28,12 @@ export interface RegraDoagem {
   observacao?: string;
   ajuste_renal?: boolean;
   ajuste_hepatico?: boolean;
+  /**
+   * RM-100: quando a posologia depende da APRESENTAÇÃO (ex.: amoxicilina-
+   * clavulanato — 875/125 mg de 12/12h, 500/125 mg de 8/8h), a regra só vale
+   * para as formulações listadas. Sem este campo a regra vale para todas.
+   */
+  formulacao_ids?: string[];
   contraindicado_em?: Populacao[];
   /**
    * RM-41/RM-48: `contraindicado_em` só opera na granularidade de bucket
@@ -138,10 +144,15 @@ export function calcularDosagem(
   const formulacao = medicamento.formulacoes.find(f => f.id === formulacao_id);
   if (!formulacao) return null;
 
-  // find most specific rule for this population
-  const regra = medicamento.regras.find(r =>
-    r.populacoes.includes(populacao) && r.via === formulacao.via
-  ) ?? medicamento.regras.find(r => r.populacoes.includes(populacao));
+  // find most specific rule for this population. RM-100: regras presas a uma
+  // apresentação (`formulacao_ids`) só entram para ela, e têm prioridade sobre
+  // as genéricas — antes, escolher 500/125 mg aplicava a regra de 875 mg 12/12h.
+  const aplicaveis = medicamento.regras.filter(r =>
+    r.populacoes.includes(populacao) && (!r.formulacao_ids || r.formulacao_ids.includes(formulacao_id))
+  );
+  const regra = aplicaveis.find(r => r.formulacao_ids && r.via === formulacao.via)
+    ?? aplicaveis.find(r => r.via === formulacao.via)
+    ?? aplicaveis[0];
 
   if (!regra) {
     return {
@@ -389,9 +400,14 @@ export const MEDICAMENTOS_DOSAGEM: MedicamentoDosagem[] = [
       { id: 'amoxiclav-comp-500', descricao: 'Comprimido 500/125 mg',               tipo: 'comprimido', via: 'oral', concentracao_mg: 500, unidade_dispensa: 'comprimido' },
     ],
     regras: [
-      { populacoes: ['lactente', 'pediatrico'], dose: 45, unidade: 'mg/kg/dia', frequencia_horas: 12, via: 'oral', dose_maxima_por_dia_mg: 2000, indicacao: 'Infecções por germes beta-lactamase+', observacao: 'Otite resistente / sinusite: 90 mg/kg/dia' },
-      { populacoes: ['adolescente', 'adulto'],  dose: 875, unidade: 'mg',       frequencia_horas: 12, via: 'oral', dose_maxima_por_dia_mg: 2000 },
-      { populacoes: ['geriatrico'],             dose: 500, unidade: 'mg',       frequencia_horas: 12, via: 'oral', dose_maxima_por_dia_mg: 1500, ajuste_renal: true },
+      // Bula Eurofarma (pó p/ susp. 400 mg + 57 mg/5 mL, uso a partir de 2 meses): dose baixa 25/3,6 a
+      // 45/6,4 mg/kg/dia; dose alta (infecções graves) 45/6,4 a 70/10 mg/kg/dia — sempre em 2 doses.
+      { populacoes: ['lactente', 'pediatrico'], formulacao_ids: ['amoxiclav-susp-400'], dose: 45, unidade: 'mg/kg/dia', frequencia_horas: 12, via: 'oral', dose_maxima_por_dia_mg: 2000, contraindicado_ate_dias: 60, indicacao: 'Infecções por germes beta-lactamase+', observacao: 'Dose baixa 25–45 mg/kg/dia; dose alta (otite média, sinusite, ITU, broncopneumonia) 45–70 mg/kg/dia, em 2 doses (bula Eurofarma). Acima de 70 mg/kg/dia (ex.: 90 mg/kg/dia da AAP) exige a formulação ES 14:1, não a 400/57 mg/5 mL. Sem posologia em < 2 meses.' },
+      // RM-100: a posologia depende da apresentação do comprimido. ATENÇÃO: neste motor a unidade 'mg'
+      // é o TOTAL DO DIA (calcularDosagem divide por 24/frequencia_horas) — por isso 1750 mg/dia ÷ 2 = 875 mg
+      // por dose e 1500 mg/dia ÷ 3 = 500 mg por dose.
+      { populacoes: ['adolescente', 'adulto', 'geriatrico'], formulacao_ids: ['amoxiclav-comp-875'], dose: 1750, unidade: 'mg', frequencia_horas: 12, via: 'oral', dose_maxima_por_dia_mg: 1750, ajuste_renal: true, observacao: '875/125 mg de 12/12h. TFG < 30 mL/min: não usar o comprimido de 875 mg (bula Eurofarma e rótulo FDA).' },
+      { populacoes: ['adolescente', 'adulto', 'geriatrico'], formulacao_ids: ['amoxiclav-comp-500'], dose: 1500, unidade: 'mg', frequencia_horas: 8,  via: 'oral', dose_maxima_por_dia_mg: 1500, ajuste_renal: true, observacao: '500/125 mg de 8/8h. TFG 10–30 mL/min: 500 mg de 12/12h; TFG < 10 mL/min: 500 mg de 24/24h (rótulo FDA; a bula Eurofarma da suspensão considera TFG < 30 "não recomendável").' },
     ],
     diretriz: 'IDSA / SBI 2022',
     observacao_geral: 'Dose baseada no componente amoxicilina. Evitar em pacientes com hepatotoxicidade prévia à amoxicilina-clavulanato.',

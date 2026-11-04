@@ -939,17 +939,18 @@ export const PHARMA_DB: QuickDrug[] = [
     dose_adulto: {
       habitual: '875/125', min: '500/125', max: '875/125', unidade: 'mg', via: 'VO',
       frequencias: ['2x/dia', '3x/dia'],
-      instrucoes: 'Tomar com alimento para reduzir intolerância GI. Faringoamigdalite: 875/125 mg 2x/dia por 10 dias.',
+      instrucoes: 'Tomar no início da refeição para reduzir intolerância GI. A frequência depende da apresentação: 875/125 mg de 12/12h (2x/dia) e 500/125 mg de 8/8h (3x/dia). Faringoamigdalite: 875/125 mg 2x/dia por 10 dias. Não passar de 14 dias sem reavaliação (bula).',
     },
     dose_pediatrica: {
       calculo: 'mg/kg/dia', dose_por_kg: 45, unidade: 'mg',
       frequencia_divisoes: 2, max_dose_dia: 1750, max_dose_dia_unidade: 'mg/dia',
-      faixa_etaria: '> 3 meses: 25 mg/kg/dia (leve) ou 45 mg/kg/dia (grave) em 2 doses — referente à fração amoxicilina.',
+      faixa_etaria: '≥ 2 meses (bula Eurofarma): 25 a 45 mg/kg/dia (infecção leve a moderada) ou 45 a 70 mg/kg/dia (infecção grave: otite média, sinusite, ITU, broncopneumonia), em 2 doses — referente à fração amoxicilina. Sem posologia em < 2 meses.',
       observacao: 'Susp. oral 400/57 mg/5 mL (80 mg/mL amoxicilina): dose = (peso × 45 ÷ 2) ÷ 80. Ex. 27 kg/amigdalite: 27×45=1215/2=607 mg/dose ÷ 80 = 7,6 mL 2x/dia. Tomar com alimento.',
     },
     ajuste_renal: {
-      normal: '875/125 mg 2x/dia', tfg_60_30: '500/125 mg 2x/dia',
-      tfg_30_15: '500/125 mg/dia', tfg_lt_15: 'Não recomendado — clavulanato acumula', dialisavel: true,
+      normal: '875/125 mg 12/12h ou 500/125 mg 8/8h', tfg_60_30: 'Sem ajuste (TFG > 30 mL/min) — bula Eurofarma',
+      tfg_30_15: 'NÃO usar 875/125 mg. Bula Eurofarma: não recomendável com TFG < 30; rótulo FDA: 500/125 mg 12/12h se TFG 10–30',
+      tfg_lt_15: 'Bula Eurofarma: não recomendável; rótulo FDA: 500/125 mg a cada 24h se TFG < 10', dialisavel: true,
     },
     ajuste_hepatico: { child_a: 'Cautela', child_b: 'Monitorar TGO/TGP', child_c: 'Contraindicado (hepatotoxicidade por clavulanato)' },
     contraindicacoes_rapidas: ['Alergia a penicilinas', 'Histórico de icterícia colestática por amoxicilina+clavulanato', 'Mononucleose infecciosa'],

@@ -184,6 +184,10 @@ interface DadosEvidencia {
   beneficio: BeneficioRisco;
 }
 
+// RM-101: NENHUM nnh (number needed to harm) numérico — os valores anteriores (500, 400, 200, 50, 10000, 80)
+// não tinham fonte nem desfecho de dano definido (NNH de quê?). Os resumos dos ensaios pivotais
+// no PubMed não trazem taxas de eventos adversos; sem uma taxa verificável o NNH fica indefinido.
+// Quando houver fonte, registre o desfecho de dano junto do número.
 const EVIDENCIA_DB: Record<string, DadosEvidencia> = {
   // ── IECA ────────────────────────────────────────────────────
   enalapril: {
@@ -236,7 +240,7 @@ const EVIDENCIA_DB: Record<string, DadosEvidencia> = {
       { nome: 'EMPA-REG OUTCOME', doi: '10.1056/NEJMoa1504720', n_pacientes: 7020, desfecho_primario: 'Morte CV + IAM não fatal + AVC não fatal', resultado: 'Redução de 14% no desfecho primário; 38% redução morte CV', nnt: 39, rrr: 14, rar: 1.6 },
       { nome: 'EMPEROR-Reduced', doi: '10.1056/NEJMoa2022190', n_pacientes: 3730, desfecho_primario: 'Morte CV + hospitalização IC', resultado: 'Redução de 25% no desfecho primário', nnt: 19, rrr: 25, rar: 5 },
     ],
-    beneficio: { beneficio_absoluto: 'Reduz morte CV em 38%, hospitalização por IC em 30-35%', nnt: 39, nnh: 500, horizonte_tempo: '3,1 anos', forca_evidencia: 'A' },
+    beneficio: { beneficio_absoluto: 'Reduz morte CV em 38%, hospitalização por IC em 30-35%', nnt: 39, horizonte_tempo: '3,1 anos', forca_evidencia: 'A' },
   },
   dapagliflozina: {
     diretriz: 'ADA 2025 / ESC 2024 / KDIGO 2024',
@@ -253,7 +257,7 @@ const EVIDENCIA_DB: Record<string, DadosEvidencia> = {
       { nome: 'DAPA-HF', doi: '10.1056/NEJMoa1911303', n_pacientes: 4744, desfecho_primario: 'Piora IC + morte CV', resultado: 'Redução de 26% no desfecho primário', nnt: 21, rrr: 26, rar: 5 },
       { nome: 'DAPA-CKD', doi: '10.1056/NEJMoa2024816', n_pacientes: 4304, desfecho_primario: 'Queda ≥50% TFG + IRTS + morte renal + morte CV', resultado: 'Redução de 39% no desfecho primário', nnt: 19, rrr: 39, rar: 5 },
     ],
-    beneficio: { beneficio_absoluto: 'Reduz progressão de DRC em 39% e hospitalização por IC em 30%', nnt: 21, nnh: 400, horizonte_tempo: '2,4 anos', forca_evidencia: 'A' },
+    beneficio: { beneficio_absoluto: 'Reduz progressão de DRC em 39% e hospitalização por IC em 30%', nnt: 21, horizonte_tempo: '2,4 anos', forca_evidencia: 'A' },
   },
   // ── Metformina ──────────────────────────────────────────────
   metformina: {
@@ -270,7 +274,7 @@ const EVIDENCIA_DB: Record<string, DadosEvidencia> = {
     estudos: [
       { nome: 'UKPDS 34', doi: '10.1016/S0140-6736(98)07037-8', n_pacientes: 1704, desfecho_primario: 'Eventos relacionados ao DM', resultado: 'Redução de 32% em eventos relacionados ao DM em obesos; 42% AVC', nnt: 14, rrr: 32, rar: 6.7 },
     ],
-    beneficio: { beneficio_absoluto: 'Reduz eventos relacionados ao DM em 32% em pacientes obesos; redução HbA1c 1–2%', nnt: 14, nnh: 200, horizonte_tempo: '10 anos', forca_evidencia: 'A' },
+    beneficio: { beneficio_absoluto: 'Reduz eventos relacionados ao DM em 32% em pacientes obesos; redução HbA1c 1–2%', nnt: 14, horizonte_tempo: '10 anos', forca_evidencia: 'A' },
   },
   // ── Sacubitril/Valsartana ───────────────────────────────────
   'sacubitril/valsartana': {
@@ -287,7 +291,7 @@ const EVIDENCIA_DB: Record<string, DadosEvidencia> = {
     estudos: [
       { nome: 'PARADIGM-HF', doi: '10.1056/NEJMoa1409077', n_pacientes: 8442, desfecho_primario: 'Morte CV + hospitalização IC', resultado: 'Redução de 20% vs. enalapril; 16% redução morte CV', nnt: 21, rrr: 20, rar: 4.7 },
     ],
-    beneficio: { beneficio_absoluto: 'Reduz morte CV + hospitalização IC em 20% vs. enalapril em IC-FEr', nnt: 21, nnh: 50, horizonte_tempo: '27 meses', forca_evidencia: 'B' },
+    beneficio: { beneficio_absoluto: 'Reduz morte CV + hospitalização IC em 20% vs. enalapril em IC-FEr', nnt: 21, horizonte_tempo: '27 meses', forca_evidencia: 'B' },
   },
   // ── Estatina ────────────────────────────────────────────────
   rosuvastatina: {
@@ -305,7 +309,7 @@ const EVIDENCIA_DB: Record<string, DadosEvidencia> = {
       { nome: 'JUPITER', doi: '10.1056/NEJMoa0807646', n_pacientes: 17802, desfecho_primario: 'IAM + AVC + morte CV + angina + revascularização', resultado: 'Redução de 44% no desfecho primário em prevenção primária', nnt: 95, rrr: 44, rar: 0.9 },
       { nome: 'CTT Meta-analysis', doi: '10.1016/S0140-6736(10)61350-5', n_pacientes: 170000, desfecho_primario: 'Eventos CV maiores', resultado: 'Cada 1 mmol/L redução LDL → 22% redução eventos', nnt: 50, rrr: 22 },
     ],
-    beneficio: { beneficio_absoluto: 'Reduz eventos CV maiores em 22% por mmol/L de redução de LDL-c', nnt: 50, nnh: 10000, horizonte_tempo: '5 anos', forca_evidencia: 'A' },
+    beneficio: { beneficio_absoluto: 'Reduz eventos CV maiores em 22% por mmol/L de redução de LDL-c', nnt: 50, horizonte_tempo: '5 anos', forca_evidencia: 'A' },
   },
   // ── Budesonida/Formoterol ────────────────────────────────────
   'budesonida/formoterol': {
@@ -643,19 +647,19 @@ const ALTERNATIVAS_DB: Record<string, AlternativasDB> = {
 
 const WHATIF_DB: Record<string, CenarioClinco[]> = {
   I10: [
-    { nome: 'Enalapril 10mg', molecula: 'Enalapril', classe: 'IECA', mortalidade_relativa: '↓ 16% morte CV', nnt: 14, nnh: 50, custo_mensal_brl: 15, disponivel_sus: true, trust_score: 92, forca_evidencia: 'A', vantagens: ['Custo mínimo', 'Nefroproteção', 'SUS'], desvantagens: ['Tosse 10-15%'], perfil_ideal: 'DM, IC, nefropatia, pós-IAM', estudos: ['CONSENSUS', 'SOLVD', 'HOPE-pilot'] },
-    { nome: 'ARNI (Sacubitril/Valsartana)', molecula: 'Sacubitril/Valsartana', classe: 'ARNI', mortalidade_relativa: '↓ 16% morte CV vs enalapril', nnt: 21, nnh: 50, custo_mensal_brl: 420, disponivel_sus: false, trust_score: 88, forca_evidencia: 'B', vantagens: ['Superior ao IECA em IC-FEr', 'Remodelamento reverso'], desvantagens: ['Custo elevado', 'Washout 36h se IECA'], perfil_ideal: 'IC-FEr NYHA II-IV em IECA tolerante', estudos: ['PARADIGM-HF'] },
-    { nome: 'ARNI + iSGLT2', molecula: 'Sacubitril/Valsartana + Dapagliflozina', classe: 'ARNI + iSGLT2', mortalidade_relativa: '↓ ~30% morte CV + hospitalização IC (estimativa combinada)', nnt: 12, nnh: 50, custo_mensal_brl: 600, disponivel_sus: false, trust_score: 85, forca_evidencia: 'B', vantagens: ['Maior redução de desfechos combinados', 'Quatro pilares IC-FEr simultâneos'], desvantagens: ['Custo muito elevado', 'Complexidade de combinação'], perfil_ideal: 'IC-FEr + DM2 ou DRC, alto risco', estudos: ['PARADIGM-HF', 'DAPA-HF', 'análises combinadas'] },
+    { nome: 'Enalapril 10mg', molecula: 'Enalapril', classe: 'IECA', mortalidade_relativa: '↓ 16% morte CV', nnt: 14, custo_mensal_brl: 15, disponivel_sus: true, trust_score: 92, forca_evidencia: 'A', vantagens: ['Custo mínimo', 'Nefroproteção', 'SUS'], desvantagens: ['Tosse 10-15%'], perfil_ideal: 'DM, IC, nefropatia, pós-IAM', estudos: ['CONSENSUS', 'SOLVD', 'HOPE-pilot'] },
+    { nome: 'ARNI (Sacubitril/Valsartana)', molecula: 'Sacubitril/Valsartana', classe: 'ARNI', mortalidade_relativa: '↓ 16% morte CV vs enalapril', nnt: 21, custo_mensal_brl: 420, disponivel_sus: false, trust_score: 88, forca_evidencia: 'B', vantagens: ['Superior ao IECA em IC-FEr', 'Remodelamento reverso'], desvantagens: ['Custo elevado', 'Washout 36h se IECA'], perfil_ideal: 'IC-FEr NYHA II-IV em IECA tolerante', estudos: ['PARADIGM-HF'] },
+    { nome: 'ARNI + iSGLT2', molecula: 'Sacubitril/Valsartana + Dapagliflozina', classe: 'ARNI + iSGLT2', mortalidade_relativa: '↓ ~30% morte CV + hospitalização IC (estimativa combinada)', nnt: 12, custo_mensal_brl: 600, disponivel_sus: false, trust_score: 85, forca_evidencia: 'B', vantagens: ['Maior redução de desfechos combinados', 'Quatro pilares IC-FEr simultâneos'], desvantagens: ['Custo muito elevado', 'Complexidade de combinação'], perfil_ideal: 'IC-FEr + DM2 ou DRC, alto risco', estudos: ['PARADIGM-HF', 'DAPA-HF', 'análises combinadas'] },
   ],
   E11: [
-    { nome: 'Metformina', molecula: 'Metformina', classe: 'Biguanida', mortalidade_relativa: '↓ 32% eventos DM (obesos)', nnt: 14, nnh: 200, custo_mensal_brl: 10, disponivel_sus: true, trust_score: 95, forca_evidencia: 'A', vantagens: ['Custo mínimo', 'Sem hipoglicemia', 'UKPDS'], desvantagens: ['GI intolerância', 'TFG < 30 CI'], perfil_ideal: 'DM2 sem DCV/IC/DRC', estudos: ['UKPDS 34'] },
-    { nome: 'Empagliflozina', molecula: 'Empagliflozina', classe: 'iSGLT2', mortalidade_relativa: '↓ 38% morte CV + ↓ 35% progressão DRC', nnt: 39, nnh: 500, custo_mensal_brl: 280, disponivel_sus: false, trust_score: 92, forca_evidencia: 'A', vantagens: ['Cardioproteção', 'Nefroproteção', 'Perda de peso 2-4kg'], desvantagens: ['Custo elevado', 'ITU/candidíase'], perfil_ideal: 'DM2 + DCV estabelecida ou IC ou DRC', estudos: ['EMPA-REG OUTCOME', 'EMPEROR-Reduced', 'EMPA-KIDNEY'] },
-    { nome: 'Metformina + Empagliflozina', molecula: 'Metformina + Empagliflozina', classe: 'Biguanida + iSGLT2', mortalidade_relativa: '↓ HbA1c adicional + efeitos cardiorrenais iSGLT2', nnt: 20, nnh: 300, custo_mensal_brl: 290, disponivel_sus: false, trust_score: 90, forca_evidencia: 'A', vantagens: ['Sinergismo glicêmico', 'Cardioproteção + custo baixo da metformina'], desvantagens: ['Custo da empagliflozina'], perfil_ideal: 'DM2 + DCV/IC/DRC sem contraindicação a metformina', estudos: ['EMPA-REG OUTCOME', 'UKPDS'] },
+    { nome: 'Metformina', molecula: 'Metformina', classe: 'Biguanida', mortalidade_relativa: '↓ 32% eventos DM (obesos)', nnt: 14, custo_mensal_brl: 10, disponivel_sus: true, trust_score: 95, forca_evidencia: 'A', vantagens: ['Custo mínimo', 'Sem hipoglicemia', 'UKPDS'], desvantagens: ['GI intolerância', 'TFG < 30 CI'], perfil_ideal: 'DM2 sem DCV/IC/DRC', estudos: ['UKPDS 34'] },
+    { nome: 'Empagliflozina', molecula: 'Empagliflozina', classe: 'iSGLT2', mortalidade_relativa: '↓ 38% morte CV + ↓ 35% progressão DRC', nnt: 39, custo_mensal_brl: 280, disponivel_sus: false, trust_score: 92, forca_evidencia: 'A', vantagens: ['Cardioproteção', 'Nefroproteção', 'Perda de peso 2-4kg'], desvantagens: ['Custo elevado', 'ITU/candidíase'], perfil_ideal: 'DM2 + DCV estabelecida ou IC ou DRC', estudos: ['EMPA-REG OUTCOME', 'EMPEROR-Reduced', 'EMPA-KIDNEY'] },
+    { nome: 'Metformina + Empagliflozina', molecula: 'Metformina + Empagliflozina', classe: 'Biguanida + iSGLT2', mortalidade_relativa: '↓ HbA1c adicional + efeitos cardiorrenais iSGLT2', nnt: 20, custo_mensal_brl: 290, disponivel_sus: false, trust_score: 90, forca_evidencia: 'A', vantagens: ['Sinergismo glicêmico', 'Cardioproteção + custo baixo da metformina'], desvantagens: ['Custo da empagliflozina'], perfil_ideal: 'DM2 + DCV/IC/DRC sem contraindicação a metformina', estudos: ['EMPA-REG OUTCOME', 'UKPDS'] },
   ],
   I50: [
-    { nome: 'Enalapril (sem ARNI)', molecula: 'Enalapril', classe: 'IECA', mortalidade_relativa: '↓ 16% morte + hospitalização IC', nnt: 14, nnh: 80, custo_mensal_brl: 15, disponivel_sus: true, trust_score: 90, forca_evidencia: 'A', vantagens: ['Custo mínimo', 'SUS', '30 anos evidência'], desvantagens: ['Inferior ao ARNI', 'Tosse'], perfil_ideal: 'IC-FEr sem acesso a ARNI', estudos: ['CONSENSUS', 'SOLVD'] },
-    { nome: 'Sacubitril/Valsartana (ARNI)', molecula: 'Sacubitril/Valsartana', classe: 'ARNI', mortalidade_relativa: '↓ 20% vs enalapril + ↓ 16% morte CV', nnt: 21, nnh: 50, custo_mensal_brl: 420, disponivel_sus: false, trust_score: 92, forca_evidencia: 'B', vantagens: ['Superior ao IECA', 'Remodelamento reverso', 'PARADIGM-HF'], desvantagens: ['Custo', 'Washout IECA'], perfil_ideal: 'IC-FEr estável já em IECA, tolerante', estudos: ['PARADIGM-HF'] },
-    { nome: 'ARNI + iSGLT2 + ARM + BB (4 pilares)', molecula: 'Combinação 4 pilares', classe: 'ARNI + iSGLT2 + ARM + BB', mortalidade_relativa: 'Estimativa: ↓ 40-50% mortalidade vs nenhum tratamento', nnt: 7, nnh: 30, custo_mensal_brl: 680, disponivel_sus: false, trust_score: 88, forca_evidencia: 'A', vantagens: ['4 pilares: máxima redução de mortalidade e hospitalização', 'Alvo terapêutico completo ESC 2023'], desvantagens: ['Custo elevado', 'Complexidade', 'Monitoramento K+/Cr/PA'], perfil_ideal: 'IC-FEr NYHA II-III estável, alto risco, sem contraindicação', estudos: ['PARADIGM-HF', 'DAPA-HF', 'RALES', 'COPERNICUS'] },
+    { nome: 'Enalapril (sem ARNI)', molecula: 'Enalapril', classe: 'IECA', mortalidade_relativa: '↓ 16% morte + hospitalização IC', nnt: 14, custo_mensal_brl: 15, disponivel_sus: true, trust_score: 90, forca_evidencia: 'A', vantagens: ['Custo mínimo', 'SUS', '30 anos evidência'], desvantagens: ['Inferior ao ARNI', 'Tosse'], perfil_ideal: 'IC-FEr sem acesso a ARNI', estudos: ['CONSENSUS', 'SOLVD'] },
+    { nome: 'Sacubitril/Valsartana (ARNI)', molecula: 'Sacubitril/Valsartana', classe: 'ARNI', mortalidade_relativa: '↓ 20% vs enalapril + ↓ 16% morte CV', nnt: 21, custo_mensal_brl: 420, disponivel_sus: false, trust_score: 92, forca_evidencia: 'B', vantagens: ['Superior ao IECA', 'Remodelamento reverso', 'PARADIGM-HF'], desvantagens: ['Custo', 'Washout IECA'], perfil_ideal: 'IC-FEr estável já em IECA, tolerante', estudos: ['PARADIGM-HF'] },
+    { nome: 'ARNI + iSGLT2 + ARM + BB (4 pilares)', molecula: 'Combinação 4 pilares', classe: 'ARNI + iSGLT2 + ARM + BB', mortalidade_relativa: 'Estimativa: ↓ 40-50% mortalidade vs nenhum tratamento', nnt: 7, custo_mensal_brl: 680, disponivel_sus: false, trust_score: 88, forca_evidencia: 'A', vantagens: ['4 pilares: máxima redução de mortalidade e hospitalização', 'Alvo terapêutico completo ESC 2023'], desvantagens: ['Custo elevado', 'Complexidade', 'Monitoramento K+/Cr/PA'], perfil_ideal: 'IC-FEr NYHA II-III estável, alto risco, sem contraindicação', estudos: ['PARADIGM-HF', 'DAPA-HF', 'RALES', 'COPERNICUS'] },
   ],
   // RM-97: só 2 cenários, ambos de PROFILAXIA (agudo × preventivo não se compara). NNT,
   // custo e disponibilidade no SUS vêm das mesmas bases do projeto (EVIDENCIA_DB e

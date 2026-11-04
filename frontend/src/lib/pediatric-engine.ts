@@ -364,13 +364,13 @@ export const PEDIATRIC_DOSES: PediatricDoseEntry[] = [
     drugName: 'Amoxicilina/Clavulanato',
     indicacoes: [{
       nome: 'Infecções resistentes (PRSP, H. influenzae β-lactamase+)',
-      doseMgKgDia: 90, frequencia: '12/12h', divisoes: 2,
+      doseMgKgDia: 70, frequencia: '12/12h', divisoes: 2,
       maxDoseMg: 875, idadeMinMeses: 2,
-      instrucoes: 'Dose baseada na fração amoxicilina. Formulação ES (14:1) para alta dose: 90/6.4 mg/kg/dia. Diarreia frequente — Lactobacillus como adjuvante.',
-      alertas: ['Diarreia: efeito adverso em 10–25%', 'Icterícia colestática (adultos)'],
+      instrucoes: 'Dose baseada na fração amoxicilina. Com a suspensão 400/57 mg/5 mL (7:1) o teto da bula Eurofarma é 70/10 mg/kg/dia, que é a dose usada aqui. 90/6,4 mg/kg/dia (AAP 2013, doi 10.1542/peds.2012-3488) pressupõe a formulação ES 14:1 — disponibilidade no Brasil não conferida. Diarreia frequente — Lactobacillus como adjuvante.',
+      alertas: ['Diarreia: efeito adverso em 10–25%', 'Icterícia colestática (adultos)', 'A suspensão 400/57 mg/5 mL (7:1) NÃO é ES: a bula Eurofarma limita a 70/10 mg/kg/dia; 90 mg/kg/dia só com a formulação ES 14:1'],
     }],
     formulacoes: [
-      { faixaMeses: [2, 48], forma: 'Suspensão', concentracao: '400/57 mg/5 mL (ES) ou 250/62.5 mg/5 mL' },
+      { faixaMeses: [2, 48], forma: 'Suspensão', concentracao: '400/57 mg/5 mL (7:1; máx. 70/10 mg/kg/dia pela bula) ou 250/62.5 mg/5 mL' },
       { faixaKg: [25, 999], forma: 'Comprimido', concentracao: '875/125 mg' },
     ],
     fontes: ['SBP 2023', 'AAP 2023'],
