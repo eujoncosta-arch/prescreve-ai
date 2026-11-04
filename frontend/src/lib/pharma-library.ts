@@ -761,7 +761,7 @@ const EUROFARMA_ENRICHED: Partial<MarcaFarmaceuticaEnterprise>[] = [
     ],
     nivel_evidencia_geral: 'A',
     observacao_evidencia: 'Equivalente ao Leuprolide (GnRH análogo) em redução de dor (Harada 2009, Fertil Steril), com melhor perfil ósseo e lipídico. NNT 4 para redução de EVA ≥ 2 (Strowitzki 2010).',
-    posologia_adulto: '1 comprimido de 2 mg 2x/dia (12/12h), continuamente sem intervalo. Iniciar em qualquer dia do ciclo. Uso contínuo — sem pausa menstrual.',
+    posologia_adulto: '1 comprimido de 2 mg 1x/dia, continuamente sem intervalo. Iniciar em qualquer dia do ciclo. Uso contínuo — sem pausa menstrual.',
     ajustes: {
       gestante: 'CONTRAINDICADO — uso durante a gravidez está contraindicado. Realizar teste de gravidez antes de iniciar.',
       hepatico: 'CONTRAINDICADO em hepatopatia grave ativa. Metabolismo hepático.',
@@ -782,8 +782,8 @@ const EUROFARMA_ENRICHED: Partial<MarcaFarmaceuticaEnterprise>[] = [
         'Hepatopatia grave ativa',
         'Hipersensibilidade ao dienogeste',
       ],
-      como_usar: 'Tome 1 comprimido de manhã e 1 comprimido à noite (12/12h), todos os dias sem interrupção. Pode ser tomado com ou sem alimentos.',
-      posologia_simplificada: '1 comprimido de 2 mg de manhã e 1 comprimido à noite, todos os dias continuamente.',
+      como_usar: 'Tome 1 comprimido por dia, sempre no mesmo horário, todos os dias sem interrupção. Pode ser tomado com ou sem alimentos.',
+      posologia_simplificada: '1 comprimido de 2 mg uma vez ao dia, todos os dias continuamente.',
       efeitos_adversos_principais: [
         'Sangramento irregular ou gotejamento (spotting) nos primeiros 3 meses — esperado',
         'Dores de cabeça',
@@ -798,7 +798,7 @@ const EUROFARMA_ENRICHED: Partial<MarcaFarmaceuticaEnterprise>[] = [
     bula_profissional: {
       indicacoes: ['Endometriose: tratamento dos sintomas dolorosos associados, incluindo dismenorreia, dispareunia e dor pélvica crônica'],
       mecanismo_acao: 'Progestagênio sintético derivado da 19-nortestosterona com alta seletividade para receptor de progesterona. Atividade antiandrogênica parcial intrínseca. Mecanismos de ação na endometriose: (1) decidualização e atrofia do endométrio ectópico por agonismo progestogênico; (2) supressão parcial do estradiol circulante (reduz estímulo estrogênico dos focos); (3) inibição da proliferação de células endometrióticas; (4) redução de prostaglandinas e citocinas pró-inflamatórias (IL-1β, TNF-α, IL-6) nos focos; (5) inibição da aromatase local nos focos endometrióticos. Não provoca hipoestrogenismo grave como os análogos GnRH.',
-      posologia_adulto: '2 mg (1 comprimido) 2x/dia (manhã e noite, 12/12h), continuamente, sem intervalo entre ciclos. Iniciar em qualquer momento do ciclo (preferir início com menstruação para excluir gravidez).',
+      posologia_adulto: '2 mg (1 comprimido) 1x/dia, continuamente, sem intervalo entre ciclos. Iniciar em qualquer momento do ciclo (preferir início com menstruação para excluir gravidez).',
       contraindicacoes: [
         'Gravidez ou suspeita de gravidez',
         'Trombose venosa profunda ou embolismo pulmonar ativo ou histórico',
@@ -837,7 +837,7 @@ const EUROFARMA_ENRICHED: Partial<MarcaFarmaceuticaEnterprise>[] = [
         { descricao: 'Alopecia', frequencia: 'incomum' },
         { descricao: 'Tromboembolismo venoso', frequencia: 'raro' },
       ],
-      farmacocinetica: 'Absorção oral rápida (Tmax 1,5h). Biodisponibilidade 91%. Ligação proteica 90% (albumina). Metabolismo hepático (CYP3A4). Excreção urinária e fecal. Meia-vida de eliminação 9–10h. Regime 2x/dia mantém concentrações estáveis.',
+      farmacocinetica: 'Absorção oral rápida (Tmax 1,5h). Biodisponibilidade 91%. Ligação proteica 90% (albumina). Metabolismo hepático (CYP3A4). Excreção urinária e fecal. Meia-vida de eliminação 9–10h. Regime de 1x/dia (2 mg) é a dose mínima eficaz.',
       superdosagem: 'Doses maiores não causaram intoxicação grave em estudos. Tratamento sintomático. Sem antídoto específico.',
       gravidez_categoria: 'X',
       lactacao: 'Não usar durante amamentação — excreção no leite humano desconhecida. Possível efeito sobre o lactente.',

@@ -44,17 +44,10 @@ fontes sobre TFG 10–30 divergem (bula Eurofarma: "não recomendável"; FDA: 50
 Verificado no navegador (`/dosagem`, adulto 40 anos, 70 kg): **875/125 → 1 comprimido 12/12h, 875 mg/tomada, 1,75 g/dia;
 500/125 → 1 comprimido 8/8h, 500 mg/tomada, 1,5 g/dia.**
 
-## Achado fora do escopo (grave) — tarefa separada criada
+## Achado que virou a RM-103
 
-No motor, `unidade: 'mg'` e `'mg/kg'` são tratadas como **total do dia** e divididas pelas tomadas, mas os dados de quase todos
-os medicamentos estão escritos **por tomada**. Efeito medido (adulto, tela `/dosagem`): dipirona 500 mg 6/6h → **125 mg por dose**;
-paracetamol 750 mg 6/6h → 187,5 mg; amoxicilina 500 mg 8/8h → 166,7 mg; ibuprofeno 400 mg 8/8h → 133,3 mg; metformina 500 mg
-12/12h → 250 mg; salbutamol 2,5 mg 6/6h → 0,6 mg. É **subdose sistemática de 2–4×**.
-
-Um teste antigo (RM-54, `dosing-engine-unit-audit.test.ts`) fixa a semântica atual para `mg/kg`, e os testes rm48/rm52/rm53
-dependem do motor; por isso **não mudei a semântica**, que é uma decisão clínica de grande alcance. Para a amoxicilina-clavulanato
-codifiquei os totais do dia (1750 e 1500 mg) para o resultado sair certo sob a convenção atual, com comentário no código.
-**Se a semântica for corrigida, esses dois valores precisam voltar para 875 e 500** (o teste `rm100` acusa).
+No motor, `unidade: 'mg'` e `'mg/kg'` eram tratadas como total do dia, mas os dados estão por tomada (dipirona 500 mg 6/6h saía 125 mg por dose; subdose de 2–4×). A correção geral é a [RM-103](RM-103-SEMANTICA-DA-UNIDADE-DE-DOSE-NO-MOTOR.md).
+Nesta RM, a amoxicilina-clavulanato foi inicialmente codificada com os totais do dia (1750 e 1500 mg) só para sair certa sob a convenção antiga; **com a RM-103 esses valores voltaram a 875 mg (12/12h) e 500 mg (8/8h)**.
 
 ## O que NÃO mudei
 

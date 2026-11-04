@@ -23,6 +23,8 @@ export interface RegraDoagem {
   frequencia_horas: number;  // 6 → 6/6h  | 8 → 8/8h | 12 → 12/12h | 24 → 1x/dia
   dose_maxima_por_dose_mg?: number;
   dose_maxima_por_dia_mg?: number;
+  /** Piso por tomada, independente do peso (ex.: salbutamol nebulizado 0,15 mg/kg, mín 2,5 mg). Só se aplica à dose por tomada. */
+  dose_minima_por_dose_mg?: number;
   via: Via;
   indicacao?: string;
   observacao?: string;
@@ -217,23 +219,30 @@ export function calcularDosagem(
   }
 
   const doses_por_dia = 24 / regra.frequencia_horas;
-  let dose_total_dia_mg = 0;
   let formula_texto = '';
   let bsa: number | undefined;
+
+  // RM-103: semântica de `regra.unidade`. Todas as unidades são POR TOMADA,
+  // exceto `mg/kg/dia`, que é o total do DIA (a frequência o divide em
+  // tomadas). Era o contrário para `mg` e `mg/kg`: o valor por tomada dos
+  // dados (ex.: dipirona 500 mg 6/6h, paracetamol 15 mg/kg 6/6h) era dividido
+  // de novo por `doses_por_dia`, subdosando 2-4x.
+  let dose_base_mg = 0;
+  const base_por_dia = regra.unidade === 'mg/kg/dia';
 
   switch (regra.unidade) {
     case 'mg/kg':
     case 'mg/kg/dia':
-      dose_total_dia_mg = regra.dose * peso_kg;
-      formula_texto = `${regra.dose} mg/kg × ${peso_kg} kg = ${dose_total_dia_mg.toFixed(1)} mg/dia`;
+      dose_base_mg = regra.dose * peso_kg;
+      formula_texto = `${regra.dose} ${regra.unidade} × ${peso_kg} kg = ${dose_base_mg.toFixed(1)} mg${base_por_dia ? '/dia' : ' por tomada'}`;
       break;
     case 'mcg/kg':
-      dose_total_dia_mg = (regra.dose * peso_kg) / 1000;
-      formula_texto = `${regra.dose} mcg/kg × ${peso_kg} kg ÷ 1000 = ${dose_total_dia_mg.toFixed(3)} mg/dia`;
+      dose_base_mg = (regra.dose * peso_kg) / 1000;
+      formula_texto = `${regra.dose} mcg/kg × ${peso_kg} kg ÷ 1000 = ${dose_base_mg.toFixed(3)} mg por tomada`;
       break;
     case 'g/kg':
-      dose_total_dia_mg = regra.dose * peso_kg * 1000;
-      formula_texto = `${regra.dose} g/kg × ${peso_kg} kg × 1000 = ${dose_total_dia_mg.toFixed(1)} mg/dia`;
+      dose_base_mg = regra.dose * peso_kg * 1000;
+      formula_texto = `${regra.dose} g/kg × ${peso_kg} kg × 1000 = ${dose_base_mg.toFixed(1)} mg por tomada`;
       break;
     case 'mg/m²':
       if (!altura_cm) {
@@ -247,46 +256,46 @@ export function calcularDosagem(
         };
       }
       bsa = calcularBSA(peso_kg, altura_cm);
-      dose_total_dia_mg = regra.dose * bsa;
-      formula_texto = `BSA: √(${peso_kg}×${altura_cm}/3600) = ${bsa.toFixed(2)} m² → ${regra.dose} mg/m² × ${bsa.toFixed(2)} = ${dose_total_dia_mg.toFixed(1)} mg/dia`;
+      dose_base_mg = regra.dose * bsa;
+      formula_texto = `BSA: √(${peso_kg}×${altura_cm}/3600) = ${bsa.toFixed(2)} m² → ${regra.dose} mg/m² × ${bsa.toFixed(2)} = ${dose_base_mg.toFixed(1)} mg por tomada`;
       break;
     case 'UI/kg':
-      dose_total_dia_mg = regra.dose * peso_kg;
-      formula_texto = `${regra.dose} UI/kg × ${peso_kg} kg = ${dose_total_dia_mg.toFixed(0)} UI/dia`;
+      dose_base_mg = regra.dose * peso_kg;
+      formula_texto = `${regra.dose} UI/kg × ${peso_kg} kg = ${dose_base_mg.toFixed(0)} UI por tomada`;
       break;
     case 'mg':
     case 'UI':
     case 'mcg':
     case 'g':
-      dose_total_dia_mg = regra.unidade === 'g'
+      dose_base_mg = regra.unidade === 'g'
         ? regra.dose * 1000
         : regra.unidade === 'mcg'
         ? regra.dose / 1000
         : regra.dose;
-      formula_texto = `Dose fixa: ${regra.dose} ${regra.unidade}/dia`;
+      formula_texto = `Dose fixa: ${regra.dose} ${regra.unidade} por tomada`;
       break;
     case 'mL':
-      dose_total_dia_mg = regra.dose * (formulacao.concentracao_mg / (formulacao.volume_ref_mL ?? 1));
-      formula_texto = `${regra.dose} mL × ${formulacao.concentracao_mg} mg/${formulacao.volume_ref_mL ?? 1} mL = ${dose_total_dia_mg.toFixed(1)} mg/dia`;
+      dose_base_mg = regra.dose * (formulacao.concentracao_mg / (formulacao.volume_ref_mL ?? 1));
+      formula_texto = `${regra.dose} mL × ${formulacao.concentracao_mg} mg/${formulacao.volume_ref_mL ?? 1} mL = ${dose_base_mg.toFixed(1)} mg por tomada`;
       break;
     default:
-      dose_total_dia_mg = regra.dose;
-      formula_texto = `Dose: ${regra.dose} ${regra.unidade}/dia`;
+      dose_base_mg = regra.dose;
+      formula_texto = `Dose: ${regra.dose} ${regra.unidade} por tomada`;
+  }
+
+  let dose_total_dia_mg = base_por_dia ? dose_base_mg : dose_base_mg * doses_por_dia;
+  const dose_por_dose_mg_bruta = dose_total_dia_mg / doses_por_dia;
+  if (!base_por_dia && doses_por_dia !== 1) {
+    formula_texto += ` × ${doses_por_dia} tomadas = ${dose_total_dia_mg.toFixed(1)} mg/dia`;
   }
 
   // Correção UNIT-AUDIT-02 (auditoria RM-36 — alto): `excede_dose_maxima_dia`/
-  // `_dose` eram calculadas DEPOIS do `Math.min`/clamp já ter reduzido
-  // `dose_total_dia_mg`/`dose_por_dose_mg` ao próprio teto — ou seja,
-  // comparavam o valor JÁ LIMITADO contra o mesmo limite, o que é
-  // matematicamente quase impossível de dar `true` (só um artefato de
-  // ponto flutuante). `app/dosagem/page.tsx` usa esses booleanos para
-  // exibir um selo verde "Dose validada" — com o bug, o selo aparecia
-  // verde mesmo quando a dose PRESCRITA (antes do corte automático)
-  // excedia brutalmente o máximo seguro, escondendo do médico que o
-  // sistema teve que reduzir a dose silenciosamente. Corrigido para
-  // capturar os valores BRUTOS (antes do clamp) e comparar esses.
+  // `_dose` eram calculadas DEPOIS do clamp, comparando o valor JÁ LIMITADO
+  // contra o mesmo limite (nunca `true`). `app/dosagem/page.tsx` usa esses
+  // booleanos para o selo "Dose validada". Comparam-se os valores BRUTOS.
   const dose_total_dia_mg_bruta = dose_total_dia_mg;
   const excede_dose_maxima_dia = !!(regra.dose_maxima_por_dia_mg && dose_total_dia_mg_bruta > regra.dose_maxima_por_dia_mg * 1.01);
+  const excede_dose_maxima_dose = !!(regra.dose_maxima_por_dose_mg && dose_por_dose_mg_bruta > regra.dose_maxima_por_dose_mg * 1.01);
 
   // apply max constraints
   if (regra.dose_maxima_por_dia_mg && dose_total_dia_mg > regra.dose_maxima_por_dia_mg) {
@@ -295,12 +304,17 @@ export function calcularDosagem(
   }
 
   let dose_por_dose_mg = dose_total_dia_mg / doses_por_dia;
-  const dose_por_dose_mg_bruta = dose_total_dia_mg_bruta / doses_por_dia;
-  const excede_dose_maxima_dose = !!(regra.dose_maxima_por_dose_mg && dose_por_dose_mg_bruta > regra.dose_maxima_por_dose_mg * 1.01);
+
+  if (regra.dose_minima_por_dose_mg && dose_por_dose_mg < regra.dose_minima_por_dose_mg) {
+    dose_por_dose_mg = regra.dose_minima_por_dose_mg;
+    dose_total_dia_mg = dose_por_dose_mg * doses_por_dia;
+    formula_texto += ` → elevada à dose mínima por tomada de ${regra.dose_minima_por_dose_mg} mg (independente do peso)`;
+  }
 
   if (regra.dose_maxima_por_dose_mg && dose_por_dose_mg > regra.dose_maxima_por_dose_mg) {
     dose_por_dose_mg = regra.dose_maxima_por_dose_mg;
-    formula_texto += ` → dose por tomada limitada a ${regra.dose_maxima_por_dose_mg} mg`;
+    dose_total_dia_mg = dose_por_dose_mg * doses_por_dia;
+    formula_texto += ` → dose por tomada limitada a ${regra.dose_maxima_por_dose_mg} mg (${dose_total_dia_mg.toFixed(1)} mg/dia)`;
   }
 
   // volume calculations
@@ -403,11 +417,10 @@ export const MEDICAMENTOS_DOSAGEM: MedicamentoDosagem[] = [
       // Bula Eurofarma (pó p/ susp. 400 mg + 57 mg/5 mL, uso a partir de 2 meses): dose baixa 25/3,6 a
       // 45/6,4 mg/kg/dia; dose alta (infecções graves) 45/6,4 a 70/10 mg/kg/dia — sempre em 2 doses.
       { populacoes: ['lactente', 'pediatrico'], formulacao_ids: ['amoxiclav-susp-400'], dose: 45, unidade: 'mg/kg/dia', frequencia_horas: 12, via: 'oral', dose_maxima_por_dia_mg: 2000, contraindicado_ate_dias: 60, indicacao: 'Infecções por germes beta-lactamase+', observacao: 'Dose baixa 25–45 mg/kg/dia; dose alta (otite média, sinusite, ITU, broncopneumonia) 45–70 mg/kg/dia, em 2 doses (bula Eurofarma). Acima de 70 mg/kg/dia (ex.: 90 mg/kg/dia da AAP) exige a formulação ES 14:1, não a 400/57 mg/5 mL. Sem posologia em < 2 meses.' },
-      // RM-100: a posologia depende da apresentação do comprimido. ATENÇÃO: neste motor a unidade 'mg'
-      // é o TOTAL DO DIA (calcularDosagem divide por 24/frequencia_horas) — por isso 1750 mg/dia ÷ 2 = 875 mg
-      // por dose e 1500 mg/dia ÷ 3 = 500 mg por dose.
-      { populacoes: ['adolescente', 'adulto', 'geriatrico'], formulacao_ids: ['amoxiclav-comp-875'], dose: 1750, unidade: 'mg', frequencia_horas: 12, via: 'oral', dose_maxima_por_dia_mg: 1750, ajuste_renal: true, observacao: '875/125 mg de 12/12h. TFG < 30 mL/min: não usar o comprimido de 875 mg (bula Eurofarma e rótulo FDA).' },
-      { populacoes: ['adolescente', 'adulto', 'geriatrico'], formulacao_ids: ['amoxiclav-comp-500'], dose: 1500, unidade: 'mg', frequencia_horas: 8,  via: 'oral', dose_maxima_por_dia_mg: 1500, ajuste_renal: true, observacao: '500/125 mg de 8/8h. TFG 10–30 mL/min: 500 mg de 12/12h; TFG < 10 mL/min: 500 mg de 24/24h (rótulo FDA; a bula Eurofarma da suspensão considera TFG < 30 "não recomendável").' },
+      // RM-100: a posologia depende da apresentação do comprimido (875/125 mg de 12/12h; 500/125 mg de 8/8h).
+      // Unidade 'mg' = POR TOMADA (RM-103).
+      { populacoes: ['adolescente', 'adulto', 'geriatrico'], formulacao_ids: ['amoxiclav-comp-875'], dose: 875, unidade: 'mg', frequencia_horas: 12, via: 'oral', dose_maxima_por_dia_mg: 1750, ajuste_renal: true, observacao: '875/125 mg de 12/12h. TFG < 30 mL/min: não usar o comprimido de 875 mg (bula Eurofarma e rótulo FDA).' },
+      { populacoes: ['adolescente', 'adulto', 'geriatrico'], formulacao_ids: ['amoxiclav-comp-500'], dose: 500, unidade: 'mg', frequencia_horas: 8,  via: 'oral', dose_maxima_por_dia_mg: 1500, ajuste_renal: true, observacao: '500/125 mg de 8/8h. TFG 10–30 mL/min: 500 mg de 12/12h; TFG < 10 mL/min: 500 mg de 24/24h (rótulo FDA; a bula Eurofarma da suspensão considera TFG < 30 "não recomendável").' },
     ],
     diretriz: 'IDSA / SBI 2022',
     observacao_geral: 'Dose baseada no componente amoxicilina. Evitar em pacientes com hepatotoxicidade prévia à amoxicilina-clavulanato.',
@@ -481,7 +494,7 @@ export const MEDICAMENTOS_DOSAGEM: MedicamentoDosagem[] = [
       { id: 'parac-comp-750',  descricao: 'Comprimido 750 mg',    tipo: 'comprimido', via: 'oral', concentracao_mg: 750, unidade_dispensa: 'comprimido' },
     ],
     regras: [
-      { populacoes: ['neonato'],                            dose: 10, unidade: 'mg/kg', frequencia_horas: 6,  via: 'oral', dose_maxima_por_dia_mg: 40, observacao: 'Máx 40 mg/kg/dia em neonatos' },
+      { populacoes: ['neonato'],                            dose: 10, unidade: 'mg/kg', frequencia_horas: 6,  via: 'oral', observacao: 'Máx 40 mg/kg/dia em neonatos (10 mg/kg 6/6h já é o teto; sem teto absoluto em mg — a unidade do campo é mg/dia, não mg/kg/dia)' },
       { populacoes: ['lactente', 'pediatrico'],             dose: 15, unidade: 'mg/kg', frequencia_horas: 6,  via: 'oral', dose_maxima_por_dose_mg: 1000, dose_maxima_por_dia_mg: 4000, observacao: 'Máx 60 mg/kg/dia ou 4g/dia' },
       { populacoes: ['adolescente', 'adulto'],              dose: 750, unidade: 'mg',   frequencia_horas: 6,  via: 'oral', dose_maxima_por_dose_mg: 1000, dose_maxima_por_dia_mg: 4000 },
       { populacoes: ['geriatrico'],                         dose: 500, unidade: 'mg',   frequencia_horas: 8,  via: 'oral', dose_maxima_por_dia_mg: 2000, observacao: 'Reduzir dose máxima em hepatopatas e idosos frágeis' },
@@ -562,11 +575,15 @@ export const MEDICAMENTOS_DOSAGEM: MedicamentoDosagem[] = [
       { id: 'salb-susp-neb', descricao: 'Solução nebulização 5 mg/mL', tipo: 'solucao_oral', via: 'inalatorio', concentracao_mg: 5, volume_ref_mL: 1, unidade_dispensa: 'mL' },
     ],
     regras: [
-      { populacoes: ['lactente', 'pediatrico'], dose: 0.15, unidade: 'mg/kg', frequencia_horas: 6, via: 'inalatorio', dose_maxima_por_dose_mg: 5, indicacao: 'Crise asmática / broncoespasmo', observacao: 'Diluir em 3 mL SF para nebulização' },
-      { populacoes: ['adolescente', 'adulto'],  dose: 2.5, unidade: 'mg',     frequencia_horas: 6, via: 'inalatorio', dose_maxima_por_dia_mg: 20, indicacao: 'Resgate em crise' },
-      { populacoes: ['geriatrico'],             dose: 2.5, unidade: 'mg',     frequencia_horas: 8, via: 'inalatorio', dose_maxima_por_dia_mg: 12, observacao: 'Risco de taquicardia e hipopotassemia' },
+      { populacoes: ['lactente', 'pediatrico'], dose: 0.15, unidade: 'mg/kg', frequencia_horas: 6, via: 'inalatorio', formulacao_ids: ['salb-susp-neb'], dose_minima_por_dose_mg: 2.5, dose_maxima_por_dose_mg: 5, indicacao: 'Crise asmática / broncoespasmo', observacao: 'Diluir em 3 mL SF para nebulização. Dose mínima 2,5 mg e máxima 5 mg por tomada, independente do peso (protocolo Shared Health Manitoba: 0,15 mg/kg, mín 2,5 mg, máx 5 mg; ensaio pediátrico australiano usou 2,5 mg < 25 kg e 5 mg > 25 kg). Eficácia incerta em < 18 meses (SmPC).' },
+      { populacoes: ['adolescente', 'adulto'],  dose: 2.5, unidade: 'mg',     frequencia_horas: 6, via: 'inalatorio', formulacao_ids: ['salb-susp-neb'], dose_maxima_por_dia_mg: 20, indicacao: 'Resgate em crise (nebulização)' },
+      { populacoes: ['geriatrico'],             dose: 2.5, unidade: 'mg',     frequencia_horas: 8, via: 'inalatorio', formulacao_ids: ['salb-susp-neb'], dose_maxima_por_dia_mg: 12, observacao: 'Risco de taquicardia e hipopotassemia' },
+      // Aerossol dosimetrado 100 mcg/jato (RM-103): bula Ventolin Evohaler (emc) — 1 jato (100 mcg) a 2 jatos (200 mcg) sob demanda, máx 8 jatos/24 h (0,8 mg/dia); crianças 4–11 anos: 1 jato.
+      { populacoes: ['pediatrico'],             dose: 0.1, unidade: 'mg',     frequencia_horas: 6, via: 'inalatorio', formulacao_ids: ['salb-aerossol'], dose_maxima_por_dia_mg: 0.8, indicacao: 'Resgate (aerossol, com espaçador)', observacao: 'Bula: crianças de 4 a 11 anos; 1 jato (100 mcg) sob demanda, máx 8 jatos/24 h. Não há regra de aerossol para < 4 anos. Na crise aguda em PS, ver alerta do fármaco (mais jatos sob supervisão).' },
+      { populacoes: ['adolescente', 'adulto', 'geriatrico'], dose: 0.2, unidade: 'mg', frequencia_horas: 6, via: 'inalatorio', formulacao_ids: ['salb-aerossol'], dose_maxima_por_dia_mg: 0.8, indicacao: 'Resgate (aerossol)', observacao: '1 jato (100 mcg), aumentável a 2 jatos (200 mcg) se necessário; máx 8 jatos/24 h em uso sob demanda. Na crise aguda em PS, ver alerta do fármaco (mais jatos sob supervisão).' },
     ],
-    observacao_geral: 'Aerossol: 2–4 jatos por dose com espaçador. Nebulização: diluir em SF 0,9% até 3 mL. Monitorar FC e K+ em altas doses.',
+    observacao_geral: 'Aerossol: 1–2 jatos por dose com espaçador (máx 8 jatos/24 h na bula do aerossol dosimetrado, uso sob demanda). Nebulização: diluir em SF 0,9% até 3 mL. Monitorar FC e K+ em altas doses.',
+    alerta_especial: 'Crise aguda de asma em pronto-socorro: o teto de 8 jatos/24 h é da bula para uso sob demanda e NÃO limita o tratamento supervisionado da exacerbação. Protocolos usam doses repetidas a cada 20 min na 1ª hora (GINA; Australian Asthma Handbook): ex. 6 jatos (100 mcg) com espaçador em crianças de 1–5 anos no PS; faixas de 4–8 jatos (crianças maiores) e 2–10 jatos (adultos) a cada 20 min, até 3 doses, e depois a cada 1–4 h. Somente sob supervisão médica, com reavaliação de resposta, FC e K+; nunca como autoadministração domiciliar.',
   },
   {
     id: 'montelucaste',
@@ -694,8 +711,8 @@ export const MEDICAMENTOS_DOSAGEM: MedicamentoDosagem[] = [
       { id: 'feni-inj', descricao: 'Solução injetável 50 mg/mL', tipo: 'injetavel', via: 'iv', concentracao_mg: 50, volume_ref_mL: 1, unidade_dispensa: 'mL' },
     ],
     regras: [
-      { populacoes: ['neonato'],                           dose: 5,  unidade: 'mg/kg', frequencia_horas: 12, via: 'oral', dose_maxima_por_dia_mg: 20, indicacao: 'Crises neonatais', observacao: 'Monitorar nível sérico alvo 10–20 mcg/mL' },
-      { populacoes: ['lactente', 'pediatrico'],            dose: 5,  unidade: 'mg/kg', frequencia_horas: 12, via: 'oral', dose_maxima_por_dia_mg: 300 },
+      { populacoes: ['neonato'],                           dose: 5,  unidade: 'mg/kg/dia', frequencia_horas: 12, via: 'oral', indicacao: 'Crises neonatais', observacao: 'Manutenção neonatal 4–8 mg/kg/dia em 2 tomadas (diretrizes neonatais NSW/Escócia/CHEO). Sem teto absoluto em mg: o antigo 20 mg/dia não tem fonte. Monitorar nível sérico alvo 10–20 mcg/mL' },
+      { populacoes: ['lactente', 'pediatrico'],            dose: 5,  unidade: 'mg/kg/dia', frequencia_horas: 12, via: 'oral', dose_maxima_por_dia_mg: 300 },
       { populacoes: ['adolescente', 'adulto', 'geriatrico'], dose: 300, unidade: 'mg', frequencia_horas: 24, via: 'oral', dose_maxima_por_dia_mg: 600, ajuste_hepatico: true },
     ],
     observacao_geral: 'Monitorar nível sérico (alvo 10–20 μg/mL). Múltiplas interações medicamentosas (indução de CYP). Ajustar em hepatopatas. Hiperplasia gengival em uso crônico.',
@@ -712,7 +729,7 @@ export const MEDICAMENTOS_DOSAGEM: MedicamentoDosagem[] = [
       { id: 'dien-comp-2', descricao: 'Comprimido 2 mg (PIETRA ED®)', tipo: 'comprimido', via: 'oral', concentracao_mg: 2, unidade_dispensa: 'comprimido' },
     ],
     regras: [
-      { populacoes: ['adolescente', 'adulto'], dose: 2, unidade: 'mg', frequencia_horas: 12, via: 'oral', dose_maxima_por_dia_mg: 4, indicacao: 'Endometriose — 1 comprimido 12/12h continuamente' },
+      { populacoes: ['adolescente', 'adulto'], dose: 2, unidade: 'mg', frequencia_horas: 24, via: 'oral', dose_maxima_por_dia_mg: 2, indicacao: 'Endometriose — 1 comprimido (2 mg) 1x/dia continuamente, sem pausa' },
     ],
     diretriz: 'ESHRE Endometriosis Guideline 2022; FEBRASGO 2021',
     observacao_geral: 'Uso contínuo (sem pausa). Sangramento irregular esperado nos primeiros 3 meses. Densitometria óssea após 24 meses de uso.',

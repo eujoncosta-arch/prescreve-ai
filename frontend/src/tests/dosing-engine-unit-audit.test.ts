@@ -154,9 +154,11 @@ describe('calcularDosagem() — conversão para gotas exige fator explícito, nu
   it('formulação gotas COM gotas_por_mL explícito converte corretamente', () => {
     const resultado = calcularDosagem(10, undefined, 3 * 365, MEDICAMENTO_GOTAS_COM_FATOR, 'form-gotas');
     expect(resultado?.ok).toBe(true);
-    // RM-54: valor real conferido (10mg/kg × 10kg ÷ 3 doses/dia = 33,33mg/dose;
-    // ÷ 100mg/mL = 0,333mL; × 20 gotas/mL = 6,67 → arredondado para 7 gotas).
-    expect(resultado?.gotas_por_dose).toBe(7);
+    // RM-103: `mg/kg` é POR TOMADA (só `mg/kg/dia` é total do dia). O RM-54
+    // fixava 7 gotas dividindo 10 mg/kg × 10 kg por 3 doses/dia — a divisão
+    // indevida (subdose 3x) que a RM-103 corrigiu. Valor correto: 10 mg/kg ×
+    // 10 kg = 100 mg/dose; ÷ 100 mg/mL = 1 mL; × 20 gotas/mL = 20 gotas.
+    expect(resultado?.gotas_por_dose).toBe(20);
   });
 
   it('formulação gotas SEM gotas_por_mL cadastrado BLOQUEIA o cálculo — nunca assume 20 gotas/mL', () => {
