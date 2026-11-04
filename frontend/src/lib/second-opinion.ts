@@ -2,7 +2,7 @@
 // Exibe alternativas válidas com evidência, benefícios, riscos e diretriz
 
 export type NivelEvidencia = 'A' | 'B' | 'C';
-export type GrauRecomendacao = 'I' | 'IIa' | 'IIb' | 'III';
+export type GrauRecomendacao = 'I' | 'IIa' | 'IIb' | 'III' | 'Consenso';
 
 export interface EstudoPrincipal {
   nome: string;
@@ -961,7 +961,7 @@ const CONDICOES: CondicaoClinica[] = [
         beneficios: ['1ª linha estabelecida para crise leve-moderada', 'Baixo custo e ampla disponibilidade', 'Sem risco cardiovascular (ao contrário do triptano)'],
         riscos: ['Dispepsia e risco de sangramento GI com uso frequente', 'Nefrotoxicidade com uso crônico', 'Risco de cefaleia por uso excessivo de analgésico (MOH) se usado > 2–3 dias/semana'],
         contraindicacoes: ['Úlcera péptica ativa', 'DRC avançada (TFG < 30)', 'Hipersensibilidade a AINEs/AAS', 'Terceiro trimestre de gestação'],
-        diretriz: { orgao: 'American Headache Society (AHS)', ano: 2021, recomendacao: 'AINEs são 1ª linha para crise leve-moderada, limitados a ≤ 2–3 dias/semana para evitar MOH. Ailani J et al., Headache 2021;61(7):1021-1039, doi: 10.1111/head.14153.', grau: 'I', nivel: 'A' },
+        diretriz: { orgao: 'American Headache Society (AHS)', ano: 2021, recomendacao: 'Consenso da AHS 2021 (sem graduação formal de classe): AINEs para crise leve-moderada, limitados a ≤ 2–3 dias/semana para evitar MOH. Ailani J et al., Headache 2021;61(7):1021-1039, doi: 10.1111/head.14153. Evidência do naproxeno: Cochrane (Law 2013, doi 10.1002/14651858.CD009455.pub2): naproxeno 500–825 mg supera o placebo, mas o NNT é 11 para livre de dor em 2 h (qualidade moderada) e a revisão o considera pouco útil como analgésico isolado.', grau: 'Consenso', nivel: 'A' },
         perfil_ideal: 'Crise leve-moderada, sem contraindicação a AINE, sem fator de risco cardiovascular relevante',
       },
       {
@@ -978,7 +978,7 @@ const CONDICOES: CondicaoClinica[] = [
         beneficios: ['Tratamento específico (agonista 5-HT1B/1D), não só analgésico inespecífico', 'Eficaz mesmo em crises intensas', 'Boa resposta mesmo tardiamente no curso da crise'],
         riscos: ['Formigamento/pressão torácica (geralmente benignos)', 'Risco de MOH se usado > 2 dias/semana', 'Contraindicado em doença cardiovascular'],
         contraindicacoes: ['Doença arterial coronariana ou equivalente isquêmico', 'AVC/AIT prévio', 'HAS não controlada', 'Enxaqueca hemiplégica ou basilar', 'Uso concomitante de ergotamínicos ou IMAO'],
-        diretriz: { orgao: 'American Headache Society (AHS)', ano: 2021, recomendacao: 'Triptanos são o tratamento específico de 1ª linha para crise moderada-grave, com avaliação de risco cardiovascular obrigatória antes da 1ª prescrição. Ailani J et al., Headache 2021;61(7):1021-1039, doi: 10.1111/head.14153.', grau: 'I', nivel: 'A' },
+        diretriz: { orgao: 'American Headache Society (AHS)', ano: 2021, recomendacao: 'Consenso da AHS 2021 (sem graduação formal de classe): triptanos como tratamento específico para crise moderada-grave, com avaliação de risco cardiovascular antes da 1ª prescrição. Ailani J et al., Headache 2021;61(7):1021-1039, doi: 10.1111/head.14153. Nível A: revisões Cochrane do sumatriptano (NNT 6,1 para 50 mg).', grau: 'Consenso', nivel: 'A' },
         perfil_ideal: 'Crise moderada-grave, sem risco cardiovascular, falha ou contraindicação a AINE',
       },
       {
@@ -1159,6 +1159,7 @@ export const GRAU_COR: Record<GrauRecomendacao, string> = {
   IIa: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
   IIb: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
   III: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
+  Consenso: 'bg-teal-100 text-teal-800 dark:bg-teal-900/40 dark:text-teal-300',
 };
 
 // ─── Bridge to Medical Copilot Second Opinion ────────────────

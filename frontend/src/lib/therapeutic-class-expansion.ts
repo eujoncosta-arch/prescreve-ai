@@ -342,7 +342,7 @@ function buildEvidencia(entity: DrugEntity, fallback: ScientificReference): Scie
   if (guidelines.length === 0) return fallback;
 
   let nivel: 'A' | 'B' | 'C' | 'D' = fallback.nivel_evidencia.nivel;
-  let grau: 'I' | 'IIa' | 'IIb' | 'III' = fallback.nivel_evidencia.grau;
+  let grau: ScientificReference['nivel_evidencia']['grau'] = fallback.nivel_evidencia.grau;
   if (evidenciaRef) {
     const m = evidenciaRef.value.match(/Nível\s*([ABCD])/i);
     const g = evidenciaRef.value.match(/Classe\s*(I{1,3}a?|IIb)/i);

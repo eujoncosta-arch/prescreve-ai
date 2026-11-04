@@ -1146,7 +1146,7 @@ export const MOLECULES_DB: MoleculaComparavel[] = [
     grau_recomendacao: 'I',
     diretriz_principal: 'AHS Consensus 2021 (enxaqueca) · ACR/EULAR 2020 (gota)',
     eficacia: [
-      { desfecho: 'Tratamento agudo de crise de enxaqueca leve-moderada', reducao: '1ª linha estabelecida', estudo: 'Ailani J et al., Headache 2021 (AHS Consensus)' },
+      { desfecho: 'Tratamento agudo de crise de enxaqueca leve-moderada', reducao: 'NNT 11 para livre de dor em 2 h (naproxeno 500–825 mg vs placebo); indicado pelo consenso AHS 2021 para crise leve-moderada', estudo: 'Law S et al., Cochrane 2013 (CD009455, doi 10.1002/14651858.CD009455.pub2); Ailani J et al., Headache 2021 (consenso AHS)' },
       { desfecho: 'Tratamento agudo de crise de gota', reducao: '1ª linha estabelecida, junto com colchicina', estudo: 'FitzGerald JD et al., Arthritis Care Res 2020 (ACR/EULAR)' },
     ],
     interacoes: [

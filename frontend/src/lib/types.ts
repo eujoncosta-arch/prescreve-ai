@@ -111,7 +111,7 @@ export interface DiagnosticSupport {
 
 export interface EvidenceLevel {
   nivel: 'A' | 'B' | 'C' | 'D';
-  grau: 'I' | 'IIa' | 'IIb' | 'III';
+  grau: 'I' | 'IIa' | 'IIb' | 'III' | 'Consenso';
   descricao: string;
 }
 
