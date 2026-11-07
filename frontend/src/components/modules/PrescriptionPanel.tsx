@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import { useApp } from '@/lib/store';
 import type { Prescription, PrescriptionItem } from '@/lib/types';
 import { mapFrequenciaParaContrato, mapUnidadeParaContrato } from '@/lib/dose-calculator';
+import { registroDeRecomendacaoTexto, registroDeInclusaoManual, registrarEdicaoPosologica, semRegistroParaPersistir } from '@/lib/prescricao-proveniencia';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -130,6 +131,12 @@ export function PrescriptionPanel({ onComplete }: PrescriptionPanelProps) {
         duracao: m.dose.duracao ?? 'Uso contínuo',
         uso_continuo: m.dose.duracao === 'Contínuo',
         dose_estruturada: doseEstruturada,
+        // RM-107.1.1-E2 (F2): texto de recomendação ⇒ não avaliada; nada é promovido nem inferido como confirmado.
+        posologia_registrada: registroDeRecomendacaoTexto({
+          texto: m.posologia_completa,
+          dose: doseEstruturada,
+          campos_padrao: ['forma_farmaceutica', 'quantidade', ...(m.dose.duracao ? [] : ['duracao'])],
+        }),
       };
     });
 
@@ -150,7 +157,10 @@ export function PrescriptionPanel({ onComplete }: PrescriptionPanelProps) {
     if (value === null) return;
     setPrescricao(prev => ({
       ...prev,
-      itens: prev.itens.map(item => item.id === id ? { ...item, [field]: value } : item),
+      // RM-107.1.1-E2 (F3c): valor gravado idêntico ao anterior; a proveniência é invalidada só se a posologia mudou.
+      itens: prev.itens.map(item => item.id === id
+        ? { ...item, [field]: value, posologia_registrada: registrarEdicaoPosologica(item.posologia_registrada, field, (item as unknown as Record<string, unknown>)[field], value) }
+        : item),
     }));
   };
 
@@ -169,6 +179,8 @@ export function PrescriptionPanel({ onComplete }: PrescriptionPanelProps) {
           via: 'Oral',
           duracao: '',
           uso_continuo: false,
+          // RM-107.1.1-E2 (F3b): inclusão manual ⇒ sempre não avaliada; sem dose estruturada fabricada.
+          posologia_registrada: registroDeInclusaoManual({ texto: '', campos_padrao: ['forma_farmaceutica', 'via'] }),
         },
       ],
     }));
@@ -186,7 +198,7 @@ export function PrescriptionPanel({ onComplete }: PrescriptionPanelProps) {
   const handleFinalize = async () => {
     setLoading(true);
     await new Promise(r => setTimeout(r, 800));
-    dispatch({ type: 'UPDATE_PRESCRIPTION', payload: { ...prescricao, id: Date.now().toString() } });
+    dispatch({ type: 'UPDATE_PRESCRIPTION', payload: { ...prescricao, itens: prescricao.itens.map(semRegistroParaPersistir), id: Date.now().toString() } });
     setLoading(false);
     // Honesto quanto ao estado real: o dado só está confirmado localmente
     // neste momento. A sincronização com o backend acontece em seguida

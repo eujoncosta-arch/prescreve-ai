@@ -297,6 +297,12 @@ export interface PrescriptionItem {
    * dose estruturada (nunca envia só o texto livre de `posologia`).
    */
   dose_estruturada?: DoseEstruturada;
+  /**
+   * RM-107.1.1-E2: proveniência/avaliação da posologia, SOMENTE em memória no `PrescriptionPanel`.
+   * É removida antes de `UPDATE_PRESCRIPTION` (nunca chega ao store/localStorage/backend nesta etapa).
+   * Ausente ⇒ interpretado como `nao_avaliada`.
+   */
+  posologia_registrada?: import('./dose-contract/registro').PosologiaRegistrada;
 }
 
 export interface Prescription {

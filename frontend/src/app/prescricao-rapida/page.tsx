@@ -21,6 +21,8 @@ import { SafetyCoverageNotice } from '@/components/modules/SafetyCoverageNotice'
 import { AlergiasNotice } from '@/components/modules/AlergiasNotice';
 import { normalizarIdade, formatarIdade, type UnidadeIdade } from '@/lib/age-contract';
 import { dadosClinicosPreenchidos } from '@/lib/patient-session';
+import { registroDeFullDoseResult, type PosologiaRegistrada } from '@/lib/dose-contract';
+import { registroDeInclusaoManual, registrarEdicaoPosologica, semRegistroParaPersistir } from '@/lib/prescricao-proveniencia';
 import { ROTULO_CAMPO } from '@/lib/safety-context';
 import { PrescriptionPrintPreview } from '@/components/modules/PrescriptionPrintPreview';
 import type { StatusAlergiasInformado, TipoAlergia, GravidadeAlergia, AlergiasInput } from '@/lib/safety-allergy';
@@ -114,6 +116,11 @@ interface RxItem {
   produto_id?: string;
   bula_profissional?: string;
   bula_paciente?: string;
+  /**
+   * RM-107.1.1-E2: proveniência/avaliação da posologia, SOMENTE em memória. Ausente (item legado/de protocolo) ⇒ interpretado como `nao_avaliada`.
+   * Nunca é gravado em favoritos (ver `saveFavorite`).
+   */
+  posologia_registrada?: PosologiaRegistrada;
 }
 
 interface FavoriteProtocol {
@@ -328,6 +335,8 @@ export default function PrescricaoRapida() {
       duracao: '30 dias',
       tipo_receita: selectedDrug.alertas_especiais.some(a => a.includes('RECEITA ESPECIAL')) ? 'especial_branca' : 'simples',
     };
+    // RM-107.1.1-E2 (F3b): inclusão manual ⇒ SEMPRE não avaliada; nenhuma dose estruturada fabricada; valores do item inalterados.
+    item.posologia_registrada = registroDeInclusaoManual({ texto: item.dose, campos_padrao: ['via', 'frequencia', 'duracao'] });
     setRxItems(prev => [...prev, item]);
     toast.success(`${selectedDrug.molecula} adicionado à prescrição`);
     setSelectedDrug(null);
@@ -368,6 +377,14 @@ export default function PrescricaoRapida() {
       uso_continuo: false,
       tipo_receita: selectedDrug.alertas_especiais.some(a => a.includes('RECEITA ESPECIAL')) ? 'especial_branca' : 'simples',
     };
+    // RM-107.1.1-E2 (F3): proveniência do motor C. Os campos legados acima permanecem exatamente como antes.
+    item.posologia_registrada = registroDeFullDoseResult(result, { via: selectedDrug.dose_adulto.via }, {
+      campos_padrao: [
+        'via',
+        ...(brand?.formas?.[0] ? [] : ['forma_farmaceutica']),
+        ...(duracao ? [] : ['duracao']),
+      ],
+    });
     setRxItems(prev => [...prev, item]);
     toast.success(`${selectedDrug.molecula} adicionado — dose calculada automaticamente`);
     setSelectedDrug(null);
@@ -382,7 +399,10 @@ export default function PrescricaoRapida() {
   };
 
   const updateItem = (id: string, field: keyof RxItem, value: string | boolean) => {
-    setRxItems(prev => prev.map(i => i.id === id ? { ...i, [field]: value } : i));
+    // RM-107.1.1-E2 (F3c): o valor gravado é o mesmo de antes; só a proveniência é atualizada (invalida avaliação se a posologia mudou).
+    setRxItems(prev => prev.map(i => i.id === id
+      ? { ...i, [field]: value, posologia_registrada: registrarEdicaoPosologica(i.posologia_registrada, field, i[field], value) }
+      : i));
   };
 
   // ── Save favorite ─────────────────────────────────────────
@@ -397,7 +417,8 @@ export default function PrescricaoRapida() {
       itens: rxItems,
       criado_em: new Date().toISOString(),
     };
-    const updated = [...favorites, fav];
+    // RM-107.1.1-E2: a proveniência é só em memória da prescrição atual — nunca entra nos favoritos (memória ou localStorage).
+    const updated = [...favorites, { ...fav, itens: fav.itens.map(semRegistroParaPersistir) }];
     setFavorites(updated);
     localStorage.setItem('prescreve-ai-favoritos', JSON.stringify(updated));
     toast.success(`Protocolo "${nome}" salvo`);

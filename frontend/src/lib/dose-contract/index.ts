@@ -6,3 +6,4 @@ export * from './rules';
 export * from './evaluate';
 export * from './adapters';
 export * from './compat';
+export * from './registro';
