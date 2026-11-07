@@ -1,0 +1,55 @@
+const fs = require('fs');
+const rows = JSON.parse(fs.readFileSync(__dirname + '/cls1.json', 'utf8'));
+const E = JSON.parse(fs.readFileSync(__dirname + '/entities.json', 'utf8'));
+const strip = s => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const W = s => ' ' + s + ' ';
+
+// ── 1. léxicos (palavras inteiras, texto normalizado)
+const CLASSE = ['corticosteroide','analgesico','anti inflamatorio','anti histaminico','anti h1','sartana','antialdosterona','benzo','heparina baixo peso','antipsicotico atipico','ieca','bra','ara ii','arni','arm','bcc','aine','aines','ains','isrs','irsn','isglt2','sglt2','sglt 2','dpp4','dpp 4','glp1','glp 1','imao','tca','ibp','ppi','saba','sama','laba','lama','ics','pde5','pde4','pde 3','p2y12','xoa','avk','hbpm','iag','aee','bnm','bzd','ibb','dmard','g csf','nassa','nitrato','nitratos','estatina','estatinas','fibrato','digitalico','diuretico','tiazidico','glitazona','gliptina','biguanida','tiazolidinediona','sulfonilureia','anticoagulante','antiagregante','antiarritmico','antibiotico','antifungico','antiviral','antidepressivo','antipsicotico','anticonvulsivante','ansiolitico','hipnotico','benzodiazepino','benzodiazepinico','opioide','opioid','corticoide','glicocorticoide','mineralocorticoide','imunossupressor','laxativo','antiemetico','antidiarreico','mucolitico','broncodilatador','vasopressor','vasopresor','inotropico','inodilatador','trombolitico','fibrinolitico','antifibrinolitico','surfactante','surfatante','antidoto','quelante','biologico','macrolideo','macrolidio','penicilina','cefalosporina','carbapenem','quinolona','fluoroquinolona','fluorquinolona','glicopeptideo','oxazolidinona','lincosamida','tetraciclina','nitroimidazol','polieno','equinocandina','taxano','platina','antraciclina','antifolato','barbiturico','neuroleptico','antiacido','procinetico','anticoncepcional','minipilula','pilula','uterotonico','canabinoide','flebotonico','antimuscarinico','anticolinergico','antiparasitario','antiangiogenico','retinoide','bisfosfonato','calcimimetico','antitireoideo','antidemencial','antihistaminico','estabilizador humor','estimulante','psicoestimulante','imunoterapia','antiobesidade','hipolipemiante','coxibe','cox2','cox 2','gliptinas','glifozina','triptano','insulina basal','insulina rapida','insulina simples','insulina intermediaria','insulina isofana','insulina prolongada','insulina ultra prolongada','analogo basal','analogo ultrarapido','biguanida','agonista','antagonista','inibidor','bloqueador','bloq','beta bloq','betabloqueador','antileucotriene','leucotrieno','antagonista nmda','alfa bloqueador','alfa 2 agonista','vitamina d','vitamina b9','vitamina gestacao','suplemento gestacional','suplemento ferro gestacao','hormonio antidiuretico','anestesia iv','anestesia dissociativa','sedacao','relaxante','aldosterona','anti aldosterona','mineralocorticoide','inibidor'];
+const INDIC = ['artrite','dor aguda','tdah','tdm','diabetes','nefropatia diabetica','hipertensao','hipertensao pulmonar','hap pediatrica','disfuncao eretil','hiperplasia prostatica','parkinson','vertigem','meniere','herpes','zoster','hsv','convulsao','status epilepticus','epilepsia','rinite','polipo nasal','lupus','acne','acne grave','diarreia','pneumonia','sinusite','tabagismo','obesidade','osteoporose','hipotireoidismo','hipertireoidismo','doenca de graves','meningite','gastrite','ulcera','drge','nausei','vomito','febre','ansiedade','ansiedade generalizada','toc','bipolar','esquizofrenia','esquizofrenia refrataria','insonia','enxaqueca','alzheimer','demencia','anemia renal','acidose metabolica cronica drc','hipercalemia','hipocalcemia','hiperfosfatemia dialise','hiperfosfatemia','hiperparatireoidismo dialise','hipercalcemia paratireoidea','endometriose','eclampsia','pre eclampsia grave','pre eclampsia leve','hipertensao gestacional','anafilaxia','bradicardia','arritmia','ischemia','angina sl','cardioprotecao','giardiase','criptosporidiose','escabiose','oncocercose','neurocisticercose','estrongiloide tratamento','candida tratamento','candida uti','aspergillus tratamento','mucormicose','mssa tratamento','mrsa tratamento','mrsa oral','vre tratamento','esbl tratamento','esbl ambulatorial','influenza tratamento','herpes tratamento','h pylori','pcp profilaxia','trichomonas','rickettsia','chlamydia','artrose','neuralgia trigemeo','neuropatia dor','dor neuropatica','dor moderada','dor intensa','dor pos operatoria','dor musculoesqueletica','fibromialgia lyrica','urticaria','prurido','hipotensao ortostatica fludrocortisona','insuficiencia adrenal','apneia prematuridade','sdr prematuro','bronquiolite prematuro','neutropenia quimio','sindrome lise tumoral','slt','slt alto risco','choque cardiogenico','ic descompensada','ic refrataria','tep macico','avc isquemico','pcr','pcr hipercalemia','acidose grave','hipotensao','trauma hemorragico','hemorragia pos parto','hpp','inducao parto','maturacao pulmonar','maturacao colo','amadurecimento cervical','neuroprotecao fetal','prevencao dtn','suporte luteo','hiperprolactinemia','prolactinoma','gastroparesia','estertores terminais','delirium paliativo','agitacao terminal','constipacao opioide','constipacao cronica peg','encefalopatia hepatica lactulose','hipertensao pulmonar persistente rn','hpprn','convulsao neonatal','epilepsia neonatal','ehi','sepse','2a linha sepse','profilaxia cirurgica','profilaxia hemorragica rn','profilaxia hiperuricemia','dpoc exacerbacoes','asma alergica grave','asma eosinofilica','dermatite atopica biologico','dor neuropatica gabapentina','colesterol','pele infeccao','itu quinolona','meningite antibiotico','dpoc profilaxia','dii manutencao','fibrose cistica mucolitico'];
+const SINTOMA = ['febre','dor','nausei','nauseia','nauseias','vomito','diarreia','prurido','tosse','vertigem','convulsao','dispneia','constipacao','agitacao','insonia','bradicardia','arritmia','estertores terminais','dor intensa','dor moderada'];
+const GENERICO = ['atipico','tipico','spray nasal','motilidade','controlado','multimodal','antidepressivo multimodal','tab','add','ic','dae','puff oral asma','o2 terapia','oxigenoterapia','oxigenoterapia domiciliar','cateter nasal','mascara venturi','otld','heliox','helio oxigenio','he:o2','baixa densidade gas respiratorio','triple therapy ellipta','smart therapy','combinacao analgesica','who degrau 3 especial','opioide forte','opioide ir seguro','patch opioide','patch','multimodal paliativo','ce','ne','da','nor','dex','vsr','th','pop','mst','sri','sux','sri rapida'];
+// abreviações inequívocas (documentadas como sigla do princípio ativo)
+const ABREV = { hctz: 'hidroclorotiazida', aas: 'acido acetilsalicilico', mtx: 'metotrexato', ptu: 'propiltiouracil', '5fu': 'fluorouracil', '5 fu': 'fluorouracil', ddp: 'cisplatina', mdz: 'midazolam', hbpm: null };
+// DCI/USAN estrangeiros equivalentes (equivalência universal documentada; só classifica, não cria identidade)
+const DCI_ALT = { acetaminophen: 'paracetamol', albuterol: 'salbutamol', metamizol: 'dipirona', metamizole: 'dipirona', epinephrine: 'adrenalina', adrenalina: 'epinefrina', warfarin: 'varfarina', aspirin: 'acido acetilsalicilico', aspirina: 'acido acetilsalicilico', ketamine: 'cetamina', phenytoin: 'fenitoina', phenobarbital: 'fenobarbital', 'caffeine citrate': 'cafeina', 'polyethylene glycol': 'macrogol', lithium: 'litio', amlodipine: 'anlodipino' };
+
+function lev(a, b) { const m = a.length, n = b.length; const d = Array.from({ length: m + 1 }, (_, i) => [i, ...Array(n).fill(0)]); for (let j = 0; j <= n; j++) d[0][j] = j; for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); return d[m][n]; }
+const has = (t, list) => { const s = W(t); return list.some(w => s.includes(W(w))); };
+const eq = (t, list) => list.includes(t);
+
+const byId = new Map(E.map(e => [e.id, e]));
+function classificar(r, ignorarPre) {
+  if (r.cat && !ignorarPre) return r;
+  const t = r.norm, e = byId.get(r.ent), nome = strip(e.name).replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+  const nomeW = nome.split(' ')[0];
+  const mk = (cat, conf, ev) => ({ ...r, cat, conf, ev });
+  // a) abreviação inequívoca
+  if (ABREV[t] !== undefined && ABREV[t]) return mk('abreviacao_inequivoca', 'alta', `sigla de ${ABREV[t]}`);
+  // b) DCI estrangeiro documentado
+  if (DCI_ALT[t] && (nome.includes(DCI_ALT[t].split(' ')[0]) || strip(e.fullName || '').includes(DCI_ALT[t].split(' ')[0]))) return mk('sinonimo_farmacologico_valido', 'media', `DCI/USAN alternativo de ${e.name}`);
+  // c) variante ortográfica de uma única palavra do próprio princípio ativo
+  const palavrasNome = nome.split(' ').filter(w => w.length >= 5); const alvo = !t.includes(' ') && t.length >= 5 && !has(t, CLASSE) ? palavrasNome.find(w => t.slice(0, 4) === w.slice(0, 4) && lev(t, w) <= 3) : null;
+  if (alvo) return mk('sinonimo_farmacologico_valido', 'media', `variante ortográfica/DCI de ${e.name} (lev=${lev(t, alvo)})`);
+  // d) classe terapêutica (palavra de classe como termo inteiro ou como núcleo)
+  if (eq(t, GENERICO)) return mk('termo_generico', 'media', 'termo genérico/contextual sem identidade farmacológica');
+  if (eq(t, SINTOMA)) return mk('sintoma', 'alta', 'sintoma');
+  if (eq(t, INDIC) || has(t, INDIC.filter(x => x.length >= 6))) {
+    // indicação (se também citar uma classe, prevalece a classe abaixo)
+    if (!has(t, CLASSE)) return mk('indicacao_clinica', 'media', 'indicação clínica / contexto de uso');
+  }
+  if (has(t, CLASSE)) return mk('classe_terapeutica', 'media', 'contém termo de classe terapêutica: ' + CLASSE.filter(w => W(t).includes(W(w))).slice(0, 2).join(', '));
+  if (has(t, INDIC)) return mk('indicacao_clinica', 'baixa', 'contém termo de indicação clínica');
+  return mk('nao_validado', 'baixa', 'sem evidência de equivalência verificável (possível nome comercial, sigla ou contexto)');
+}
+const out = rows.map(r => { const c = classificar(r, false); const lex = classificar({ ...r, cat: null }, true); return { ...c, lex: lex.cat }; });
+
+const por = {}; out.forEach(r => { por[r.cat] = (por[r.cat] || 0) + 1; });
+console.log('TOTAL', out.length, JSON.stringify(por, null, 1));
+fs.writeFileSync(__dirname + '/cls2.json', JSON.stringify(out));
+// amostras
+for (const c of ['classe_terapeutica', 'indicacao_clinica', 'sintoma', 'termo_generico', 'abreviacao_inequivoca', 'sinonimo_farmacologico_valido']) {
+  const s = out.filter(r => r.cat === c && r.conf !== 'alta' || r.cat === c).slice(0, 14).map(r => r.sin + '→' + r.ent).join('; ');
+  console.log('\n[' + c + ']', s);
+}
+console.log('\n[nao_validado amostra]', out.filter(r => r.cat === 'nao_validado').slice(0, 40).map(r => r.sin).join('; '));

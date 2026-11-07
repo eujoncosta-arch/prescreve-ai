@@ -1,0 +1,6717 @@
+{
+ "entidades": 382,
+ "entidadesComInteracao": 382,
+ "refsEntidade": 360,
+ "porSev": {
+  "moderada": 456,
+  "grave": 261,
+  "contraindicado": 70,
+  "leve": 83
+ },
+ "stat": {
+  "total": 870,
+  "comFonte": 31,
+  "comMecanismo": 655,
+  "comConduta": 258
+ },
+ "distintos": 491,
+ "duplicadas": [],
+ "divergentes": [
+  "cimetidina->teofilina:grave × teofilina->cimetidina:moderada",
+  "cimetidina->teofilina:grave × teofilina->cimetidina:moderada"
+ ],
+ "semReciproca": 283,
+ "semRecAmostra": [
+  "olmesartana -> enalapril",
+  "olmesartana -> espironolactona",
+  "olmesartana -> espironolactona",
+  "valsartana -> enalapril",
+  "anlodipino -> ciclosporina",
+  "hctz -> digoxina",
+  "hctz -> digoxina",
+  "carvedilol -> verapamil",
+  "carvedilol -> amiodarona",
+  "carvedilol -> amiodarona-pcr",
+  "bisoprolol -> verapamil",
+  "bisoprolol -> amiodarona",
+  "bisoprolol -> amiodarona-pcr",
+  "furosemida -> digoxina",
+  "furosemida -> digoxina"
+ ],
+ "comSubstring": 580,
+ "comIgualdade": 239,
+ "soSubstring": 343,
+ "semCobertura": [
+  "AINEs",
+  "Indutores de CYP3A4 (rifampicina, fenitoína, carbamazepina)",
+  "Hipoglicemiantes / insulina",
+  "Diuréticos espoliadores de potássio",
+  "Vacinas de vírus vivo",
+  "Alisquireno",
+  "Sinvastatina",
+  "Aminoglicosídeos",
+  "Contraste iodado IV",
+  "Insulina",
+  "Sulfonilureias (glibenclamida, gliclazida)",
+  "Beta-bloqueadores",
+  "Ritonavir",
+  "Indutores potentes de CYP (fenobarbital, rifampicina, fenitoína, carbamazepina)",
+  "Genfibrozila",
+  "Álcool",
+  "Opioides",
+  "Diuréticos",
+  "IMAOs",
+  "Paroxetina/Fluoxetina",
+  "AINE/Aspirina",
+  "Rifampicina",
+  "QT-prolongadores",
+  "Anticoncepcionais orais",
+  "Levodopa",
+  "Anti-histamínicos (H1)",
+  "Inibidores da MAO (incl. MAO-B, ex.: selegilina)",
+  "Probenecida/Cimetidina",
+  "Suco cítrico/maçã",
+  "Cetoconazol/Eritromicina",
+  "Anticoagulantes",
+  "Outros AINEs",
+  "Anti-hipertensivos",
+  "Antidiabéticos",
+  "Inibidores CYP3A4",
+  "Anticoagulantes (varfarina)",
+  "Tramadol/triptanos",
+  "Tamoxifeno",
+  "AINEs/tiazídicos",
+  "IECA/BRA",
+  "Antihipertensivos",
+  "IMAOs/antidepressivos serotoninérgicos",
+  "Benzodiazepínicos/depressores SNC",
+  "Verapamil/diltiazem",
+  "Clonidina",
+  "IECA (duplo bloqueio)",
+  "Inibidores PDE5 (sildenafila/tadalafila)",
+  "Nitratos (nitroglicerina, isossorbida)",
+  "Inibidores CYP3A4 (cetoconazol, ritonavir)",
+  "Antifúngicos azólicos (cetoconazol)",
+  "Eritromicina/claritromicina",
+  "Amantadina/quetamina",
+  "Anticolinérgicos",
+  "Betabloqueadores/antiarrítmicos",
+  "Carbamazepina e outros indutores enzimáticos",
+  "Depressores do SNC (álcool, benzodiazepínicos, opioides)",
+  "Inibidores CYP3A4 fortes (cetoconazol)",
+  "Fluconazol/miconazol",
+  "AINEs/salicilatos",
+  "Amiodarona/QT-prolongadores",
+  "(sem interação medicamentosa relevante documentada)",
+  "Tetraciclinas",
+  "Vitamina A suplementar",
+  "Álcool (paracetamol)",
+  "Antiácidos/cálcio/ferro oral",
+  "Antiarrítmicos IA/III (amiodarona)",
+  "Antiácidos com Al/Mg/Ca",
+  "beta-bloqueador",
+  "Verapamil / Diltiazem (BCC não di-hidropiridínicos)",
+  "Insulina / hipoglicemiantes",
+  "Losartana/BRA",
+  "Heparina",
+  "BRA/Alisquireno",
+  "Diuréticos poupadores de K+",
+  "IECA (Enalapril, Ramipril, Perindopril)",
+  "Espironolactona/Eplerenona",
+  "Estatinas (atorvastatina)",
+  "Verapamil/Diltiazem",
+  "Insulina/Hipoglicemiantes",
+  "Betabloqueadores",
+  "CYP3A4 inibidores (cetoconazol, claritromicina)",
+  "Betabloqueadores (VO)",
+  "Estatinas (sinvastatina, lovastatina)",
+  "Colchicina",
+  "Inibidores CYP3A4 potentes",
+  "Suplementos de K+",
+  "Estatinas (sinvastatina)",
+  "Diltiazem/Verapamil",
+  "QT prolongadores (haloperidol, citalopram, azitromicina)",
+  "Quinidina",
+  "Diuréticos (furosemida, HCTZ, clortalidona)",
+  "Eritromicina/Claritromicina",
+  "Fluconazol/Metronidazol",
+  "AAS/AINEs",
+  "Vitamina K (alimentos)",
+  "Antibióticos (amplo espectro)",
+  "Inibidores CYP3A4 + P-gp (cetoconazol, ritonavir, claritromicina)",
+  "Indutores CYP3A4 + P-gp (rifampicina, fenitoína, carbamazepina)",
+  "Inibidores CYP3A4 + P-gp",
+  "Indutores CYP3A4 + P-gp (rifampicina)",
+  "AINEs/AAS",
+  "Inibidores P-gp (cetoconazol, dronedarona, ciclosporina, itraconazol)",
+  "Omeprazol/Esomeprazol",
+  "Varfarina/DOACs",
+  "AAS > 100 mg/dia",
+  "Fibratos (fenofibrato)",
+  "Colestiramina",
+  "Estatinas",
+  "Sildenafil/Tadalafil/Vardenafil (iPDE5)",
+  "iPDE5 (sildenafil, tadalafil)",
+  "Inibidores CYP3A4 (cetoconazol, claritromicina)",
+  "Poupadores de potássio/suplementos de K+",
+  "Digitálicos",
+  "Barbitúricos/narcóticos/álcool",
+  "Corticosteroides",
+  "iSGLT2 (empagliflozina, dapagliflozina)",
+  "IECA/ARA-II",
+  "Tiazolidinedionas",
+  "GLP-1 (liraglutida, semaglutida)",
+  "GLP-1/iSGLT2",
+  "Sulfonilureias",
+  "CYP2C8 inibidores (gemfibrozila)",
+  "CYP2C8 indutores (rifampicina)",
+  "Insulina/Sulfonilureias",
+  "Antiácidos com Al ou Mg",
+  "Betabloqueadores (propranolol)",
+  "Cálcio/Ferro/Antiácidos",
+  "Cálcio (suplemento)",
+  "Antirretrovirais (lopinavir)",
+  "IMAO",
+  "Metoprolol/Betabloqueadores",
+  "Soluções de cálcio IV (Ringer lactato, gluconato de Ca)",
+  "Bloqueadores neuromusculares",
+  "Álcool (etanol)",
+  "Antiácidos com Al/Mg, Ca2+, Fe, Zinco",
+  "Retinoides (isotretinoína)",
+  "ACE/BRA + TMP",
+  "Aminoglicosídeos (amicacina, gentamicina)",
+  "Piperacilina-tazobactam",
+  "Diuréticos de alça (furosemida)",
+  "ISRS/IRSN (sertralina, venlafaxina, duloxetina)",
+  "IMAO (selegilina, fenelzina)",
+  "Simpaticomiméticos (pseudoefedrina, dopamina)",
+  "Tacrolimus/Ciclosporina",
+  "Hipoglicemiantes (sulfonilureias)",
+  "Sirolimus (rapamicina)",
+  "Warfarina",
+  "Rifampicina, dexametasona, fenitoína, carbamazepina",
+  "Diuréticos de alça",
+  "Ciclosporina/Tacrolimus",
+  "Antiácidos com Al/Mg, Fe, Ca, Zn",
+  "Tenofovir",
+  "Vacina influenza oral atenuada (LAIV)",
+  "Praziquantel",
+  "Benzodiazepínicos/barbitúricos",
+  "Beta-bloqueadores não seletivos",
+  "IMAO / antidepressivos tricíclicos",
+  "Tiotrópio / Umeclidínio (LAMA)",
+  "LAMA (tiotrópio, umeclidínio)",
+  "Outros anticolinérgicos (tiotrópio, ipratrópio)",
+  "Outros LAMAs / ipratrópio",
+  "Ritonavir / Cobicistate",
+  "Cetoconazol / Itraconazol",
+  "Ritonavir / inibidores CYP3A4 potentes",
+  "Inibidores potentes de CYP3A4 (cetoconazol, ritonavir, itraconazol)",
+  "Ritonavir / inibidores CYP3A4",
+  "Inibidores CYP3A4 potentes (cetoconazol, ritonavir)",
+  "Outros LAMAs (tiotrópio, umeclidínio)",
+  "Outros LAMAs",
+  "Outros anticolinérgicos",
+  "Inibidores CYP3A4 (ritonavir, cetoconazol)",
+  "Ciprofloxacino / Claritromicina",
+  "Rifampicina / Carbamazepina / Fenitoína",
+  "(sem interação farmacocinética relevante)",
+  "Vacinas vivas atenuadas",
+  "Carvão ativado (paracetamol IV)",
+  "Antibióticos (amoxicilina, eritromicina, cefuroxima)",
+  "Antitussígenos (codeína, dextrometorfano)",
+  "Anticolinérgicos/atropínicos (secantes de secreção)",
+  "Outros medicamentos inalados (no mesmo nebulizador)",
+  "Eritromicina / claritromicina",
+  "Propranolol",
+  "Rifampicina / carbamazepina / fenitoína",
+  "Eritromicina / cetoconazol",
+  "Fluorquinolonas",
+  "Bleomicina (atual ou histórico)",
+  "Paraquat (intoxicação)",
+  "Fármacos nebulizados (broncodilatadores)",
+  "QT-prolongadores (haloperidol, amiodarona, quinolonas)",
+  "IMAO (selegilina, fenelzina, tranilcipromina)",
+  "Tramadol / Triptanos",
+  "Antipsicóticos metabolizados por CYP2D6 (haloperidol, risperidona)",
+  "QT-prolongadores (antiarrítmicos, antipsicóticos, azóis)",
+  "Omeprazol / Esomeprazol",
+  "Benzodiazepínicos (diazepam, alprazolam)",
+  "Álcool / benzodiazepínicos",
+  "Antiarrítmicos classe Ia (quinidina, procainamida)",
+  "Anticolinérgicos (biperideno, oxibutinina, atropina)",
+  "Fluoxetina / paroxetina",
+  "ISRS (fluoxetina, paroxetina)",
+  "ISRS/IRSN/TCA/outros antidepressivos",
+  "Tiramina dietética (queijo curado, vinho tinto, embutidos)",
+  "Meperidina / tramadol / dextromefetamina",
+  "Simpaticomiméticos (pseudoefedrina, fenilefrina, dopamina)",
+  "ISRS / outros serotoninérgicos",
+  "Opioídes (tramadol, petidina)",
+  "Lítio (altas doses)",
+  "Carbamazepina / rifampicina",
+  "Benzodiazepínicos IV (diazepam IV) + olanzapina IM",
+  "Tabagismo / carbamazepina",
+  "Cetoconazol / eritromicina / outros inibidores CYP3A4",
+  "Fluoxetina / paroxetina (CYP2D6)",
+  "Carbamazepina / rifampicina (CYP3A4)",
+  "Cetoconazol / itraconazol (CYP3A4)",
+  "Tabagismo (cessação)",
+  "Benzodiazepínicos",
+  "QT-prolongadores (sotalol, amiodarona, eritromicina, fluorquinolonas)",
+  "Contraceptivos orais",
+  "Fluconazol / isoniazida",
+  "Varfarina / anticoagulantes",
+  "Antirretrovirais HIV (IPs, NNRTIs)",
+  "Aspirina (altas doses)",
+  "Carbamazepina / fenitoína / rifampicina (indutores)",
+  "Contraceptivos orais (estrógeno)",
+  "Antiácidos (alumínio/magnésio)",
+  "Álcool / BZD / outros depressores SNC",
+  "BZD / álcool",
+  "Tiazolidinedionas (pioglitazona)",
+  "Corticoides",
+  "Anticolinérgicos (biperideno, oxibutinina, amitriptilina)",
+  "Betabloqueadores / outros bradicardizantes",
+  "Succinilcolina (cirurgia)",
+  "Paroxetina / fluoxetina (CYP2D6)",
+  "Cetoconazol / eritromicina (CYP3A4)",
+  "Álcool / BZD / opioides",
+  "Eritromicina / cetoconazol (CYP3A4)",
+  "Cetoconazol / eritromicina / grapefruit",
+  "Opioides / propofol",
+  "Fluconazol (CYP3A4)",
+  "Opioides / álcool / outros depressores SNC",
+  "Fluvoxamina / omeprazol (CYP2C19)",
+  "Opioides / álcool / depressores SNC",
+  "Cetoconazol / itraconazol / eritromicina",
+  "Álcool / depressores SNC",
+  "Cetoconazol / claritromicina (CYP3A4 inibidores potentes)",
+  "Rifampicina / carbamazepina (CYP3A4 indutores potentes)",
+  "Metotrexato (altas doses)",
+  "Atazanavir / rilpivirina",
+  "Atazanavir",
+  "Dasatinibe / erlotinibe",
+  "Amitriptilina / nortriptilina",
+  "Apomorfina",
+  "QT-prolongadores (antiarrítmicos, antipsicóticos, macrolídeos)",
+  "Tramadol / SSRIs",
+  "Antipsicóticos / levodopa",
+  "Antibióticos orais (neomicina, rifaximina)",
+  "Antiácidos / leite",
+  "Medicamentos orais concomitantes",
+  "Diuréticos e corticosteroides",
+  "Antibióticos",
+  "Fármacos que prolongam QT (ondansetrona, haloperidol, macrolídeos, quinolonas)",
+  "Inibidores CYP3A4 (cetoconazol, itraconazol)",
+  "Quinidina / ritonavir (P-gp inibidores)",
+  "Inibidores da ECA (enalapril, captopril, lisinopril)",
+  "Inibidores ECA",
+  "Fluconazol / voriconazol / itraconazol",
+  "Estatinas (especialmente lovastatina, sinvastatina)",
+  "AINEs / aminoglicosídeos",
+  "Grapefruit (suco)",
+  "Fluconazol / voriconazol / posaconazol",
+  "Rifampicina / carbamazepina",
+  "Grapefruit / tangerina pomelo",
+  "Antiácidos (magnésio/alumínio)",
+  "Colestiramina / sevelamer",
+  "Levotiroxina / ciprofloxacino / tacrolimo / micofenolato",
+  "Levotiroxina / fluorquinolonas / bisfosfonatos / ferro",
+  "Diuréticos tiazídicos",
+  "Fluorquinolonas / levotiroxina",
+  "Fluorquinolonas / levotiroxina / ferro / bisfosfonatos",
+  "Citrato (incluindo sucos cítricos)",
+  "Ferro (suplementação)",
+  "Colestiramina / sequestrantes biliares",
+  "CYP2D6 — antipsicóticos, antidepressivos TCAs",
+  "CYP3A4 inibidores (cetoconazol, itraconazol)",
+  "Tiazídicos",
+  "Tetraciclinase / fluorquinolonas",
+  "TODOS os medicamentos orais",
+  "Sorbitol",
+  "Antiácidos/laxantes com cátions (hidróxido de Mg/Al)",
+  "Medicamentos orais em geral",
+  "Ferro oral",
+  "Laxativos / furosemida",
+  "(sem interação medicamentosa)",
+  "nitratos",
+  "bosentan",
+  "IECA / BRA",
+  "Indutores de CYP3A4 (rifampicina, carbamazepina, fenitoína, erva-de-são-joão)",
+  "Inibidores potentes de CYP3A4 (cetoconazol, ritonavir)",
+  "rifampicina",
+  "lamisil (terbinafina)",
+  "Aminoglutetimida",
+  "Indutores enzimáticos (rifampicina, barbitúricos, carbamazepina, fenitoína, oxcarbazepina, griseofulvina)",
+  "tamoxifeno",
+  "Inibidores de CYP3A4 (cetoconazol e azólicos)",
+  "Indutores de CYP3A4 (rifampicina, barbitúricos, carbamazepina, hidantoína)",
+  "bloqueadores neuromusculares",
+  "Betamiméticos tocolíticos (terbutalina, salbutamol, ritodrina)",
+  "cálcio",
+  "antipsicóticos",
+  "aminoglicosídeos",
+  "cetoconazol / inibidores CYP3A4",
+  "inibidores CYP3A4",
+  "sorivudina / brivudina",
+  "radioterapia concomitante",
+  "penicilinas",
+  "probenecida",
+  "corticoides crônicos (> 10 mg/dia prednisona)",
+  "Corticosteroides sistêmicos / imunossupressores (basais)",
+  "Outros inibidores de checkpoint (ex.: nivolumabe)",
+  "sinvastatina",
+  "Sunitinibe",
+  "Antraciclinas (± radioterapia torácica)",
+  "itraconazol",
+  "inibidores CYP3A4 potentes (cetoconazol, claritromicina)",
+  "apomorfina",
+  "contraceptivos orais",
+  "Quimioterápicos citotóxicos",
+  "Ifosfamida / ciclofosfamida",
+  "Exames laboratoriais (cetonas urinárias, CPK)",
+  "mercaptopurina / azatioprina",
+  "Dosagem de ácido úrico (interferência laboratorial)",
+  "halotano / anestésicos halogenados",
+  "antidepressivos tricíclicos",
+  "β-bloqueadores",
+  "cocaína",
+  "Vasodilatadores (nitratos, iECA, BCC)",
+  "Diuréticos (especialmente furosemida)",
+  "Outros inotrópicos/simpatomiméticos e digoxina",
+  "opioides",
+  "antihipertensivos",
+  "opioide + BZD",
+  "inibidores CYP3A4 (fluconazol, eritromicina)",
+  "Opioides (fentanila, morfina)",
+  "Benzodiazepínicos / sedativos",
+  "Indutores enzimáticos (fenitoína, rifampicina)",
+  "BZD / propofol",
+  "aminoglicosídeos / polimixinas",
+  "magnésio",
+  "contraceptivos hormonais",
+  "toremifeno",
+  "insulina / antidiabéticos",
+  "fator IX concentrado",
+  "sotalol / outros antiarrítmicos",
+  "dipiridamol",
+  "teofilina / cafeína",
+  "cálcio IV",
+  "catecolaminas",
+  "anticoagulantes",
+  "Opioides (morfina, fentanila, metadona)",
+  "Antidepressivos tricíclicos (amitriptilina, nortriptilina)",
+  "Benzodiazepínicos (uso crônico/dependência)",
+  "Proconvulsivantes (carbamazepina, fenitoína em overdose)",
+  "ISRS / IRSN",
+  "BZD / opioides",
+  "inibidores CYP2D6 (fluoxetina, paroxetina)",
+  "BZD / outros depressores SNC",
+  "inibidores CYP3A4 (cetoconazol, eritromicina)",
+  "BZD / depressores SNC",
+  "outros opioides fortes",
+  "antifúngicos azólicos",
+  "rifampicina / fenitoína",
+  "amiodarona / sotalol",
+  "morfina SC (mesma seringa)",
+  "haloperidol SC",
+  "midazolam / BZD",
+  "outros antipsicóticos",
+  "haloperidol / antipsicóticos",
+  "morfina SC",
+  "Outros anticolinérgicos/antimuscarínicos (atropina, escopolamina, ADT, anti-H1, antiespasmódicos)",
+  "Outros antagonistas opioides (naloxona, naltrexona)",
+  "(perfil CYP)",
+  "insulina / hipoglicemiantes",
+  "opioides / BZD",
+  "antiácidos com alumínio/magnésio",
+  "Álcool e depressores do SNC",
+  "Cálcio, antiácidos, ferro",
+  "Colestipol/colestiramina",
+  "Cloranfenicol",
+  "Clobazam",
+  "Inibidores de CYP3A4 (cetoconazol, ritonavir)",
+  "Cetoconazol/itraconazol",
+  "Diuréticos tiazídicos ou de alça",
+  "Fenobarbital/rifampicina",
+  "Inibidores de PDE5 (tadalafila etc.)",
+  "ISRS/IRSN",
+  "Anticoagulantes orais",
+  "Rifampicina/carbamazepina/fenitoína",
+  "Antibióticos de amplo espectro",
+  "Rifampicina/carbamazepina",
+  "Outros corticosteroides tópicos/sistêmicos",
+  "Outros aminoglicosídeos (tópicos ou sistêmicos)"
+ ],
+ "porClasseTop": [
+  [
+   "Anticonvulsivante",
+   32
+  ],
+  [
+   "Antipsicótico Atípico",
+   22
+  ],
+  [
+   "Antifúngico",
+   17
+  ],
+  [
+   "BCC",
+   16
+  ],
+  [
+   "Anticoagulante",
+   16
+  ],
+  [
+   "IECA",
+   15
+  ],
+  [
+   "Insulina",
+   15
+  ],
+  [
+   "Imunossupressor",
+   15
+  ],
+  [
+   "ISRS",
+   14
+  ],
+  [
+   "BRA",
+   10
+  ],
+  [
+   "Macrolídeo",
+   10
+  ],
+  [
+   "Benzodiazepínico",
+   10
+  ],
+  [
+   "Antianginoso",
+   9
+  ],
+  [
+   "TCA",
+   9
+  ],
+  [
+   "Beta-bloqueador",
+   8
+  ],
+  [
+   "Antagonista de Receptor de Leucotrieno",
+   8
+  ],
+  [
+   "Diurético",
+   8
+  ],
+  [
+   "Antiplaquetário",
+   8
+  ],
+  [
+   "Hipolipemiante",
+   8
+  ],
+  [
+   "BRA + Diurético Tiazídico (Associação)",
+   8
+  ],
+  [
+   "Antiobesidade",
+   8
+  ],
+  [
+   "IMAO",
+   8
+  ],
+  [
+   "Antiemético",
+   8
+  ],
+  [
+   "Quelante de Fósforo",
+   8
+  ],
+  [
+   "Penicilina",
+   7
+  ]
+ ],
+ "porWith": [
+  {
+   "with": "AINEs",
+   "nUso": 20,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Indutores de CYP3A4 (rifampicina, fenitoína, carbamazepina)",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fenitoina",
+    "carbamazepina"
+   ],
+   "antigoSoSubstring": [
+    "fenitoina",
+    "carbamazepina"
+   ],
+   "enumeracao": "rifampicina, fenitoína, carbamazepina"
+  },
+  {
+   "with": "Hipoglicemiantes / insulina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Diuréticos espoliadores de potássio",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Vacinas de vírus vivo",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Losartana",
+   "nUso": 2,
+   "exato": [
+    "losartana"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "losartana",
+    "losartana_hidroclorotiazida"
+   ],
+   "antigoSoSubstring": [
+    "losartana_hidroclorotiazida"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Espironolactona",
+   "nUso": 4,
+   "exato": [
+    "espironolactona",
+    "espironolactona"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "espironolactona"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "AINE",
+   "nUso": 2,
+   "exato": [],
+   "sin": [
+    "cetorolaco",
+    "meloxicam",
+    "aceclofenaco",
+    "cetoprofeno"
+   ],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Enalapril",
+   "nUso": 4,
+   "exato": [
+    "enalapril"
+   ],
+   "sin": [
+    "enalapril"
+   ],
+   "comp": [],
+   "antigo": [
+    "enalapril"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Alisquireno",
+   "nUso": 4,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Sinvastatina",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Ciclosporina",
+   "nUso": 10,
+   "exato": [
+    "ciclosporina"
+   ],
+   "sin": [
+    "ciclosporina"
+   ],
+   "comp": [],
+   "antigo": [
+    "ciclosporina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Digoxina",
+   "nUso": 19,
+   "exato": [
+    "digoxina",
+    "digoxina"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "digoxina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Lítio",
+   "nUso": 19,
+   "exato": [],
+   "sin": [
+    "litio",
+    "litio"
+   ],
+   "comp": [],
+   "antigo": [
+    "litio"
+   ],
+   "antigoSoSubstring": [
+    "litio"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Verapamil",
+   "nUso": 4,
+   "exato": [
+    "verapamil"
+   ],
+   "sin": [
+    "verapamil"
+   ],
+   "comp": [],
+   "antigo": [
+    "verapamil"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Amiodarona",
+   "nUso": 9,
+   "exato": [
+    "amiodarona",
+    "amiodarona-pcr"
+   ],
+   "sin": [
+    "amiodarona"
+   ],
+   "comp": [],
+   "antigo": [
+    "amiodarona",
+    "amiodarona-pcr"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Aminoglicosídeos",
+   "nUso": 5,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Anlodipino",
+   "nUso": 1,
+   "exato": [
+    "anlodipino"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "anlodipino"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Claritromicina",
+   "nUso": 1,
+   "exato": [
+    "claritromicina",
+    "claritromicina"
+   ],
+   "sin": [
+    "claritromicina"
+   ],
+   "comp": [],
+   "antigo": [
+    "claritromicina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Varfarina",
+   "nUso": 38,
+   "exato": [
+    "varfarina"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "varfarina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Furosemida",
+   "nUso": 1,
+   "exato": [
+    "furosemida",
+    "furosemida"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "furosemida"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Contraste iodado IV",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Insulina",
+   "nUso": 7,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "insulina_nph",
+    "insulina_regular",
+    "insulina_glargina",
+    "insulina_asparte",
+    "insulina_lispro",
+    "insulina_degludeca"
+   ],
+   "antigoSoSubstring": [
+    "insulina_nph",
+    "insulina_regular",
+    "insulina_glargina",
+    "insulina_asparte",
+    "insulina_lispro",
+    "insulina_degludeca"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Sulfonilureias (glibenclamida, gliclazida)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "glibenclamida"
+   ],
+   "antigoSoSubstring": [
+    "glibenclamida"
+   ],
+   "enumeracao": "glibenclamida, gliclazida"
+  },
+  {
+   "with": "Beta-bloqueadores",
+   "nUso": 3,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Ritonavir",
+   "nUso": 3,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Indutores potentes de CYP (fenobarbital, rifampicina, fenitoína, carbamazepina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fenitoina",
+    "carbamazepina",
+    "fenobarbital",
+    "fenobarbital-neonatal",
+    "fenobarbital-paliativo"
+   ],
+   "antigoSoSubstring": [
+    "fenitoina",
+    "carbamazepina",
+    "fenobarbital",
+    "fenobarbital-neonatal",
+    "fenobarbital-paliativo"
+   ],
+   "enumeracao": "fenobarbital, rifampicina, fenitoína, carbamazepina"
+  },
+  {
+   "with": "Genfibrozila",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Metotrexato",
+   "nUso": 10,
+   "exato": [
+    "metotrexato-onco"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "metotrexato-onco"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Tramadol",
+   "nUso": 2,
+   "exato": [
+    "tramadol",
+    "tramadol-paliativo"
+   ],
+   "sin": [
+    "tramadol"
+   ],
+   "comp": [
+    "tramadol_paracetamol"
+   ],
+   "antigo": [
+    "tramadol",
+    "tramadol-paliativo",
+    "tramadol_paracetamol"
+   ],
+   "antigoSoSubstring": [
+    "tramadol_paracetamol"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Álcool",
+   "nUso": 9,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Opioides",
+   "nUso": 4,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Clopidogrel",
+   "nUso": 6,
+   "exato": [
+    "clopidogrel"
+   ],
+   "sin": [
+    "clopidogrel"
+   ],
+   "comp": [],
+   "antigo": [
+    "clopidogrel"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Diuréticos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Fluconazol",
+   "nUso": 3,
+   "exato": [
+    "fluconazol",
+    "fluconazol"
+   ],
+   "sin": [
+    "fluconazol"
+   ],
+   "comp": [],
+   "antigo": [
+    "fluconazol"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "IMAOs",
+   "nUso": 8,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Paroxetina/Fluoxetina",
+   "nUso": 3,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fluoxetina"
+   ],
+   "antigoSoSubstring": [
+    "fluoxetina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "AINE/Aspirina",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Rifampicina",
+   "nUso": 9,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Carbamazepina",
+   "nUso": 8,
+   "exato": [
+    "carbamazepina",
+    "carbamazepina"
+   ],
+   "sin": [
+    "carbamazepina"
+   ],
+   "comp": [],
+   "antigo": [
+    "carbamazepina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "QT-prolongadores",
+   "nUso": 7,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Cetoconazol",
+   "nUso": 4,
+   "exato": [],
+   "sin": [],
+   "comp": [
+    "cetoconazol_betametasona",
+    "cetoconazol_betametasona_neomicina"
+   ],
+   "antigo": [
+    "cetoconazol_betametasona",
+    "cetoconazol_betametasona_neomicina"
+   ],
+   "antigoSoSubstring": [
+    "cetoconazol_betametasona",
+    "cetoconazol_betametasona_neomicina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Valproato",
+   "nUso": 5,
+   "exato": [],
+   "sin": [
+    "acido-valproico",
+    "divalproato-sodio"
+   ],
+   "comp": [],
+   "antigo": [
+    "acido-valproico",
+    "divalproato-sodio"
+   ],
+   "antigoSoSubstring": [
+    "acido-valproico",
+    "divalproato-sodio"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Anticoncepcionais orais",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Metoclopramida",
+   "nUso": 1,
+   "exato": [
+    "metoclopramida",
+    "metoclopramida-paliativa",
+    "metoclopramida-paliativa"
+   ],
+   "sin": [
+    "metoclopramida"
+   ],
+   "comp": [],
+   "antigo": [
+    "metoclopramida",
+    "metoclopramida-paliativa"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Levodopa",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Anti-histamínicos (H1)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "H1"
+  },
+  {
+   "with": "Inibidores da MAO (incl. MAO-B, ex.: selegilina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "incl. MAO-B, ex.: selegilina"
+  },
+  {
+   "with": "Ibuprofeno",
+   "nUso": 1,
+   "exato": [
+    "ibuprofeno",
+    "ibuprofeno"
+   ],
+   "sin": [],
+   "comp": [
+    "ibuprofeno-paracetamol"
+   ],
+   "antigo": [
+    "ibuprofeno-paracetamol",
+    "ibuprofeno"
+   ],
+   "antigoSoSubstring": [
+    "ibuprofeno-paracetamol"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Probenecida/Cimetidina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "cimetidina"
+   ],
+   "antigoSoSubstring": [
+    "cimetidina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Suco cítrico/maçã",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Cetoconazol/Eritromicina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Anticoagulantes",
+   "nUso": 6,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Outros AINEs",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Anti-hipertensivos",
+   "nUso": 7,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Antidiabéticos",
+   "nUso": 6,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Inibidores CYP3A4",
+   "nUso": 5,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Anticoagulantes (varfarina)",
+   "nUso": 3,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "varfarina"
+   ],
+   "antigoSoSubstring": [
+    "varfarina"
+   ],
+   "enumeracao": "varfarina"
+  },
+  {
+   "with": "Tramadol/triptanos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "tramadol",
+    "tramadol-paliativo"
+   ],
+   "antigoSoSubstring": [
+    "tramadol",
+    "tramadol-paliativo"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Tamoxifeno",
+   "nUso": 4,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "AINEs/tiazídicos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "IECA/BRA",
+   "nUso": 3,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Antihipertensivos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "IMAOs/antidepressivos serotoninérgicos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Benzodiazepínicos/depressores SNC",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Verapamil/diltiazem",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "diltiazem",
+    "verapamil"
+   ],
+   "antigoSoSubstring": [
+    "diltiazem",
+    "verapamil"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Clonidina",
+   "nUso": 4,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "IECA (duplo bloqueio)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "duplo bloqueio"
+  },
+  {
+   "with": "Inibidores PDE5 (sildenafila/tadalafila)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "tadalafila",
+    "sildenafil-neonatal"
+   ],
+   "antigoSoSubstring": [
+    "tadalafila",
+    "sildenafil-neonatal"
+   ],
+   "enumeracao": "sildenafila/tadalafila"
+  },
+  {
+   "with": "Nitratos (nitroglicerina, isossorbida)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "nitroglicerina"
+   ],
+   "antigoSoSubstring": [
+    "nitroglicerina"
+   ],
+   "enumeracao": "nitroglicerina, isossorbida"
+  },
+  {
+   "with": "Inibidores CYP3A4 (cetoconazol, ritonavir)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "cetoconazol, ritonavir"
+  },
+  {
+   "with": "Antifúngicos azólicos (cetoconazol)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "cetoconazol"
+  },
+  {
+   "with": "Eritromicina/claritromicina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "claritromicina"
+   ],
+   "antigoSoSubstring": [
+    "claritromicina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Amantadina/quetamina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Anticolinérgicos",
+   "nUso": 3,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Betabloqueadores/antiarrítmicos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Carbamazepina e outros indutores enzimáticos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "carbamazepina"
+   ],
+   "antigoSoSubstring": [
+    "carbamazepina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Depressores do SNC (álcool, benzodiazepínicos, opioides)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "álcool, benzodiazepínicos, opioides"
+  },
+  {
+   "with": "Inibidores CYP3A4 fortes (cetoconazol)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "cetoconazol"
+  },
+  {
+   "with": "Fluconazol/miconazol",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fluconazol"
+   ],
+   "antigoSoSubstring": [
+    "fluconazol"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "AINEs/salicilatos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Amiodarona/QT-prolongadores",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "amiodarona",
+    "amiodarona-pcr"
+   ],
+   "antigoSoSubstring": [
+    "amiodarona",
+    "amiodarona-pcr"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "(sem interação medicamentosa relevante documentada)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "sem interação medicamentosa relevante documentada"
+  },
+  {
+   "with": "Tetraciclinas",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Vitamina A suplementar",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Álcool (paracetamol)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "paracetamol"
+   ],
+   "antigoSoSubstring": [
+    "paracetamol"
+   ],
+   "enumeracao": "paracetamol"
+  },
+  {
+   "with": "Antiácidos/cálcio/ferro oral",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Antiarrítmicos IA/III (amiodarona)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "amiodarona",
+    "amiodarona-pcr"
+   ],
+   "antigoSoSubstring": [
+    "amiodarona",
+    "amiodarona-pcr"
+   ],
+   "enumeracao": "amiodarona"
+  },
+  {
+   "with": "Antiácidos com Al/Mg/Ca",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "ipratropio",
+   "nUso": 1,
+   "exato": [
+    "ipratropio"
+   ],
+   "sin": [
+    "ipratropio"
+   ],
+   "comp": [
+    "fenoterol_ipratropio"
+   ],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "tiotropio",
+   "nUso": 1,
+   "exato": [
+    "tiotropio"
+   ],
+   "sin": [
+    "tiotropio",
+    "tiotropio"
+   ],
+   "comp": [
+    "olodaterol_tiotropio"
+   ],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "teofilina",
+   "nUso": 1,
+   "exato": [
+    "teofilina",
+    "teofilina"
+   ],
+   "sin": [
+    "teofilina"
+   ],
+   "comp": [],
+   "antigo": [
+    "teofilina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "beta-bloqueador",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "cetoconazol",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [
+    "cetoconazol_betametasona",
+    "cetoconazol_betametasona_neomicina"
+   ],
+   "antigo": [
+    "cetoconazol_betametasona",
+    "cetoconazol_betametasona_neomicina"
+   ],
+   "antigoSoSubstring": [
+    "cetoconazol_betametasona",
+    "cetoconazol_betametasona_neomicina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Verapamil / Diltiazem (BCC não di-hidropiridínicos)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "diltiazem",
+    "verapamil"
+   ],
+   "antigoSoSubstring": [
+    "diltiazem",
+    "verapamil"
+   ],
+   "enumeracao": "BCC não di-hidropiridínicos"
+  },
+  {
+   "with": "Insulina / hipoglicemiantes",
+   "nUso": 3,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Losartana/BRA",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "losartana"
+   ],
+   "antigoSoSubstring": [
+    "losartana"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Sacubitril/Valsartana",
+   "nUso": 2,
+   "exato": [
+    "sacubitril_valsartana"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "valsartana",
+    "sacubitril_valsartana"
+   ],
+   "antigoSoSubstring": [
+    "valsartana"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Heparina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "BRA/Alisquireno",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Diuréticos poupadores de K+",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "IECA",
+   "nUso": 2,
+   "exato": [],
+   "sin": [
+    "enalapril",
+    "ramipril",
+    "perindopril"
+   ],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "IECA (Enalapril, Ramipril, Perindopril)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "enalapril",
+    "ramipril",
+    "perindopril"
+   ],
+   "antigoSoSubstring": [
+    "enalapril",
+    "ramipril",
+    "perindopril"
+   ],
+   "enumeracao": "Enalapril, Ramipril, Perindopril"
+  },
+  {
+   "with": "Espironolactona/Eplerenona",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "espironolactona",
+    "eplerenona"
+   ],
+   "antigoSoSubstring": [
+    "espironolactona",
+    "eplerenona"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Estatinas (atorvastatina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "atorvastatina"
+   ],
+   "antigoSoSubstring": [
+    "atorvastatina"
+   ],
+   "enumeracao": "atorvastatina"
+  },
+  {
+   "with": "Verapamil/Diltiazem",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "diltiazem",
+    "verapamil"
+   ],
+   "antigoSoSubstring": [
+    "diltiazem",
+    "verapamil"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Insulina/Hipoglicemiantes",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Betabloqueadores",
+   "nUso": 8,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "CYP3A4 inibidores (cetoconazol, claritromicina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "claritromicina"
+   ],
+   "antigoSoSubstring": [
+    "claritromicina"
+   ],
+   "enumeracao": "cetoconazol, claritromicina"
+  },
+  {
+   "with": "Betabloqueadores (VO)",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "VO"
+  },
+  {
+   "with": "Estatinas (sinvastatina, lovastatina)",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "sinvastatina, lovastatina"
+  },
+  {
+   "with": "Colchicina",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Inibidores CYP3A4 potentes",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Suplementos de K+",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Estatinas (sinvastatina)",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "sinvastatina"
+  },
+  {
+   "with": "Diltiazem/Verapamil",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "diltiazem",
+    "verapamil"
+   ],
+   "antigoSoSubstring": [
+    "diltiazem",
+    "verapamil"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "QT prolongadores (haloperidol, citalopram, azitromicina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "azitromicina",
+    "azitromicina_dpoc",
+    "citalopram",
+    "haloperidol",
+    "haloperidol-paliativo"
+   ],
+   "antigoSoSubstring": [
+    "azitromicina",
+    "azitromicina_dpoc",
+    "citalopram",
+    "haloperidol",
+    "haloperidol-paliativo"
+   ],
+   "enumeracao": "haloperidol, citalopram, azitromicina"
+  },
+  {
+   "with": "Diltiazem",
+   "nUso": 1,
+   "exato": [
+    "diltiazem"
+   ],
+   "sin": [
+    "diltiazem"
+   ],
+   "comp": [],
+   "antigo": [
+    "diltiazem"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Quinidina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Diuréticos (furosemida, HCTZ, clortalidona)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "furosemida",
+    "clortalidona"
+   ],
+   "antigoSoSubstring": [
+    "furosemida",
+    "clortalidona"
+   ],
+   "enumeracao": "furosemida, HCTZ, clortalidona"
+  },
+  {
+   "with": "Eritromicina/Claritromicina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "claritromicina"
+   ],
+   "antigoSoSubstring": [
+    "claritromicina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Fluconazol/Metronidazol",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "metronidazol",
+    "fluconazol"
+   ],
+   "antigoSoSubstring": [
+    "metronidazol",
+    "fluconazol"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "AAS/AINEs",
+   "nUso": 3,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Vitamina K (alimentos)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "alimentos"
+  },
+  {
+   "with": "Antibióticos (amplo espectro)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "amplo espectro"
+  },
+  {
+   "with": "Inibidores CYP3A4 + P-gp (cetoconazol, ritonavir, claritromicina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "claritromicina"
+   ],
+   "antigoSoSubstring": [
+    "claritromicina"
+   ],
+   "enumeracao": "cetoconazol, ritonavir, claritromicina"
+  },
+  {
+   "with": "Indutores CYP3A4 + P-gp (rifampicina, fenitoína, carbamazepina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fenitoina",
+    "carbamazepina"
+   ],
+   "antigoSoSubstring": [
+    "fenitoina",
+    "carbamazepina"
+   ],
+   "enumeracao": "rifampicina, fenitoína, carbamazepina"
+  },
+  {
+   "with": "Inibidores CYP3A4 + P-gp",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Indutores CYP3A4 + P-gp (rifampicina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "rifampicina"
+  },
+  {
+   "with": "AINEs/AAS",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Inibidores P-gp (cetoconazol, dronedarona, ciclosporina, itraconazol)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "ciclosporina"
+   ],
+   "antigoSoSubstring": [
+    "ciclosporina"
+   ],
+   "enumeracao": "cetoconazol, dronedarona, ciclosporina, itraconazol"
+  },
+  {
+   "with": "Omeprazol/Esomeprazol",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "omeprazol"
+   ],
+   "antigoSoSubstring": [
+    "omeprazol"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "AAS",
+   "nUso": 2,
+   "exato": [],
+   "sin": [
+    "aas"
+   ],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Varfarina/DOACs",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "varfarina"
+   ],
+   "antigoSoSubstring": [
+    "varfarina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "AAS > 100 mg/dia",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Fibratos (fenofibrato)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fenofibrato"
+   ],
+   "antigoSoSubstring": [
+    "fenofibrato"
+   ],
+   "enumeracao": "fenofibrato"
+  },
+  {
+   "with": "Colestiramina",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Estatinas",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Ezetimiba",
+   "nUso": 1,
+   "exato": [
+    "ezetimiba",
+    "ezetimiba"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "ezetimiba"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Sildenafil/Tadalafil/Vardenafil (iPDE5)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "sildenafil-neonatal"
+   ],
+   "antigoSoSubstring": [
+    "sildenafil-neonatal"
+   ],
+   "enumeracao": "iPDE5"
+  },
+  {
+   "with": "iPDE5 (sildenafil, tadalafil)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "sildenafil-neonatal"
+   ],
+   "antigoSoSubstring": [
+    "sildenafil-neonatal"
+   ],
+   "enumeracao": "sildenafil, tadalafil"
+  },
+  {
+   "with": "Inibidores CYP3A4 (cetoconazol, claritromicina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "claritromicina"
+   ],
+   "antigoSoSubstring": [
+    "claritromicina"
+   ],
+   "enumeracao": "cetoconazol, claritromicina"
+  },
+  {
+   "with": "Poupadores de potássio/suplementos de K+",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Digitálicos",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Barbitúricos/narcóticos/álcool",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Corticosteroides",
+   "nUso": 5,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "iSGLT2 (empagliflozina, dapagliflozina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "empagliflozina",
+    "dapagliflozina"
+   ],
+   "antigoSoSubstring": [
+    "empagliflozina",
+    "dapagliflozina"
+   ],
+   "enumeracao": "empagliflozina, dapagliflozina"
+  },
+  {
+   "with": "IECA/ARA-II",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Tiazolidinedionas",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "GLP-1 (liraglutida, semaglutida)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "semaglutida",
+    "liraglutida"
+   ],
+   "antigoSoSubstring": [
+    "semaglutida",
+    "liraglutida"
+   ],
+   "enumeracao": "liraglutida, semaglutida"
+  },
+  {
+   "with": "iSGLT2",
+   "nUso": 1,
+   "exato": [],
+   "sin": [
+    "dapagliflozina"
+   ],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "GLP-1/iSGLT2",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Sulfonilureias",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "CYP2C8 inibidores (gemfibrozila)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "gemfibrozila"
+  },
+  {
+   "with": "CYP2C8 indutores (rifampicina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "rifampicina"
+  },
+  {
+   "with": "Insulina/Sulfonilureias",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Carbonato de cálcio",
+   "nUso": 1,
+   "exato": [
+    "carbonato-calcio-quelante"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "carbonato-calcio-quelante"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Sulfato ferroso",
+   "nUso": 1,
+   "exato": [
+    "sulfato-ferroso-gestacao"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "sulfato-ferroso-gestacao"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Antiácidos com Al ou Mg",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Betabloqueadores (propranolol)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "propranolol"
+  },
+  {
+   "with": "Cálcio/Ferro/Antiácidos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Cálcio (suplemento)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "suplemento"
+  },
+  {
+   "with": "Levotiroxina",
+   "nUso": 1,
+   "exato": [
+    "levotiroxina"
+   ],
+   "sin": [
+    "levotiroxina"
+   ],
+   "comp": [],
+   "antigo": [
+    "levotiroxina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Antirretrovirais (lopinavir)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "lopinavir"
+  },
+  {
+   "with": "IMAO",
+   "nUso": 17,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Metoprolol/Betabloqueadores",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Vancomicina",
+   "nUso": 2,
+   "exato": [
+    "vancomicina"
+   ],
+   "sin": [
+    "vancomicina"
+   ],
+   "comp": [],
+   "antigo": [
+    "vancomicina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Alopurinol",
+   "nUso": 2,
+   "exato": [
+    "alopurinol-onco"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "alopurinol-onco"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Metformina",
+   "nUso": 1,
+   "exato": [
+    "metformina"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "metformina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Soluções de cálcio IV (Ringer lactato, gluconato de Ca)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "Ringer lactato, gluconato de Ca"
+  },
+  {
+   "with": "Bloqueadores neuromusculares",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Álcool (etanol)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "etanol"
+  },
+  {
+   "with": "Antiácidos com Al/Mg, Ca2+, Fe, Zinco",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Retinoides (isotretinoína)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "isotretinoia"
+   ],
+   "antigoSoSubstring": [
+    "isotretinoia"
+   ],
+   "enumeracao": "isotretinoína"
+  },
+  {
+   "with": "ACE/BRA + TMP",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Fenitoína",
+   "nUso": 5,
+   "exato": [
+    "fenitoina",
+    "fenitoina"
+   ],
+   "sin": [
+    "fenitoina"
+   ],
+   "comp": [],
+   "antigo": [
+    "fenitoina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Aminoglicosídeos (amicacina, gentamicina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "amicacina, gentamicina"
+  },
+  {
+   "with": "Piperacilina-tazobactam",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Anfotericina B",
+   "nUso": 1,
+   "exato": [
+    "anfotericina_b"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "anfotericina_b"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Diuréticos de alça (furosemida)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "furosemida"
+   ],
+   "antigoSoSubstring": [
+    "furosemida"
+   ],
+   "enumeracao": "furosemida"
+  },
+  {
+   "with": "ISRS/IRSN (sertralina, venlafaxina, duloxetina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "sertralina",
+    "duloxetina"
+   ],
+   "antigoSoSubstring": [
+    "sertralina",
+    "duloxetina"
+   ],
+   "enumeracao": "sertralina, venlafaxina, duloxetina"
+  },
+  {
+   "with": "IMAO (selegilina, fenelzina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "selegilina, fenelzina"
+  },
+  {
+   "with": "Simpaticomiméticos (pseudoefedrina, dopamina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "dopamina"
+   ],
+   "antigoSoSubstring": [
+    "dopamina"
+   ],
+   "enumeracao": "pseudoefedrina, dopamina"
+  },
+  {
+   "with": "Tacrolimus/Ciclosporina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "ciclosporina"
+   ],
+   "antigoSoSubstring": [
+    "ciclosporina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Hipoglicemiantes (sulfonilureias)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "sulfonilureias"
+  },
+  {
+   "with": "Sirolimus (rapamicina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "rapamicina"
+  },
+  {
+   "with": "Tacrolimus",
+   "nUso": 2,
+   "exato": [],
+   "sin": [
+    "tacrolimo"
+   ],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Warfarina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Metadona",
+   "nUso": 1,
+   "exato": [
+    "metadona-paliativa",
+    "metadona-paliativa"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "metadona-paliativa"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Rifampicina, dexametasona, fenitoína, carbamazepina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fenitoina",
+    "carbamazepina",
+    "dexametasona-paliativa"
+   ],
+   "antigoSoSubstring": [
+    "fenitoina",
+    "carbamazepina",
+    "dexametasona-paliativa"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Diuréticos de alça",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Ciclosporina/Tacrolimus",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "ciclosporina"
+   ],
+   "antigoSoSubstring": [
+    "ciclosporina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Antiácidos com Al/Mg, Fe, Ca, Zn",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Teofilina",
+   "nUso": 5,
+   "exato": [
+    "teofilina",
+    "teofilina"
+   ],
+   "sin": [
+    "teofilina"
+   ],
+   "comp": [],
+   "antigo": [
+    "teofilina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Tenofovir",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Vacina influenza oral atenuada (LAIV)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "LAIV"
+  },
+  {
+   "with": "Dexametasona",
+   "nUso": 1,
+   "exato": [
+    "dexametasona-paliativa"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "dexametasona-paliativa"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Praziquantel",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Cimetidina",
+   "nUso": 3,
+   "exato": [
+    "cimetidina",
+    "cimetidina"
+   ],
+   "sin": [
+    "cimetidina"
+   ],
+   "comp": [],
+   "antigo": [
+    "cimetidina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Benzodiazepínicos/barbitúricos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Beta-bloqueadores não seletivos",
+   "nUso": 5,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "IMAO / antidepressivos tricíclicos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Tiotrópio / Umeclidínio (LAMA)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "tiotropio",
+    "umeclidinio"
+   ],
+   "antigoSoSubstring": [
+    "tiotropio",
+    "umeclidinio"
+   ],
+   "enumeracao": "LAMA"
+  },
+  {
+   "with": "LAMA (tiotrópio, umeclidínio)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "tiotropio",
+    "umeclidinio"
+   ],
+   "antigoSoSubstring": [
+    "tiotropio",
+    "umeclidinio"
+   ],
+   "enumeracao": "tiotrópio, umeclidínio"
+  },
+  {
+   "with": "Outros anticolinérgicos (tiotrópio, ipratrópio)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "tiotropio",
+    "ipratropio"
+   ],
+   "antigoSoSubstring": [
+    "tiotropio",
+    "ipratropio"
+   ],
+   "enumeracao": "tiotrópio, ipratrópio"
+  },
+  {
+   "with": "Outros LAMAs / ipratrópio",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "ipratropio"
+   ],
+   "antigoSoSubstring": [
+    "ipratropio"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Ritonavir / Cobicistate",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Cetoconazol / Itraconazol",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Ritonavir / inibidores CYP3A4 potentes",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Inibidores potentes de CYP3A4 (cetoconazol, ritonavir, itraconazol)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "cetoconazol, ritonavir, itraconazol"
+  },
+  {
+   "with": "Ritonavir / inibidores CYP3A4",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Inibidores CYP3A4 potentes (cetoconazol, ritonavir)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "cetoconazol, ritonavir"
+  },
+  {
+   "with": "Outros LAMAs (tiotrópio, umeclidínio)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "tiotropio",
+    "umeclidinio"
+   ],
+   "antigoSoSubstring": [
+    "tiotropio",
+    "umeclidinio"
+   ],
+   "enumeracao": "tiotrópio, umeclidínio"
+  },
+  {
+   "with": "Outros LAMAs",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Outros anticolinérgicos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Inibidores CYP3A4 (ritonavir, cetoconazol)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "ritonavir, cetoconazol"
+  },
+  {
+   "with": "Ciprofloxacino / Claritromicina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "claritromicina",
+    "ciprofloxacino"
+   ],
+   "antigoSoSubstring": [
+    "claritromicina",
+    "ciprofloxacino"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Rifampicina / Carbamazepina / Fenitoína",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fenitoina",
+    "carbamazepina"
+   ],
+   "antigoSoSubstring": [
+    "fenitoina",
+    "carbamazepina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Tabagismo",
+   "nUso": 1,
+   "exato": [],
+   "sin": [
+    "bupropiona"
+   ],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "(sem interação farmacocinética relevante)",
+   "nUso": 5,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "sem interação farmacocinética relevante"
+  },
+  {
+   "with": "Vacinas vivas atenuadas",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Nitroglicerina",
+   "nUso": 1,
+   "exato": [
+    "nitroglicerina",
+    "nitroglicerina"
+   ],
+   "sin": [
+    "nitroglicerina"
+   ],
+   "comp": [],
+   "antigo": [
+    "nitroglicerina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Carvão ativado (paracetamol IV)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "paracetamol"
+   ],
+   "antigoSoSubstring": [
+    "paracetamol"
+   ],
+   "enumeracao": "paracetamol IV"
+  },
+  {
+   "with": "Antibióticos (amoxicilina, eritromicina, cefuroxima)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "amoxicilina"
+   ],
+   "antigoSoSubstring": [
+    "amoxicilina"
+   ],
+   "enumeracao": "amoxicilina, eritromicina, cefuroxima"
+  },
+  {
+   "with": "Antitussígenos (codeína, dextrometorfano)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "codeina"
+   ],
+   "antigoSoSubstring": [
+    "codeina"
+   ],
+   "enumeracao": "codeína, dextrometorfano"
+  },
+  {
+   "with": "Anticolinérgicos/atropínicos (secantes de secreção)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "secantes de secreção"
+  },
+  {
+   "with": "Outros medicamentos inalados (no mesmo nebulizador)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "no mesmo nebulizador"
+  },
+  {
+   "with": "Eritromicina / claritromicina",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "claritromicina"
+   ],
+   "antigoSoSubstring": [
+    "claritromicina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Aspirina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [
+    "aas"
+   ],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Propranolol",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Rifampicina / carbamazepina / fenitoína",
+   "nUso": 3,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fenitoina",
+    "carbamazepina"
+   ],
+   "antigoSoSubstring": [
+    "fenitoina",
+    "carbamazepina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Eritromicina / cetoconazol",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Fluorquinolonas",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Bleomicina (atual ou histórico)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "atual ou histórico"
+  },
+  {
+   "with": "Paraquat (intoxicação)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "intoxicação"
+  },
+  {
+   "with": "Fármacos nebulizados (broncodilatadores)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "broncodilatadores"
+  },
+  {
+   "with": "QT-prolongadores (haloperidol, amiodarona, quinolonas)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "amiodarona",
+    "haloperidol",
+    "amiodarona-pcr",
+    "haloperidol-paliativo"
+   ],
+   "antigoSoSubstring": [
+    "amiodarona",
+    "haloperidol",
+    "amiodarona-pcr",
+    "haloperidol-paliativo"
+   ],
+   "enumeracao": "haloperidol, amiodarona, quinolonas"
+  },
+  {
+   "with": "IMAO (selegilina, fenelzina, tranilcipromina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "tranilcipromina"
+   ],
+   "antigoSoSubstring": [
+    "tranilcipromina"
+   ],
+   "enumeracao": "selegilina, fenelzina, tranilcipromina"
+  },
+  {
+   "with": "Tramadol / Triptanos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "tramadol",
+    "tramadol-paliativo"
+   ],
+   "antigoSoSubstring": [
+    "tramadol",
+    "tramadol-paliativo"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Antipsicóticos metabolizados por CYP2D6 (haloperidol, risperidona)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "risperidona",
+    "haloperidol",
+    "haloperidol-paliativo"
+   ],
+   "antigoSoSubstring": [
+    "risperidona",
+    "haloperidol",
+    "haloperidol-paliativo"
+   ],
+   "enumeracao": "haloperidol, risperidona"
+  },
+  {
+   "with": "QT-prolongadores (antiarrítmicos, antipsicóticos, azóis)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "antiarrítmicos, antipsicóticos, azóis"
+  },
+  {
+   "with": "Omeprazol / Esomeprazol",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "omeprazol"
+   ],
+   "antigoSoSubstring": [
+    "omeprazol"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Clozapina",
+   "nUso": 1,
+   "exato": [
+    "clozapina",
+    "clozapina"
+   ],
+   "sin": [
+    "clozapina"
+   ],
+   "comp": [],
+   "antigo": [
+    "clozapina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Benzodiazepínicos (diazepam, alprazolam)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "alprazolam",
+    "diazepam"
+   ],
+   "antigoSoSubstring": [
+    "alprazolam",
+    "diazepam"
+   ],
+   "enumeracao": "diazepam, alprazolam"
+  },
+  {
+   "with": "Álcool / benzodiazepínicos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Fluvoxamina",
+   "nUso": 3,
+   "exato": [
+    "fluvoxamina"
+   ],
+   "sin": [
+    "fluvoxamina"
+   ],
+   "comp": [],
+   "antigo": [
+    "fluvoxamina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Ciprofloxacino",
+   "nUso": 1,
+   "exato": [
+    "ciprofloxacino"
+   ],
+   "sin": [
+    "ciprofloxacino"
+   ],
+   "comp": [],
+   "antigo": [
+    "ciprofloxacino"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Antiarrítmicos classe Ia (quinidina, procainamida)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "quinidina, procainamida"
+  },
+  {
+   "with": "Anticolinérgicos (biperideno, oxibutinina, atropina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "atropina"
+   ],
+   "antigoSoSubstring": [
+    "atropina"
+   ],
+   "enumeracao": "biperideno, oxibutinina, atropina"
+  },
+  {
+   "with": "Fluoxetina / paroxetina",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fluoxetina"
+   ],
+   "antigoSoSubstring": [
+    "fluoxetina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "ISRS (fluoxetina, paroxetina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fluoxetina"
+   ],
+   "antigoSoSubstring": [
+    "fluoxetina"
+   ],
+   "enumeracao": "fluoxetina, paroxetina"
+  },
+  {
+   "with": "ISRS/IRSN/TCA/outros antidepressivos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Tiramina dietética (queijo curado, vinho tinto, embutidos)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "queijo curado, vinho tinto, embutidos"
+  },
+  {
+   "with": "Meperidina / tramadol / dextromefetamina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "tramadol",
+    "tramadol-paliativo"
+   ],
+   "antigoSoSubstring": [
+    "tramadol",
+    "tramadol-paliativo"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Simpaticomiméticos (pseudoefedrina, fenilefrina, dopamina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "dopamina"
+   ],
+   "antigoSoSubstring": [
+    "dopamina"
+   ],
+   "enumeracao": "pseudoefedrina, fenilefrina, dopamina"
+  },
+  {
+   "with": "ISRS / outros serotoninérgicos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Opioídes (tramadol, petidina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "tramadol",
+    "tramadol-paliativo"
+   ],
+   "antigoSoSubstring": [
+    "tramadol",
+    "tramadol-paliativo"
+   ],
+   "enumeracao": "tramadol, petidina"
+  },
+  {
+   "with": "Lítio (altas doses)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "altas doses"
+  },
+  {
+   "with": "Carbamazepina / rifampicina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "carbamazepina"
+   ],
+   "antigoSoSubstring": [
+    "carbamazepina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Benzodiazepínicos IV (diazepam IV) + olanzapina IM",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "olanzapina",
+    "diazepam"
+   ],
+   "antigoSoSubstring": [
+    "olanzapina",
+    "diazepam"
+   ],
+   "enumeracao": "diazepam IV"
+  },
+  {
+   "with": "Tabagismo / carbamazepina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "carbamazepina"
+   ],
+   "antigoSoSubstring": [
+    "carbamazepina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Cetoconazol / eritromicina / outros inibidores CYP3A4",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Fluoxetina / paroxetina (CYP2D6)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fluoxetina"
+   ],
+   "antigoSoSubstring": [
+    "fluoxetina"
+   ],
+   "enumeracao": "CYP2D6"
+  },
+  {
+   "with": "Carbamazepina / rifampicina (CYP3A4)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "carbamazepina"
+   ],
+   "antigoSoSubstring": [
+    "carbamazepina"
+   ],
+   "enumeracao": "CYP3A4"
+  },
+  {
+   "with": "Cetoconazol / itraconazol (CYP3A4)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "CYP3A4"
+  },
+  {
+   "with": "Tabagismo (cessação)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "cessação"
+  },
+  {
+   "with": "Benzodiazepínicos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "QT-prolongadores (sotalol, amiodarona, eritromicina, fluorquinolonas)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "amiodarona",
+    "amiodarona-pcr"
+   ],
+   "antigoSoSubstring": [
+    "amiodarona",
+    "amiodarona-pcr"
+   ],
+   "enumeracao": "sotalol, amiodarona, eritromicina, fluorquinolonas"
+  },
+  {
+   "with": "Contraceptivos orais",
+   "nUso": 4,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Fluconazol / isoniazida",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fluconazol"
+   ],
+   "antigoSoSubstring": [
+    "fluconazol"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Ácido valproico",
+   "nUso": 1,
+   "exato": [
+    "acido-valproico"
+   ],
+   "sin": [
+    "divalproato-sodio"
+   ],
+   "comp": [
+    "acido-valproico"
+   ],
+   "antigo": [
+    "acido-valproico"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Varfarina / anticoagulantes",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "varfarina"
+   ],
+   "antigoSoSubstring": [
+    "varfarina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Antirretrovirais HIV (IPs, NNRTIs)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "IPs, NNRTIs"
+  },
+  {
+   "with": "Voriconazol",
+   "nUso": 1,
+   "exato": [
+    "voriconazol",
+    "voriconazol"
+   ],
+   "sin": [
+    "voriconazol"
+   ],
+   "comp": [],
+   "antigo": [
+    "voriconazol"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Lamotrigina",
+   "nUso": 4,
+   "exato": [
+    "lamotrigina",
+    "lamotrigina"
+   ],
+   "sin": [
+    "lamotrigina"
+   ],
+   "comp": [],
+   "antigo": [
+    "lamotrigina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Aspirina (altas doses)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "altas doses"
+  },
+  {
+   "with": "Carbamazepina / fenitoína / rifampicina (indutores)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fenitoina",
+    "carbamazepina"
+   ],
+   "antigoSoSubstring": [
+    "fenitoina",
+    "carbamazepina"
+   ],
+   "enumeracao": "indutores"
+  },
+  {
+   "with": "Contraceptivos orais (estrógeno)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "estrógeno"
+  },
+  {
+   "with": "Antiácidos (alumínio/magnésio)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "alumínio/magnésio"
+  },
+  {
+   "with": "Álcool / BZD / outros depressores SNC",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "BZD / álcool",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Tiazolidinedionas (pioglitazona)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "pioglitazona"
+   ],
+   "antigoSoSubstring": [
+    "pioglitazona"
+   ],
+   "enumeracao": "pioglitazona"
+  },
+  {
+   "with": "Corticoides",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Anticolinérgicos (biperideno, oxibutinina, amitriptilina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "amitriptilina",
+    "amitriptilina-paliativa"
+   ],
+   "antigoSoSubstring": [
+    "amitriptilina",
+    "amitriptilina-paliativa"
+   ],
+   "enumeracao": "biperideno, oxibutinina, amitriptilina"
+  },
+  {
+   "with": "Betabloqueadores / outros bradicardizantes",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Succinilcolina (cirurgia)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "succinilcolina"
+   ],
+   "antigoSoSubstring": [
+    "succinilcolina"
+   ],
+   "enumeracao": "cirurgia"
+  },
+  {
+   "with": "Paroxetina / fluoxetina (CYP2D6)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fluoxetina"
+   ],
+   "antigoSoSubstring": [
+    "fluoxetina"
+   ],
+   "enumeracao": "CYP2D6"
+  },
+  {
+   "with": "Cetoconazol / eritromicina (CYP3A4)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "CYP3A4"
+  },
+  {
+   "with": "Álcool / BZD / opioides",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Eritromicina / cetoconazol (CYP3A4)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "CYP3A4"
+  },
+  {
+   "with": "Cetoconazol / eritromicina / grapefruit",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Opioides / propofol",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "propofol-uti"
+   ],
+   "antigoSoSubstring": [
+    "propofol-uti"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Fluconazol (CYP3A4)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fluconazol"
+   ],
+   "antigoSoSubstring": [
+    "fluconazol"
+   ],
+   "enumeracao": "CYP3A4"
+  },
+  {
+   "with": "Opioides / álcool / outros depressores SNC",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Fluvoxamina / omeprazol (CYP2C19)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "omeprazol",
+    "fluvoxamina"
+   ],
+   "antigoSoSubstring": [
+    "omeprazol",
+    "fluvoxamina"
+   ],
+   "enumeracao": "CYP2C19"
+  },
+  {
+   "with": "Opioides / álcool / depressores SNC",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Ácido valpróico",
+   "nUso": 1,
+   "exato": [
+    "acido-valproico"
+   ],
+   "sin": [
+    "divalproato-sodio"
+   ],
+   "comp": [
+    "acido-valproico"
+   ],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Cetoconazol / itraconazol / eritromicina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Álcool / depressores SNC",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Cetoconazol / claritromicina (CYP3A4 inibidores potentes)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "claritromicina"
+   ],
+   "antigoSoSubstring": [
+    "claritromicina"
+   ],
+   "enumeracao": "CYP3A4 inibidores potentes"
+  },
+  {
+   "with": "Rifampicina / carbamazepina (CYP3A4 indutores potentes)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "carbamazepina"
+   ],
+   "antigoSoSubstring": [
+    "carbamazepina"
+   ],
+   "enumeracao": "CYP3A4 indutores potentes"
+  },
+  {
+   "with": "Metotrexato (altas doses)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "metotrexato-onco"
+   ],
+   "antigoSoSubstring": [
+    "metotrexato-onco"
+   ],
+   "enumeracao": "altas doses"
+  },
+  {
+   "with": "Atazanavir / rilpivirina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Atazanavir",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Dasatinibe / erlotinibe",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Amitriptilina / nortriptilina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "amitriptilina",
+    "amitriptilina-paliativa"
+   ],
+   "antigoSoSubstring": [
+    "amitriptilina",
+    "amitriptilina-paliativa"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Apomorfina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "morfina-paliativa"
+   ],
+   "antigoSoSubstring": [
+    "morfina-paliativa"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "QT-prolongadores (antiarrítmicos, antipsicóticos, macrolídeos)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "antiarrítmicos, antipsicóticos, macrolídeos"
+  },
+  {
+   "with": "Tramadol / SSRIs",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "tramadol",
+    "tramadol-paliativo"
+   ],
+   "antigoSoSubstring": [
+    "tramadol",
+    "tramadol-paliativo"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Antipsicóticos / levodopa",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Antibióticos orais (neomicina, rifaximina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "neomicina, rifaximina"
+  },
+  {
+   "with": "Antiácidos / leite",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Medicamentos orais concomitantes",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Diuréticos e corticosteroides",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Antibióticos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Fármacos que prolongam QT (ondansetrona, haloperidol, macrolídeos, quinolonas)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "haloperidol",
+    "ondansetrona",
+    "haloperidol-paliativo",
+    "ondansetrona-paliativa"
+   ],
+   "antigoSoSubstring": [
+    "haloperidol",
+    "ondansetrona",
+    "haloperidol-paliativo",
+    "ondansetrona-paliativa"
+   ],
+   "enumeracao": "ondansetrona, haloperidol, macrolídeos, quinolonas"
+  },
+  {
+   "with": "Inibidores CYP3A4 (cetoconazol, itraconazol)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "cetoconazol, itraconazol"
+  },
+  {
+   "with": "Quinidina / ritonavir (P-gp inibidores)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "P-gp inibidores"
+  },
+  {
+   "with": "Inibidores da ECA (enalapril, captopril, lisinopril)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "enalapril"
+   ],
+   "antigoSoSubstring": [
+    "enalapril"
+   ],
+   "enumeracao": "enalapril, captopril, lisinopril"
+  },
+  {
+   "with": "Inibidores ECA",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Fluconazol / voriconazol / itraconazol",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fluconazol",
+    "voriconazol"
+   ],
+   "antigoSoSubstring": [
+    "fluconazol",
+    "voriconazol"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Estatinas (especialmente lovastatina, sinvastatina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "especialmente lovastatina, sinvastatina"
+  },
+  {
+   "with": "AINEs / aminoglicosídeos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Grapefruit (suco)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "suco"
+  },
+  {
+   "with": "Fluconazol / voriconazol / posaconazol",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fluconazol",
+    "voriconazol"
+   ],
+   "antigoSoSubstring": [
+    "fluconazol",
+    "voriconazol"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Rifampicina / carbamazepina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "carbamazepina"
+   ],
+   "antigoSoSubstring": [
+    "carbamazepina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Grapefruit / tangerina pomelo",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Antiácidos (magnésio/alumínio)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "magnésio/alumínio"
+  },
+  {
+   "with": "Colestiramina / sevelamer",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "sevelamer"
+   ],
+   "antigoSoSubstring": [
+    "sevelamer"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Levotiroxina / ciprofloxacino / tacrolimo / micofenolato",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "levotiroxina",
+    "ciprofloxacino",
+    "tacrolimo"
+   ],
+   "antigoSoSubstring": [
+    "levotiroxina",
+    "ciprofloxacino",
+    "tacrolimo"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Levotiroxina / fluorquinolonas / bisfosfonatos / ferro",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "levotiroxina"
+   ],
+   "antigoSoSubstring": [
+    "levotiroxina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Diuréticos tiazídicos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Fluorquinolonas / levotiroxina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "levotiroxina"
+   ],
+   "antigoSoSubstring": [
+    "levotiroxina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Fluorquinolonas / levotiroxina / ferro / bisfosfonatos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "levotiroxina"
+   ],
+   "antigoSoSubstring": [
+    "levotiroxina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Citrato (incluindo sucos cítricos)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "incluindo sucos cítricos"
+  },
+  {
+   "with": "Ferro (suplementação)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "suplementação"
+  },
+  {
+   "with": "Colestiramina / sequestrantes biliares",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "CYP2D6 — antipsicóticos, antidepressivos TCAs",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "CYP3A4 inibidores (cetoconazol, itraconazol)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "cetoconazol, itraconazol"
+  },
+  {
+   "with": "Tiazídicos",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Tetraciclinase / fluorquinolonas",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "TODOS os medicamentos orais",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Sorbitol",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Antiácidos/laxantes com cátions (hidróxido de Mg/Al)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "hidróxido de Mg/Al"
+  },
+  {
+   "with": "Medicamentos orais em geral",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Ferro oral",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Laxativos / furosemida",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "furosemida"
+   ],
+   "antigoSoSubstring": [
+    "furosemida"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "fenobarbital",
+   "nUso": 2,
+   "exato": [
+    "fenobarbital",
+    "fenobarbital",
+    "fenobarbital-neonatal",
+    "fenobarbital-paliativo"
+   ],
+   "sin": [
+    "fenobarbital"
+   ],
+   "comp": [],
+   "antigo": [
+    "fenobarbital",
+    "fenobarbital-neonatal",
+    "fenobarbital-paliativo"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "fluconazol",
+   "nUso": 1,
+   "exato": [
+    "fluconazol",
+    "fluconazol"
+   ],
+   "sin": [
+    "fluconazol"
+   ],
+   "comp": [],
+   "antigo": [
+    "fluconazol"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "(sem interação medicamentosa)",
+   "nUso": 4,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "sem interação medicamentosa"
+  },
+  {
+   "with": "varfarina",
+   "nUso": 7,
+   "exato": [
+    "varfarina"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "varfarina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "nitratos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "bosentan",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "metotrexato",
+   "nUso": 4,
+   "exato": [
+    "metotrexato-onco"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "metotrexato-onco"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "lítio",
+   "nUso": 3,
+   "exato": [],
+   "sin": [
+    "litio",
+    "litio"
+   ],
+   "comp": [],
+   "antigo": [
+    "litio"
+   ],
+   "antigoSoSubstring": [
+    "litio"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "anticoagulante",
+   "nUso": 1,
+   "exato": [],
+   "sin": [
+    "enoxaparina"
+   ],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "IECA / BRA",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "valproato",
+   "nUso": 1,
+   "exato": [],
+   "sin": [
+    "acido-valproico",
+    "divalproato-sodio"
+   ],
+   "comp": [],
+   "antigo": [
+    "acido-valproico",
+    "divalproato-sodio"
+   ],
+   "antigoSoSubstring": [
+    "acido-valproico",
+    "divalproato-sodio"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "fenitoína",
+   "nUso": 5,
+   "exato": [
+    "fenitoina",
+    "fenitoina"
+   ],
+   "sin": [
+    "fenitoina"
+   ],
+   "comp": [],
+   "antigo": [
+    "fenitoina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Indutores de CYP3A4 (rifampicina, carbamazepina, fenitoína, erva-de-são-joão)",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fenitoina",
+    "carbamazepina"
+   ],
+   "antigoSoSubstring": [
+    "fenitoina",
+    "carbamazepina"
+   ],
+   "enumeracao": "rifampicina, carbamazepina, fenitoína, erva-de-são-joão"
+  },
+  {
+   "with": "Inibidores potentes de CYP3A4 (cetoconazol, ritonavir)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "cetoconazol, ritonavir"
+  },
+  {
+   "with": "rifampicina",
+   "nUso": 8,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "carbamazepina",
+   "nUso": 5,
+   "exato": [
+    "carbamazepina",
+    "carbamazepina"
+   ],
+   "sin": [
+    "carbamazepina"
+   ],
+   "comp": [],
+   "antigo": [
+    "carbamazepina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "lamisil (terbinafina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "terbinafina"
+  },
+  {
+   "with": "Aminoglutetimida",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Indutores enzimáticos (rifampicina, barbitúricos, carbamazepina, fenitoína, oxcarbazepina, griseofulvina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fenitoina",
+    "carbamazepina",
+    "oxcarbazepina"
+   ],
+   "antigoSoSubstring": [
+    "fenitoina",
+    "carbamazepina",
+    "oxcarbazepina"
+   ],
+   "enumeracao": "rifampicina, barbitúricos, carbamazepina, fenitoína, oxcarbazepina, griseofulvina"
+  },
+  {
+   "with": "tamoxifeno",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Inibidores de CYP3A4 (cetoconazol e azólicos)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "cetoconazol e azólicos"
+  },
+  {
+   "with": "Indutores de CYP3A4 (rifampicina, barbitúricos, carbamazepina, hidantoína)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "carbamazepina"
+   ],
+   "antigoSoSubstring": [
+    "carbamazepina"
+   ],
+   "enumeracao": "rifampicina, barbitúricos, carbamazepina, hidantoína"
+  },
+  {
+   "with": "nifedipino",
+   "nUso": 1,
+   "exato": [
+    "nifedipino",
+    "nifedipino"
+   ],
+   "sin": [
+    "nifedipino"
+   ],
+   "comp": [],
+   "antigo": [
+    "nifedipino"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "bloqueadores neuromusculares",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "sulfato de magnésio",
+   "nUso": 1,
+   "exato": [
+    "sulfato-magnesio",
+    "sulfato-magnesio"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "sulfato-magnesio"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "misoprostol",
+   "nUso": 1,
+   "exato": [
+    "misoprostol",
+    "misoprostol"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "misoprostol"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "ocitocina",
+   "nUso": 1,
+   "exato": [
+    "ocitocina",
+    "ocitocina"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "ocitocina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Betamiméticos tocolíticos (terbutalina, salbutamol, ritodrina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "salbutamol"
+   ],
+   "antigoSoSubstring": [
+    "salbutamol"
+   ],
+   "enumeracao": "terbutalina, salbutamol, ritodrina"
+  },
+  {
+   "with": "cálcio",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "carbonato-calcio-quelante",
+    "patiromer",
+    "poliestireno-sulfonato-calcio",
+    "gluconato-calcio"
+   ],
+   "antigoSoSubstring": [
+    "carbonato-calcio-quelante",
+    "patiromer",
+    "poliestireno-sulfonato-calcio",
+    "gluconato-calcio"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "levotiroxina",
+   "nUso": 1,
+   "exato": [
+    "levotiroxina"
+   ],
+   "sin": [
+    "levotiroxina"
+   ],
+   "comp": [],
+   "antigo": [
+    "levotiroxina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "antipsicóticos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "aminoglicosídeos",
+   "nUso": 4,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "furosemida",
+   "nUso": 1,
+   "exato": [
+    "furosemida",
+    "furosemida"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "furosemida"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "fluorouracil",
+   "nUso": 2,
+   "exato": [
+    "fluorouracil"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fluorouracil"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "cetoconazol / inibidores CYP3A4",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "doxorrubicina",
+   "nUso": 2,
+   "exato": [
+    "doxorrubicina",
+    "doxorrubicina"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "doxorrubicina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "inibidores CYP3A4",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "leucovorin",
+   "nUso": 1,
+   "exato": [
+    "leucovorin"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "leucovorin"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "metronidazol",
+   "nUso": 1,
+   "exato": [
+    "metronidazol",
+    "metronidazol"
+   ],
+   "sin": [
+    "metronidazol"
+   ],
+   "comp": [],
+   "antigo": [
+    "metronidazol"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "sorivudina / brivudina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "oxaliplatina",
+   "nUso": 1,
+   "exato": [
+    "oxaliplatina",
+    "oxaliplatina"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "oxaliplatina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "cisplatina",
+   "nUso": 3,
+   "exato": [
+    "cisplatina",
+    "cisplatina"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "cisplatina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "radioterapia concomitante",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "penicilinas",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "probenecida",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "trastuzumabe",
+   "nUso": 1,
+   "exato": [
+    "trastuzumabe",
+    "trastuzumabe"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "trastuzumabe"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "paclitaxel",
+   "nUso": 2,
+   "exato": [
+    "paclitaxel",
+    "paclitaxel"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "paclitaxel"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "ciclosporina",
+   "nUso": 1,
+   "exato": [
+    "ciclosporina"
+   ],
+   "sin": [
+    "ciclosporina"
+   ],
+   "comp": [],
+   "antigo": [
+    "ciclosporina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "corticoides crônicos (> 10 mg/dia prednisona)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "prednisona"
+   ],
+   "antigoSoSubstring": [
+    "prednisona"
+   ],
+   "enumeracao": "> 10 mg/dia prednisona"
+  },
+  {
+   "with": "ipilimumabe",
+   "nUso": 2,
+   "exato": [
+    "ipilimumabe",
+    "ipilimumabe"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "ipilimumabe"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Corticosteroides sistêmicos / imunossupressores (basais)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "basais"
+  },
+  {
+   "with": "Outros inibidores de checkpoint (ex.: nivolumabe)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "nivolumabe"
+   ],
+   "antigoSoSubstring": [
+    "nivolumabe"
+   ],
+   "enumeracao": "ex.: nivolumabe"
+  },
+  {
+   "with": "sinvastatina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Sunitinibe",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Antraciclinas (± radioterapia torácica)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "± radioterapia torácica"
+  },
+  {
+   "with": "itraconazol",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "inibidores CYP3A4 potentes (cetoconazol, claritromicina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "claritromicina"
+   ],
+   "antigoSoSubstring": [
+    "claritromicina"
+   ],
+   "enumeracao": "cetoconazol, claritromicina"
+  },
+  {
+   "with": "apomorfina",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "morfina-paliativa"
+   ],
+   "antigoSoSubstring": [
+    "morfina-paliativa"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "dexametasona",
+   "nUso": 1,
+   "exato": [
+    "dexametasona-paliativa"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "dexametasona-paliativa"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "contraceptivos orais",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Quimioterápicos citotóxicos",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Ifosfamida / ciclofosfamida",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Exames laboratoriais (cetonas urinárias, CPK)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "cetonas urinárias, CPK"
+  },
+  {
+   "with": "mercaptopurina / azatioprina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "azatioprina"
+   ],
+   "antigoSoSubstring": [
+    "azatioprina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "amoxicilina",
+   "nUso": 1,
+   "exato": [
+    "amoxicilina"
+   ],
+   "sin": [
+    "amoxicilina"
+   ],
+   "comp": [
+    "amoxicilina_clavulanato"
+   ],
+   "antigo": [
+    "amoxicilina",
+    "amoxicilina_clavulanato"
+   ],
+   "antigoSoSubstring": [
+    "amoxicilina_clavulanato"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Dosagem de ácido úrico (interferência laboratorial)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "interferência laboratorial"
+  },
+  {
+   "with": "halotano / anestésicos halogenados",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "antidepressivos tricíclicos",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "β-bloqueadores",
+   "nUso": 3,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "cocaína",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "norepinefrina",
+   "nUso": 1,
+   "exato": [
+    "norepinefrina"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "norepinefrina",
+    "epinefrina-uti"
+   ],
+   "antigoSoSubstring": [
+    "epinefrina-uti"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Vasodilatadores (nitratos, iECA, BCC)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "nitratos, iECA, BCC"
+  },
+  {
+   "with": "Diuréticos (especialmente furosemida)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "furosemida"
+   ],
+   "antigoSoSubstring": [
+    "furosemida"
+   ],
+   "enumeracao": "especialmente furosemida"
+  },
+  {
+   "with": "Outros inotrópicos/simpatomiméticos e digoxina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "digoxina"
+   ],
+   "antigoSoSubstring": [
+    "digoxina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "opioides",
+   "nUso": 3,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "antihipertensivos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "opioide + BZD",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "inibidores CYP3A4 (fluconazol, eritromicina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fluconazol"
+   ],
+   "antigoSoSubstring": [
+    "fluconazol"
+   ],
+   "enumeracao": "fluconazol, eritromicina"
+  },
+  {
+   "with": "Opioides (fentanila, morfina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fentanil-uti",
+    "morfina-paliativa",
+    "fentanil-transdermico"
+   ],
+   "antigoSoSubstring": [
+    "fentanil-uti",
+    "morfina-paliativa",
+    "fentanil-transdermico"
+   ],
+   "enumeracao": "fentanila, morfina"
+  },
+  {
+   "with": "Benzodiazepínicos / sedativos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Indutores enzimáticos (fenitoína, rifampicina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fenitoina"
+   ],
+   "antigoSoSubstring": [
+    "fenitoina"
+   ],
+   "enumeracao": "fenitoína, rifampicina"
+  },
+  {
+   "with": "BZD / propofol",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "propofol-uti"
+   ],
+   "antigoSoSubstring": [
+    "propofol-uti"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "propofol",
+   "nUso": 1,
+   "exato": [
+    "propofol-uti",
+    "propofol-uti"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "propofol-uti"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "aminoglicosídeos / polimixinas",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "magnésio",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "sulfato-magnesio"
+   ],
+   "antigoSoSubstring": [
+    "sulfato-magnesio"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "contraceptivos hormonais",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "toremifeno",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "insulina / antidiabéticos",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "fator IX concentrado",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "digoxina",
+   "nUso": 2,
+   "exato": [
+    "digoxina",
+    "digoxina"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "digoxina"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "sotalol / outros antiarrítmicos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "dipiridamol",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "teofilina / cafeína",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "teofilina"
+   ],
+   "antigoSoSubstring": [
+    "teofilina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "cálcio IV",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "catecolaminas",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "bicarbonato de sódio",
+   "nUso": 1,
+   "exato": [
+    "bicarbonato-sodio-oral",
+    "bicarbonato-sodio-pcr"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "bicarbonato-sodio-oral",
+    "bicarbonato-sodio-pcr"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "anticoagulantes",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Opioides (morfina, fentanila, metadona)",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fentanil-uti",
+    "morfina-paliativa",
+    "fentanil-transdermico",
+    "metadona-paliativa"
+   ],
+   "antigoSoSubstring": [
+    "fentanil-uti",
+    "morfina-paliativa",
+    "fentanil-transdermico",
+    "metadona-paliativa"
+   ],
+   "enumeracao": "morfina, fentanila, metadona"
+  },
+  {
+   "with": "Buprenorfina",
+   "nUso": 2,
+   "exato": [
+    "buprenorfina-transdermico"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "buprenorfina-transdermico"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Antidepressivos tricíclicos (amitriptilina, nortriptilina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "amitriptilina",
+    "amitriptilina-paliativa"
+   ],
+   "antigoSoSubstring": [
+    "amitriptilina",
+    "amitriptilina-paliativa"
+   ],
+   "enumeracao": "amitriptilina, nortriptilina"
+  },
+  {
+   "with": "Benzodiazepínicos (uso crônico/dependência)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "uso crônico/dependência"
+  },
+  {
+   "with": "Proconvulsivantes (carbamazepina, fenitoína em overdose)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fenitoina",
+    "carbamazepina"
+   ],
+   "antigoSoSubstring": [
+    "fenitoina",
+    "carbamazepina"
+   ],
+   "enumeracao": "carbamazepina, fenitoína em overdose"
+  },
+  {
+   "with": "ISRS / IRSN",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "BZD / opioides",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "inibidores CYP2D6 (fluoxetina, paroxetina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fluoxetina"
+   ],
+   "antigoSoSubstring": [
+    "fluoxetina"
+   ],
+   "enumeracao": "fluoxetina, paroxetina"
+  },
+  {
+   "with": "BZD / outros depressores SNC",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "inibidores CYP3A4 (cetoconazol, eritromicina)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "cetoconazol, eritromicina"
+  },
+  {
+   "with": "BZD",
+   "nUso": 2,
+   "exato": [],
+   "sin": [
+    "midazolam-uti"
+   ],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "BZD / depressores SNC",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "outros opioides fortes",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "antifúngicos azólicos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "rifampicina / fenitoína",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fenitoina"
+   ],
+   "antigoSoSubstring": [
+    "fenitoina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "amiodarona / sotalol",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "amiodarona",
+    "amiodarona-pcr"
+   ],
+   "antigoSoSubstring": [
+    "amiodarona",
+    "amiodarona-pcr"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "morfina SC (mesma seringa)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "morfina-paliativa"
+   ],
+   "antigoSoSubstring": [
+    "morfina-paliativa"
+   ],
+   "enumeracao": "mesma seringa"
+  },
+  {
+   "with": "haloperidol SC",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "haloperidol",
+    "haloperidol-paliativo"
+   ],
+   "antigoSoSubstring": [
+    "haloperidol",
+    "haloperidol-paliativo"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "midazolam / BZD",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "midazolam",
+    "midazolam-uti",
+    "midazolam-paliativo"
+   ],
+   "antigoSoSubstring": [
+    "midazolam",
+    "midazolam-uti",
+    "midazolam-paliativo"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "outros antipsicóticos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "haloperidol / antipsicóticos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "haloperidol",
+    "haloperidol-paliativo"
+   ],
+   "antigoSoSubstring": [
+    "haloperidol",
+    "haloperidol-paliativo"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "morfina SC",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "morfina-paliativa"
+   ],
+   "antigoSoSubstring": [
+    "morfina-paliativa"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Outros anticolinérgicos/antimuscarínicos (atropina, escopolamina, ADT, anti-H1, antiespasmódicos)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "atropina"
+   ],
+   "antigoSoSubstring": [
+    "atropina"
+   ],
+   "enumeracao": "atropina, escopolamina, ADT, anti-H1, antiespasmódicos"
+  },
+  {
+   "with": "Outros antagonistas opioides (naloxona, naltrexona)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "naloxona",
+    "naloxona-antidoto-opioide"
+   ],
+   "antigoSoSubstring": [
+    "naloxona",
+    "naloxona-antidoto-opioide"
+   ],
+   "enumeracao": "naloxona, naltrexona"
+  },
+  {
+   "with": "(perfil CYP)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "perfil CYP"
+  },
+  {
+   "with": "insulina / hipoglicemiantes",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "opioides / BZD",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "antiácidos com alumínio/magnésio",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "tramadol",
+   "nUso": 1,
+   "exato": [
+    "tramadol",
+    "tramadol-paliativo"
+   ],
+   "sin": [
+    "tramadol"
+   ],
+   "comp": [
+    "tramadol_paracetamol"
+   ],
+   "antigo": [
+    "tramadol",
+    "tramadol-paliativo",
+    "tramadol_paracetamol"
+   ],
+   "antigoSoSubstring": [
+    "tramadol_paracetamol"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Álcool e depressores do SNC",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Topiramato",
+   "nUso": 1,
+   "exato": [
+    "topiramato",
+    "topiramato"
+   ],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "topiramato"
+   ],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Cálcio, antiácidos, ferro",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Colestipol/colestiramina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Cloranfenicol",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Clobazam",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Inibidores de CYP3A4 (cetoconazol, ritonavir)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "cetoconazol, ritonavir"
+  },
+  {
+   "with": "Cetoconazol/itraconazol",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Diuréticos tiazídicos ou de alça",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Fenobarbital/rifampicina",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fenobarbital",
+    "fenobarbital-neonatal",
+    "fenobarbital-paliativo"
+   ],
+   "antigoSoSubstring": [
+    "fenobarbital",
+    "fenobarbital-neonatal",
+    "fenobarbital-paliativo"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Inibidores de PDE5 (tadalafila etc.)",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "tadalafila"
+   ],
+   "antigoSoSubstring": [
+    "tadalafila"
+   ],
+   "enumeracao": "tadalafila etc."
+  },
+  {
+   "with": "ISRS/IRSN",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Anticoagulantes orais",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Rifampicina/carbamazepina/fenitoína",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "fenitoina",
+    "carbamazepina"
+   ],
+   "antigoSoSubstring": [
+    "fenitoina",
+    "carbamazepina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Antibióticos de amplo espectro",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Rifampicina/carbamazepina",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [
+    "carbamazepina"
+   ],
+   "antigoSoSubstring": [
+    "carbamazepina"
+   ],
+   "enumeracao": null
+  },
+  {
+   "with": "Outros corticosteroides tópicos/sistêmicos",
+   "nUso": 1,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": null
+  },
+  {
+   "with": "Outros aminoglicosídeos (tópicos ou sistêmicos)",
+   "nUso": 2,
+   "exato": [],
+   "sin": [],
+   "comp": [],
+   "antigo": [],
+   "antigoSoSubstring": [],
+   "enumeracao": "tópicos ou sistêmicos"
+  }
+ ]
+}

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proposta — situação da verificação na receita (RM-105)</title>
+<style>
+  :root { --bg:#f1f5f9; --card:#fff; --tx:#0f172a; --mut:#64748b; --bd:#cbd5e1; --ok:#166534; --okbg:#f0fdf4; --warn:#92400e; --warnbg:#fffbeb; --bad:#991b1b; --badbg:#fef2f2; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0b1220; --card:#111a2e; --tx:#e2e8f0; --mut:#94a3b8; --bd:#334155; --ok:#86efac; --okbg:#052e16; --warn:#fcd34d; --warnbg:#2a1d04; --bad:#fca5a5; --badbg:#2a0a0a; } }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--tx); font:14px/1.45 system-ui, sans-serif; }
+  h1 { font-size:18px; margin:0 0 4px; } p.sub { margin:0 0 16px; color:var(--mut); }
+  .grid { display:grid; gap:16px; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); max-width:1200px; }
+  .opt { background:var(--card); border:1px solid var(--bd); border-radius:12px; padding:14px; }
+  .opt h2 { font-size:14px; margin:0 0 2px; } .opt small { color:var(--mut); display:block; margin-bottom:10px; }
+  .rx { border:1px solid var(--bd); border-radius:8px; padding:12px; background:#fff; color:#0f172a; font-size:12px; }
+  .rx .titulo { text-align:center; font-weight:700; letter-spacing:.1em; border:1px solid #cbd5e1; display:inline-block; padding:2px 14px; border-radius:4px; }
+  .rx .item { margin:10px 0 0; } .rx .item b { display:block; } .rx .item span { color:#475569; margin-left:12px; }
+  .rx footer { margin-top:14px; padding-top:8px; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; gap:8px; color:#64748b; font-size:11px; }
+  .sel { margin-top:8px; padding:5px 8px; border-radius:6px; font-size:11px; border:1px solid; }
+  .ok { color:var(--ok); background:var(--okbg); border-color:var(--ok); }
+  .warn { color:var(--warn); background:var(--warnbg); border-color:var(--warn); }
+  .bad { color:var(--bad); background:var(--badbg); border-color:var(--bad); }
+  .anexo { margin-top:10px; border:1px dashed var(--bd); border-radius:8px; padding:10px; background:#fff; color:#0f172a; font-size:11px; }
+  .anexo h3 { margin:0 0 6px; font-size:12px; } .anexo table { width:100%; border-collapse:collapse; } .anexo td, .anexo th { text-align:left; padding:2px 6px; border-bottom:1px solid #e2e8f0; }
+  ul { margin:6px 0 0 18px; padding:0; } li { margin:2px 0; }
+  .tag { display:inline-block; font-size:10px; padding:1px 6px; border-radius:99px; border:1px solid var(--bd); color:var(--mut); }
+</style>
+</head>
+<body>
+<h1>Proposta — situação da verificação de segurança na receita impressa</h1>
+<p class="sub">Maquete estática para aprovação. <strong>A receita real não foi modificada.</strong> Hoje a receita não traz nenhuma informação de segurança; o aviso da RM-104 existe só na tela, fora da área impressa.</p>
+
+<div class="grid">
+
+  <section class="opt">
+    <h2>A · Linha de situação no rodapé <span class="tag">mínima</span></h2>
+    <small>Uma linha curta, gerada pelo sistema, sob "Gerado por PRESCREVE-AI". Não polui a receita do paciente.</small>
+    <div class="rx">
+      <div style="text-align:center"><span class="titulo">RECEITA MÉDICA</span></div>
+      <div class="item"><b>1. Paracetamol 500 mg — comprimido</b><span>500 mg · VO · 6/6h · por 3 dias</span></div>
+      <footer>
+        <div>Gerado por PRESCREVE-AI<br>Apoio à decisão clínica — responsabilidade do médico prescritor
+          <div class="sel ok">Verificação de segurança: moléculas COMPLETA · avaliação clínica não integral (contexto não avaliado: função renal, alergias)</div>
+        </div>
+        <div>04 de novembro de 2026<br><br>Assinatura e carimbo</div>
+      </footer>
+    </div>
+    <ul>
+      <li><b>Parcial:</b> <span class="sel warn" style="display:inline-block;margin:0">Verificação de segurança PARCIAL — não verificadas: xyz</span></li>
+      <li><b>Nada reconhecido / erro:</b> <span class="sel bad" style="display:inline-block;margin:0">Verificação de segurança NÃO REALIZADA</span></li>
+    </ul>
+  </section>
+
+  <section class="opt">
+    <h2>B · Anexo de verificação (página separada) <span class="tag">recomendada</span></h2>
+    <small>A receita do paciente fica limpa; uma segunda página, só para o prontuário/farmácia, registra o que foi e o que não foi verificado. Entra no mesmo arquivo de impressão, com quebra de página.</small>
+    <div class="rx">
+      <div style="text-align:center"><span class="titulo">RECEITA MÉDICA</span></div>
+      <div class="item"><b>1. Sertralina 50 mg — comprimido</b><span>50 mg · VO · 1x/dia</span></div>
+      <div class="item"><b>2. xyz_desconhecida</b><span>— · VO</span></div>
+      <footer><div>Gerado por PRESCREVE-AI<div class="sel warn">Verificação de segurança PARCIAL — ver anexo</div></div><div>Assinatura e carimbo</div></footer>
+    </div>
+    <div class="anexo">
+      <h3>ANEXO — Verificação de segurança (uso do prescritor) · 04/11/2026 15:30</h3>
+      <table>
+        <tr><th>Situação</th><td>PARCIAL — há itens não verificados</td></tr>
+        <tr><th>Verificadas</th><td>Sertralina (identidade confirmada: nome ativo)</td></tr>
+        <tr><th>Não verificadas</th><td>xyz_desconhecida (não reconhecida)</td></tr>
+        <tr><th>Combinações não avaliadas</th><td>Sertralina + xyz_desconhecida</td></tr>
+        <tr><th>Alertas emitidos</th><td>nenhum (para o que foi verificado)</td></tr>
+        <tr><th>Contexto</th><td>gestação: informado · lactação: informado · função renal: <b>não informado</b> · alergias: <b>não avaliado</b></td></tr>
+        <tr><th>Versão das regras</th><td>RM-105 · base de 382 medicamentos</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section class="opt">
+    <h2>C · Só na tela (situação atual) <span class="tag">sem mudança</span></h2>
+    <small>Mantém a receita como está. O aviso aparece na pré-visualização, fora da área impressa. Risco: a informação se perde quando a receita é impressa.</small>
+    <div class="rx">
+      <div class="sel warn" style="margin:0 0 8px">⚠ Verificação de segurança incompleta — (somente na tela, <code>print:hidden</code>)</div>
+      <div style="text-align:center"><span class="titulo">RECEITA MÉDICA</span></div>
+      <div class="item"><b>1. Paracetamol 500 mg — comprimido</b><span>500 mg · VO · 6/6h</span></div>
+      <footer><div>Gerado por PRESCREVE-AI</div><div>Assinatura e carimbo</div></footer>
+    </div>
+  </section>
+
+</div>
+
+<section class="opt" style="max-width:1200px;margin-top:16px">
+  <h2>Proposta técnica (para aprovação)</h2>
+  <ul>
+    <li><b>Dados:</b> <code>PrintPreview</code> passa a receber o <code>SafetyCheckResult</code> inteiro (hoje recebe só um texto de aviso) e a data/hora da verificação.</li>
+    <li><b>Texto:</b> função pura <code>resumirVerificacaoParaReceita(result)</code> em <code>safety-coverage.ts</code> devolve <code>{ rotulo, nivel, linhas[] }</code> e é a única fonte do texto impresso (testável sem renderizar a página).</li>
+    <li><b>Impressão:</b> linha no rodapé (A) e/ou anexo com <code>break-before: page</code> (B), dentro de <code>#print-area</code>; o painel de controles continua <code>print:hidden</code>.</li>
+    <li><b>Estado obrigatório:</b> a receita só é impressa com um rótulo de situação; nenhum estado "em branco".</li>
+    <li><b>Decisões que dependem de vocês:</b> (1) A, B ou A+B; (2) o rótulo deve aparecer na via do paciente?; (3) o anexo entra no PDF/arquivo do prontuário?; (4) bloquear a impressão em <code>erro</code> ou apenas avisar?</li>
+    <li><b>Pré-requisito (RM-106+):</b> a tela hoje envia <code>gestante</code>/<code>lactante</code>/<code>idoso</code> sempre como booleanos (nunca "não informado"); para a linha de contexto ser fiel, esses campos precisam poder ficar vazios.</li>
+  </ul>
+</section>
+</body>
+</html>

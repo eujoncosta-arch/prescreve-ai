@@ -20,8 +20,13 @@ import { describe, it, expect } from 'vitest';
 import { searchDrugs, getAllDrugs } from '@/lib/pharma-database';
 import { EUROFARMA_CATALOG } from '@/lib/eurofarma-sync';
 import { getAdjustmentForCrCl, calcCrCl, type PatientParams } from '@/lib/dose-calculator';
-import { runSafetyCheck } from '@/lib/safety-rules';
+import { runSafetyCheck as runSafetyCheckComCobertura } from '@/lib/safety-rules';
 import { drugRepository } from '@/lib/pharma-core';
+
+// RM-104: `runSafetyCheck` agora devolve o resultado com cobertura explícita. Estes testes
+// verificam o CONTEÚDO dos alertas (comportamento preservado); a cobertura é testada em
+// `rm104-cobertura-verificacao-seguranca.test.ts`.
+const runSafetyCheck = (input: Parameters<typeof runSafetyCheckComCobertura>[0]) => runSafetyCheckComCobertura(input).alertas;
 
 const MOLECULA = 'Losartana Potássica + Hidroclorotiazida';
 

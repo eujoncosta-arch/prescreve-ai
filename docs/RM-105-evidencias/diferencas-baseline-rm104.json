@@ -1,0 +1,238 @@
+{
+ "total": 539,
+ "iguais": 527,
+ "dif": [
+  {
+   "k": "ieca||enalapril",
+   "gated": [
+    "ieca"
+   ],
+   "removidos": [
+    "dup-IECA"
+   ],
+   "adicionados": [],
+   "titulosRemovidos": [
+    "Duplicidade terapêutica: IECA"
+   ],
+   "titulosAdicionados": [],
+   "sevRem": [
+    "warning"
+   ],
+   "statusAntes": "parcial",
+   "statusDepois": "parcial"
+  },
+  {
+   "k": "bra||enalapril",
+   "gated": [
+    "bra"
+   ],
+   "removidos": [
+    "inter-olmesartana-enalapril"
+   ],
+   "adicionados": [],
+   "titulosRemovidos": [
+    "Interação: Olmesartana + Enalapril"
+   ],
+   "titulosAdicionados": [],
+   "sevRem": [
+    "danger"
+   ],
+   "statusAntes": "parcial",
+   "statusDepois": "parcial"
+  },
+  {
+   "k": "isrs||varfarina",
+   "gated": [
+    "isrs"
+   ],
+   "removidos": [
+    "inter-sertralina-varfarina"
+   ],
+   "adicionados": [],
+   "titulosRemovidos": [
+    "Interação: Sertralina + Varfarina"
+   ],
+   "titulosAdicionados": [],
+   "sevRem": [
+    "warning"
+   ],
+   "statusAntes": "parcial",
+   "statusDepois": "parcial"
+  },
+  {
+   "k": "isrs||tramadol",
+   "gated": [
+    "isrs"
+   ],
+   "removidos": [
+    "critical-pair-sertralina-tramadol"
+   ],
+   "adicionados": [
+    "critical-pair-isrs-tramadol"
+   ],
+   "titulosRemovidos": [
+    "Sertralina + Tramadol — Síndrome serotoninérgica"
+   ],
+   "titulosAdicionados": [
+    "ISRS + Tramadol — Síndrome serotoninérgica"
+   ],
+   "sevRem": [
+    "danger"
+   ],
+   "statusAntes": "parcial",
+   "statusDepois": "parcial"
+  },
+  {
+   "k": "isrs||sertralina",
+   "gated": [
+    "isrs"
+   ],
+   "removidos": [
+    "dup-ISRS — Inibidor Seletivo da Recaptação de Serotonina"
+   ],
+   "adicionados": [],
+   "titulosRemovidos": [
+    "Duplicidade terapêutica: ISRS — Inibidor Seletivo da Recaptação de Serotonina"
+   ],
+   "titulosAdicionados": [],
+   "sevRem": [
+    "warning"
+   ],
+   "statusAntes": "parcial",
+   "statusDepois": "parcial"
+  },
+  {
+   "k": "antibiotico||varfarina",
+   "gated": [
+    "antibiotico"
+   ],
+   "removidos": [
+    "inter-amoxicilina-varfarina"
+   ],
+   "adicionados": [],
+   "titulosRemovidos": [
+    "Interação: Amoxicilina + Varfarina"
+   ],
+   "titulosAdicionados": [],
+   "sevRem": [
+    "warning"
+   ],
+   "statusAntes": "parcial",
+   "statusDepois": "parcial"
+  },
+  {
+   "k": "analgesico||varfarina",
+   "gated": [
+    "analgesico"
+   ],
+   "removidos": [
+    "inter-paracetamol-varfarina"
+   ],
+   "adicionados": [],
+   "titulosRemovidos": [
+    "Interação: Paracetamol + Varfarina"
+   ],
+   "titulosAdicionados": [],
+   "sevRem": [
+    "warning"
+   ],
+   "statusAntes": "parcial",
+   "statusDepois": "parcial"
+  },
+  {
+   "k": "febre||varfarina",
+   "gated": [
+    "febre"
+   ],
+   "removidos": [
+    "inter-paracetamol-varfarina"
+   ],
+   "adicionados": [],
+   "titulosRemovidos": [
+    "Interação: Paracetamol + Varfarina"
+   ],
+   "titulosAdicionados": [],
+   "sevRem": [
+    "warning"
+   ],
+   "statusAntes": "parcial",
+   "statusDepois": "parcial"
+  },
+  {
+   "k": "ansiedade||tramadol",
+   "gated": [
+    "ansiedade"
+   ],
+   "removidos": [
+    "critical-pair-escitalopram-tramadol"
+   ],
+   "adicionados": [],
+   "titulosRemovidos": [
+    "Escitalopram + Tramadol — Síndrome serotoninérgica"
+   ],
+   "titulosAdicionados": [],
+   "sevRem": [
+    "danger"
+   ],
+   "statusAntes": "parcial",
+   "statusDepois": "parcial"
+  },
+  {
+   "k": "antidepressivo||varfarina",
+   "gated": [
+    "antidepressivo"
+   ],
+   "removidos": [
+    "inter-sertralina-varfarina"
+   ],
+   "adicionados": [],
+   "titulosRemovidos": [
+    "Interação: Sertralina + Varfarina"
+   ],
+   "titulosAdicionados": [],
+   "sevRem": [
+    "warning"
+   ],
+   "statusAntes": "parcial",
+   "statusDepois": "parcial"
+  },
+  {
+   "k": "antidepressivo||tramadol",
+   "gated": [
+    "antidepressivo"
+   ],
+   "removidos": [
+    "critical-pair-sertralina-tramadol"
+   ],
+   "adicionados": [],
+   "titulosRemovidos": [
+    "Sertralina + Tramadol — Síndrome serotoninérgica"
+   ],
+   "titulosAdicionados": [],
+   "sevRem": [
+    "danger"
+   ],
+   "statusAntes": "parcial",
+   "statusDepois": "parcial"
+  },
+  {
+   "k": "antidepressivo||sertralina",
+   "gated": [
+    "antidepressivo"
+   ],
+   "removidos": [
+    "dup-ISRS — Inibidor Seletivo da Recaptação de Serotonina"
+   ],
+   "adicionados": [],
+   "titulosRemovidos": [
+    "Duplicidade terapêutica: ISRS — Inibidor Seletivo da Recaptação de Serotonina"
+   ],
+   "titulosAdicionados": [],
+   "sevRem": [
+    "warning"
+   ],
+   "statusAntes": "parcial",
+   "statusDepois": "parcial"
+  }
+ ]
+}

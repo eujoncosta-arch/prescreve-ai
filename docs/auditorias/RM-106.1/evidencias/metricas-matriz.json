@@ -1,0 +1,117 @@
+{
+ "U1_regras_cadastradas": 870,
+ "U2_with_distintos": 491,
+ "U2b_entidades": 382,
+ "entidades_com_references": 360,
+ "regras_com_campos_alem_de_with_severity_description": 0,
+ "heuristica_texto_description": {
+  "cita_fonte_no_texto": 15,
+  "menciona_mecanismo_no_texto": 491,
+  "menciona_conduta_no_texto": 178,
+  "nota": "heurística por regex sobre texto livre; NÃO equivale a fonte/mecanismo/conduta estruturados nem verificados"
+ },
+ "U3_relacoes_direcionais_regra_entidade": {
+  "novo": 2662,
+  "antigo_substring": 580,
+  "mantidas": 574,
+  "perdidas": 6,
+  "ganhas": 2088,
+  "por_tipo_novo": {
+   "classe_farmacologica": 1183,
+   "enumeracao_explicita": 176,
+   "grupo_aprovado": 628,
+   "nome_base_do_ativo": 138,
+   "molecula_exata": 401,
+   "sinonimo_autorizado": 73,
+   "componente_combinacao": 63
+  }
+ },
+ "U4_pares_nao_ordenados_com_relacao": {
+  "novo": 2335,
+  "antigo_substring": 532,
+  "ganhos": 1809,
+  "perdidos": 6,
+  "total_possivel_de_pares": 72771
+ },
+ "U5_interface_por_par_de_entidades": {
+  "pares_executados": 72771,
+  "pares_com_alerta_de_interacao": 2363,
+  "pares_com_alguma_alerta": 4053,
+  "alertas_interacao_total": 2363,
+  "pares_com_mais_de_um_alerta_interacao": 0,
+  "pares_sem_regra": 70408,
+  "por_classificacao": {
+   "por_grupo": 567,
+   "por_classe": 1030,
+   "pendente_validacao": 766
+  },
+  "por_tipo_correspondencia": {
+   "grupo_aprovado": 567,
+   "classe_farmacologica": 914,
+   "nome_base_do_ativo": 130,
+   "enumeracao_explicita": 154,
+   "regra_fixa_par": 137,
+   "molecula_exata": 349,
+   "componente_combinacao": 58,
+   "sinonimo_autorizado": 54
+  },
+  "por_origem": {
+   "base_cadastrada": 2226,
+   "regra_fixa_par": 137
+  },
+  "divergencia_de_gravidade": 87,
+  "pares_ambiguos": 0,
+  "pares_com_entidade_nao_verificada": 0,
+  "ids_alertas_duplicados": 0
+ },
+ "U5_exemplos_por_tipo": {
+  "grupo_aprovado": [
+   "prednisona+metformina:inter-prednisona-metformina",
+   "prednisona+empagliflozina:inter-prednisona-empagliflozina",
+   "prednisona+sitagliptina:inter-prednisona-sitagliptina",
+   "prednisona+dapagliflozina:inter-prednisona-dapagliflozina"
+  ],
+  "classe_farmacologica": [
+   "prednisona+celecoxibe:inter-prednisona-celecoxibe",
+   "prednisona+cetorolaco:inter-prednisona-cetorolaco",
+   "prednisona+meloxicam:inter-prednisona-meloxicam",
+   "prednisona+aceclofenaco:inter-prednisona-aceclofenaco"
+  ],
+  "nome_base_do_ativo": [
+   "prednisona+insulina_nph:inter-prednisona-insulina_nph",
+   "prednisona+insulina_regular:inter-prednisona-insulina_regular",
+   "prednisona+insulina_glargina:inter-prednisona-insulina_glargina",
+   "prednisona+insulina_asparte:inter-prednisona-insulina_asparte"
+  ],
+  "enumeracao_explicita": [
+   "prednisona+fenitoina:inter-prednisona-fenitoina",
+   "prednisona+carbamazepina:inter-prednisona-carbamazepina",
+   "enalapril+milrinona:inter-milrinona-enalapril",
+   "salbutamol+betametasona-antenatal:inter-betametasona-antenatal-salbutamol"
+  ],
+  "regra_fixa_par": [
+   "enalapril+olmesartana:critical-pair-ieca-bra",
+   "enalapril+losartana:critical-pair-ieca-bra",
+   "enalapril+valsartana:critical-pair-ieca-bra",
+   "enalapril+celecoxibe:critical-pair-ieca-aine"
+  ],
+  "molecula_exata": [
+   "enalapril+espironolactona:inter-enalapril-espironolactona",
+   "enalapril+sacubitril_valsartana:inter-sacubitril_valsartana-enalapril",
+   "enalapril+racecadotrila:inter-racecadotrila-enalapril",
+   "olmesartana+espironolactona:inter-olmesartana-espironolactona"
+  ],
+  "componente_combinacao": [
+   "amoxicilina_clavulanato+ambroxol:inter-ambroxol-amoxicilina_clavulanato",
+   "amoxicilina_clavulanato+alopurinol-onco:inter-alopurinol-onco-amoxicilina_clavulanato",
+   "zolpidem+cetoconazol_betametasona:inter-zolpidem-cetoconazol_betametasona",
+   "zolpidem+cetoconazol_betametasona_neomicina:inter-zolpidem-cetoconazol_betametasona_neomicina"
+  ],
+  "sinonimo_autorizado": [
+   "sertralina+litio:inter-sertralina-litio",
+   "duloxetina+aas:inter-duloxetina-aas",
+   "duloxetina+paroxetina:inter-duloxetina-paroxetina",
+   "vortioxetina+paroxetina:inter-vortioxetina-paroxetina"
+  ]
+ }
+}

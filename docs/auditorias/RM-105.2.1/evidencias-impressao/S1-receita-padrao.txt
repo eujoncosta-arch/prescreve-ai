@@ -1,0 +1,20 @@
+Dr. João Silva
+
+Clínica Médica · CRM: CRM-SP 123456
+
+Paciente: Maria da Silva (teste) Idade: 45 anos
+
+                                           RECEITA MÉDICA
+
+1. Varfarina 10 mg — Comprimido
+
+   1 comprimido · VO · 1x/dia · por 30 dias
+
+2. ibuprofeno 10 mg — Comprimido
+
+   1 comprimido · VO · 1x/dia · por 30 dias
+
+Gerado por PRESCREVE-AI                                           07 de novembro de 2026
+Apoio à decisão clínica — responsabilidade do médico prescritor
+                                                                 Assinatura e carimbo
+

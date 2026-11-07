@@ -1,0 +1,49 @@
+                                ANEXO TÉCNICO — USO EXCLUSIVO DO PRESCRITOR
+
+                                      Documento técnico de apoio à decisão. Não se destina ao paciente e não faz parte da receita.
+
+Erro de avaliação — nenhuma conclusão é possível
+Avaliação integral: NÃO realizada (cobertura molecular não equivale a avaliação clínica integral)
+
+Identificação da avaliação
+    Data e horário da avaliação: 07/11/2026, 09:31
+    Versão do contrato de avaliação: RM-105.2
+
+Situação geral da avaliação
+    Erro de avaliação — nenhuma conclusão é possível
+    Avaliação integral: NÃO realizada (cobertura molecular não equivale a avaliação clínica integral)
+    Detalhe do erro: falha simulada para validação de impressão. Este resultado NÃO é uma avaliação sem alertas.
+
+Medicamentos e moléculas identificados
+    Nenhum medicamento foi identificado.
+
+Medicamentos ou moléculas não identificados
+    Nenhum.
+
+Combinações não avaliadas
+    Nenhuma.
+
+Alertas encontrados
+    Alertas indisponíveis: a avaliação não foi concluída.
+
+Contextos clínicos
+    Gestação: NÃO avaliado — A avaliação correspondente não foi executada ou não foi conclusiva.
+    Lactação: NÃO avaliado — A avaliação correspondente não foi executada ou não foi conclusiva.
+    Idade: NÃO avaliado — A avaliação correspondente não foi executada ou não foi conclusiva.
+    Função renal: NÃO avaliado — A avaliação correspondente não foi executada ou não foi conclusiva.
+    Potássio: NÃO avaliado — A avaliação correspondente não foi executada ou não foi conclusiva.
+    Alergias: NÃO avaliado — A avaliação correspondente não foi executada ou não foi conclusiva.
+    Peso: NÃO avaliado (não exigido por regra) — A avaliação correspondente não foi executada ou não foi conclusiva.
+
+Situação da avaliação de alergias
+    Avaliação de alergias NÃO executada
+
+Limitações relevantes
+    Cobertura molecular não equivale a avaliação clínica integral.
+    A avaliação considera apenas as regras cadastradas no sistema; não substitui o julgamento clínico nem a consulta à bula e a protocolos.
+    O cruzamento é feito apenas por identidade molecular (mesma molécula ou componente de combinação).
+    Reatividade cruzada entre moléculas ou classes NÃO é avaliada: nenhuma regra com fonte documentada foi cadastrada.
+    Alergias não medicamentosas (alimento, ambiental, outro) não são cruzadas com excipientes.
+    Este anexo é gerado no momento da impressão e não é armazenado automaticamente pelo sistema.
+    Informações clínicas pendentes: Gestação, Lactação, Idade, Função renal, Potássio, Alergias.
+

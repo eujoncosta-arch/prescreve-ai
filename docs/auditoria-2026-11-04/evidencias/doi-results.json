@@ -1,0 +1,1195 @@
+[
+ {
+  "doi": "10.1177/0333102417738202",
+  "status": 200,
+  "title": "Headache Classification Committee of the International Headache Society (IHS) The International Classification | Cephalalgia | 2018",
+  "err": "",
+  "where": [
+   "lib/clinical-decision-support.ts:1101"
+  ]
+ },
+ {
+  "doi": "10.1002/14651858.CD009455.pub2",
+  "status": 200,
+  "title": "Naproxen with or without an antiemetic for acute migraine headaches in adults | Cochrane Database of Systematic Reviews | 2013",
+  "err": "",
+  "where": [
+   "lib/clinical-therapeutics.ts:494",
+   "lib/drug-comparator.ts:1149",
+   "lib/second-opinion.ts:964"
+  ]
+ },
+ {
+  "doi": "10.1590/S1806-37562018000000130",
+  "status": 200,
+  "title": "2018 recommendations for the management of community acquired pneumonia | Jornal Brasileiro de Pneumologia | 2018",
+  "err": "",
+  "where": [
+   "lib/clinical-decision-support.ts:999",
+   "lib/clinical-therapeutics.ts:450",
+   "lib/clinical-therapeutics.ts:450"
+  ]
+ },
+ {
+  "doi": "10.1002/acr.24180",
+  "status": 200,
+  "title": "2020 American College of Rheumatology Guideline for the Management of Gout | Arthritis Care &amp; Research | 2020",
+  "err": "",
+  "where": [
+   "lib/clinical-decision-support.ts:1184",
+   "lib/clinical-therapeutics.ts:574",
+   "lib/clinical-therapeutics.ts:588"
+  ]
+ },
+ {
+  "doi": "10.14309/ajg.0000000000001538",
+  "status": 200,
+  "title": "ACG Clinical Guideline for the Diagnosis and Management of Gastroesophageal Reflux Disease | American Journal of Gastroenterology | 2021",
+  "err": "",
+  "where": [
+   "lib/clinical-decision-support.ts:1272",
+   "lib/clinical-therapeutics.ts:636",
+   "lib/explainable-ai-v2.ts:640"
+  ]
+ },
+ {
+  "doi": "10.1111/head.14153",
+  "status": 200,
+  "title": "The American Headache Society Consensus Statement: Update on integrating new migraine treatments into clinical | Headache: The Journal of Head and Face P | 2021",
+  "err": "",
+  "where": [
+   "lib/clinical-therapeutics.ts:494",
+   "lib/clinical-therapeutics.ts:508",
+   "lib/explainable-ai-v2.ts:395"
+  ]
+ },
+ {
+  "doi": "10.1212/WNL.0000000000214881",
+  "status": 200,
+  "title": "Pharmacologic Treatment for Migraine Prevention in Adults Practice Guideline Recommendations | Neurology | 2026",
+  "err": "",
+  "where": [
+   "lib/clinical-therapeutics.ts:522",
+   "lib/clinical-therapeutics.ts:536",
+   "lib/clinical-therapeutics.ts:536"
+  ]
+ },
+ {
+  "doi": "10.1002/14651858.CD008615.pub2",
+  "status": 200,
+  "title": "Sumatriptan (oral route of administration) for acute migraine attacks in adults | Cochrane Database of Systematic Reviews | 2012",
+  "err": "",
+  "where": [
+   "lib/clinical-therapeutics.ts:508",
+   "lib/explainable-ai-v2.ts:401",
+   "lib/second-opinion.ts:974"
+  ]
+ },
+ {
+  "doi": "10.2337/dc24-S001",
+  "status": 200,
+  "title": "1. Improving Care and Promoting Health in Populations:\n                    <i>Standards of Care in Diabetes—20 | Diabetes Care | 2023",
+  "err": "",
+  "where": [
+   "lib/demo-cases.ts:214"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1504720",
+  "status": 200,
+  "title": "Empagliflozin, Cardiovascular Outcomes, and Mortality in Type 2 Diabetes | New England Journal of Medicine | 2015",
+  "err": "",
+  "where": [
+   "lib/demo-cases.ts:262",
+   "lib/evidence-engine.ts:492",
+   "lib/explainable-ai-v2.ts:240"
+  ]
+ },
+ {
+  "doi": "10.36660/abc.20250624",
+  "status": 200,
+  "title": "Diretriz Brasileira de Hipertensão Arterial – 2025 | Arquivos Brasileiros de Cardiologia | 2025",
+  "err": "",
+  "where": [
+   "lib/clinical-decision-support.ts:186",
+   "lib/clinical-therapeutics.ts:44",
+   "lib/clinical-therapeutics.ts:59"
+  ]
+ },
+ {
+  "doi": "10.36660/abc.20240209",
+  "status": 404,
+  "title": "",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:138"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1511939",
+  "status": 200,
+  "title": "A Randomized Trial of Intensive versus Standard Blood-Pressure Control | New England Journal of Medicine | 2015",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:204",
+   "lib/governance.ts:224",
+   "lib/medical-knowledge-graph.ts:114"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJM200001203420301",
+  "status": 200,
+  "title": "Effects of an Angiotensin-Converting–Enzyme Inhibitor, Ramipril, on Cardiovascular Events in High-Risk Patient | New England Journal of Medicine | 2000",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:176",
+   "lib/explainable-ai-v2.ts:222",
+   "lib/medical-knowledge-graph.ts:110"
+  ]
+ },
+ {
+  "doi": "10.1016/S0140-6736(15)01225-8",
+  "status": 200,
+  "title": "Blood pressure lowering for prevention of cardiovascular disease and death: a systematic review and meta-analy | The Lancet | 2016",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:233",
+   "lib/governance.ts:237"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa0801317",
+  "status": 200,
+  "title": "Telmisartan, Ramipril, or Both in Patients at High Risk for Vascular Events | New England Journal of Medicine | 2008",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:271"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa011161",
+  "status": 200,
+  "title": "Effects of Losartan on Renal and Cardiovascular Outcomes in Patients with Type 2 Diabetes and Nephropathy | New England Journal of Medicine | 2001",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:296"
+  ]
+ },
+ {
+  "doi": "10.1002/14651858.CD002966.pub2",
+  "status": 200,
+  "title": "Metformin for type 2 diabetes mellitus | Cochrane Database of Systematic Reviews | 2001",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:454"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa2024816",
+  "status": 200,
+  "title": "Dapagliflozin in Patients with Chronic Kidney Disease | New England Journal of Medicine | 2020",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:520",
+   "lib/explainable-ai-v2.ts:258",
+   "lib/guideline-updates.ts:433"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1611925",
+  "status": 200,
+  "title": "Canagliflozin and Cardiovascular and Renal Events in Type 2 Diabetes | New England Journal of Medicine | 2017",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:546"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1603827",
+  "status": 200,
+  "title": "Liraglutide and Cardiovascular Outcomes in Type 2 Diabetes | New England Journal of Medicine | 2016",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:589"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa2307563",
+  "status": 200,
+  "title": "Semaglutide and Cardiovascular Outcomes in Obesity without Diabetes | New England Journal of Medicine | 2023",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:615",
+   "lib/governance.ts:519",
+   "lib/governance.ts:568"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJM199909023411001",
+  "status": 200,
+  "title": "The Effect of Spironolactone on Morbidity and Mortality in Patients with Severe Heart Failure | New England Journal of Medicine | 1999",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:785",
+   "lib/medical-knowledge-graph.ts:115",
+   "lib/medical-knowledge-graph.ts:220"
+  ]
+ },
+ {
+  "doi": "10.1016/S0140-6736(98)07037-8",
+  "status": 200,
+  "title": "Effect of intensive blood-glucose control with metformin on complications in overweight patients with type 2 d | The Lancet | 1998",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:426",
+   "lib/evidence-library.ts:332",
+   "lib/explainable-ai-v2.ts:275"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa2022190",
+  "status": 200,
+  "title": "Cardiovascular and Renal Outcomes with Empagliflozin in Heart Failure | New England Journal of Medicine | 2020",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:882",
+   "lib/explainable-ai-v2.ts:241",
+   "lib/recommendation-registry.ts:292"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1715274",
+  "status": 200,
+  "title": "Inhaled Combined Budesonide–Formoterol as Needed in Mild Asthma | New England Journal of Medicine | 2018",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1005",
+   "lib/evidence-library.ts:376",
+   "lib/explainable-ai-v2.ts:327"
+  ]
+ },
+ {
+  "doi": "10.1093/eurheartj/ehad195",
+  "status": 200,
+  "title": "2023 Focused Update of the 2021 ESC Guidelines for the diagnosis and treatment of acute and chronic heart fail | European Heart Journal | 2023",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:717",
+   "lib/explainable-ai-v2.ts:286",
+   "lib/guideline-class-validation.ts:137"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1409077",
+  "status": 200,
+  "title": "Angiotensin–Neprilysin Inhibition versus Enalapril in Heart Failure | New England Journal of Medicine | 2014",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:741",
+   "lib/explainable-ai-v2.ts:292",
+   "lib/governance.ts:409"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1009492",
+  "status": 200,
+  "title": "Eplerenone in Patients with Systolic Heart Failure and Mild Symptoms | New England Journal of Medicine | 2011",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:814",
+   "lib/medical-knowledge-graph.ts:116",
+   "lib/medical-knowledge-graph.ts:221"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1911303",
+  "status": 200,
+  "title": "Dapagliflozin in Patients with Heart Failure and Reduced Ejection Fraction | New England Journal of Medicine | 2019",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:855",
+   "lib/explainable-ai-v2.ts:257",
+   "lib/governance.ts:422"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa0807646",
+  "status": 200,
+  "title": "Rosuvastatin to Prevent Vascular Events in Men and Women with Elevated C-Reactive Protein | New England Journal of Medicine | 2008",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1151",
+   "lib/evidence-library.ts:354",
+   "lib/explainable-ai-v2.ts:309"
+  ]
+ },
+ {
+  "doi": "10.1016/S0140-6736(02)09327-3",
+  "status": 200,
+  "title": "MRC/BHF Heart Protection Study of cholesterol lowering with simvastatin in 20 536 high-risk individuals: a ran | The Lancet | 2002",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1178"
+  ]
+ },
+ {
+  "doi": "10.1016/S0140-6736(10)61350-5",
+  "status": 200,
+  "title": "Efficacy and safety of more intensive lowering of LDL cholesterol: a meta-analysis of data from 170 000 partic | The Lancet | 2010",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1205",
+   "lib/explainable-ai-v2.ts:310"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1410489",
+  "status": 200,
+  "title": "Ezetimibe Added to Statin Therapy after Acute Coronary Syndromes | New England Journal of Medicine | 2015",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1243"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1615664",
+  "status": 200,
+  "title": "Evolocumab and Clinical Outcomes in Patients with Cardiovascular Disease | New England Journal of Medicine | 2017",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1286",
+   "lib/guideline-updates.ts:540"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1715275",
+  "status": 200,
+  "title": "As-Needed Budesonide–Formoterol versus Maintenance Budesonide in Mild Asthma | New England Journal of Medicine | 2018",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1030",
+   "lib/evidence-library.ts:385",
+   "lib/explainable-ai-v2.ts:326"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1801174",
+  "status": 200,
+  "title": "Alirocumab and Cardiovascular Outcomes after Acute Coronary Syndrome | New England Journal of Medicine | 2018",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1313"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa0905561",
+  "status": 200,
+  "title": "Dabigatran versus Warfarin in Patients with Atrial Fibrillation | New England Journal of Medicine | 2009",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1408"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1107039",
+  "status": 200,
+  "title": "Apixaban versus Warfarin in Patients with Atrial Fibrillation | New England Journal of Medicine | 2011",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1381"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1009638",
+  "status": 200,
+  "title": "Rivaroxaban versus Warfarin in Nonvalvular Atrial Fibrillation | New England Journal of Medicine | 2011",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1435"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa021328",
+  "status": 200,
+  "title": "A Comparison of Rate Control and Rhythm Control in Patients with Atrial Fibrillation | New England Journal of Medicine | 2002",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1474"
+  ]
+ },
+ {
+  "doi": "10.1093/eurheartj/ehz455",
+  "status": 200,
+  "title": "2019 ESC/EAS Guidelines for the management of dyslipidaemias:\n                    <i>lipid modification to red | European Heart Journal | 2019",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1127",
+   "lib/explainable-ai-v2.ts:303"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa010746",
+  "status": 200,
+  "title": "Effects of Clopidogrel in Addition to Aspirin in Patients with Acute Coronary Syndromes without ST-Segment Ele | New England Journal of Medicine | 2001",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1564"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa0904327",
+  "status": 200,
+  "title": "Ticagrelor versus Clopidogrel in Patients with Acute Coronary Syndromes | New England Journal of Medicine | 2009",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1537",
+   "lib/evidence-library.ts:480"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa040583",
+  "status": 200,
+  "title": "Intensive versus Moderate Lipid Lowering with Statins after Acute Coronary Syndromes | New England Journal of Medicine | 2004",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1607"
+  ]
+ },
+ {
+  "doi": "10.1093/eurheartj/ehaa612",
+  "status": 200,
+  "title": "2020 ESC Guidelines for the diagnosis and management of atrial fibrillation developed in collaboration with th | European Heart Journal | 2020",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1357"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa063070",
+  "status": 200,
+  "title": "Salmeterol and Fluticasone Propionate and Survival in Chronic Obstructive Pulmonary Disease | New England Journal of Medicine | 2007",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1714"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1713901",
+  "status": 200,
+  "title": "Once-Daily Single-Inhaler Triple versus Dual Therapy in Patients with COPD | New England Journal of Medicine | 2018",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1754",
+   "lib/guideline-updates.ts:338"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa0805800",
+  "status": 200,
+  "title": "A 4-Year Trial of Tiotropium in Chronic Obstructive Pulmonary Disease | New England Journal of Medicine | 2008",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1675",
+   "lib/evidence-library.ts:416"
+  ]
+ },
+ {
+  "doi": "10.1093/eurheartj/ehad191",
+  "status": 200,
+  "title": "2023 ESC Guidelines for the management of acute coronary syndromes | European Heart Journal | 2023",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1513",
+   "lib/guideline-class-validation.ts:359",
+   "lib/guideline-class-validation.ts:374"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1811744",
+  "status": 200,
+  "title": "Canagliflozin and Renal Outcomes in Type 2 Diabetes and Nephropathy | New England Journal of Medicine | 2019",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1817"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa2025845",
+  "status": 200,
+  "title": "Effect of Finerenone on Chronic Kidney Disease Outcomes in Type 2 Diabetes | New England Journal of Medicine | 2020",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1860"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa2110956",
+  "status": 200,
+  "title": "Cardiovascular Events with Finerenone in Kidney Disease and Type 2 Diabetes | New England Journal of Medicine | 2021",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1886"
+  ]
+ },
+ {
+  "doi": "10.1016/S0140-6736(17)32802-7",
+  "status": 200,
+  "title": "Comparative efficacy and acceptability of 21 antidepressant drugs for the acute treatment of adults with major | The Lancet | 2018",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1951",
+   "lib/evidence-engine.ts:2012"
+  ]
+ },
+ {
+  "doi": "10.1176/appi.ajp.163.1.28",
+  "status": 200,
+  "title": "Evaluation of Outcomes With Citalopram for Depression Using Measurement-Based Care in STAR*D: Implications for | American Journal of Psychiatry | 2006",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:1974"
+  ]
+ },
+ {
+  "doi": "10.1001/jama.280.24.2077",
+  "status": 200,
+  "title": "Effect of Alendronate on Risk of Fracture in Women With Low Bone Density but Without Vertebral Fractures&lt;SU | JAMA | 1998",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:2074"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa067312",
+  "status": 200,
+  "title": "Once-Yearly Zoledronic Acid for Treatment of Postmenopausal Osteoporosis | New England Journal of Medicine | 2007",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:2099"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa0809493",
+  "status": 200,
+  "title": "Denosumab for Prevention of Fractures in Postmenopausal Women with Osteoporosis | New England Journal of Medicine | 2009",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:2140"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1215340",
+  "status": 200,
+  "title": "Clopidogrel with Aspirin in Acute Minor Stroke or Transient Ischemic Attack | New England Journal of Medicine | 2013",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:2205"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1800410",
+  "status": 200,
+  "title": "Clopidogrel and Aspirin in Acute Ischemic Stroke and High-Risk TIA | New England Journal of Medicine | 2018",
+  "err": "",
+  "where": [
+   "lib/evidence-engine.ts:2232"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJM198706043162301",
+  "status": 200,
+  "title": "Effects of Enalapril on Mortality in Severe Congestive Heart Failure | New England Journal of Medicine | 1987",
+  "err": "",
+  "where": [
+   "lib/evidence-library.ts:281",
+   "lib/explainable-ai-v2.ts:205"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJM199108013250501",
+  "status": 200,
+  "title": "Effect of Enalapril on Survival in Patients with Reduced Left Ventricular Ejection Fractions and Congestive He | New England Journal of Medicine | 1991",
+  "err": "",
+  "where": [
+   "lib/evidence-library.ts:290",
+   "lib/explainable-ai-v2.ts:206"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJM199209033271001",
+  "status": 200,
+  "title": "Effect of Captopril on Mortality and Morbidity in Patients with Left Ventricular Dysfunction after Myocardial  | New England Journal of Medicine | 1992",
+  "err": "",
+  "where": [
+   "lib/evidence-library.ts:299"
+  ]
+ },
+ {
+  "doi": "10.1001/jama.288.23.2981",
+  "status": 200,
+  "title": "Major Outcomes in High-Risk Hypertensive Patients Randomized to Angiotensin-Converting Enzyme Inhibitor or Cal | JAMA: The Journal of the American Medica | 2002",
+  "err": "",
+  "where": [
+   "lib/evidence-library.ts:310"
+  ]
+ },
+ {
+  "doi": "10.1016/S0140-6736(98)07019-6",
+  "status": 200,
+  "title": "Intensive blood-glucose control with sulphonylureas or insulin compared with conventional treatment and risk o | The Lancet | 1998",
+  "err": "",
+  "where": [
+   "lib/evidence-library.ts:341",
+   "lib/medical-knowledge-graph.ts:112",
+   "lib/medical-knowledge-graph.ts:218"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1901963",
+  "status": 200,
+  "title": "Controlled Trial of Budesonide–Formoterol as Needed for Mild Asthma | New England Journal of Medicine | 2019",
+  "err": "",
+  "where": [
+   "lib/evidence-library.ts:394"
+  ]
+ },
+ {
+  "doi": "10.1001/jama.295.13.jpc60002",
+  "status": 200,
+  "title": "Effect of Very High-Intensity Statin Therapy on Regression of Coronary Atherosclerosis | JAMA | 2006",
+  "err": "",
+  "where": [
+   "lib/evidence-library.ts:363"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1303342",
+  "status": 200,
+  "title": "Tiotropium Respimat Inhaler and the Risk of Death in COPD | New England Journal of Medicine | 2013",
+  "err": "",
+  "where": [
+   "lib/evidence-library.ts:425"
+  ]
+ },
+ {
+  "doi": "10.1016/S0140-6736(88)92833-4",
+  "status": 200,
+  "title": "RANDOMISED TRIAL OF INTRAVENOUS STREPTOKINASE, ORAL ASPIRIN, BOTH, OR NEITHER AMONG 17 187 CASES OF SUSPECTED  | The Lancet | 1988",
+  "err": "",
+  "where": [
+   "lib/evidence-library.ts:471"
+  ]
+ },
+ {
+  "doi": "10.1136/bmj.b1665",
+  "status": 200,
+  "title": "Use of blood pressure lowering drugs in the prevention of cardiovascular disease: meta-analysis of 147 randomi | BMJ | 2009",
+  "err": "",
+  "where": [
+   "lib/evidence-library.ts:319"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJM199605233342101",
+  "status": 200,
+  "title": "The Effect of Carvedilol on Morbidity and Mortality in Patients with Chronic Heart Failure | New England Journal of Medicine | 1996",
+  "err": "",
+  "where": [
+   "lib/evidence-library.ts:438"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJM200105313442201",
+  "status": 200,
+  "title": "Effect of Carvedilol on Survival in Severe Chronic Heart Failure | New England Journal of Medicine | 2001",
+  "err": "",
+  "where": [
+   "lib/evidence-library.ts:447",
+   "lib/scientific-repository.ts:182"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1005419",
+  "status": 200,
+  "title": "Diuretic Strategies in Patients with Acute Decompensated Heart Failure | New England Journal of Medicine | 2011",
+  "err": "",
+  "where": [
+   "lib/evidence-library.ts:458"
+  ]
+ },
+ {
+  "doi": "10.1093/eurheartj/ehae178",
+  "status": 200,
+  "title": "2024 ESC Guidelines for the management of elevated blood pressure and hypertension | European Heart Journal | 2024",
+  "err": "",
+  "where": [
+   "lib/explainable-ai-v2.ts:199",
+   "lib/explainable-ai-v2.ts:216"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1603825",
+  "status": 200,
+  "title": "Thyroid Hormone Therapy for Older Adults with Subclinical Hypothyroidism | New England Journal of Medicine | 2017",
+  "err": "",
+  "where": [
+   "lib/evidence-library.ts:493"
+  ]
+ },
+ {
+  "doi": "10.1016/S0140-6736(99)12323-7",
+  "status": 200,
+  "title": "Effects of ramipril on cardiovascular and microvascular outcomes in people with diabetes mellitus: results of  | The Lancet | 2000",
+  "err": "",
+  "where": [
+   "lib/explainable-ai-v2.ts:223"
+  ]
+ },
+ {
+  "doi": "10.2337/dc25-S010",
+  "status": 200,
+  "title": "10. Cardiovascular Disease and Risk Management: Standards of Care in Diabetes—2025 | Diabetes Care | 2024",
+  "err": "",
+  "where": [
+   "lib/explainable-ai-v2.ts:234",
+   "lib/explainable-ai-v2.ts:251",
+   "lib/explainable-ai-v2.ts:269"
+  ]
+ },
+ {
+  "doi": "10.1001/jama.291.8.965",
+  "status": 200,
+  "title": "Topiramate for Migraine Prevention&lt;SUBTITLE&gt;A Randomized Controlled Trial&lt;/SUBTITLE&gt; | JAMA | 2004",
+  "err": "",
+  "where": [
+   "lib/explainable-ai-v2.ts:369",
+   "lib/second-opinion.ts:1007"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa2215145",
+  "status": 200,
+  "title": "Hydrocortisone in Severe Community-Acquired Pneumonia | New England Journal of Medicine | 2023",
+  "err": "",
+  "where": [
+   "lib/evidence-library.ts:539"
+  ]
+ },
+ {
+  "doi": "10.1002/art.27327",
+  "status": 200,
+  "title": "High versus low dosing of oral colchicine for early acute gout flare: Twenty‐four–hour outcome of the first mu | Arthritis &amp; Rheumatism | 2010",
+  "err": "",
+  "where": [
+   "lib/explainable-ai-v2.ts:344",
+   "lib/second-opinion.ts:1034"
+  ]
+ },
+ {
+  "doi": "10.1001/archneur.61.4.490",
+  "status": 200,
+  "title": "Topiramate in Migraine Prevention | Archives of Neurology | 2004",
+  "err": "",
+  "where": [
+   "lib/explainable-ai-v2.ts:370",
+   "lib/second-opinion.ts:1008"
+  ]
+ },
+ {
+  "doi": "10.1212/WNL.0000000000218112",
+  "status": 200,
+  "title": "Systematic Review of Pharmacologic Treatment for Migraine Prevention in Adults | Neurology | 2026",
+  "err": "",
+  "where": [
+   "lib/explainable-ai-v2.ts:371",
+   "lib/explainable-ai-v2.ts:414",
+   "lib/explainable-ai-v2.ts:441"
+  ]
+ },
+ {
+  "doi": "10.1002/14651858.CD009108.pub2",
+  "status": 200,
+  "title": "Sumatriptan (all routes of administration) for acute migraine attacks in adults - overview of Cochrane reviews | Cochrane Database of Systematic Reviews | 2014",
+  "err": "",
+  "where": [
+   "lib/explainable-ai-v2.ts:402",
+   "lib/second-opinion.ts:975"
+  ]
+ },
+ {
+  "doi": "10.1136/bmj-2024-080107",
+  "status": 200,
+  "title": "Comparative effects of drug interventions for the acute management of migraine episodes in adults: systematic  | BMJ | 2024",
+  "err": "",
+  "where": [
+   "lib/explainable-ai-v2.ts:404"
+  ]
+ },
+ {
+  "doi": "10.1371/journal.pone.0212785",
+  "status": 200,
+  "title": "Beta-blockers for the prevention of headache in adults, a systematic review and meta-analysis | PLOS ONE | 2019",
+  "err": "",
+  "where": [
+   "lib/explainable-ai-v2.ts:439",
+   "lib/second-opinion.ts:991"
+  ]
+ },
+ {
+  "doi": "10.1016/S0140-6736(01)06711-3",
+  "status": 200,
+  "title": "Oral triptans (serotonin 5-HT1B/1D agonists) in acute migraine treatment: a meta-analysis of 53 trials | The Lancet | 2001",
+  "err": "",
+  "where": [
+   "lib/explainable-ai-v2.ts:403",
+   "lib/second-opinion.ts:976"
+  ]
+ },
+ {
+  "doi": "10.1007/s00415-004-0464-6",
+  "status": 200,
+  "title": "Topiramate in migraine prophylaxis | Journal of Neurology | 2004",
+  "err": "",
+  "where": [
+   "lib/explainable-ai-v2.ts:440",
+   "lib/second-opinion.ts:992"
+  ]
+ },
+ {
+  "doi": "10.2337/dc24-SINT",
+  "status": 200,
+  "title": "Introduction and Methodology:\n                    <i>Standards of Care in Diabetes—2024</i> | Diabetes Care | 2023",
+  "err": "",
+  "where": [
+   "lib/governance.ts:274",
+   "lib/governance.ts:275",
+   "lib/scientific-repository.ts:94"
+  ]
+ },
+ {
+  "doi": "10.1016/S0140-6736(20)31824-9",
+  "status": 200,
+  "title": "SGLT2 inhibitors in patients with heart failure with reduced ejection fraction: a meta-analysis of the EMPEROR | The Lancet | 2020",
+  "err": "",
+  "where": [
+   "lib/governance.ts:312"
+  ]
+ },
+ {
+  "doi": "10.1093/eurheartj/ehab777",
+  "status": 200,
+  "title": "Cardiovascular and kidney outcomes with finerenone in patients with type 2 diabetes and chronic kidney disease | European Heart Journal | 2021",
+  "err": "",
+  "where": [
+   "lib/governance.ts:532",
+   "lib/guideline-updates.ts:470"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa2107038",
+  "status": 200,
+  "title": "Empagliflozin in Heart Failure with a Preserved Ejection Fraction | New England Journal of Medicine | 2021",
+  "err": "",
+  "where": [
+   "lib/governance.ts:557",
+   "lib/guideline-updates.ts:100"
+  ]
+ },
+ {
+  "doi": "10.2337/dc24-S009",
+  "status": 200,
+  "title": "9. Pharmacologic Approaches to Glycemic Treatment:\n                    <i>Standards of Care in Diabetes—2024</ | Diabetes Care | 2023",
+  "err": "",
+  "where": [
+   "lib/guideline-class-validation.ts:161",
+   "lib/guideline-class-validation.ts:176",
+   "lib/guideline-class-validation.ts:191"
+  ]
+ },
+ {
+  "doi": "10.2337/dc26-SREV",
+  "status": 200,
+  "title": "Summary of Revisions: Standards of Care in Diabetes—2026 | Diabetes Care | 2025",
+  "err": "",
+  "where": [
+   "lib/guideline-conflict-engine.ts:85",
+   "lib/guideline-updates.ts:187",
+   "lib/guideline-updates.ts:197"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa2206286",
+  "status": 200,
+  "title": "Dapagliflozin in Heart Failure with Mildly Reduced or Preserved Ejection Fraction | New England Journal of Medicine | 2022",
+  "err": "",
+  "where": [
+   "lib/guideline-updates.ts:112"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1915928",
+  "status": 200,
+  "title": "Vericiguat in Patients with Heart Failure and Reduced Ejection Fraction | New England Journal of Medicine | 2020",
+  "err": "",
+  "where": [
+   "lib/guideline-updates.ts:137"
+  ]
+ },
+ {
+  "doi": "10.1016/S0140-6736(21)01754-2",
+  "status": 200,
+  "title": "Haemodynamic-guided management of heart failure (GUIDE-HF): a randomised controlled trial | The Lancet | 2021",
+  "err": "",
+  "where": [
+   "lib/guideline-updates.ts:162"
+  ]
+ },
+ {
+  "doi": "10.1016/S0140-6736(23)01200-X",
+  "status": 200,
+  "title": "Tirzepatide once weekly for the treatment of obesity in people with type 2 diabetes (SURMOUNT-2): a double-bli | The Lancet | 2023",
+  "err": "",
+  "where": [
+   "lib/guideline-updates.ts:219"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa2505928",
+  "status": 200,
+  "title": "Cardiovascular Outcomes with Tirzepatide versus Dulaglutide in Type 2 Diabetes | New England Journal of Medicine | 2025",
+  "err": "",
+  "where": [
+   "lib/guideline-updates.ts:231"
+  ]
+ },
+ {
+  "doi": "10.1093/eurheartj/ehab368",
+  "status": 200,
+  "title": "2021 ESC Guidelines for the diagnosis and treatment of acute and chronic heart failure | European Heart Journal | 2021",
+  "err": "",
+  "where": [
+   "lib/governance.ts:385",
+   "lib/governance.ts:386",
+   "lib/scientific-repository.ts:156"
+  ]
+ },
+ {
+  "doi": "10.1007/s00125-024-06107-6",
+  "status": 200,
+  "title": "Continuous glucose monitoring in adults with type 2 diabetes: a systematic review and meta-analysis | Diabetologia | 2024",
+  "err": "",
+  "where": [
+   "lib/guideline-updates.ts:256"
+  ]
+ },
+ {
+  "doi": "10.1001/jama.2021.7444",
+  "status": 200,
+  "title": "Effect of Continuous Glucose Monitoring on Glycemic Control in Patients With Type 2 Diabetes Treated With Basa | JAMA | 2021",
+  "err": "",
+  "where": [
+   "lib/guideline-updates.ts:268"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa0802743",
+  "status": 200,
+  "title": "Effects of Intensive Glucose Lowering in Type 2 Diabetes | New England Journal of Medicine | 2008",
+  "err": "",
+  "where": [
+   "lib/guideline-updates.ts:293",
+   "lib/medical-knowledge-graph.ts:113"
+  ]
+ },
+ {
+  "doi": "10.1164/rccm.201803-0405OC",
+  "status": 200,
+  "title": "Long-Term Triple Therapy De-escalation to Indacaterol/Glycopyrronium in Patients with Chronic Obstructive Pulm | American Journal of Respiratory and Crit | 2018",
+  "err": "",
+  "where": [
+   "lib/guideline-updates.ts:363"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa2204233",
+  "status": 200,
+  "title": "Empagliflozin in Patients with Chronic Kidney Disease | New England Journal of Medicine | 2023",
+  "err": "",
+  "where": [
+   "lib/guideline-updates.ts:445"
+  ]
+ },
+ {
+  "doi": "10.1097/HJH.0000000000003480",
+  "status": 200,
+  "title": "2023 ESH Guidelines for the management of arterial hypertension The Task Force for the management of arterial  | Journal of Hypertension | 2023",
+  "err": "",
+  "where": [
+   "lib/guideline-class-validation.ts:482",
+   "lib/guideline-class-validation.ts:497",
+   "lib/guideline-class-validation.ts:512"
+  ]
+ },
+ {
+  "doi": "10.1016/S0140-6736(16)30272-0",
+  "status": 200,
+  "title": "Neuropsychiatric safety and efficacy of varenicline, bupropion, and nicotine patch in smokers with and without | The Lancet | 2016",
+  "err": "",
+  "where": [
+   "lib/guideline-updates.ts:388"
+  ]
+ },
+ {
+  "doi": "10.1681/ASN.2017020148",
+  "status": 200,
+  "title": "Effects of Intensive BP Control in CKD | Journal of the American Society of Nephr | 2017",
+  "err": "",
+  "where": [
+   "lib/guideline-updates.ts:495"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa2215024",
+  "status": 200,
+  "title": "Bempedoic Acid and Cardiovascular Outcomes in Statin-Intolerant Patients | New England Journal of Medicine | 2023",
+  "err": "",
+  "where": [
+   "lib/guideline-updates.ts:565"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa072100",
+  "status": 200,
+  "title": "Coronary Calcium as a Predictor of Coronary Events in Four Racial or Ethnic Groups | New England Journal of Medicine | 2008",
+  "err": "",
+  "where": [
+   "lib/guideline-updates.ts:590"
+  ]
+ },
+ {
+  "doi": "10.1542/peds.2012-3488",
+  "status": 200,
+  "title": "The Diagnosis and Management of Acute Otitis Media | Pediatrics | 2013",
+  "err": "",
+  "where": [
+   "lib/pediatric-engine.ts:369"
+  ]
+ },
+ {
+  "doi": "10.1056/NEJMoa1804092",
+  "status": 200,
+  "title": "Dupilumab Efficacy and Safety in Moderate-to-Severe Uncontrolled Asthma | New England Journal of Medicine | 2018",
+  "err": "",
+  "where": [
+   "lib/guideline-updates.ts:635"
+  ]
+ },
+ {
+  "doi": "10.1002/cpt.2526",
+  "status": 200,
+  "title": "Clinical Pharmacogenetics Implementation Consortium Guideline for\n                    <i>CYP2C19</i>\n          | Clinical Pharmacology &amp; Therapeutics | 2022",
+  "err": "",
+  "where": [
+   "lib/precision-medicine.ts:72"
+  ]
+ },
+ {
+  "doi": "10.1002/cpt.668",
+  "status": 200,
+  "title": "Clinical Pharmacogenetics Implementation Consortium (CPIC) Guideline for Pharmacogenetics‐Guided Warfarin Dosi | Clinical Pharmacology &amp; Therapeutics | 2017",
+  "err": "",
+  "where": [
+   "lib/precision-medicine.ts:88"
+  ]
+ },
+ {
+  "doi": "10.1002/cpt.2557",
+  "status": 200,
+  "title": "The Clinical Pharmacogenetics Implementation Consortium Guideline for\n                    <i>SLCO1B1</i>\n      | Clinical Pharmacology &amp; Therapeutics | 2022",
+  "err": "",
+  "where": [
+   "lib/precision-medicine.ts:120"
+  ]
+ },
+ {
+  "doi": "10.1002/cpt.2149",
+  "status": 200,
+  "title": "Clinical Pharmacogenetics Implementation Consortium Guideline for\n                    <i>CYP2D6</i>\n           | Clinical Pharmacology &amp; Therapeutics | 2021",
+  "err": "",
+  "where": [
+   "lib/precision-medicine.ts:104"
+  ]
+ },
+ {
+  "doi": "10.1038/clpt.2014.38",
+  "status": 200,
+  "title": "Clinical Pharmacogenetics Implementation Consortium Guidelines for HLA-B Genotype and Abacavir Dosing: 2014 Up | Clinical Pharmacology &amp; Therapeutics | 2014",
+  "err": "",
+  "where": [
+   "lib/precision-medicine.ts:153"
+  ]
+ },
+ {
+  "doi": "10.1002/cpt.3351",
+  "status": 200,
+  "title": "Clinical Pharmacogenetics Implementation Consortium Guideline (CPIC) for <i>CYP2D6</i>, <i>ADRB1</i>, <i>ADRB2 | Clinical Pharmacology &amp; Therapeutics | 2024",
+  "err": "",
+  "where": [
+   "lib/precision-medicine.ts:171"
+  ]
+ },
+ {
+  "doi": "10.1002/cpt.1004",
+  "status": 200,
+  "title": "Clinical Pharmacogenetics Implementation Consortium Guideline for\n                    <i>HLA</i>\n              | Clinical Pharmacology &amp; Therapeutics | 2018",
+  "err": "",
+  "where": [
+   "lib/precision-medicine.ts:136"
+  ]
+ },
+ {
+  "doi": "10.1002/cpt.2015",
+  "status": 200,
+  "title": "Clinical Pharmacogenetics Implementation Consortium (CPIC) Guideline for\n                    <i>CYP2C19</i>\n   | Clinical Pharmacology &amp; Therapeutics | 2020",
+  "err": "",
+  "where": [
+   "lib/precision-medicine.ts:188"
+  ]
+ },
+ {
+  "doi": "10.29327/557753",
+  "status": 200,
+  "title": "Diretriz Oficial da Sociedade Brasileira de Diabetes |  | 2022",
+  "err": "",
+  "where": [
+   "lib/scientific-repository.ts:110"
+  ]
+ },
+ {
+  "doi": "10.1002/14651858.CD007313.pub3",
+  "status": 200,
+  "title": "Combination formoterol and budesonide as maintenance and reliever therapy versus current best practice (includ | Cochrane Database of Systematic Reviews | 2013",
+  "err": "",
+  "where": [
+   "lib/scientific-repository.ts:250"
+  ]
+ },
+ {
+  "doi": "10.1093/eurheartj/ehy339",
+  "status": 200,
+  "title": "2018 ESC/ESH Guidelines for the management of arterial hypertension | European Heart Journal | 2018",
+  "err": "",
+  "where": [
+   "lib/scientific-repository.ts:45"
+  ]
+ },
+ {
+  "doi": "10.5935/abc.20180190",
+  "status": 200,
+  "title": "Diretriz Brasileira de Insuficiência Cardíaca Crônica e Aguda | Arquivos Brasileiros de Cardiologia | 2018",
+  "err": "",
+  "where": [
+   "lib/validate-full-patient-flow.ts:138"
+  ]
+ }
+]

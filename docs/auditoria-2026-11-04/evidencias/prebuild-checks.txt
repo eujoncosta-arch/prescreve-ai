@@ -1,0 +1,8 @@
+[RM-23] consistência: 382 entidades · 0 inconsistências (critical=0 high=0 medium=0 low=0)
+[RM-23] ✅ consistência OK (sem inconsistências critical/high).
+[RM-24] cross-db: total=368 compatíveis=132 divergentes=0 aceitos=0 críticos=0
+[RM-24] ✅ fontes sincronizadas (sem conflitos críticos) — publicação liberada.
+[RM-49] ✅ integridade textual OK — 307 arquivos verificados, 0 sequências suspeitas.
+[RM-62] Auditoria de Integridade Comercial (marcas/concentrações)
+[RM-62] Marcas analisadas: 710 · Medicamentos: 382
+[RM-62] BLOCKING_ERROR=0 · REVIEW_REQUIRED=98 · ACCEPTED_EXCEPTION=1

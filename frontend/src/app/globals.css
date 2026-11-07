@@ -128,3 +128,22 @@
     @apply font-sans;
   }
 }
+/* RM-105.2/105.2.1 — Impressão em A4, duas partes INDEPENDENTES (opção B).
+   Cada comando de impressão gera um trabalho próprio: #print-root[data-print-mode] decide qual parte
+   existe no papel. Receita e anexo NUNCA saem no mesmo documento. Oculta todo o resto da aplicação:
+   só #print-root (portal em <body>) é impresso. */
+@page { size: A4; margin: 14mm; }
+@media print {
+  body > *:not(#print-root) { display: none !important; }
+  html, body { background: #fff !important; height: auto !important; overflow: visible !important; }
+  #print-root { position: static !important; inset: auto !important; display: block !important; background: transparent !important; padding: 0 !important; }
+  #print-root .print-sheet { max-height: none !important; max-width: none !important; width: 100% !important; overflow: visible !important; box-shadow: none !important; border-radius: 0 !important; }
+  /* modo receita (padrão): o anexo nunca é impresso, mesmo que esteja aberto na tela */
+  #print-root[data-print-mode="receita"] [data-print-part="anexo"] { display: none !important; }
+  /* modo anexo: a receita nunca é impressa junto */
+  #print-root[data-print-mode="anexo"] [data-print-part="receita"] { display: none !important; }
+  #print-root [data-print-part="anexo"] { padding: 0 !important; border-top: 0 !important; }
+  #print-root [data-annex-section] { break-inside: avoid; }
+  #print-root [data-annex-section] > h3 { break-after: avoid; }
+  #print-root [data-annex-section] li { break-inside: avoid; }
+}

@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { runSafetyCheck } from '@/lib/safety-rules';
+import { runSafetyCheck as runSafetyCheckComCobertura } from '@/lib/safety-rules';
+
+// RM-104: `runSafetyCheck` agora devolve o resultado com cobertura explícita. Estes testes
+// verificam o CONTEÚDO dos alertas (comportamento preservado); a cobertura é testada em
+// `rm104-cobertura-verificacao-seguranca.test.ts`.
+const runSafetyCheck = (input: Parameters<typeof runSafetyCheckComCobertura>[0]) => runSafetyCheckComCobertura(input).alertas;
 
 // ============================================================
 // RM-36 — Auditoria exaustiva de CRITICAL_PAIRS
@@ -25,16 +30,13 @@ describe('runSafetyCheck() — cobertura isolada de TODOS os 22 pares de CRITICA
     { id: 'azitromicina+amiodarona (tokens)', moleculas: ['azitromicina', 'amiodarona'], tituloSubstr: 'Amiodarona', severidade: 'critical' },
     { id: 'azitromicina+haloperidol', moleculas: ['azitromicina', 'haloperidol'], tituloSubstr: 'Azitromicina + Haloperidol', severidade: 'danger' },
     { id: 'hidroxicloroquina+azitromicina', moleculas: ['hidroxicloroquina', 'azitromicina'], tituloSubstr: 'Hidroxicloroquina + Azitromicina', severidade: 'danger' },
-    // CRIT-AUDIT-05: o literal 'isrs' é, ele mesmo, um sinônimo cadastrado
-    // de Sertralina no banco (`resolveSafeDrug('isrs')` resolve para
-    // Sertralina) — então este input SEMPRE identifica um membro
-    // específico da classe, nunca "só a classe" de forma pura. Pela regra
-    // de dedup semântica (alerta mais específico com mesma/maior
-    // severidade prevalece), o alerta correto e esperado é o específico
-    // da Sertralina, não o genérico "ISRS + Tramadol" — a cobertura do
-    // par GENÉRICO puro (sem membro específico próprio) é feita à parte,
-    // com Paroxetina, em crit-audit-05-isrs-classe-dedup.test.ts.
-    { id: 'isrs+tramadol', moleculas: ['isrs', 'tramadol'], tituloSubstr: 'Sertralina + Tramadol', severidade: 'danger' },
+    // CRIT-AUDIT-05 (revisto na RM-105): o literal 'isrs' estava cadastrado como sinônimo de
+    // Sertralina, então a entrada era tomada como a molécula e o alerta saía com o texto do
+    // membro específico ("Sertralina + Tramadol"). Classe terapêutica NÃO identifica molécula:
+    // 'isrs' agora é um termo não molecular (não verificado), e o alerta clínico é o do par
+    // GENÉRICO "ISRS + Tramadol", com a MESMA severidade (danger). O par específico segue
+    // coberto pelo caso 'sertralina+tramadol' logo abaixo.
+    { id: 'isrs+tramadol', moleculas: ['isrs', 'tramadol'], tituloSubstr: 'ISRS + Tramadol', severidade: 'danger' },
     { id: 'sertralina+tramadol', moleculas: ['sertralina', 'tramadol'], tituloSubstr: 'Sertralina + Tramadol', severidade: 'danger' },
     { id: 'escitalopram+tramadol', moleculas: ['escitalopram', 'tramadol'], tituloSubstr: 'Escitalopram + Tramadol', severidade: 'danger' },
     { id: 'metformina+contraste', moleculas: ['metformina', 'contraste'], tituloSubstr: 'Metformina + Contraste', severidade: 'warning' },

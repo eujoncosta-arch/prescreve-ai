@@ -1,0 +1,266 @@
+{
+ "porPDF": [
+  {
+   "arquivo": "S1-receita-padrao.pdf",
+   "paginas": 1,
+   "achadosTexto": [
+    "sem título órfão nem item dividido"
+   ],
+   "paginasDetalhe": [
+    {
+     "pagina": 1,
+     "linhas": 11,
+     "primeira": "Dr. João Silva",
+     "ultima": "Assinatura e carimbo"
+    }
+   ]
+  },
+  {
+   "arquivo": "S1b-receita-com-anexo-aberto-na-tela.pdf",
+   "paginas": 1,
+   "achadosTexto": [
+    "sem título órfão nem item dividido"
+   ],
+   "paginasDetalhe": [
+    {
+     "pagina": 1,
+     "linhas": 11,
+     "primeira": "Dr. João Silva",
+     "ultima": "Assinatura e carimbo"
+    }
+   ]
+  },
+  {
+   "arquivo": "S2-anexo-varfarina-aine-alergia.pdf",
+   "paginas": 1,
+   "achadosTexto": [
+    "sem título órfão nem item dividido"
+   ],
+   "paginasDetalhe": [
+    {
+     "pagina": 1,
+     "linhas": 44,
+     "primeira": "ANEXO TÉCNICO — USO EXCLUSIVO DO PRESCRITOR",
+     "ultima": "Informações clínicas pendentes: Gestação, Lactação, Função renal."
+    }
+   ]
+  },
+  {
+   "arquivo": "S3-anexo-muitos-alertas.pdf",
+   "paginas": 3,
+   "achadosTexto": [
+    "sem título órfão nem item dividido"
+   ],
+   "paginasDetalhe": [
+    {
+     "pagina": 1,
+     "linhas": 34,
+     "primeira": "ANEXO TÉCNICO — USO EXCLUSIVO DO PRESCRITOR",
+     "ultima": "Nenhuma."
+    },
+    {
+     "pagina": 2,
+     "linhas": 52,
+     "primeira": "Alertas encontrados",
+     "ultima": "Alergias não informadas: nada foi avaliado. A ausência de avaliação nã"
+    },
+    {
+     "pagina": 3,
+     "linhas": 8,
+     "primeira": "Limitações relevantes",
+     "ultima": "Informações clínicas pendentes: Gestação, Lactação, Função renal, Potá"
+    }
+   ]
+  },
+  {
+   "arquivo": "S3b-receita-18-itens.pdf",
+   "paginas": 2,
+   "achadosTexto": [
+    "p2: primeira linha não é título nem início de item: \"13. Nitroglicerina 10 mg — Comprimido                       \""
+   ],
+   "paginasDetalhe": [
+    {
+     "pagina": 1,
+     "linhas": 28,
+     "primeira": "Dr. João Silva",
+     "ultima": "1 comprimido · VO · 1x/dia · por 30 dias"
+    },
+    {
+     "pagina": 2,
+     "linhas": 14,
+     "primeira": "13. Nitroglicerina 10 mg — Comprimido                             07 d",
+     "ultima": "Apoio à decisão clínica — responsabilidade do médico prescritor"
+    }
+   ]
+  },
+  {
+   "arquivo": "S4-anexo-varias-nao-identificadas.pdf",
+   "paginas": 3,
+   "achadosTexto": [
+    "sem título órfão nem item dividido"
+   ],
+   "paginasDetalhe": [
+    {
+     "pagina": 1,
+     "linhas": 33,
+     "primeira": "ANEXO TÉCNICO — USO EXCLUSIVO DO PRESCRITOR",
+     "ultima": "Remédio Sem Cadastro — não reconhecido"
+    },
+    {
+     "pagina": 2,
+     "linhas": 50,
+     "primeira": "Combinações não avaliadas",
+     "ultima": "Alergias não informadas: nada foi avaliado. A ausência de avaliação nã"
+    },
+    {
+     "pagina": 3,
+     "linhas": 9,
+     "primeira": "Limitações relevantes",
+     "ultima": "Existem combinações não avaliadas."
+    }
+   ]
+  },
+  {
+   "arquivo": "S5-anexo-avaliacao-parcial.pdf",
+   "paginas": 2,
+   "achadosTexto": [
+    "sem título órfão nem item dividido"
+   ],
+   "paginasDetalhe": [
+    {
+     "pagina": 1,
+     "linhas": 42,
+     "primeira": "ANEXO TÉCNICO — USO EXCLUSIVO DO PRESCRITOR",
+     "ultima": "Alergias não informadas: nada foi avaliado. A ausência de avaliação nã"
+    },
+    {
+     "pagina": 2,
+     "linhas": 9,
+     "primeira": "Limitações relevantes",
+     "ultima": "Existem combinações não avaliadas."
+    }
+   ]
+  },
+  {
+   "arquivo": "S6-anexo-erro-de-avaliacao.pdf",
+   "paginas": 1,
+   "achadosTexto": [
+    "sem título órfão nem item dividido"
+   ],
+   "paginasDetalhe": [
+    {
+     "pagina": 1,
+     "linhas": 37,
+     "primeira": "ANEXO TÉCNICO — USO EXCLUSIVO DO PRESCRITOR",
+     "ultima": "Informações clínicas pendentes: Gestação, Lactação, Idade, Função rena"
+    }
+   ]
+  }
+ ],
+ "estouroLateral": [
+  {
+   "snapshot": "S1-receita-padrao.html",
+   "largura": 688,
+   "scrollW": 688,
+   "foraDaLargura": [],
+   "nForaDaLargura": 0,
+   "modo": "receita",
+   "partes": {
+    "receita": true,
+    "anexo": false
+   },
+   "outrosVisiveisNoBody": 0
+  },
+  {
+   "snapshot": "S1b-receita-com-anexo-aberto-na-tela.html",
+   "largura": 688,
+   "scrollW": 688,
+   "foraDaLargura": [],
+   "nForaDaLargura": 0,
+   "modo": "receita",
+   "partes": {
+    "receita": true,
+    "anexo": false
+   },
+   "outrosVisiveisNoBody": 0
+  },
+  {
+   "snapshot": "S2-anexo-varfarina-aine-alergia.html",
+   "largura": 688,
+   "scrollW": 688,
+   "foraDaLargura": [],
+   "nForaDaLargura": 0,
+   "modo": "anexo",
+   "partes": {
+    "receita": false,
+    "anexo": true
+   },
+   "outrosVisiveisNoBody": 0
+  },
+  {
+   "snapshot": "S3-anexo-muitos-alertas.html",
+   "largura": 688,
+   "scrollW": 673,
+   "foraDaLargura": [],
+   "nForaDaLargura": 0,
+   "modo": "anexo",
+   "partes": {
+    "receita": false,
+    "anexo": true
+   },
+   "outrosVisiveisNoBody": 0
+  },
+  {
+   "snapshot": "S3b-receita-18-itens.html",
+   "largura": 688,
+   "scrollW": 673,
+   "foraDaLargura": [],
+   "nForaDaLargura": 0,
+   "modo": "receita",
+   "partes": {
+    "receita": true,
+    "anexo": false
+   },
+   "outrosVisiveisNoBody": 0
+  },
+  {
+   "snapshot": "S4-anexo-varias-nao-identificadas.html",
+   "largura": 688,
+   "scrollW": 673,
+   "foraDaLargura": [],
+   "nForaDaLargura": 0,
+   "modo": "anexo",
+   "partes": {
+    "receita": false,
+    "anexo": true
+   },
+   "outrosVisiveisNoBody": 0
+  },
+  {
+   "snapshot": "S5-anexo-avaliacao-parcial.html",
+   "largura": 688,
+   "scrollW": 673,
+   "foraDaLargura": [],
+   "nForaDaLargura": 0,
+   "modo": "anexo",
+   "partes": {
+    "receita": false,
+    "anexo": true
+   },
+   "outrosVisiveisNoBody": 0
+  },
+  {
+   "snapshot": "S6-anexo-erro-de-avaliacao.html",
+   "largura": 688,
+   "scrollW": 688,
+   "foraDaLargura": [],
+   "nForaDaLargura": 0,
+   "modo": "anexo",
+   "partes": {
+    "receita": false,
+    "anexo": true
+   },
+   "outrosVisiveisNoBody": 0
+  }
+ ]
+}

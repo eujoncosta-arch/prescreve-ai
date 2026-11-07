@@ -131,13 +131,14 @@ describe('CJ-009 — prescrição rápida opera inteiramente fora do dispatch re
     renderPrescricaoRapida();
 
     await user.type(screen.getByPlaceholderText('Nome completo'), 'Paciente Teste CJ-009');
-    await user.type(screen.getByPlaceholderText('anos'), '68');
+    await user.type(screen.getByTestId('idade-valor'), '68');
     await user.type(screen.getByPlaceholderText('kg'), '70');
     await user.type(screen.getByPlaceholderText('0.0'), '1.4');
 
-    const switches = screen.getAllByRole('switch');
-    for (const sw of switches) {
-      await user.click(sw);
+    // RM-105.2: gestante/lactante são tri-state (Não informado / Não / Sim) — não mais switches booleanos.
+    for (const id of ['gestante-select', 'lactante-select']) {
+      await user.click(screen.getByTestId(id));
+      await user.click(await screen.findByRole('option', { name: 'Sim' }));
     }
 
     expect(dispatchSpy).not.toHaveBeenCalled();
@@ -163,7 +164,7 @@ describe('CJ-009 — prescrição rápida opera inteiramente fora do dispatch re
 
     const modalHeading = screen.getByText('Pré-visualização da Receita');
     const modal = modalHeading.closest('div.fixed') as HTMLElement;
-    await user.click(within(modal).getByRole('button', { name: '' }));
+    await user.click(within(modal).getByRole('button', { name: /fechar/i }));
 
     expect(dispatchSpy).not.toHaveBeenCalled();
   }, 15000);

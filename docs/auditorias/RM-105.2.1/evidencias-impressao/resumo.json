@@ -1,0 +1,73 @@
+[
+ {
+  "nome": "S1-S2 receita padrao / anexo / isolamento",
+  "log": [
+   {
+    "modo": "receita",
+    "anexo": false,
+    "receita": true
+   },
+   {
+    "modo": "receita",
+    "anexo": true,
+    "receita": true
+   },
+   {
+    "modo": "anexo",
+    "anexo": true,
+    "receita": true
+   }
+  ],
+  "s1": {
+   "paginas": 1,
+   "mediabox": "0 0 594.95996 841.91998",
+   "temAnexo": false,
+   "temReceita": false,
+   "vazamento": []
+  },
+  "s1b": {
+   "paginas": 1,
+   "temAnexo": false,
+   "temReceita": false
+  },
+  "s2": {
+   "paginas": 1,
+   "mediabox": "0 0 594.95996 841.91998",
+   "temAnexo": false,
+   "temReceita": false,
+   "alergia": true
+  }
+ },
+ {
+  "nome": "S3 anexo muitos alertas",
+  "alertasNoAnexo": 10,
+  "anexo": {
+   "paginas": 3,
+   "temReceita": false
+  },
+  "receita": {
+   "paginas": 2,
+   "temAnexo": false
+  }
+ },
+ {
+  "nome": "S4 anexo varias nao identificadas",
+  "paginas": 3,
+  "naoIdentificadas": 0,
+  "situacao": true
+ },
+ {
+  "nome": "S5 anexo avaliacao parcial",
+  "paginas": 2,
+  "parcial": true,
+  "combinacoes": false
+ },
+ {
+  "nome": "S6 anexo erro de avaliacao",
+  "statusMotor": "erro",
+  "paginas": 1,
+  "erro": false,
+  "semAlertas": true,
+  "indisponiveis": false
+ }
+]

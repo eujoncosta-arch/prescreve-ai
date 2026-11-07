@@ -1,0 +1,149 @@
+## Matriz de dosagem: 700 cenários | 18 medicamentos
+ok=true: 535  ok=false: 165  null: 0
+
+### Cobertura (✓ regra calculável / ✗ sem posologia / ⛔ contraindicado ou bloqueado)
+med                          neona lacte pedia adole adult geria 
+amoxicilina                  ✓     ✓     ✓     ✓     ✓     ✓     
+amoxicilina-clavulanato      ✗     ~     ~     ~     ~     ~     
+azitromicina                 ✗     ✓     ✓     ✓     ✓     ✓     
+cefalexina                   ✗     ✓     ✓     ✓     ✓     ✓     
+sulfametoxazol-trimetoprim   ✗     ✓     ✓     ✓     ✓     ✓     
+paracetamol                  ✓     ✓     ✓     ✓     ✓     ✓     
+ibuprofeno                   ✗     ✗     ✓     ✓     ✓     ✓     
+dipirona                     ✗     ✓     ✓     ✓     ✓     ✓     
+prednisona                   ✗     ✓     ✓     ✓     ✓     ✓     
+salbutamol                   ✗     ~     ✓     ✓     ✓     ✓     
+montelucaste                 ✗     ✓     ✓     ✓     ✓     ✓     
+atenolol                     ✗     ✗     ✗     ✓     ✓     ✓     
+losartana                    ✗     ✗     ✓     ✓     ✓     ✓     
+metformina                   ✗     ✗     ✓     ✓     ✓     ✓     
+omeprazol                    ✗     ✓     ✓     ✓     ✓     ✓     
+pramipexol                   ✗     ✗     ✗     ✗     ✓     ✓     
+fenitoina                    ✓     ✓     ✓     ✓     ✓     ✓     
+dienogeste                   ✗     ✗     ✗     ✓     ✓     ✗     
+
+### Inconsistência dose×tomadas ≠ total/dia (sem clamp explicado): 0
+
+### Cenários com excede_dose_maxima_* = true: 0
+
+### Comprimidos/cápsulas com fração que não é múltipla de 1/4: 125
+  amoxicilina/amox-cap-500                 0.03, 0.12, 0.13, 0.3, 0.4, 0.67
+  amoxicilina/amox-cap-875                 0.02, 0.07, 0.08, 0.17, 0.23, 0.38
+  azitromicina/azitro-comp-500             0.08, 0.18, 0.24, 0.4, 0.6
+  cefalexina/cef-cap-500                   0.05, 0.11, 0.15, 0.38
+  sulfametoxazol-trimetoprim/smxtmp-comp   0.2, 0.45, 0.6
+  sulfametoxazol-trimetoprim/smxtmp-comp-forte 0.1, 0.23, 0.3
+  paracetamol/parac-comp-500               0.02, 0.07, 0.12, 0.27, 0.36, 0.6
+  paracetamol/parac-comp-750               0.01, 0.05, 0.08, 0.18, 0.24, 0.4
+  ibuprofeno/ibu-comp-300                  0.4, 0.67, 1.33
+  ibuprofeno/ibu-comp-600                  0.2, 0.33, 0.67
+  dipirona/dip-comp-500                    0.12, 0.27, 0.36, 0.6, 0.9
+  dipirona/dip-comp-1g                     0.06, 0.14, 0.18, 0.3, 0.45
+  prednisona/pred-comp-5                   0.8, 1.8, 2.4
+  prednisona/pred-comp-20                  0.2, 0.45, 0.6, 1.13, 0.56, 0.81
+  montelucaste/mont-comp-10                0.4
+  losartana/los-comp-25                    0.34, 0.56, 0.84
+  losartana/los-comp-50                    0.17, 0.28, 0.42
+  losartana/los-comp-100                   0.08, 0.14, 0.21
+  metformina/met-comp-850                  0.59
+  omeprazol/ome-caps-20                    0.2, 0.45, 0.6
+  omeprazol/ome-caps-40                    0.1, 0.23, 0.3
+  pramipexol/prami-comp-lp-1125            0.33
+  fenitoina/feni-comp-100                  0.03, 0.09, 0.1, 0.23, 0.3
+Comprimidos < 1/4 de unidade: 42 amoxicilina/amox-cap-500:0.03; amoxicilina/amox-cap-500:0.12; amoxicilina/amox-cap-500:0.13; amoxicilina/amox-cap-875:0.02; amoxicilina/amox-cap-875:0.07; amoxicilina/amox-cap-875:0.08; amoxicilina/amox-cap-875:0.17; amoxicilina/amox-cap-875:0.23; azitromicina/azitro-comp-500:0.08; azitromicina/azitro-comp-500:0.18; azitromicina/azitro-comp-500:0.24; cefalexina/cef-cap-500:0.05
+
+### Volumes por dose < 0,2 mL ou > 30 mL: 8
+  amoxicilina amox-susp-500 neonato 1kg 0.17 mL
+  paracetamol parac-gotas neonato 1kg 0.05 mL
+  paracetamol parac-gotas neonato 3.5kg 0.17 mL
+  dipirona dip-gotas lactente 4kg 0.12 mL
+  dipirona dip-inj-500 lactente 4kg 0.12 mL
+  fenitoina feni-susp neonato 1kg 0.10 mL
+  fenitoina feni-inj neonato 1kg 0.05 mL
+  fenitoina feni-inj neonato 3.5kg 0.17 mL
+Cenários em gotas: 26  faixa gotas: 1 – 75
+
+### Mensagens de bloqueio:
+  78 Não há posologia definida para Neonatologia (< N dias) neste medicamento.
+  40 Não há posologia definida para Lactente (N dias – N meses) neste medicamento.
+  30 Não há posologia definida para Pediatria (N–N anos) neste medicamento.
+  10 Não há posologia definida para Adolescente (N–N anos) neste medicamento.
+  4 Não há posologia definida para Geriatria (≥ N anos) neste medicamento.
+  3 Não há posologia definida para Adulto (N–N anos) neste medicamento.
+
+### Pediatria/neonato/lactente: mg/kg/dia e mg/kg/dose (referência para revisão; NÃO é veredito)
+  amoxicilina                neonato     1kg     freq q8h   dose   16.7 mg/kg/dose   50.0 mg/kg/dia | regra 50 mg/kg/dia | máx dia 3000 mg
+  amoxicilina                neonato     3.5kg   freq q8h   dose   16.7 mg/kg/dose   50.0 mg/kg/dia | regra 50 mg/kg/dia | máx dia 3000 mg
+  amoxicilina                lactente    4kg     freq q8h   dose   16.7 mg/kg/dose   50.0 mg/kg/dia | regra 50 mg/kg/dia | máx dia 3000 mg
+  amoxicilina                lactente    9kg     freq q8h   dose   16.7 mg/kg/dose   50.0 mg/kg/dia | regra 50 mg/kg/dia | máx dia 3000 mg
+  amoxicilina                pediatrico  12kg    freq q8h   dose   16.7 mg/kg/dose   50.0 mg/kg/dia | regra 50 mg/kg/dia | máx dia 3000 mg
+  amoxicilina                pediatrico  20kg    freq q8h   dose   16.7 mg/kg/dose   50.0 mg/kg/dia | regra 50 mg/kg/dia | máx dia 3000 mg
+  amoxicilina                pediatrico  30kg    freq q8h   dose   16.7 mg/kg/dose   50.0 mg/kg/dia | regra 50 mg/kg/dia | máx dia 3000 mg
+  amoxicilina-clavulanato    lactente    4kg     freq q12h  dose   22.5 mg/kg/dose   45.0 mg/kg/dia | regra 45 mg/kg/dia | máx dia 2000 mg
+  amoxicilina-clavulanato    lactente    9kg     freq q12h  dose   22.5 mg/kg/dose   45.0 mg/kg/dia | regra 45 mg/kg/dia | máx dia 2000 mg
+  amoxicilina-clavulanato    pediatrico  12kg    freq q12h  dose   22.5 mg/kg/dose   45.0 mg/kg/dia | regra 45 mg/kg/dia | máx dia 2000 mg
+  amoxicilina-clavulanato    pediatrico  20kg    freq q12h  dose   22.5 mg/kg/dose   45.0 mg/kg/dia | regra 45 mg/kg/dia | máx dia 2000 mg
+  amoxicilina-clavulanato    pediatrico  30kg    freq q12h  dose   22.5 mg/kg/dose   45.0 mg/kg/dia | regra 45 mg/kg/dia | máx dia 2000 mg
+  azitromicina               lactente    4kg     freq q24h  dose   10.0 mg/kg/dose   10.0 mg/kg/dia | regra 10 mg/kg | máx dia 500 mg
+  azitromicina               lactente    9kg     freq q24h  dose   10.0 mg/kg/dose   10.0 mg/kg/dia | regra 10 mg/kg | máx dia 500 mg
+  azitromicina               pediatrico  12kg    freq q24h  dose   10.0 mg/kg/dose   10.0 mg/kg/dia | regra 10 mg/kg | máx dia 500 mg
+  azitromicina               pediatrico  20kg    freq q24h  dose   10.0 mg/kg/dose   10.0 mg/kg/dia | regra 10 mg/kg | máx dia 500 mg
+  azitromicina               pediatrico  30kg    freq q24h  dose   10.0 mg/kg/dose   10.0 mg/kg/dia | regra 10 mg/kg | máx dia 500 mg
+  cefalexina                 lactente    4kg     freq q6h   dose    6.3 mg/kg/dose   25.0 mg/kg/dia | regra 25 mg/kg/dia | máx dia 4000 mg
+  cefalexina                 lactente    9kg     freq q6h   dose    6.3 mg/kg/dose   25.0 mg/kg/dia | regra 25 mg/kg/dia | máx dia 4000 mg
+  cefalexina                 pediatrico  12kg    freq q6h   dose    6.3 mg/kg/dose   25.0 mg/kg/dia | regra 25 mg/kg/dia | máx dia 4000 mg
+  cefalexina                 pediatrico  20kg    freq q6h   dose    6.3 mg/kg/dose   25.0 mg/kg/dia | regra 25 mg/kg/dia | máx dia 4000 mg
+  cefalexina                 pediatrico  30kg    freq q6h   dose    6.3 mg/kg/dose   25.0 mg/kg/dia | regra 25 mg/kg/dia | máx dia 4000 mg
+  sulfametoxazol-trimetoprim lactente    4kg     freq q12h  dose    4.0 mg/kg/dose    8.0 mg/kg/dia | regra 8 mg/kg/dia | máx dia 320 mg
+  sulfametoxazol-trimetoprim lactente    9kg     freq q12h  dose    4.0 mg/kg/dose    8.0 mg/kg/dia | regra 8 mg/kg/dia | máx dia 320 mg
+  sulfametoxazol-trimetoprim pediatrico  12kg    freq q12h  dose    4.0 mg/kg/dose    8.0 mg/kg/dia | regra 8 mg/kg/dia | máx dia 320 mg
+  sulfametoxazol-trimetoprim pediatrico  20kg    freq q12h  dose    4.0 mg/kg/dose    8.0 mg/kg/dia | regra 8 mg/kg/dia | máx dia 320 mg
+  sulfametoxazol-trimetoprim pediatrico  30kg    freq q12h  dose    4.0 mg/kg/dose    8.0 mg/kg/dia | regra 8 mg/kg/dia | máx dia 320 mg
+  paracetamol                neonato     1kg     freq q6h   dose   10.0 mg/kg/dose   40.0 mg/kg/dia | regra 10 mg/kg 
+  paracetamol                neonato     3.5kg   freq q6h   dose   10.0 mg/kg/dose   40.0 mg/kg/dia | regra 10 mg/kg 
+  paracetamol                lactente    4kg     freq q6h   dose   15.0 mg/kg/dose   60.0 mg/kg/dia | regra 15 mg/kg | máx dia 4000 mg
+  paracetamol                lactente    9kg     freq q6h   dose   15.0 mg/kg/dose   60.0 mg/kg/dia | regra 15 mg/kg | máx dia 4000 mg
+  paracetamol                pediatrico  12kg    freq q6h   dose   15.0 mg/kg/dose   60.0 mg/kg/dia | regra 15 mg/kg | máx dia 4000 mg
+  paracetamol                pediatrico  20kg    freq q6h   dose   15.0 mg/kg/dose   60.0 mg/kg/dia | regra 15 mg/kg | máx dia 4000 mg
+  paracetamol                pediatrico  30kg    freq q6h   dose   15.0 mg/kg/dose   60.0 mg/kg/dia | regra 15 mg/kg | máx dia 4000 mg
+  ibuprofeno                 pediatrico  12kg    freq q8h   dose   10.0 mg/kg/dose   30.0 mg/kg/dia | regra 10 mg/kg | máx dia 2400 mg
+  ibuprofeno                 pediatrico  20kg    freq q8h   dose   10.0 mg/kg/dose   30.0 mg/kg/dia | regra 10 mg/kg | máx dia 2400 mg
+  ibuprofeno                 pediatrico  30kg    freq q8h   dose   10.0 mg/kg/dose   30.0 mg/kg/dia | regra 10 mg/kg | máx dia 2400 mg
+  dipirona                   lactente    4kg     freq q6h   dose   15.0 mg/kg/dose   60.0 mg/kg/dia | regra 15 mg/kg | máx dia 4000 mg
+  dipirona                   lactente    9kg     freq q6h   dose   15.0 mg/kg/dose   60.0 mg/kg/dia | regra 15 mg/kg | máx dia 4000 mg
+  dipirona                   pediatrico  12kg    freq q6h   dose   15.0 mg/kg/dose   60.0 mg/kg/dia | regra 15 mg/kg | máx dia 4000 mg
+  dipirona                   pediatrico  20kg    freq q6h   dose   15.0 mg/kg/dose   60.0 mg/kg/dia | regra 15 mg/kg | máx dia 4000 mg
+  dipirona                   pediatrico  30kg    freq q6h   dose   15.0 mg/kg/dose   60.0 mg/kg/dia | regra 15 mg/kg | máx dia 4000 mg
+  prednisona                 lactente    4kg     freq q24h  dose    1.0 mg/kg/dose    1.0 mg/kg/dia | regra 1 mg/kg | máx dia 40 mg
+  prednisona                 lactente    9kg     freq q24h  dose    1.0 mg/kg/dose    1.0 mg/kg/dia | regra 1 mg/kg | máx dia 40 mg
+  prednisona                 pediatrico  12kg    freq q24h  dose    1.0 mg/kg/dose    1.0 mg/kg/dia | regra 1 mg/kg | máx dia 40 mg
+  prednisona                 pediatrico  20kg    freq q24h  dose    1.0 mg/kg/dose    1.0 mg/kg/dia | regra 1 mg/kg | máx dia 40 mg
+  prednisona                 pediatrico  30kg    freq q24h  dose    1.0 mg/kg/dose    1.0 mg/kg/dia | regra 1 mg/kg | máx dia 40 mg
+  salbutamol                 pediatrico  12kg    freq q6h   dose    0.0 mg/kg/dose    0.0 mg/kg/dia | regra 0.1 mg | máx dia 0.8 mg
+  salbutamol                 pediatrico  20kg    freq q6h   dose    0.0 mg/kg/dose    0.0 mg/kg/dia | regra 0.1 mg | máx dia 0.8 mg
+  salbutamol                 pediatrico  30kg    freq q6h   dose    0.0 mg/kg/dose    0.0 mg/kg/dia | regra 0.1 mg | máx dia 0.8 mg
+  salbutamol                 lactente    4kg     freq q6h   dose    0.6 mg/kg/dose    2.5 mg/kg/dia | regra 0.15 mg/kg 
+  salbutamol                 lactente    9kg     freq q6h   dose    0.3 mg/kg/dose    1.1 mg/kg/dia | regra 0.15 mg/kg 
+  montelucaste               lactente    4kg     freq q24h  dose    1.0 mg/kg/dose    1.0 mg/kg/dia | regra 4 mg 
+  montelucaste               lactente    9kg     freq q24h  dose    0.4 mg/kg/dose    0.4 mg/kg/dia | regra 4 mg 
+  montelucaste               pediatrico  12kg    freq q24h  dose    0.4 mg/kg/dose    0.4 mg/kg/dia | regra 5 mg | máx dia 5 mg
+  montelucaste               pediatrico  20kg    freq q24h  dose    0.3 mg/kg/dose    0.3 mg/kg/dia | regra 5 mg | máx dia 5 mg
+  montelucaste               pediatrico  30kg    freq q24h  dose    0.2 mg/kg/dose    0.2 mg/kg/dia | regra 5 mg | máx dia 5 mg
+  losartana                  pediatrico  12kg    freq q24h  dose    0.7 mg/kg/dose    0.7 mg/kg/dia | regra 0.7 mg/kg | máx dia 50 mg
+  losartana                  pediatrico  20kg    freq q24h  dose    0.7 mg/kg/dose    0.7 mg/kg/dia | regra 0.7 mg/kg | máx dia 50 mg
+  losartana                  pediatrico  30kg    freq q24h  dose    0.7 mg/kg/dose    0.7 mg/kg/dia | regra 0.7 mg/kg | máx dia 50 mg
+  metformina                 pediatrico  12kg    freq q12h  dose   41.7 mg/kg/dose   83.3 mg/kg/dia | regra 500 mg | máx dia 2000 mg
+  metformina                 pediatrico  20kg    freq q12h  dose   25.0 mg/kg/dose   50.0 mg/kg/dia | regra 500 mg | máx dia 2000 mg
+  metformina                 pediatrico  30kg    freq q12h  dose   16.7 mg/kg/dose   33.3 mg/kg/dia | regra 500 mg | máx dia 2000 mg
+  omeprazol                  lactente    4kg     freq q24h  dose    1.0 mg/kg/dose    1.0 mg/kg/dia | regra 1 mg/kg | máx dia 40 mg
+  omeprazol                  lactente    9kg     freq q24h  dose    1.0 mg/kg/dose    1.0 mg/kg/dia | regra 1 mg/kg | máx dia 40 mg
+  omeprazol                  pediatrico  12kg    freq q24h  dose    1.0 mg/kg/dose    1.0 mg/kg/dia | regra 1 mg/kg | máx dia 40 mg
+  omeprazol                  pediatrico  20kg    freq q24h  dose    1.0 mg/kg/dose    1.0 mg/kg/dia | regra 1 mg/kg | máx dia 40 mg
+  omeprazol                  pediatrico  30kg    freq q24h  dose    1.0 mg/kg/dose    1.0 mg/kg/dia | regra 1 mg/kg | máx dia 40 mg
+  fenitoina                  neonato     1kg     freq q12h  dose    2.5 mg/kg/dose    5.0 mg/kg/dia | regra 5 mg/kg/dia 
+  fenitoina                  neonato     3.5kg   freq q12h  dose    2.5 mg/kg/dose    5.0 mg/kg/dia | regra 5 mg/kg/dia 
+  fenitoina                  lactente    4kg     freq q12h  dose    2.5 mg/kg/dose    5.0 mg/kg/dia | regra 5 mg/kg/dia | máx dia 300 mg
+  fenitoina                  lactente    9kg     freq q12h  dose    2.5 mg/kg/dose    5.0 mg/kg/dia | regra 5 mg/kg/dia | máx dia 300 mg
+  fenitoina                  pediatrico  12kg    freq q12h  dose    2.5 mg/kg/dose    5.0 mg/kg/dia | regra 5 mg/kg/dia | máx dia 300 mg
+  fenitoina                  pediatrico  20kg    freq q12h  dose    2.5 mg/kg/dose    5.0 mg/kg/dia | regra 5 mg/kg/dia | máx dia 300 mg
+  fenitoina                  pediatrico  30kg    freq q12h  dose    2.5 mg/kg/dose    5.0 mg/kg/dia | regra 5 mg/kg/dia | máx dia 300 mg

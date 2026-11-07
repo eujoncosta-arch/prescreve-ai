@@ -1,0 +1,6 @@
+ibuprofeno-paracetamol --[Álcool (paracetamol)]--> paracetamol (Paracetamol) | sev=grave | nao_med=true atomos=Álcool (paracetamol):nao_medicamentoso
+acetilcisteina --[Carvão ativado (paracetamol IV)]--> paracetamol (Paracetamol) | sev=moderada | nao_med=true atomos=Carvão ativado (paracetamol IV):nao_medicamentoso
+ondansetrona --[Apomorfina]--> morfina-paliativa (morfina) | sev=contraindicado | nao_med=false atomos=Apomorfina:nao_resolvido
+palonossetrona --[apomorfina]--> morfina-paliativa (morfina) | sev=contraindicado | nao_med=false atomos=apomorfina:nao_resolvido
+vasopressina --[norepinefrina]--> epinefrina-uti (epinefrina) | sev=leve | nao_med=false atomos=norepinefrina:molecula_exata
+ondansetrona-paliativa --[apomorfina]--> morfina-paliativa (morfina) | sev=contraindicado | nao_med=false atomos=apomorfina:nao_resolvido

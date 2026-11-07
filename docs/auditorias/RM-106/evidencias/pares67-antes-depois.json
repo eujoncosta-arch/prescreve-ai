@@ -1,0 +1,2046 @@
+[
+ {
+  "a": "varfarina",
+  "b": "ácido acetilsalicílico",
+  "cat": "hemorragia",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "danger"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-aas-varfarina"
+   ],
+   "classificacoes": [
+    "inter-aas-varfarina=pendente_validacao/molecula_exata"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "varfarina",
+  "b": "ibuprofeno",
+  "cat": "hemorragia",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "critical"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "critical"
+   ],
+   "ids": [
+    "critical-pair-varfarina-aine"
+   ],
+   "classificacoes": [
+    "critical-pair-varfarina-aine=por_classe/regra_fixa_par"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "varfarina",
+  "b": "sulfametoxazol + trimetoprima",
+  "cat": "hemorragia",
+  "antes": {
+   "ra": true,
+   "rb": false,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 1,
+   "naoReconhecidas": [
+    "sulfametoxazol + trimetoprima"
+   ],
+   "ambiguas": [],
+   "nAlert": 0,
+   "nInter": 0,
+   "sev": [],
+   "ids": [],
+   "classificacoes": [],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "varfarina",
+  "b": "amiodarona",
+  "cat": "hemorragia",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "danger"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [
+    "amiodarona:variantes_sem_id"
+   ],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-varfarina-amiodarona"
+   ],
+   "classificacoes": [
+    "inter-varfarina-amiodarona=pendente_validacao/molecula_exata"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "varfarina",
+  "b": "metronidazol",
+  "cat": "hemorragia",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "danger"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-varfarina-metronidazol"
+   ],
+   "classificacoes": [
+    "inter-varfarina-metronidazol=pendente_validacao/molecula_exata"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "varfarina",
+  "b": "fluconazol",
+  "cat": "hemorragia",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "danger"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-varfarina-fluconazol"
+   ],
+   "classificacoes": [
+    "inter-varfarina-fluconazol=pendente_validacao/molecula_exata"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "clopidogrel",
+  "b": "omeprazol",
+  "cat": "CYP2C19",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "warning"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "warning"
+   ],
+   "ids": [
+    "inter-clopidogrel-omeprazol"
+   ],
+   "classificacoes": [
+    "inter-clopidogrel-omeprazol=pendente_validacao/molecula_exata"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "rivaroxabana",
+  "b": "ácido acetilsalicílico",
+  "cat": "hemorragia",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "warning"
+   ],
+   "ids": [
+    "inter-rivaroxabana-aas"
+   ],
+   "classificacoes": [
+    "inter-rivaroxabana-aas=pendente_validacao/sinonimo_autorizado"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "apixabana",
+  "b": "ibuprofeno",
+  "cat": "hemorragia",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-ibuprofeno-apixabana"
+   ],
+   "classificacoes": [
+    "inter-ibuprofeno-apixabana=por_classe/classe_farmacologica"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "sertralina",
+  "b": "tramadol",
+  "cat": "serotoninérgica",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "danger"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [
+    "tramadol:variantes_sem_id"
+   ],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "critical-pair-sertralina-tramadol"
+   ],
+   "classificacoes": [
+    "critical-pair-sertralina-tramadol=medicamento_nao_identificado/regra_fixa_par"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "fluoxetina",
+  "b": "tramadol",
+  "cat": "serotoninérgica",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 2,
+   "sev": [
+    "danger",
+    "danger"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [
+    "tramadol:variantes_sem_id"
+   ],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-fluoxetina-tramadol"
+   ],
+   "classificacoes": [
+    "inter-fluoxetina-tramadol=pendente_validacao/molecula_exata"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "linezolida",
+  "b": "sertralina",
+  "cat": "serotoninérgica",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "danger"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-linezolida-sertralina"
+   ],
+   "classificacoes": [
+    "inter-linezolida-sertralina=pendente_validacao/molecula_exata"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "ondansetrona",
+  "b": "sertralina",
+  "cat": "serotoninérgica",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [
+    "ondansetrona:variantes_sem_id"
+   ],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "info"
+   ],
+   "ids": [
+    "inter-ondansetrona-sertralina"
+   ],
+   "classificacoes": [
+    "inter-ondansetrona-sertralina=por_classe/classe_farmacologica"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "venlafaxina",
+  "b": "tramadol",
+  "cat": "serotoninérgica",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "warning"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [
+    "tramadol:variantes_sem_id"
+   ],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "warning"
+   ],
+   "ids": [
+    "inter-venlafaxina-tramadol"
+   ],
+   "classificacoes": [
+    "inter-venlafaxina-tramadol=pendente_validacao/molecula_exata"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "sertralina",
+  "b": "sumatriptano",
+  "cat": "serotoninérgica",
+  "antes": {
+   "ra": true,
+   "rb": false,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 1,
+   "naoReconhecidas": [
+    "sumatriptano"
+   ],
+   "ambiguas": [],
+   "nAlert": 0,
+   "nInter": 0,
+   "sev": [],
+   "ids": [],
+   "classificacoes": [],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "ondansetrona",
+  "b": "haloperidol",
+  "cat": "QT",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [
+    "ondansetrona:variantes_sem_id",
+    "haloperidol:variantes_sem_id"
+   ],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "warning"
+   ],
+   "ids": [
+    "inter-ondansetrona-haloperidol"
+   ],
+   "classificacoes": [
+    "inter-ondansetrona-haloperidol=pendente_validacao/enumeracao_explicita"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "azitromicina",
+  "b": "ondansetrona",
+  "cat": "QT",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [
+    "azitromicina:variantes_sem_id",
+    "ondansetrona:variantes_sem_id"
+   ],
+   "nAlert": 0,
+   "nInter": 0,
+   "sev": [],
+   "ids": [],
+   "classificacoes": [],
+   "semRegra": 1,
+   "naoResolvidas": [
+    1
+   ],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "amiodarona",
+  "b": "haloperidol",
+  "cat": "QT",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "danger"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [
+    "amiodarona:variantes_sem_id",
+    "haloperidol:variantes_sem_id"
+   ],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-amiodarona-haloperidol"
+   ],
+   "classificacoes": [
+    "inter-amiodarona-haloperidol=pendente_validacao/enumeracao_explicita"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "claritromicina",
+  "b": "amiodarona",
+  "cat": "QT",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [
+    "amiodarona:variantes_sem_id"
+   ],
+   "nAlert": 0,
+   "nInter": 0,
+   "sev": [],
+   "ids": [],
+   "classificacoes": [],
+   "semRegra": 1,
+   "naoResolvidas": [
+    1
+   ],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "levofloxacino",
+  "b": "amiodarona",
+  "cat": "QT",
+  "antes": {
+   "ra": false,
+   "rb": true,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 1,
+   "naoReconhecidas": [
+    "levofloxacino"
+   ],
+   "ambiguas": [
+    "amiodarona:variantes_sem_id"
+   ],
+   "nAlert": 0,
+   "nInter": 0,
+   "sev": [],
+   "ids": [],
+   "classificacoes": [],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "metadona",
+  "b": "amiodarona",
+  "cat": "QT",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "danger"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [
+    "amiodarona:variantes_sem_id"
+   ],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-metadona-paliativa-amiodarona"
+   ],
+   "classificacoes": [
+    "inter-metadona-paliativa-amiodarona=pendente_validacao/molecula_exata"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "citalopram",
+  "b": "ondansetrona",
+  "cat": "QT",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [
+    "ondansetrona:variantes_sem_id"
+   ],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "info"
+   ],
+   "ids": [
+    "inter-ondansetrona-citalopram"
+   ],
+   "classificacoes": [
+    "inter-ondansetrona-citalopram=por_classe/classe_farmacologica"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "domperidona",
+  "b": "cetoconazol",
+  "cat": "QT",
+  "antes": {
+   "ra": true,
+   "rb": false,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 1,
+   "naoReconhecidas": [
+    "cetoconazol"
+   ],
+   "ambiguas": [],
+   "nAlert": 0,
+   "nInter": 0,
+   "sev": [],
+   "ids": [],
+   "classificacoes": [],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "sotalol",
+  "b": "amiodarona",
+  "cat": "QT",
+  "antes": {
+   "ra": false,
+   "rb": true,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 1,
+   "naoReconhecidas": [
+    "sotalol"
+   ],
+   "ambiguas": [
+    "amiodarona:variantes_sem_id"
+   ],
+   "nAlert": 0,
+   "nInter": 0,
+   "sev": [],
+   "ids": [],
+   "classificacoes": [],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "midazolam",
+  "b": "fentanil",
+  "cat": "depressão respiratória",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [
+    "midazolam:variantes_sem_id",
+    "fentanil:variantes_sem_id"
+   ],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-midazolam-fentanil-uti"
+   ],
+   "classificacoes": [
+    "inter-midazolam-fentanil-uti=por_classe/classe_farmacologica"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "diazepam",
+  "b": "morfina",
+  "cat": "depressão respiratória",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "critical"
+   ],
+   "ids": [
+    "inter-diazepam-morfina-paliativa"
+   ],
+   "classificacoes": [
+    "inter-diazepam-morfina-paliativa=por_classe/classe_farmacologica"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "lorazepam",
+  "b": "tramadol",
+  "cat": "depressão respiratória",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [
+    "lorazepam:variantes_sem_id",
+    "tramadol:variantes_sem_id"
+   ],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-lorazepam-tramadol"
+   ],
+   "classificacoes": [
+    "inter-lorazepam-tramadol=por_classe/classe_farmacologica"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "fenobarbital",
+  "b": "morfina",
+  "cat": "depressão respiratória",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [
+    "fenobarbital:variantes_sem_id"
+   ],
+   "nAlert": 0,
+   "nInter": 0,
+   "sev": [],
+   "ids": [],
+   "classificacoes": [],
+   "semRegra": 1,
+   "naoResolvidas": [
+    1
+   ],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "gabapentina",
+  "b": "morfina",
+  "cat": "depressão respiratória",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [
+    "gabapentina:variantes_sem_id"
+   ],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-gabapentina-morfina-paliativa"
+   ],
+   "classificacoes": [
+    "inter-gabapentina-morfina-paliativa=por_classe/classe_farmacologica"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "clonazepam",
+  "b": "codeína",
+  "cat": "depressão respiratória",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-clonazepam-codeina"
+   ],
+   "classificacoes": [
+    "inter-clonazepam-codeina=por_classe/classe_farmacologica"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "enalapril",
+  "b": "espironolactona",
+  "cat": "hipercalemia",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 3,
+   "sev": [
+    "warning",
+    "warning"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 2,
+   "nInter": 1,
+   "sev": [
+    "warning",
+    "warning"
+   ],
+   "ids": [
+    "inter-enalapril-espironolactona",
+    "arm-k-nao-informado"
+   ],
+   "classificacoes": [
+    "inter-enalapril-espironolactona=pendente_validacao/molecula_exata",
+    "arm-k-nao-informado=pendente_validacao/regra_fixa_arm"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "enalapril",
+  "b": "losartana",
+  "cat": "hipercalemia/renal",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 2,
+   "sev": [
+    "critical",
+    "danger"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "critical"
+   ],
+   "ids": [
+    "critical-pair-ieca-bra"
+   ],
+   "classificacoes": [
+    "critical-pair-ieca-bra=por_classe/regra_fixa_par"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "losartana",
+  "b": "ibuprofeno",
+  "cat": "nefrotoxicidade",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "danger"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "critical-pair-bra-aine"
+   ],
+   "classificacoes": [
+    "critical-pair-bra-aine=por_classe/regra_fixa_par"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "enalapril",
+  "b": "ibuprofeno",
+  "cat": "nefrotoxicidade",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "danger"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "critical-pair-ieca-aine"
+   ],
+   "classificacoes": [
+    "critical-pair-ieca-aine=por_classe/regra_fixa_par"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "furosemida",
+  "b": "gentamicina",
+  "cat": "nefro/ototoxicidade",
+  "antes": {
+   "ra": true,
+   "rb": false,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 1,
+   "naoReconhecidas": [
+    "gentamicina"
+   ],
+   "ambiguas": [],
+   "nAlert": 0,
+   "nInter": 0,
+   "sev": [],
+   "ids": [],
+   "classificacoes": [],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "vancomicina",
+  "b": "gentamicina",
+  "cat": "nefrotoxicidade",
+  "antes": {
+   "ra": true,
+   "rb": false,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 1,
+   "naoReconhecidas": [
+    "gentamicina"
+   ],
+   "ambiguas": [],
+   "nAlert": 0,
+   "nInter": 0,
+   "sev": [],
+   "ids": [],
+   "classificacoes": [],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "lítio",
+  "b": "ibuprofeno",
+  "cat": "toxicidade do lítio",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "warning"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-litio-ibuprofeno"
+   ],
+   "classificacoes": [
+    "inter-litio-ibuprofeno=por_classe/classe_farmacologica"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "lítio",
+  "b": "enalapril",
+  "cat": "toxicidade do lítio",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-litio-enalapril"
+   ],
+   "classificacoes": [
+    "inter-litio-enalapril=por_classe/classe_farmacologica"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "metotrexato",
+  "b": "sulfametoxazol + trimetoprima",
+  "cat": "mielotoxicidade",
+  "antes": {
+   "ra": true,
+   "rb": false,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 1,
+   "naoReconhecidas": [
+    "sulfametoxazol + trimetoprima"
+   ],
+   "ambiguas": [],
+   "nAlert": 0,
+   "nInter": 0,
+   "sev": [],
+   "ids": [],
+   "classificacoes": [],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "metotrexato",
+  "b": "ibuprofeno",
+  "cat": "toxicidade MTX",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "danger"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-ibuprofeno-metotrexato-onco"
+   ],
+   "classificacoes": [
+    "inter-ibuprofeno-metotrexato-onco=pendente_validacao/molecula_exata"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "sinvastatina",
+  "b": "claritromicina",
+  "cat": "rabdomiólise",
+  "antes": {
+   "ra": false,
+   "rb": true,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 1,
+   "naoReconhecidas": [
+    "sinvastatina"
+   ],
+   "ambiguas": [],
+   "nAlert": 0,
+   "nInter": 0,
+   "sev": [],
+   "ids": [],
+   "classificacoes": [],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "sinvastatina",
+  "b": "diltiazem",
+  "cat": "rabdomiólise",
+  "antes": {
+   "ra": false,
+   "rb": true,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 1,
+   "naoReconhecidas": [
+    "sinvastatina"
+   ],
+   "ambiguas": [],
+   "nAlert": 0,
+   "nInter": 0,
+   "sev": [],
+   "ids": [],
+   "classificacoes": [],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "atorvastatina",
+  "b": "claritromicina",
+  "cat": "rabdomiólise",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "warning"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-claritromicina-atorvastatina"
+   ],
+   "classificacoes": [
+    "inter-claritromicina-atorvastatina=por_classe/classe_farmacologica"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "sinvastatina",
+  "b": "amiodarona",
+  "cat": "rabdomiólise",
+  "antes": {
+   "ra": false,
+   "rb": true,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 1,
+   "naoReconhecidas": [
+    "sinvastatina"
+   ],
+   "ambiguas": [
+    "amiodarona:variantes_sem_id"
+   ],
+   "nAlert": 0,
+   "nInter": 0,
+   "sev": [],
+   "ids": [],
+   "classificacoes": [],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "digoxina",
+  "b": "amiodarona",
+  "cat": "toxicidade digitálica",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "danger"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [
+    "amiodarona:variantes_sem_id"
+   ],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-digoxina-amiodarona"
+   ],
+   "classificacoes": [
+    "inter-digoxina-amiodarona=pendente_validacao/molecula_exata"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "digoxina",
+  "b": "claritromicina",
+  "cat": "toxicidade digitálica",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "warning"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-claritromicina-digoxina"
+   ],
+   "classificacoes": [
+    "inter-claritromicina-digoxina=pendente_validacao/molecula_exata"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "digoxina",
+  "b": "verapamil",
+  "cat": "bradicardia",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "danger"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-digoxina-verapamil"
+   ],
+   "classificacoes": [
+    "inter-digoxina-verapamil=pendente_validacao/molecula_exata"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "metoprolol",
+  "b": "verapamil",
+  "cat": "bradicardia/BAV",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "danger"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-metoprolol-verapamil"
+   ],
+   "classificacoes": [
+    "inter-metoprolol-verapamil=pendente_validacao/molecula_exata"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "atenolol",
+  "b": "diltiazem",
+  "cat": "bradicardia/BAV",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "danger"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-atenolol-diltiazem"
+   ],
+   "classificacoes": [
+    "inter-atenolol-diltiazem=pendente_validacao/molecula_exata"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "carvedilol",
+  "b": "verapamil",
+  "cat": "bradicardia/BAV",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "danger"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-carvedilol-verapamil"
+   ],
+   "classificacoes": [
+    "inter-carvedilol-verapamil=pendente_validacao/molecula_exata"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "insulina",
+  "b": "glibenclamida",
+  "cat": "hipoglicemia",
+  "antes": {
+   "ra": false,
+   "rb": true,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 1,
+   "naoReconhecidas": [
+    "insulina"
+   ],
+   "ambiguas": [],
+   "nAlert": 0,
+   "nInter": 0,
+   "sev": [],
+   "ids": [],
+   "classificacoes": [],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "glibenclamida",
+  "b": "sulfametoxazol + trimetoprima",
+  "cat": "hipoglicemia",
+  "antes": {
+   "ra": true,
+   "rb": false,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 1,
+   "naoReconhecidas": [
+    "sulfametoxazol + trimetoprima"
+   ],
+   "ambiguas": [],
+   "nAlert": 0,
+   "nInter": 0,
+   "sev": [],
+   "ids": [],
+   "classificacoes": [],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "glimepirida",
+  "b": "levofloxacino",
+  "cat": "disglicemia",
+  "antes": {
+   "ra": true,
+   "rb": false,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 1,
+   "naoReconhecidas": [
+    "levofloxacino"
+   ],
+   "ambiguas": [],
+   "nAlert": 0,
+   "nInter": 0,
+   "sev": [],
+   "ids": [],
+   "classificacoes": [],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "insulina",
+  "b": "propranolol",
+  "cat": "mascaramento hipoglicemia",
+  "antes": {
+   "ra": false,
+   "rb": false,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 0,
+   "naoReconhecidas": [
+    "insulina",
+    "propranolol"
+   ],
+   "ambiguas": [],
+   "nAlert": 0,
+   "nInter": 0,
+   "sev": [],
+   "ids": [],
+   "classificacoes": [],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "molecula_nao_reconhecida"
+  }
+ },
+ {
+  "a": "sildenafila",
+  "b": "nitroglicerina",
+  "cat": "hipotensão",
+  "antes": {
+   "ra": false,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "critical"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 1,
+   "naoReconhecidas": [
+    "sildenafila"
+   ],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "critical"
+   ],
+   "ids": [
+    "critical-pair-nitrato-sildenafila"
+   ],
+   "classificacoes": [
+    "critical-pair-nitrato-sildenafila=medicamento_nao_identificado/regra_fixa_par"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "tadalafila",
+  "b": "isossorbida",
+  "cat": "hipotensão",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "critical"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "critical"
+   ],
+   "ids": [
+    "critical-pair-nitrato-tadalafila"
+   ],
+   "classificacoes": [
+    "critical-pair-nitrato-tadalafila=por_classe/regra_fixa_par"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "metformina",
+  "b": "contraste iodado",
+  "cat": "acidose lática",
+  "antes": {
+   "ra": true,
+   "rb": false,
+   "nAlert": 1,
+   "sev": [
+    "warning"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 1,
+   "naoReconhecidas": [
+    "contraste iodado"
+   ],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "warning"
+   ],
+   "ids": [
+    "critical-pair-metformina-contraste"
+   ],
+   "classificacoes": [
+    "critical-pair-metformina-contraste=medicamento_nao_identificado/regra_fixa_par"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "ciprofloxacino",
+  "b": "tizanidina",
+  "cat": "hipotensão",
+  "antes": {
+   "ra": true,
+   "rb": false,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 1,
+   "naoReconhecidas": [
+    "tizanidina"
+   ],
+   "ambiguas": [],
+   "nAlert": 0,
+   "nInter": 0,
+   "sev": [],
+   "ids": [],
+   "classificacoes": [],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "carbamazepina",
+  "b": "varfarina",
+  "cat": "indução CYP",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "danger"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-carbamazepina-varfarina"
+   ],
+   "classificacoes": [
+    "inter-carbamazepina-varfarina=pendente_validacao/molecula_exata"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "fenitoína",
+  "b": "varfarina",
+  "cat": "interação",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "danger"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "danger"
+   ],
+   "ids": [
+    "inter-fenitoina-varfarina"
+   ],
+   "classificacoes": [
+    "inter-fenitoina-varfarina=pendente_validacao/molecula_exata"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "carbamazepina",
+  "b": "anticoncepcional",
+  "cat": "falha contraceptiva",
+  "antes": {
+   "ra": true,
+   "rb": false,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 1,
+   "naoReconhecidas": [
+    "anticoncepcional"
+   ],
+   "ambiguas": [],
+   "nAlert": 0,
+   "nInter": 0,
+   "sev": [],
+   "ids": [],
+   "classificacoes": [],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "rifampicina",
+  "b": "varfarina",
+  "cat": "indução CYP",
+  "antes": {
+   "ra": false,
+   "rb": true,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 1,
+   "naoReconhecidas": [
+    "rifampicina"
+   ],
+   "ambiguas": [],
+   "nAlert": 0,
+   "nInter": 0,
+   "sev": [],
+   "ids": [],
+   "classificacoes": [],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "paracetamol",
+  "b": "varfarina",
+  "cat": "INR",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "warning"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "warning"
+   ],
+   "ids": [
+    "inter-paracetamol-varfarina"
+   ],
+   "classificacoes": [
+    "inter-paracetamol-varfarina=pendente_validacao/molecula_exata"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "completa"
+  }
+ },
+ {
+  "a": "tramadol",
+  "b": "carbamazepina",
+  "cat": "convulsão",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "warning"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [
+    "tramadol:variantes_sem_id"
+   ],
+   "nAlert": 1,
+   "nInter": 1,
+   "sev": [
+    "warning"
+   ],
+   "ids": [
+    "inter-tramadol-carbamazepina"
+   ],
+   "classificacoes": [
+    "inter-tramadol-carbamazepina=pendente_validacao/molecula_exata"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "bupropiona",
+  "b": "tramadol",
+  "cat": "convulsão",
+  "antes": {
+   "ra": true,
+   "rb": true,
+   "nAlert": 0,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 2,
+   "naoReconhecidas": [],
+   "ambiguas": [
+    "tramadol:variantes_sem_id"
+   ],
+   "nAlert": 0,
+   "nInter": 0,
+   "sev": [],
+   "ids": [],
+   "classificacoes": [],
+   "semRegra": 1,
+   "naoResolvidas": [
+    2
+   ],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "espironolactona",
+  "b": "cloreto de potássio",
+  "cat": "hipercalemia",
+  "antes": {
+   "ra": true,
+   "rb": false,
+   "nAlert": 1,
+   "sev": []
+  },
+  "depois": {
+   "reconhecidas": 1,
+   "naoReconhecidas": [
+    "cloreto de potássio"
+   ],
+   "ambiguas": [],
+   "nAlert": 1,
+   "nInter": 0,
+   "sev": [
+    "warning"
+   ],
+   "ids": [
+    "arm-k-nao-informado"
+   ],
+   "classificacoes": [
+    "arm-k-nao-informado=pendente_validacao/regra_fixa_arm"
+   ],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ },
+ {
+  "a": "sacubitril + valsartana",
+  "b": "enalapril",
+  "cat": "angioedema",
+  "antes": {
+   "ra": false,
+   "rb": true,
+   "nAlert": 1,
+   "sev": [
+    "critical"
+   ]
+  },
+  "depois": {
+   "reconhecidas": 1,
+   "naoReconhecidas": [
+    "sacubitril + valsartana"
+   ],
+   "ambiguas": [],
+   "nAlert": 0,
+   "nInter": 0,
+   "sev": [],
+   "ids": [],
+   "classificacoes": [],
+   "semRegra": 0,
+   "naoResolvidas": [],
+   "status": "parcial"
+  }
+ }
+]

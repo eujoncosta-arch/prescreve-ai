@@ -25,12 +25,17 @@ import { analyzeClinical } from '@/lib/clinical-decision-support';
 import { avaliarRiscoClinico } from '@/lib/clinical-risk-engine';
 import { getTherapeuticForCondition } from '@/lib/clinical-therapeutics';
 import { eligibilityContextFromAnamnesis } from '@/lib/therapeutic-class-expansion';
-import { runSafetyCheck } from '@/lib/safety-rules';
+import { runSafetyCheck as runSafetyCheckComCobertura } from '@/lib/safety-rules';
 import { calcCrCl, getAdjustmentForCrCl, checkBeersCriteria, type PatientParams } from '@/lib/dose-calculator';
 import { calcDosePediatrica, type PediatricPatient } from '@/lib/pediatric-engine';
 import { searchDrugs, getAllDrugs } from '@/lib/pharma-database';
 import { reducer, INITIAL_PAGINATION, type AppState } from '@/lib/store';
 import type { Consultation } from '@/lib/types';
+
+// RM-104: `runSafetyCheck` agora devolve o resultado com cobertura explícita. Estes testes
+// verificam o CONTEÚDO dos alertas (comportamento preservado); a cobertura é testada em
+// `rm104-cobertura-verificacao-seguranca.test.ts`.
+const runSafetyCheck = (input: Parameters<typeof runSafetyCheckComCobertura>[0]) => runSafetyCheckComCobertura(input).alertas;
 
 // ── Fixtures compartilhadas ────────────────────────────────────
 

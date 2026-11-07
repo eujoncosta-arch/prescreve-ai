@@ -1,0 +1,82 @@
+Dr. João Silva
+
+Clínica Médica · CRM: CRM-SP 123456
+
+Paciente: Maria da Silva (teste) Idade: 45 anos
+
+                                           RECEITA MÉDICA
+
+1. Varfarina 10 mg — Comprimido
+
+   1 comprimido · VO · 1x/dia · por 30 dias
+
+2. ibuprofeno 10 mg — Comprimido
+
+   1 comprimido · VO · 1x/dia · por 30 dias
+
+3. Enalapril 10 mg — Comprimido
+
+   1 comprimido · VO · 1x/dia · por 30 dias
+
+4. Losartana 10 mg — Comprimido
+
+   1 comprimido · VO · 1x/dia · por 30 dias
+
+5. Espironolactona 10 mg — Comprimido
+
+   1 comprimido · VO · 1x/dia · por 30 dias
+
+6. Sertralina 10 mg — Comprimido
+
+   1 comprimido · VO · 1x/dia · por 30 dias
+
+7. Tramadol 10 mg — Comprimido
+
+   1 comprimido · VO · 1x/dia · por 30 dias
+
+8. Azitromicina 10 mg — Comprimido
+
+   1 comprimido · VO · 1x/dia · por 30 dias
+
+9. Amiodarona 10 mg — Comprimido
+
+   1 comprimido · VO · 1x/dia · por 30 dias
+
+10. Carbonato de Lítio 10 mg — Comprimido
+
+   1 comprimido · VO · 1x/dia · por 30 dias
+
+11. Hidroclorotiazida 10 mg — Comprimido
+
+   1 comprimido · VO · 1x/dia · por 30 dias
+
+12. Tadalafila 10 mg — Comprimido
+
+   1 comprimido · VO · 1x/dia · por 30 dias
+13. Nitroglicerina 10 mg — Comprimido                             07 de novembro de 2026
+
+   1 comprimido · VO · 1x/dia · por 30 dias                      Assinatura e carimbo
+
+14. Tranilcipromina 10 mg — Comprimido
+
+   1 comprimido · VO · 1x/dia · por 30 dias
+
+15. Sacubitril/Valsartana 10 mg — Comprimido
+
+   1 comprimido · VO · 1x/dia · por 30 dias
+
+16. Haloperidol 10 mg — Comprimido
+
+   1 comprimido · VO · 1x/dia · por 30 dias
+
+17. Hidroxicloroquina 10 mg — Comprimido
+
+   1 comprimido · VO · 1x/dia · por 30 dias
+
+18. Moxifloxacino 10 mg — Comprimido
+
+   1 comprimido · VO · 1x/dia · por 30 dias
+
+Gerado por PRESCREVE-AI
+Apoio à decisão clínica — responsabilidade do médico prescritor
+

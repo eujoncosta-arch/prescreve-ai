@@ -1,0 +1,56 @@
+                                ANEXO TÉCNICO — USO EXCLUSIVO DO PRESCRITOR
+
+                                      Documento técnico de apoio à decisão. Não se destina ao paciente e não faz parte da receita.
+
+Cobertura molecular completa (todas as moléculas informadas foram identificadas e verificadas)
+Avaliação integral: NÃO realizada (cobertura molecular não equivale a avaliação clínica integral)
+
+Identificação da avaliação
+    Data e horário da avaliação: 07/11/2026, 09:30
+    Versão do contrato de avaliação: RM-105.2
+
+Situação geral da avaliação
+    Cobertura molecular completa (todas as moléculas informadas foram identificadas e verificadas)
+    Avaliação integral: NÃO realizada (cobertura molecular não equivale a avaliação clínica integral)
+    Verificação concluída para 2 medicamento(s)/molécula(s) informado(s). Ausência de alerta indica apenas que nenhuma regra cadastrada foi acionada.
+
+Medicamentos e moléculas identificados
+    Varfarina → Varfarina [varfarina] — identidade confirmada (ID da entidade informado)
+    ibuprofeno → ibuprofeno [ibuprofeno] — identidade confirmada (ID da entidade informado)
+
+Medicamentos ou moléculas não identificados
+    Nenhum.
+
+Combinações não avaliadas
+    Nenhuma.
+
+Alertas encontrados
+    [Crítico] Varfarina + AINE — Risco hemorrágico grave — origem: regra fixa (par de alta relevância clínica); estado: baseado em moléculas
+    identificadas
+    [Crítico] Alergia registrada: Ibuprofeno × ibuprofeno — origem: registro de alergia (identidade molecular); estado: baseado em moléculas identificadas
+
+Contextos clínicos
+    Gestação: NÃO informado — Dado não informado: a regra dependente NÃO foi avaliada (ausência não significa "não").
+    Lactação: NÃO informado — Dado não informado: a regra dependente NÃO foi avaliada (ausência não significa "não").
+    Idade: informado — Dado informado.
+    Função renal: NÃO informado — Dado não informado: a regra dependente NÃO foi avaliada (ausência não significa "não").
+    Potássio: não aplicável (não exigido por regra) — Dado não usado nesta verificação.
+    Alergias: informado — Alergias registradas e cruzadas por identidade molecular (reatividade cruzada não avaliada).
+    Peso: não aplicável (não exigido por regra) — Peso não é usado por esta verificação (é usado nas calculadoras de dose).
+
+Situação da avaliação de alergias
+    Alergias registradas e cruzadas por identidade molecular
+    Registro 1: Ibuprofeno — alérgeno identificado molecularmente (identificação confirmada) (ibuprofeno); gravidade não informada; origem: informado
+    pelo prescritor na tela de prescrição rápida
+    Cruzamento: "Ibuprofeno" × Varfarina — sem correspondência molecular (reatividade cruzada não avaliada)
+    Cruzamento: "Ibuprofeno" × ibuprofeno — correspondência molecular (identificação confirmada)
+
+Limitações relevantes
+    Cobertura molecular não equivale a avaliação clínica integral.
+    A avaliação considera apenas as regras cadastradas no sistema; não substitui o julgamento clínico nem a consulta à bula e a protocolos.
+    O cruzamento é feito apenas por identidade molecular (mesma molécula ou componente de combinação).
+    Reatividade cruzada entre moléculas ou classes NÃO é avaliada: nenhuma regra com fonte documentada foi cadastrada.
+    Alergias não medicamentosas (alimento, ambiental, outro) não são cruzadas com excipientes.
+    Este anexo é gerado no momento da impressão e não é armazenado automaticamente pelo sistema.
+    Informações clínicas pendentes: Gestação, Lactação, Função renal.
+

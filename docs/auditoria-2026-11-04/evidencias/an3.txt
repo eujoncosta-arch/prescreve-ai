@@ -1,0 +1,64 @@
+## Comparação de posologia entre os 3 motores/bases (mesma molécula)
+
+### amoxicilina
+  dosing-engine  ped: 50 mg/kg/dia q8h (máx 3000)   | adulto: 500 mg q8h
+  pediatric-eng  : Otite média aguda / Rinosinusite / IVA: 50 mg/kg/dia 12/12h máx 90 mg/kg/dia ; Pneumonia ambulatorial: 90 mg/kg/dia 12/12h ; Faringoamigdalite por estreptococo: 50 mg/kg/dia 12/12h
+  PHARMA QuickDrug ped: 45 mg (mg/kg/dia) ÷2 máx 3000mg/dia
+  PHARMA QuickDrug adulto: 875 mg 2x/dia (máx 875)
+
+### amoxicilinaclav
+  dosing-engine  ped: 45 mg/kg/dia q12h (máx 2000)   | adulto: 875 mg q12h [amoxiclav-comp-875] ; 500 mg q8h [amoxiclav-comp-500]
+  pediatric-eng  : Infecções resistentes (PRSP, H. influe: 70 mg/kg/dia 12/12h
+  PHARMA QuickDrug ped: 45 mg (mg/kg/dia) ÷2 máx 1750mg/dia
+  PHARMA QuickDrug adulto: 875/125 mg 2x/dia (máx 875/125)
+
+### azitromicina
+  dosing-engine  ped: 10 mg/kg q24h (máx 500)   | adulto: 500 mg q24h
+  pediatric-eng  : Pneumonia atípica / Coqueluche / OMA a: 10 mg/kg/dose D1: 10 mg/kg → D2–D5: 5 mg/kg 1×/dia
+  PHARMA QuickDrug ped: 10 mg (mg/kg/dia) ÷1 máx 500mg/dia
+  PHARMA QuickDrug adulto: 500 mg VO 1×/dia × 3–5 dias (PAC) | 250 mg 3×/semana (profilaxia DPOC) mg 1×/dia × 3–5 dias (PAC) (máx 500 mg/dia)
+
+### cefalexina
+  dosing-engine  ped: 25 mg/kg/dia q6h (máx 4000)   | adulto: 500 mg q6h
+  pediatric-eng  : Infecções de pele e partes moles / ITU: 50 mg/kg/dia 6/6h máx 100 mg/kg/dia
+  PHARMA QuickDrug adulto: 500 mg VO q6h mg q6h (padrão) (máx 4 g/dia)
+
+### dipirona
+  pediatric-eng  : Febre e dor: 15 mg/kg/dose a cada 6h máx 60 mg/kg/dia
+  PHARMA QuickDrug ped: 10 mg (mg/kg/dose) ÷4 máx 50mg/kg/dia
+  PHARMA QuickDrug adulto: 1000 mg A cada 6-8h (máx 1000)
+
+### ibuprofeno
+  dosing-engine  ped: 10 mg/kg q8h (máx 2400)   | adulto: 400 mg q8h
+  pediatric-eng  : Febre: 5 mg/kg/dose a cada 6–8h máx 40 mg/kg/dia ; Dor leve a moderada: 7.5 mg/kg/dose a cada 6–8h máx 40 mg/kg/dia ; Artrite juvenil idiopática: 30 mg/kg/dia 3–4×/dia máx 40 mg/kg/dia ; Fechamento de canal arterial (neonatal: 10 mg/kg/dose D1: 10 mg/kg IV → D2: 5 mg/kg → D3: 5 mg/kg
+  PHARMA QuickDrug ped: 7.5 mg/kg/dose (mg/kg/dose) ÷3 máx 40mg/kg/dia
+  PHARMA QuickDrug adulto: 400–600 mg/dose mg 6/6h (máx 2400 mg/dia)
+
+### metformina
+  dosing-engine  ped: 500 mg q12h (máx 2000)   | adulto: 500 mg q12h
+  PHARMA QuickDrug ped: 0 mg (mg/dia) ÷2 máx 2000mg
+  PHARMA QuickDrug adulto: 850 mg 2x/dia (máx 3000)
+
+### omeprazol
+  dosing-engine  ped: 1 mg/kg q24h (máx 40)   | adulto: 20 mg q24h
+  pediatric-eng  : DRGE / Esofagite / Profilaxia de úlcer: 1 mg/kg/dose 1×/dia (30 min antes do café)
+  PHARMA QuickDrug ped: 0.7 mg (mg/kg/dia) ÷1 máx 20mg/dia
+  PHARMA QuickDrug adulto: 20 mg 1x/dia (30 min antes café) (máx 40)
+
+### paracetamol
+  pediatric-eng  : Febre e dor: 15 mg/kg/dose a cada 4–6h máx 75 mg/kg/dia
+  PHARMA QuickDrug ped: 15 mg (mg/kg/dose) ÷4 máx 60mg/kg/dia
+  PHARMA QuickDrug adulto: 500 mg A cada 4-6h (máx 1000)
+
+### prednisolona
+  pediatric-eng  : Asma aguda: 1 mg/kg/dose 1×/dia por 3–5 dias ; Croup (laringotraqueíte): 0.6 mg/kg/dose Dose única VO ; Nefrose / Anti-inflamatório: 2 mg/kg/dia 1×/dia
+  PHARMA QuickDrug ped: 1 mg (mg/kg/dia) ÷1 máx 40mg/dia
+  PHARMA QuickDrug adulto: 40–60 mg VO 1×/dia × 5–7 dias (exacerbação) mg 1×/dia (manhã — ritmo circadiano) (máx 60 mg/dia (exacerbação aguda))
+
+### smxtmp
+  dosing-engine  ped: 8 mg/kg/dia q12h (máx 320)   | adulto: 160 mg q12h
+  pediatric-eng  : ITU / Pneumocistose (PCP): 6 mg/kg/dia 12/12h máx 12 mg/kg/dia
+  PHARMA QuickDrug adulto: 800/160 mg (1 cp dupla dose) VO q12h mg q12h (ITU, MRSA pele) (máx 15–20 mg/kg/dia de TMP (PCP grave IV))
+
+moléculas presentes em ≥2 das 3 fontes pediátricas:
+11

@@ -15,7 +15,15 @@ import {
   type CrClResult, type FullDoseResult,
 } from '@/lib/dose-calculator';
 import { DoseCalcCard } from '@/components/modules/DoseCalcCard';
-import { runSafetyCheck, SEVERITY_CONFIG, type QuickSafetyAlert } from '@/lib/safety-rules';
+import { runSafetyCheck, SEVERITY_CONFIG, type QuickSafetyAlert, type SafetyCheckResult } from '@/lib/safety-rules';
+import { coberturaIncompleta, rotuloAlertaNaoConfirmado, descreverClassificacaoAlerta } from '@/lib/safety-coverage';
+import { SafetyCoverageNotice } from '@/components/modules/SafetyCoverageNotice';
+import { AlergiasNotice } from '@/components/modules/AlergiasNotice';
+import { normalizarIdade, formatarIdade, type UnidadeIdade } from '@/lib/age-contract';
+import { dadosClinicosPreenchidos } from '@/lib/patient-session';
+import { ROTULO_CAMPO } from '@/lib/safety-context';
+import { PrescriptionPrintPreview } from '@/components/modules/PrescriptionPrintPreview';
+import type { StatusAlergiasInformado, TipoAlergia, GravidadeAlergia, AlergiasInput } from '@/lib/safety-allergy';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -28,7 +36,7 @@ import Link from 'next/link';
 import {
   Zap, Search, Pill, Calculator, Shield, Star, History,
   Plus, Trash2, Printer, ChevronDown, ChevronUp, AlertTriangle,
-  CheckCircle2, Building2, User, BookOpen,
+  Building2, User, BookOpen,
   X, FileText, ExternalLink,
   Library, FileCheck,
 } from 'lucide-react';
@@ -39,6 +47,8 @@ import { toast } from 'sonner';
 interface PatientInfo {
   nome: string;
   idade: string;
+  /** RM-105.2.2: unidade explícita da idade; '' = não escolhida (o valor NÃO é interpretado). */
+  idade_unidade: '' | UnidadeIdade;
   sexo: 'M' | 'F' | '';
   peso: string;
   altura: string;
@@ -46,13 +56,50 @@ interface PatientInfo {
   child_pugh: '' | 'A' | 'B' | 'C';
   diagnostico: string;
   observacoes: string;
-  gestante: boolean;
-  lactante: boolean;
+  /** RM-105.2: tri-state — '' = NÃO informado (nunca interpretado como "não"). */
+  gestante: '' | 'sim' | 'nao';
+  lactante: '' | 'sim' | 'nao';
+  /** RM-105.2: estado explícito das alergias. */
+  alergias_status: StatusAlergiasInformado;
+  alergias: AlergiaUI[];
+}
+
+interface AlergiaUI {
+  id: string;
+  substancia: string;
+  tipo: TipoAlergia;
+  gravidade: '' | GravidadeAlergia;
+  reacao: string;
+  registrado_em: string;
+}
+
+/** RM-105.2: monta o estado explícito de alergias para o motor de segurança. */
+const ROTULO_UNIDADE: Record<UnidadeIdade, string> = { dias: 'Dias', meses: 'Meses', anos: 'Anos' };
+const ROTULO_TRI: Record<string, string> = { nao_informado: 'Não informado', nao: 'Não', sim: 'Sim' };
+const ROTULO_ALERGIAS: Record<StatusAlergiasInformado, string> = { nao_informado: 'Não informado', sem_alergias_conhecidas: 'Sem alergias conhecidas (informado)', informadas: 'Alergias informadas' };
+const ROTULO_TIPO: Record<TipoAlergia, string> = { medicamento: 'Medicamento', alimento: 'Alimento', ambiental: 'Ambiental', outro: 'Outro' };
+const ROTULO_GRAVIDADE: Record<string, string> = { nao_informada: 'Gravidade n/i', leve: 'Leve', moderada: 'Moderada', grave: 'Grave' };
+
+function montarAlergiasInput(p: PatientInfo): AlergiasInput {
+  if (p.alergias_status !== 'informadas') return { status: p.alergias_status };
+  return {
+    status: 'informadas',
+    registros: p.alergias.map(a => ({
+      substancia: a.substancia,
+      tipo: a.tipo,
+      gravidade: a.gravidade || undefined,
+      reacao: a.reacao.trim() || undefined,
+      origem: 'informado pelo prescritor na tela de prescrição rápida',
+      registrado_em: a.registrado_em,
+    })),
+  };
 }
 
 interface RxItem {
   id: string;
   molecula: string;
+  /** RM-105.1: ID da entidade farmacológica escolhida (QuickDrug.id). Ausente em protocolos antigos: identidade não confirmada. */
+  entidade_id?: string;
   nome_comercial: string;
   laboratorio: string;
   concentracao: string;
@@ -78,9 +125,9 @@ interface FavoriteProtocol {
 }
 
 const BLANK_PATIENT: PatientInfo = {
-  nome: '', idade: '', sexo: '', peso: '', altura: '',
+  nome: '', idade: '', idade_unidade: '', sexo: '', peso: '', altura: '',
   creatinina: '', child_pugh: '', diagnostico: '', observacoes: '',
-  gestante: false, lactante: false,
+  gestante: '', lactante: '', alergias_status: 'nao_informado', alergias: [],
 };
 
 const BLANK_ITEM: Omit<RxItem, 'id'> = {
@@ -114,6 +161,13 @@ export default function PrescricaoRapida() {
   // ── State ──────────────────────────────────────────────────
   const [patient, setPatient] = useState<PatientInfo>(BLANK_PATIENT);
   const [patientExpanded, setPatientExpanded] = useState(true);
+  // RM-105.2.2: a idade só é interpretada com UNIDADE explícita (dias | meses | anos). Valor sem unidade não vale.
+  const idadeRes = useMemo(
+    () => normalizarIdade(patient.idade.trim() === '' ? undefined : { valor: Number(patient.idade), unidade: patient.idade_unidade || undefined }),
+    [patient.idade, patient.idade_unidade],
+  );
+  const idadeAnos: number | undefined = idadeRes.estado === 'informada' ? idadeRes.idade.anos : undefined;
+  const idadeTexto = idadeRes.estado === 'informada' ? formatarIdade(idadeRes.idade) : '';
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<QuickDrug[]>([]);
   const [selectedDrug, setSelectedDrug] = useState<QuickDrug | null>(null);
@@ -121,7 +175,14 @@ export default function PrescricaoRapida() {
   const [selectedConcentration, setSelectedConcentration] = useState('');
   const [customDose, setCustomDose] = useState('');
   const [rxItems, setRxItems] = useState<RxItem[]>([]);
-  const [safetyAlerts, setSafetyAlerts] = useState<QuickSafetyAlert[]>([]);
+  // RM-104: guarda o RESULTADO com cobertura (não só a lista de alertas): lista vazia ≠ "seguro".
+  const [safetyResult, setSafetyResult] = useState<SafetyCheckResult | null>(null);
+  const [avaliadoEm, setAvaliadoEm] = useState<string | null>(null);
+  /** RM-105.2.1: aviso de que o protocolo recuperado traz só os itens — nunca alergias, contexto nem avaliação. */
+  const [protocoloRecuperado, setProtocoloRecuperado] = useState<{ nome: string; criadoEm: string; semId: number; descartou: boolean } | null>(null);
+  /** RM-105.2.2: protocolo aguardando confirmação para descartar os dados clínicos da sessão atual. */
+  const [trocaPendente, setTrocaPendente] = useState<FavoriteProtocol | null>(null);
+  const safetyAlerts: QuickSafetyAlert[] = safetyResult?.alertas ?? [];
   const [favorites, setFavorites] = useState<FavoriteProtocol[]>([]);
   const [activeTab, setActiveTab] = useState<'prescricao' | 'calculadora' | 'favoritos' | 'historico'>('prescricao');
   const [drugInfoExpanded, setDrugInfoExpanded] = useState(false);
@@ -167,7 +228,6 @@ export default function PrescricaoRapida() {
   useEffect(() => {
     if (!selectedDrug) return;
     let cancelado = false;
-    const idadeAnos = patient.idade ? Number(patient.idade) : undefined;
     const preferred = getPreferredBrandForPatient(selectedDrug, labPref, idadeAnos);
     queueMicrotask(() => {
       if (cancelado) return;
@@ -177,14 +237,14 @@ export default function PrescricaoRapida() {
       }
     });
     return () => { cancelado = true; };
-  }, [patient.idade, labPref, selectedDrug]);
+  }, [idadeAnos, labPref, selectedDrug]);
 
   // ── CrCl auto-calc ────────────────────────────────────────
   useEffect(() => {
     let cancelado = false;
-    const result = (patient.idade && patient.peso && patient.creatinina && patient.sexo)
+    const result = (idadeAnos !== undefined && patient.peso && patient.creatinina && patient.sexo)
       ? calcCrCl({
-          idade: Number(patient.idade),
+          idade: idadeAnos,
           sexo: patient.sexo as 'M' | 'F',
           peso: Number(patient.peso),
           creatinina: Number(patient.creatinina),
@@ -192,21 +252,31 @@ export default function PrescricaoRapida() {
       : null;
     queueMicrotask(() => { if (!cancelado) setCrclResult(result); });
     return () => { cancelado = true; };
-  }, [patient.idade, patient.peso, patient.creatinina, patient.sexo]);
+  }, [idadeAnos, patient.peso, patient.creatinina, patient.sexo]);
 
   // ── Safety check ─────────────────────────────────────────
   useEffect(() => {
     let cancelado = false;
-    const alerts = rxItems.length < 1 ? [] : runSafetyCheck({
+    const resultado = rxItems.length < 1 ? null : runSafetyCheck({
       moleculas: rxItems.map(i => i.molecula),
-      gestante: patient.gestante,
-      lactante: patient.lactante,
-      idoso: Number(patient.idade) >= 65,
+      entidade_ids: rxItems.map(i => i.entidade_id),
+      // RM-105.2: '' (não informado) vira undefined — nunca "não gestante". Idade/peso vazios também ficam ausentes.
+      gestante: patient.gestante === '' ? undefined : patient.gestante === 'sim',
+      lactante: patient.lactante === '' ? undefined : patient.lactante === 'sim',
+      // RM-105.2.2: idade com unidade explícita; sem unidade o motor marca a idade como inválida (não interpreta).
+      idade: patient.idade.trim() === '' ? undefined : { valor: Number(patient.idade), unidade: (patient.idade_unidade || undefined) as UnidadeIdade },
+      peso_kg: patient.peso.trim() === '' ? undefined : Number(patient.peso),
+      sexo: patient.sexo === '' ? undefined : patient.sexo,
+      alergias: montarAlergiasInput(patient),
       crclValue: crclResult?.crcl,
     });
-    queueMicrotask(() => { if (!cancelado) setSafetyAlerts(alerts); });
+    queueMicrotask(() => {
+      if (cancelado) return;
+      setSafetyResult(resultado);
+      setAvaliadoEm(resultado ? new Date().toISOString() : null);
+    });
     return () => { cancelado = true; };
-  }, [rxItems, patient.gestante, patient.lactante, patient.idade, crclResult]);
+  }, [rxItems, patient, crclResult]);
 
   // ── Select drug ───────────────────────────────────────────
   const selectDrug = useCallback((drug: QuickDrug) => {
@@ -214,7 +284,6 @@ export default function PrescricaoRapida() {
     setSearchQuery(drug.molecula);
     setSearchResults([]);
     setDrugInfoExpanded(false);
-    const idadeAnos = patient.idade ? Number(patient.idade) : undefined;
     const preferred = getPreferredBrandForPatient(drug, labPref, idadeAnos);
     setSelectedBrand(preferred);
     const defaultConc = preferred
@@ -235,7 +304,7 @@ export default function PrescricaoRapida() {
       setCalcResult(result.passo_a_passo);
       setCustomDose(String(result.dose_por_tomada));
     }
-  }, [labPref, patient.peso, patient.idade]);
+  }, [labPref, patient.peso, idadeAnos]);
 
   // ── Add to prescription ───────────────────────────────────
   const addToRx = useCallback(() => {
@@ -245,6 +314,7 @@ export default function PrescricaoRapida() {
       ...BLANK_ITEM,
       id: Date.now().toString(),
       molecula: selectedDrug.molecula,
+      entidade_id: selectedDrug.id,
       nome_comercial: brand?.nome ?? selectedDrug.molecula,
       laboratorio: brand?.laboratorio ?? '',
       concentracao: selectedConcentration,
@@ -280,6 +350,7 @@ export default function PrescricaoRapida() {
       ...BLANK_ITEM,
       id: Date.now().toString(),
       molecula: selectedDrug.molecula,
+      entidade_id: selectedDrug.id,
       nome_comercial: brand?.nome ?? selectedDrug.molecula,
       laboratorio: brand?.laboratorio ?? '',
       concentracao: selectedConcentration,
@@ -332,10 +403,33 @@ export default function PrescricaoRapida() {
     toast.success(`Protocolo "${nome}" salvo`);
   };
 
-  const loadFavorite = (fav: FavoriteProtocol) => {
+  /**
+   * RM-105.2.2: aplica o protocolo. Com `descartar`, antes limpa TODOS os dados clínicos da sessão anterior
+   * (paciente, contexto, alergias, resultado da avaliação) para que nada de um paciente seja tomado como de outro.
+   * O protocolo traz somente itens; a avaliação é recalculada pelo efeito de segurança.
+   */
+  const aplicarProtocolo = (fav: FavoriteProtocol, descartar: boolean) => {
+    if (descartar) {
+      setPatient(BLANK_PATIENT);
+      setCrclResult(null);
+      setSafetyResult(null);
+      setAvaliadoEm(null);
+    }
     setRxItems(fav.itens);
+    setTrocaPendente(null);
+    setProtocoloRecuperado({ nome: fav.nome, criadoEm: fav.criado_em, semId: fav.itens.filter(i => !i.entidade_id).length, descartou: descartar });
     setActiveTab('prescricao');
     toast.success(`Protocolo "${fav.nome}" carregado`);
+  };
+
+  const loadFavorite = (fav: FavoriteProtocol) => {
+    // Há dados clínicos de um paciente na sessão? Pede confirmação ANTES de qualquer descarte.
+    if (dadosClinicosPreenchidos(patient).length > 0) {
+      setTrocaPendente(fav);
+      setActiveTab('favoritos');
+      return;
+    }
+    aplicarProtocolo(fav, false);
   };
 
   const deleteFavorite = (id: string) => {
@@ -363,9 +457,9 @@ export default function PrescricaoRapida() {
 
   // ── Beers criteria ────────────────────────────────────────
   const beersAlert = useMemo(() => {
-    if (!selectedDrug || Number(patient.idade) < 65) return null;
+    if (!selectedDrug || !(idadeRes.estado === 'informada' && idadeRes.idade.idoso)) return null;
     return checkBeersCriteria(selectedDrug.molecula);
-  }, [selectedDrug, patient.idade]);
+  }, [selectedDrug, idadeRes]);
 
   // ── mL conversion ────────────────────────────────────────
   const mlConversion = useMemo(() => {
@@ -417,7 +511,7 @@ export default function PrescricaoRapida() {
               <CardTitle className="text-sm flex items-center gap-2">
                 <User className="w-4 h-4 text-violet-600" />
                 Dados do Paciente
-                {patient.nome && <span className="font-normal text-slate-500">— {patient.nome}{patient.idade ? `, ${patient.idade} anos` : ''}{patient.sexo ? ` (${patient.sexo})` : ''}{patient.peso ? `, ${patient.peso} kg` : ''}</span>}
+                {patient.nome && <span className="font-normal text-slate-500">— {patient.nome}{idadeTexto ? `, ${idadeTexto}` : ''}{patient.sexo ? ` (${patient.sexo})` : ''}{patient.peso ? `, ${patient.peso} kg` : ''}</span>}
               </CardTitle>
               {patientExpanded ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
             </div>
@@ -430,9 +524,26 @@ export default function PrescricaoRapida() {
                   <Label className="text-xs text-slate-600">Nome do paciente</Label>
                   <Input className="mt-1 h-8 text-sm" placeholder="Nome completo" value={patient.nome} onChange={e => setPatient(p => ({ ...p, nome: e.target.value }))} />
                 </div>
-                <div>
-                  <Label className="text-xs text-slate-600">Idade</Label>
-                  <Input className="mt-1 h-8 text-sm" placeholder="anos" type="number" value={patient.idade} onChange={e => setPatient(p => ({ ...p, idade: e.target.value }))} />
+                <div className="col-span-2">
+                  <Label className="text-xs text-slate-600">Idade (valor e unidade)</Label>
+                  <div className="mt-1 flex gap-1">
+                    <Input className="h-8 w-20 text-sm" placeholder="valor" type="number" min={0} data-testid="idade-valor" value={patient.idade} onChange={e => setPatient(p => ({ ...p, idade: e.target.value }))} />
+                    <Select value={patient.idade_unidade} onValueChange={v => setPatient(p => ({ ...p, idade_unidade: v as UnidadeIdade }))}>
+                      <SelectTrigger className="h-8 w-28 text-xs" data-testid="idade-unidade"><SelectValue>{patient.idade_unidade ? ROTULO_UNIDADE[patient.idade_unidade] : 'unidade'}</SelectValue></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="dias">Dias</SelectItem>
+                        <SelectItem value="meses">Meses</SelectItem>
+                        <SelectItem value="anos">Anos</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  {patient.idade.trim() !== '' && (
+                    <p data-testid="idade-interpretacao" data-idade-estado={idadeRes.estado} className={`mt-1 text-[11px] ${idadeRes.estado === 'informada' ? 'text-slate-500' : 'text-red-600'}`}>
+                      {idadeRes.estado === 'informada'
+                        ? `Interpretada como ${idadeTexto} (≈ ${Number(idadeRes.idade.anos.toFixed(4))} anos; faixa ${idadeRes.idade.faixa})`
+                        : idadeRes.estado === 'invalida' ? idadeRes.detalhe : ''}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <Label className="text-xs text-slate-600">Sexo</Label>
@@ -476,14 +587,28 @@ export default function PrescricaoRapida() {
                   <Label className="text-xs text-slate-600">Diagnóstico / Hipótese</Label>
                   <Input className="mt-1 h-8 text-sm" placeholder="Opcional" value={patient.diagnostico} onChange={e => setPatient(p => ({ ...p, diagnostico: e.target.value }))} />
                 </div>
-                <div className="flex items-end gap-4 pb-0.5">
-                  <div className="flex items-center gap-2">
-                    <Switch checked={patient.gestante} onCheckedChange={v => setPatient(p => ({ ...p, gestante: v }))} />
-                    <span className="text-xs text-slate-600">Gestante</span>
+                <div className="flex items-end gap-3 pb-0.5">
+                  <div>
+                    <Label className="text-xs text-slate-600">Gestante</Label>
+                    <Select value={patient.gestante || 'nao_informado'} onValueChange={v => setPatient(p => ({ ...p, gestante: v === 'nao_informado' ? '' : (v as 'sim' | 'nao') }))}>
+                      <SelectTrigger className="mt-1 h-8 w-28 text-xs" data-testid="gestante-select"><SelectValue>{ROTULO_TRI[patient.gestante || 'nao_informado']}</SelectValue></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="nao_informado">Não informado</SelectItem>
+                        <SelectItem value="nao">Não</SelectItem>
+                        <SelectItem value="sim">Sim</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Switch checked={patient.lactante} onCheckedChange={v => setPatient(p => ({ ...p, lactante: v }))} />
-                    <span className="text-xs text-slate-600">Lactante</span>
+                  <div>
+                    <Label className="text-xs text-slate-600">Lactante</Label>
+                    <Select value={patient.lactante || 'nao_informado'} onValueChange={v => setPatient(p => ({ ...p, lactante: v === 'nao_informado' ? '' : (v as 'sim' | 'nao') }))}>
+                      <SelectTrigger className="mt-1 h-8 w-28 text-xs" data-testid="lactante-select"><SelectValue>{ROTULO_TRI[patient.lactante || 'nao_informado']}</SelectValue></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="nao_informado">Não informado</SelectItem>
+                        <SelectItem value="nao">Não</SelectItem>
+                        <SelectItem value="sim">Sim</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
                 {/* IMC + CrCl inline */}
@@ -496,6 +621,64 @@ export default function PrescricaoRapida() {
                     </span>
                   )}
                 </div>
+              </div>
+
+              {/* RM-105.2 — Alergias com estado explícito (ausência de informação ≠ ausência de alergia) */}
+              <div className="mt-3 border-t border-slate-100 pt-3" data-testid="alergias-bloco">
+                <div className="flex items-center gap-3">
+                  <Label className="text-xs text-slate-600">Alergias</Label>
+                  <Select value={patient.alergias_status} onValueChange={v => setPatient(p => ({ ...p, alergias_status: v as StatusAlergiasInformado }))}>
+                    <SelectTrigger className="h-8 w-72 text-xs" data-testid="alergias-status"><SelectValue>{ROTULO_ALERGIAS[patient.alergias_status]}</SelectValue></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="nao_informado">Não informado</SelectItem>
+                      <SelectItem value="sem_alergias_conhecidas">Sem alergias conhecidas (informado)</SelectItem>
+                      <SelectItem value="informadas">Alergias informadas</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {patient.alergias_status === 'informadas' && (
+                    <Button
+                      size="sm" variant="outline" className="h-8 text-xs gap-1" data-testid="alergia-adicionar"
+                      onClick={() => setPatient(p => ({ ...p, alergias: [...p.alergias, { id: Date.now().toString(), substancia: '', tipo: 'medicamento', gravidade: '', reacao: '', registrado_em: new Date().toISOString() }] }))}
+                    >
+                      <Plus className="w-3 h-3" />Adicionar alergia
+                    </Button>
+                  )}
+                </div>
+                {patient.alergias_status === 'informadas' && (
+                  <div className="mt-2 space-y-2">
+                    {patient.alergias.length === 0 && <p className="text-xs text-amber-700">Nenhuma alergia listada: adicione ao menos um registro ou altere o estado.</p>}
+                    {patient.alergias.map(a => (
+                      <div key={a.id} className="grid grid-cols-12 gap-2 items-center" data-testid="alergia-linha">
+                        <Input className="col-span-4 h-8 text-xs" placeholder="Substância / medicamento" value={a.substancia}
+                          onChange={e => setPatient(p => ({ ...p, alergias: p.alergias.map(x => x.id === a.id ? { ...x, substancia: e.target.value } : x) }))} />
+                        <Select value={a.tipo} onValueChange={v => setPatient(p => ({ ...p, alergias: p.alergias.map(x => x.id === a.id ? { ...x, tipo: v as TipoAlergia } : x) }))}>
+                          <SelectTrigger className="col-span-2 h-8 text-xs"><SelectValue>{ROTULO_TIPO[a.tipo]}</SelectValue></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="medicamento">Medicamento</SelectItem>
+                            <SelectItem value="alimento">Alimento</SelectItem>
+                            <SelectItem value="ambiental">Ambiental</SelectItem>
+                            <SelectItem value="outro">Outro</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <Select value={a.gravidade || 'nao_informada'} onValueChange={v => setPatient(p => ({ ...p, alergias: p.alergias.map(x => x.id === a.id ? { ...x, gravidade: v === 'nao_informada' ? '' : (v as GravidadeAlergia) } : x) }))}>
+                          <SelectTrigger className="col-span-2 h-8 text-xs"><SelectValue>{ROTULO_GRAVIDADE[a.gravidade || 'nao_informada']}</SelectValue></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="nao_informada">Gravidade n/i</SelectItem>
+                            <SelectItem value="leve">Leve</SelectItem>
+                            <SelectItem value="moderada">Moderada</SelectItem>
+                            <SelectItem value="grave">Grave</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <Input className="col-span-3 h-8 text-xs" placeholder="Reação (opcional)" value={a.reacao}
+                          onChange={e => setPatient(p => ({ ...p, alergias: p.alergias.map(x => x.id === a.id ? { ...x, reacao: e.target.value } : x) }))} />
+                        <Button size="sm" variant="ghost" className="col-span-1 h-8 text-red-400 hover:text-red-600" aria-label="Remover alergia"
+                          onClick={() => setPatient(p => ({ ...p, alergias: p.alergias.filter(x => x.id !== a.id) }))}>
+                          <Trash2 className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </CardContent>
           )}
@@ -747,17 +930,17 @@ export default function PrescricaoRapida() {
                   )}
 
                   {/* Card de cálculo automático (sempre que idade + peso disponíveis) */}
-                  {patient.peso && patient.idade ? (
+                  {patient.peso && idadeAnos !== undefined ? (
                     <DoseCalcCard
                       drug={selectedDrug}
                       concentracaoSelecionada={selectedConcentration || (selectedDrug.dose_adulto.habitual + ' ' + selectedDrug.dose_adulto.unidade)}
-                      idadeAnos={Number(patient.idade)}
+                      idadeAnos={idadeAnos}
                       pesoKg={Number(patient.peso)}
                       alturaM={patient.altura ? Number(patient.altura) / 100 : undefined}
                       crcl={crclResult?.crcl}
                       childPugh={patient.child_pugh || undefined}
-                      gestante={patient.gestante}
-                      lactante={patient.lactante}
+                      gestante={patient.gestante === 'sim'}
+                      lactante={patient.lactante === 'sim'}
                       onApply={applyDoseCalc}
                     />
                   ) : (
@@ -848,6 +1031,9 @@ export default function PrescricaoRapida() {
                   {criticalCount > 0 && (
                     <span className="bg-red-500 text-white text-[9px] px-1.5 rounded-full ml-0.5">{criticalCount}</span>
                   )}
+                  {coberturaIncompleta(safetyResult) && (
+                    <span title="Verificação de segurança incompleta" className="bg-amber-500 text-white text-[9px] px-1.5 rounded-full ml-0.5">!</span>
+                  )}
                 </TabsTrigger>
                 <TabsTrigger value="favoritos" className="text-xs gap-1">
                   <Star className="w-3 h-3" />
@@ -864,6 +1050,20 @@ export default function PrescricaoRapida() {
 
               {/* Prescrição */}
               <TabsContent value="prescricao" className="mt-3">
+                {protocoloRecuperado && rxItems.length > 0 && (
+                  <div data-testid="protocolo-recuperado" role="status" className="mb-3 rounded-lg border border-amber-300 bg-amber-50 p-3 text-xs text-amber-900">
+                    <p className="font-semibold">Protocolo &quot;{protocoloRecuperado.nome}&quot; recuperado (salvo em {new Date(protocoloRecuperado.criadoEm).toLocaleDateString('pt-BR')})</p>
+                    {protocoloRecuperado.descartou && <p className="mt-0.5" data-testid="dados-descartados">Os dados clínicos do paciente anterior (paciente, contexto e alergias) foram descartados.</p>}
+                    <p className="mt-0.5">Apenas os itens da prescrição fazem parte do protocolo. Alergias, gestação, lactação, idade, função renal e a avaliação de segurança NÃO são recuperados: a avaliação foi refeita agora com os dados atuais da tela.{protocoloRecuperado.descartou ? '' : ' Confirme que os dados do paciente exibidos acima pertencem a este paciente.'}</p>
+                    {safetyResult && safetyResult.cobertura_contextual.pendencias.length > 0 && (
+                      <p className="mt-0.5" data-testid="a-preencher">Informações a preencher para este paciente: {safetyResult.cobertura_contextual.pendencias.map(p => ROTULO_CAMPO[p]).join(', ')}.</p>
+                    )}
+                    {protocoloRecuperado.semId > 0 && (
+                      <p className="mt-0.5">{protocoloRecuperado.semId} item(ns) sem identificação de entidade (protocolo antigo): a identidade só é confirmada quando o nome corresponde a uma única entidade; reselecione o medicamento para confirmar.</p>
+                    )}
+                    <button type="button" className="mt-1 underline" onClick={() => setProtocoloRecuperado(null)}>Dispensar aviso</button>
+                  </div>
+                )}
                 {rxItems.length === 0 ? (
                   <div className="text-center py-12 border-2 border-dashed border-slate-200 rounded-xl">
                     <Pill className="w-8 h-8 text-slate-300 mx-auto mb-2" />
@@ -888,7 +1088,7 @@ export default function PrescricaoRapida() {
                         variant="outline"
                         size="sm"
                         className="flex-1 gap-1 text-xs border-red-200 text-red-600 hover:bg-red-50"
-                        onClick={() => setRxItems([])}
+                        onClick={() => { setRxItems([]); setProtocoloRecuperado(null); }}
                       >
                         <Trash2 className="w-3 h-3" />
                         Limpar tudo
@@ -909,16 +1109,9 @@ export default function PrescricaoRapida() {
               {/* Segurança */}
               <TabsContent value="calculadora" className="mt-3">
                 <div className="space-y-2">
-                  {safetyAlerts.length === 0 ? (
-                    <div className="text-center py-8 border-2 border-dashed border-green-100 rounded-xl">
-                      <CheckCircle2 className="w-7 h-7 text-green-500 mx-auto mb-2" />
-                      <p className="text-sm text-green-600 font-medium">Nenhum alerta de segurança</p>
-                      <p className="text-xs text-slate-400 mt-1">
-                        {rxItems.length === 0 ? 'Adicione medicamentos para verificar interações' : 'Prescrição verificada'}
-                      </p>
-                    </div>
-                  ) : (
-                    safetyAlerts.map(alert => {
+                  <SafetyCoverageNotice result={safetyResult} itensNaReceita={rxItems.length} />
+                  <AlergiasNotice result={safetyResult} itensNaReceita={rxItems.length} />
+                  {safetyAlerts.map(alert => {
                       const cfg = SEVERITY_CONFIG[alert.severidade];
                       return (
                         <div key={alert.id} className={`p-3 rounded-lg border ${cfg.color}`}>
@@ -927,6 +1120,18 @@ export default function PrescricaoRapida() {
                             <div>
                               <p className="text-xs font-semibold text-slate-800">{alert.titulo}</p>
                               <p className="text-xs text-slate-600 mt-0.5">{alert.descricao}</p>
+                              {rotuloAlertaNaoConfirmado(safetyResult, alert.id) && (
+                                <p className="text-[11px] font-medium text-amber-700 mt-1" data-testid="alerta-entrada-nao-verificada">{rotuloAlertaNaoConfirmado(safetyResult, alert.id)}</p>
+                              )}
+                              {(() => {
+                                const cl = descreverClassificacaoAlerta(safetyResult, alert.id);
+                                return cl ? (
+                                  <div className="mt-1 space-y-0.5" data-testid="alerta-classificacao" data-pendente={cl.pendente ? 'sim' : 'nao'}>
+                                    <p className="text-[11px] font-semibold text-slate-700">{cl.rotulo}</p>
+                                    {cl.detalhes.map((d, k) => <p key={k} className="text-[11px] text-slate-500">{d}</p>)}
+                                  </div>
+                                ) : null;
+                              })()}
                               <p className="text-xs font-medium text-slate-700 mt-1">→ {alert.acao}</p>
                             </div>
                             <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ml-auto flex-shrink-0 ${cfg.icon} bg-white/50`}>
@@ -935,13 +1140,22 @@ export default function PrescricaoRapida() {
                           </div>
                         </div>
                       );
-                    })
-                  )}
+                  })}
                 </div>
               </TabsContent>
 
               {/* Favoritos */}
               <TabsContent value="favoritos" className="mt-3">
+                {trocaPendente && (
+                  <div data-testid="troca-paciente" role="alertdialog" aria-label="Confirmar troca de protocolo" className="mb-3 rounded-lg border-2 border-amber-400 bg-amber-50 p-3 text-xs text-amber-900">
+                    <p className="font-semibold">Há dados clínicos preenchidos nesta sessão: {dadosClinicosPreenchidos(patient).join(', ')}.</p>
+                    <p className="mt-1">Carregar o protocolo &quot;{trocaPendente.nome}&quot; vai DESCARTAR esses dados, as alergias e a avaliação de segurança atuais, e substituir a prescrição atual. Os dados do paciente não fazem parte do protocolo: serão pedidos de novo para o próximo paciente.</p>
+                    <div className="mt-2 flex gap-2">
+                      <button type="button" data-testid="confirmar-troca" className="rounded bg-amber-600 px-3 py-1 text-white" onClick={() => aplicarProtocolo(trocaPendente, true)}>Descartar dados e carregar</button>
+                      <button type="button" data-testid="cancelar-troca" className="rounded border border-amber-600 px-3 py-1" onClick={() => setTrocaPendente(null)}>Cancelar (manter a sessão atual)</button>
+                    </div>
+                  </div>
+                )}
                 {favorites.length === 0 ? (
                   <div className="text-center py-8 border-2 border-dashed border-slate-200 rounded-xl">
                     <Star className="w-7 h-7 text-slate-300 mx-auto mb-2" />
@@ -995,10 +1209,13 @@ export default function PrescricaoRapida() {
 
       {/* ── Print Modal ───────────────────────────────────────── */}
       {showPrint && (
-        <PrintPreview
-          patient={patient}
+        <PrescriptionPrintPreview
+          safetyResult={safetyResult}
+          avaliadoEm={avaliadoEm}
+          patient={{ nome: patient.nome, idade: idadeTexto, diagnostico: patient.diagnostico }}
           items={rxItems}
           medico={state.settings.medico}
+          avisoSeguranca={coberturaIncompleta(safetyResult) ? safetyResult?.mensagem ?? 'Verificação de segurança incompleta.' : null}
           onClose={() => setShowPrint(false)}
         />
       )}
@@ -1106,102 +1323,5 @@ function RxItemCard({
         </div>
       </CardContent>
     </Card>
-  );
-}
-
-// ─── PRINT PREVIEW ────────────────────────────────────────────
-
-function PrintPreview({
-  patient, items, medico, onClose,
-}: {
-  patient: PatientInfo;
-  items: RxItem[];
-  medico: { nome: string; crm: string; especialidade: string; endereco?: string; telefone?: string };
-  onClose: () => void;
-}) {
-  const hoje = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
-
-  return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        {/* Controls */}
-        <div className="flex items-center justify-between p-4 border-b border-slate-200 print:hidden">
-          <p className="font-semibold text-slate-800">Pré-visualização da Receita</p>
-          <div className="flex gap-2">
-            <Button size="sm" variant="outline" className="gap-1 text-xs" onClick={() => window.print()}>
-              <Printer className="w-3.5 h-3.5" />Imprimir
-            </Button>
-            <Button size="sm" variant="outline" onClick={onClose}><X className="w-4 h-4" /></Button>
-          </div>
-        </div>
-
-        {/* Receipt */}
-        <div className="p-8" id="print-area">
-          {/* Header médico */}
-          <div className="border-b-2 border-slate-900 pb-4 mb-6">
-            <h2 className="text-lg font-bold text-slate-900">{medico.nome || 'Dr. Médico'}</h2>
-            <p className="text-sm text-slate-600">{medico.especialidade || 'Clínica Médica'} · CRM: {medico.crm || '000000'}</p>
-            {medico.endereco && <p className="text-xs text-slate-500">{medico.endereco}</p>}
-            {medico.telefone && <p className="text-xs text-slate-500">Tel: {medico.telefone}</p>}
-          </div>
-
-          {/* Dados do paciente */}
-          <div className="mb-6">
-            <div className="grid grid-cols-3 gap-4 text-sm">
-              <div>
-                <span className="text-slate-500">Paciente:</span>
-                <span className="font-semibold ml-1 text-slate-900">{patient.nome || '_______________'}</span>
-              </div>
-              {patient.idade && <div><span className="text-slate-500">Idade:</span><span className="font-medium ml-1">{patient.idade} anos</span></div>}
-              {patient.diagnostico && <div><span className="text-slate-500">CID/Diagnóstico:</span><span className="font-medium ml-1 text-xs">{patient.diagnostico}</span></div>}
-            </div>
-          </div>
-
-          {/* Título */}
-          <div className="text-center mb-6">
-            <p className="text-base font-bold text-slate-800 uppercase tracking-widest border border-slate-300 inline-block px-6 py-1 rounded">
-              RECEITA MÉDICA
-            </p>
-          </div>
-
-          {/* Medicamentos */}
-          <div className="space-y-5">
-            {items.map((item, i) => (
-              <div key={item.id}>
-                <p className="font-bold text-slate-900">
-                  {i + 1}. {item.nome_comercial || item.molecula}
-                  {item.concentracao && ` ${item.concentracao}`}
-                  {item.forma_farmaceutica && ` — ${item.forma_farmaceutica}`}
-                </p>
-                <p className="text-sm text-slate-700 ml-4">
-                  {item.dose} · {item.via} · {item.frequencia}
-                  {item.duracao && ` · por ${item.duracao}`}
-                  {item.uso_continuo && ' · USO CONTÍNUO'}
-                </p>
-                {item.instrucoes && (
-                  <p className="text-xs text-slate-500 ml-4 italic">{item.instrucoes}</p>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Footer */}
-          <div className="mt-12 pt-6 border-t border-slate-200">
-            <div className="flex justify-between text-sm text-slate-600">
-              <div>
-                <p className="text-xs text-slate-400">Gerado por PRESCREVE-AI</p>
-                <p className="text-xs text-slate-300">Apoio à decisão clínica — responsabilidade do médico prescritor</p>
-              </div>
-              <div className="text-right">
-                <p>{hoje}</p>
-                <div className="mt-8 border-t border-slate-400 pt-1 w-48 text-center">
-                  <p className="text-xs text-slate-500">Assinatura e carimbo</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }

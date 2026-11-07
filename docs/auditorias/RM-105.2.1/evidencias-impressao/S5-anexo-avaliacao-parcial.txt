@@ -1,0 +1,63 @@
+                                ANEXO TÉCNICO — USO EXCLUSIVO DO PRESCRITOR
+
+                                      Documento técnico de apoio à decisão. Não se destina ao paciente e não faz parte da receita.
+
+Avaliação realizada com cobertura parcial
+Avaliação integral: NÃO realizada (cobertura molecular não equivale a avaliação clínica integral)
+
+Identificação da avaliação
+    Data e horário da avaliação: 07/11/2026, 09:31
+    Versão do contrato de avaliação: RM-105.2
+
+Situação geral da avaliação
+    Avaliação realizada com cobertura parcial
+    Avaliação integral: NÃO realizada (cobertura molecular não equivale a avaliação clínica integral)
+    Verificação PARCIAL: não foi possível verificar "Xyzcilina". Identidade AMBÍGUA / não confirmada (alertas calculados só para a primeira
+    correspondência, nunca para uma variante escolhida): "Midazolam" sem ID de entidade: casa com 3 variantes (Midazolam (Sedação / ansiólise (geral))
+    [midazolam] / midazolam (Sedação contínua em UTI) [midazolam-uti] / midazolam (Sedação paliativa) [midazolam-paliativo]). Combinações não
+    avaliadas ou sem identidade confirmada: Midazolam + Sertralina; Midazolam + Xyzcilina; Midazolam + Tramadol; Sertralina + Xyzcilina; Xyzcilina +
+    Tramadol. Nenhuma conclusão de segurança é possível para o que não foi verificado.
+
+Medicamentos e moléculas identificados
+    Midazolam → Midazolam [midazolam] — identidade NÃO confirmada (sem ID: várias entidades possíveis, nenhuma foi escolhida com confirmação);
+    contexto: Sedação / ansiólise (geral)
+    Sertralina → Sertralina [sertralina] — identidade confirmada (nome com correspondência única, sem ID)
+    Tramadol → Tramadol [tramadol] — identidade confirmada (ID da entidade informado); contexto: Dor aguda moderada (geral)
+
+Medicamentos ou moléculas não identificados
+    Xyzcilina — não reconhecido
+
+Combinações não avaliadas
+    Midazolam + Sertralina — identidade não confirmada (alertas apenas para a primeira correspondência)
+    Midazolam + Xyzcilina — ao menos uma molécula não foi verificada
+    Midazolam + Tramadol — identidade não confirmada (alertas apenas para a primeira correspondência)
+    Sertralina + Xyzcilina — ao menos uma molécula não foi verificada
+    Xyzcilina + Tramadol — ao menos uma molécula não foi verificada
+
+Alertas encontrados
+    [Alerta] Sertralina + Tramadol — Síndrome serotoninérgica — origem: regra fixa (par de alta relevância clínica); estado: baseado em moléculas
+    identificadas
+
+Contextos clínicos
+    Gestação: NÃO informado — Dado não informado: a regra dependente NÃO foi avaliada (ausência não significa "não").
+    Lactação: NÃO informado — Dado não informado: a regra dependente NÃO foi avaliada (ausência não significa "não").
+    Idade: informado — Dado informado.
+    Função renal: NÃO informado — Dado não informado: a regra dependente NÃO foi avaliada (ausência não significa "não").
+    Potássio: não aplicável (não exigido por regra) — Dado não usado nesta verificação.
+    Alergias: NÃO informado — Alergias não informadas: a avaliação NÃO ocorreu (ausência de informação ≠ ausência de alergia).
+    Peso: não aplicável (não exigido por regra) — Peso não é usado por esta verificação (é usado nas calculadoras de dose).
+
+Situação da avaliação de alergias
+    NÃO informadas (a avaliação não ocorreu; ausência de informação não significa ausência de alergia)
+    Alergias não informadas: nada foi avaliado. A ausência de avaliação não indica ausência de risco.
+Limitações relevantes
+
+    Cobertura molecular não equivale a avaliação clínica integral.
+    A avaliação considera apenas as regras cadastradas no sistema; não substitui o julgamento clínico nem a consulta à bula e a protocolos.
+    O cruzamento é feito apenas por identidade molecular (mesma molécula ou componente de combinação).
+    Reatividade cruzada entre moléculas ou classes NÃO é avaliada: nenhuma regra com fonte documentada foi cadastrada.
+    Alergias não medicamentosas (alimento, ambiental, outro) não são cruzadas com excipientes.
+    Este anexo é gerado no momento da impressão e não é armazenado automaticamente pelo sistema.
+    Informações clínicas pendentes: Gestação, Lactação, Função renal, Alergias.
+    Existem combinações não avaliadas.
+

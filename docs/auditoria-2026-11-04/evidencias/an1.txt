@@ -1,0 +1,54 @@
+## A. ALL_DRUGS (getAllDrugs): 382 medicamentos
+ids duplicados: 0 
+moléculas (normalizadas) com >1 entrada: 14
+  - azitromicina => azitromicina | azitromicina_dpoc
+  - prednisolona => prednisolona | prednisolona_asma
+  - tramadol => tramadol | tramadol-paliativo
+  - amiodarona => amiodarona | amiodarona-pcr
+  - amitriptilina => amitriptilina | amitriptilina-paliativa
+  - haloperidol => haloperidol | haloperidol-paliativo
+  - gabapentina => gabapentina | gabapentina-paliativa
+  - fenobarbital => fenobarbital | fenobarbital-neonatal | fenobarbital-paliativo
+  - midazolam => midazolam | midazolam-uti | midazolam-paliativo
+  - lorazepam => lorazepam | lorazepam-paliativo
+  - ondansetrona => ondansetrona | ondansetrona-paliativa
+  - metoclopramida => metoclopramida | metoclopramida-paliativa
+  - fentanil => fentanil-uti | fentanil-transdermico
+  - naloxona => naloxona | naloxona-antidoto-opioide
+sem atc_code: 373 / 382
+sem ajuste_renal: 18 / 382
+sem ajuste_hepatico: 0 / 382
+sem contraindicacoes_rapidas: 0 / 382
+sem interacoes_importantes: 0 / 382
+sem dose_adulto: 0 / 382
+sem guidelines_referencia: 241 / 382
+sem nivel_evidencia: 276 / 382
+sem uso_gestante: 0 / 382
+sem uso_lactante: 0 / 382
+sem marcas: 0 / 382
+sem doi_referencia: 382 / 382
+com dose_pediatrica: 20
+
+## B. moléculas distintas por base: ALL=366 DOSAGEM=18 PEDIATRIC=21 COMPARADOR=22 EUROFARMA=102 BIBLIOTECA=102 DRUGDB_CID=15 PGX=8
+- DOSAGEM: 1 molécula(s) sem correspondente em ALL_DRUGS: sulfametoxazol + trimetoprima
+- PEDIATRIC: 0 molécula(s) sem correspondente em ALL_DRUGS: 
+- COMPARADOR: 4 molécula(s) sem correspondente em ALL_DRUGS: naproxeno; sumatriptano; propranolol; colchicina
+- EUROFARMA: 0 molécula(s) sem correspondente em ALL_DRUGS: 
+- BIBLIOTECA: 0 molécula(s) sem correspondente em ALL_DRUGS: 
+- DRUGDB_CID: 0 molécula(s) sem correspondente em ALL_DRUGS: 
+- PGX: 2 molécula(s) sem correspondente em ALL_DRUGS: sinvastatina; abacavir
+
+DOSAGEM∩PEDIATRIC: 8  DOSAGEM∩COMPARADOR: 3  PEDIATRIC∩COMPARADOR: 1
+DOSAGEM sem PEDIATRIC: sulfametoxazol + trimetoprima; prednisona; salbutamol; montelucaste; atenolol; losartana; metformina; de pramipexol; fenitoina; dienogeste
+
+## C. EUROFARMA_CATALOG 119 BIBLIOTECA 119 | ids em comum: 119 | só EUROFARMA: 0 | só BIBLIOTECA: 0
+LAB_CATALOG_REGISTRY por lab: eurofarma=13 ems=4 sanofi=3 novo_nordisk=5 astrazeneca=2 bayer=1 bms=1 boehringer=2 novartis=1 msd=1 eli_lilly=3 ache=1 roche=1
+ids do REGISTRY em EUROFARMA_CATALOG: 1 / 38
+
+marcas em ALL_DRUGS: 710 | verificado=true: 118 | com produto_id: 90 | produto_id sem produto no catálogo: 0 | sem link de bula: 632
+marca↔catálogo com concentrações divergentes: 0 
+marca↔catálogo com MOLÉCULA divergente: 0 
+marcas verificado!=true: 592 prednisona/Meticorten; prednisona/Prednisona EMS; enalapril/EMS Enalapril; enalapril/Vasopril; olmesartana/Holmes®; olmesartana/Benicar; olmesartana/Olmesartana EMS; losartana/Cozaar; valsartana/Diovan; valsartana/Valsartana EMS; anlodipino/Norvasc; anlodipino/Anlodipino EMS; hctz/Clorana; carvedilol/Coreg; bisoprolol/Concor
+marcas associadas a >1 entrada de molécula: 4 gardenal:[fenobarbital-neonatal,fenobarbital-paliativo]; dormicum:[midazolam-uti,midazolam-paliativo]; midazolam (generico):[midazolam-uti,midazolam-paliativo]; narcan:[naloxona,naloxona-antidoto-opioide]
+
+## D. CANONICAL: 382 | legacyId distintos: 382 | brands total: 710

@@ -1,0 +1,818 @@
+{
+ "velhos": 580,
+ "novos": 2650,
+ "mantidos": 562,
+ "perdidos": 18,
+ "ganhos": 2088,
+ "porTipo": {
+  "classe_farmacologica": 1183,
+  "enumeracao_explicita": 176,
+  "grupo_aprovado": 628,
+  "nome_base_do_ativo": 138,
+  "molecula_exata": 401,
+  "sinonimo_autorizado": 61,
+  "componente_combinacao": 63
+ },
+ "ganhosSev": {
+  "moderada": 1391,
+  "grave": 387,
+  "leve": 200,
+  "contraindicado": 110
+ },
+ "ganhosPorTipo": {
+  "classe_farmacologica": 1175,
+  "grupo_aprovado": 628,
+  "nome_base_do_ativo": 88,
+  "sinonimo_autorizado": 37,
+  "componente_combinacao": 46,
+  "enumeracao_explicita": 111,
+  "molecula_exata": 3
+ },
+ "perdidosL": [
+  {
+   "a": "topiramato",
+   "with": "Valproato",
+   "b": "acido-valproico",
+   "sev": "moderada"
+  },
+  {
+   "a": "topiramato",
+   "with": "Valproato",
+   "b": "divalproato-sodio",
+   "sev": "moderada"
+  },
+  {
+   "a": "ibuprofeno-paracetamol",
+   "with": "Álcool (paracetamol)",
+   "b": "paracetamol",
+   "sev": "grave"
+  },
+  {
+   "a": "meropenem",
+   "with": "Valproato",
+   "b": "acido-valproico",
+   "sev": "grave"
+  },
+  {
+   "a": "meropenem",
+   "with": "Valproato",
+   "b": "divalproato-sodio",
+   "sev": "grave"
+  },
+  {
+   "a": "ertapenem",
+   "with": "Valproato",
+   "b": "acido-valproico",
+   "sev": "grave"
+  },
+  {
+   "a": "ertapenem",
+   "with": "Valproato",
+   "b": "divalproato-sodio",
+   "sev": "grave"
+  },
+  {
+   "a": "acetilcisteina",
+   "with": "Carvão ativado (paracetamol IV)",
+   "b": "paracetamol",
+   "sev": "moderada"
+  },
+  {
+   "a": "lamotrigina",
+   "with": "Valproato",
+   "b": "acido-valproico",
+   "sev": "grave"
+  },
+  {
+   "a": "lamotrigina",
+   "with": "Valproato",
+   "b": "divalproato-sodio",
+   "sev": "grave"
+  },
+  {
+   "a": "ondansetrona",
+   "with": "Apomorfina",
+   "b": "morfina-paliativa",
+   "sev": "contraindicado"
+  },
+  {
+   "a": "fenobarbital-neonatal",
+   "with": "valproato",
+   "b": "acido-valproico",
+   "sev": "moderada"
+  },
+  {
+   "a": "fenobarbital-neonatal",
+   "with": "valproato",
+   "b": "divalproato-sodio",
+   "sev": "moderada"
+  },
+  {
+   "a": "palonossetrona",
+   "with": "apomorfina",
+   "b": "morfina-paliativa",
+   "sev": "contraindicado"
+  },
+  {
+   "a": "vasopressina",
+   "with": "norepinefrina",
+   "b": "epinefrina-uti",
+   "sev": "leve"
+  },
+  {
+   "a": "ondansetrona-paliativa",
+   "with": "apomorfina",
+   "b": "morfina-paliativa",
+   "sev": "contraindicado"
+  },
+  {
+   "a": "canabidiol",
+   "with": "Valproato",
+   "b": "acido-valproico",
+   "sev": "grave"
+  },
+  {
+   "a": "canabidiol",
+   "with": "Valproato",
+   "b": "divalproato-sodio",
+   "sev": "grave"
+  }
+ ],
+ "ganhosCrit": [
+  {
+   "a": "duloxetina",
+   "with": "IMAOs",
+   "b": "tranilcipromina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "duloxetina",
+   "with": "IMAOs",
+   "b": "moclobemida",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "vortioxetina",
+   "with": "IMAOs",
+   "b": "tranilcipromina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "vortioxetina",
+   "with": "IMAOs",
+   "b": "moclobemida",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "ramipril",
+   "with": "Losartana/BRA",
+   "b": "olmesartana",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "ramipril",
+   "with": "Losartana/BRA",
+   "b": "valsartana",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "ramipril",
+   "with": "Losartana/BRA",
+   "b": "irbesartana",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "ramipril",
+   "with": "Losartana/BRA",
+   "b": "telmisartana",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "ramipril",
+   "with": "Losartana/BRA",
+   "b": "sacubitril_valsartana",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "ramipril",
+   "with": "Losartana/BRA",
+   "b": "losartana_hidroclorotiazida",
+   "tipo": "nome_base_do_ativo"
+  },
+  {
+   "a": "perindopril",
+   "with": "BRA/Alisquireno",
+   "b": "olmesartana",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "perindopril",
+   "with": "BRA/Alisquireno",
+   "b": "losartana",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "perindopril",
+   "with": "BRA/Alisquireno",
+   "b": "valsartana",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "perindopril",
+   "with": "BRA/Alisquireno",
+   "b": "irbesartana",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "perindopril",
+   "with": "BRA/Alisquireno",
+   "b": "telmisartana",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "perindopril",
+   "with": "BRA/Alisquireno",
+   "b": "sacubitril_valsartana",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "telmisartana",
+   "with": "IECA",
+   "b": "enalapril",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "telmisartana",
+   "with": "IECA",
+   "b": "ramipril",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "telmisartana",
+   "with": "IECA",
+   "b": "perindopril",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "dabigatrana",
+   "with": "Inibidores P-gp (cetoconazol, dronedarona, ciclosporina, itraconazol)",
+   "b": "cetoconazol_betametasona",
+   "tipo": "enumeracao_explicita"
+  },
+  {
+   "a": "dabigatrana",
+   "with": "Inibidores P-gp (cetoconazol, dronedarona, ciclosporina, itraconazol)",
+   "b": "cetoconazol_betametasona_neomicina",
+   "tipo": "enumeracao_explicita"
+  },
+  {
+   "a": "nitroglicerina",
+   "with": "Sildenafil/Tadalafil/Vardenafil (iPDE5)",
+   "b": "tadalafila",
+   "tipo": "enumeracao_explicita"
+  },
+  {
+   "a": "isossorbida_mononitrato",
+   "with": "iPDE5 (sildenafil, tadalafil)",
+   "b": "tadalafila",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "ivabradina",
+   "with": "Inibidores CYP3A4 (cetoconazol, claritromicina)",
+   "b": "cetoconazol_betametasona",
+   "tipo": "enumeracao_explicita"
+  },
+  {
+   "a": "ivabradina",
+   "with": "Inibidores CYP3A4 (cetoconazol, claritromicina)",
+   "b": "cetoconazol_betametasona_neomicina",
+   "tipo": "enumeracao_explicita"
+  },
+  {
+   "a": "naltrexona_bupropiona",
+   "with": "Opioides",
+   "b": "tramadol",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "naltrexona_bupropiona",
+   "with": "Opioides",
+   "b": "fentanil-uti",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "naltrexona_bupropiona",
+   "with": "Opioides",
+   "b": "tramadol-paliativo",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "naltrexona_bupropiona",
+   "with": "Opioides",
+   "b": "codeina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "naltrexona_bupropiona",
+   "with": "Opioides",
+   "b": "morfina-paliativa",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "naltrexona_bupropiona",
+   "with": "Opioides",
+   "b": "oxicodona-paliativa",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "naltrexona_bupropiona",
+   "with": "Opioides",
+   "b": "fentanil-transdermico",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "naltrexona_bupropiona",
+   "with": "Opioides",
+   "b": "buprenorfina-transdermico",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "naltrexona_bupropiona",
+   "with": "Opioides",
+   "b": "hidromorfona",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "naltrexona_bupropiona",
+   "with": "IMAO",
+   "b": "tranilcipromina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "naltrexona_bupropiona",
+   "with": "IMAO",
+   "b": "moclobemida",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "linezolida",
+   "with": "IMAO (selegilina, fenelzina)",
+   "b": "tranilcipromina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "linezolida",
+   "with": "IMAO (selegilina, fenelzina)",
+   "b": "moclobemida",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "fluticasona_ff_vilanterol",
+   "with": "Inibidores CYP3A4 potentes (cetoconazol, ritonavir)",
+   "b": "cetoconazol_betametasona",
+   "tipo": "enumeracao_explicita"
+  },
+  {
+   "a": "fluticasona_ff_vilanterol",
+   "with": "Inibidores CYP3A4 potentes (cetoconazol, ritonavir)",
+   "b": "cetoconazol_betametasona_neomicina",
+   "tipo": "enumeracao_explicita"
+  },
+  {
+   "a": "fluticasona_ff_vilanterol_umeclidinio",
+   "with": "Inibidores CYP3A4 (ritonavir, cetoconazol)",
+   "b": "cetoconazol_betametasona",
+   "tipo": "enumeracao_explicita"
+  },
+  {
+   "a": "fluticasona_ff_vilanterol_umeclidinio",
+   "with": "Inibidores CYP3A4 (ritonavir, cetoconazol)",
+   "b": "cetoconazol_betametasona_neomicina",
+   "tipo": "enumeracao_explicita"
+  },
+  {
+   "a": "fluoxetina",
+   "with": "IMAO (selegilina, fenelzina, tranilcipromina)",
+   "b": "moclobemida",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "citalopram",
+   "with": "IMAO",
+   "b": "tranilcipromina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "citalopram",
+   "with": "IMAO",
+   "b": "moclobemida",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "desvenlafaxina",
+   "with": "IMAO",
+   "b": "tranilcipromina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "desvenlafaxina",
+   "with": "IMAO",
+   "b": "moclobemida",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "levomilnaciprano",
+   "with": "IMAO",
+   "b": "tranilcipromina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "levomilnaciprano",
+   "with": "IMAO",
+   "b": "moclobemida",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "mirtazapina",
+   "with": "IMAO",
+   "b": "tranilcipromina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "mirtazapina",
+   "with": "IMAO",
+   "b": "moclobemida",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "amitriptilina",
+   "with": "IMAO",
+   "b": "tranilcipromina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "amitriptilina",
+   "with": "IMAO",
+   "b": "moclobemida",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "imipramina",
+   "with": "IMAO",
+   "b": "tranilcipromina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "imipramina",
+   "with": "IMAO",
+   "b": "moclobemida",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "clomipramina",
+   "with": "IMAO",
+   "b": "tranilcipromina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "clomipramina",
+   "with": "IMAO",
+   "b": "moclobemida",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "tranilcipromina",
+   "with": "ISRS/IRSN/TCA/outros antidepressivos",
+   "b": "sertralina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "tranilcipromina",
+   "with": "ISRS/IRSN/TCA/outros antidepressivos",
+   "b": "escitalopram",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "tranilcipromina",
+   "with": "ISRS/IRSN/TCA/outros antidepressivos",
+   "b": "duloxetina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "tranilcipromina",
+   "with": "ISRS/IRSN/TCA/outros antidepressivos",
+   "b": "venlafaxina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "tranilcipromina",
+   "with": "ISRS/IRSN/TCA/outros antidepressivos",
+   "b": "paroxetina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "tranilcipromina",
+   "with": "ISRS/IRSN/TCA/outros antidepressivos",
+   "b": "nortriptilina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "tranilcipromina",
+   "with": "ISRS/IRSN/TCA/outros antidepressivos",
+   "b": "fluoxetina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "tranilcipromina",
+   "with": "ISRS/IRSN/TCA/outros antidepressivos",
+   "b": "citalopram",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "tranilcipromina",
+   "with": "ISRS/IRSN/TCA/outros antidepressivos",
+   "b": "fluvoxamina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "tranilcipromina",
+   "with": "ISRS/IRSN/TCA/outros antidepressivos",
+   "b": "amitriptilina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "tranilcipromina",
+   "with": "ISRS/IRSN/TCA/outros antidepressivos",
+   "b": "imipramina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "tranilcipromina",
+   "with": "ISRS/IRSN/TCA/outros antidepressivos",
+   "b": "clomipramina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "tranilcipromina",
+   "with": "ISRS/IRSN/TCA/outros antidepressivos",
+   "b": "amitriptilina-paliativa",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "tranilcipromina",
+   "with": "Meperidina / tramadol / dextromefetamina",
+   "b": "tramadol_paracetamol",
+   "tipo": "componente_combinacao"
+  },
+  {
+   "a": "olanzapina",
+   "with": "Benzodiazepínicos IV (diazepam IV) + olanzapina IM",
+   "b": "alprazolam",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "olanzapina",
+   "with": "Benzodiazepínicos IV (diazepam IV) + olanzapina IM",
+   "b": "midazolam",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "olanzapina",
+   "with": "Benzodiazepínicos IV (diazepam IV) + olanzapina IM",
+   "b": "lorazepam",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "olanzapina",
+   "with": "Benzodiazepínicos IV (diazepam IV) + olanzapina IM",
+   "b": "clonazepam",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "olanzapina",
+   "with": "Benzodiazepínicos IV (diazepam IV) + olanzapina IM",
+   "b": "midazolam-uti",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "olanzapina",
+   "with": "Benzodiazepínicos IV (diazepam IV) + olanzapina IM",
+   "b": "midazolam-paliativo",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "olanzapina",
+   "with": "Benzodiazepínicos IV (diazepam IV) + olanzapina IM",
+   "b": "lorazepam-paliativo",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "ziprasidona",
+   "with": "QT-prolongadores (sotalol, amiodarona, eritromicina, fluorquinolonas)",
+   "b": "moxifloxacino",
+   "tipo": "enumeracao_explicita"
+  },
+  {
+   "a": "ziprasidona",
+   "with": "QT-prolongadores (sotalol, amiodarona, eritromicina, fluorquinolonas)",
+   "b": "ciprofloxacino",
+   "tipo": "enumeracao_explicita"
+  },
+  {
+   "a": "diazepam",
+   "with": "Opioides / álcool / outros depressores SNC",
+   "b": "tramadol",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "diazepam",
+   "with": "Opioides / álcool / outros depressores SNC",
+   "b": "fentanil-uti",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "diazepam",
+   "with": "Opioides / álcool / outros depressores SNC",
+   "b": "tramadol-paliativo",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "diazepam",
+   "with": "Opioides / álcool / outros depressores SNC",
+   "b": "codeina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "diazepam",
+   "with": "Opioides / álcool / outros depressores SNC",
+   "b": "morfina-paliativa",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "diazepam",
+   "with": "Opioides / álcool / outros depressores SNC",
+   "b": "oxicodona-paliativa",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "diazepam",
+   "with": "Opioides / álcool / outros depressores SNC",
+   "b": "fentanil-transdermico",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "diazepam",
+   "with": "Opioides / álcool / outros depressores SNC",
+   "b": "buprenorfina-transdermico",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "diazepam",
+   "with": "Opioides / álcool / outros depressores SNC",
+   "b": "hidromorfona",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "buspirona",
+   "with": "IMAO",
+   "b": "tranilcipromina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "buspirona",
+   "with": "IMAO",
+   "b": "moclobemida",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "lurasidona",
+   "with": "Cetoconazol / claritromicina (CYP3A4 inibidores potentes)",
+   "b": "cetoconazol_betametasona",
+   "tipo": "componente_combinacao"
+  },
+  {
+   "a": "lurasidona",
+   "with": "Cetoconazol / claritromicina (CYP3A4 inibidores potentes)",
+   "b": "cetoconazol_betametasona_neomicina",
+   "tipo": "componente_combinacao"
+  },
+  {
+   "a": "sildenafil-neonatal",
+   "with": "nitratos",
+   "b": "nitroglicerina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "sildenafil-neonatal",
+   "with": "nitratos",
+   "b": "isossorbida_mononitrato",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "metildopa",
+   "with": "IMAO",
+   "b": "tranilcipromina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "metildopa",
+   "with": "IMAO",
+   "b": "moclobemida",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "norepinefrina",
+   "with": "IMAO",
+   "b": "tranilcipromina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "norepinefrina",
+   "with": "IMAO",
+   "b": "moclobemida",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "flumazenil",
+   "with": "Antidepressivos tricíclicos (amitriptilina, nortriptilina)",
+   "b": "nortriptilina",
+   "tipo": "sinonimo_autorizado"
+  },
+  {
+   "a": "flumazenil",
+   "with": "Antidepressivos tricíclicos (amitriptilina, nortriptilina)",
+   "b": "imipramina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "flumazenil",
+   "with": "Antidepressivos tricíclicos (amitriptilina, nortriptilina)",
+   "b": "clomipramina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "tramadol-paliativo",
+   "with": "IMAO",
+   "b": "tranilcipromina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "tramadol-paliativo",
+   "with": "IMAO",
+   "b": "moclobemida",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "morfina-paliativa",
+   "with": "IMAO",
+   "b": "tranilcipromina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "morfina-paliativa",
+   "with": "IMAO",
+   "b": "moclobemida",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "amitriptilina-paliativa",
+   "with": "IMAO",
+   "b": "tranilcipromina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "amitriptilina-paliativa",
+   "with": "IMAO",
+   "b": "moclobemida",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "tramadol_paracetamol",
+   "with": "IMAOs",
+   "b": "tranilcipromina",
+   "tipo": "classe_farmacologica"
+  },
+  {
+   "a": "tramadol_paracetamol",
+   "with": "IMAOs",
+   "b": "moclobemida",
+   "tipo": "classe_farmacologica"
+  }
+ ],
+ "atomosPorTipo": {
+  "classe_farmacologica": 149,
+  "enumeracao_explicita": 50,
+  "grupo_aprovado": 34,
+  "nome_base_do_ativo": 22,
+  "nao_resolvido": 190,
+  "nao_medicamentoso": 41,
+  "molecula_exata": 166,
+  "sinonimo_autorizado": 25,
+  "componente_combinacao": 15
+ },
+ "distintos": 491,
+ "semEntidade": 87,
+ "naoMed": 30,
+ "parciais": 69
+}

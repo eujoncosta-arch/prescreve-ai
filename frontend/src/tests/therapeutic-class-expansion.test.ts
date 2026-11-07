@@ -10,9 +10,14 @@ import { describe, it, expect } from 'vitest';
 import { getTherapeuticForCondition } from '@/lib/clinical-therapeutics';
 import { isEligible } from '@/lib/therapeutic-class-expansion';
 import { drugRepository } from '@/lib/pharma-core';
-import { runSafetyCheck } from '@/lib/safety-rules';
+import { runSafetyCheck as runSafetyCheckComCobertura } from '@/lib/safety-rules';
 import { buildConsistencyReport } from '@/validation/drug-consistency';
 import { buildSyncReport } from '@/validation/cross-database';
+
+// RM-104: `runSafetyCheck` agora devolve o resultado com cobertura explícita. Estes testes
+// verificam o CONTEÚDO dos alertas (comportamento preservado); a cobertura é testada em
+// `rm104-cobertura-verificacao-seguranca.test.ts`.
+const runSafetyCheck = (input: Parameters<typeof runSafetyCheckComCobertura>[0]) => runSafetyCheckComCobertura(input).alertas;
 
 describe('Cobertura da recomendação clínica — HAS', () => {
   const plan = getTherapeuticForCondition('has', 'HAS (I10)')!;

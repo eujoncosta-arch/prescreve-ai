@@ -1,0 +1,4399 @@
+{
+ "comAtc": 358,
+ "total": 382,
+ "atcPorEntidade": [
+  {
+   "id": "prednisona",
+   "atc": "H02AB07",
+   "classe": "Corticosteroide sistêmico"
+  },
+  {
+   "id": "enalapril",
+   "atc": "C09AA02",
+   "classe": "IECA"
+  },
+  {
+   "id": "olmesartana",
+   "atc": "C09CA08",
+   "classe": "BRA"
+  },
+  {
+   "id": "losartana",
+   "atc": "C09CA01",
+   "classe": "BRA"
+  },
+  {
+   "id": "valsartana",
+   "atc": "C09CA03",
+   "classe": "BRA"
+  },
+  {
+   "id": "anlodipino",
+   "atc": "C08CA01",
+   "classe": "BCC"
+  },
+  {
+   "id": "hctz",
+   "atc": "C03AA03",
+   "classe": "Diurético Tiazídico"
+  },
+  {
+   "id": "carvedilol",
+   "atc": "C07AG02",
+   "classe": "Beta-bloqueador"
+  },
+  {
+   "id": "bisoprolol",
+   "atc": "C07AB07",
+   "classe": "Beta-bloqueador"
+  },
+  {
+   "id": "espironolactona",
+   "atc": "C03DA01",
+   "classe": "ARM — Antagonista da Aldosterona"
+  },
+  {
+   "id": "furosemida",
+   "atc": "C03CA01",
+   "classe": "Diurético de Alça"
+  },
+  {
+   "id": "atorvastatina",
+   "atc": "C10AA05",
+   "classe": "Estatina (Inibidor da HMG-CoA Redutase)"
+  },
+  {
+   "id": "rosuvastatina",
+   "atc": "C10AA07",
+   "classe": "Estatina (Inibidor da HMG-CoA Redutase)"
+  },
+  {
+   "id": "metformina",
+   "atc": "A10BA02",
+   "classe": "Biguanida"
+  },
+  {
+   "id": "empagliflozina",
+   "atc": "A10BK03",
+   "classe": "SGLT-2"
+  },
+  {
+   "id": "sitagliptina",
+   "atc": "A10BH01",
+   "classe": "DPP-4"
+  },
+  {
+   "id": "salbutamol",
+   "atc": "R03AC02",
+   "classe": "SABA (Beta-2 agonista de curta ação)"
+  },
+  {
+   "id": "budesonida",
+   "atc": "R03BA02",
+   "classe": "Corticosteroide Inalatório (ICS)"
+  },
+  {
+   "id": "montelucaste",
+   "atc": "R03DC03",
+   "classe": "Antagonista de Receptor de Leucotrieno"
+  },
+  {
+   "id": "amoxicilina",
+   "atc": "J01CA04",
+   "classe": "Penicilina de Amplo Espectro"
+  },
+  {
+   "id": "amoxicilina_clavulanato",
+   "atc": "J01CR02",
+   "classe": "Aminopenicilina + Inibidor de β-lactamase"
+  },
+  {
+   "id": "azitromicina",
+   "atc": "J01FA10",
+   "classe": "Macrolídeo"
+  },
+  {
+   "id": "sertralina",
+   "atc": "N06AB06",
+   "classe": "ISRS — Inibidor Seletivo da Recaptação de Serotonina"
+  },
+  {
+   "id": "escitalopram",
+   "atc": "N06AB10",
+   "classe": "ISRS"
+  },
+  {
+   "id": "alprazolam",
+   "atc": "N05BA12",
+   "classe": "Benzodiazepínico"
+  },
+  {
+   "id": "omeprazol",
+   "atc": "A02BC01",
+   "classe": "Inibidor de Bomba de Prótons (IBP)"
+  },
+  {
+   "id": "paracetamol",
+   "atc": "N02BE01",
+   "classe": "Analgésico/Antipirético"
+  },
+  {
+   "id": "dipirona",
+   "atc": "N02BB02",
+   "classe": "Analgésico/Antipirético/Espasmolítico"
+  },
+  {
+   "id": "dapagliflozina",
+   "atc": "A10BK01",
+   "classe": "iSGLT2"
+  },
+  {
+   "id": "semaglutida",
+   "atc": "A10BJ06",
+   "classe": "AR-GLP-1"
+  },
+  {
+   "id": "glimepirida",
+   "atc": "A10BB12",
+   "classe": "Sulfonilureia"
+  },
+  {
+   "id": "duloxetina",
+   "atc": "N06AX21",
+   "classe": "IRSN"
+  },
+  {
+   "id": "vortioxetina",
+   "atc": "N06AX26",
+   "classe": "Antidepressivo Multimodal"
+  },
+  {
+   "id": "risperidona",
+   "atc": "N05AX08",
+   "classe": "Antipsicótico Atípico"
+  },
+  {
+   "id": "zolpidem",
+   "atc": "N05CF02",
+   "classe": "Hipnótico Não-Benzodiazepínico"
+  },
+  {
+   "id": "eszopiclona",
+   "atc": "N05CF04",
+   "classe": "Hipnótico Não-Benzodiazepínico"
+  },
+  {
+   "id": "celecoxibe",
+   "atc": "M01AH01",
+   "classe": "AINE — Coxibe (seletivo COX-2)"
+  },
+  {
+   "id": "topiramato",
+   "atc": "N03AX11",
+   "classe": "Anticonvulsivante"
+  },
+  {
+   "id": "pramipexol",
+   "atc": "N04BC05",
+   "classe": "Agonista Dopaminérgico D2/D3"
+  },
+  {
+   "id": "betaistina",
+   "atc": "N07CA01",
+   "classe": "Antivertiginoso — Análogo da Histamina"
+  },
+  {
+   "id": "enoxaparina",
+   "atc": "B01AB05",
+   "classe": "Anticoagulante — HBPM"
+  },
+  {
+   "id": "aas",
+   "atc": "B01AC06",
+   "classe": "Antiagregante Plaquetário — Inibidor COX Irreversível"
+  },
+  {
+   "id": "valaciclovir",
+   "atc": "J05AB11",
+   "classe": "Antiviral — Pró-fármaco do Aciclovir"
+  },
+  {
+   "id": "fexofenadina",
+   "atc": "R06AX26",
+   "classe": "Anti-histamínico H1 de 2ª Geração"
+  },
+  {
+   "id": "ebastina",
+   "atc": "R06AX22",
+   "classe": "Anti-histamínico H1 de 2ª Geração"
+  },
+  {
+   "id": "cetorolaco",
+   "atc": "M01AB15",
+   "classe": "AINE — Inibidor COX não seletivo (potente analgésico)"
+  },
+  {
+   "id": "meloxicam",
+   "atc": "M01AC06",
+   "classe": "AINE — Inibidor COX preferencial (COX-2 > COX-1)"
+  },
+  {
+   "id": "prednisolona",
+   "atc": "H02AB06",
+   "classe": "Corticosteroide Sistêmico — Glicocorticoide"
+  },
+  {
+   "id": "aceclofenaco",
+   "atc": "M01AB16",
+   "classe": "AINE — Inibidor COX preferencial (COX-2 > COX-1)"
+  },
+  {
+   "id": "venlafaxina",
+   "atc": "N06AX16",
+   "classe": "IRSN — Inibidor da Recaptação de Serotonina e Noradrenalina"
+  },
+  {
+   "id": "paroxetina",
+   "atc": "N06AB05",
+   "classe": "ISRS — Inibidor Seletivo da Recaptação de Serotonina"
+  },
+  {
+   "id": "bupropiona",
+   "atc": "N06AX12",
+   "classe": "IRND — Inibidor da Recaptação de Noradrenalina e Dopamina"
+  },
+  {
+   "id": "nortriptilina",
+   "atc": "N06AA10",
+   "classe": "Antidepressivo Tricíclico (ATC) — Amina Secundária"
+  },
+  {
+   "id": "litio",
+   "atc": "N05AN01",
+   "classe": "Estabilizador do Humor — Sal de Lítio"
+  },
+  {
+   "id": "metilfenidato",
+   "atc": "N06BA04",
+   "classe": "Psicoestimulante — Inibidor da Recaptação de Dopamina e Noradrenalina"
+  },
+  {
+   "id": "tramadol",
+   "atc": "N02AX02",
+   "classe": "Opioide Fraco — Agonista µ parcial + Inibidor Recaptação Serotonina/Noradrenalina"
+  },
+  {
+   "id": "metoprolol",
+   "atc": "C07AB02",
+   "classe": "Betabloqueador Cardiosseletivo (β1) — Ação Prolongada"
+  },
+  {
+   "id": "irbesartana",
+   "atc": "C09CA04",
+   "classe": "BRA — Bloqueador do Receptor de Angiotensina II (AT1)"
+  },
+  {
+   "id": "doxazosina",
+   "atc": "C02CA04",
+   "classe": "Alfa-1 Bloqueador Seletivo"
+  },
+  {
+   "id": "tadalafila",
+   "atc": "G04BE08",
+   "classe": "Inibidor da PDE5 — Vasodilatador"
+  },
+  {
+   "id": "esomeprazol",
+   "atc": "A02BC05",
+   "classe": "Inibidor da Bomba de Prótons (IBP)"
+  },
+  {
+   "id": "domperidona",
+   "atc": "A03FA03",
+   "classe": "Procinético — Antagonista Dopaminérgico D2 Periférico"
+  },
+  {
+   "id": "memantina",
+   "atc": "N06DX01",
+   "classe": "Antagonista do Receptor NMDA — Antidemencial"
+  },
+  {
+   "id": "donepezila",
+   "atc": "N06DA02",
+   "classe": "Inibidor da Acetilcolinesterase — Antidemencial"
+  },
+  {
+   "id": "levetiracetam",
+   "atc": "N03AX14",
+   "classe": "Anticonvulsivante — Ligante da Proteína SV2A da Vesícula Sináptica"
+  },
+  {
+   "id": "mometasona-nasal",
+   "atc": "R01AD09",
+   "classe": "Corticosteroide Nasal Tópico"
+  },
+  {
+   "id": "glicazida",
+   "atc": "A10BB09",
+   "classe": "Sulfonilureia de 2ª Geração"
+  },
+  {
+   "id": "glibenclamida",
+   "atc": "A10BB01",
+   "classe": "Sulfonilureia de 2ª Geração"
+  },
+  {
+   "id": "hidroxicloroquina",
+   "atc": "P01BA02",
+   "classe": "DMARD Convencional — Antimalárico"
+  },
+  {
+   "id": "trimetazidina",
+   "atc": "C01EB15",
+   "classe": "Antiisquêmico Metabólico — Inibidor Parcial da Beta-Oxidação de Ácidos Graxos"
+  },
+  {
+   "id": "isotretinoia",
+   "atc": "D10BA01",
+   "classe": "Retinóide Sistêmico — Derivado da Vitamina A"
+  },
+  {
+   "id": "ibuprofeno-paracetamol",
+   "atc": "M01AE51",
+   "classe": "AINE + Analgésico não opioide — Combinação Fixa"
+  },
+  {
+   "id": "cetoprofeno",
+   "atc": "M01AE03",
+   "classe": "AINE — Inibidor COX não seletivo (derivado do ácido propiônico)"
+  },
+  {
+   "id": "risedronato",
+   "atc": "M05BA07",
+   "classe": "Bifosfonato — Antirreabsortivo Ósseo"
+  },
+  {
+   "id": "nitazoxanida",
+   "atc": "P01AX11",
+   "classe": "Antiprotozoário — Nitrotiazolil-Salicilamida"
+  },
+  {
+   "id": "moxifloxacino",
+   "atc": "J01MA14",
+   "classe": "Fluoroquinolona de 4ª Geração — Inibidor DNA Girase e Topoisomerase IV"
+  },
+  {
+   "id": "tiotropio",
+   "atc": "R03BB04",
+   "classe": "LAMA"
+  },
+  {
+   "id": "umeclidinio",
+   "atc": "R03BB07",
+   "classe": "LAMA"
+  },
+  {
+   "id": "formoterol",
+   "atc": "R03AC13",
+   "classe": "LABA"
+  },
+  {
+   "id": "salmeterol",
+   "atc": "R03AC12",
+   "classe": "LABA"
+  },
+  {
+   "id": "atenolol",
+   "atc": "C07AB03",
+   "classe": "Beta-bloqueador"
+  },
+  {
+   "id": "ramipril",
+   "atc": "C09AA05",
+   "classe": "IECA"
+  },
+  {
+   "id": "perindopril",
+   "atc": "C09AA04",
+   "classe": "IECA"
+  },
+  {
+   "id": "telmisartana",
+   "atc": "C09CA07",
+   "classe": "BRA"
+  },
+  {
+   "id": "sacubitril_valsartana",
+   "atc": "C09DX04",
+   "classe": "ARNI"
+  },
+  {
+   "id": "nebivolol",
+   "atc": "C07AB12",
+   "classe": "Betabloqueador"
+  },
+  {
+   "id": "nifedipino",
+   "atc": "C08CA05",
+   "classe": "BCC"
+  },
+  {
+   "id": "diltiazem",
+   "atc": "C08DB01",
+   "classe": "BCC"
+  },
+  {
+   "id": "verapamil",
+   "atc": "C08DA01",
+   "classe": "BCC"
+  },
+  {
+   "id": "clortalidona",
+   "atc": "C03BA04",
+   "classe": "Diurético"
+  },
+  {
+   "id": "indapamida",
+   "atc": "C03BA11",
+   "classe": "Diurético"
+  },
+  {
+   "id": "eplerenona",
+   "atc": "C03DA04",
+   "classe": "ARM"
+  },
+  {
+   "id": "amiodarona",
+   "atc": "C01BD01",
+   "classe": "Antiarrítmico"
+  },
+  {
+   "id": "digoxina",
+   "atc": "C01AA05",
+   "classe": "Glicosídeo Cardíaco"
+  },
+  {
+   "id": "varfarina",
+   "atc": "B01AA03",
+   "classe": "Anticoagulante"
+  },
+  {
+   "id": "apixabana",
+   "atc": "B01AF02",
+   "classe": "Anticoagulante"
+  },
+  {
+   "id": "rivaroxabana",
+   "atc": "B01AF01",
+   "classe": "Anticoagulante"
+  },
+  {
+   "id": "dabigatrana",
+   "atc": "B01AE07",
+   "classe": "Anticoagulante"
+  },
+  {
+   "id": "clopidogrel",
+   "atc": "B01AC04",
+   "classe": "Antiplaquetário"
+  },
+  {
+   "id": "ticagrelor",
+   "atc": "B01AC24",
+   "classe": "Antiplaquetário"
+  },
+  {
+   "id": "ezetimiba",
+   "atc": "C10AX09",
+   "classe": "Hipolipemiante"
+  },
+  {
+   "id": "fenofibrato",
+   "atc": "C10AB05",
+   "classe": "Hipolipemiante"
+  },
+  {
+   "id": "nitroglicerina",
+   "atc": "C01DA02",
+   "classe": "Antianginoso"
+  },
+  {
+   "id": "isossorbida_mononitrato",
+   "atc": "C01DA14",
+   "classe": "Antianginoso"
+  },
+  {
+   "id": "ivabradina",
+   "atc": "C01EB17",
+   "classe": "Antianginoso"
+  },
+  {
+   "id": "losartana_hidroclorotiazida",
+   "atc": null,
+   "classe": "BRA + Diurético Tiazídico (Associação)"
+  },
+  {
+   "id": "olmesartana_hidroclorotiazida",
+   "atc": null,
+   "classe": "BRA + Diurético Tiazídico (Associação)"
+  },
+  {
+   "id": "insulina_nph",
+   "atc": "A10AC01",
+   "classe": "Insulina"
+  },
+  {
+   "id": "insulina_regular",
+   "atc": "A10AB01",
+   "classe": "Insulina"
+  },
+  {
+   "id": "insulina_glargina",
+   "atc": "A10AE04",
+   "classe": "Insulina"
+  },
+  {
+   "id": "insulina_asparte",
+   "atc": "A10AB05",
+   "classe": "Insulina"
+  },
+  {
+   "id": "insulina_lispro",
+   "atc": "A10AB04",
+   "classe": "Insulina"
+  },
+  {
+   "id": "insulina_degludeca",
+   "atc": "A10AE06",
+   "classe": "Insulina"
+  },
+  {
+   "id": "liraglutida",
+   "atc": "A10BJ02",
+   "classe": "AR-GLP-1"
+  },
+  {
+   "id": "tirzepatida",
+   "atc": "A10BX16",
+   "classe": "Dual GIP/GLP-1"
+  },
+  {
+   "id": "pioglitazona",
+   "atc": "A10BG03",
+   "classe": "Tiazolidinediona"
+  },
+  {
+   "id": "acarbose",
+   "atc": "A10BF01",
+   "classe": "Inibidor de alfa-glicosidase"
+  },
+  {
+   "id": "levotiroxina",
+   "atc": "H03AA01",
+   "classe": "Hormônio Tireoidiano"
+  },
+  {
+   "id": "metimazol",
+   "atc": "H03BB02",
+   "classe": "Antitireoidiano"
+  },
+  {
+   "id": "propiltiouracil",
+   "atc": "H03BA02",
+   "classe": "Antitireoidiano"
+  },
+  {
+   "id": "alendronato",
+   "atc": "M05BA04",
+   "classe": "Bifosfonato"
+  },
+  {
+   "id": "denosumabe",
+   "atc": "M05BX04",
+   "classe": "Anticorpo Monoclonal Anti-RANK-L"
+  },
+  {
+   "id": "orlistate",
+   "atc": "A08AB01",
+   "classe": "Antiobesidade"
+  },
+  {
+   "id": "naltrexona_bupropiona",
+   "atc": "A08AA62",
+   "classe": "Antiobesidade"
+  },
+  {
+   "id": "semaglutida_obesidade",
+   "atc": "A10BJ06",
+   "classe": "AR-GLP-1"
+  },
+  {
+   "id": "piperacilina_tazobactam",
+   "atc": "J01CR05",
+   "classe": "Penicilina"
+  },
+  {
+   "id": "ampicilina_sulbactam",
+   "atc": "J01CR01",
+   "classe": "Penicilina"
+  },
+  {
+   "id": "oxacilina",
+   "atc": "J01CF04",
+   "classe": "Penicilina"
+  },
+  {
+   "id": "cefalexina",
+   "atc": "J01DB01",
+   "classe": "Cefalosporina"
+  },
+  {
+   "id": "cefazolina",
+   "atc": "J01DB04",
+   "classe": "Cefalosporina"
+  },
+  {
+   "id": "ceftriaxona",
+   "atc": "J01DD04",
+   "classe": "Cefalosporina"
+  },
+  {
+   "id": "cefepima",
+   "atc": "J01DE01",
+   "classe": "Cefalosporina"
+  },
+  {
+   "id": "claritromicina",
+   "atc": "J01FA09",
+   "classe": "Macrolídeo"
+  },
+  {
+   "id": "clindamicina",
+   "atc": "J01FF01",
+   "classe": "Lincosamida"
+  },
+  {
+   "id": "metronidazol",
+   "atc": "J01XD01",
+   "classe": "Nitroimidazol"
+  },
+  {
+   "id": "doxiciclina",
+   "atc": "J01AA02",
+   "classe": "Tetraciclina"
+  },
+  {
+   "id": "smz_tmp",
+   "atc": "J01EE01",
+   "classe": "Sulfonamida"
+  },
+  {
+   "id": "meropenem",
+   "atc": "J01DH02",
+   "classe": "Carbapenêmico"
+  },
+  {
+   "id": "ertapenem",
+   "atc": "J01DH03",
+   "classe": "Carbapenêmico"
+  },
+  {
+   "id": "vancomicina",
+   "atc": "J01XA01",
+   "classe": "Glicopeptídeo"
+  },
+  {
+   "id": "linezolida",
+   "atc": "J01XX08",
+   "classe": "Oxazolidinona"
+  },
+  {
+   "id": "fluconazol",
+   "atc": "J02AC01",
+   "classe": "Antifúngico"
+  },
+  {
+   "id": "voriconazol",
+   "atc": "J02AC03",
+   "classe": "Antifúngico"
+  },
+  {
+   "id": "caspofungina",
+   "atc": "J02AX04",
+   "classe": "Antifúngico"
+  },
+  {
+   "id": "anfotericina_b",
+   "atc": "J02AA01",
+   "classe": "Antifúngico"
+  },
+  {
+   "id": "ciprofloxacino",
+   "atc": "J01MA02",
+   "classe": "Fluorquinolona"
+  },
+  {
+   "id": "aciclovir",
+   "atc": "J05AB01",
+   "classe": "Antiviral"
+  },
+  {
+   "id": "oseltamivir",
+   "atc": "J05AH02",
+   "classe": "Antiviral"
+  },
+  {
+   "id": "albendazol",
+   "atc": "P02CA03",
+   "classe": "Antiparasitário"
+  },
+  {
+   "id": "ivermectina",
+   "atc": "P02CF01",
+   "classe": "Antiparasitário"
+  },
+  {
+   "id": "fenoterol",
+   "atc": "R03AC04",
+   "classe": "SABA"
+  },
+  {
+   "id": "ipratropio",
+   "atc": "R03BB01",
+   "classe": "SAMA"
+  },
+  {
+   "id": "fenoterol_ipratropio",
+   "atc": "R03AL01",
+   "classe": "SABA + SAMA"
+  },
+  {
+   "id": "indacaterol",
+   "atc": "R03AC18",
+   "classe": "LABA"
+  },
+  {
+   "id": "olodaterol",
+   "atc": "R03AC19",
+   "classe": "LABA"
+  },
+  {
+   "id": "glicopirronio",
+   "atc": "R03BB06",
+   "classe": "LAMA"
+  },
+  {
+   "id": "aclidinio",
+   "atc": "R03BB05",
+   "classe": "LAMA"
+  },
+  {
+   "id": "fluticasona_propionato",
+   "atc": "R03BA05",
+   "classe": "ICS"
+  },
+  {
+   "id": "fluticasona_furoato",
+   "atc": "R03BA09",
+   "classe": "ICS"
+  },
+  {
+   "id": "beclometasona",
+   "atc": "R03BA01",
+   "classe": "ICS"
+  },
+  {
+   "id": "ciclesonida",
+   "atc": "R03BA08",
+   "classe": "ICS"
+  },
+  {
+   "id": "budesonida_formoterol",
+   "atc": "R03AK07",
+   "classe": "ICS/LABA"
+  },
+  {
+   "id": "fluticasona_salmeterol",
+   "atc": "R03AK06",
+   "classe": "ICS/LABA"
+  },
+  {
+   "id": "fluticasona_ff_vilanterol",
+   "atc": "R03AK10",
+   "classe": "ICS/LABA"
+  },
+  {
+   "id": "beclometasona_formoterol",
+   "atc": "R03AK08",
+   "classe": "ICS/LABA"
+  },
+  {
+   "id": "indacaterol_glicopirronio",
+   "atc": "R03AL04",
+   "classe": "LABA/LAMA"
+  },
+  {
+   "id": "vilanterol_umeclidinio",
+   "atc": "R03AL03",
+   "classe": "LABA/LAMA"
+  },
+  {
+   "id": "olodaterol_tiotropio",
+   "atc": "R03AL06",
+   "classe": "LABA/LAMA"
+  },
+  {
+   "id": "fluticasona_ff_vilanterol_umeclidinio",
+   "atc": "R03AL08",
+   "classe": "ICS/LABA/LAMA"
+  },
+  {
+   "id": "budesonida_formoterol_glicopirronio",
+   "atc": "R03AL11",
+   "classe": "ICS/LABA/LAMA"
+  },
+  {
+   "id": "teofilina",
+   "atc": "R03DA04",
+   "classe": "Metilxantina"
+  },
+  {
+   "id": "omalizumabe",
+   "atc": "R03DX05",
+   "classe": "Biológico"
+  },
+  {
+   "id": "mepolizumabe",
+   "atc": "R03DX09",
+   "classe": "Biológico"
+  },
+  {
+   "id": "benralizumabe",
+   "atc": "R03DX10",
+   "classe": "Biológico"
+  },
+  {
+   "id": "dupilumabe",
+   "atc": "D04AA34",
+   "classe": "Biológico"
+  },
+  {
+   "id": "tezepelumabe",
+   "atc": "R03DX11",
+   "classe": "Biológico"
+  },
+  {
+   "id": "acetilcisteina",
+   "atc": "R05CB01",
+   "classe": "Mucolítico"
+  },
+  {
+   "id": "ambroxol",
+   "atc": "R05CB06",
+   "classe": "Mucolítico"
+  },
+  {
+   "id": "carbocisteina",
+   "atc": "R05CB03",
+   "classe": "Mucolítico"
+  },
+  {
+   "id": "dornase_alfa",
+   "atc": "R05CB13",
+   "classe": "Mucolítico"
+  },
+  {
+   "id": "zafirlucaste",
+   "atc": "R03DC01",
+   "classe": "Antagonista de Receptor de Leucotrieno"
+  },
+  {
+   "id": "zileutona",
+   "atc": "R03DC03",
+   "classe": "Antagonista de Receptor de Leucotrieno"
+  },
+  {
+   "id": "roflumilaste",
+   "atc": "R03DX07",
+   "classe": "Inibidor de PDE4"
+  },
+  {
+   "id": "prednisolona_asma",
+   "atc": "H02AB06",
+   "classe": "Corticosteroide Sistêmico"
+  },
+  {
+   "id": "oxigenio_suplementar",
+   "atc": "V03AN01",
+   "classe": "Oxigenoterapia"
+  },
+  {
+   "id": "heliox",
+   "atc": "V03AN03",
+   "classe": "Oxigenoterapia"
+  },
+  {
+   "id": "azitromicina_dpoc",
+   "atc": "J01FA10",
+   "classe": "Macrolídeo"
+  },
+  {
+   "id": "fluoxetina",
+   "atc": "N06AB03",
+   "classe": "ISRS"
+  },
+  {
+   "id": "citalopram",
+   "atc": "N06AB04",
+   "classe": "ISRS"
+  },
+  {
+   "id": "fluvoxamina",
+   "atc": "N06AB08",
+   "classe": "ISRS"
+  },
+  {
+   "id": "desvenlafaxina",
+   "atc": "N06AX23",
+   "classe": "IRSN"
+  },
+  {
+   "id": "levomilnaciprano",
+   "atc": "N06AX28",
+   "classe": "IRSN"
+  },
+  {
+   "id": "mirtazapina",
+   "atc": "N06AX11",
+   "classe": "NaSSA"
+  },
+  {
+   "id": "agomelatina",
+   "atc": "N06AX22",
+   "classe": "Antidepressivo"
+  },
+  {
+   "id": "amitriptilina",
+   "atc": "N06AA09",
+   "classe": "TCA"
+  },
+  {
+   "id": "imipramina",
+   "atc": "N06AA02",
+   "classe": "TCA"
+  },
+  {
+   "id": "clomipramina",
+   "atc": "N06AA04",
+   "classe": "TCA"
+  },
+  {
+   "id": "tranilcipromina",
+   "atc": "N06AF04",
+   "classe": "IMAO"
+  },
+  {
+   "id": "moclobemida",
+   "atc": "N06AG02",
+   "classe": "IMAO"
+  },
+  {
+   "id": "haloperidol",
+   "atc": "N05AD01",
+   "classe": "Antipsicótico Típico"
+  },
+  {
+   "id": "olanzapina",
+   "atc": "N05AH03",
+   "classe": "Antipsicótico Atípico"
+  },
+  {
+   "id": "quetiapina",
+   "atc": "N05AH04",
+   "classe": "Antipsicótico Atípico"
+  },
+  {
+   "id": "aripiprazol",
+   "atc": "N05AX12",
+   "classe": "Antipsicótico Atípico"
+  },
+  {
+   "id": "clozapina",
+   "atc": "N05AH02",
+   "classe": "Antipsicótico Atípico"
+  },
+  {
+   "id": "ziprasidona",
+   "atc": "N05AE04",
+   "classe": "Antipsicótico Atípico"
+  },
+  {
+   "id": "paliperidona",
+   "atc": "N05AX13",
+   "classe": "Antipsicótico Atípico"
+  },
+  {
+   "id": "fenitoina",
+   "atc": "N03AB02",
+   "classe": "Anticonvulsivante"
+  },
+  {
+   "id": "carbamazepina",
+   "atc": "N03AF01",
+   "classe": "Anticonvulsivante"
+  },
+  {
+   "id": "acido-valproico",
+   "atc": "N03AG01",
+   "classe": "Anticonvulsivante"
+  },
+  {
+   "id": "lamotrigina",
+   "atc": "N03AX09",
+   "classe": "Anticonvulsivante"
+  },
+  {
+   "id": "gabapentina",
+   "atc": "N03AX12",
+   "classe": "Anticonvulsivante"
+  },
+  {
+   "id": "pregabalina",
+   "atc": "N03AX16",
+   "classe": "Anticonvulsivante"
+  },
+  {
+   "id": "oxcarbazepina",
+   "atc": "N03AF02",
+   "classe": "Anticonvulsivante"
+  },
+  {
+   "id": "fenobarbital",
+   "atc": "N03AA02",
+   "classe": "Anticonvulsivante"
+  },
+  {
+   "id": "rivastigmina",
+   "atc": "N06DA03",
+   "classe": "Antidemencial"
+  },
+  {
+   "id": "galantamina",
+   "atc": "N06DA04",
+   "classe": "Antidemencial"
+  },
+  {
+   "id": "zopiclona",
+   "atc": "N05CF01",
+   "classe": "Hipnótico"
+  },
+  {
+   "id": "midazolam",
+   "atc": "N05CD08",
+   "classe": "Benzodiazepínico"
+  },
+  {
+   "id": "diazepam",
+   "atc": "N05BA01",
+   "classe": "Benzodiazepínico"
+  },
+  {
+   "id": "lorazepam",
+   "atc": "N05BA06",
+   "classe": "Benzodiazepínico"
+  },
+  {
+   "id": "clonazepam",
+   "atc": "N03AE01",
+   "classe": "Benzodiazepínico"
+  },
+  {
+   "id": "buspirona",
+   "atc": "N05BE01",
+   "classe": "Ansiolítico"
+  },
+  {
+   "id": "hidroxizina",
+   "atc": "N05BB01",
+   "classe": "Ansiolítico"
+  },
+  {
+   "id": "lurasidona",
+   "atc": "N05AE05",
+   "classe": "Antipsicótico Atípico"
+  },
+  {
+   "id": "pantoprazol",
+   "atc": "A02BC02",
+   "classe": "IBP"
+  },
+  {
+   "id": "lansoprazol",
+   "atc": "A02BC03",
+   "classe": "IBP"
+  },
+  {
+   "id": "rabeprazol",
+   "atc": "A02BC04",
+   "classe": "IBP"
+  },
+  {
+   "id": "ranitidina",
+   "atc": "A02BA02",
+   "classe": "Bloqueador H2"
+  },
+  {
+   "id": "famotidina",
+   "atc": "A02BA03",
+   "classe": "Bloqueador H2"
+  },
+  {
+   "id": "cimetidina",
+   "atc": "A02BA01",
+   "classe": "Bloqueador H2"
+  },
+  {
+   "id": "ondansetrona",
+   "atc": "A04AA01",
+   "classe": "Antiemético"
+  },
+  {
+   "id": "metoclopramida",
+   "atc": "A03FA01",
+   "classe": "Antiemético"
+  },
+  {
+   "id": "granisetrona",
+   "atc": "A04AA02",
+   "classe": "Antiemético"
+  },
+  {
+   "id": "lactulose",
+   "atc": "A06AD11",
+   "classe": "Laxativo"
+  },
+  {
+   "id": "bisacodil",
+   "atc": "A06AB02",
+   "classe": "Laxativo"
+  },
+  {
+   "id": "polietilenoglicol",
+   "atc": "A06AD15",
+   "classe": "Laxativo"
+  },
+  {
+   "id": "picossulfato-sodio",
+   "atc": "A06AB08",
+   "classe": "Laxativo"
+  },
+  {
+   "id": "loperamida",
+   "atc": "A07DA03",
+   "classe": "Antidiarreico"
+  },
+  {
+   "id": "racecadotrila",
+   "atc": "A07XA04",
+   "classe": "Antidiarreico"
+  },
+  {
+   "id": "azatioprina",
+   "atc": "L04AX01",
+   "classe": "Imunossupressor"
+  },
+  {
+   "id": "ciclosporina",
+   "atc": "L04AD01",
+   "classe": "Imunossupressor"
+  },
+  {
+   "id": "tacrolimo",
+   "atc": "L04AD02",
+   "classe": "Imunossupressor"
+  },
+  {
+   "id": "micofenolato-mofetil",
+   "atc": "L04AA06",
+   "classe": "Imunossupressor"
+  },
+  {
+   "id": "sevelamer",
+   "atc": "V03AE02",
+   "classe": "Quelante de Fósforo"
+  },
+  {
+   "id": "carbonato-calcio-quelante",
+   "atc": "A12AA04",
+   "classe": "Quelante de Fósforo"
+  },
+  {
+   "id": "carbonato-lantanio",
+   "atc": "V03AE03",
+   "classe": "Quelante de Fósforo"
+  },
+  {
+   "id": "hidroxido-aluminio",
+   "atc": "A02AB01",
+   "classe": "Quelante de Fósforo"
+  },
+  {
+   "id": "eritropoetina-alfa",
+   "atc": "B03XA01",
+   "classe": "Agente Estimulador da Eritropoese"
+  },
+  {
+   "id": "darbepoetina-alfa",
+   "atc": "B03XA02",
+   "classe": "Agente Estimulador da Eritropoese"
+  },
+  {
+   "id": "paricalcitol",
+   "atc": "H05BX02",
+   "classe": "Análogo da Vitamina D"
+  },
+  {
+   "id": "cinacalcete",
+   "atc": "H05BX01",
+   "classe": "Calcimimético"
+  },
+  {
+   "id": "calcitriol",
+   "atc": "A11CC04",
+   "classe": "Análogo da Vitamina D"
+  },
+  {
+   "id": "bicarbonato-sodio-oral",
+   "atc": "B05XA02",
+   "classe": "Corretor de Acidose Metabólica"
+  },
+  {
+   "id": "patiromer",
+   "atc": "V03AE09",
+   "classe": "Quelante de Potássio"
+  },
+  {
+   "id": "poliestireno-sulfonato-calcio",
+   "atc": "V03AE01",
+   "classe": "Quelante de Potássio"
+  },
+  {
+   "id": "ferro-iv",
+   "atc": "B03AC",
+   "classe": "Suplemento de Ferro"
+  },
+  {
+   "id": "fludrocortisona",
+   "atc": "H02AA02",
+   "classe": "Mineralocorticoide"
+  },
+  {
+   "id": "cafeina-citrato",
+   "atc": "N06BC01",
+   "classe": "Metilxantina"
+  },
+  {
+   "id": "poractant-alfa",
+   "atc": "R07AA02",
+   "classe": "Surfactante pulmonar exógeno"
+  },
+  {
+   "id": "vitamina-k1-neonatal",
+   "atc": "B02BA01",
+   "classe": "Vitamina lipossolúvel / coagulante"
+  },
+  {
+   "id": "palivizumabe",
+   "atc": "J06BD01",
+   "classe": "Anticorpo monoclonal humanizado IgG1 anti-VSR"
+  },
+  {
+   "id": "sildenafil-neonatal",
+   "atc": "G04BE03",
+   "classe": "Inibidor da fosfodiesterase-5 (IPDE-5)"
+  },
+  {
+   "id": "ibuprofeno",
+   "atc": "M01AE01",
+   "classe": "AINE — Anti-inflamatório Não Esteroidal / Inibidor não seletivo COX-1 e COX-2"
+  },
+  {
+   "id": "fenobarbital-neonatal",
+   "atc": "N03AA02",
+   "classe": "Barbitúrico anticonvulsivante"
+  },
+  {
+   "id": "dienogeste",
+   "atc": "G03DB08",
+   "classe": "Progestagênio (derivado da 19-nortestosterona)"
+  },
+  {
+   "id": "etinilestradiol-levonorgestrel",
+   "atc": "G03AA07",
+   "classe": "Contraceptivo oral combinado (COC) — 1ª geração"
+  },
+  {
+   "id": "etinilestradiol-desogestrel",
+   "atc": "G03AA09",
+   "classe": "Contraceptivo oral combinado (COC) — 3ª geração"
+  },
+  {
+   "id": "desogestrel-75mcg",
+   "atc": "G03AC09",
+   "classe": "Contraceptivo oral de progestogênio puro"
+  },
+  {
+   "id": "levonorgestrel-emergencia",
+   "atc": "G03AD01",
+   "classe": "Contraceptivo de emergência — progestogênio puro"
+  },
+  {
+   "id": "medroxiprogesterona-injetavel",
+   "atc": "G03AC06",
+   "classe": "Contraceptivo injetável trimestral — progestogênio de depósito"
+  },
+  {
+   "id": "estradiol-transdermico",
+   "atc": "G03CA03",
+   "classe": "Estrogênio natural transdérmico"
+  },
+  {
+   "id": "progesterona-micronizada",
+   "atc": "G03DA04",
+   "classe": "Progestogênio natural micronizado"
+  },
+  {
+   "id": "tibolona",
+   "atc": "G03CX01",
+   "classe": "Esteroide sintético — ação estrogênica + progestagênica + androgênica"
+  },
+  {
+   "id": "sulfato-magnesio",
+   "atc": "A12CC02",
+   "classe": "Eletrólito / Anticonvulsivante obstétrico"
+  },
+  {
+   "id": "metildopa",
+   "atc": "C02AB01",
+   "classe": "Agonista alfa-2 central"
+  },
+  {
+   "id": "hidralazina",
+   "atc": "C02DB02",
+   "classe": "Vasodilatador direto arterial"
+  },
+  {
+   "id": "ocitocina",
+   "atc": "H01BB02",
+   "classe": "Hormônio neurohipofisário / Uterotônico"
+  },
+  {
+   "id": "misoprostol",
+   "atc": "A02BB01",
+   "classe": "Análogo sintético da prostaglandina E1 (PGE1)"
+  },
+  {
+   "id": "betametasona-antenatal",
+   "atc": "H02AB01",
+   "classe": "Corticosteroide fluorado — maturação pulmonar fetal"
+  },
+  {
+   "id": "acido-folico",
+   "atc": "B03BB01",
+   "classe": "Vitamina do complexo B / Coenzima síntese de nucleotídeos"
+  },
+  {
+   "id": "sulfato-ferroso-gestacao",
+   "atc": "B03AA07",
+   "classe": "Suplemento de ferro ferroso oral"
+  },
+  {
+   "id": "cabergolina",
+   "atc": "G02CB03",
+   "classe": "Agonista dopaminérgico D2 de longa ação"
+  },
+  {
+   "id": "cisplatina",
+   "atc": "L01XA01",
+   "classe": "Agente alquilante — platina"
+  },
+  {
+   "id": "carboplatina",
+   "atc": "L01XA02",
+   "classe": "Agente alquilante — platina 2ª geração"
+  },
+  {
+   "id": "oxaliplatina",
+   "atc": "L01XA03",
+   "classe": "Agente alquilante — platina 3ª geração"
+  },
+  {
+   "id": "paclitaxel",
+   "atc": "L01CD01",
+   "classe": "Taxano — estabilizador de microtúbulos"
+  },
+  {
+   "id": "docetaxel",
+   "atc": "L01CD02",
+   "classe": "Taxano — estabilizador de microtúbulos"
+  },
+  {
+   "id": "fluorouracil",
+   "atc": "L01BC02",
+   "classe": "Antimetabólito — análogo de pirimidina"
+  },
+  {
+   "id": "capecitabina",
+   "atc": "L01BC06",
+   "classe": "Antimetabólito — pró-fármaco oral do 5-FU"
+  },
+  {
+   "id": "gencitabina",
+   "atc": "L01BC05",
+   "classe": "Antimetabólito — análogo de desoxicitidina"
+  },
+  {
+   "id": "pemetrexede",
+   "atc": "L01BA04",
+   "classe": "Antimetabólito — inibidor multialvo de folato"
+  },
+  {
+   "id": "metotrexato-onco",
+   "atc": "L01BA01",
+   "classe": "Antimetabólito — inibidor de DHFR"
+  },
+  {
+   "id": "doxorrubicina",
+   "atc": "L01DB01",
+   "classe": "Antracíclina — inibidor de topoisomerase II"
+  },
+  {
+   "id": "pembrolizumabe",
+   "atc": "L01FF02",
+   "classe": "Inibidor de checkpoint imune — anti-PD-1 (IgG4 humanizado)"
+  },
+  {
+   "id": "nivolumabe",
+   "atc": "L01FF01",
+   "classe": "Inibidor de checkpoint imune — anti-PD-1 (IgG4 humano)"
+  },
+  {
+   "id": "ipilimumabe",
+   "atc": "L01FX04",
+   "classe": "Inibidor de checkpoint imune — anti-CTLA-4 (IgG1 humano)"
+  },
+  {
+   "id": "rituximabe",
+   "atc": "L01FA01",
+   "classe": "Anticorpo monoclonal — anti-CD20 (IgG1 quimérico)"
+  },
+  {
+   "id": "imatinibe",
+   "atc": "L01EA01",
+   "classe": "Inibidor de tirosina quinase (ITK) — BCR-ABL / KIT / PDGFR"
+  },
+  {
+   "id": "trastuzumabe",
+   "atc": "L01FD01",
+   "classe": "Anticorpo monoclonal — anti-HER2/ErbB2 (IgG1 humanizado)"
+  },
+  {
+   "id": "bevacizumabe",
+   "atc": "L01FG01",
+   "classe": "Anticorpo monoclonal — anti-VEGF-A (IgG1 humanizado)"
+  },
+  {
+   "id": "osimertinibe",
+   "atc": "L01EB04",
+   "classe": "Inibidor de EGFR 3ª geração (ITK) — EGFR mutado e T790M"
+  },
+  {
+   "id": "palbociclibe",
+   "atc": "L01EF01",
+   "classe": "Inibidor de CDK4/6"
+  },
+  {
+   "id": "palonossetrona",
+   "atc": "A04AA05",
+   "classe": "Antagonista 5-HT3 de 2ª geração (meia-vida longa)"
+  },
+  {
+   "id": "aprepitanto",
+   "atc": "A04AD12",
+   "classe": "Antagonista de receptor NK1 (neurocinina-1)"
+  },
+  {
+   "id": "filgrastim",
+   "atc": "L03AA02",
+   "classe": "Fator de crescimento de granulócitos — G-CSF recombinante humano"
+  },
+  {
+   "id": "pegfilgrastim",
+   "atc": "L03AA13",
+   "classe": "Fator de crescimento de granulócitos peguilado (meia-vida prolongada)"
+  },
+  {
+   "id": "mesna",
+   "atc": "V03AF01",
+   "classe": "Uroprotector — inativador de acroleína"
+  },
+  {
+   "id": "alopurinol-onco",
+   "atc": "M04AA01",
+   "classe": "Inibidor de xantina oxidase"
+  },
+  {
+   "id": "leucovorin",
+   "atc": "V03AF03",
+   "classe": "Vitamina B9 reduzida — antagonista do metotrexato"
+  },
+  {
+   "id": "rasburicase",
+   "atc": "V03AF07",
+   "classe": "Uricase recombinante — enzima degradadora de ácido úrico"
+  },
+  {
+   "id": "norepinefrina",
+   "atc": "C01CA03",
+   "classe": "Catecolamina — agonista α1 predominante + β1 moderado"
+  },
+  {
+   "id": "epinefrina-uti",
+   "atc": "C01CA24",
+   "classe": "Catecolamina — agonista α + β1 + β2"
+  },
+  {
+   "id": "vasopressina",
+   "atc": "H01BA01",
+   "classe": "Análogo de vasopressina — agonista V1R/V2R"
+  },
+  {
+   "id": "dobutamina",
+   "atc": "C01CA07",
+   "classe": "Catecolamina sintética — agonista β1 predominante (inotrópico)"
+  },
+  {
+   "id": "dopamina",
+   "atc": "C01CA04",
+   "classe": "Catecolamina endógena — agonista dopaminérgico + β1 + α1 (dose-dependente)"
+  },
+  {
+   "id": "milrinona",
+   "atc": "C01CE02",
+   "classe": "Inibidor de fosfodiesterase-3 (PDE-3) — inotrópico + vasodilatador"
+  },
+  {
+   "id": "propofol-uti",
+   "atc": "N01AX10",
+   "classe": "Anestésico geral IV — modulador GABA-A"
+  },
+  {
+   "id": "dexmedetomidina",
+   "atc": "N05CM18",
+   "classe": "Agonista α2-adrenérgico central — sedativo-analgésico-ansiolítico"
+  },
+  {
+   "id": "midazolam-uti",
+   "atc": "N05CD08",
+   "classe": "Benzodiazepínico de meia-vida intermediária — potenciador GABA-A"
+  },
+  {
+   "id": "ketamina-uti",
+   "atc": "N01AX03",
+   "classe": "Antagonista de receptor NMDA — anestésico dissociativo"
+  },
+  {
+   "id": "etomidato",
+   "atc": "N01AX07",
+   "classe": "Hipnótico não barbitúrico — modulador GABA-A (imidazol)"
+  },
+  {
+   "id": "fentanil-uti",
+   "atc": "N02AB03",
+   "classe": "Opioide — agonista µ (altamente lipofílico, curta duração em bolus)"
+  },
+  {
+   "id": "remifentanil",
+   "atc": "N01AH06",
+   "classe": "Opioide — agonista µ de ultra-curta duração (éster — hidrólise por esterases)"
+  },
+  {
+   "id": "succinilcolina",
+   "atc": "M03AB01",
+   "classe": "Bloqueador neuromuscular despolarizante — agonista nicotínico persistente"
+  },
+  {
+   "id": "rocurônio",
+   "atc": "M03AC09",
+   "classe": "Bloqueador neuromuscular não-despolarizante (aminoesteroide)"
+  },
+  {
+   "id": "cisatracúrio",
+   "atc": "M03AC11",
+   "classe": "Bloqueador neuromuscular não-despolarizante (benzilisoquinolínico)"
+  },
+  {
+   "id": "sugamadex",
+   "atc": "V03AB35",
+   "classe": "Ciclodextrina modificada — agente de encapsulação seletiva de BNM aminosteroidal"
+  },
+  {
+   "id": "hidrocortisona-choque",
+   "atc": "H02AB09",
+   "classe": "Corticosteroide — glicocorticoide + mineralocorticoide"
+  },
+  {
+   "id": "acido-tranexamico",
+   "atc": "B02AA02",
+   "classe": "Antifibrinolítico — inibidor da plasmina e ativadores do plasminogênio"
+  },
+  {
+   "id": "amiodarona-pcr",
+   "atc": "C01BD01",
+   "classe": "Antiarrítmico Classe III — bloqueia canais K+ (prolongamento QT)"
+  },
+  {
+   "id": "adenosina",
+   "atc": "C01EB10",
+   "classe": "Nucleosídeo endógeno — agonista de receptor A1 (bloqueia nó AV transitoriamente)"
+  },
+  {
+   "id": "bicarbonato-sodio-pcr",
+   "atc": "B05XA02",
+   "classe": "Tampão — alcalinizante sistêmico"
+  },
+  {
+   "id": "gluconato-calcio",
+   "atc": "A12AA03",
+   "classe": "Eletrólito — cálcio iônico divalente"
+  },
+  {
+   "id": "atropina",
+   "atc": "A03BA01",
+   "classe": "Anticolinérgico — antagonista muscarínico"
+  },
+  {
+   "id": "alteplase-tep",
+   "atc": "B01AD02",
+   "classe": "Trombolítico — ativador de plasminogênio tecidual recombinante (rtPA)"
+  },
+  {
+   "id": "naloxona",
+   "atc": "V03AB15",
+   "classe": "Antagonista opioide — bloqueador µ/κ/δ competitivo"
+  },
+  {
+   "id": "flumazenil",
+   "atc": "V03AB25",
+   "classe": "Antagonista competitivo de receptor GABA-A benzodiazepínico"
+  },
+  {
+   "id": "tramadol-paliativo",
+   "atc": "N02AX02",
+   "classe": "Opioide fraco — agonista µ parcial + inibidor recaptação serotonina/noradrenalina"
+  },
+  {
+   "id": "codeina",
+   "atc": "N02AA59",
+   "classe": "Opioide fraco — pró-fármaco da morfina (via CYP2D6)"
+  },
+  {
+   "id": "morfina-paliativa",
+   "atc": "N02AA01",
+   "classe": "Opioide forte — agonista µ pleno (padrão ouro em cuidados paliativos)"
+  },
+  {
+   "id": "oxicodona-paliativa",
+   "atc": "N02AA05",
+   "classe": "Opioide forte — agonista µ/κ pleno"
+  },
+  {
+   "id": "fentanil-transdermico",
+   "atc": "N02AB03",
+   "classe": "Opioide forte — transdérmico (70h de duração)"
+  },
+  {
+   "id": "buprenorfina-transdermico",
+   "atc": "N02AE01",
+   "classe": "Agonista µ parcial — transdérmico (seguro em IR/IH)"
+  },
+  {
+   "id": "hidromorfona",
+   "atc": "N02AA03",
+   "classe": "Opioide forte — agonista µ pleno (análogo hidrogenado da morfina)"
+  },
+  {
+   "id": "metadona-paliativa",
+   "atc": "N07BC02",
+   "classe": "Opioide forte — agonista µ pleno + antagonista NMDA + inibidor recaptação serotonina"
+  },
+  {
+   "id": "midazolam-paliativo",
+   "atc": "N05CD08",
+   "classe": "Benzodiazepínico — sedativo-hipnótico (GABA-A)"
+  },
+  {
+   "id": "fenobarbital-paliativo",
+   "atc": "N03AA02",
+   "classe": "Barbitúrico — modulador GABA-A (sedação mais profunda que BZD)"
+  },
+  {
+   "id": "haloperidol-paliativo",
+   "atc": "N05AD01",
+   "classe": "Antipsicótico típico — antagonista D2 (butirofenona)"
+  },
+  {
+   "id": "levomepromazina",
+   "atc": "N05AA02",
+   "classe": "Antipsicótico fenotiazínico sedativo — antagonista D2, H1, M1, α1, 5-HT2"
+  },
+  {
+   "id": "lorazepam-paliativo",
+   "atc": "N05BA06",
+   "classe": "Benzodiazepínico de ação intermediária (sem metabólito ativo)"
+  },
+  {
+   "id": "metoclopramida-paliativa",
+   "atc": "A03FA01",
+   "classe": "Antagonista D2 / 5-HT4 agonista — antiemético + procinético"
+  },
+  {
+   "id": "ondansetrona-paliativa",
+   "atc": "A04AA01",
+   "classe": "Antagonista 5-HT3 — antiemético central e periférico"
+  },
+  {
+   "id": "hioscina-butilbrometo",
+   "atc": "A03BB01",
+   "classe": "Anticolinérgico quaternário — antagonista muscarínico periférico (não cruza BHE)"
+  },
+  {
+   "id": "glicopirronio-sc",
+   "atc": "A03AB02",
+   "classe": "Anticolinérgico quaternário — antagonista muscarínico periférico"
+  },
+  {
+   "id": "metilnaltrexona",
+   "atc": "A06AH01",
+   "classe": "Antagonista opioide periférico (PAMORA) — bloqueio intestinal sem reverter analgesia central"
+  },
+  {
+   "id": "dexametasona-paliativa",
+   "atc": "H02AB02",
+   "classe": "Corticosteroide — glicocorticoide (potência relativa: 1 mg dex ≈ 7 mg prednisona)"
+  },
+  {
+   "id": "gabapentina-paliativa",
+   "atc": "N03AX12",
+   "classe": "Análogo GABA — modulador de canais de cálcio (α2δ) — antineuropático"
+  },
+  {
+   "id": "amitriptilina-paliativa",
+   "atc": "N06AA09",
+   "classe": "Antidepressivo tricíclico (TCA) — inibidor recaptação NE/5-HT + anticolinérgico"
+  },
+  {
+   "id": "octreotida-paliativa",
+   "atc": "H01CB02",
+   "classe": "Análogo da somatostatina — inibidor de secreções GI e pancreáticas"
+  },
+  {
+   "id": "naloxona-antidoto-opioide",
+   "atc": "V03AB15",
+   "classe": "Antagonista opioide — bloqueador µ competitivo"
+  },
+  {
+   "id": "levocetirizina",
+   "atc": null,
+   "classe": "Anti-histamínico H1 de 3ª Geração"
+  },
+  {
+   "id": "divalproato-sodio",
+   "atc": null,
+   "classe": "Anticonvulsivante / Estabilizador do Humor"
+  },
+  {
+   "id": "acido-ibandronico",
+   "atc": null,
+   "classe": "Bifosfonato — Inibidor da Reabsorção Óssea"
+  },
+  {
+   "id": "trimebutina",
+   "atc": null,
+   "classe": "Regulador da Motilidade Intestinal — Antiespasmódico"
+  },
+  {
+   "id": "colecalciferol",
+   "atc": null,
+   "classe": "Vitamina D"
+  },
+  {
+   "id": "hidroxocobalamina",
+   "atc": null,
+   "classe": "Vitamina B12 — Injetável IM"
+  },
+  {
+   "id": "nitrato-fenticonazol",
+   "atc": null,
+   "classe": "Antifúngico Tópico — Imidazólico Vaginal"
+  },
+  {
+   "id": "promestrieno",
+   "atc": null,
+   "classe": "Estrogênio Tópico — Tratamento da Atrofia Vulvovaginal"
+  },
+  {
+   "id": "canabidiol",
+   "atc": null,
+   "classe": "Canabinóide — Fitoterápico Derivado de Cannabis"
+  },
+  {
+   "id": "formoterol_fluticasona",
+   "atc": null,
+   "classe": "ICS + LABA — Corticosteroide Inalatório + Beta-2 Agonista de Longa Ação"
+  },
+  {
+   "id": "montelucaste_levocetirizina",
+   "atc": null,
+   "classe": "Antagonista de Leucotrienos + Anti-histamínico H1 de 3ª Geração (Associação)"
+  },
+  {
+   "id": "doxazosina_finasterida",
+   "atc": null,
+   "classe": "Alfa-1 Bloqueador + Inibidor da 5-Alfa-Redutase (Associação para HPB)"
+  },
+  {
+   "id": "tramadol_paracetamol",
+   "atc": null,
+   "classe": "Associação Opioide (Agonista μ) + Analgésico Não Opioide"
+  },
+  {
+   "id": "diosmina_hesperidina",
+   "atc": null,
+   "classe": "Flebotônico / Venoativo — Flavonoide"
+  },
+  {
+   "id": "betametasona_dipropionato_fosfato",
+   "atc": null,
+   "classe": "Corticosteroide de Ação Prolongada — Uso Injetável (Depósito)"
+  },
+  {
+   "id": "etinilestradiol_ciproterona",
+   "atc": null,
+   "classe": "Anticoncepcional Hormonal Combinado — Antiandrogênico"
+  },
+  {
+   "id": "clormadinona_etinilestradiol",
+   "atc": null,
+   "classe": "Anticoncepcional Hormonal Combinado Oral (AHCO)"
+  },
+  {
+   "id": "desogestrel_etinilestradiol",
+   "atc": null,
+   "classe": "Anticoncepcional Hormonal Combinado Oral (AHCO) — Baixa Dose"
+  },
+  {
+   "id": "cetoconazol_betametasona",
+   "atc": null,
+   "classe": "Antifúngico + Corticosteroide Tópico"
+  },
+  {
+   "id": "betametasona_gentamicina",
+   "atc": null,
+   "classe": "Corticosteroide + Antibiótico Tópico"
+  },
+  {
+   "id": "cetoconazol_betametasona_neomicina",
+   "atc": null,
+   "classe": "Antifúngico + Corticosteroide + Antibiótico Tópico"
+  },
+  {
+   "id": "tinidazol_miconazol",
+   "atc": null,
+   "classe": "Antiprotozoário + Antifúngico — Uso Vaginal"
+  }
+ ],
+ "atomos": [
+  {
+   "atomo": "varfarina",
+   "n": 47,
+   "ex": [
+    "Varfarina",
+    "Varfarina/DOACs"
+   ]
+  },
+  {
+   "atomo": "rifampicina",
+   "n": 32,
+   "ex": [
+    "Rifampicina",
+    "Rifampicina, dexametasona, fenitoína, carbamazepina"
+   ]
+  },
+  {
+   "atomo": "carbamazepina",
+   "n": 28,
+   "ex": [
+    "Carbamazepina",
+    "Carbamazepina e outros indutores enzimáticos"
+   ]
+  },
+  {
+   "atomo": "aines",
+   "n": 27,
+   "ex": [
+    "AINEs",
+    "AINEs/tiazídicos"
+   ]
+  },
+  {
+   "atomo": "litio",
+   "n": 23,
+   "ex": [
+    "Lítio",
+    "Lítio (altas doses)"
+   ]
+  },
+  {
+   "atomo": "alcool",
+   "n": 23,
+   "ex": [
+    "Álcool",
+    "Álcool (paracetamol)"
+   ]
+  },
+  {
+   "atomo": "digoxina",
+   "n": 22,
+   "ex": [
+    "Digoxina",
+    "Outros inotrópicos/simpatomiméticos e digoxina"
+   ]
+  },
+  {
+   "atomo": "imao",
+   "n": 20,
+   "ex": [
+    "IMAO",
+    "IMAO (selegilina, fenelzina)"
+   ]
+  },
+  {
+   "atomo": "opioides",
+   "n": 18,
+   "ex": [
+    "Opioides",
+    "Opioídes (tramadol, petidina)"
+   ]
+  },
+  {
+   "atomo": "cetoconazol",
+   "n": 18,
+   "ex": [
+    "Cetoconazol",
+    "Cetoconazol/Eritromicina"
+   ]
+  },
+  {
+   "atomo": "inibidores cyp3a4",
+   "n": 18,
+   "ex": [
+    "Inibidores CYP3A4",
+    "Inibidores CYP3A4 (cetoconazol, ritonavir)"
+   ]
+  },
+  {
+   "atomo": "fenitoina",
+   "n": 18,
+   "ex": [
+    "Fenitoína",
+    "Rifampicina, dexametasona, fenitoína, carbamazepina"
+   ]
+  },
+  {
+   "atomo": "insulina",
+   "n": 17,
+   "ex": [
+    "Hipoglicemiantes / insulina",
+    "Insulina"
+   ]
+  },
+  {
+   "atomo": "metotrexato",
+   "n": 15,
+   "ex": [
+    "Metotrexato",
+    "Metotrexato (altas doses)"
+   ]
+  },
+  {
+   "atomo": "betabloqueadores",
+   "n": 14,
+   "ex": [
+    "Betabloqueadores/antiarrítmicos",
+    "Betabloqueadores"
+   ]
+  },
+  {
+   "atomo": "ciclosporina",
+   "n": 13,
+   "ex": [
+    "Ciclosporina",
+    "Tacrolimus/Ciclosporina"
+   ]
+  },
+  {
+   "atomo": "bzd",
+   "n": 13,
+   "ex": [
+    "Álcool / BZD / outros depressores SNC",
+    "BZD / álcool"
+   ]
+  },
+  {
+   "atomo": "amiodarona",
+   "n": 12,
+   "ex": [
+    "Amiodarona",
+    "Amiodarona/QT-prolongadores"
+   ]
+  },
+  {
+   "atomo": "aminoglicosideos",
+   "n": 12,
+   "ex": [
+    "Aminoglicosídeos",
+    "Aminoglicosídeos (amicacina, gentamicina)"
+   ]
+  },
+  {
+   "atomo": "qt-prolongadores",
+   "n": 12,
+   "ex": [
+    "QT-prolongadores",
+    "Amiodarona/QT-prolongadores"
+   ]
+  },
+  {
+   "atomo": "eritromicina",
+   "n": 11,
+   "ex": [
+    "Cetoconazol/Eritromicina",
+    "Eritromicina/claritromicina"
+   ]
+  },
+  {
+   "atomo": "anticoagulantes",
+   "n": 11,
+   "ex": [
+    "Anticoagulantes",
+    "Anticoagulantes (varfarina)"
+   ]
+  },
+  {
+   "atomo": "fluconazol",
+   "n": 10,
+   "ex": [
+    "Fluconazol",
+    "Fluconazol/miconazol"
+   ]
+  },
+  {
+   "atomo": "verapamil",
+   "n": 9,
+   "ex": [
+    "Verapamil",
+    "Verapamil/diltiazem"
+   ]
+  },
+  {
+   "atomo": "imaos",
+   "n": 9,
+   "ex": [
+    "IMAOs",
+    "IMAOs/antidepressivos serotoninérgicos"
+   ]
+  },
+  {
+   "atomo": "ieca",
+   "n": 9,
+   "ex": [
+    "IECA/BRA",
+    "IECA (duplo bloqueio)"
+   ]
+  },
+  {
+   "atomo": "ritonavir",
+   "n": 8,
+   "ex": [
+    "Ritonavir",
+    "Ritonavir / Cobicistate"
+   ]
+  },
+  {
+   "atomo": "antidiabeticos",
+   "n": 8,
+   "ex": [
+    "Antidiabéticos",
+    "insulina / antidiabéticos"
+   ]
+  },
+  {
+   "atomo": "hipoglicemiantes",
+   "n": 7,
+   "ex": [
+    "Hipoglicemiantes / insulina",
+    "Insulina / hipoglicemiantes"
+   ]
+  },
+  {
+   "atomo": "claritromicina",
+   "n": 7,
+   "ex": [
+    "Claritromicina",
+    "Eritromicina/claritromicina"
+   ]
+  },
+  {
+   "atomo": "tramadol",
+   "n": 7,
+   "ex": [
+    "Tramadol",
+    "Tramadol/triptanos"
+   ]
+  },
+  {
+   "atomo": "paroxetina",
+   "n": 7,
+   "ex": [
+    "Paroxetina/Fluoxetina",
+    "Fluoxetina / paroxetina"
+   ]
+  },
+  {
+   "atomo": "fluoxetina",
+   "n": 7,
+   "ex": [
+    "Paroxetina/Fluoxetina",
+    "Fluoxetina / paroxetina"
+   ]
+  },
+  {
+   "atomo": "anti-hipertensivos",
+   "n": 7,
+   "ex": [
+    "Anti-hipertensivos"
+   ]
+  },
+  {
+   "atomo": "bra",
+   "n": 7,
+   "ex": [
+    "IECA/BRA",
+    "Losartana/BRA"
+   ]
+  },
+  {
+   "atomo": "benzodiazepinicos",
+   "n": 7,
+   "ex": [
+    "Benzodiazepínicos/depressores SNC",
+    "Benzodiazepínicos/barbitúricos"
+   ]
+  },
+  {
+   "atomo": "antiacidos",
+   "n": 7,
+   "ex": [
+    "Antiácidos/cálcio/ferro oral",
+    "Cálcio/Ferro/Antiácidos"
+   ]
+  },
+  {
+   "atomo": "teofilina",
+   "n": 7,
+   "ex": [
+    "teofilina",
+    "Teofilina"
+   ]
+  },
+  {
+   "atomo": "estatinas",
+   "n": 7,
+   "ex": [
+    "Estatinas (atorvastatina)",
+    "Estatinas (sinvastatina, lovastatina)"
+   ]
+  },
+  {
+   "atomo": "clopidogrel",
+   "n": 6,
+   "ex": [
+    "Clopidogrel"
+   ]
+  },
+  {
+   "atomo": "valproato",
+   "n": 6,
+   "ex": [
+    "Valproato",
+    "valproato"
+   ]
+  },
+  {
+   "atomo": "diltiazem",
+   "n": 6,
+   "ex": [
+    "Verapamil/diltiazem",
+    "Verapamil / Diltiazem (BCC não di-hidropiridínicos)"
+   ]
+  },
+  {
+   "atomo": "anticolinergicos",
+   "n": 6,
+   "ex": [
+    "Anticolinérgicos",
+    "Anticolinérgicos/atropínicos (secantes de secreção)"
+   ]
+  },
+  {
+   "atomo": "aas",
+   "n": 6,
+   "ex": [
+    "AAS/AINEs",
+    "AINEs/AAS"
+   ]
+  },
+  {
+   "atomo": "corticosteroides",
+   "n": 6,
+   "ex": [
+    "Corticosteroides",
+    "Diuréticos e corticosteroides"
+   ]
+  },
+  {
+   "atomo": "levotiroxina",
+   "n": 6,
+   "ex": [
+    "Levotiroxina",
+    "Levotiroxina / ciprofloxacino / tacrolimo / micofenolato"
+   ]
+  },
+  {
+   "atomo": "isrs",
+   "n": 6,
+   "ex": [
+    "ISRS/IRSN (sertralina, venlafaxina, duloxetina)",
+    "ISRS (fluoxetina, paroxetina)"
+   ]
+  },
+  {
+   "atomo": "itraconazol",
+   "n": 6,
+   "ex": [
+    "Cetoconazol / Itraconazol",
+    "Cetoconazol / itraconazol (CYP3A4)"
+   ]
+  },
+  {
+   "atomo": "contraceptivos orais",
+   "n": 6,
+   "ex": [
+    "Contraceptivos orais",
+    "Contraceptivos orais (estrógeno)"
+   ]
+  },
+  {
+   "atomo": "indutores de cyp3a4",
+   "n": 5,
+   "ex": [
+    "Indutores de CYP3A4 (rifampicina, fenitoína, carbamazepina)",
+    "Indutores de CYP3A4 (rifampicina, carbamazepina, fenitoína, erva-de-são-joão)"
+   ]
+  },
+  {
+   "atomo": "espironolactona",
+   "n": 5,
+   "ex": [
+    "Espironolactona",
+    "Espironolactona/Eplerenona"
+   ]
+  },
+  {
+   "atomo": "alisquireno",
+   "n": 5,
+   "ex": [
+    "Alisquireno",
+    "BRA/Alisquireno"
+   ]
+  },
+  {
+   "atomo": "sulfonilureias",
+   "n": 5,
+   "ex": [
+    "Sulfonilureias (glibenclamida, gliclazida)",
+    "Sulfonilureias"
+   ]
+  },
+  {
+   "atomo": "tamoxifeno",
+   "n": 5,
+   "ex": [
+    "Tamoxifeno",
+    "tamoxifeno"
+   ]
+  },
+  {
+   "atomo": "depressores snc",
+   "n": 5,
+   "ex": [
+    "Benzodiazepínicos/depressores SNC",
+    "Opioides / álcool / depressores SNC"
+   ]
+  },
+  {
+   "atomo": "calcio",
+   "n": 5,
+   "ex": [
+    "Antiácidos/cálcio/ferro oral",
+    "Cálcio/Ferro/Antiácidos"
+   ]
+  },
+  {
+   "atomo": "inibidores cyp3a4 potentes",
+   "n": 5,
+   "ex": [
+    "Inibidores CYP3A4 potentes",
+    "Ritonavir / inibidores CYP3A4 potentes"
+   ]
+  },
+  {
+   "atomo": "colestiramina",
+   "n": 5,
+   "ex": [
+    "Colestiramina",
+    "Colestiramina / sevelamer"
+   ]
+  },
+  {
+   "atomo": "ferro",
+   "n": 5,
+   "ex": [
+    "Cálcio/Ferro/Antiácidos",
+    "Levotiroxina / fluorquinolonas / bisfosfonatos / ferro"
+   ]
+  },
+  {
+   "atomo": "beta-bloqueadores nao seletivos",
+   "n": 5,
+   "ex": [
+    "Beta-bloqueadores não seletivos"
+   ]
+  },
+  {
+   "atomo": "fluorquinolonas",
+   "n": 5,
+   "ex": [
+    "Fluorquinolonas",
+    "Levotiroxina / fluorquinolonas / bisfosfonatos / ferro"
+   ]
+  },
+  {
+   "atomo": "aine",
+   "n": 4,
+   "ex": [
+    "AINE",
+    "AINE/Aspirina"
+   ]
+  },
+  {
+   "atomo": "enalapril",
+   "n": 4,
+   "ex": [
+    "Enalapril"
+   ]
+  },
+  {
+   "atomo": "diureticos",
+   "n": 4,
+   "ex": [
+    "Diuréticos",
+    "Diuréticos (furosemida, HCTZ, clortalidona)"
+   ]
+  },
+  {
+   "atomo": "aspirina",
+   "n": 4,
+   "ex": [
+    "AINE/Aspirina",
+    "Aspirina"
+   ]
+  },
+  {
+   "atomo": "cimetidina",
+   "n": 4,
+   "ex": [
+    "Probenecida/Cimetidina",
+    "Cimetidina"
+   ]
+  },
+  {
+   "atomo": "clonidina",
+   "n": 4,
+   "ex": [
+    "Clonidina"
+   ]
+  },
+  {
+   "atomo": "antiacidos com al",
+   "n": 4,
+   "ex": [
+    "Antiácidos com Al/Mg/Ca",
+    "Antiácidos com Al ou Mg"
+   ]
+  },
+  {
+   "atomo": "mg",
+   "n": 4,
+   "ex": [
+    "Antiácidos com Al/Mg/Ca",
+    "Antiácidos com Al ou Mg"
+   ]
+  },
+  {
+   "atomo": "p-gp",
+   "n": 4,
+   "ex": [
+    "Inibidores CYP3A4 + P-gp (cetoconazol, ritonavir, claritromicina)",
+    "Indutores CYP3A4 + P-gp (rifampicina, fenitoína, carbamazepina)"
+   ]
+  },
+  {
+   "atomo": "irsn",
+   "n": 4,
+   "ex": [
+    "ISRS/IRSN (sertralina, venlafaxina, duloxetina)",
+    "ISRS/IRSN/TCA/outros antidepressivos"
+   ]
+  },
+  {
+   "atomo": "tacrolimus",
+   "n": 4,
+   "ex": [
+    "Tacrolimus/Ciclosporina",
+    "Tacrolimus"
+   ]
+  },
+  {
+   "atomo": "antidepressivos triciclicos",
+   "n": 4,
+   "ex": [
+    "IMAO / antidepressivos tricíclicos",
+    "antidepressivos tricíclicos"
+   ]
+  },
+  {
+   "atomo": "fluvoxamina",
+   "n": 4,
+   "ex": [
+    "Fluvoxamina",
+    "Fluvoxamina / omeprazol (CYP2C19)"
+   ]
+  },
+  {
+   "atomo": "lamotrigina",
+   "n": 4,
+   "ex": [
+    "Lamotrigina"
+   ]
+  },
+  {
+   "atomo": "losartana",
+   "n": 3,
+   "ex": [
+    "Losartana",
+    "Losartana/BRA"
+   ]
+  },
+  {
+   "atomo": "sinvastatina",
+   "n": 3,
+   "ex": [
+    "Sinvastatina",
+    "sinvastatina"
+   ]
+  },
+  {
+   "atomo": "furosemida",
+   "n": 3,
+   "ex": [
+    "Furosemida",
+    "Laxativos / furosemida"
+   ]
+  },
+  {
+   "atomo": "beta-bloqueadores",
+   "n": 3,
+   "ex": [
+    "Beta-bloqueadores"
+   ]
+  },
+  {
+   "atomo": "tiazidicos",
+   "n": 3,
+   "ex": [
+    "AINEs/tiazídicos",
+    "Tiazídicos"
+   ]
+  },
+  {
+   "atomo": "depressores do snc",
+   "n": 3,
+   "ex": [
+    "Depressores do SNC (álcool, benzodiazepínicos, opioides)",
+    "Álcool e depressores do SNC"
+   ]
+  },
+  {
+   "atomo": "antibioticos",
+   "n": 3,
+   "ex": [
+    "Antibióticos (amplo espectro)",
+    "Antibióticos (amoxicilina, eritromicina, cefuroxima)"
+   ]
+  },
+  {
+   "atomo": "omeprazol",
+   "n": 3,
+   "ex": [
+    "Omeprazol/Esomeprazol",
+    "Omeprazol / Esomeprazol"
+   ]
+  },
+  {
+   "atomo": "isglt2",
+   "n": 3,
+   "ex": [
+    "iSGLT2 (empagliflozina, dapagliflozina)",
+    "iSGLT2"
+   ]
+  },
+  {
+   "atomo": "dexametasona",
+   "n": 3,
+   "ex": [
+    "Rifampicina, dexametasona, fenitoína, carbamazepina",
+    "Dexametasona"
+   ]
+  },
+  {
+   "atomo": "outros anticolinergicos",
+   "n": 3,
+   "ex": [
+    "Outros anticolinérgicos (tiotrópio, ipratrópio)",
+    "Outros anticolinérgicos"
+   ]
+  },
+  {
+   "atomo": "outros lamas",
+   "n": 3,
+   "ex": [
+    "Outros LAMAs / ipratrópio",
+    "Outros LAMAs (tiotrópio, umeclidínio)"
+   ]
+  },
+  {
+   "atomo": "ciprofloxacino",
+   "n": 3,
+   "ex": [
+    "Ciprofloxacino / Claritromicina",
+    "Ciprofloxacino"
+   ]
+  },
+  {
+   "atomo": "tabagismo",
+   "n": 3,
+   "ex": [
+    "Tabagismo",
+    "Tabagismo / carbamazepina"
+   ]
+  },
+  {
+   "atomo": "voriconazol",
+   "n": 3,
+   "ex": [
+    "Voriconazol",
+    "Fluconazol / voriconazol / itraconazol"
+   ]
+  },
+  {
+   "atomo": "outros depressores snc",
+   "n": 3,
+   "ex": [
+    "Álcool / BZD / outros depressores SNC",
+    "Opioides / álcool / outros depressores SNC"
+   ]
+  },
+  {
+   "atomo": "grapefruit",
+   "n": 3,
+   "ex": [
+    "Cetoconazol / eritromicina / grapefruit",
+    "Grapefruit (suco)"
+   ]
+  },
+  {
+   "atomo": "propofol",
+   "n": 3,
+   "ex": [
+    "Opioides / propofol",
+    "BZD / propofol"
+   ]
+  },
+  {
+   "atomo": "apomorfina",
+   "n": 3,
+   "ex": [
+    "Apomorfina",
+    "apomorfina"
+   ]
+  },
+  {
+   "atomo": "antipsicoticos",
+   "n": 3,
+   "ex": [
+    "Antipsicóticos / levodopa",
+    "antipsicóticos"
+   ]
+  },
+  {
+   "atomo": "fenobarbital",
+   "n": 3,
+   "ex": [
+    "fenobarbital",
+    "Fenobarbital/rifampicina"
+   ]
+  },
+  {
+   "atomo": "cisplatina",
+   "n": 3,
+   "ex": [
+    "cisplatina"
+   ]
+  },
+  {
+   "atomo": "β-bloqueadores",
+   "n": 3,
+   "ex": [
+    "β-bloqueadores"
+   ]
+  },
+  {
+   "atomo": "magnesio",
+   "n": 3,
+   "ex": [
+    "magnésio",
+    "antiácidos com alumínio/magnésio"
+   ]
+  },
+  {
+   "atomo": "sotalol",
+   "n": 3,
+   "ex": [
+    "sotalol / outros antiarrítmicos",
+    "amiodarona / sotalol"
+   ]
+  },
+  {
+   "atomo": "anticoncepcionais orais",
+   "n": 2,
+   "ex": [
+    "Anticoncepcionais orais"
+   ]
+  },
+  {
+   "atomo": "levodopa",
+   "n": 2,
+   "ex": [
+    "Levodopa",
+    "Antipsicóticos / levodopa"
+   ]
+  },
+  {
+   "atomo": "probenecida",
+   "n": 2,
+   "ex": [
+    "Probenecida/Cimetidina",
+    "probenecida"
+   ]
+  },
+  {
+   "atomo": "triptanos",
+   "n": 2,
+   "ex": [
+    "Tramadol/triptanos",
+    "Tramadol / Triptanos"
+   ]
+  },
+  {
+   "atomo": "antihipertensivos",
+   "n": 2,
+   "ex": [
+    "Antihipertensivos",
+    "antihipertensivos"
+   ]
+  },
+  {
+   "atomo": "nitratos",
+   "n": 2,
+   "ex": [
+    "Nitratos (nitroglicerina, isossorbida)",
+    "nitratos"
+   ]
+  },
+  {
+   "atomo": "antifungicos azolicos",
+   "n": 2,
+   "ex": [
+    "Antifúngicos azólicos (cetoconazol)",
+    "antifúngicos azólicos"
+   ]
+  },
+  {
+   "atomo": "ferro oral",
+   "n": 2,
+   "ex": [
+    "Antiácidos/cálcio/ferro oral",
+    "Ferro oral"
+   ]
+  },
+  {
+   "atomo": "ca",
+   "n": 2,
+   "ex": [
+    "Antiácidos com Al/Mg/Ca",
+    "Antiácidos com Al/Mg, Fe, Ca, Zn"
+   ]
+  },
+  {
+   "atomo": "ipratropio",
+   "n": 2,
+   "ex": [
+    "ipratropio",
+    "Outros LAMAs / ipratrópio"
+   ]
+  },
+  {
+   "atomo": "tiotropio",
+   "n": 2,
+   "ex": [
+    "tiotropio",
+    "Tiotrópio / Umeclidínio (LAMA)"
+   ]
+  },
+  {
+   "atomo": "beta-bloqueador",
+   "n": 2,
+   "ex": [
+    "beta-bloqueador"
+   ]
+  },
+  {
+   "atomo": "sacubitril",
+   "n": 2,
+   "ex": [
+    "Sacubitril/Valsartana"
+   ]
+  },
+  {
+   "atomo": "valsartana",
+   "n": 2,
+   "ex": [
+    "Sacubitril/Valsartana"
+   ]
+  },
+  {
+   "atomo": "cyp3a4 inibidores",
+   "n": 2,
+   "ex": [
+    "CYP3A4 inibidores (cetoconazol, claritromicina)",
+    "CYP3A4 inibidores (cetoconazol, itraconazol)"
+   ]
+  },
+  {
+   "atomo": "colchicina",
+   "n": 2,
+   "ex": [
+    "Colchicina"
+   ]
+  },
+  {
+   "atomo": "suplementos de k",
+   "n": 2,
+   "ex": [
+    "Suplementos de K+",
+    "Poupadores de potássio/suplementos de K+"
+   ]
+  },
+  {
+   "atomo": "quinidina",
+   "n": 2,
+   "ex": [
+    "Quinidina",
+    "Quinidina / ritonavir (P-gp inibidores)"
+   ]
+  },
+  {
+   "atomo": "metronidazol",
+   "n": 2,
+   "ex": [
+    "Fluconazol/Metronidazol",
+    "metronidazol"
+   ]
+  },
+  {
+   "atomo": "indutores cyp3a4",
+   "n": 2,
+   "ex": [
+    "Indutores CYP3A4 + P-gp (rifampicina, fenitoína, carbamazepina)",
+    "Indutores CYP3A4 + P-gp (rifampicina)"
+   ]
+  },
+  {
+   "atomo": "esomeprazol",
+   "n": 2,
+   "ex": [
+    "Omeprazol/Esomeprazol",
+    "Omeprazol / Esomeprazol"
+   ]
+  },
+  {
+   "atomo": "digitalicos",
+   "n": 2,
+   "ex": [
+    "Digitálicos"
+   ]
+  },
+  {
+   "atomo": "barbituricos",
+   "n": 2,
+   "ex": [
+    "Barbitúricos/narcóticos/álcool",
+    "Benzodiazepínicos/barbitúricos"
+   ]
+  },
+  {
+   "atomo": "tiazolidinedionas",
+   "n": 2,
+   "ex": [
+    "Tiazolidinedionas",
+    "Tiazolidinedionas (pioglitazona)"
+   ]
+  },
+  {
+   "atomo": "glp-1",
+   "n": 2,
+   "ex": [
+    "GLP-1 (liraglutida, semaglutida)",
+    "GLP-1/iSGLT2"
+   ]
+  },
+  {
+   "atomo": "vancomicina",
+   "n": 2,
+   "ex": [
+    "Vancomicina"
+   ]
+  },
+  {
+   "atomo": "alopurinol",
+   "n": 2,
+   "ex": [
+    "Alopurinol"
+   ]
+  },
+  {
+   "atomo": "bloqueadores neuromusculares",
+   "n": 2,
+   "ex": [
+    "Bloqueadores neuromusculares",
+    "bloqueadores neuromusculares"
+   ]
+  },
+  {
+   "atomo": "fe",
+   "n": 2,
+   "ex": [
+    "Antiácidos com Al/Mg, Ca2+, Fe, Zinco",
+    "Antiácidos com Al/Mg, Fe, Ca, Zn"
+   ]
+  },
+  {
+   "atomo": "diureticos de alca",
+   "n": 2,
+   "ex": [
+    "Diuréticos de alça (furosemida)",
+    "Diuréticos de alça"
+   ]
+  },
+  {
+   "atomo": "simpaticomimeticos",
+   "n": 2,
+   "ex": [
+    "Simpaticomiméticos (pseudoefedrina, dopamina)",
+    "Simpaticomiméticos (pseudoefedrina, fenilefrina, dopamina)"
+   ]
+  },
+  {
+   "atomo": "inibidores potentes de cyp3a4",
+   "n": 2,
+   "ex": [
+    "Inibidores potentes de CYP3A4 (cetoconazol, ritonavir, itraconazol)",
+    "Inibidores potentes de CYP3A4 (cetoconazol, ritonavir)"
+   ]
+  },
+  {
+   "atomo": "acido valproico",
+   "n": 2,
+   "ex": [
+    "Ácido valproico",
+    "Ácido valpróico"
+   ]
+  },
+  {
+   "atomo": "atazanavir",
+   "n": 2,
+   "ex": [
+    "Atazanavir / rilpivirina",
+    "Atazanavir"
+   ]
+  },
+  {
+   "atomo": "bisfosfonatos",
+   "n": 2,
+   "ex": [
+    "Levotiroxina / fluorquinolonas / bisfosfonatos / ferro",
+    "Fluorquinolonas / levotiroxina / ferro / bisfosfonatos"
+   ]
+  },
+  {
+   "atomo": "diureticos tiazidicos",
+   "n": 2,
+   "ex": [
+    "Diuréticos tiazídicos",
+    "Diuréticos tiazídicos ou de alça"
+   ]
+  },
+  {
+   "atomo": "indutores enzimaticos",
+   "n": 2,
+   "ex": [
+    "Indutores enzimáticos (rifampicina, barbitúricos, carbamazepina, fenitoína, oxcarbazepina, griseofulvina)",
+    "Indutores enzimáticos (fenitoína, rifampicina)"
+   ]
+  },
+  {
+   "atomo": "inibidores de cyp3a4",
+   "n": 2,
+   "ex": [
+    "Inibidores de CYP3A4 (cetoconazol e azólicos)",
+    "Inibidores de CYP3A4 (cetoconazol, ritonavir)"
+   ]
+  },
+  {
+   "atomo": "fluorouracil",
+   "n": 2,
+   "ex": [
+    "fluorouracil"
+   ]
+  },
+  {
+   "atomo": "doxorrubicina",
+   "n": 2,
+   "ex": [
+    "doxorrubicina"
+   ]
+  },
+  {
+   "atomo": "paclitaxel",
+   "n": 2,
+   "ex": [
+    "paclitaxel"
+   ]
+  },
+  {
+   "atomo": "ipilimumabe",
+   "n": 2,
+   "ex": [
+    "ipilimumabe"
+   ]
+  },
+  {
+   "atomo": "quimioterapicos citotoxicos",
+   "n": 2,
+   "ex": [
+    "Quimioterápicos citotóxicos"
+   ]
+  },
+  {
+   "atomo": "buprenorfina",
+   "n": 2,
+   "ex": [
+    "Buprenorfina"
+   ]
+  },
+  {
+   "atomo": "morfina sc",
+   "n": 2,
+   "ex": [
+    "morfina SC (mesma seringa)",
+    "morfina SC"
+   ]
+  },
+  {
+   "atomo": "outros aminoglicosideos",
+   "n": 2,
+   "ex": [
+    "Outros aminoglicosídeos (tópicos ou sistêmicos)"
+   ]
+  },
+  {
+   "atomo": "diureticos espoliadores de potassio",
+   "n": 1,
+   "ex": [
+    "Diuréticos espoliadores de potássio"
+   ]
+  },
+  {
+   "atomo": "vacinas de virus vivo",
+   "n": 1,
+   "ex": [
+    "Vacinas de vírus vivo"
+   ]
+  },
+  {
+   "atomo": "anlodipino",
+   "n": 1,
+   "ex": [
+    "Anlodipino"
+   ]
+  },
+  {
+   "atomo": "contraste iodado iv",
+   "n": 1,
+   "ex": [
+    "Contraste iodado IV"
+   ]
+  },
+  {
+   "atomo": "indutores potentes de cyp",
+   "n": 1,
+   "ex": [
+    "Indutores potentes de CYP (fenobarbital, rifampicina, fenitoína, carbamazepina)"
+   ]
+  },
+  {
+   "atomo": "genfibrozila",
+   "n": 1,
+   "ex": [
+    "Genfibrozila"
+   ]
+  },
+  {
+   "atomo": "metoclopramida",
+   "n": 1,
+   "ex": [
+    "Metoclopramida"
+   ]
+  },
+  {
+   "atomo": "anti-histaminicos",
+   "n": 1,
+   "ex": [
+    "Anti-histamínicos (H1)"
+   ]
+  },
+  {
+   "atomo": "inibidores da mao",
+   "n": 1,
+   "ex": [
+    "Inibidores da MAO (incl. MAO-B, ex.: selegilina)"
+   ]
+  },
+  {
+   "atomo": "ibuprofeno",
+   "n": 1,
+   "ex": [
+    "Ibuprofeno"
+   ]
+  },
+  {
+   "atomo": "suco citrico",
+   "n": 1,
+   "ex": [
+    "Suco cítrico/maçã"
+   ]
+  },
+  {
+   "atomo": "maca",
+   "n": 1,
+   "ex": [
+    "Suco cítrico/maçã"
+   ]
+  },
+  {
+   "atomo": "outros aines",
+   "n": 1,
+   "ex": [
+    "Outros AINEs"
+   ]
+  },
+  {
+   "atomo": "antidepressivos serotoninergicos",
+   "n": 1,
+   "ex": [
+    "IMAOs/antidepressivos serotoninérgicos"
+   ]
+  },
+  {
+   "atomo": "inibidores pde5",
+   "n": 1,
+   "ex": [
+    "Inibidores PDE5 (sildenafila/tadalafila)"
+   ]
+  },
+  {
+   "atomo": "amantadina",
+   "n": 1,
+   "ex": [
+    "Amantadina/quetamina"
+   ]
+  },
+  {
+   "atomo": "quetamina",
+   "n": 1,
+   "ex": [
+    "Amantadina/quetamina"
+   ]
+  },
+  {
+   "atomo": "antiarritmicos",
+   "n": 1,
+   "ex": [
+    "Betabloqueadores/antiarrítmicos"
+   ]
+  },
+  {
+   "atomo": "outros indutores enzimaticos",
+   "n": 1,
+   "ex": [
+    "Carbamazepina e outros indutores enzimáticos"
+   ]
+  },
+  {
+   "atomo": "inibidores cyp3a4 fortes",
+   "n": 1,
+   "ex": [
+    "Inibidores CYP3A4 fortes (cetoconazol)"
+   ]
+  },
+  {
+   "atomo": "miconazol",
+   "n": 1,
+   "ex": [
+    "Fluconazol/miconazol"
+   ]
+  },
+  {
+   "atomo": "salicilatos",
+   "n": 1,
+   "ex": [
+    "AINEs/salicilatos"
+   ]
+  },
+  {
+   "atomo": "tetraciclinas",
+   "n": 1,
+   "ex": [
+    "Tetraciclinas"
+   ]
+  },
+  {
+   "atomo": "vitamina a suplementar",
+   "n": 1,
+   "ex": [
+    "Vitamina A suplementar"
+   ]
+  },
+  {
+   "atomo": "antiarritmicos ia",
+   "n": 1,
+   "ex": [
+    "Antiarrítmicos IA/III (amiodarona)"
+   ]
+  },
+  {
+   "atomo": "iii",
+   "n": 1,
+   "ex": [
+    "Antiarrítmicos IA/III (amiodarona)"
+   ]
+  },
+  {
+   "atomo": "heparina",
+   "n": 1,
+   "ex": [
+    "Heparina"
+   ]
+  },
+  {
+   "atomo": "diureticos poupadores de k",
+   "n": 1,
+   "ex": [
+    "Diuréticos poupadores de K+"
+   ]
+  },
+  {
+   "atomo": "eplerenona",
+   "n": 1,
+   "ex": [
+    "Espironolactona/Eplerenona"
+   ]
+  },
+  {
+   "atomo": "qt prolongadores",
+   "n": 1,
+   "ex": [
+    "QT prolongadores (haloperidol, citalopram, azitromicina)"
+   ]
+  },
+  {
+   "atomo": "vitamina k",
+   "n": 1,
+   "ex": [
+    "Vitamina K (alimentos)"
+   ]
+  },
+  {
+   "atomo": "inibidores p-gp",
+   "n": 1,
+   "ex": [
+    "Inibidores P-gp (cetoconazol, dronedarona, ciclosporina, itraconazol)"
+   ]
+  },
+  {
+   "atomo": "doacs",
+   "n": 1,
+   "ex": [
+    "Varfarina/DOACs"
+   ]
+  },
+  {
+   "atomo": "aas > 100 mg",
+   "n": 1,
+   "ex": [
+    "AAS > 100 mg/dia"
+   ]
+  },
+  {
+   "atomo": "dia",
+   "n": 1,
+   "ex": [
+    "AAS > 100 mg/dia"
+   ]
+  },
+  {
+   "atomo": "fibratos",
+   "n": 1,
+   "ex": [
+    "Fibratos (fenofibrato)"
+   ]
+  },
+  {
+   "atomo": "ezetimiba",
+   "n": 1,
+   "ex": [
+    "Ezetimiba"
+   ]
+  },
+  {
+   "atomo": "sildenafil",
+   "n": 1,
+   "ex": [
+    "Sildenafil/Tadalafil/Vardenafil (iPDE5)"
+   ]
+  },
+  {
+   "atomo": "tadalafil",
+   "n": 1,
+   "ex": [
+    "Sildenafil/Tadalafil/Vardenafil (iPDE5)"
+   ]
+  },
+  {
+   "atomo": "vardenafil",
+   "n": 1,
+   "ex": [
+    "Sildenafil/Tadalafil/Vardenafil (iPDE5)"
+   ]
+  },
+  {
+   "atomo": "ipde5",
+   "n": 1,
+   "ex": [
+    "iPDE5 (sildenafil, tadalafil)"
+   ]
+  },
+  {
+   "atomo": "poupadores de potassio",
+   "n": 1,
+   "ex": [
+    "Poupadores de potássio/suplementos de K+"
+   ]
+  },
+  {
+   "atomo": "narcoticos",
+   "n": 1,
+   "ex": [
+    "Barbitúricos/narcóticos/álcool"
+   ]
+  },
+  {
+   "atomo": "ara-ii",
+   "n": 1,
+   "ex": [
+    "IECA/ARA-II"
+   ]
+  },
+  {
+   "atomo": "cyp2c8 inibidores",
+   "n": 1,
+   "ex": [
+    "CYP2C8 inibidores (gemfibrozila)"
+   ]
+  },
+  {
+   "atomo": "cyp2c8 indutores",
+   "n": 1,
+   "ex": [
+    "CYP2C8 indutores (rifampicina)"
+   ]
+  },
+  {
+   "atomo": "carbonato de calcio",
+   "n": 1,
+   "ex": [
+    "Carbonato de cálcio"
+   ]
+  },
+  {
+   "atomo": "sulfato ferroso",
+   "n": 1,
+   "ex": [
+    "Sulfato ferroso"
+   ]
+  },
+  {
+   "atomo": "antirretrovirais",
+   "n": 1,
+   "ex": [
+    "Antirretrovirais (lopinavir)"
+   ]
+  },
+  {
+   "atomo": "metoprolol",
+   "n": 1,
+   "ex": [
+    "Metoprolol/Betabloqueadores"
+   ]
+  },
+  {
+   "atomo": "metformina",
+   "n": 1,
+   "ex": [
+    "Metformina"
+   ]
+  },
+  {
+   "atomo": "solucoes de calcio iv",
+   "n": 1,
+   "ex": [
+    "Soluções de cálcio IV (Ringer lactato, gluconato de Ca)"
+   ]
+  },
+  {
+   "atomo": "ca2",
+   "n": 1,
+   "ex": [
+    "Antiácidos com Al/Mg, Ca2+, Fe, Zinco"
+   ]
+  },
+  {
+   "atomo": "zinco",
+   "n": 1,
+   "ex": [
+    "Antiácidos com Al/Mg, Ca2+, Fe, Zinco"
+   ]
+  },
+  {
+   "atomo": "retinoides",
+   "n": 1,
+   "ex": [
+    "Retinoides (isotretinoína)"
+   ]
+  },
+  {
+   "atomo": "ace",
+   "n": 1,
+   "ex": [
+    "ACE/BRA + TMP"
+   ]
+  },
+  {
+   "atomo": "tmp",
+   "n": 1,
+   "ex": [
+    "ACE/BRA + TMP"
+   ]
+  },
+  {
+   "atomo": "piperacilina-tazobactam",
+   "n": 1,
+   "ex": [
+    "Piperacilina-tazobactam"
+   ]
+  },
+  {
+   "atomo": "anfotericina b",
+   "n": 1,
+   "ex": [
+    "Anfotericina B"
+   ]
+  },
+  {
+   "atomo": "sirolimus",
+   "n": 1,
+   "ex": [
+    "Sirolimus (rapamicina)"
+   ]
+  },
+  {
+   "atomo": "warfarina",
+   "n": 1,
+   "ex": [
+    "Warfarina"
+   ]
+  },
+  {
+   "atomo": "metadona",
+   "n": 1,
+   "ex": [
+    "Metadona"
+   ]
+  },
+  {
+   "atomo": "zn",
+   "n": 1,
+   "ex": [
+    "Antiácidos com Al/Mg, Fe, Ca, Zn"
+   ]
+  },
+  {
+   "atomo": "tenofovir",
+   "n": 1,
+   "ex": [
+    "Tenofovir"
+   ]
+  },
+  {
+   "atomo": "vacina influenza oral atenuada",
+   "n": 1,
+   "ex": [
+    "Vacina influenza oral atenuada (LAIV)"
+   ]
+  },
+  {
+   "atomo": "praziquantel",
+   "n": 1,
+   "ex": [
+    "Praziquantel"
+   ]
+  },
+  {
+   "atomo": "umeclidinio",
+   "n": 1,
+   "ex": [
+    "Tiotrópio / Umeclidínio (LAMA)"
+   ]
+  },
+  {
+   "atomo": "lama",
+   "n": 1,
+   "ex": [
+    "LAMA (tiotrópio, umeclidínio)"
+   ]
+  },
+  {
+   "atomo": "cobicistate",
+   "n": 1,
+   "ex": [
+    "Ritonavir / Cobicistate"
+   ]
+  },
+  {
+   "atomo": "vacinas vivas atenuadas",
+   "n": 1,
+   "ex": [
+    "Vacinas vivas atenuadas"
+   ]
+  },
+  {
+   "atomo": "nitroglicerina",
+   "n": 1,
+   "ex": [
+    "Nitroglicerina"
+   ]
+  },
+  {
+   "atomo": "carvao ativado",
+   "n": 1,
+   "ex": [
+    "Carvão ativado (paracetamol IV)"
+   ]
+  },
+  {
+   "atomo": "antitussigenos",
+   "n": 1,
+   "ex": [
+    "Antitussígenos (codeína, dextrometorfano)"
+   ]
+  },
+  {
+   "atomo": "atropinicos",
+   "n": 1,
+   "ex": [
+    "Anticolinérgicos/atropínicos (secantes de secreção)"
+   ]
+  },
+  {
+   "atomo": "outros medicamentos inalados",
+   "n": 1,
+   "ex": [
+    "Outros medicamentos inalados (no mesmo nebulizador)"
+   ]
+  },
+  {
+   "atomo": "propranolol",
+   "n": 1,
+   "ex": [
+    "Propranolol"
+   ]
+  },
+  {
+   "atomo": "bleomicina",
+   "n": 1,
+   "ex": [
+    "Bleomicina (atual ou histórico)"
+   ]
+  },
+  {
+   "atomo": "paraquat",
+   "n": 1,
+   "ex": [
+    "Paraquat (intoxicação)"
+   ]
+  },
+  {
+   "atomo": "farmacos nebulizados",
+   "n": 1,
+   "ex": [
+    "Fármacos nebulizados (broncodilatadores)"
+   ]
+  },
+  {
+   "atomo": "antipsicoticos metabolizados por cyp2d6",
+   "n": 1,
+   "ex": [
+    "Antipsicóticos metabolizados por CYP2D6 (haloperidol, risperidona)"
+   ]
+  },
+  {
+   "atomo": "clozapina",
+   "n": 1,
+   "ex": [
+    "Clozapina"
+   ]
+  },
+  {
+   "atomo": "antiarritmicos classe ia",
+   "n": 1,
+   "ex": [
+    "Antiarrítmicos classe Ia (quinidina, procainamida)"
+   ]
+  },
+  {
+   "atomo": "tca",
+   "n": 1,
+   "ex": [
+    "ISRS/IRSN/TCA/outros antidepressivos"
+   ]
+  },
+  {
+   "atomo": "outros antidepressivos",
+   "n": 1,
+   "ex": [
+    "ISRS/IRSN/TCA/outros antidepressivos"
+   ]
+  },
+  {
+   "atomo": "tiramina dietetica",
+   "n": 1,
+   "ex": [
+    "Tiramina dietética (queijo curado, vinho tinto, embutidos)"
+   ]
+  },
+  {
+   "atomo": "meperidina",
+   "n": 1,
+   "ex": [
+    "Meperidina / tramadol / dextromefetamina"
+   ]
+  },
+  {
+   "atomo": "dextromefetamina",
+   "n": 1,
+   "ex": [
+    "Meperidina / tramadol / dextromefetamina"
+   ]
+  },
+  {
+   "atomo": "outros serotoninergicos",
+   "n": 1,
+   "ex": [
+    "ISRS / outros serotoninérgicos"
+   ]
+  },
+  {
+   "atomo": "benzodiazepinicos iv",
+   "n": 1,
+   "ex": [
+    "Benzodiazepínicos IV (diazepam IV) + olanzapina IM"
+   ]
+  },
+  {
+   "atomo": "olanzapina im",
+   "n": 1,
+   "ex": [
+    "Benzodiazepínicos IV (diazepam IV) + olanzapina IM"
+   ]
+  },
+  {
+   "atomo": "outros inibidores cyp3a4",
+   "n": 1,
+   "ex": [
+    "Cetoconazol / eritromicina / outros inibidores CYP3A4"
+   ]
+  },
+  {
+   "atomo": "isoniazida",
+   "n": 1,
+   "ex": [
+    "Fluconazol / isoniazida"
+   ]
+  },
+  {
+   "atomo": "antirretrovirais hiv",
+   "n": 1,
+   "ex": [
+    "Antirretrovirais HIV (IPs, NNRTIs)"
+   ]
+  },
+  {
+   "atomo": "corticoides",
+   "n": 1,
+   "ex": [
+    "Corticoides"
+   ]
+  },
+  {
+   "atomo": "outros bradicardizantes",
+   "n": 1,
+   "ex": [
+    "Betabloqueadores / outros bradicardizantes"
+   ]
+  },
+  {
+   "atomo": "succinilcolina",
+   "n": 1,
+   "ex": [
+    "Succinilcolina (cirurgia)"
+   ]
+  },
+  {
+   "atomo": "rilpivirina",
+   "n": 1,
+   "ex": [
+    "Atazanavir / rilpivirina"
+   ]
+  },
+  {
+   "atomo": "dasatinibe",
+   "n": 1,
+   "ex": [
+    "Dasatinibe / erlotinibe"
+   ]
+  },
+  {
+   "atomo": "erlotinibe",
+   "n": 1,
+   "ex": [
+    "Dasatinibe / erlotinibe"
+   ]
+  },
+  {
+   "atomo": "amitriptilina",
+   "n": 1,
+   "ex": [
+    "Amitriptilina / nortriptilina"
+   ]
+  },
+  {
+   "atomo": "nortriptilina",
+   "n": 1,
+   "ex": [
+    "Amitriptilina / nortriptilina"
+   ]
+  },
+  {
+   "atomo": "ssris",
+   "n": 1,
+   "ex": [
+    "Tramadol / SSRIs"
+   ]
+  },
+  {
+   "atomo": "antibioticos orais",
+   "n": 1,
+   "ex": [
+    "Antibióticos orais (neomicina, rifaximina)"
+   ]
+  },
+  {
+   "atomo": "leite",
+   "n": 1,
+   "ex": [
+    "Antiácidos / leite"
+   ]
+  },
+  {
+   "atomo": "medicamentos orais concomitantes",
+   "n": 1,
+   "ex": [
+    "Medicamentos orais concomitantes"
+   ]
+  },
+  {
+   "atomo": "farmacos que prolongam qt",
+   "n": 1,
+   "ex": [
+    "Fármacos que prolongam QT (ondansetrona, haloperidol, macrolídeos, quinolonas)"
+   ]
+  },
+  {
+   "atomo": "inibidores da eca",
+   "n": 1,
+   "ex": [
+    "Inibidores da ECA (enalapril, captopril, lisinopril)"
+   ]
+  },
+  {
+   "atomo": "inibidores eca",
+   "n": 1,
+   "ex": [
+    "Inibidores ECA"
+   ]
+  },
+  {
+   "atomo": "posaconazol",
+   "n": 1,
+   "ex": [
+    "Fluconazol / voriconazol / posaconazol"
+   ]
+  },
+  {
+   "atomo": "tangerina pomelo",
+   "n": 1,
+   "ex": [
+    "Grapefruit / tangerina pomelo"
+   ]
+  },
+  {
+   "atomo": "sevelamer",
+   "n": 1,
+   "ex": [
+    "Colestiramina / sevelamer"
+   ]
+  },
+  {
+   "atomo": "tacrolimo",
+   "n": 1,
+   "ex": [
+    "Levotiroxina / ciprofloxacino / tacrolimo / micofenolato"
+   ]
+  },
+  {
+   "atomo": "micofenolato",
+   "n": 1,
+   "ex": [
+    "Levotiroxina / ciprofloxacino / tacrolimo / micofenolato"
+   ]
+  },
+  {
+   "atomo": "citrato",
+   "n": 1,
+   "ex": [
+    "Citrato (incluindo sucos cítricos)"
+   ]
+  },
+  {
+   "atomo": "sequestrantes biliares",
+   "n": 1,
+   "ex": [
+    "Colestiramina / sequestrantes biliares"
+   ]
+  },
+  {
+   "atomo": "cyp2d6 — antipsicoticos",
+   "n": 1,
+   "ex": [
+    "CYP2D6 — antipsicóticos, antidepressivos TCAs"
+   ]
+  },
+  {
+   "atomo": "antidepressivos tcas",
+   "n": 1,
+   "ex": [
+    "CYP2D6 — antipsicóticos, antidepressivos TCAs"
+   ]
+  },
+  {
+   "atomo": "tetraciclinase",
+   "n": 1,
+   "ex": [
+    "Tetraciclinase / fluorquinolonas"
+   ]
+  },
+  {
+   "atomo": "todos os medicamentos orais",
+   "n": 1,
+   "ex": [
+    "TODOS os medicamentos orais"
+   ]
+  },
+  {
+   "atomo": "sorbitol",
+   "n": 1,
+   "ex": [
+    "Sorbitol"
+   ]
+  },
+  {
+   "atomo": "laxantes com cations",
+   "n": 1,
+   "ex": [
+    "Antiácidos/laxantes com cátions (hidróxido de Mg/Al)"
+   ]
+  },
+  {
+   "atomo": "medicamentos orais em geral",
+   "n": 1,
+   "ex": [
+    "Medicamentos orais em geral"
+   ]
+  },
+  {
+   "atomo": "laxativos",
+   "n": 1,
+   "ex": [
+    "Laxativos / furosemida"
+   ]
+  },
+  {
+   "atomo": "bosentan",
+   "n": 1,
+   "ex": [
+    "bosentan"
+   ]
+  },
+  {
+   "atomo": "anticoagulante",
+   "n": 1,
+   "ex": [
+    "anticoagulante"
+   ]
+  },
+  {
+   "atomo": "lamisil",
+   "n": 1,
+   "ex": [
+    "lamisil (terbinafina)"
+   ]
+  },
+  {
+   "atomo": "aminoglutetimida",
+   "n": 1,
+   "ex": [
+    "Aminoglutetimida"
+   ]
+  },
+  {
+   "atomo": "nifedipino",
+   "n": 1,
+   "ex": [
+    "nifedipino"
+   ]
+  },
+  {
+   "atomo": "sulfato de magnesio",
+   "n": 1,
+   "ex": [
+    "sulfato de magnésio"
+   ]
+  },
+  {
+   "atomo": "misoprostol",
+   "n": 1,
+   "ex": [
+    "misoprostol"
+   ]
+  },
+  {
+   "atomo": "ocitocina",
+   "n": 1,
+   "ex": [
+    "ocitocina"
+   ]
+  },
+  {
+   "atomo": "betamimeticos tocoliticos",
+   "n": 1,
+   "ex": [
+    "Betamiméticos tocolíticos (terbutalina, salbutamol, ritodrina)"
+   ]
+  },
+  {
+   "atomo": "leucovorin",
+   "n": 1,
+   "ex": [
+    "leucovorin"
+   ]
+  },
+  {
+   "atomo": "sorivudina",
+   "n": 1,
+   "ex": [
+    "sorivudina / brivudina"
+   ]
+  },
+  {
+   "atomo": "brivudina",
+   "n": 1,
+   "ex": [
+    "sorivudina / brivudina"
+   ]
+  },
+  {
+   "atomo": "oxaliplatina",
+   "n": 1,
+   "ex": [
+    "oxaliplatina"
+   ]
+  },
+  {
+   "atomo": "radioterapia concomitante",
+   "n": 1,
+   "ex": [
+    "radioterapia concomitante"
+   ]
+  },
+  {
+   "atomo": "penicilinas",
+   "n": 1,
+   "ex": [
+    "penicilinas"
+   ]
+  },
+  {
+   "atomo": "trastuzumabe",
+   "n": 1,
+   "ex": [
+    "trastuzumabe"
+   ]
+  },
+  {
+   "atomo": "corticoides cronicos",
+   "n": 1,
+   "ex": [
+    "corticoides crônicos (> 10 mg/dia prednisona)"
+   ]
+  },
+  {
+   "atomo": "corticosteroides sistemicos",
+   "n": 1,
+   "ex": [
+    "Corticosteroides sistêmicos / imunossupressores (basais)"
+   ]
+  },
+  {
+   "atomo": "imunossupressores",
+   "n": 1,
+   "ex": [
+    "Corticosteroides sistêmicos / imunossupressores (basais)"
+   ]
+  },
+  {
+   "atomo": "outros inibidores de checkpoint",
+   "n": 1,
+   "ex": [
+    "Outros inibidores de checkpoint (ex.: nivolumabe)"
+   ]
+  },
+  {
+   "atomo": "sunitinibe",
+   "n": 1,
+   "ex": [
+    "Sunitinibe"
+   ]
+  },
+  {
+   "atomo": "antraciclinas",
+   "n": 1,
+   "ex": [
+    "Antraciclinas (± radioterapia torácica)"
+   ]
+  },
+  {
+   "atomo": "ifosfamida",
+   "n": 1,
+   "ex": [
+    "Ifosfamida / ciclofosfamida"
+   ]
+  },
+  {
+   "atomo": "ciclofosfamida",
+   "n": 1,
+   "ex": [
+    "Ifosfamida / ciclofosfamida"
+   ]
+  },
+  {
+   "atomo": "exames laboratoriais",
+   "n": 1,
+   "ex": [
+    "Exames laboratoriais (cetonas urinárias, CPK)"
+   ]
+  },
+  {
+   "atomo": "mercaptopurina",
+   "n": 1,
+   "ex": [
+    "mercaptopurina / azatioprina"
+   ]
+  },
+  {
+   "atomo": "azatioprina",
+   "n": 1,
+   "ex": [
+    "mercaptopurina / azatioprina"
+   ]
+  },
+  {
+   "atomo": "amoxicilina",
+   "n": 1,
+   "ex": [
+    "amoxicilina"
+   ]
+  },
+  {
+   "atomo": "dosagem de acido urico",
+   "n": 1,
+   "ex": [
+    "Dosagem de ácido úrico (interferência laboratorial)"
+   ]
+  },
+  {
+   "atomo": "halotano",
+   "n": 1,
+   "ex": [
+    "halotano / anestésicos halogenados"
+   ]
+  },
+  {
+   "atomo": "anestesicos halogenados",
+   "n": 1,
+   "ex": [
+    "halotano / anestésicos halogenados"
+   ]
+  },
+  {
+   "atomo": "cocaina",
+   "n": 1,
+   "ex": [
+    "cocaína"
+   ]
+  },
+  {
+   "atomo": "norepinefrina",
+   "n": 1,
+   "ex": [
+    "norepinefrina"
+   ]
+  },
+  {
+   "atomo": "vasodilatadores",
+   "n": 1,
+   "ex": [
+    "Vasodilatadores (nitratos, iECA, BCC)"
+   ]
+  },
+  {
+   "atomo": "outros inotropicos",
+   "n": 1,
+   "ex": [
+    "Outros inotrópicos/simpatomiméticos e digoxina"
+   ]
+  },
+  {
+   "atomo": "simpatomimeticos",
+   "n": 1,
+   "ex": [
+    "Outros inotrópicos/simpatomiméticos e digoxina"
+   ]
+  },
+  {
+   "atomo": "opioide",
+   "n": 1,
+   "ex": [
+    "opioide + BZD"
+   ]
+  },
+  {
+   "atomo": "sedativos",
+   "n": 1,
+   "ex": [
+    "Benzodiazepínicos / sedativos"
+   ]
+  },
+  {
+   "atomo": "polimixinas",
+   "n": 1,
+   "ex": [
+    "aminoglicosídeos / polimixinas"
+   ]
+  },
+  {
+   "atomo": "contraceptivos hormonais",
+   "n": 1,
+   "ex": [
+    "contraceptivos hormonais"
+   ]
+  },
+  {
+   "atomo": "toremifeno",
+   "n": 1,
+   "ex": [
+    "toremifeno"
+   ]
+  },
+  {
+   "atomo": "fator ix concentrado",
+   "n": 1,
+   "ex": [
+    "fator IX concentrado"
+   ]
+  },
+  {
+   "atomo": "outros antiarritmicos",
+   "n": 1,
+   "ex": [
+    "sotalol / outros antiarrítmicos"
+   ]
+  },
+  {
+   "atomo": "dipiridamol",
+   "n": 1,
+   "ex": [
+    "dipiridamol"
+   ]
+  },
+  {
+   "atomo": "cafeina",
+   "n": 1,
+   "ex": [
+    "teofilina / cafeína"
+   ]
+  },
+  {
+   "atomo": "calcio iv",
+   "n": 1,
+   "ex": [
+    "cálcio IV"
+   ]
+  },
+  {
+   "atomo": "catecolaminas",
+   "n": 1,
+   "ex": [
+    "catecolaminas"
+   ]
+  },
+  {
+   "atomo": "bicarbonato de sodio",
+   "n": 1,
+   "ex": [
+    "bicarbonato de sódio"
+   ]
+  },
+  {
+   "atomo": "proconvulsivantes",
+   "n": 1,
+   "ex": [
+    "Proconvulsivantes (carbamazepina, fenitoína em overdose)"
+   ]
+  },
+  {
+   "atomo": "inibidores cyp2d6",
+   "n": 1,
+   "ex": [
+    "inibidores CYP2D6 (fluoxetina, paroxetina)"
+   ]
+  },
+  {
+   "atomo": "outros opioides fortes",
+   "n": 1,
+   "ex": [
+    "outros opioides fortes"
+   ]
+  },
+  {
+   "atomo": "haloperidol sc",
+   "n": 1,
+   "ex": [
+    "haloperidol SC"
+   ]
+  },
+  {
+   "atomo": "midazolam",
+   "n": 1,
+   "ex": [
+    "midazolam / BZD"
+   ]
+  },
+  {
+   "atomo": "outros antipsicoticos",
+   "n": 1,
+   "ex": [
+    "outros antipsicóticos"
+   ]
+  },
+  {
+   "atomo": "haloperidol",
+   "n": 1,
+   "ex": [
+    "haloperidol / antipsicóticos"
+   ]
+  },
+  {
+   "atomo": "antimuscarinicos",
+   "n": 1,
+   "ex": [
+    "Outros anticolinérgicos/antimuscarínicos (atropina, escopolamina, ADT, anti-H1, antiespasmódicos)"
+   ]
+  },
+  {
+   "atomo": "outros antagonistas opioides",
+   "n": 1,
+   "ex": [
+    "Outros antagonistas opioides (naloxona, naltrexona)"
+   ]
+  },
+  {
+   "atomo": "antiacidos com aluminio",
+   "n": 1,
+   "ex": [
+    "antiácidos com alumínio/magnésio"
+   ]
+  },
+  {
+   "atomo": "topiramato",
+   "n": 1,
+   "ex": [
+    "Topiramato"
+   ]
+  },
+  {
+   "atomo": "colestipol",
+   "n": 1,
+   "ex": [
+    "Colestipol/colestiramina"
+   ]
+  },
+  {
+   "atomo": "cloranfenicol",
+   "n": 1,
+   "ex": [
+    "Cloranfenicol"
+   ]
+  },
+  {
+   "atomo": "clobazam",
+   "n": 1,
+   "ex": [
+    "Clobazam"
+   ]
+  },
+  {
+   "atomo": "de alca",
+   "n": 1,
+   "ex": [
+    "Diuréticos tiazídicos ou de alça"
+   ]
+  },
+  {
+   "atomo": "inibidores de pde5",
+   "n": 1,
+   "ex": [
+    "Inibidores de PDE5 (tadalafila etc.)"
+   ]
+  },
+  {
+   "atomo": "anticoagulantes orais",
+   "n": 1,
+   "ex": [
+    "Anticoagulantes orais"
+   ]
+  },
+  {
+   "atomo": "antibioticos de amplo espectro",
+   "n": 1,
+   "ex": [
+    "Antibióticos de amplo espectro"
+   ]
+  },
+  {
+   "atomo": "outros corticosteroides topicos",
+   "n": 1,
+   "ex": [
+    "Outros corticosteroides tópicos/sistêmicos"
+   ]
+  },
+  {
+   "atomo": "sistemicos",
+   "n": 1,
+   "ex": [
+    "Outros corticosteroides tópicos/sistêmicos"
+   ]
+  }
+ ]
+}

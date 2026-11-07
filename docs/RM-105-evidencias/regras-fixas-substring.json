@@ -1,0 +1,44 @@
+{
+ "letras": {
+  "pares": 650,
+  "comAlerta": 460,
+  "mediaAlertas": 6.43,
+  "max": 22
+ },
+ "ab": [
+  "critical-pair-azitromicina-amiodarona:critical",
+  "critical-pair-varfarina-aine:critical",
+  "critical-pair-moxifloxacino-amiodarona:critical",
+  "critical-pair-ieca-bra:critical",
+  "critical-pair-fenelzina-sertralina:critical",
+  "critical-pair-fenelzina-fluoxetina:critical",
+  "critical-pair-nitrato-tadalafila:critical",
+  "critical-pair-nitrato-sildenafila:critical",
+  "critical-pair-nitrato-vardenafila:critical",
+  "critical-pair-sacubitril-ieca:critical",
+  "critical-pair-ieca-aine:danger",
+  "critical-pair-bra-aine:danger",
+  "critical-pair-azitromicina-haloperidol:danger",
+  "critical-pair-hidroxicloroquina-azitromicina:danger",
+  "critical-pair-sertralina-tramadol:danger",
+  "critical-pair-escitalopram-tramadol:danger",
+  "critical-pair-ieca-espironolactona:warning",
+  "critical-pair-metformina-contraste:warning",
+  "critical-pair-prednisolona-aine:warning"
+ ],
+ "abStatus": "molecula_nao_reconhecida",
+ "pre": [
+  "tra+tramadol -> critical-pair-sertralina-tramadol",
+  "sert+tramadol -> critical-pair-sertralina-tramadol",
+  "amio+tramadol -> -",
+  "warf+tramadol -> -",
+  "var+tramadol -> -",
+  "nitr+tramadol -> -",
+  "litio+tramadol -> -",
+  "metf+tramadol -> -",
+  "isr+tramadol -> critical-pair-isrs-tramadol",
+  "ima+tramadol -> -",
+  "aza+tramadol -> -",
+  "ibu+tramadol -> -"
+ ]
+}

@@ -1,0 +1,610 @@
+2ª linha sepse	indicacao_clinica
+5 ht3 antagonista	classe_terapeutica
+5ht3 antagonista	classe_terapeutica
+5ht3 antagonista granisetron	classe_terapeutica
+acidose grave	indicacao_clinica
+acidose metabolica cronica drc	indicacao_clinica
+acne	indicacao_clinica
+acne grave	indicacao_clinica
+add	termo_generico
+adjuvante dor neuropatica	indicacao_clinica
+aee dialise	classe_terapeutica
+aee vida longa	classe_terapeutica
+agitacao terminal	indicacao_clinica
+agonista dopaminergico	classe_terapeutica
+agonista duplo	classe_terapeutica
+agonista glp 1	classe_terapeutica
+agonista parcial d2	classe_terapeutica
+agonista parcial opioide td	classe_terapeutica
+aine	classe_terapeutica
+aldosterona antagonista seletivo	classe_terapeutica
+alfa 2 agonista	classe_terapeutica
+alfa bloqueador	classe_terapeutica
+allhat diuretico	classe_terapeutica
+alzheimer	indicacao_clinica
+alzheimer galantamina	indicacao_clinica
+alzheimer rivastigmina	indicacao_clinica
+amadurecimento cervical	indicacao_clinica
+amamentando anticoncepcional	classe_terapeutica
+ampicilina inibidor	classe_terapeutica
+anaerobio antibiotico	classe_terapeutica
+anafilaxia	indicacao_clinica
+anafranil toc	indicacao_clinica
+analgesico	classe_terapeutica
+analogo basal	classe_terapeutica
+analogo basal ultra prolongado	classe_terapeutica
+analogo ultrarapido	classe_terapeutica
+analogo ultrarapido lispro	classe_terapeutica
+anemia renal	indicacao_clinica
+anestesia dissociativa	classe_terapeutica
+anestesia iv	classe_terapeutica
+angina sl	indicacao_clinica
+ansiedade	indicacao_clinica
+ansiedade generalizada	indicacao_clinica
+ansiedade pregabalina	indicacao_clinica
+ansiolitico	classe_terapeutica
+ansiolitico nao bzd	classe_terapeutica
+ansiolitico paliativo	classe_terapeutica
+antagonista dopamina gastrica	classe_terapeutica
+antagonista h2	classe_terapeutica
+antagonista nmda	classe_terapeutica
+antagonista periferico µ	classe_terapeutica
+antagonista vitamina k	classe_terapeutica
+anti aldosterona	classe_terapeutica
+anti h1	classe_terapeutica
+anti histaminico	classe_terapeutica
+anti histaminico ansiolitico	classe_terapeutica
+anti histaminico h1	classe_terapeutica
+anti inflamatorio	classe_terapeutica
+anti inflamatorio paliativo	classe_terapeutica
+antiacido	classe_terapeutica
+antiacido aluminio	classe_terapeutica
+antiagregante	classe_terapeutica
+antiangiogenico	classe_terapeutica
+antiarritmico	classe_terapeutica
+antiarritmico classe iii	classe_terapeutica
+antibiotico	classe_terapeutica
+antibiotico atipico	classe_terapeutica
+anticoagulante	classe_terapeutica
+anticoagulante oral	classe_terapeutica
+anticoagulante oral direto	classe_terapeutica
+anticolinergico	classe_terapeutica
+anticolinergico curta acao	classe_terapeutica
+anticolinergico estertores	classe_terapeutica
+anticolinergico periferico	classe_terapeutica
+anticoncepcional injetavel 3 meses	classe_terapeutica
+anticoncepcional oral	classe_terapeutica
+anticonvulsivante	classe_terapeutica
+anticonvulsivante cbz	classe_terapeutica
+anticonvulsivante lam	classe_terapeutica
+anticonvulsivante neuropatia	classe_terapeutica
+anticonvulsivante neuropatia pregabalina	classe_terapeutica
+anticonvulsivante trileptal	classe_terapeutica
+anticonvulsivante vpa	classe_terapeutica
+antidemencial galantamina	classe_terapeutica
+antidemencial patch	classe_terapeutica
+antidepressivo	classe_terapeutica
+antidepressivo multimodal	termo_generico
+antidepressivo sono	classe_terapeutica
+antidepressivo triciclico	classe_terapeutica
+antidepressivo triclico	classe_terapeutica
+antidepressivo triclico imipramina	classe_terapeutica
+antidiarreico loperamida	classe_terapeutica
+antidiarreico secretor	classe_terapeutica
+antidoto bzd	classe_terapeutica
+antidoto opioide	classe_terapeutica
+antidoto rocuronio	classe_terapeutica
+antiemetico oncologia	classe_terapeutica
+antiemetico paliativo	classe_terapeutica
+antiemetico plasil	classe_terapeutica
+antiemetico qt	classe_terapeutica
+antiemetico quimio	classe_terapeutica
+antiemetico quimio granisetron	classe_terapeutica
+antifibrinolitico	classe_terapeutica
+antifolato	classe_terapeutica
+antifungico amplo espectro	classe_terapeutica
+antifungico vaginal	classe_terapeutica
+antileucotriene	classe_terapeutica
+antileucotriene alternativo	classe_terapeutica
+antiobesidade combinado	classe_terapeutica
+antiparasitario	classe_terapeutica
+antipsicotico	classe_terapeutica
+antipsicotico atipico	classe_terapeutica
+antipsicotico atipico metabolico	classe_terapeutica
+antipsicotico cognitivo	classe_terapeutica
+antipsicotico depressao bipolar	classe_terapeutica
+antipsicotico esquizofrenia resistente	classe_terapeutica
+antipsicotico qt	classe_terapeutica
+antipsicotico sedativo	classe_terapeutica
+antipsicotico sono	classe_terapeutica
+antipsicotico tipico	classe_terapeutica
+antitireoideo	classe_terapeutica
+antitireoideo gestacao	classe_terapeutica
+antiviral gripe	classe_terapeutica
+antiviral hsv vzv	classe_terapeutica
+antraciclina	classe_terapeutica
+apneia prematuridade	indicacao_clinica
+ar glp1	classe_terapeutica
+ar glp1 anti obesidade	classe_terapeutica
+ara ii	classe_terapeutica
+arm	classe_terapeutica
+arm seletivo	classe_terapeutica
+arni	classe_terapeutica
+arritmia	sintoma
+artrite	indicacao_clinica
+artrose	indicacao_clinica
+asma alergica grave	indicacao_clinica
+asma eosinofilica	indicacao_clinica
+aspergillus tratamento	indicacao_clinica
+atipico	termo_generico
+avc isquemico	indicacao_clinica
+avk	classe_terapeutica
+azol antifungico	classe_terapeutica
+baixa densidade gas respiratorio	termo_generico
+barbiturico anticonvulsivante	classe_terapeutica
+barbiturico sedacao terminal	classe_terapeutica
+bcc	classe_terapeutica
+bcc diidropiridinco	classe_terapeutica
+bcc fenilalquilamina	classe_terapeutica
+bcc nao diidropiridinco	classe_terapeutica
+benzo	classe_terapeutica
+benzodiazepinico	classe_terapeutica
+benzodiazepinico ansiedade	classe_terapeutica
+benzodiazepinico iv	classe_terapeutica
+benzodiazepino	classe_terapeutica
+beta bloq	classe_terapeutica
+betabloqueador	classe_terapeutica
+betabloqueador cardiosseletivo	classe_terapeutica
+betabloqueador seletivo	classe_terapeutica
+betabloqueador vasodilatador	classe_terapeutica
+biguanida	classe_terapeutica
+biologico asma	classe_terapeutica
+biologico asma eosinofilica	classe_terapeutica
+biologico asma grave sem fenotipo	classe_terapeutica
+biologico eosinofilico	classe_terapeutica
+biologico t2 high	classe_terapeutica
+bipolar	indicacao_clinica
+bipolar depressao lamotrigina	indicacao_clinica
+bisfosfonato	classe_terapeutica
+bloqueador canal calcio	classe_terapeutica
+bloqueador h2 famotidina	classe_terapeutica
+bloqueador h2 interacoes	classe_terapeutica
+bloqueador h2 ranitidina	classe_terapeutica
+bnm ards	classe_terapeutica
+bnm despolarizante	classe_terapeutica
+bnm nao despolarizante	classe_terapeutica
+bra	classe_terapeutica
+bra bloq	classe_terapeutica
+bradicardia	sintoma
+broncodilatador duplo	classe_terapeutica
+broncodilatador oral	classe_terapeutica
+broncodilatador rapido	classe_terapeutica
+broncodilatador rapido fenoterol	classe_terapeutica
+bronquiolite prematuro	indicacao_clinica
+bzd	classe_terapeutica
+bzd acao intermediaria	classe_terapeutica
+bzd anticonvulsivante	classe_terapeutica
+bzd meia vida longa	classe_terapeutica
+bzd sublingual	classe_terapeutica
+calcimimetico	classe_terapeutica
+canabinoide	classe_terapeutica
+canal calcio antagonista	classe_terapeutica
+candida tratamento	indicacao_clinica
+candida uti	indicacao_clinica
+carbapenem	classe_terapeutica
+carbapenem uma vez dia	classe_terapeutica
+carbonato calcio quelante fosforo	classe_terapeutica
+cardioprotecao	indicacao_clinica
+cateter nasal	termo_generico
+cdk4 6 inibidor	classe_terapeutica
+ce	termo_generico
+cefalosporina antipseudomonal	classe_terapeutica
+cefalosporina oral	classe_terapeutica
+cefalosporina profilaxia	classe_terapeutica
+chlamydia	indicacao_clinica
+choque cardiogenico	indicacao_clinica
+clonazepam ansiedade	indicacao_clinica
+colesterol	indicacao_clinica
+combinacao analgesica	termo_generico
+constipacao cronica peg	indicacao_clinica
+constipacao opioide	classe_terapeutica
+controlado	termo_generico
+convulsao	sintoma
+convulsao neonatal	indicacao_clinica
+corticoide	classe_terapeutica
+corticoide dpoc	classe_terapeutica
+corticoide fetal	classe_terapeutica
+corticoide inalatorio	classe_terapeutica
+corticoide injetavel de deposito	classe_terapeutica
+corticoide nasal	classe_terapeutica
+corticoide oral	classe_terapeutica
+corticoide oral asma	classe_terapeutica
+corticoide paliativo	classe_terapeutica
+corticoide sepse	classe_terapeutica
+corticosteroide	classe_terapeutica
+cox 2	classe_terapeutica
+cox2	classe_terapeutica
+coxibe	classe_terapeutica
+criptosporidiose	indicacao_clinica
+da	termo_generico
+dae	termo_generico
+delirium paliativo	indicacao_clinica
+demencia	indicacao_clinica
+deposito mensal antipsicotico	classe_terapeutica
+dermatite atopica biologico	classe_terapeutica
+dex	termo_generico
+diabetes	indicacao_clinica
+diarreia	sintoma
+diarreia loperamida	indicacao_clinica
+digitalico	classe_terapeutica
+dii manutencao	indicacao_clinica
+disfuncao eretil	indicacao_clinica
+dispneia ansiedade	indicacao_clinica
+diuretico	classe_terapeutica
+diuretico alca	classe_terapeutica
+diuretico tiazidico	classe_terapeutica
+diuretico tiazidico simile	classe_terapeutica
+dmard	classe_terapeutica
+doenca de graves	indicacao_clinica
+dor aguda	indicacao_clinica
+dor intensa	sintoma
+dor moderada	sintoma
+dor musculoesqueletica	indicacao_clinica
+dor neuropatica	indicacao_clinica
+dor neuropatica gabapentina	indicacao_clinica
+dor pos operatoria	indicacao_clinica
+dpoc exacerbacoes	indicacao_clinica
+dpoc profilaxia	indicacao_clinica
+dpp 4	classe_terapeutica
+dpp4	classe_terapeutica
+drge	indicacao_clinica
+drge pantoprazol	indicacao_clinica
+dual gip glp 1	classe_terapeutica
+eclampsia	indicacao_clinica
+ehi	indicacao_clinica
+encefalinase inibidor	classe_terapeutica
+encefalopatia hepatica lactulose	indicacao_clinica
+endometriose	indicacao_clinica
+enxaqueca	indicacao_clinica
+enxaqueca profilaxia valproato	indicacao_clinica
+epilepsia	indicacao_clinica
+epilepsia neonatal	indicacao_clinica
+equinocandina	classe_terapeutica
+esbl ambulatorial	indicacao_clinica
+esbl tratamento	indicacao_clinica
+escabiose	indicacao_clinica
+esquizofrenia refrataria	indicacao_clinica
+estabilizador bipolar	indicacao_clinica
+estabilizador bipolar valproato	indicacao_clinica
+estabilizador humor	classe_terapeutica
+estatina	classe_terapeutica
+estatina potente	classe_terapeutica
+estertores terminais	sintoma
+estimulante	classe_terapeutica
+estrongiloide tratamento	indicacao_clinica
+fator estimulante de colonias	classe_terapeutica
+febre	sintoma
+fenoterol saba	classe_terapeutica
+fibrato	classe_terapeutica
+fibrinolitico	classe_terapeutica
+fibromialgia lyrica	indicacao_clinica
+fibrose cistica mucolitico	classe_terapeutica
+flebotonico	classe_terapeutica
+fluoroquinolona	classe_terapeutica
+fluorquinolona	classe_terapeutica
+g csf	classe_terapeutica
+g csf peguilado	classe_terapeutica
+gardenal epilepsia	indicacao_clinica
+gastrite	indicacao_clinica
+gastroparesia	indicacao_clinica
+giardiase	indicacao_clinica
+glicocorticoide	classe_terapeutica
+glicopeptideo	classe_terapeutica
+glifozina	classe_terapeutica
+gliptina	classe_terapeutica
+glitazona	classe_terapeutica
+glp 1	classe_terapeutica
+glp 1 obesidade	classe_terapeutica
+glp1	classe_terapeutica
+h pylori	indicacao_clinica
+hap pediatrica	indicacao_clinica
+hbpm	classe_terapeutica
+he:o2	termo_generico
+helio oxigenio	termo_generico
+hemorragia pos parto	indicacao_clinica
+heparina baixo peso	classe_terapeutica
+herpes	indicacao_clinica
+herpes tratamento	indicacao_clinica
+hipercalcemia paratireoidea	indicacao_clinica
+hipercalemia	indicacao_clinica
+hipercalemia drc	indicacao_clinica
+hipercalemia ieca	classe_terapeutica
+hipercalemia resina	indicacao_clinica
+hiperfosfatemia calcio	indicacao_clinica
+hiperfosfatemia dialise	indicacao_clinica
+hiperfosfatemia sem calcio	indicacao_clinica
+hiperparatireoidismo dialise	indicacao_clinica
+hiperplasia prostatica	indicacao_clinica
+hiperprolactinemia	indicacao_clinica
+hipertensao	indicacao_clinica
+hipertensao gestacional	indicacao_clinica
+hipertensao pulmonar	indicacao_clinica
+hipertensao pulmonar persistente rn	indicacao_clinica
+hipertireoidismo	indicacao_clinica
+hipertireoidismo 1o trimestre	indicacao_clinica
+hipnotico	classe_terapeutica
+hipnotico sri	classe_terapeutica
+hipnotico z drug	classe_terapeutica
+hipocalcemia	indicacao_clinica
+hipolipemiante	classe_terapeutica
+hipotensao ortostatica fludrocortisona	indicacao_clinica
+hipotireoidismo	indicacao_clinica
+hormonio antidiuretico	classe_terapeutica
+hpp	indicacao_clinica
+hpprn	indicacao_clinica
+hsv	indicacao_clinica
+iag	classe_terapeutica
+ibb	classe_terapeutica
+ibp independente cyp2c19	classe_terapeutica
+ibp lansoprazol	classe_terapeutica
+ibp pantoprazol	classe_terapeutica
+ibp rabeprazol	classe_terapeutica
+ic	termo_generico
+ic descompensada	indicacao_clinica
+ic refrataria	indicacao_clinica
+ics	classe_terapeutica
+ics 1x dia	classe_terapeutica
+ics beclometasona	classe_terapeutica
+ics fluticasona	classe_terapeutica
+ics laba	classe_terapeutica
+ics laba 1x dia	classe_terapeutica
+ics laba combinado	classe_terapeutica
+ics laba extrafino	classe_terapeutica
+ics laba fluticasona	classe_terapeutica
+ics laba lama 1x dia	classe_terapeutica
+ics laba lama budesonida	classe_terapeutica
+ics menos candidiase	classe_terapeutica
+ics once daily	classe_terapeutica
+ics pro droga	classe_terapeutica
+icu bnm	classe_terapeutica
+ieca	classe_terapeutica
+imao irreversivel	classe_terapeutica
+imao nao seletivo	classe_terapeutica
+imao reversivel	classe_terapeutica
+imunossupressor	classe_terapeutica
+imunossupressor azatioprina	classe_terapeutica
+imunossupressor calcineurina	classe_terapeutica
+imunossupressor transplante	classe_terapeutica
+imunossupressor transplante mmf	classe_terapeutica
+imunoterapia	classe_terapeutica
+inducao parto	indicacao_clinica
+influenza tratamento	indicacao_clinica
+inibidor 5 lipoxigenase	classe_terapeutica
+inibidor absorcao colesterol	classe_terapeutica
+inibidor alfa glicosidase	classe_terapeutica
+inibidor bcr abl	classe_terapeutica
+inibidor bomba protonica	classe_terapeutica
+inibidor colinesterase	classe_terapeutica
+inibidor if	classe_terapeutica
+inibidor lipase	classe_terapeutica
+inibidor pde 3	classe_terapeutica
+inibidor trombina direta	classe_terapeutica
+inodilatador	classe_terapeutica
+inotropico	classe_terapeutica
+insonia	sintoma
+insonia zopiclona	indicacao_clinica
+insuficiencia adrenal fludrocortisona	indicacao_clinica
+insuficiencia adrenal relativa	indicacao_clinica
+insulina basal	classe_terapeutica
+insulina intermediaria	classe_terapeutica
+insulina isofana	classe_terapeutica
+insulina prolongada	classe_terapeutica
+insulina rapida	classe_terapeutica
+insulina simples	classe_terapeutica
+insulina ultra prolongada	classe_terapeutica
+irsn	classe_terapeutica
+irsn metabolito venlafaxina	classe_terapeutica
+irsn noradrenergico	classe_terapeutica
+ischemia	indicacao_clinica
+isglt2	classe_terapeutica
+isrs	classe_terapeutica
+isrs crianca	classe_terapeutica
+isrs qt	classe_terapeutica
+isrs toc	classe_terapeutica
+itu quinolona	classe_terapeutica
+laba 1x dia	classe_terapeutica
+laba 1x dia dpoc	classe_terapeutica
+laba lama anoro	classe_terapeutica
+laba lama breezhaler	classe_terapeutica
+laba lama respimat	classe_terapeutica
+laba lama ultibro	classe_terapeutica
+laba once daily	classe_terapeutica
+laba respimat	classe_terapeutica
+lama breezhaler	classe_terapeutica
+lama genuair	classe_terapeutica
+laxativo estimulante	classe_terapeutica
+laxativo gotas pediatrico	classe_terapeutica
+laxativo osmotico lactulose	classe_terapeutica
+laxativo osmotico peg	classe_terapeutica
+leucotrieno	classe_terapeutica
+lincosamida	classe_terapeutica
+long acting g csf	classe_terapeutica
+lupus	indicacao_clinica
+lupus micofenolato	indicacao_clinica
+macrolideo	classe_terapeutica
+macrolidio	classe_terapeutica
+macrolidio 15 membros	classe_terapeutica
+mascara venturi	termo_generico
+maturacao colo	indicacao_clinica
+maturacao pulmonar	indicacao_clinica
+melatonina antidepressivo	classe_terapeutica
+meniere	indicacao_clinica
+meningite antibiotico	classe_terapeutica
+midazolam status epilepticus	indicacao_clinica
+mineralocorticoide	classe_terapeutica
+minipilula	classe_terapeutica
+motilidade	termo_generico
+mrsa oral	indicacao_clinica
+mrsa tratamento	indicacao_clinica
+mssa tratamento	indicacao_clinica
+mst	termo_generico
+mucolitico	classe_terapeutica
+mucolitico carbocisteina	classe_terapeutica
+mucolitico secretomotor	classe_terapeutica
+mucormicose	indicacao_clinica
+multimodal	termo_generico
+multimodal paliativo	termo_generico
+nassa antidepressivo	classe_terapeutica
+nausea opioide	classe_terapeutica
+nausei	sintoma
+ne	termo_generico
+nefropatia diabetica	indicacao_clinica
+neuralgia trigemeo	indicacao_clinica
+neurocisticercose	indicacao_clinica
+neuropatia dor	indicacao_clinica
+neuroprotecao fetal	indicacao_clinica
+neutropenia quimio	indicacao_clinica
+nitrato	classe_terapeutica
+nitrato prolongado	classe_terapeutica
+nitroimidazol	classe_terapeutica
+nk1 antagonista	classe_terapeutica
+nmda antagonista	classe_terapeutica
+nmda antagonista opioide	classe_terapeutica
+nor	termo_generico
+o2 terapia	termo_generico
+obesidade	indicacao_clinica
+oncocercose	indicacao_clinica
+opioid	classe_terapeutica
+opioide contexto insensivel	classe_terapeutica
+opioide forte	termo_generico
+opioide forte alternativo	classe_terapeutica
+opioide fraco	classe_terapeutica
+opioide ir seguro	termo_generico
+opioide ultracurto	classe_terapeutica
+opioide uti	classe_terapeutica
+osteoporose	indicacao_clinica
+osteoporose biologico	classe_terapeutica
+otld	termo_generico
+oxazolidinona	classe_terapeutica
+oxigenoterapia	termo_generico
+oxigenoterapia domiciliar	termo_generico
+p2y12	classe_terapeutica
+p2y12 reversivel	classe_terapeutica
+parkinson	indicacao_clinica
+parkinson demencia	indicacao_clinica
+patch opioide	termo_generico
+pcp profilaxia	indicacao_clinica
+pcr	indicacao_clinica
+pcr assistolia aesp historico	indicacao_clinica
+pcr hipercalemia	indicacao_clinica
+pde4 inibidor	classe_terapeutica
+pde5	classe_terapeutica
+pele infeccao	indicacao_clinica
+penicilina	classe_terapeutica
+pilula anticoncepcional	classe_terapeutica
+pilula do dia seguinte	classe_terapeutica
+pilula so de progestogenio	classe_terapeutica
+platina	classe_terapeutica
+platina 3ª geracao	classe_terapeutica
+pneumonia	indicacao_clinica
+polieno	classe_terapeutica
+polipo nasal	indicacao_clinica
+pop	termo_generico
+ppi	classe_terapeutica
+pre eclampsia grave	indicacao_clinica
+pre eclampsia leve	indicacao_clinica
+prevencao dtn	indicacao_clinica
+procinetico	classe_terapeutica
+procinetico plasil	classe_terapeutica
+profilaxia cirurgica	indicacao_clinica
+profilaxia hemorragica rn	indicacao_clinica
+profilaxia hiperuricemia	indicacao_clinica
+progestagenio endometriose	indicacao_clinica
+prolactinoma	indicacao_clinica
+prurido hidroxizina	indicacao_clinica
+psicoestimulante	classe_terapeutica
+pth secundario calcimimetico	classe_terapeutica
+puff oral asma	termo_generico
+quelante fosforo	classe_terapeutica
+quelante fosforo aluminio	classe_terapeutica
+quelante fosforo calcio	classe_terapeutica
+quelante fosforo lantanio	classe_terapeutica
+quelante potassio	classe_terapeutica
+quinolona	classe_terapeutica
+retinoide	classe_terapeutica
+reversao benzodiazepinico	classe_terapeutica
+reversao bnm	classe_terapeutica
+reversao opioide	classe_terapeutica
+reversao opioide paliativo	classe_terapeutica
+rickettsia	indicacao_clinica
+rinite	indicacao_clinica
+saba	classe_terapeutica
+saba sama combinado	classe_terapeutica
+sama	classe_terapeutica
+sartana	classe_terapeutica
+sdr prematuro	indicacao_clinica
+sedacao	classe_terapeutica
+sedacao consciente uti	classe_terapeutica
+sedacao procedimento	classe_terapeutica
+sedacao refrataria	classe_terapeutica
+sedacao terminal	classe_terapeutica
+sedacao uti	classe_terapeutica
+semaglutida obesidade	indicacao_clinica
+seroquel bipolar	indicacao_clinica
+sglt 2	classe_terapeutica
+sglt2	classe_terapeutica
+sindrome lise tumoral	indicacao_clinica
+sinusite	indicacao_clinica
+slt	indicacao_clinica
+slt alto risco	indicacao_clinica
+smart therapy	termo_generico
+spray nasal	termo_generico
+sri	termo_generico
+sri rapida	termo_generico
+status epilepticus	indicacao_clinica
+sulfonilureia	classe_terapeutica
+suplemento ferro gestacao	classe_terapeutica
+suplemento gestacional	classe_terapeutica
+suporte luteo	indicacao_clinica
+surfactante	classe_terapeutica
+surfactante pulmonar	classe_terapeutica
+surfatante	classe_terapeutica
+sux	termo_generico
+tab	termo_generico
+tabagismo	indicacao_clinica
+taxano	classe_terapeutica
+tca	classe_terapeutica
+tca enurese	classe_terapeutica
+tca toc	classe_terapeutica
+tdah	indicacao_clinica
+tdm	indicacao_clinica
+tep macico	indicacao_clinica
+tetraciclina	classe_terapeutica
+tiazidico	classe_terapeutica
+tiazolidinediona	classe_terapeutica
+toc	indicacao_clinica
+trauma hemorragico	indicacao_clinica
+trichomonas	indicacao_clinica
+triple therapy ellipta	termo_generico
+trombolitico	classe_terapeutica
+ulcera	indicacao_clinica
+ulcera lansoprazol	indicacao_clinica
+ulcera pantoprazol	indicacao_clinica
+urticaria hidroxizina	indicacao_clinica
+uterotonico	classe_terapeutica
+uterotonico pge1	classe_terapeutica
+vasopresor	classe_terapeutica
+vasopressor	classe_terapeutica
+vasopressor 1ª linha	classe_terapeutica
+vertigem	sintoma
+vitamina b9	classe_terapeutica
+vitamina d	classe_terapeutica
+vitamina d ativa	classe_terapeutica
+vitamina gestacao	classe_terapeutica
+vomito	sintoma
+vre tratamento	indicacao_clinica
+vsr	termo_generico
+who degrau 3 especial	termo_generico
+xoa	classe_terapeutica
+xoa direto	classe_terapeutica
+zoster	indicacao_clinica

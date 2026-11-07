@@ -1,0 +1,111 @@
+                                ANEXO TÉCNICO — USO EXCLUSIVO DO PRESCRITOR
+
+                                      Documento técnico de apoio à decisão. Não se destina ao paciente e não faz parte da receita.
+
+Avaliação realizada com cobertura parcial
+Avaliação integral: NÃO realizada (cobertura molecular não equivale a avaliação clínica integral)
+
+Identificação da avaliação
+
+    Data e horário da avaliação: 07/11/2026, 09:30
+    Versão do contrato de avaliação: RM-105.2
+
+Situação geral da avaliação
+
+    Avaliação realizada com cobertura parcial
+    Avaliação integral: NÃO realizada (cobertura molecular não equivale a avaliação clínica integral)
+    Verificação PARCIAL: não foi possível verificar "Xyzcilina", "Abcdopril", "Medicamento Inventado 1", "Medicamento Inventado 2", "Fármaco Teste
+    3", "Substância Z", "Composto Q-7", "Remédio Sem Cadastro". Combinações não avaliadas ou sem identidade confirmada: Varfarina + Xyzcilina;
+    Varfarina + Abcdopril; Varfarina + Medicamento Inventado 1; Varfarina + Medicamento Inventado 2; Varfarina + Fármaco Teste 3; Varfarina +
+    Substância Z; Varfarina + Composto Q-7; Varfarina + Remédio Sem Cadastro; Xyzcilina + Abcdopril; Xyzcilina + Medicamento Inventado 1; Xyzcilina
+    + Medicamento Inventado 2; Xyzcilina + Fármaco Teste 3; Xyzcilina + Substância Z; Xyzcilina + Composto Q-7; Xyzcilina + Remédio Sem Cadastro;
+    Abcdopril + Medicamento Inventado 1; Abcdopril + Medicamento Inventado 2; Abcdopril + Fármaco Teste 3; Abcdopril + Substância Z; Abcdopril +
+    Composto Q-7; Abcdopril + Remédio Sem Cadastro; Medicamento Inventado 1 + Medicamento Inventado 2; Medicamento Inventado 1 + Fármaco
+    Teste 3; Medicamento Inventado 1 + Substância Z; Medicamento Inventado 1 + Composto Q-7; Medicamento Inventado 1 + Remédio Sem Cadastro;
+    Medicamento Inventado 2 + Fármaco Teste 3; Medicamento Inventado 2 + Substância Z; Medicamento Inventado 2 + Composto Q-7; Medicamento
+    Inventado 2 + Remédio Sem Cadastro; Fármaco Teste 3 + Substância Z; Fármaco Teste 3 + Composto Q-7; Fármaco Teste 3 + Remédio Sem Cadastro;
+    Substância Z + Composto Q-7; Substância Z + Remédio Sem Cadastro; Composto Q-7 + Remédio Sem Cadastro. Nenhuma conclusão de segurança é
+    possível para o que não foi verificado.
+
+Medicamentos e moléculas identificados
+
+    Varfarina → Varfarina [varfarina] — identidade confirmada (ID da entidade informado)
+
+Medicamentos ou moléculas não identificados
+
+    Xyzcilina — não reconhecido
+    Abcdopril — não reconhecido
+    Medicamento Inventado 1 — não reconhecido
+    Medicamento Inventado 2 — não reconhecido
+    Fármaco Teste 3 — não reconhecido
+    Substância Z — não reconhecido
+    Composto Q-7 — não reconhecido
+    Remédio Sem Cadastro — não reconhecido
+Combinações não avaliadas
+
+    Varfarina + Xyzcilina — ao menos uma molécula não foi verificada
+    Varfarina + Abcdopril — ao menos uma molécula não foi verificada
+    Varfarina + Medicamento Inventado 1 — ao menos uma molécula não foi verificada
+    Varfarina + Medicamento Inventado 2 — ao menos uma molécula não foi verificada
+    Varfarina + Fármaco Teste 3 — ao menos uma molécula não foi verificada
+    Varfarina + Substância Z — ao menos uma molécula não foi verificada
+    Varfarina + Composto Q-7 — ao menos uma molécula não foi verificada
+    Varfarina + Remédio Sem Cadastro — ao menos uma molécula não foi verificada
+    Xyzcilina + Abcdopril — ao menos uma molécula não foi verificada
+    Xyzcilina + Medicamento Inventado 1 — ao menos uma molécula não foi verificada
+    Xyzcilina + Medicamento Inventado 2 — ao menos uma molécula não foi verificada
+    Xyzcilina + Fármaco Teste 3 — ao menos uma molécula não foi verificada
+    Xyzcilina + Substância Z — ao menos uma molécula não foi verificada
+    Xyzcilina + Composto Q-7 — ao menos uma molécula não foi verificada
+    Xyzcilina + Remédio Sem Cadastro — ao menos uma molécula não foi verificada
+    Abcdopril + Medicamento Inventado 1 — ao menos uma molécula não foi verificada
+    Abcdopril + Medicamento Inventado 2 — ao menos uma molécula não foi verificada
+    Abcdopril + Fármaco Teste 3 — ao menos uma molécula não foi verificada
+    Abcdopril + Substância Z — ao menos uma molécula não foi verificada
+    Abcdopril + Composto Q-7 — ao menos uma molécula não foi verificada
+    Abcdopril + Remédio Sem Cadastro — ao menos uma molécula não foi verificada
+    Medicamento Inventado 1 + Medicamento Inventado 2 — ao menos uma molécula não foi verificada
+    Medicamento Inventado 1 + Fármaco Teste 3 — ao menos uma molécula não foi verificada
+    Medicamento Inventado 1 + Substância Z — ao menos uma molécula não foi verificada
+    Medicamento Inventado 1 + Composto Q-7 — ao menos uma molécula não foi verificada
+    Medicamento Inventado 1 + Remédio Sem Cadastro — ao menos uma molécula não foi verificada
+    Medicamento Inventado 2 + Fármaco Teste 3 — ao menos uma molécula não foi verificada
+    Medicamento Inventado 2 + Substância Z — ao menos uma molécula não foi verificada
+    Medicamento Inventado 2 + Composto Q-7 — ao menos uma molécula não foi verificada
+    Medicamento Inventado 2 + Remédio Sem Cadastro — ao menos uma molécula não foi verificada
+    Fármaco Teste 3 + Substância Z — ao menos uma molécula não foi verificada
+    Fármaco Teste 3 + Composto Q-7 — ao menos uma molécula não foi verificada
+    Fármaco Teste 3 + Remédio Sem Cadastro — ao menos uma molécula não foi verificada
+    Substância Z + Composto Q-7 — ao menos uma molécula não foi verificada
+    Substância Z + Remédio Sem Cadastro — ao menos uma molécula não foi verificada
+    Composto Q-7 + Remédio Sem Cadastro — ao menos uma molécula não foi verificada
+
+Alertas encontrados
+
+    Nenhum alerta emitido, porém a avaliação NÃO foi completa: a ausência de alerta não indica ausência de risco.
+
+Contextos clínicos
+
+    Gestação: NÃO informado — Dado não informado: a regra dependente NÃO foi avaliada (ausência não significa "não").
+    Lactação: NÃO informado — Dado não informado: a regra dependente NÃO foi avaliada (ausência não significa "não").
+    Idade: informado — Dado informado.
+    Função renal: NÃO informado — Dado não informado: a regra dependente NÃO foi avaliada (ausência não significa "não").
+    Potássio: não aplicável (não exigido por regra) — Dado não usado nesta verificação.
+    Alergias: NÃO informado — Alergias não informadas: a avaliação NÃO ocorreu (ausência de informação ≠ ausência de alergia).
+    Peso: não aplicável (não exigido por regra) — Peso não é usado por esta verificação (é usado nas calculadoras de dose).
+
+Situação da avaliação de alergias
+
+    NÃO informadas (a avaliação não ocorreu; ausência de informação não significa ausência de alergia)
+    Alergias não informadas: nada foi avaliado. A ausência de avaliação não indica ausência de risco.
+Limitações relevantes
+
+    Cobertura molecular não equivale a avaliação clínica integral.
+    A avaliação considera apenas as regras cadastradas no sistema; não substitui o julgamento clínico nem a consulta à bula e a protocolos.
+    O cruzamento é feito apenas por identidade molecular (mesma molécula ou componente de combinação).
+    Reatividade cruzada entre moléculas ou classes NÃO é avaliada: nenhuma regra com fonte documentada foi cadastrada.
+    Alergias não medicamentosas (alimento, ambiental, outro) não são cruzadas com excipientes.
+    Este anexo é gerado no momento da impressão e não é armazenado automaticamente pelo sistema.
+    Informações clínicas pendentes: Gestação, Lactação, Função renal, Alergias.
+    Existem combinações não avaliadas.
+

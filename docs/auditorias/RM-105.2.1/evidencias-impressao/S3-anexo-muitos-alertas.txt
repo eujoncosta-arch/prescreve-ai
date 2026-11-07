@@ -1,0 +1,108 @@
+                                ANEXO TÉCNICO — USO EXCLUSIVO DO PRESCRITOR
+
+                                      Documento técnico de apoio à decisão. Não se destina ao paciente e não faz parte da receita.
+
+Cobertura molecular completa (todas as moléculas informadas foram identificadas e verificadas)
+Avaliação integral: NÃO realizada (cobertura molecular não equivale a avaliação clínica integral)
+
+Identificação da avaliação
+    Data e horário da avaliação: 07/11/2026, 09:30
+    Versão do contrato de avaliação: RM-105.2
+
+Situação geral da avaliação
+    Cobertura molecular completa (todas as moléculas informadas foram identificadas e verificadas)
+    Avaliação integral: NÃO realizada (cobertura molecular não equivale a avaliação clínica integral)
+    Verificação concluída para 18 medicamento(s)/molécula(s) informado(s). Ausência de alerta indica apenas que nenhuma regra cadastrada foi acionada.
+
+Medicamentos e moléculas identificados
+    Varfarina → Varfarina [varfarina] — identidade confirmada (ID da entidade informado)
+    ibuprofeno → ibuprofeno [ibuprofeno] — identidade confirmada (ID da entidade informado)
+    Enalapril → Enalapril [enalapril] — identidade confirmada (ID da entidade informado)
+    Losartana → Losartana [losartana] — identidade confirmada (ID da entidade informado)
+    Espironolactona → Espironolactona [espironolactona] — identidade confirmada (ID da entidade informado)
+    Sertralina → Sertralina [sertralina] — identidade confirmada (ID da entidade informado)
+    Tramadol → Tramadol [tramadol] — identidade confirmada (ID da entidade informado); contexto: Dor aguda moderada (geral)
+    Azitromicina → Azitromicina [azitromicina] — identidade confirmada (ID da entidade informado); contexto: Infecção aguda (esquema padrão)
+    Amiodarona → Amiodarona [amiodarona] — identidade confirmada (ID da entidade informado); contexto: Antiarrítmico crônico (FA/flutter)
+    Carbonato de Lítio → Carbonato de Lítio [litio] — identidade confirmada (ID da entidade informado)
+    Hidroclorotiazida → Hidroclorotiazida [hctz] — identidade confirmada (ID da entidade informado)
+    Tadalafila → Tadalafila [tadalafila] — identidade confirmada (ID da entidade informado)
+    Nitroglicerina → Nitroglicerina [nitroglicerina] — identidade confirmada (ID da entidade informado)
+    Tranilcipromina → Tranilcipromina [tranilcipromina] — identidade confirmada (ID da entidade informado)
+    Sacubitril/Valsartana → Sacubitril/Valsartana [sacubitril_valsartana] — identidade confirmada (ID da entidade informado)
+    Haloperidol → Haloperidol [haloperidol] — identidade confirmada (ID da entidade informado); contexto: Psicose / agitação (psiquiatria)
+    Hidroxicloroquina → Hidroxicloroquina [hidroxicloroquina] — identidade confirmada (ID da entidade informado)
+    Moxifloxacino → Moxifloxacino [moxifloxacino] — identidade confirmada (ID da entidade informado)
+
+Medicamentos ou moléculas não identificados
+    Nenhum.
+
+Combinações não avaliadas
+    Nenhuma.
+Alertas encontrados
+
+    [Crítico] Interação: Sacubitril/Valsartana + Enalapril — origem: base cadastrada; estado: baseado em moléculas identificadas
+    [Crítico] Interação: Tranilcipromina + Tramadol — origem: base cadastrada; estado: baseado em moléculas identificadas
+    [Crítico] Azitromicina + Amiodarona — QT prolongado — origem: regra fixa (par de alta relevância clínica); estado: baseado em moléculas
+    identificadas
+    [Crítico] Lítio + Hidroclorotiazida — Toxicidade por lítio — origem: regra fixa (par de alta relevância clínica); estado: baseado em moléculas
+    identificadas
+    [Crítico] Varfarina + AINE — Risco hemorrágico grave — origem: regra fixa (par de alta relevância clínica); estado: baseado em moléculas
+    identificadas
+    [Crítico] Moxifloxacino + Amiodarona — QT crítico — origem: regra fixa (par de alta relevância clínica); estado: baseado em moléculas identificadas
+    [Crítico] IECA + BRA — Duplo bloqueio SRAA contraindicado — origem: regra fixa (par de alta relevância clínica); estado: baseado em moléculas
+    identificadas
+    [Crítico] IMAO + ISRS — Síndrome serotoninérgica potencialmente fatal — origem: regra fixa (par de alta relevância clínica); estado: baseado em
+    moléculas identificadas
+    [Crítico] Nitrato + Tadalafila — Hipotensão grave potencialmente fatal — origem: regra fixa (par de alta relevância clínica); estado: baseado em
+    moléculas identificadas
+    [Crítico] ARNI (Sacubitril/Valsartana) + IECA — Angioedema fatal — origem: regra fixa (par de alta relevância clínica); estado: baseado em moléculas
+    identificadas
+    [Alerta] Interação: Varfarina + Amiodarona — origem: base cadastrada; estado: baseado em moléculas identificadas
+    [Alerta] Interação: Enalapril + Losartana — origem: base cadastrada; estado: baseado em moléculas identificadas
+    [Alerta] Interação: Amiodarona + Haloperidol — origem: base cadastrada; estado: baseado em moléculas identificadas
+    [Alerta] Interação: Hidroxicloroquina + Amiodarona — origem: base cadastrada; estado: baseado em moléculas identificadas
+    [Alerta] Interação: Tadalafila + Nitroglicerina — origem: base cadastrada; estado: baseado em moléculas identificadas
+    [Alerta] IECA + AINE — Risco nefrotóxico — origem: regra fixa (par de alta relevância clínica); estado: baseado em moléculas identificadas
+    [Alerta] BRA + AINE — Risco nefrotóxico — origem: regra fixa (par de alta relevância clínica); estado: baseado em moléculas identificadas
+    [Alerta] Azitromicina + Haloperidol — QT prolongado — origem: regra fixa (par de alta relevância clínica); estado: baseado em moléculas
+    identificadas
+    [Alerta] Hidroxicloroquina + Azitromicina — QT prolongado — origem: regra fixa (par de alta relevância clínica); estado: baseado em moléculas
+    identificadas
+    [Alerta] Sertralina + Tramadol — Síndrome serotoninérgica — origem: regra fixa (par de alta relevância clínica); estado: baseado em moléculas
+    identificadas
+    [Atenção] Interação: Sertralina + Varfarina — origem: base cadastrada; estado: baseado em moléculas identificadas
+    [Atenção] Interação: Azitromicina + Varfarina — origem: base cadastrada; estado: baseado em moléculas identificadas
+    [Atenção] Interação: ibuprofeno + Carbonato de Lítio — origem: base cadastrada; estado: baseado em moléculas identificadas
+    [Atenção] Interação: Enalapril + Espironolactona — origem: base cadastrada; estado: baseado em moléculas identificadas
+    [Atenção] Interação: Losartana + Espironolactona — origem: base cadastrada; estado: baseado em moléculas identificadas
+    [Atenção] Interação: Sacubitril/Valsartana + Espironolactona — origem: base cadastrada; estado: baseado em moléculas identificadas
+    [Atenção] Interação: Sertralina + Carbonato de Lítio — origem: base cadastrada; estado: baseado em moléculas identificadas
+    [Atenção] ARM prescrito — verificar K+ sérico antes do início — origem: regra fixa (antagonista de aldosterona / K+); estado: baseado em moléculas
+    identificadas
+    [Atenção] IECA + Espironolactona — Hipercalemia — origem: regra fixa (par de alta relevância clínica); estado: baseado em moléculas identificadas
+
+Contextos clínicos
+
+    Gestação: NÃO informado — Dado não informado: a regra dependente NÃO foi avaliada (ausência não significa "não").
+    Lactação: NÃO informado — Dado não informado: a regra dependente NÃO foi avaliada (ausência não significa "não").
+    Idade: informado — Dado informado.
+    Função renal: NÃO informado — Dado não informado: a regra dependente NÃO foi avaliada (ausência não significa "não").
+    Potássio: NÃO informado — Dado não informado: a regra dependente NÃO foi avaliada (ausência não significa "não").
+    Alergias: NÃO informado — Alergias não informadas: a avaliação NÃO ocorreu (ausência de informação ≠ ausência de alergia).
+    Peso: não aplicável (não exigido por regra) — Peso não é usado por esta verificação (é usado nas calculadoras de dose).
+
+Situação da avaliação de alergias
+
+    NÃO informadas (a avaliação não ocorreu; ausência de informação não significa ausência de alergia)
+    Alergias não informadas: nada foi avaliado. A ausência de avaliação não indica ausência de risco.
+Limitações relevantes
+
+    Cobertura molecular não equivale a avaliação clínica integral.
+    A avaliação considera apenas as regras cadastradas no sistema; não substitui o julgamento clínico nem a consulta à bula e a protocolos.
+    O cruzamento é feito apenas por identidade molecular (mesma molécula ou componente de combinação).
+    Reatividade cruzada entre moléculas ou classes NÃO é avaliada: nenhuma regra com fonte documentada foi cadastrada.
+    Alergias não medicamentosas (alimento, ambiental, outro) não são cruzadas com excipientes.
+    Este anexo é gerado no momento da impressão e não é armazenado automaticamente pelo sistema.
+    Informações clínicas pendentes: Gestação, Lactação, Função renal, Potássio, Alergias.
+

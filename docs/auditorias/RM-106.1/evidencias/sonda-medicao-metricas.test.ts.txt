@@ -1,0 +1,91 @@
+// SONDA de medição da RM-106.1 (instrumento, não altera regras). Gera docs/auditorias/RM-106.1/evidencias/metricas-matriz.json
+import { it } from 'vitest';
+import * as fs from 'fs';
+import { getAllDrugs } from '@/lib/pharma-database';
+import { runSafetyCheck } from '@/lib/safety-rules';
+import { resolverAlvoInteracao } from '@/lib/interaction-targets';
+import { drugRepository } from '@/lib/pharma-core';
+
+const OUT = 'C:/Users/Jonathan Costa/Desktop/Prescreve-AI/docs/auditorias/RM-106.1/evidencias/';
+fs.mkdirSync(OUT, { recursive: true });
+
+it('medir', { timeout: 900000 }, () => {
+  const quick = getAllDrugs();
+  const ents = (drugRepository.getAll() as unknown as Array<{ id: string; interactions: Array<{ with: string; severity: string; description: string }>; references: unknown[] }>);
+  const porId = new Map(quick.map(d => [d.id, d]));
+  const M: Record<string, unknown> = {};
+
+  // ── U1/U2: base cadastral
+  const regras = ents.flatMap(e => e.interactions.map(i => ({ de: e.id, ...i })));
+  M.U1_regras_cadastradas = regras.length;
+  M.U2_with_distintos = new Set(regras.map(r => r.with)).size;
+  M.U2b_entidades = ents.length;
+  M.entidades_com_references = ents.filter(e => Array.isArray(e.references) && e.references.length > 0).length;
+  M.regras_com_campos_alem_de_with_severity_description = regras.filter(r => Object.keys(r).filter(k => !['de', 'with', 'severity', 'description'].includes(k)).length > 0).length;
+  // detecção textual (heurística, NÃO é fonte registrada): o `description` cita algo?
+  const rx = { fonte: /\b(bula|fda|anvisa|diretriz|guideline|consenso|ESC|AHA|ACC|CPIC|KDIGO)\b/i, mecanismo: /(inibe|inibição|induz|indução|CYP|P-gp|potencializa|aditivo|aumenta|reduz|diminui)/i, conduta: /(evitar|monitorar|ajustar|suspender|contraindicad|não associar|reduzir dose)/i };
+  M.heuristica_texto_description = { cita_fonte_no_texto: regras.filter(r => rx.fonte.test(r.description)).length, menciona_mecanismo_no_texto: regras.filter(r => rx.mecanismo.test(r.description)).length, menciona_conduta_no_texto: regras.filter(r => rx.conduta.test(r.description)).length, nota: 'heurística por regex sobre texto livre; NÃO equivale a fonte/mecanismo/conduta estruturados nem verificados' };
+
+  // ── U3: relações direcionais regra→entidade (novo resolvedor) e (antigo substring)
+  const novo = new Map<string, { tipo: string; sev: string }>(); // chave de|para|with
+  const antigo = new Set<string>();
+  const tipoCont: Record<string, number> = {};
+  for (const e of ents) {
+    for (const r of e.interactions) {
+      const alvo = resolverAlvoInteracao(r.with);
+      for (const [t, tipo] of alvo.entidades) {
+        if (t === e.id) continue;
+        novo.set(`${e.id}|${t}|${r.with}`, { tipo, sev: r.severity });
+        tipoCont[tipo] = (tipoCont[tipo] || 0) + 1;
+      }
+      for (const q of quick) {
+        if (q.id === e.id) continue;
+        const a = q.molecula.toLowerCase(), b = r.with.toLowerCase();
+        if (a.includes(b) || b.includes(a)) antigo.add(`${e.id}|${q.id}|${r.with}`);
+      }
+    }
+  }
+  M.U3_relacoes_direcionais_regra_entidade = { novo: novo.size, antigo_substring: antigo.size, mantidas: [...antigo].filter(k => novo.has(k)).length, perdidas: [...antigo].filter(k => !novo.has(k)).length, ganhas: [...novo.keys()].filter(k => !antigo.has(k)).length, por_tipo_novo: tipoCont };
+
+  // ── U4: pares NÃO ORDENADOS de entidades com ≥1 relação direcional
+  const par = (a: string, b: string) => (a < b ? `${a}||${b}` : `${b}||${a}`);
+  const paresNovo = new Set([...novo.keys()].map(k => { const [a, b] = k.split('|'); return par(a, b); }));
+  const paresAntigo = new Set([...antigo].map(k => { const [a, b] = k.split('|'); return par(a, b); }));
+  M.U4_pares_nao_ordenados_com_relacao = { novo: paresNovo.size, antigo_substring: paresAntigo.size, ganhos: [...paresNovo].filter(p => !paresAntigo.has(p)).length, perdidos: [...paresAntigo].filter(p => !paresNovo.has(p)).length, total_possivel_de_pares: (ents.length * (ents.length - 1)) / 2 };
+
+  // ── U5: o que a INTERFACE mostra, par a par (runSafetyCheck por ID, todas as combinações dos pares com relação OU amostra completa)
+  const ids = ents.map(e => e.id);
+  const cont = { pares_executados: 0, pares_com_alerta_de_interacao: 0, pares_com_alguma_alerta: 0, alertas_interacao_total: 0, pares_com_mais_de_um_alerta_interacao: 0, pares_sem_regra: 0, por_classificacao: {} as Record<string, number>, por_tipo_correspondencia: {} as Record<string, number>, por_origem: {} as Record<string, number>, divergencia_de_gravidade: 0, pares_ambiguos: 0, pares_com_entidade_nao_verificada: 0, ids_alertas_duplicados: 0 };
+  const exemplos: Record<string, string[]> = {};
+  for (let i = 0; i < ids.length; i++) {
+    for (let j = i + 1; j < ids.length; j++) {
+      const a = porId.get(ids[i]), b = porId.get(ids[j]);
+      if (!a || !b) continue;
+      const r = runSafetyCheck({ moleculas: [a.molecula, b.molecula], entidade_ids: [a.id, b.id] });
+      cont.pares_executados++;
+      const inter = r.alertas.filter(x => x.id.startsWith('inter-') || x.id.startsWith('critical-pair-'));
+      if (r.alertas.length) cont.pares_com_alguma_alerta++;
+      if (inter.length) cont.pares_com_alerta_de_interacao++;
+      cont.alertas_interacao_total += inter.length;
+      if (inter.length > 1) cont.pares_com_mais_de_um_alerta_interacao++;
+      if (r.moleculas_verificadas.some(v => v.ambigua)) cont.pares_ambiguos++;
+      if (r.moleculas_nao_verificadas.length) cont.pares_com_entidade_nao_verificada++;
+      if (r.resumo_interacoes.pares_sem_regra_encontrada.length) cont.pares_sem_regra++;
+      const ids2 = r.alertas.map(x => x.id);
+      if (new Set(ids2).size !== ids2.length) cont.ids_alertas_duplicados++;
+      for (const x of r.rastreio_alertas) {
+        if (!x.classificacao) continue;
+        if (!(x.alerta_id.startsWith('inter-') || x.alerta_id.startsWith('critical-pair-'))) continue;
+        cont.por_classificacao[x.classificacao] = (cont.por_classificacao[x.classificacao] || 0) + 1;
+        const t = x.tipo_correspondencia ?? x.origem ?? '?';
+        cont.por_tipo_correspondencia[t] = (cont.por_tipo_correspondencia[t] || 0) + 1;
+        cont.por_origem[x.origem ?? '?'] = (cont.por_origem[x.origem ?? '?'] || 0) + 1;
+        (exemplos[t] ||= []).length < 4 && exemplos[t].push(`${a.id}+${b.id}:${x.alerta_id}`);
+      }
+      if (r.interacoes_avaliadas.some(x => x.divergencia_de_gravidade)) cont.divergencia_de_gravidade++;
+    }
+  }
+  M.U5_interface_por_par_de_entidades = cont;
+  M.U5_exemplos_por_tipo = exemplos;
+  fs.writeFileSync(OUT + 'metricas-matriz.json', JSON.stringify(M, null, 1));
+});

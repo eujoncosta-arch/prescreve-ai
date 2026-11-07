@@ -10,7 +10,7 @@
 // Resultado obtido · Status. Executado automaticamente pelo Vitest.
 // ============================================================
 
-import { runSafetyCheck, type QuickSafetyAlert, type SafetyCheckInput } from '@/lib/safety-rules';
+import { runSafetyCheck, type QuickSafetyAlert, type SafetyCheckInput, type SafetyCheckResult } from '@/lib/safety-rules';
 
 export type ClinicalCategory =
   | 'pediatria'
@@ -99,6 +99,11 @@ export function runSuite(cases: ClinicalCase[]): SuiteResult {
 // ── Helpers de asserção sobre alertas do safety engine ───────────────────────
 
 export function safety(input: SafetyCheckInput): QuickSafetyAlert[] {
+  return runSafetyCheck(input).alertas;
+}
+
+/** RM-104: resultado completo, com a cobertura da verificação. */
+export function safetyResult(input: SafetyCheckInput): SafetyCheckResult {
   return runSafetyCheck(input);
 }
 
@@ -128,7 +133,22 @@ export function expectAlert(alerts: QuickSafetyAlert[], m: AlertMatcher): { obti
   return { obtido: resumo, status: hit ? 'PASS' : 'FAIL' };
 }
 
-/** PASS se NENHUM alerta casa com o matcher (ausência esperada). */
+/**
+ * RM-104: ausência esperada COM cobertura. Só passa se a verificação foi completa — com cobertura
+ * parcial, molécula não reconhecida, dados insuficientes ou erro, "nenhum alerta" não prova nada.
+ */
+export function expectNoAlertCompleto(result: SafetyCheckResult, m: AlertMatcher): { obtido: string; status: CaseStatus } {
+  if (!result.verificacao_completa) {
+    return { obtido: `verificação ${result.status}: ${result.mensagem}`, status: 'FAIL' };
+  }
+  return expectNoAlert(result.alertas, m);
+}
+
+/**
+ * PASS se NENHUM alerta casa com o matcher (ausência esperada).
+ * ATENÇÃO (RM-104): recebe só a lista de alertas e não sabe se a verificação foi completa; para casos
+ * com molécula resolvida na base prefira `expectNoAlertCompleto`.
+ */
 export function expectNoAlert(alerts: QuickSafetyAlert[], m: AlertMatcher): { obtido: string; status: CaseStatus } {
   const hit = findAlert(alerts, m);
   const resumo = alerts.length
