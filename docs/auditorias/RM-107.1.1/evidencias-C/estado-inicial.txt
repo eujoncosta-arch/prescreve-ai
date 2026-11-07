@@ -1,0 +1,6 @@
+branch: main
+HEAD: b2ff7bb8362a3f390a04cd6fba45fc881a57768c
+status (porcelain):
+?? docs/auditorias/RM-107.1.1/evidencias-C/
+(vazio = árvore limpa)
+ahead/behind origin: 0	0
