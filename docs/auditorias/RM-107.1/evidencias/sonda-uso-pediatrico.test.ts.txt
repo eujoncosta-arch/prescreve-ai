@@ -1,0 +1,23 @@
+import { it } from 'vitest';
+import * as fs from 'fs';
+import { getAllDrugs } from '@/lib/pharma-database';
+it('upeds', () => {
+  const R = JSON.parse(fs.readFileSync('C:/Users/Jonathan Costa/Desktop/Prescreve-AI/docs/auditorias/RM-107.1/evidencias/catalogo-dose-calculator-por-paciente.json', 'utf8')) as Array<Record<string, unknown>>;
+  const flag = new Map(getAllDrugs().map(d => [d.id, d.uso_pediatrico ?? '']));
+  const k = 'crianca_4a_15kg';
+  const calc = R.filter(r => !r.tem_dose_pediatrica && r[k + '_fonte'] === 'adulto_fixo' && !r[k + '_freq_indet'] && !r[k + '_bloqueio'] && Number(r[k + '_dia']) > 0);
+  const fi = R.filter(r => !r.tem_dose_pediatrica && r[k + '_freq_indet']);
+  const sem = R.filter(r => !r.tem_dose_pediatrica);
+  const out = {
+    total_marcados_nao_aplicavel: [...flag.values()].filter(v => v === 'nao_aplicavel').length,
+    entre_os_362_sem_dose_ped: sem.filter(r => flag.get(String(r.id)) === 'nao_aplicavel').length,
+    entre_os_207_que_calculam_dose_adulta: calc.filter(r => flag.get(String(r.id)) === 'nao_aplicavel').length,
+    entre_os_125_freq_indeterminada: fi.filter(r => flag.get(String(r.id)) === 'nao_aplicavel').length,
+    os_207_SEM_marca_de_nao_aplicavel: calc.filter(r => flag.get(String(r.id)) !== 'nao_aplicavel').length,
+    com_regra_ped_e_marcados: R.filter(r => r.tem_dose_pediatrica && flag.get(String(r.id)) === 'nao_aplicavel').map(r => r.id),
+    ids_207_marcados: calc.filter(r => flag.get(String(r.id)) === 'nao_aplicavel').map(r => r.id),
+    ids_207_nao_marcados: calc.filter(r => flag.get(String(r.id)) !== 'nao_aplicavel').map(r => r.id),
+  };
+  fs.writeFileSync('C:/Users/Jonathan Costa/Desktop/Prescreve-AI/docs/auditorias/RM-107.1/evidencias/catalogo-uso-pediatrico-vs-calculo.json', JSON.stringify(out, null, 1));
+  console.log(JSON.stringify({ ...out, ids_207_marcados: out.ids_207_marcados.length, ids_207_nao_marcados: out.ids_207_nao_marcados.length }));
+});

@@ -1,0 +1,2587 @@
+[
+ {
+  "medicamento": "paracetamol",
+  "paciente": "neonato 14 d, 3,5 kg",
+  "A_formulacoes_ok": "parac-gotas:35 | parac-susp:35 | parac-comp-500:35 | parac-comp-750:35",
+  "A": {
+   "ok": true,
+   "pop": "neonato",
+   "por_tomada_mg": 35,
+   "dia_mg": 140,
+   "freq_h": 6,
+   "formulacao": "parac-gotas",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 52.5,
+   "dia_mg": 210,
+   "freq": "a cada 4–6h",
+   "indicacao": "Febre e dor",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "neonato",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 52.5,
+   "unidade": "mg",
+   "dia": 210,
+   "freq": "a cada 6 horas",
+   "tomadas": 4,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "paracetamol",
+  "paciente": "lactente 6 m, 8 kg",
+  "A_formulacoes_ok": "parac-gotas:120 | parac-susp:120 | parac-comp-500:120 | parac-comp-750:120",
+  "A": {
+   "ok": true,
+   "pop": "lactente",
+   "por_tomada_mg": 120,
+   "dia_mg": 480,
+   "freq_h": 6,
+   "formulacao": "parac-gotas",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 120,
+   "dia_mg": 480,
+   "freq": "a cada 4–6h",
+   "indicacao": "Febre e dor",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "lactente",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 120,
+   "unidade": "mg",
+   "dia": 480,
+   "freq": "a cada 6 horas",
+   "tomadas": 4,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "paracetamol",
+  "paciente": "criança 4 a, 15 kg",
+  "A_formulacoes_ok": "parac-gotas:225 | parac-susp:225 | parac-comp-500:225 | parac-comp-750:225",
+  "A": {
+   "ok": true,
+   "pop": "pediatrico",
+   "por_tomada_mg": 225,
+   "dia_mg": 900,
+   "freq_h": 6,
+   "formulacao": "parac-gotas",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 225,
+   "dia_mg": 900,
+   "freq": "a cada 4–6h",
+   "indicacao": "Febre e dor",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "pre_escolar",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 225,
+   "unidade": "mg",
+   "dia": 900,
+   "freq": "a cada 6 horas",
+   "tomadas": 4,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "paracetamol",
+  "paciente": "criança 9 a, 30 kg",
+  "A_formulacoes_ok": "parac-gotas:450 | parac-susp:450 | parac-comp-500:450 | parac-comp-750:450",
+  "A": {
+   "ok": true,
+   "pop": "pediatrico",
+   "por_tomada_mg": 450,
+   "dia_mg": 1800,
+   "freq_h": 6,
+   "formulacao": "parac-gotas",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 450,
+   "dia_mg": 1800,
+   "freq": "a cada 4–6h",
+   "indicacao": "Febre e dor",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "escolar",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 450,
+   "unidade": "mg",
+   "dia": 1800,
+   "freq": "a cada 6 horas",
+   "tomadas": 4,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "paracetamol",
+  "paciente": "adolescente 14 a, 50 kg",
+  "A_formulacoes_ok": "parac-gotas:750 | parac-susp:750 | parac-comp-500:750 | parac-comp-750:750",
+  "A": {
+   "ok": true,
+   "pop": "adolescente",
+   "por_tomada_mg": 750,
+   "dia_mg": 3000,
+   "freq_h": 6,
+   "formulacao": "parac-gotas",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 750,
+   "dia_mg": 3000,
+   "freq": "a cada 4–6h",
+   "indicacao": "Febre e dor",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "adolescente",
+   "fonte": "adulto_fixo",
+   "por_tomada": 500,
+   "unidade": "mg",
+   "dia": 0,
+   "freq": "frequência a confirmar",
+   "tomadas": 0,
+   "limitado": true,
+   "freq_indeterminada": true,
+   "bloqueio": [
+    "🚨 BLOQUEADO: confirme manualmente a frequência de \"Paracetamol\" (frequência cadastrada: \""
+   ],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "paracetamol",
+  "paciente": "adulto 40 a, 70 kg",
+  "A_formulacoes_ok": "parac-gotas:750 | parac-susp:750 | parac-comp-500:750 | parac-comp-750:750",
+  "A": {
+   "ok": true,
+   "pop": "adulto",
+   "por_tomada_mg": 750,
+   "dia_mg": 3000,
+   "freq_h": 6,
+   "formulacao": "parac-gotas",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 1000,
+   "dia_mg": 4000,
+   "freq": "a cada 4–6h",
+   "indicacao": "Febre e dor",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "adulto",
+   "fonte": "adulto_fixo",
+   "por_tomada": 500,
+   "unidade": "mg",
+   "dia": 0,
+   "freq": "frequência a confirmar",
+   "tomadas": 0,
+   "limitado": true,
+   "freq_indeterminada": true,
+   "bloqueio": [
+    "🚨 BLOQUEADO: confirme manualmente a frequência de \"Paracetamol\" (frequência cadastrada: \""
+   ],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "paracetamol",
+  "paciente": "idoso 75 a, 70 kg",
+  "A_formulacoes_ok": "parac-gotas:500 | parac-susp:500 | parac-comp-500:500 | parac-comp-750:500",
+  "A": {
+   "ok": true,
+   "pop": "geriatrico",
+   "por_tomada_mg": 500,
+   "dia_mg": 1500,
+   "freq_h": 8,
+   "formulacao": "parac-gotas",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 1000,
+   "dia_mg": 4000,
+   "freq": "a cada 4–6h",
+   "indicacao": "Febre e dor",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "geriatrico",
+   "fonte": "adulto_fixo",
+   "por_tomada": 500,
+   "unidade": "mg",
+   "dia": 0,
+   "freq": "frequência a confirmar",
+   "tomadas": 0,
+   "limitado": true,
+   "freq_indeterminada": true,
+   "bloqueio": [
+    "🚨 BLOQUEADO: confirme manualmente a frequência de \"Paracetamol\" (frequência cadastrada: \""
+   ],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "dipirona",
+  "paciente": "neonato 14 d, 3,5 kg",
+  "A_formulacoes_ok": "",
+  "A": {
+   "ok": false,
+   "pop": "neonato",
+   "por_tomada_mg": 0,
+   "dia_mg": 0,
+   "freq_h": null,
+   "formulacao": "dip-gotas",
+   "erro": "Não há posologia definida para Neonatologia (< 28 dias) neste medicamento.",
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 52.5,
+   "dia_mg": 210,
+   "freq": "a cada 6h",
+   "indicacao": "Febre e dor",
+   "bloqueio": [
+    "🚨 CONTRAINDICADO: idade mínima 3 meses. Paciente tem 0 meses."
+   ],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "neonato",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 35,
+   "unidade": "mg",
+   "dia": 140,
+   "freq": "a cada 6 horas",
+   "tomadas": 4,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": [
+    "⚠ Agranulocitose (rara, 1:1 milhão): suspender se febre alta, úlceras "
+   ]
+  }
+ },
+ {
+  "medicamento": "dipirona",
+  "paciente": "lactente 6 m, 8 kg",
+  "A_formulacoes_ok": "dip-gotas:120 | dip-comp-500:120 | dip-comp-1g:120 | dip-inj-500:120",
+  "A": {
+   "ok": true,
+   "pop": "lactente",
+   "por_tomada_mg": 120,
+   "dia_mg": 480,
+   "freq_h": 6,
+   "formulacao": "dip-gotas",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 120,
+   "dia_mg": 480,
+   "freq": "a cada 6h",
+   "indicacao": "Febre e dor",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "lactente",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 80,
+   "unidade": "mg",
+   "dia": 320,
+   "freq": "a cada 6 horas",
+   "tomadas": 4,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": [
+    "⚠ Agranulocitose (rara, 1:1 milhão): suspender se febre alta, úlceras "
+   ]
+  }
+ },
+ {
+  "medicamento": "dipirona",
+  "paciente": "criança 4 a, 15 kg",
+  "A_formulacoes_ok": "dip-gotas:225 | dip-comp-500:225 | dip-comp-1g:225 | dip-inj-500:225",
+  "A": {
+   "ok": true,
+   "pop": "pediatrico",
+   "por_tomada_mg": 225,
+   "dia_mg": 900,
+   "freq_h": 6,
+   "formulacao": "dip-gotas",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 225,
+   "dia_mg": 900,
+   "freq": "a cada 6h",
+   "indicacao": "Febre e dor",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "pre_escolar",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 150,
+   "unidade": "mg",
+   "dia": 600,
+   "freq": "a cada 6 horas",
+   "tomadas": 4,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": [
+    "⚠ Agranulocitose (rara, 1:1 milhão): suspender se febre alta, úlceras "
+   ]
+  }
+ },
+ {
+  "medicamento": "dipirona",
+  "paciente": "criança 9 a, 30 kg",
+  "A_formulacoes_ok": "dip-gotas:450 | dip-comp-500:450 | dip-comp-1g:450 | dip-inj-500:450",
+  "A": {
+   "ok": true,
+   "pop": "pediatrico",
+   "por_tomada_mg": 450,
+   "dia_mg": 1800,
+   "freq_h": 6,
+   "formulacao": "dip-gotas",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 450,
+   "dia_mg": 1800,
+   "freq": "a cada 6h",
+   "indicacao": "Febre e dor",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "escolar",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 300,
+   "unidade": "mg",
+   "dia": 1200,
+   "freq": "a cada 6 horas",
+   "tomadas": 4,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": [
+    "⚠ Agranulocitose (rara, 1:1 milhão): suspender se febre alta, úlceras "
+   ]
+  }
+ },
+ {
+  "medicamento": "dipirona",
+  "paciente": "adolescente 14 a, 50 kg",
+  "A_formulacoes_ok": "dip-gotas:500 | dip-comp-500:500 | dip-comp-1g:500 | dip-inj-500:1000",
+  "A": {
+   "ok": true,
+   "pop": "adolescente",
+   "por_tomada_mg": 500,
+   "dia_mg": 2000,
+   "freq_h": 6,
+   "formulacao": "dip-gotas",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 750,
+   "dia_mg": 3000,
+   "freq": "a cada 6h",
+   "indicacao": "Febre e dor",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "adolescente",
+   "fonte": "adulto_fixo",
+   "por_tomada": 1000,
+   "unidade": "mg",
+   "dia": 0,
+   "freq": "frequência a confirmar",
+   "tomadas": 0,
+   "limitado": true,
+   "freq_indeterminada": true,
+   "bloqueio": [
+    "🚨 BLOQUEADO: confirme manualmente a frequência de \"Dipirona\" (frequência cadastrada: \"A c"
+   ],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": [
+    "⚠ Agranulocitose (rara, 1:1 milhão): suspender se febre alta, úlceras "
+   ]
+  }
+ },
+ {
+  "medicamento": "dipirona",
+  "paciente": "adulto 40 a, 70 kg",
+  "A_formulacoes_ok": "dip-gotas:500 | dip-comp-500:500 | dip-comp-1g:500 | dip-inj-500:1000",
+  "A": {
+   "ok": true,
+   "pop": "adulto",
+   "por_tomada_mg": 500,
+   "dia_mg": 2000,
+   "freq_h": 6,
+   "formulacao": "dip-gotas",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 1000,
+   "dia_mg": 4000,
+   "freq": "a cada 6h",
+   "indicacao": "Febre e dor",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "adulto",
+   "fonte": "adulto_fixo",
+   "por_tomada": 1000,
+   "unidade": "mg",
+   "dia": 0,
+   "freq": "frequência a confirmar",
+   "tomadas": 0,
+   "limitado": true,
+   "freq_indeterminada": true,
+   "bloqueio": [
+    "🚨 BLOQUEADO: confirme manualmente a frequência de \"Dipirona\" (frequência cadastrada: \"A c"
+   ],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": [
+    "⚠ Agranulocitose (rara, 1:1 milhão): suspender se febre alta, úlceras "
+   ]
+  }
+ },
+ {
+  "medicamento": "dipirona",
+  "paciente": "idoso 75 a, 70 kg",
+  "A_formulacoes_ok": "dip-gotas:500 | dip-comp-500:500 | dip-comp-1g:500 | dip-inj-500:500",
+  "A": {
+   "ok": true,
+   "pop": "geriatrico",
+   "por_tomada_mg": 500,
+   "dia_mg": 1500,
+   "freq_h": 8,
+   "formulacao": "dip-gotas",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 1000,
+   "dia_mg": 4000,
+   "freq": "a cada 6h",
+   "indicacao": "Febre e dor",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "geriatrico",
+   "fonte": "adulto_fixo",
+   "por_tomada": 1000,
+   "unidade": "mg",
+   "dia": 0,
+   "freq": "frequência a confirmar",
+   "tomadas": 0,
+   "limitado": true,
+   "freq_indeterminada": true,
+   "bloqueio": [
+    "🚨 BLOQUEADO: confirme manualmente a frequência de \"Dipirona\" (frequência cadastrada: \"A c"
+   ],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": [
+    "⚠ Agranulocitose (rara, 1:1 milhão): suspender se febre alta, úlceras "
+   ]
+  }
+ },
+ {
+  "medicamento": "ibuprofeno",
+  "paciente": "neonato 14 d, 3,5 kg",
+  "A_formulacoes_ok": "",
+  "A": {
+   "ok": false,
+   "pop": "neonato",
+   "por_tomada_mg": 0,
+   "dia_mg": 0,
+   "freq_h": null,
+   "formulacao": "ibu-susp-100",
+   "erro": "Não há posologia definida para Neonatologia (< 28 dias) neste medicamento.",
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 35,
+   "dia_mg": 35,
+   "freq": "D1: 10 mg/kg IV → D2: 5 mg/kg → D3: 5 mg/kg",
+   "indicacao": "Fechamento de canal arterial (neonatal)",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "neonato",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 26.3,
+   "unidade": "mg/kg/dose",
+   "dia": 78.9,
+   "freq": "a cada 8 horas",
+   "tomadas": 3,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "ibuprofeno",
+  "paciente": "lactente 6 m, 8 kg",
+  "A_formulacoes_ok": "",
+  "A": {
+   "ok": false,
+   "pop": "lactente",
+   "por_tomada_mg": 0,
+   "dia_mg": 0,
+   "freq_h": null,
+   "formulacao": "ibu-susp-100",
+   "erro": "Não há posologia definida para Lactente (28 dias – 11 meses) neste medicamento.",
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 40,
+   "dia_mg": 120,
+   "freq": "a cada 6–8h",
+   "indicacao": "Febre",
+   "bloqueio": [
+    "🚨 CONTRAINDICADO: idade mínima 6 meses. Paciente tem 5 meses."
+   ],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "lactente",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 60,
+   "unidade": "mg/kg/dose",
+   "dia": 180,
+   "freq": "a cada 8 horas",
+   "tomadas": 3,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "ibuprofeno",
+  "paciente": "criança 4 a, 15 kg",
+  "A_formulacoes_ok": "ibu-susp-100:150 | ibu-comp-300:150 | ibu-comp-600:150",
+  "A": {
+   "ok": true,
+   "pop": "pediatrico",
+   "por_tomada_mg": 150,
+   "dia_mg": 450,
+   "freq_h": 8,
+   "formulacao": "ibu-susp-100",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 75,
+   "dia_mg": 225,
+   "freq": "a cada 6–8h",
+   "indicacao": "Febre",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "pre_escolar",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 112.5,
+   "unidade": "mg/kg/dose",
+   "dia": 337.5,
+   "freq": "a cada 8 horas",
+   "tomadas": 3,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "ibuprofeno",
+  "paciente": "criança 9 a, 30 kg",
+  "A_formulacoes_ok": "ibu-susp-100:300 | ibu-comp-300:300 | ibu-comp-600:300",
+  "A": {
+   "ok": true,
+   "pop": "pediatrico",
+   "por_tomada_mg": 300,
+   "dia_mg": 900,
+   "freq_h": 8,
+   "formulacao": "ibu-susp-100",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 150,
+   "dia_mg": 450,
+   "freq": "a cada 6–8h",
+   "indicacao": "Febre",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "escolar",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 225,
+   "unidade": "mg/kg/dose",
+   "dia": 675,
+   "freq": "a cada 8 horas",
+   "tomadas": 3,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "ibuprofeno",
+  "paciente": "adolescente 14 a, 50 kg",
+  "A_formulacoes_ok": "ibu-susp-100:400 | ibu-comp-300:400 | ibu-comp-600:400",
+  "A": {
+   "ok": true,
+   "pop": "adolescente",
+   "por_tomada_mg": 400,
+   "dia_mg": 1200,
+   "freq_h": 8,
+   "formulacao": "ibu-susp-100",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 250,
+   "dia_mg": 750,
+   "freq": "a cada 6–8h",
+   "indicacao": "Febre",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "adolescente",
+   "fonte": "adulto_fixo",
+   "por_tomada": 400,
+   "unidade": "mg",
+   "dia": 1600,
+   "freq": "a cada 6 horas",
+   "tomadas": 4,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "ibuprofeno",
+  "paciente": "adulto 40 a, 70 kg",
+  "A_formulacoes_ok": "ibu-susp-100:400 | ibu-comp-300:400 | ibu-comp-600:400",
+  "A": {
+   "ok": true,
+   "pop": "adulto",
+   "por_tomada_mg": 400,
+   "dia_mg": 1200,
+   "freq_h": 8,
+   "formulacao": "ibu-susp-100",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 350,
+   "dia_mg": 1050,
+   "freq": "a cada 6–8h",
+   "indicacao": "Febre",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "adulto",
+   "fonte": "adulto_fixo",
+   "por_tomada": 400,
+   "unidade": "mg",
+   "dia": 1600,
+   "freq": "a cada 6 horas",
+   "tomadas": 4,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "ibuprofeno",
+  "paciente": "idoso 75 a, 70 kg",
+  "A_formulacoes_ok": "ibu-susp-100:200 | ibu-comp-300:200 | ibu-comp-600:200",
+  "A": {
+   "ok": true,
+   "pop": "geriatrico",
+   "por_tomada_mg": 200,
+   "dia_mg": 600,
+   "freq_h": 8,
+   "formulacao": "ibu-susp-100",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 350,
+   "dia_mg": 1050,
+   "freq": "a cada 6–8h",
+   "indicacao": "Febre",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "geriatrico",
+   "fonte": "adulto_fixo",
+   "por_tomada": 400,
+   "unidade": "mg",
+   "dia": 1600,
+   "freq": "a cada 6 horas",
+   "tomadas": 4,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "amoxicilina",
+  "paciente": "neonato 14 d, 3,5 kg",
+  "A_formulacoes_ok": "amox-susp-250:58.3 | amox-susp-500:58.3 | amox-cap-500:58.3 | amox-cap-875:58.3",
+  "A": {
+   "ok": true,
+   "pop": "neonato",
+   "por_tomada_mg": 58.3,
+   "dia_mg": 175,
+   "freq_h": 8,
+   "formulacao": "amox-susp-250",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 87.5,
+   "dia_mg": 175,
+   "freq": "12/12h",
+   "indicacao": "Otite média aguda / Rinosinusite / IVA",
+   "bloqueio": [
+    "🚨 CONTRAINDICADO: idade mínima 1 meses. Paciente tem 0 meses."
+   ],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "neonato",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 78.8,
+   "unidade": "mg",
+   "dia": 157.5,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "amoxicilina",
+  "paciente": "lactente 6 m, 8 kg",
+  "A_formulacoes_ok": "amox-susp-250:133.3 | amox-susp-500:133.3 | amox-cap-500:133.3 | amox-cap-875:133.3",
+  "A": {
+   "ok": true,
+   "pop": "lactente",
+   "por_tomada_mg": 133.3,
+   "dia_mg": 400,
+   "freq_h": 8,
+   "formulacao": "amox-susp-250",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 200,
+   "dia_mg": 400,
+   "freq": "12/12h",
+   "indicacao": "Otite média aguda / Rinosinusite / IVA",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "lactente",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 180,
+   "unidade": "mg",
+   "dia": 360,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "amoxicilina",
+  "paciente": "criança 4 a, 15 kg",
+  "A_formulacoes_ok": "amox-susp-250:250 | amox-susp-500:250 | amox-cap-500:250 | amox-cap-875:250",
+  "A": {
+   "ok": true,
+   "pop": "pediatrico",
+   "por_tomada_mg": 250,
+   "dia_mg": 750,
+   "freq_h": 8,
+   "formulacao": "amox-susp-250",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 375,
+   "dia_mg": 750,
+   "freq": "12/12h",
+   "indicacao": "Otite média aguda / Rinosinusite / IVA",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "pre_escolar",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 337.5,
+   "unidade": "mg",
+   "dia": 675,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "amoxicilina",
+  "paciente": "criança 9 a, 30 kg",
+  "A_formulacoes_ok": "amox-susp-250:500 | amox-susp-500:500 | amox-cap-500:500 | amox-cap-875:500",
+  "A": {
+   "ok": true,
+   "pop": "pediatrico",
+   "por_tomada_mg": 500,
+   "dia_mg": 1500,
+   "freq_h": 8,
+   "formulacao": "amox-susp-250",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 500,
+   "dia_mg": 1000,
+   "freq": "12/12h",
+   "indicacao": "Otite média aguda / Rinosinusite / IVA",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "escolar",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 675,
+   "unidade": "mg",
+   "dia": 1350,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "amoxicilina",
+  "paciente": "adolescente 14 a, 50 kg",
+  "A_formulacoes_ok": "amox-susp-250:500 | amox-susp-500:500 | amox-cap-500:500 | amox-cap-875:500",
+  "A": {
+   "ok": true,
+   "pop": "adolescente",
+   "por_tomada_mg": 500,
+   "dia_mg": 1500,
+   "freq_h": 8,
+   "formulacao": "amox-susp-250",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 500,
+   "dia_mg": 1000,
+   "freq": "12/12h",
+   "indicacao": "Otite média aguda / Rinosinusite / IVA",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "adolescente",
+   "fonte": "adulto_fixo",
+   "por_tomada": 875,
+   "unidade": "mg",
+   "dia": 1750,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "amoxicilina",
+  "paciente": "adulto 40 a, 70 kg",
+  "A_formulacoes_ok": "amox-susp-250:500 | amox-susp-500:500 | amox-cap-500:500 | amox-cap-875:500",
+  "A": {
+   "ok": true,
+   "pop": "adulto",
+   "por_tomada_mg": 500,
+   "dia_mg": 1500,
+   "freq_h": 8,
+   "formulacao": "amox-susp-250",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 500,
+   "dia_mg": 1000,
+   "freq": "12/12h",
+   "indicacao": "Otite média aguda / Rinosinusite / IVA",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "adulto",
+   "fonte": "adulto_fixo",
+   "por_tomada": 875,
+   "unidade": "mg",
+   "dia": 1750,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "amoxicilina",
+  "paciente": "idoso 75 a, 70 kg",
+  "A_formulacoes_ok": "amox-susp-250:500 | amox-susp-500:500 | amox-cap-500:500 | amox-cap-875:500",
+  "A": {
+   "ok": true,
+   "pop": "geriatrico",
+   "por_tomada_mg": 500,
+   "dia_mg": 1000,
+   "freq_h": 12,
+   "formulacao": "amox-susp-250",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 500,
+   "dia_mg": 1000,
+   "freq": "12/12h",
+   "indicacao": "Otite média aguda / Rinosinusite / IVA",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "geriatrico",
+   "fonte": "adulto_fixo",
+   "por_tomada": 875,
+   "unidade": "mg",
+   "dia": 1750,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "amoxicilina+clavulanato",
+  "paciente": "neonato 14 d, 3,5 kg",
+  "A_formulacoes_ok": "",
+  "A": {
+   "ok": false,
+   "pop": "neonato",
+   "por_tomada_mg": 0,
+   "dia_mg": 0,
+   "freq_h": null,
+   "formulacao": "amoxiclav-susp-400",
+   "erro": "Não há posologia definida para Neonatologia (< 28 dias) neste medicamento.",
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 122.5,
+   "dia_mg": 245,
+   "freq": "12/12h",
+   "indicacao": "Infecções resistentes (PRSP, H. influenzae β-lactamase+)",
+   "bloqueio": [
+    "🚨 CONTRAINDICADO: idade mínima 2 meses. Paciente tem 0 meses."
+   ],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "neonato",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 78.8,
+   "unidade": "mg",
+   "dia": 157.5,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "amoxicilina+clavulanato",
+  "paciente": "lactente 6 m, 8 kg",
+  "A_formulacoes_ok": "amoxiclav-susp-400:180",
+  "A": {
+   "ok": true,
+   "pop": "lactente",
+   "por_tomada_mg": 180,
+   "dia_mg": 360,
+   "freq_h": 12,
+   "formulacao": "amoxiclav-susp-400",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 280,
+   "dia_mg": 560,
+   "freq": "12/12h",
+   "indicacao": "Infecções resistentes (PRSP, H. influenzae β-lactamase+)",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "lactente",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 180,
+   "unidade": "mg",
+   "dia": 360,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "amoxicilina+clavulanato",
+  "paciente": "criança 4 a, 15 kg",
+  "A_formulacoes_ok": "amoxiclav-susp-400:337.5",
+  "A": {
+   "ok": true,
+   "pop": "pediatrico",
+   "por_tomada_mg": 337.5,
+   "dia_mg": 675,
+   "freq_h": 12,
+   "formulacao": "amoxiclav-susp-400",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 525,
+   "dia_mg": 1050,
+   "freq": "12/12h",
+   "indicacao": "Infecções resistentes (PRSP, H. influenzae β-lactamase+)",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "pre_escolar",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 337.5,
+   "unidade": "mg",
+   "dia": 675,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "amoxicilina+clavulanato",
+  "paciente": "criança 9 a, 30 kg",
+  "A_formulacoes_ok": "amoxiclav-susp-400:675",
+  "A": {
+   "ok": true,
+   "pop": "pediatrico",
+   "por_tomada_mg": 675,
+   "dia_mg": 1350,
+   "freq_h": 12,
+   "formulacao": "amoxiclav-susp-400",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 875,
+   "dia_mg": 1750,
+   "freq": "12/12h",
+   "indicacao": "Infecções resistentes (PRSP, H. influenzae β-lactamase+)",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "escolar",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 675,
+   "unidade": "mg",
+   "dia": 1350,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "amoxicilina+clavulanato",
+  "paciente": "adolescente 14 a, 50 kg",
+  "A_formulacoes_ok": "amoxiclav-comp-875:875 | amoxiclav-comp-500:500",
+  "A": {
+   "ok": true,
+   "pop": "adolescente",
+   "por_tomada_mg": 875,
+   "dia_mg": 1750,
+   "freq_h": 12,
+   "formulacao": "amoxiclav-comp-875",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 875,
+   "dia_mg": 1750,
+   "freq": "12/12h",
+   "indicacao": "Infecções resistentes (PRSP, H. influenzae β-lactamase+)",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "adolescente",
+   "fonte": "adulto_fixo",
+   "por_tomada": 875,
+   "unidade": "mg",
+   "dia": 1750,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "amoxicilina+clavulanato",
+  "paciente": "adulto 40 a, 70 kg",
+  "A_formulacoes_ok": "amoxiclav-comp-875:875 | amoxiclav-comp-500:500",
+  "A": {
+   "ok": true,
+   "pop": "adulto",
+   "por_tomada_mg": 875,
+   "dia_mg": 1750,
+   "freq_h": 12,
+   "formulacao": "amoxiclav-comp-875",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 875,
+   "dia_mg": 1750,
+   "freq": "12/12h",
+   "indicacao": "Infecções resistentes (PRSP, H. influenzae β-lactamase+)",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "adulto",
+   "fonte": "adulto_fixo",
+   "por_tomada": 875,
+   "unidade": "mg",
+   "dia": 1750,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "amoxicilina+clavulanato",
+  "paciente": "idoso 75 a, 70 kg",
+  "A_formulacoes_ok": "amoxiclav-comp-875:875 | amoxiclav-comp-500:500",
+  "A": {
+   "ok": true,
+   "pop": "geriatrico",
+   "por_tomada_mg": 875,
+   "dia_mg": 1750,
+   "freq_h": 12,
+   "formulacao": "amoxiclav-comp-875",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 875,
+   "dia_mg": 1750,
+   "freq": "12/12h",
+   "indicacao": "Infecções resistentes (PRSP, H. influenzae β-lactamase+)",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "geriatrico",
+   "fonte": "adulto_fixo",
+   "por_tomada": 875,
+   "unidade": "mg",
+   "dia": 1750,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "cefalexina",
+  "paciente": "neonato 14 d, 3,5 kg",
+  "A_formulacoes_ok": "",
+  "A": {
+   "ok": false,
+   "pop": "neonato",
+   "por_tomada_mg": 0,
+   "dia_mg": 0,
+   "freq_h": null,
+   "formulacao": "cef-susp-250",
+   "erro": "Não há posologia definida para Neonatologia (< 28 dias) neste medicamento.",
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 43.8,
+   "dia_mg": 175,
+   "freq": "6/6h",
+   "indicacao": "Infecções de pele e partes moles / ITU",
+   "bloqueio": [
+    "🚨 CONTRAINDICADO: idade mínima 1 meses. Paciente tem 0 meses."
+   ],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "neonato",
+   "fonte": "adulto_fixo",
+   "por_tomada": 500,
+   "unidade": "mg",
+   "dia": 2000,
+   "freq": "a cada 6 horas",
+   "tomadas": 4,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "cefalexina",
+  "paciente": "lactente 6 m, 8 kg",
+  "A_formulacoes_ok": "cef-susp-250:50 | cef-cap-500:50",
+  "A": {
+   "ok": true,
+   "pop": "lactente",
+   "por_tomada_mg": 50,
+   "dia_mg": 200,
+   "freq_h": 6,
+   "formulacao": "cef-susp-250",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 100,
+   "dia_mg": 400,
+   "freq": "6/6h",
+   "indicacao": "Infecções de pele e partes moles / ITU",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "lactente",
+   "fonte": "adulto_fixo",
+   "por_tomada": 500,
+   "unidade": "mg",
+   "dia": 2000,
+   "freq": "a cada 6 horas",
+   "tomadas": 4,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "cefalexina",
+  "paciente": "criança 4 a, 15 kg",
+  "A_formulacoes_ok": "cef-susp-250:93.8 | cef-cap-500:93.8",
+  "A": {
+   "ok": true,
+   "pop": "pediatrico",
+   "por_tomada_mg": 93.8,
+   "dia_mg": 375,
+   "freq_h": 6,
+   "formulacao": "cef-susp-250",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 187.5,
+   "dia_mg": 750,
+   "freq": "6/6h",
+   "indicacao": "Infecções de pele e partes moles / ITU",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "pre_escolar",
+   "fonte": "adulto_fixo",
+   "por_tomada": 500,
+   "unidade": "mg",
+   "dia": 2000,
+   "freq": "a cada 6 horas",
+   "tomadas": 4,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "cefalexina",
+  "paciente": "criança 9 a, 30 kg",
+  "A_formulacoes_ok": "cef-susp-250:187.5 | cef-cap-500:187.5",
+  "A": {
+   "ok": true,
+   "pop": "pediatrico",
+   "por_tomada_mg": 187.5,
+   "dia_mg": 750,
+   "freq_h": 6,
+   "formulacao": "cef-susp-250",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 375,
+   "dia_mg": 1500,
+   "freq": "6/6h",
+   "indicacao": "Infecções de pele e partes moles / ITU",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "escolar",
+   "fonte": "adulto_fixo",
+   "por_tomada": 500,
+   "unidade": "mg",
+   "dia": 2000,
+   "freq": "a cada 6 horas",
+   "tomadas": 4,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "cefalexina",
+  "paciente": "adolescente 14 a, 50 kg",
+  "A_formulacoes_ok": "cef-susp-250:500 | cef-cap-500:500",
+  "A": {
+   "ok": true,
+   "pop": "adolescente",
+   "por_tomada_mg": 500,
+   "dia_mg": 2000,
+   "freq_h": 6,
+   "formulacao": "cef-susp-250",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 500,
+   "dia_mg": 2000,
+   "freq": "6/6h",
+   "indicacao": "Infecções de pele e partes moles / ITU",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "adolescente",
+   "fonte": "adulto_fixo",
+   "por_tomada": 500,
+   "unidade": "mg",
+   "dia": 2000,
+   "freq": "a cada 6 horas",
+   "tomadas": 4,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "cefalexina",
+  "paciente": "adulto 40 a, 70 kg",
+  "A_formulacoes_ok": "cef-susp-250:500 | cef-cap-500:500",
+  "A": {
+   "ok": true,
+   "pop": "adulto",
+   "por_tomada_mg": 500,
+   "dia_mg": 2000,
+   "freq_h": 6,
+   "formulacao": "cef-susp-250",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 500,
+   "dia_mg": 2000,
+   "freq": "6/6h",
+   "indicacao": "Infecções de pele e partes moles / ITU",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "adulto",
+   "fonte": "adulto_fixo",
+   "por_tomada": 500,
+   "unidade": "mg",
+   "dia": 2000,
+   "freq": "a cada 6 horas",
+   "tomadas": 4,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "cefalexina",
+  "paciente": "idoso 75 a, 70 kg",
+  "A_formulacoes_ok": "cef-susp-250:500 | cef-cap-500:500",
+  "A": {
+   "ok": true,
+   "pop": "geriatrico",
+   "por_tomada_mg": 500,
+   "dia_mg": 1500,
+   "freq_h": 8,
+   "formulacao": "cef-susp-250",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 500,
+   "dia_mg": 2000,
+   "freq": "6/6h",
+   "indicacao": "Infecções de pele e partes moles / ITU",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "geriatrico",
+   "fonte": "adulto_fixo",
+   "por_tomada": 500,
+   "unidade": "mg",
+   "dia": 2000,
+   "freq": "a cada 6 horas",
+   "tomadas": 4,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "azitromicina",
+  "paciente": "neonato 14 d, 3,5 kg",
+  "A_formulacoes_ok": "",
+  "A": {
+   "ok": false,
+   "pop": "neonato",
+   "por_tomada_mg": 0,
+   "dia_mg": 0,
+   "freq_h": null,
+   "formulacao": "azitro-susp-200",
+   "erro": "Não há posologia definida para Neonatologia (< 28 dias) neste medicamento.",
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 35,
+   "dia_mg": 35,
+   "freq": "D1: 10 mg/kg → D2–D5: 5 mg/kg 1×/dia",
+   "indicacao": "Pneumonia atípica / Coqueluche / OMA alternativa",
+   "bloqueio": [
+    "🚨 CONTRAINDICADO: idade mínima 6 meses. Paciente tem 0 meses."
+   ],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "neonato",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 35,
+   "unidade": "mg",
+   "dia": 35,
+   "freq": "1x/dia",
+   "tomadas": 1,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "azitromicina",
+  "paciente": "lactente 6 m, 8 kg",
+  "A_formulacoes_ok": "azitro-susp-200:80 | azitro-comp-500:80",
+  "A": {
+   "ok": true,
+   "pop": "lactente",
+   "por_tomada_mg": 80,
+   "dia_mg": 80,
+   "freq_h": 24,
+   "formulacao": "azitro-susp-200",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 80,
+   "dia_mg": 80,
+   "freq": "D1: 10 mg/kg → D2–D5: 5 mg/kg 1×/dia",
+   "indicacao": "Pneumonia atípica / Coqueluche / OMA alternativa",
+   "bloqueio": [
+    "🚨 CONTRAINDICADO: idade mínima 6 meses. Paciente tem 5 meses."
+   ],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "lactente",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 80,
+   "unidade": "mg",
+   "dia": 80,
+   "freq": "1x/dia",
+   "tomadas": 1,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "azitromicina",
+  "paciente": "criança 4 a, 15 kg",
+  "A_formulacoes_ok": "azitro-susp-200:150 | azitro-comp-500:150",
+  "A": {
+   "ok": true,
+   "pop": "pediatrico",
+   "por_tomada_mg": 150,
+   "dia_mg": 150,
+   "freq_h": 24,
+   "formulacao": "azitro-susp-200",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 150,
+   "dia_mg": 150,
+   "freq": "D1: 10 mg/kg → D2–D5: 5 mg/kg 1×/dia",
+   "indicacao": "Pneumonia atípica / Coqueluche / OMA alternativa",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "pre_escolar",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 150,
+   "unidade": "mg",
+   "dia": 150,
+   "freq": "1x/dia",
+   "tomadas": 1,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "azitromicina",
+  "paciente": "criança 9 a, 30 kg",
+  "A_formulacoes_ok": "azitro-susp-200:300 | azitro-comp-500:300",
+  "A": {
+   "ok": true,
+   "pop": "pediatrico",
+   "por_tomada_mg": 300,
+   "dia_mg": 300,
+   "freq_h": 24,
+   "formulacao": "azitro-susp-200",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 300,
+   "dia_mg": 300,
+   "freq": "D1: 10 mg/kg → D2–D5: 5 mg/kg 1×/dia",
+   "indicacao": "Pneumonia atípica / Coqueluche / OMA alternativa",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "escolar",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 300,
+   "unidade": "mg",
+   "dia": 300,
+   "freq": "1x/dia",
+   "tomadas": 1,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "azitromicina",
+  "paciente": "adolescente 14 a, 50 kg",
+  "A_formulacoes_ok": "azitro-susp-200:500 | azitro-comp-500:500",
+  "A": {
+   "ok": true,
+   "pop": "adolescente",
+   "por_tomada_mg": 500,
+   "dia_mg": 500,
+   "freq_h": 24,
+   "formulacao": "azitro-susp-200",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 500,
+   "dia_mg": 500,
+   "freq": "D1: 10 mg/kg → D2–D5: 5 mg/kg 1×/dia",
+   "indicacao": "Pneumonia atípica / Coqueluche / OMA alternativa",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "adolescente",
+   "fonte": "adulto_fixo",
+   "por_tomada": 500,
+   "unidade": "mg",
+   "dia": 500,
+   "freq": "1x/dia",
+   "tomadas": 1,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "azitromicina",
+  "paciente": "adulto 40 a, 70 kg",
+  "A_formulacoes_ok": "azitro-susp-200:500 | azitro-comp-500:500",
+  "A": {
+   "ok": true,
+   "pop": "adulto",
+   "por_tomada_mg": 500,
+   "dia_mg": 500,
+   "freq_h": 24,
+   "formulacao": "azitro-susp-200",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 500,
+   "dia_mg": 500,
+   "freq": "D1: 10 mg/kg → D2–D5: 5 mg/kg 1×/dia",
+   "indicacao": "Pneumonia atípica / Coqueluche / OMA alternativa",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "adulto",
+   "fonte": "adulto_fixo",
+   "por_tomada": 500,
+   "unidade": "mg",
+   "dia": 500,
+   "freq": "1x/dia",
+   "tomadas": 1,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "azitromicina",
+  "paciente": "idoso 75 a, 70 kg",
+  "A_formulacoes_ok": "azitro-susp-200:500 | azitro-comp-500:500",
+  "A": {
+   "ok": true,
+   "pop": "geriatrico",
+   "por_tomada_mg": 500,
+   "dia_mg": 500,
+   "freq_h": 24,
+   "formulacao": "azitro-susp-200",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 500,
+   "dia_mg": 500,
+   "freq": "D1: 10 mg/kg → D2–D5: 5 mg/kg 1×/dia",
+   "indicacao": "Pneumonia atípica / Coqueluche / OMA alternativa",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "geriatrico",
+   "fonte": "adulto_fixo",
+   "por_tomada": 500,
+   "unidade": "mg",
+   "dia": 500,
+   "freq": "1x/dia",
+   "tomadas": 1,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "omeprazol",
+  "paciente": "neonato 14 d, 3,5 kg",
+  "A_formulacoes_ok": "",
+  "A": {
+   "ok": false,
+   "pop": "neonato",
+   "por_tomada_mg": 0,
+   "dia_mg": 0,
+   "freq_h": null,
+   "formulacao": "ome-caps-20",
+   "erro": "Não há posologia definida para Neonatologia (< 28 dias) neste medicamento.",
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 3.5,
+   "dia_mg": 3.5,
+   "freq": "1×/dia (30 min antes do café)",
+   "indicacao": "DRGE / Esofagite / Profilaxia de úlcera por corticoide",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "neonato",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 2.4,
+   "unidade": "mg",
+   "dia": 2.4,
+   "freq": "1x/dia",
+   "tomadas": 1,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "omeprazol",
+  "paciente": "lactente 6 m, 8 kg",
+  "A_formulacoes_ok": "ome-caps-20:8 | ome-caps-40:8",
+  "A": {
+   "ok": true,
+   "pop": "lactente",
+   "por_tomada_mg": 8,
+   "dia_mg": 8,
+   "freq_h": 24,
+   "formulacao": "ome-caps-20",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 8,
+   "dia_mg": 8,
+   "freq": "1×/dia (30 min antes do café)",
+   "indicacao": "DRGE / Esofagite / Profilaxia de úlcera por corticoide",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "lactente",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 5.6,
+   "unidade": "mg",
+   "dia": 5.6,
+   "freq": "1x/dia",
+   "tomadas": 1,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "omeprazol",
+  "paciente": "criança 4 a, 15 kg",
+  "A_formulacoes_ok": "ome-caps-20:15 | ome-caps-40:15",
+  "A": {
+   "ok": true,
+   "pop": "pediatrico",
+   "por_tomada_mg": 15,
+   "dia_mg": 15,
+   "freq_h": 24,
+   "formulacao": "ome-caps-20",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 15,
+   "dia_mg": 15,
+   "freq": "1×/dia (30 min antes do café)",
+   "indicacao": "DRGE / Esofagite / Profilaxia de úlcera por corticoide",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "pre_escolar",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 10.5,
+   "unidade": "mg",
+   "dia": 10.5,
+   "freq": "1x/dia",
+   "tomadas": 1,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "omeprazol",
+  "paciente": "criança 9 a, 30 kg",
+  "A_formulacoes_ok": "ome-caps-20:30 | ome-caps-40:30",
+  "A": {
+   "ok": true,
+   "pop": "pediatrico",
+   "por_tomada_mg": 30,
+   "dia_mg": 30,
+   "freq_h": 24,
+   "formulacao": "ome-caps-20",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 20,
+   "dia_mg": 20,
+   "freq": "1×/dia (30 min antes do café)",
+   "indicacao": "DRGE / Esofagite / Profilaxia de úlcera por corticoide",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "escolar",
+   "fonte": "pediatrica_mg_kg",
+   "por_tomada": 20,
+   "unidade": "mg",
+   "dia": 20,
+   "freq": "1x/dia",
+   "tomadas": 1,
+   "limitado": true,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": true,
+   "alertas_nao_criticos": [
+    "⚠ Dose máxima aplicada: 20 mg/dia"
+   ]
+  }
+ },
+ {
+  "medicamento": "omeprazol",
+  "paciente": "adolescente 14 a, 50 kg",
+  "A_formulacoes_ok": "ome-caps-20:20 | ome-caps-40:20",
+  "A": {
+   "ok": true,
+   "pop": "adolescente",
+   "por_tomada_mg": 20,
+   "dia_mg": 20,
+   "freq_h": 24,
+   "formulacao": "ome-caps-20",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 20,
+   "dia_mg": 20,
+   "freq": "1×/dia (30 min antes do café)",
+   "indicacao": "DRGE / Esofagite / Profilaxia de úlcera por corticoide",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "adolescente",
+   "fonte": "adulto_fixo",
+   "por_tomada": 20,
+   "unidade": "mg",
+   "dia": 20,
+   "freq": "1x/dia",
+   "tomadas": 1,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "omeprazol",
+  "paciente": "adulto 40 a, 70 kg",
+  "A_formulacoes_ok": "ome-caps-20:20 | ome-caps-40:20",
+  "A": {
+   "ok": true,
+   "pop": "adulto",
+   "por_tomada_mg": 20,
+   "dia_mg": 20,
+   "freq_h": 24,
+   "formulacao": "ome-caps-20",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 20,
+   "dia_mg": 20,
+   "freq": "1×/dia (30 min antes do café)",
+   "indicacao": "DRGE / Esofagite / Profilaxia de úlcera por corticoide",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "adulto",
+   "fonte": "adulto_fixo",
+   "por_tomada": 20,
+   "unidade": "mg",
+   "dia": 20,
+   "freq": "1x/dia",
+   "tomadas": 1,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "omeprazol",
+  "paciente": "idoso 75 a, 70 kg",
+  "A_formulacoes_ok": "ome-caps-20:20 | ome-caps-40:20",
+  "A": {
+   "ok": true,
+   "pop": "geriatrico",
+   "por_tomada_mg": 20,
+   "dia_mg": 20,
+   "freq_h": 24,
+   "formulacao": "ome-caps-20",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 20,
+   "dia_mg": 20,
+   "freq": "1×/dia (30 min antes do café)",
+   "indicacao": "DRGE / Esofagite / Profilaxia de úlcera por corticoide",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "geriatrico",
+   "fonte": "adulto_fixo",
+   "por_tomada": 20,
+   "unidade": "mg",
+   "dia": 20,
+   "freq": "1x/dia",
+   "tomadas": 1,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "sulfametoxazol+trimetoprima",
+  "paciente": "neonato 14 d, 3,5 kg",
+  "A_formulacoes_ok": "",
+  "A": {
+   "ok": false,
+   "pop": "neonato",
+   "por_tomada_mg": 0,
+   "dia_mg": 0,
+   "freq_h": null,
+   "formulacao": "smxtmp-susp",
+   "erro": "Não há posologia definida para Neonatologia (< 28 dias) neste medicamento.",
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 10.5,
+   "dia_mg": 21,
+   "freq": "12/12h",
+   "indicacao": "ITU / Pneumocistose (PCP)",
+   "bloqueio": [
+    "🚨 CONTRAINDICADO: idade mínima 2 meses. Paciente tem 0 meses."
+   ],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "neonato",
+   "fonte": "adulto_fixo",
+   "por_tomada": 800,
+   "unidade": "mg",
+   "dia": 1600,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "sulfametoxazol+trimetoprima",
+  "paciente": "lactente 6 m, 8 kg",
+  "A_formulacoes_ok": "smxtmp-susp:32 | smxtmp-comp:32 | smxtmp-comp-forte:32",
+  "A": {
+   "ok": true,
+   "pop": "lactente",
+   "por_tomada_mg": 32,
+   "dia_mg": 64,
+   "freq_h": 12,
+   "formulacao": "smxtmp-susp",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 24,
+   "dia_mg": 48,
+   "freq": "12/12h",
+   "indicacao": "ITU / Pneumocistose (PCP)",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "lactente",
+   "fonte": "adulto_fixo",
+   "por_tomada": 800,
+   "unidade": "mg",
+   "dia": 1600,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "sulfametoxazol+trimetoprima",
+  "paciente": "criança 4 a, 15 kg",
+  "A_formulacoes_ok": "smxtmp-susp:60 | smxtmp-comp:60 | smxtmp-comp-forte:60",
+  "A": {
+   "ok": true,
+   "pop": "pediatrico",
+   "por_tomada_mg": 60,
+   "dia_mg": 120,
+   "freq_h": 12,
+   "formulacao": "smxtmp-susp",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 45,
+   "dia_mg": 90,
+   "freq": "12/12h",
+   "indicacao": "ITU / Pneumocistose (PCP)",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "pre_escolar",
+   "fonte": "adulto_fixo",
+   "por_tomada": 800,
+   "unidade": "mg",
+   "dia": 1600,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "sulfametoxazol+trimetoprima",
+  "paciente": "criança 9 a, 30 kg",
+  "A_formulacoes_ok": "smxtmp-susp:120 | smxtmp-comp:120 | smxtmp-comp-forte:120",
+  "A": {
+   "ok": true,
+   "pop": "pediatrico",
+   "por_tomada_mg": 120,
+   "dia_mg": 240,
+   "freq_h": 12,
+   "formulacao": "smxtmp-susp",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 90,
+   "dia_mg": 180,
+   "freq": "12/12h",
+   "indicacao": "ITU / Pneumocistose (PCP)",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "escolar",
+   "fonte": "adulto_fixo",
+   "por_tomada": 800,
+   "unidade": "mg",
+   "dia": 1600,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "sulfametoxazol+trimetoprima",
+  "paciente": "adolescente 14 a, 50 kg",
+  "A_formulacoes_ok": "smxtmp-susp:160 | smxtmp-comp:160 | smxtmp-comp-forte:160",
+  "A": {
+   "ok": true,
+   "pop": "adolescente",
+   "por_tomada_mg": 160,
+   "dia_mg": 320,
+   "freq_h": 12,
+   "formulacao": "smxtmp-susp",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 150,
+   "dia_mg": 300,
+   "freq": "12/12h",
+   "indicacao": "ITU / Pneumocistose (PCP)",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "adolescente",
+   "fonte": "adulto_fixo",
+   "por_tomada": 800,
+   "unidade": "mg",
+   "dia": 1600,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "sulfametoxazol+trimetoprima",
+  "paciente": "adulto 40 a, 70 kg",
+  "A_formulacoes_ok": "smxtmp-susp:160 | smxtmp-comp:160 | smxtmp-comp-forte:160",
+  "A": {
+   "ok": true,
+   "pop": "adulto",
+   "por_tomada_mg": 160,
+   "dia_mg": 320,
+   "freq_h": 12,
+   "formulacao": "smxtmp-susp",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 210,
+   "dia_mg": 420,
+   "freq": "12/12h",
+   "indicacao": "ITU / Pneumocistose (PCP)",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "adulto",
+   "fonte": "adulto_fixo",
+   "por_tomada": 800,
+   "unidade": "mg",
+   "dia": 1600,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "sulfametoxazol+trimetoprima",
+  "paciente": "idoso 75 a, 70 kg",
+  "A_formulacoes_ok": "smxtmp-susp:160 | smxtmp-comp:160 | smxtmp-comp-forte:160",
+  "A": {
+   "ok": true,
+   "pop": "geriatrico",
+   "por_tomada_mg": 160,
+   "dia_mg": 320,
+   "freq_h": 12,
+   "formulacao": "smxtmp-susp",
+   "erro": null,
+   "excede": false
+  },
+  "B": {
+   "por_tomada_mg": 210,
+   "dia_mg": 420,
+   "freq": "12/12h",
+   "indicacao": "ITU / Pneumocistose (PCP)",
+   "bloqueio": [],
+   "pendente_validacao": false
+  },
+  "C": {
+   "pop": "geriatrico",
+   "fonte": "adulto_fixo",
+   "por_tomada": 800,
+   "unidade": "mg",
+   "dia": 1600,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "metformina",
+  "paciente": "neonato 14 d, 3,5 kg",
+  "A_formulacoes_ok": "",
+  "A": {
+   "ok": false,
+   "pop": "neonato",
+   "por_tomada_mg": 0,
+   "dia_mg": 0,
+   "freq_h": null,
+   "formulacao": "met-comp-500",
+   "erro": "Não há posologia definida para Neonatologia (< 28 dias) neste medicamento.",
+   "excede": false
+  },
+  "B": "sem regra",
+  "C": {
+   "pop": "neonato",
+   "fonte": "adulto_fixo",
+   "por_tomada": 850,
+   "unidade": "mg",
+   "dia": 1700,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "metformina",
+  "paciente": "lactente 6 m, 8 kg",
+  "A_formulacoes_ok": "",
+  "A": {
+   "ok": false,
+   "pop": "lactente",
+   "por_tomada_mg": 0,
+   "dia_mg": 0,
+   "freq_h": null,
+   "formulacao": "met-comp-500",
+   "erro": "Não há posologia definida para Lactente (28 dias – 11 meses) neste medicamento.",
+   "excede": false
+  },
+  "B": "sem regra",
+  "C": {
+   "pop": "lactente",
+   "fonte": "adulto_fixo",
+   "por_tomada": 850,
+   "unidade": "mg",
+   "dia": 1700,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "metformina",
+  "paciente": "criança 4 a, 15 kg",
+  "A_formulacoes_ok": "met-comp-500:500 | met-comp-850:500 | met-comp-1000:500",
+  "A": {
+   "ok": true,
+   "pop": "pediatrico",
+   "por_tomada_mg": 500,
+   "dia_mg": 1000,
+   "freq_h": 12,
+   "formulacao": "met-comp-500",
+   "erro": null,
+   "excede": false
+  },
+  "B": "sem regra",
+  "C": {
+   "pop": "pre_escolar",
+   "fonte": "adulto_fixo",
+   "por_tomada": 850,
+   "unidade": "mg",
+   "dia": 1700,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "metformina",
+  "paciente": "criança 9 a, 30 kg",
+  "A_formulacoes_ok": "met-comp-500:500 | met-comp-850:500 | met-comp-1000:500",
+  "A": {
+   "ok": true,
+   "pop": "pediatrico",
+   "por_tomada_mg": 500,
+   "dia_mg": 1000,
+   "freq_h": 12,
+   "formulacao": "met-comp-500",
+   "erro": null,
+   "excede": false
+  },
+  "B": "sem regra",
+  "C": {
+   "pop": "escolar",
+   "fonte": "adulto_fixo",
+   "por_tomada": 850,
+   "unidade": "mg",
+   "dia": 1700,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "metformina",
+  "paciente": "adolescente 14 a, 50 kg",
+  "A_formulacoes_ok": "met-comp-500:500 | met-comp-850:500 | met-comp-1000:500",
+  "A": {
+   "ok": true,
+   "pop": "adolescente",
+   "por_tomada_mg": 500,
+   "dia_mg": 1000,
+   "freq_h": 12,
+   "formulacao": "met-comp-500",
+   "erro": null,
+   "excede": false
+  },
+  "B": "sem regra",
+  "C": {
+   "pop": "adolescente",
+   "fonte": "adulto_fixo",
+   "por_tomada": 850,
+   "unidade": "mg",
+   "dia": 1700,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "metformina",
+  "paciente": "adulto 40 a, 70 kg",
+  "A_formulacoes_ok": "met-comp-500:500 | met-comp-850:500 | met-comp-1000:500",
+  "A": {
+   "ok": true,
+   "pop": "adulto",
+   "por_tomada_mg": 500,
+   "dia_mg": 1000,
+   "freq_h": 12,
+   "formulacao": "met-comp-500",
+   "erro": null,
+   "excede": false
+  },
+  "B": "sem regra",
+  "C": {
+   "pop": "adulto",
+   "fonte": "adulto_fixo",
+   "por_tomada": 850,
+   "unidade": "mg",
+   "dia": 1700,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ },
+ {
+  "medicamento": "metformina",
+  "paciente": "idoso 75 a, 70 kg",
+  "A_formulacoes_ok": "met-comp-500:500 | met-comp-850:500 | met-comp-1000:500",
+  "A": {
+   "ok": true,
+   "pop": "geriatrico",
+   "por_tomada_mg": 500,
+   "dia_mg": 1000,
+   "freq_h": 12,
+   "formulacao": "met-comp-500",
+   "erro": null,
+   "excede": false
+  },
+  "B": "sem regra",
+  "C": {
+   "pop": "geriatrico",
+   "fonte": "adulto_fixo",
+   "por_tomada": 850,
+   "unidade": "mg",
+   "dia": 1700,
+   "freq": "a cada 12 horas",
+   "tomadas": 2,
+   "limitado": false,
+   "freq_indeterminada": false,
+   "bloqueio": [],
+   "usou_dose_pediatrica_do_catalogo": false,
+   "alertas_nao_criticos": []
+  }
+ }
+]

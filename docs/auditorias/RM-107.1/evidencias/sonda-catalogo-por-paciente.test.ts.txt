@@ -1,0 +1,57 @@
+// SONDA DE LEITURA (RM-107.1 — matriz de deliberação). Somente chama calcFullDose; NÃO altera nada. Saídas em docs/auditorias/RM-107.1/evidencias/
+import { it } from 'vitest';
+import * as fs from 'fs';
+import { getAllDrugs, type QuickDrug } from '@/lib/pharma-database';
+import { calcFullDose } from '@/lib/dose-calculator';
+
+const OUT = 'C:/Users/Jonathan Costa/Desktop/Prescreve-AI/docs/auditorias/RM-107.1/evidencias/';
+const PAC = [
+  { k: 'neonato_14d_3.5kg', anos: 14 / 365, kg: 3.5, alt: 0.5 }, { k: 'lactente_6m_8kg', anos: 0.5, kg: 8, alt: 0.68 },
+  { k: 'crianca_4a_15kg', anos: 4, kg: 15, alt: 1.0 }, { k: 'adolescente_14a_50kg', anos: 14, kg: 50, alt: 1.6 }, { k: 'adulto_40a_70kg', anos: 40, kg: 70, alt: 1.7 },
+];
+const full = (d: QuickDrug, anos: number, kg: number, alt: number, conc: string) => calcFullDose({ molecula: d.molecula, dose_adulto: d.dose_adulto, dose_pediatrica: d.dose_pediatrica, ajuste_renal: d.ajuste_renal, ajuste_hepatico: d.ajuste_hepatico, alertas_especiais: d.alertas_especiais, uso_gestante: d.uso_gestante, uso_lactante: d.uso_lactante }, anos, kg, conc, undefined, '', false, false, alt);
+const esc = (v: unknown) => { const s = v === null || v === undefined ? '' : String(v); return /[",\n;]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+
+it('catalogo', () => {
+  const drugs = getAllDrugs();
+  const rows: Array<Record<string, unknown>> = [];
+  for (const d of drugs) {
+    const concs = [...new Set(d.marcas.flatMap(b => b.concentracoes))];
+    const conc = concs[0] ?? `${d.dose_adulto.habitual} ${d.dose_adulto.unidade}`;
+    const row: Record<string, unknown> = { id: d.id, molecula: d.molecula, categoria: d.categoria, tem_dose_pediatrica: !!d.dose_pediatrica, calculo_ped: d.dose_pediatrica?.calculo ?? '', dose_pediatrica_por_kg: d.dose_pediatrica?.dose_por_kg ?? '', habitual_adulto: d.dose_adulto.habitual, unidade_adulto: d.dose_adulto.unidade, frequencias_adulto: d.dose_adulto.frequencias.join(' / '), n_concentracoes: concs.length };
+    for (const p of PAC) {
+      const r = full(d, p.anos, p.kg, p.alt, conc);
+      row[p.k + '_fonte'] = r.fonte; row[p.k + '_pop'] = r.population.population; row[p.k + '_tomada'] = r.dose_por_tomada; row[p.k + '_unid'] = r.dose_unidade; row[p.k + '_dia'] = r.dose_total_dia;
+      row[p.k + '_bloqueio'] = r.alertas.filter(a => a.startsWith('🚨')).length; row[p.k + '_freq_indet'] = r.frequencia_indeterminada;
+    }
+    // D10: a concentração escolhida altera dose por tomada / tomadas?
+    if (concs.length >= 2) {
+      const base = PAC[4];
+      const res = concs.map(c => { const r = full(d, base.anos, base.kg, base.alt, c); return `${r.dose_por_tomada}|${r.tomadas_dia}`; });
+      row.d10_dose_independe_da_concentracao = new Set(res).size === 1;
+      row.d10_concentracoes = concs.join(' ; ');
+      row.d10_resultados = res.join(' ; ');
+    } else { row.d10_dose_independe_da_concentracao = ''; row.d10_concentracoes = concs.join(' ; '); row.d10_resultados = ''; }
+    rows.push(row);
+  }
+  fs.writeFileSync(OUT + 'catalogo-dose-calculator-por-paciente.json', JSON.stringify(rows, null, 1));
+  const cols = Object.keys(rows[0]);
+  fs.writeFileSync(OUT + 'catalogo-dose-calculator-por-paciente.csv', '\uFEFF' + cols.join(';') + '\n' + rows.map(r => cols.map(c => esc(r[c])).join(';')).join('\n'));
+  // resumo
+  const sem = rows.filter(r => !r.tem_dose_pediatrica);
+  const resumo: Record<string, unknown> = { total: rows.length, com_dose_pediatrica: rows.length - sem.length, sem_dose_pediatrica: sem.length };
+  for (const p of PAC.slice(0, 4)) {
+    const k = p.k;
+    resumo[k] = {
+      sem_regra_ped_calcula_dose_adulta_sem_bloqueio: sem.filter(r => r[k + '_fonte'] === 'adulto_fixo' && !r[k + '_freq_indet'] && !r[k + '_bloqueio'] && Number(r[k + '_dia']) > 0).length,
+      sem_regra_ped_frequencia_indeterminada_bloqueia_ate_confirmar: sem.filter(r => r[k + '_freq_indet']).length,
+      sem_regra_ped_outros: sem.filter(r => !(r[k + '_fonte'] === 'adulto_fixo' && !r[k + '_freq_indet'] && !r[k + '_bloqueio'] && Number(r[k + '_dia']) > 0) && !r[k + '_freq_indet']).length,
+      com_regra_ped_usou_regra_pediatrica: rows.filter(r => r.tem_dose_pediatrica && String(r[k + '_fonte']).startsWith('pediatrica')).length,
+      com_regra_ped_NAO_usou_regra_pediatrica: rows.filter(r => r.tem_dose_pediatrica && !String(r[k + '_fonte']).startsWith('pediatrica')).length,
+    };
+  }
+  const m = rows.filter(r => r.n_concentracoes !== '' && Number(r.n_concentracoes) >= 2);
+  resumo.d10 = { medicamentos_com_2_ou_mais_concentracoes: m.length, dose_por_tomada_independe_da_concentracao: m.filter(r => r.d10_dose_independe_da_concentracao === true).length, dose_muda_com_a_concentracao: m.filter(r => r.d10_dose_independe_da_concentracao === false).length };
+  fs.writeFileSync(OUT + 'catalogo-dose-calculator-resumo.json', JSON.stringify(resumo, null, 1));
+  console.log(JSON.stringify(resumo));
+});

@@ -1,0 +1,38 @@
+{
+ "total": 382,
+ "com_dose_pediatrica": 20,
+ "sem_dose_pediatrica": 362,
+ "neonato_14d_3.5kg": {
+  "sem_regra_ped_calcula_dose_adulta_sem_bloqueio": 207,
+  "sem_regra_ped_frequencia_indeterminada_bloqueia_ate_confirmar": 125,
+  "sem_regra_ped_outros": 30,
+  "com_regra_ped_usou_regra_pediatrica": 15,
+  "com_regra_ped_NAO_usou_regra_pediatrica": 5
+ },
+ "lactente_6m_8kg": {
+  "sem_regra_ped_calcula_dose_adulta_sem_bloqueio": 207,
+  "sem_regra_ped_frequencia_indeterminada_bloqueia_ate_confirmar": 125,
+  "sem_regra_ped_outros": 30,
+  "com_regra_ped_usou_regra_pediatrica": 15,
+  "com_regra_ped_NAO_usou_regra_pediatrica": 5
+ },
+ "crianca_4a_15kg": {
+  "sem_regra_ped_calcula_dose_adulta_sem_bloqueio": 207,
+  "sem_regra_ped_frequencia_indeterminada_bloqueia_ate_confirmar": 125,
+  "sem_regra_ped_outros": 30,
+  "com_regra_ped_usou_regra_pediatrica": 15,
+  "com_regra_ped_NAO_usou_regra_pediatrica": 5
+ },
+ "adolescente_14a_50kg": {
+  "sem_regra_ped_calcula_dose_adulta_sem_bloqueio": 207,
+  "sem_regra_ped_frequencia_indeterminada_bloqueia_ate_confirmar": 125,
+  "sem_regra_ped_outros": 30,
+  "com_regra_ped_usou_regra_pediatrica": 0,
+  "com_regra_ped_NAO_usou_regra_pediatrica": 20
+ },
+ "d10": {
+  "medicamentos_com_2_ou_mais_concentracoes": 266,
+  "dose_por_tomada_independe_da_concentracao": 266,
+  "dose_muda_com_a_concentracao": 0
+ }
+}

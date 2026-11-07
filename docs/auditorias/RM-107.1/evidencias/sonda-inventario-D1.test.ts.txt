@@ -1,0 +1,22 @@
+import { it } from 'vitest';
+import * as fs from 'fs';
+import { getAllDrugs } from '@/lib/pharma-database';
+const E = 'C:/Users/Jonathan Costa/Desktop/Prescreve-AI/docs/auditorias/RM-107.1/evidencias/';
+it('inv', () => {
+  const R = JSON.parse(fs.readFileSync(E + 'catalogo-dose-calculator-por-paciente.json', 'utf8')) as Array<Record<string, unknown>>;
+  const q = new Map(getAllDrugs().map(d => [d.id, d]));
+  const k = 'crianca_4a_15kg';
+  const grupo = (r: Record<string, unknown>) => {
+    if (r.tem_dose_pediatrica) return String(r[k + '_fonte']).startsWith('pediatrica') ? 'D1-4_regra_pediatrica_usada_pelo_motor' : 'D1-5_regra_pediatrica_cadastrada_mas_nao_utilizavel_cai_na_dose_adulta';
+    if (r[k + '_freq_indet']) return 'D1-2_sem_regra_pediatrica_frequencia_indeterminada_bloqueia_ate_confirmar';
+    if (r[k + '_fonte'] === 'adulto_fixo' && !r[k + '_bloqueio'] && Number(r[k + '_dia']) > 0) return 'D1-1_sem_regra_pediatrica_CALCULA_dose_adulta_sem_bloqueio';
+    return 'D1-3_sem_regra_pediatrica_sem_dose_numerica_ou_com_alerta_critico';
+  };
+  const cols = ['id', 'molecula', 'categoria', 'grupo_D1', 'uso_pediatrico_nao_aplicavel_no_catalogo', 'habitual_adulto', 'unidade_adulto', 'frequencias_adulto', 'neonato_tomada', 'crianca_4a_tomada', 'crianca_4a_unidade', 'crianca_4a_dia', 'adolescente_tomada', 'n_concentracoes'];
+  const esc = (v: unknown) => { const s = v === null || v === undefined ? '' : String(v); return /[",\n;]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  const rows = R.map(r => ({ id: r.id, molecula: r.molecula, categoria: r.categoria, grupo_D1: grupo(r), uso_pediatrico_nao_aplicavel_no_catalogo: q.get(String(r.id))?.uso_pediatrico === 'nao_aplicavel', habitual_adulto: r.habitual_adulto, unidade_adulto: r.unidade_adulto, frequencias_adulto: r.frequencias_adulto, neonato_tomada: r['neonato_14d_3.5kg_tomada'], crianca_4a_tomada: r[k + '_tomada'], crianca_4a_unidade: r[k + '_unid'], crianca_4a_dia: r[k + '_dia'], adolescente_tomada: r['adolescente_14a_50kg_tomada'], n_concentracoes: r.n_concentracoes }));
+  fs.writeFileSync(E + 'inventario-D1-por-medicamento.csv', '\uFEFF' + cols.join(';') + '\n' + rows.map(r => cols.map(c => esc((r as Record<string, unknown>)[c])).join(';')).join('\n'));
+  const cont: Record<string, number> = {}; rows.forEach(r => { cont[r.grupo_D1] = (cont[r.grupo_D1] || 0) + 1; });
+  const flagged: Record<string, number> = {}; rows.filter(r => r.uso_pediatrico_nao_aplicavel_no_catalogo).forEach(r => { flagged[r.grupo_D1] = (flagged[r.grupo_D1] || 0) + 1; });
+  console.log(JSON.stringify({ cont, flagged }));
+});

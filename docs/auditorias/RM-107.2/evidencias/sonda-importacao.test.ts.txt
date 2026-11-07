@@ -1,0 +1,26 @@
+import { it } from 'vitest';
+import * as fs from 'fs';
+import { getAllDrugs } from '@/lib/pharma-database';
+import { importarTodosOsMotores, resumirImportacao, estadoDaRegra, detectarSobreposicoes } from '@/lib/dose-contract';
+it('imp', () => {
+  const t = importarTodosOsMotores(getAllDrugs());
+  const est = (r: { governanca: Parameters<typeof estadoDaRegra>[0] }) => estadoDaRegra(r.governanca);
+  const cont = (arr: string[]) => arr.reduce<Record<string, number>>((m, x) => { m[x] = (m[x] || 0) + 1; return m; }, {});
+  const cod = (rs: typeof t.todas, campo: 'pendencias' | 'incompatibilidades') => cont(rs.flatMap(r => r[campo].map(x => x.replace(/:.*$/, ''))));
+  const ent = new Set(t.todas.map(r => r.entidade_id).filter(Boolean));
+  const por = detectarSobreposicoes(t.todas);
+  const cruz = por.filter(p => p.entre_motores_diferentes);
+  const out = {
+    resumo: [resumirImportacao('A:dosing-engine', t.A, est), resumirImportacao('B:pediatric-engine', t.B, est), resumirImportacao('C:dose-calculator(catalogo)', t.C, est)],
+    total_regras: t.todas.length, entidades_com_regras: ent.size,
+    incompatibilidades_por_motor: { A: cod(t.A, 'incompatibilidades'), B: cod(t.B, 'incompatibilidades'), C: cod(t.C, 'incompatibilidades') },
+    pendencias_por_motor: { A: cod(t.A, 'pendencias'), B: cod(t.B, 'pendencias'), C: cod(t.C, 'pendencias') },
+    pares_mesma_entidade: { total: por.length, entre_motores_diferentes: cruz.length, idade_sobrepoe: por.filter(p => p.idade === 'sobrepoe').length, idade_indeterminada: por.filter(p => p.idade === 'indeterminado').length, idade_disjuntas: por.filter(p => p.idade === 'disjuntas').length, cruzados_sobrepoe: cruz.filter(p => p.idade === 'sobrepoe').length, cruzados_indeterminado: cruz.filter(p => p.idade === 'indeterminado').length },
+    entidades_com_regras_de_mais_de_um_motor: [...ent].filter(e => new Set(t.todas.filter(r => r.entidade_id === e).map(r => r.origem.motor)).size > 1).length,
+    vinculo_nao_resolvido: t.todas.filter(r => r.vinculo_entidade === 'nao_resolvido').map(r => r.regra_id),
+    incompativeis_ids_C_pediatricas: t.C.filter(r => r.regra_id.endsWith(':pediatrica') && r.incompatibilidades.length).map(r => r.regra_id),
+    regras_calculaveis_tecnicamente: { A: t.A.filter(r => !r.incompatibilidades.length).length, B: t.B.filter(r => !r.incompatibilidades.length).length, C: t.C.filter(r => !r.incompatibilidades.length).length },
+  };
+  fs.writeFileSync('C:/Users/Jonathan Costa/Desktop/Prescreve-AI/docs/auditorias/RM-107.2/evidencias/importacao-por-motor.json', JSON.stringify(out, null, 1));
+  console.log(JSON.stringify(out));
+});

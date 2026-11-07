@@ -1,0 +1,16 @@
+branch: main
+HEAD: b36c639ec197f2b72fd7d554d8cd12c2eb8a24d2
+tracked modificados (antes):
+ M frontend/src/app/globals.css
+ M frontend/src/app/prescricao-rapida/page.tsx
+ M frontend/src/clinical-tests/framework.ts
+ M frontend/src/lib/safety-rules.ts
+ M frontend/src/tests/cj-009-prescricao-rapida-dispatch.test.tsx
+ M frontend/src/tests/clinical-journey-acceptance-rm64.test.ts
+ M frontend/src/tests/crit-audit-05-isrs-classe-dedup.test.ts
+ M frontend/src/tests/rm66-pilot-batch-losartana-hctz.test.ts
+ M frontend/src/tests/safety-rules-critical-pairs.test.ts
+ M frontend/src/tests/therapeutic-class-expansion.test.ts
+ M frontend/src/tests/therapeutic-prioritization-26-1.test.ts
+ M frontend/src/tests/therapeutic-prioritization.test.ts
+untracked (contagem): 33

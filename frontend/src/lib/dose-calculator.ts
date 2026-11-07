@@ -5,6 +5,7 @@
 
 import { calcularBSA as _calcularBSACore } from './dosing-engine';
 import type { FrequenciaDose, UnidadeDose } from './types';
+import { derivarAvaliacaoDose, type EstadoAvaliacaoDose, type LimitacaoDose } from './dose-estados';
 
 // ─── INTERFACES ───────────────────────────────────────────────
 
@@ -789,6 +790,14 @@ export interface FullDoseResult {
   // verdade o cálculo nunca ocorreu por falta de frequência confiável.
   frequencia_indeterminada: boolean;
   fonte: 'pediatrica_mg_kg' | 'pediatrica_mg_m2' | 'pediatrica_mcg_kg' | 'pediatrica_UI_kg' | 'pediatrica_fixa' | 'adulto_fixo' | 'adulto_mg_kg' | 'bsa';
+  // ── RM-107.1.1-A (ADITIVO, informativo): descreve a situação da avaliação sem alterar nenhum valor acima. ──
+  // NÃO existe estado de aprovação/segurança: calcular ≠ validar. Ver `lib/dose-estados.ts`.
+  /** Estado principal da avaliação (maior precedência entre os aplicáveis). */
+  estado_avaliacao: EstadoAvaliacaoDose;
+  /** Demais estados aplicáveis (nada é ocultado). */
+  estados_adicionais: EstadoAvaliacaoDose[];
+  /** Limitações informativas da avaliação (regra não validada, apresentação, regra pediátrica não utilizada etc.). */
+  limitacoes: LimitacaoDose[];
 }
 
 export function calcFullDose(
@@ -1079,5 +1088,16 @@ export function calcFullDose(
     limitado_por_dose_max: limitado,
     frequencia_indeterminada: frequenciaIndeterminada,
     fonte,
+    // RM-107.1.1-A: campos aditivos derivados do que o motor JÁ decidiu acima (nenhum valor foi alterado).
+    ...derivarAvaliacaoDose({
+      idadeAnos, pesoKg, alturaM: alturaFinal, concentracao: concentracaoSelecionada, concentracaoTipo: conc.tipo,
+      usarDosePediatricaPorIdade: profile.usar_dose_pediatrica,
+      adolescente: idadeAnos >= 12 && idadeAnos < 18,
+      temRegraPediatrica: !!drug.dose_pediatrica,
+      doseKgPediatricaPositiva: !!drug.dose_pediatrica && drug.dose_pediatrica.dose_por_kg > 0,
+      regraPediatricaUsada: !!usarPediatrica,
+      frequenciaIndeterminada, bloqueadoPorAlturaAusente,
+      criticosDeSeguranca: Math.max(0, alertas.filter(a => a.startsWith('🚨')).length - (frequenciaIndeterminada ? 1 : 0) - (bloqueadoPorAlturaAusente ? 1 : 0)),
+    }),
   };
 }

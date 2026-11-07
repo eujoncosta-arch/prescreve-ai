@@ -1,0 +1,54 @@
+// SONDA DE LEITURA da RM-107.1 — executa os 3 engines (somente leitura) para pacientes-padrão e registra os RESULTADOS comparados.
+import { it } from 'vitest';
+import * as fs from 'fs';
+import { MEDICAMENTOS_DOSAGEM, calcularDosagem } from '@/lib/dosing-engine';
+import { calcDosePediatrica } from '@/lib/pediatric-engine';
+import { getAllDrugs } from '@/lib/pharma-database';
+import { calcFullDose } from '@/lib/dose-calculator';
+
+const OUT = 'C:/Users/Jonathan Costa/Desktop/Prescreve-AI/docs/auditorias/RM-107.1/evidencias/';
+const quick = new Map(getAllDrugs().map(d => [d.id, d]));
+const MAPA: Array<{ med: string; A?: string; B?: string; C?: string }> = [
+  { med: 'paracetamol', A: 'paracetamol', B: 'paracetamol', C: 'paracetamol' }, { med: 'dipirona', A: 'dipirona', B: 'dipirona', C: 'dipirona' },
+  { med: 'ibuprofeno', A: 'ibuprofeno', B: 'ibuprofeno', C: 'ibuprofeno' }, { med: 'amoxicilina', A: 'amoxicilina', B: 'amoxicilina', C: 'amoxicilina' },
+  { med: 'amoxicilina+clavulanato', A: 'amoxicilina-clavulanato', B: 'amoxicilina-clavulanato', C: 'amoxicilina_clavulanato' }, { med: 'cefalexina', A: 'cefalexina', B: 'cefalexina', C: 'cefalexina' },
+  { med: 'azitromicina', A: 'azitromicina', B: 'azitromicina', C: 'azitromicina' }, { med: 'omeprazol', A: 'omeprazol', B: 'omeprazol', C: 'omeprazol' },
+  { med: 'sulfametoxazol+trimetoprima', A: 'sulfametoxazol-trimetoprim', B: 'smz-tmp', C: 'smz_tmp' }, { med: 'metformina', A: 'metformina', C: 'metformina' },
+];
+const PAC = [
+  { nome: 'neonato 14 d, 3,5 kg', dias: 14, kg: 3.5, alt: 50 }, { nome: 'lactente 6 m, 8 kg', dias: 182, kg: 8, alt: 68 },
+  { nome: 'criança 4 a, 15 kg', dias: 4 * 365, kg: 15, alt: 100 }, { nome: 'criança 9 a, 30 kg', dias: 9 * 365, kg: 30, alt: 135 },
+  { nome: 'adolescente 14 a, 50 kg', dias: 14 * 365, kg: 50, alt: 160 }, { nome: 'adulto 40 a, 70 kg', dias: 40 * 365, kg: 70, alt: 170 },
+  { nome: 'idoso 75 a, 70 kg', dias: 75 * 365, kg: 70, alt: 165 },
+];
+const r1 = (n: number | null | undefined) => (n === null || n === undefined ? null : Math.round(n * 10) / 10);
+
+it('resultados', () => {
+  const linhas: Array<Record<string, unknown>> = [];
+  for (const m of MAPA) {
+    for (const p of PAC) {
+      const row: Record<string, unknown> = { medicamento: m.med, paciente: p.nome };
+      // A
+      const A = MEDICAMENTOS_DOSAGEM.find(x => x.id === m.A);
+      if (A) {
+        const tent = A.formulacoes.map(f => ({ f, r: calcularDosagem(p.kg, p.alt, p.dias, A, f.id) })); const esc = tent.find(t => t.r && t.r.ok) ?? tent[0]; const r = esc.r; const formId = esc.f.id; row.A_formulacoes_ok = tent.filter(t => t.r && t.r.ok).map(t => t.f.id + ':' + r1(t.r!.dose_por_dose_mg)).join(' | ');
+        row.A = !r ? 'sem formulação' : { ok: r.ok, pop: r.populacao, por_tomada_mg: r1(r.dose_por_dose_mg), dia_mg: r1(r.dose_total_dia_mg), freq_h: r.frequencia_horas || null, formulacao: formId, erro: r.erro ?? null, excede: r.excede_dose_maxima_dia || r.excede_dose_maxima_dose };
+      } else row.A = 'sem regra';
+      // B
+      if (m.B) {
+        const r = calcDosePediatrica(m.B, { pesoKg: p.kg, alturaCm: p.alt, idadeMeses: Math.floor(p.dias / 30.4375) });
+        row.B = !r ? 'sem regra' : { por_tomada_mg: r1(r.doseUnitariaMg), dia_mg: r1(r.doseTotalDiaMg), freq: r.frequenciaTexto, indicacao: r.indicacao ?? null, bloqueio: r.alertas.filter(a => a.startsWith('🚨')).map(a => a.slice(0, 90)), pendente_validacao: r.alertas.some(a => a.includes('PENDENTE DE VALIDAÇÃO')) };
+      } else row.B = 'sem regra';
+      // C
+      const q = m.C ? quick.get(m.C) : undefined;
+      if (q) {
+        const conc = q.marcas[0]?.concentracoes[0] ?? '500 mg';
+        const r = calcFullDose({ molecula: q.molecula, dose_adulto: q.dose_adulto, dose_pediatrica: q.dose_pediatrica, ajuste_renal: q.ajuste_renal, ajuste_hepatico: q.ajuste_hepatico, alertas_especiais: q.alertas_especiais, uso_gestante: q.uso_gestante, uso_lactante: q.uso_lactante }, p.dias / 365, p.kg, conc, undefined, '', false, false, p.alt / 100);
+        row.C = { pop: r.population.population, fonte: r.fonte, por_tomada: r1(r.dose_por_tomada), unidade: r.dose_unidade, dia: r1(r.dose_total_dia), freq: r.frequencia, tomadas: r.tomadas_dia, limitado: r.limitado_por_dose_max, freq_indeterminada: r.frequencia_indeterminada, bloqueio: r.alertas.filter(a => a.startsWith('🚨')).map(a => a.slice(0, 90)), usou_dose_pediatrica_do_catalogo: r.fonte.startsWith('pediatrica'), alertas_nao_criticos: r.alertas.filter(a => !a.startsWith('🚨')).map(a => a.slice(0, 70)) };
+      } else row.C = 'sem regra';
+      linhas.push(row);
+    }
+  }
+  fs.writeFileSync(OUT + 'resultados-comparados-pacientes-padrao.json', JSON.stringify(linhas, null, 1));
+  console.log('linhas', linhas.length);
+});

@@ -14,8 +14,9 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Calculator, User, Pill, CheckCircle2, AlertTriangle,
-  ArrowRight, Beaker, Zap, Droplets, Activity, Clock,
+  ArrowRight, Beaker, Zap, Droplets, Activity, Clock, Info,
 } from 'lucide-react';
+import { ROTULO_ESTADO_AVALIACAO } from '@/lib/dose-estados';
 
 interface DoseCalcCardProps {
   drug: FullDoseInput;
@@ -338,6 +339,21 @@ export function DoseCalcCard({
             placeholder="ex: 7 dias, 30 dias…"
             className="flex-1 text-xs border border-slate-200 rounded-md px-2 py-1 focus:outline-none focus:ring-1 focus:ring-emerald-400 placeholder:text-slate-300"
           />
+        </div>
+
+        {/* RM-107.1.1-A — Estado e limitações da avaliação (INFORMATIVO; neutro: sem verde, sem selo de aprovação/segurança).
+            Não altera nenhum rótulo clínico existente (política de linguagem depende de D13). */}
+        <div data-testid="dose-estado-avaliacao" data-estado={result.estado_avaliacao} className="rounded-md border border-slate-300 bg-slate-50 p-2 text-slate-700">
+          <div className="flex items-start gap-1.5">
+            <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-slate-500" />
+            <div className="space-y-0.5">
+              <p className="text-[11px] font-semibold">Estado da avaliação: {ROTULO_ESTADO_AVALIACAO[result.estado_avaliacao]}</p>
+              {result.estados_adicionais.length > 0 && (
+                <p className="text-[10px]" data-testid="dose-estados-adicionais">Também aplicável: {result.estados_adicionais.map(e => ROTULO_ESTADO_AVALIACAO[e]).join('; ')}</p>
+              )}
+              {result.limitacoes.map(l => <p key={l.codigo} className="text-[10px] text-slate-600" data-testid="dose-limitacao" data-codigo={l.codigo}>• {l.mensagem}</p>)}
+            </div>
+          </div>
         </div>
 
         {/* Fonte */}

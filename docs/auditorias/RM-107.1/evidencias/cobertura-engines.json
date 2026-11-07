@@ -1,0 +1,104 @@
+{
+ "contagens": {
+  "A_dosing_engine_medicamentos": 18,
+  "A_regras": 54,
+  "B_pediatric_engine_medicamentos": 21,
+  "B_indicacoes": 32,
+  "C_catalogo_quickdrug": 382,
+  "C_com_dose_pediatrica": 20,
+  "C_com_ajuste_renal": 364,
+  "C_com_ajuste_hepatico": 382,
+  "pharma_core_entidades": 382
+ },
+ "A_inter_B": [
+  "amoxicilina",
+  "amoxicilina_clavulanato",
+  "azitromicina",
+  "cefalexina",
+  "smz_tmp",
+  "paracetamol",
+  "ibuprofeno",
+  "dipirona",
+  "omeprazol"
+ ],
+ "A_inter_C_ped": [
+  "amoxicilina",
+  "amoxicilina_clavulanato",
+  "azitromicina",
+  "paracetamol",
+  "ibuprofeno",
+  "dipirona",
+  "salbutamol",
+  "montelucaste",
+  "metformina",
+  "omeprazol"
+ ],
+ "B_inter_C_ped": [
+  "paracetamol",
+  "dipirona",
+  "ibuprofeno",
+  "amoxicilina",
+  "amoxicilina_clavulanato",
+  "azitromicina",
+  "prednisolona",
+  "omeprazol"
+ ],
+ "somente_A": [
+  "prednisona",
+  "atenolol",
+  "losartana",
+  "pramipexol",
+  "fenitoina",
+  "dienogeste"
+ ],
+ "somente_B": [
+  "ceftriaxona",
+  "metronidazol",
+  "fluconazol",
+  "aciclovir",
+  "oseltamivir",
+  "B:dexametasona",
+  "albendazol",
+  "ivermectina",
+  "ondansetrona",
+  "domperidona",
+  "lactulose"
+ ],
+ "A_ou_B_sem_C_ped": [
+  "cefalexina",
+  "smz_tmp",
+  "prednisona",
+  "atenolol",
+  "losartana",
+  "pramipexol",
+  "fenitoina",
+  "dienogeste",
+  "ceftriaxona",
+  "metronidazol",
+  "fluconazol",
+  "aciclovir",
+  "oseltamivir",
+  "B:dexametasona",
+  "albendazol",
+  "ivermectina",
+  "ondansetrona",
+  "domperidona",
+  "lactulose"
+ ],
+ "C_ped_sem_A_nem_B": [
+  "anlodipino",
+  "furosemida",
+  "budesonida",
+  "cafeina-citrato",
+  "poractant-alfa",
+  "vitamina-k1-neonatal",
+  "palivizumabe",
+  "sildenafil-neonatal",
+  "fenobarbital-neonatal"
+ ],
+ "ids_diferentes_entre_engines": {
+  "amoxicilina-clavulanato (A,B)": "amoxicilina_clavulanato (catálogo)",
+  "sulfametoxazol-trimetoprim (A)": "smz_tmp (catálogo)",
+  "smz-tmp (B)": "smz_tmp (catálogo)"
+ }
+}

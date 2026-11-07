@@ -1,0 +1,105 @@
+// SONDA DE LEITURA da RM-107.1 (instrumento; NÃO altera nenhum engine nem dado). Gera docs/auditorias/RM-107.1/evidencias/*.json|csv
+import { it } from 'vitest';
+import * as fs from 'fs';
+import { MEDICAMENTOS_DOSAGEM, detectarPopulacao } from '@/lib/dosing-engine';
+import { PEDIATRIC_DOSES } from '@/lib/pediatric-engine';
+import { getAllDrugs } from '@/lib/pharma-database';
+import { parseFrequencia, classifyPopulation } from '@/lib/dose-calculator';
+import { drugRepository } from '@/lib/pharma-core';
+
+const OUT = 'C:/Users/Jonathan Costa/Desktop/Prescreve-AI/docs/auditorias/RM-107.1/evidencias/';
+fs.mkdirSync(OUT, { recursive: true });
+const quick = getAllDrugs();
+const porId = new Map(quick.map(d => [d.id, d]));
+
+// Mapeamento DE AUDITORIA entre identificadores dos engines (não é vínculo do sistema; ver relatório: não existe ID comum).
+const ALIAS_C: Record<string, string> = {
+  'amoxicilina-clavulanato': 'amoxicilina_clavulanato',
+  'sulfametoxazol-trimetoprim': 'smz_tmp',
+  'smz-tmp': 'smz_tmp',
+};
+const idC = (id: string): string | null => { const a = ALIAS_C[id] ?? id; return porId.has(a) ? a : null; };
+
+type Linha = Record<string, unknown>;
+const L: Linha[] = [];
+const num = (s: string | undefined) => { const n = parseFloat(String(s ?? '').replace(',', '.')); return Number.isFinite(n) ? n : null; };
+
+// ── A: dosing-engine ───────────────────────────────────────────────
+for (const m of MEDICAMENTOS_DOSAGEM) {
+  for (const r of m.regras) {
+    const porKgDia = r.unidade === 'mg/kg/dia' ? r.dose : r.unidade === 'mg/kg' ? r.dose * (24 / r.frequencia_horas) : null;
+    const fixaDia = r.unidade === 'mg' ? r.dose * (24 / r.frequencia_horas) : null;
+    L.push({
+      engine: 'A:dosing-engine', id_engine: m.id, entidade_catalogo: idC(m.id), molecula: m.nome_generico,
+      apresentacao: r.formulacao_ids ? r.formulacao_ids.join('|') : '(todas)', populacao: r.populacoes.join('|'), faixa_etaria: 'bucket em dias (neonato<28; lactente<365; pediatrico<4380; adolescente<6570; adulto<23725)',
+      indicacao: r.indicacao ?? '', dose_valor: r.dose, dose_unidade: r.unidade, semantica_unidade: r.unidade === 'mg/kg/dia' ? 'total do dia' : 'por tomada',
+      mg_kg_dia: porKgDia, mg_dia_fixa: fixaDia, dose_max_tomada_mg: r.dose_maxima_por_dose_mg ?? null, dose_max_dia_mg: r.dose_maxima_por_dia_mg ?? null,
+      frequencia: `${r.frequencia_horas}/${r.frequencia_horas}h`, intervalo_h: r.frequencia_horas, duracao: null, via: r.via, forma: m.formulacoes.map(f => f.tipo).join('|'),
+      ajuste_renal: r.ajuste_renal ?? null, ajuste_hepatico: r.ajuste_hepatico ?? null, contraindicado_em: (r.contraindicado_em ?? []).join('|') + (r.contraindicado_ate_dias !== undefined ? ` <${r.contraindicado_ate_dias}d` : ''),
+      fonte: m.diretriz ?? m.evidencia ?? null, status_validacao: 'sem status estruturado',
+    });
+  }
+}
+// ── B: pediatric-engine ────────────────────────────────────────────
+for (const p of PEDIATRIC_DOSES) {
+  for (const i of p.indicacoes) {
+    const div = i.divisoes ?? null;
+    const porKgDia = i.doseMgKgDia ?? (i.doseMgKg && div ? i.doseMgKg * div : null);
+    L.push({
+      engine: 'B:pediatric-engine', id_engine: p.drugId, entidade_catalogo: idC(p.drugId), molecula: p.drugName,
+      apresentacao: p.formulacoes.map(f => `${f.forma} ${f.concentracao}`).join(' | '), populacao: 'pediátrico (meses)', faixa_etaria: `${i.idadeMinMeses ?? '-'}–${i.idadeMaxMeses ?? '-'} meses`,
+      indicacao: i.nome, dose_valor: i.doseMgKg ?? i.doseMgKgDia ?? i.doseMcgKg ?? i.doseMgM2 ?? (i.doseFixa ? 'faixas' : null),
+      dose_unidade: i.doseMgKg ? 'mg/kg/dose' : i.doseMgKgDia ? 'mg/kg/dia' : i.doseMcgKg ? 'mcg/kg/dose' : i.doseMgM2 ? 'mg/m²/dose' : i.doseFixa ? 'mg fixa por faixa' : '?',
+      semantica_unidade: i.doseMgKgDia ? 'total do dia' : 'por tomada', mg_kg_dia: porKgDia, mg_dia_fixa: null, dose_max_tomada_mg: i.maxDoseMg ?? null, dose_max_dia_mg: null, max_mg_kg_dia: i.maxDoseMgKgDia ?? null,
+      frequencia: i.frequencia, divisoes: div, intervalo_h: null, duracao: null, via: '(não estruturada; texto em instruções)', forma: p.formulacoes.map(f => f.forma).join('|'),
+      ajuste_renal: null, ajuste_hepatico: null, contraindicado_em: (p.contraindPediatrica ?? []).join('; '), fonte: p.fontes.join('; '),
+      status_validacao: i.maxDoseMgKgDiaPendenteValidacao ? 'PENDENTE DE VALIDAÇÃO FARMACÊUTICA (declarado no dado): ' + i.maxDoseMgKgDiaPendenteValidacao : 'fontes citadas como texto, não verificadas',
+    });
+  }
+}
+// ── C: catálogo (entrada do dose-calculator/calcFullDose) ──────────
+for (const d of quick) {
+  const a = d.dose_adulto;
+  const f = parseFrequencia(a.frequencias[0] ?? '');
+  const hab = num(a.habitual);
+  L.push({
+    engine: 'C:catálogo→dose-calculator (adulto)', id_engine: d.id, entidade_catalogo: d.id, molecula: d.molecula, apresentacao: d.marcas.flatMap(b => b.concentracoes).filter((v, i, s) => s.indexOf(v) === i).join(' | '),
+    populacao: 'adulto (e pediátrico sem dose_por_kg)', faixa_etaria: 'classifyPopulation(anos): adolescente<18 usa dose adulta', indicacao: d.indicacao_contexto ?? '', dose_valor: a.habitual, dose_unidade: a.unidade,
+    semantica_unidade: 'por tomada (habitual)', mg_kg_dia: null, mg_dia_fixa: hab !== null && f.tomadasDia ? hab * f.tomadasDia : null, dose_max_tomada_mg: null, dose_max_dia_texto: a.max, frequencia: a.frequencias.join(' / '), intervalo_h: null, duracao: null, via: a.via,
+    forma: d.marcas.flatMap(b => b.formas).filter((v, i, s) => s.indexOf(v) === i).join('|'), ajuste_renal: !!d.ajuste_renal, ajuste_hepatico: !!d.ajuste_hepatico, contraindicado_em: d.contraindicacoes_rapidas.join('; '), fonte: null, status_validacao: 'sem fonte/status estruturado',
+  });
+  if (d.dose_pediatrica) {
+    const p = d.dose_pediatrica;
+    const div = p.frequencia_divisoes;
+    const porKgDia = p.calculo === 'mg/kg/dose' ? p.dose_por_kg * div : (p.calculo === 'mg/kg' || p.calculo === 'mg/kg/dia' || p.calculo === '' ) ? p.dose_por_kg : null;
+    L.push({
+      engine: 'C:catálogo→dose-calculator (pediátrico)', id_engine: d.id, entidade_catalogo: d.id, molecula: d.molecula, apresentacao: '(qualquer)', populacao: 'pediátrico (<12 anos via classifyPopulation)', faixa_etaria: p.faixa_etaria + ' (TEXTO LIVRE, não aplicado como limite)',
+      indicacao: d.indicacao_contexto ?? '', dose_valor: p.dose_por_kg, dose_unidade: p.calculo || '(vazio→trata como mg/kg/dia)', semantica_unidade: p.calculo === 'mg/kg/dose' ? 'por tomada' : p.calculo === 'dose_fixa' ? 'dose fixa/dia' : 'total do dia',
+      mg_kg_dia: porKgDia, mg_dia_fixa: null, dose_max_tomada_mg: null, dose_max_dia_valor: p.max_dose_dia, dose_max_dia_unidade: p.max_dose_dia_unidade, frequencia: `${div} tomada(s)/dia`, divisoes: div, intervalo_h: null, duracao: null, via: a.via, forma: '', ajuste_renal: !!d.ajuste_renal, ajuste_hepatico: !!d.ajuste_hepatico,
+      contraindicado_em: '', fonte: null, status_validacao: 'sem fonte/status estruturado',
+    });
+  }
+}
+fs.writeFileSync(OUT + 'matriz-regras-dose.json', JSON.stringify(L, null, 1));
+const cols = ['engine', 'id_engine', 'entidade_catalogo', 'molecula', 'apresentacao', 'populacao', 'faixa_etaria', 'indicacao', 'dose_valor', 'dose_unidade', 'semantica_unidade', 'mg_kg_dia', 'mg_dia_fixa', 'dose_max_tomada_mg', 'dose_max_dia_mg', 'dose_max_dia_valor', 'dose_max_dia_unidade', 'dose_max_dia_texto', 'max_mg_kg_dia', 'frequencia', 'divisoes', 'intervalo_h', 'duracao', 'via', 'forma', 'ajuste_renal', 'ajuste_hepatico', 'contraindicado_em', 'fonte', 'status_validacao'];
+const esc = (v: unknown) => { const s = v === null || v === undefined ? '' : String(v); return /[",\n;]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+fs.writeFileSync(OUT + 'matriz-regras-dose.csv', '\uFEFF' + cols.join(';') + '\n' + L.map(r => cols.map(c => esc(r[c])).join(';')).join('\n'));
+
+// ── Cobertura
+const A = new Set(MEDICAMENTOS_DOSAGEM.map(m => idC(m.id) ?? 'A:' + m.id));
+const B = new Set(PEDIATRIC_DOSES.map(p => idC(p.drugId) ?? 'B:' + p.drugId));
+const Cd = new Set(quick.filter(d => d.dose_pediatrica).map(d => d.id));
+const cov = {
+  contagens: { A_dosing_engine_medicamentos: MEDICAMENTOS_DOSAGEM.length, A_regras: MEDICAMENTOS_DOSAGEM.reduce((s, m) => s + m.regras.length, 0), B_pediatric_engine_medicamentos: PEDIATRIC_DOSES.length, B_indicacoes: PEDIATRIC_DOSES.reduce((s, p) => s + p.indicacoes.length, 0), C_catalogo_quickdrug: quick.length, C_com_dose_pediatrica: Cd.size, C_com_ajuste_renal: quick.filter(d => d.ajuste_renal).length, C_com_ajuste_hepatico: quick.filter(d => d.ajuste_hepatico).length, pharma_core_entidades: (drugRepository.getAll() as unknown[]).length },
+  A_inter_B: [...A].filter(x => B.has(x)), A_inter_C_ped: [...A].filter(x => Cd.has(x)), B_inter_C_ped: [...B].filter(x => Cd.has(x)),
+  somente_A: [...A].filter(x => !B.has(x) && !Cd.has(x)), somente_B: [...B].filter(x => !A.has(x) && !Cd.has(x)), A_ou_B_sem_C_ped: [...new Set([...A, ...B])].filter(x => !Cd.has(x)),
+  C_ped_sem_A_nem_B: [...Cd].filter(x => !A.has(x) && !B.has(x)),
+  ids_diferentes_entre_engines: { 'amoxicilina-clavulanato (A,B)': 'amoxicilina_clavulanato (catálogo)', 'sulfametoxazol-trimetoprim (A)': 'smz_tmp (catálogo)', 'smz-tmp (B)': 'smz_tmp (catálogo)' },
+};
+fs.writeFileSync(OUT + 'cobertura-engines.json', JSON.stringify(cov, null, 1));
+
+// ── Classificação etária: comparação engine × engine em pontos de fronteira (idade em dias)
+const pontos = [0, 1, 27, 28, 29, 30, 89, 90, 91, 364, 365, 366, 729, 730, 731, 2190, 2191, 4379, 4380, 4381, 6569, 6570, 6571, 23724, 23725, 23726];
+const idades = pontos.map(d => ({ dias: d, A_dosing_engine: detectarPopulacao(d), C_dose_calculator: classifyPopulation(d / 365).population, B_pediatric_engine_meses_inteiros_naive: Math.floor(d / 30.4167) }));
+fs.writeFileSync(OUT + 'classificacao-etaria-comparada.json', JSON.stringify(idades, null, 1));
+console.log('linhas', L.length, JSON.stringify(cov.contagens));

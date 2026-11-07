@@ -1,0 +1,82 @@
+{
+ "a_amoxclav_C": {
+  "conc_875": {
+   "tomada": 875,
+   "freq": "a cada 12 horas",
+   "dia": 1750
+  },
+  "conc_500": {
+   "tomada": 875,
+   "freq": "a cada 12 horas",
+   "dia": 1750
+  },
+  "concentracoes_do_catalogo": [
+   "400/57 mg/5 mL",
+   "875/125 mg",
+   "250/62,5 mg/5 mL",
+   "500/125 mg"
+  ],
+  "frequencias_cadastradas": [
+   "2x/dia",
+   "3x/dia"
+  ]
+ },
+ "a_amox_C": {
+  "conc_500": {
+   "tomada": 875,
+   "freq": "a cada 12 horas"
+  },
+  "conc_875": {
+   "tomada": 875,
+   "freq": "a cada 12 horas"
+  }
+ },
+ "b_dipirona_60d_5kg": {
+  "A": {
+   "ok": false,
+   "erro": "Este medicamento é CONTRAINDICADO em idade < 90 dias (paciente tem 60 dias).",
+   "tomada": 0,
+   "dia": 0
+  },
+  "B": {
+   "tomada": 75,
+   "bloqueio": [
+    "🚨 CONTRAINDICADO: idade mínima 3 meses. Paciente tem 2 meses."
+   ]
+  },
+  "C": {
+   "tomada": 50,
+   "dia": 200,
+   "bloqueio": []
+  }
+ },
+ "c_idade_12_meses": {
+  "nota": "dias do dosing-engine (idadeDias: 1 mês = 30 d) × dias canônicos do age-contract RM-105.2.2 (1 mês = 365/12 d); calculado aritmeticamente com DIAS_POR_ANO=365; populacao_A pelo detectarPopulacao (lactente < 365 d)",
+  "dosing_engine_dias": 360,
+  "canonico_dias": 365,
+  "populacao_A_com_dias_do_dosing_engine": "lactente",
+  "populacao_A_com_dias_canonicos": "pediatrico"
+ },
+ "c_tabela": [
+  {
+   "entrada": "0a 11m",
+   "dias_dosing_engine": 330,
+   "dias_canonicos": 334.58
+  },
+  {
+   "entrada": "1a 0m",
+   "dias_dosing_engine": 365,
+   "dias_canonicos": 365
+  },
+  {
+   "entrada": "0a 6m",
+   "dias_dosing_engine": 180,
+   "dias_canonicos": 182.5
+  },
+  {
+   "entrada": "0a 1m",
+   "dias_dosing_engine": 30,
+   "dias_canonicos": 30.42
+  }
+ ]
+}

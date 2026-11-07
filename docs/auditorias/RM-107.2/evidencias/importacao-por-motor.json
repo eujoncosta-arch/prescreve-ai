@@ -1,0 +1,104 @@
+{
+ "resumo": [
+  {
+   "motor": "A:dosing-engine",
+   "regras": 54,
+   "incompativeis": 0,
+   "sem_fonte": 17,
+   "fonte_candidata": 37,
+   "sem_escopo_etario": 0,
+   "vinculo_nao_resolvido": 0,
+   "validadas": 0
+  },
+  {
+   "motor": "B:pediatric-engine",
+   "regras": 32,
+   "incompativeis": 1,
+   "sem_fonte": 0,
+   "fonte_candidata": 32,
+   "sem_escopo_etario": 0,
+   "vinculo_nao_resolvido": 3,
+   "validadas": 0
+  },
+  {
+   "motor": "C:dose-calculator(catalogo)",
+   "regras": 402,
+   "incompativeis": 318,
+   "sem_fonte": 402,
+   "fonte_candidata": 0,
+   "sem_escopo_etario": 402,
+   "vinculo_nao_resolvido": 0,
+   "validadas": 0
+  }
+ ],
+ "total_regras": 488,
+ "entidades_com_regras": 382,
+ "incompatibilidades_por_motor": {
+  "A": {},
+  "B": {
+   "sem_valor_de_dose": 1
+  },
+  "C": {
+   "valor_nao_numerico_puro": 311,
+   "calculo_nao_reconhecido": 7,
+   "dose_por_kg_nao_positiva": 5,
+   "base_temporal_nao_declarada_na_unidade": 38,
+   "unidade_nao_suportada": 16
+  }
+ },
+ "pendencias_por_motor": {
+  "A": {
+   "populacao_por_balde_do_motor": 54,
+   "indicacao_nao_declarada": 27,
+   "ajuste_apenas_flag_sem_parametros": 11,
+   "associacao_sem_substancia_de_referencia_declarada": 6,
+   "sem_fonte": 17
+  },
+  "B": {
+   "frequencia_nao_estruturada": 32,
+   "via_nao_estruturada": 32,
+   "apresentacao_nao_estruturada": 32,
+   "B_usa_idade_corrigida_quando_IG_e_pos_natal_informadas": 32,
+   "sem_limite_superior_de_idade": 30,
+   "limite_pendente_validacao_declarado_no_dado": 1
+  },
+  "C": {
+   "escopo_etario_nao_declarado": 402,
+   "sem_fonte": 402,
+   "limite_em_texto_sem_periodo_garantido": 382,
+   "faixa_etaria_em_texto_livre": 20,
+   "uso_pediatrico_nao_aplicavel_no_cadastro": 66,
+   "C_motor_trata_unidade_com_base_ou_peso_como_por_tomada": 44,
+   "C_motor_trata_como_mg_kg_dia_no_ramo_padrao": 2
+  }
+ },
+ "pares_mesma_entidade": {
+  "total": 271,
+  "entre_motores_diferentes": 176,
+  "idade_sobrepoe": 56,
+  "idade_indeterminada": 152,
+  "idade_disjuntas": 63,
+  "cruzados_sobrepoe": 41,
+  "cruzados_indeterminado": 132
+ },
+ "entidades_com_regras_de_mais_de_um_motor": 29,
+ "vinculo_nao_resolvido": [
+  "B:dexametasona:0",
+  "B:dexametasona:1",
+  "B:dexametasona:2"
+ ],
+ "incompativeis_ids_C_pediatricas": [
+  "C:metformina:pediatrica",
+  "C:salbutamol:pediatrica",
+  "C:budesonida:pediatrica",
+  "C:montelucaste:pediatrica",
+  "C:cafeina-citrato:pediatrica",
+  "C:vitamina-k1-neonatal:pediatrica",
+  "C:fenobarbital-neonatal:pediatrica"
+ ],
+ "regras_calculaveis_tecnicamente": {
+  "A": 54,
+  "B": 31,
+  "C": 84
+ }
+}
