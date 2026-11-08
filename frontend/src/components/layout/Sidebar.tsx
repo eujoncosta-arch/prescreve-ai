@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useApp } from '@/lib/store';
+import { contarPendenciasDoProprietario } from '@/lib/pendencias-locais';
 import { ChevronRight, Stethoscope, Shield } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { NAV_GROUPS as navGroups } from '@/lib/clinical-nav-registry';
@@ -95,7 +96,12 @@ export function Sidebar() {
         </Link>
         {auth.isAuthenticated ? (
           <button
-            onClick={() => { void auth.logout(); }}
+            onClick={() => {
+              // RM-107.1.1-E2.8: sair NUNCA descarta prescrições locais pendentes em silêncio — pede confirmação explícita; o descarte é uma ação separada em Prescrições.
+              const n = auth.currentUser ? contarPendenciasDoProprietario(auth.currentUser.id) : 0;
+              if (n > 0 && !window.confirm(`Há ${n} prescrição(ões)/consulta(s) local(is) ainda não confirmada(s) pelo servidor. Ao sair, elas serão MANTIDAS neste navegador e só ficarão disponíveis quando você entrar novamente com ESTA conta (não são visíveis a outra conta pelo aplicativo, mas permanecem legíveis para quem acessar o navegador). Para descartá-las, cancele e use "Descartar minhas pendências locais" em Prescrições. Sair agora?`)) return;
+              void auth.logout();
+            }}
             className="mt-1 w-full text-center text-[10px] text-slate-400 hover:text-red-500 transition-colors"
           >
             Sair da sessão

@@ -8,6 +8,7 @@
 import { IS_DEMO_MODE, IS_PRODUCTION_MODE, APP_MODE } from './app-mode';
 import { NonRetryableError } from './sync-engine';
 import type { MedicamentoPrescrito } from './types';
+import { KEY_PENDENTES_V2, KEY_PENDENTES_LEGADO } from './pendencias-locais';
 
 // ============================================================
 // RM-43 — Formato real de `GET /api/consulta/:id`
@@ -124,10 +125,15 @@ function setTokens(tokens: AuthTokens): void {
 function clearTokens(): void {
   if (typeof window === 'undefined') return;
   const prefixos = ['prescreve_ai_', 'prescreve-ai-'];
+  // RM-107.1.1-E2.8 (F-1): três operações DISTINTAS. Esta função encerra a sessão local = limpa CREDENCIAIS (tokens) e os demais dados clínicos
+  // locais (política FE-03), mas NUNCA apaga as PENDÊNCIAS (prescrições/consultas ainda não confirmadas pelo servidor): elas ficam retidas,
+  // isoladas por proprietário, e só são descartadas por AÇÃO EXPLÍCITA do usuário (ver `pendencias-locais.ts`). O registro legado sem
+  // proprietário também NÃO é apagado aqui (quarentena até descarte/verificação explícitos).
+  const RETIDAS = new Set<string>([KEY_PENDENTES_V2, KEY_PENDENTES_LEGADO]);
   const chaves: string[] = [];
   for (let i = 0; i < localStorage.length; i++) {
     const chave = localStorage.key(i);
-    if (chave && prefixos.some((p) => chave.startsWith(p))) {
+    if (chave && prefixos.some((p) => chave.startsWith(p)) && !RETIDAS.has(chave)) {
       chaves.push(chave);
     }
   }
@@ -317,6 +323,25 @@ export const authApi = {
 
   isAuthenticated(): boolean {
     return !!getAccessToken();
+  },
+
+  /**
+   * RM-107.1.1-E2.8: verifica a sessão NO SERVIDOR (chamada autenticada barata). Só uma resposta bem-sucedida comprova a identidade; um token
+   * apenas "presente"/decodificável no navegador NÃO comprova nada. `sessao_invalida` (401 sem refresh) já encerra a sessão local (sem apagar pendências).
+   * Demo/sem backend ⇒ não verificável (nunca "ok").
+   */
+  async verificarSessao(): Promise<{ ok: true; id: string } | { ok: false; motivo: 'demo' | 'sem_backend' | 'sessao_invalida' | 'rede' | 'indisponivel' }> {
+    if (IS_DEMO_MODE) return { ok: false, motivo: 'demo' };
+    if (!API_URL_CONFIGURED) return { ok: false, motivo: 'sem_backend' };
+    try {
+      // E2.8.1: identidade CONFIRMADA PELO SERVIDOR (GET /auth/me). Resposta sem `id` textual = não confiável.
+      const me = await apiFetch<{ id?: unknown }>('/auth/me');
+      if (!me || typeof me.id !== 'string' || !me.id) return { ok: false, motivo: 'indisponivel' };
+      return { ok: true, id: me.id };
+    } catch (e) {
+      if (e instanceof ApiError) return { ok: false, motivo: e.status === 401 || e.status === 403 ? 'sessao_invalida' : 'indisponivel' };
+      return { ok: false, motivo: 'rede' };
+    }
   },
 
   getToken(): string | null {

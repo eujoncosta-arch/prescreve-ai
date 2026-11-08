@@ -177,7 +177,8 @@ function Harness({ srv, backendMode = true, inicial }: { srv: ReturnType<typeof 
     const { deps } = depsReais({ atual: ref.current }, srv, { dispatch });
     await executarSincronizacaoConsulta(c, deps);
   }, [srv]);
-  const valor = { state, dispatch, auth: { backendMode, demoMode: !backendMode }, retrySync };
+  // E2.8: o componente exige usuário autenticado (consultas sem `proprietario_id` pertencem ao usuário atual).
+  const valor = { state, dispatch, auth: { backendMode, demoMode: !backendMode, currentUser: { id: 'u-test', email: 'u@x.com', perfil: 'MEDICO' } }, retrySync };
   return React.createElement(AppCtx.Provider, { value: valor }, React.createElement(PrescricoesLocaisPendentes), React.createElement('output', { 'data-testid': 'estado-json' }, JSON.stringify(state.consultations)));
 }
 const estadoAtual = (): Consultation[] => JSON.parse(screen.getByTestId('estado-json').textContent ?? '[]');

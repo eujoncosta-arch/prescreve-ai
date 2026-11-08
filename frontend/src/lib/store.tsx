@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useReducer, useEffect, useCallback, useRef, type ReactNode } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, useCallback, useRef, useState, type ReactNode } from 'react';
 import { toast } from 'sonner';
 import type { Consultation, Anamnesis, DiagnosticSupport, TherapeuticPlan, SafetyCheck, Prescription, AppSettings, PrognosisData, LaboratoryPreference, ResourceSyncState, MedicamentoPrescrito, ConsultationDetailStatus, PrescricaoRecuperada, DiagnosticoEstruturado, RiscoCalculado, RiscoRecuperado } from './types';
 import { MOCK_CONSULTATIONS } from './mock-data';
@@ -8,6 +8,7 @@ import { authApi, consultaApi, getCurrentUser, useRealBackend, type CurrentUser 
 import { syncResource, newIdempotencyKey, isDemoConsultationId } from './sync-engine';
 import { APP_MODE, IS_DEMO_MODE } from './app-mode';
 import { registrarEventoSessao, limparTrilhaDaSessao } from './trilha-sessao-posologia';
+import { consultaTemPendenciaLocal as consultaTemPendenciaLocalImpl, carregarPendencias, salvarPendencias, ultimosConflitos, consultaPertenceAoUsuario } from './pendencias-locais';
 
 const DEFAULT_SETTINGS: AppSettings = {
   medico: { nome: 'Dr. João Silva', crm: 'CRM-SP 123456', especialidade: 'Clínica Médica' },
@@ -115,7 +116,9 @@ export type Action =
   | { type: 'RESET_PAGINATION' }
   | { type: 'RESTORE_PENDING_CONSULTATIONS'; payload: Consultation[] }
   /** RM-107.1.1-E2.4: revisão da prescrição de uma consulta ESPECÍFICA (por id), sem depender de ser a consulta ativa nem do Panel original. */
-  | { type: 'REVIEW_PRESCRIPTION'; payload: { consultaId: string; prescricao: Prescription } };
+  /** E2.8: descarte EXPLÍCITO das pendências locais do proprietário (nunca de outro). */
+  | { type: 'DISCARD_PENDING_CONSULTATIONS'; payload: { ids: string[]; usuarioId: string } }
+  | { type: 'REVIEW_PRESCRIPTION'; payload: { consultaId: string; prescricao: Prescription; /** E2.8: usuário que revisa — recusado se não for o proprietário. */ usuarioId?: string } };
 
 // ============================================================
 // RM-42: hidratação da lista de consultas a partir do backend real
@@ -268,8 +271,18 @@ export function reducer(state: AppState, action: Action): AppState {
       return { ...state, loading: action.payload };
     case 'SET_ERROR':
       return { ...state, error: action.payload };
-    case 'SET_USER':
-      return { ...state, currentUser: action.payload };
+    case 'SET_USER': {
+      // RM-107.1.1-E2.8: troca de usuário NUNCA reassocia nem exibe dados de outro proprietário. Consultas restauradas com `proprietario_id` diferente
+      // saem da memória (a cópia persistida continua isolada sob o proprietário original).
+      const uid = action.payload?.id;
+      const alheia = (c: Consultation) => !!c.proprietario_id && c.proprietario_id !== uid;
+      if (!state.consultations.some(alheia) && !(state.activeConsultation && alheia(state.activeConsultation))) return { ...state, currentUser: action.payload };
+      return {
+        ...state, currentUser: action.payload,
+        consultations: state.consultations.filter((c) => !alheia(c)),
+        activeConsultation: state.activeConsultation && alheia(state.activeConsultation) ? null : state.activeConsultation,
+      };
+    }
 
     case 'NEW_CONSULTATION':
       return {
@@ -479,10 +492,22 @@ export function reducer(state: AppState, action: Action): AppState {
     case 'RESET_PAGINATION':
       return { ...state, consultationsPagination: INITIAL_PAGINATION };
 
+    case 'DISCARD_PENDING_CONSULTATIONS': {
+      const { ids, usuarioId } = action.payload;
+      const remover = (c: Consultation) => ids.includes(c.id) && consultaPertenceAoUsuario(c, usuarioId) && consultaTemPendenciaLocalImpl(c);
+      return {
+        ...state,
+        consultations: state.consultations.filter((c) => !remover(c)),
+        activeConsultation: state.activeConsultation && remover(state.activeConsultation) ? null : state.activeConsultation,
+      };
+    }
+
     case 'REVIEW_PRESCRIPTION': {
-      const { consultaId, prescricao } = action.payload;
+      const { consultaId, prescricao, usuarioId } = action.payload;
       const aplicar = (c: Consultation): Consultation => {
         if (c.id !== consultaId) return c;
+        // E2.8: a revisão NUNCA troca o proprietário e é recusada para quem não é o proprietário.
+        if (usuarioId !== undefined && !consultaPertenceAoUsuario(c, usuarioId)) return c;
         const p = c.sync?.prescricao;
         // Bloqueio de integridade anterior deixa de valer como "estado de sync" (o bloqueio real vive nos itens: `bloqueio_dto`).
         // Qualquer outro estado (falha de rede etc., com sua idempotency_key) é preservado.
@@ -1143,12 +1168,7 @@ const KEY_CONSULTAS_PENDENTES = 'prescreve_ai_consultas_pendentes';
  * RM-107.1.1-E2.4: inclui a consulta JÁ sincronizada cuja PRESCRIÇÃO local ficou pendente/bloqueada/falha — antes ela não era persistida
  * e se perdia no reload (perda silenciosa). Consultas hidratadas do backend não têm `prescricao` local e continuam fora.
  */
-export function consultaTemPendenciaLocal(c: Consultation): boolean {
-  const status = c.sync?.consulta?.status;
-  if (status && status !== 'synced') return true;
-  const p = c.sync?.prescricao;
-  return !!c.prescricao?.itens?.length && !!p && p.status !== 'synced';
-}
+export const consultaTemPendenciaLocal = consultaTemPendenciaLocalImpl;   // E2.8: implementação movida para `pendencias-locais.ts` (mesmo comportamento)
 
 export function persistirConsultasPendentes(consultations: Consultation[]): void {
   if (typeof window === 'undefined') return;
@@ -1213,6 +1233,7 @@ interface AppContextType {
     /** Verdadeiro apenas quando o modo demo foi explicitamente ativado (NEXT_PUBLIC_DEMO_MODE=true) e o ambiente não é produção. */
     demoMode: boolean;
     appMode: typeof APP_MODE;
+    identidadeVerificada: boolean;
     login: (email: string, senha: string) => Promise<void>;
     register: (dados: RegisterData) => Promise<void>;
     logout: () => Promise<void>;
@@ -1259,6 +1280,8 @@ const AppContext = createContext<AppContextType | null>(null);
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
+  // RM-107.1.1-E2.8: id do usuário cuja sessão foi VERIFICADA pelo servidor (null = não verificada).
+  const [identidadeVerificada, setIdentidadeVerificada] = useState<string | null>(null);
   // Evita re-disparar a sincronização automática a cada atualização de
   // status de sync (o efeito abaixo reage a mudanças em activeConsultation,
   // e SET_SYNC_STATE também muda essa referência) — sem isso, cada
@@ -1295,19 +1318,36 @@ export function AppProvider({ children }: { children: ReactNode }) {
   // fictício não é persistido). `clearTokens()` (logout) já limpa a
   // mesma chave de localStorage, então a política de nunca deixar dado
   // clínico sobreviver a um logout continua intacta.
+  // RM-107.1.1-E2.8: a restauração só ocorre para o PROPRIETÁRIO com sessão VERIFICADA PELO SERVIDOR (`identidadeVerificada`) — nunca no mount,
+  // nunca para token apenas "presente", nunca de outro proprietário. O formato legado (sem dono) fica em quarentena (não é carregado aqui).
   useEffect(() => {
-    if (IS_DEMO_MODE) return;
-    const restauradas = restaurarConsultasPendentes();
+    if (IS_DEMO_MODE || !identidadeVerificada || identidadeVerificada !== state.currentUser?.id) return;
+    const restauradas = carregarPendencias(identidadeVerificada);
     if (restauradas.length > 0) dispatch({ type: 'RESTORE_PENDING_CONSULTATIONS', payload: restauradas });
-  }, []);
+  }, [identidadeVerificada, state.currentUser?.id]);
 
   // RM-45: persiste o subconjunto pendente sempre que `state.consultations`
   // muda — mantém a recuperação após reload atualizada em tempo real,
   // sem exigir uma ação explícita do médico.
+  // E2.8: persiste SOMENTE sob o proprietário verificado (nunca antes da verificação, nunca sem dono). `salvarPendencias` não apaga registros do
+  // proprietário que ainda não foram restaurados nem toca registros de outros proprietários (merge por id).
   useEffect(() => {
-    if (IS_DEMO_MODE) return;
-    persistirConsultasPendentes(state.consultations);
-  }, [state.consultations]);
+    if (IS_DEMO_MODE || !identidadeVerificada || identidadeVerificada !== state.currentUser?.id) return;
+    salvarPendencias(identidadeVerificada, state.consultations);
+    // E2.8.1: outra aba alterou o mesmo registro — a gravação desta aba foi RECUSADA (sem sobrescrita silenciosa); avisa para recarregar.
+    if (ultimosConflitos.length > 0) toast.warning('Outra aba do navegador alterou pendências locais desta conta. Recarregue a página para ver a versão mais recente; a alteração desta aba não sobrescreveu a outra.', { id: 'pendencias-conflito-abas' });
+  }, [state.consultations, identidadeVerificada, state.currentUser?.id]);
+
+  // E2.8: verificação de identidade NO SERVIDOR para uma sessão restaurada de um token existente (login/registro já provam a identidade).
+  useEffect(() => {
+    const uid = state.currentUser?.id;
+    if (!uid || IS_DEMO_MODE || state.currentUser?.demo || !useRealBackend) return;
+    if (identidadeVerificada === uid) return;
+    let cancelado = false;
+    // E2.8.1: só vale se o id devolvido PELO SERVIDOR for o mesmo do token decodificado (sub); divergência ⇒ nada é restaurado/persistido.
+    void authApi.verificarSessao().then((r) => { if (!cancelado && r.ok && r.id === uid) setIdentidadeVerificada(uid); });
+    return () => { cancelado = true; };
+  }, [state.currentUser, identidadeVerificada]);
 
   // RM-44: carrega a PRIMEIRA página do histórico sob demanda/paginação
   // real (substitui a busca única de 50 registros do RM-42).
@@ -1357,12 +1397,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const login = useCallback(async (email: string, senha: string) => {
     await authApi.login(email, senha);
-    dispatch({ type: 'SET_USER', payload: getCurrentUser() });
+    const u = getCurrentUser();
+    dispatch({ type: 'SET_USER', payload: u });
+    if (u && !u.demo && useRealBackend) setIdentidadeVerificada(u.id);   // E2.8: o servidor acabou de emitir o token ⇒ identidade comprovada
   }, []);
 
   const register = useCallback(async (dados: RegisterData) => {
     await authApi.register(dados);
-    dispatch({ type: 'SET_USER', payload: getCurrentUser() });
+    const u = getCurrentUser();
+    dispatch({ type: 'SET_USER', payload: u });
+    if (u && !u.demo && useRealBackend) setIdentidadeVerificada(u.id);
   }, []);
 
   const logout = useCallback(async () => {
@@ -1373,6 +1417,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     // requisição de paginação/detalhe ainda em voo desta sessão.
     hidratadoParaUsuario.current = null;
     sessaoEpochRef.current += 1;
+    setIdentidadeVerificada(null);   // E2.8: sem identidade verificada nada é restaurado/salvo; as pendências ficam RETIDAS sob o proprietário (não são apagadas)
     limparTrilhaDaSessao();
     dispatch({ type: 'SET_USER', payload: null });
     dispatch({ type: 'RESET_SESSION_DATA' });
@@ -1384,6 +1429,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
   // da função pura `executarSincronizacaoConsulta` — ver o comentário
   // extenso acima dela para o detalhamento dos 3 riscos corrigidos.
   const sincronizarConsulta = useCallback(async (c: Consultation) => {
+    // E2.8: nunca sincroniza consulta de OUTRO proprietário sob a sessão atual.
+    if (!consultaPertenceAoUsuario(c, getCurrentUser()?.id)) {
+      toast.error('Esta consulta pertence a outra conta e não pode ser enviada nesta sessão.', { duration: 6000 });
+      return;
+    }
     if (!podeSincronizar(c, emSincronizacaoRef.current)) return;
     emSincronizacaoRef.current.add(c.id);
     const epoch = sessaoEpochRef.current;
@@ -1489,6 +1539,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     backendMode: useRealBackend,
     demoMode: IS_DEMO_MODE,
     appMode: APP_MODE,
+    /** E2.8: a sessão foi verificada pelo servidor para o usuário atual (pré-requisito para restaurar/mostrar pendências locais). */
+    identidadeVerificada: !!state.currentUser && identidadeVerificada === state.currentUser.id,
     login, register, logout,
   };
 

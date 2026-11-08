@@ -1,5 +1,6 @@
 import {
   Controller,
+  Get,
   Post,
   Body,
   UseGuards,
@@ -72,6 +73,17 @@ export class AuthController {
   refresh(@Body() dto: RefreshDto, @Req() req: Request) {
     const ip = req.ip ?? req.headers['x-forwarded-for']?.toString();
     return this.auth.refresh(dto.refresh_token, ip);
+  }
+
+  /**
+   * RM-107.1.1-E2.8.1 — identidade da sessão CONFIRMADA PELO SERVIDOR (somente leitura, aditivo).
+   * O frontend usa o `id` devolvido (não o `sub` decodificado no navegador) como proprietário das pendências locais. `JwtAuthGuard`/`JwtStrategy`
+   * já validam a assinatura, a expiração e que o usuário existe e está ativo; devolve apenas {id, email, perfil} do usuário autenticado.
+   */
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  me(@CurrentUser() user: { id: string; email: string; perfil: Perfil }) {
+    return { id: user.id, email: user.email, perfil: user.perfil };
   }
 
   @Post('logout')

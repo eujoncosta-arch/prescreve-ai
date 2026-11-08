@@ -426,6 +426,11 @@ export interface Consultation {
   status: 'anamnese' | 'diagnostico' | 'terapeutico' | 'prescricao' | 'concluida';
   paciente_nome: string;
   data: string;
+  /**
+   * RM-107.1.1-E2.8: id do usuário PROPRIETÁRIO verificado desta consulta quando ela foi restaurada do armazenamento local. Imutável após a restauração
+   * (a revisão não o altera). Ausente em consultas criadas na sessão atual (pertencem ao usuário atual).
+   */
+  proprietario_id?: string;
   anamnese?: Anamnesis;
   apoio_diagnostico?: DiagnosticSupport;
   diagnostico_selecionado?: string;

@@ -108,7 +108,7 @@ function Harness({ srv, inicial }: { srv: ReturnType<typeof servidor>; inicial: 
     if (!podeSincronizar(c, new Set())) return;
     await executarSincronizacaoConsulta(c, deps({ atual: ref.current }, srv, { dispatch }).d);
   }, [srv]);
-  return React.createElement(AppCtx.Provider, { value: { state, dispatch, auth: { backendMode: true, demoMode: false }, retrySync } },
+  return React.createElement(AppCtx.Provider, { value: { state, dispatch, auth: { backendMode: true, demoMode: false, currentUser: { id: 'u-test', email: 'u@x.com', perfil: 'MEDICO' } }, retrySync } },
     React.createElement(PrescricoesLocaisPendentes), React.createElement('output', { 'data-testid': 'estado-json' }, JSON.stringify(state.consultations)));
 }
 const estadoAtual = (): Consultation[] => JSON.parse(screen.getByTestId('estado-json').textContent ?? '[]');

@@ -7,6 +7,11 @@ import { classificarSincronizacaoPrescricao } from '@/lib/sincronizacao-prescric
 import { avaliarIntegridadeDto } from '@/lib/posologia-consistencia';
 import { itemParaRevisao, prepararItemParaStore, reconfirmarDoseEstruturada, registrarEdicaoPosologica } from '@/lib/prescricao-proveniencia';
 import { registrarEventoSessao } from '@/lib/trilha-sessao-posologia';
+import {
+  consultaPertenceAoUsuario, contarRegistrosLegadosSemProprietario, descartarRegistrosLegados, reivindicarLegadoVerificado, carregarPendencias,
+  descartarPendenciasDoProprietario,
+} from '@/lib/pendencias-locais';
+import { consultaApi } from '@/lib/api-client';
 import { normalizarProveniencia, ROTULO_ORIGEM, ROTULO_ESTRUTURA } from '@/lib/proveniencia-persistida';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -45,7 +50,7 @@ function ProvenienciaDoItem({ item, estadoAtual, idx }: { item: ItemRevisao; est
 }
 
 function RevisaoDaPrescricao({ c, onFechar }: { c: Consultation; onFechar: () => void }) {
-  const { dispatch } = useApp();
+  const { dispatch, auth } = useApp();
   const [itens, setItens] = useState<ItemRevisao[]>(() => (c.prescricao?.itens ?? []).map(i => itemParaRevisao(i)));
   const [salvo, setSalvo] = useState(false);
 
@@ -61,7 +66,7 @@ function RevisaoDaPrescricao({ c, onFechar }: { c: Consultation; onFechar: () =>
     if (!c.prescricao) return;
     const preparados = itens.map(prepararItemParaStore) as PrescriptionItem[];
     registrarEventoSessao({ tipo: 'revisao_salva', consulta_id: c.id, detalhe: `itens=${preparados.length};ainda_bloqueados=${preparados.filter(i => i.bloqueio_dto).length}` });
-    dispatch({ type: 'REVIEW_PRESCRIPTION', payload: { consultaId: c.id, prescricao: { ...c.prescricao, itens: preparados } } });
+    dispatch({ type: 'REVIEW_PRESCRIPTION', payload: { consultaId: c.id, prescricao: { ...c.prescricao, itens: preparados }, usuarioId: auth.currentUser?.id } });
     setSalvo(true);
     // Recomeça a revisão a partir do que foi salvo (o envelope já incorpora as alterações/reutilização desta sessão — evita contá-las duas vezes).
     setItens(preparados.map(i => itemParaRevisao(i)));
@@ -122,20 +127,67 @@ function RevisaoDaPrescricao({ c, onFechar }: { c: Consultation; onFechar: () =>
   );
 }
 
+/**
+ * RM-107.1.1-E2.8 — quarentena do formato legado (sem proprietário). Mostra SOMENTE contagens (sem PHI) e duas ações explícitas:
+ * verificar a propriedade no SERVIDOR (só registros com `backend_id`) ou descartar. Nunca atribui automaticamente ao usuário atual.
+ */
+function RegistrosLegadosSemProprietario({ usuarioId }: { usuarioId: string }) {
+  const { dispatch } = useApp();
+  const [n, setN] = useState(() => contarRegistrosLegadosSemProprietario());
+  const [msg, setMsg] = useState<string | null>(null);
+  if (n === 0 && !msg) return null;
+  const verificar = async () => {
+    const r = await reivindicarLegadoVerificado(usuarioId, async (id) => { const d = await consultaApi.buscar(id); return !!d && d.id === id; });
+    const restauradas = carregarPendencias(usuarioId);
+    if (restauradas.length > 0) dispatch({ type: 'RESTORE_PENDING_CONSULTATIONS', payload: restauradas });
+    setN(contarRegistrosLegadosSemProprietario());
+    setMsg(`${r.reivindicados} registro(s) confirmado(s) pelo servidor como seus; ${r.mantidosEmQuarentena} permanecem isolados (propriedade não comprovada).`);
+  };
+  const descartar = () => {
+    if (!window.confirm(`Descartar ${n} registro(s) local(is) de origem NÃO identificada? Se algum deles for uma prescrição ainda não enviada, ela será perdida. Esta ação não pode ser desfeita.`)) return;
+    const d = descartarRegistrosLegados(); setN(0); setMsg(`${d} registro(s) sem proprietário descartado(s).`);
+  };
+  return (
+    <section className="mb-4 rounded-md border border-slate-300 bg-slate-50 p-3 text-sm text-slate-700 space-y-2" data-testid="registros-legados" aria-label="Registros locais de origem não identificada">
+      <p className="font-medium">Há {n} registro(s) local(is) de origem não identificada neste dispositivo.</p>
+      <p className="text-xs">Eles NÃO são exibidos, revisados nem enviados e não foram atribuídos a esta conta. Você pode pedir ao servidor que comprove a propriedade (apenas registros já sincronizados) ou descartá-los.</p>
+      <div className="flex flex-wrap gap-2">
+        <Button size="sm" variant="outline" onClick={() => void verificar()} disabled={n === 0}>Verificar propriedade no servidor</Button>
+        <Button size="sm" variant="outline" onClick={descartar} disabled={n === 0}>Descartar registros sem proprietário</Button>
+      </div>
+      {msg && <p className="text-xs" data-testid="legado-msg">{msg}</p>}
+    </section>
+  );
+}
+
 export function PrescricoesLocaisPendentes() {
-  const { state, auth, retrySync } = useApp();
+  const { state, auth, retrySync, dispatch } = useApp();
   const [revisandoId, setRevisandoId] = useState<string | null>(null);
+  const usuarioId = auth.currentUser?.id;
 
   const pendentes = useMemo(() => state.consultations
+    .filter(c => consultaPertenceAoUsuario(c, usuarioId))   // E2.8: nunca lista (nem permite revisar/reenviar) consulta de outro proprietário
     .map(c => ({ c, parecer: classificarSincronizacaoPrescricao(c, { backendMode: auth.backendMode }) }))
     .filter(({ parecer }) => parecer.estado !== 'sincronizada' && parecer.estado !== 'sem_prescricao_local'
       // Sem backend (local/demonstração) toda prescrição é "somente no dispositivo": só interessa o que está BLOQUEADO.
       && (auth.backendMode || parecer.estado === 'bloqueada_por_integridade')),
-  [state.consultations, auth.backendMode]);
+  [state.consultations, auth.backendMode, usuarioId]);
 
-  if (pendentes.length === 0) return null;
+  const descartarMinhas = () => {
+    if (!usuarioId) return;
+    if (!window.confirm(`Descartar ${pendentes.length} prescrição(ões)/consulta(s) local(is) ainda não confirmada(s) pelo servidor? Elas serão PERDIDAS neste dispositivo e não poderão ser recuperadas.`)) return;
+    const ids = pendentes.map(({ c }) => c.id);
+    descartarPendenciasDoProprietario(usuarioId);
+    dispatch({ type: 'DISCARD_PENDING_CONSULTATIONS', payload: { ids, usuarioId } });
+    setRevisandoId(null);
+  };
+
+  if (!usuarioId) return null;
+  if (pendentes.length === 0) return <RegistrosLegadosSemProprietario usuarioId={usuarioId} />;
 
   return (
+    <>
+    <RegistrosLegadosSemProprietario usuarioId={usuarioId} />
     <section className="mb-6 space-y-3" aria-label="Prescrições finalizadas somente neste dispositivo" data-testid="prescricoes-locais-pendentes">
       <div className="flex items-center gap-2 text-slate-800">
         <CloudOff className="w-4 h-4 text-amber-600" />
@@ -171,6 +223,10 @@ export function PrescricoesLocaisPendentes() {
           </CardContent>
         </Card>
       ))}
+      <div className="flex justify-end">
+        <Button size="sm" variant="outline" onClick={descartarMinhas} data-testid="descartar-minhas">Descartar minhas pendências locais…</Button>
+      </div>
     </section>
+    </>
   );
 }
