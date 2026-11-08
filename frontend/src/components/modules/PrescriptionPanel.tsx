@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import { useApp } from '@/lib/store';
 import type { Prescription, PrescriptionItem } from '@/lib/types';
 import { mapFrequenciaParaContrato, mapUnidadeParaContrato } from '@/lib/dose-calculator';
-import { registroDeRecomendacaoTexto, registroDeInclusaoManual, registrarEdicaoPosologica, semRegistroParaPersistir } from '@/lib/prescricao-proveniencia';
+import { registroDeRecomendacaoTexto, registroDeInclusaoManual, registrarEdicaoPosologica, prepararItemParaStore, reconfirmarDoseEstruturada, doseEstruturadaDesatualizada } from '@/lib/prescricao-proveniencia';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -164,6 +164,14 @@ export function PrescriptionPanel({ onComplete }: PrescriptionPanelProps) {
     }));
   };
 
+  // RM-107.1.1-E2.2: reconfirmação explícita (ação do prescritor). Não recalcula nem edita o DTO e não promove a avaliação.
+  const reconfirmarDose = (id: string) => {
+    setPrescricao(prev => ({
+      ...prev,
+      itens: prev.itens.map(item => item.id === id ? { ...item, posologia_registrada: reconfirmarDoseEstruturada(item.posologia_registrada) } : item),
+    }));
+  };
+
   const addItem = () => {
     setPrescricao(prev => ({
       ...prev,
@@ -198,7 +206,13 @@ export function PrescriptionPanel({ onComplete }: PrescriptionPanelProps) {
   const handleFinalize = async () => {
     setLoading(true);
     await new Promise(r => setTimeout(r, 800));
-    dispatch({ type: 'UPDATE_PRESCRIPTION', payload: { ...prescricao, itens: prescricao.itens.map(semRegistroParaPersistir), id: Date.now().toString() } });
+    // RM-107.1.1-E2.2: o registro nunca sai do estado local; DTO desatualizado e NÃO reconfirmado não segue como a posologia atual
+    // (o gate existente de sincronização bloqueia o item sem `dose_estruturada`). Texto e demais campos legados seguem inalterados.
+    const itensDesatualizados = prescricao.itens.filter(doseEstruturadaDesatualizada);
+    dispatch({ type: 'UPDATE_PRESCRIPTION', payload: { ...prescricao, itens: prescricao.itens.map(prepararItemParaStore), id: Date.now().toString() } });
+    if (itensDesatualizados.length > 0) {
+      toast.warning(`${itensDesatualizados.length} medicamento(s) com a dose estruturada desatualizada em relação ao texto editado: a dose estruturada anterior NÃO será enviada ao servidor sem reconfirmação.`, { duration: 8000 });
+    }
     setLoading(false);
     // Honesto quanto ao estado real: o dado só está confirmado localmente
     // neste momento. A sincronização com o backend acontece em seguida
@@ -391,6 +405,19 @@ export function PrescriptionPanel({ onComplete }: PrescriptionPanelProps) {
                         onChange={e => updateItem(item.id, 'posologia', e.target.value)}
                       />
                     </div>
+                    {doseEstruturadaDesatualizada(item) && item.dose_estruturada && (
+                      <div className="rounded-md border border-amber-300 bg-amber-50 p-2 text-xs text-amber-900 space-y-1.5" role="alert">
+                        <p>
+                          O texto/campos da posologia foram editados. A dose estruturada registrada anteriormente
+                          ({item.dose_estruturada.valor} {item.dose_estruturada.unidade} · {item.dose_estruturada.frequencia} · {item.dose_estruturada.via})
+                          pode não corresponder ao texto atual e <strong>não será enviada ao servidor</strong> até você reconfirmar.
+                          A reconfirmação não valida clinicamente a dose.
+                        </p>
+                        <Button type="button" variant="outline" size="sm" className="h-7 text-xs" onClick={() => reconfirmarDose(item.id)}>
+                          Reconfirmar dose estruturada anterior
+                        </Button>
+                      </div>
+                    )}
                     <div className="flex items-center gap-4">
                       <div>
                         <Label className="text-xs text-slate-500">Duração</Label>

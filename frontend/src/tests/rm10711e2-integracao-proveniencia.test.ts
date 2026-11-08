@@ -187,7 +187,8 @@ describe('E2 — sem persistência e valores posológicos idênticos', () => {
   it('favoritos: o registro é removido antes do localStorage; protocolos/impressão/store não referenciam o registro', () => {
     expect(PAGE).toContain('itens: fav.itens.map(semRegistroParaPersistir)');
     expect(PAGE).toContain('itens: rxItems,');   // literal exigido pela RM-105.2.1 permanece
-    expect(PANEL).toContain('itens: prescricao.itens.map(semRegistroParaPersistir)');
+    // E2.2: o Panel usa `prepararItemParaStore`, que remove o registro (via semRegistroParaPersistir) e ainda contém DTO desatualizado
+    expect(PANEL).toContain('itens: prescricao.itens.map(prepararItemParaStore)');
     expect(STORE).not.toMatch(/posologia_registrada/);
     expect(SRC('../components/modules/PrescriptionPrintPreview.tsx')).not.toMatch(/posologia_registrada/);
     expect(SRC('../lib/api-client.ts')).not.toMatch(/posologia_registrada/);

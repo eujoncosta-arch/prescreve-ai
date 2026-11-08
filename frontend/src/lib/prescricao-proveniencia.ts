@@ -100,6 +100,46 @@ export function leituraDoseEstruturada<D>(item: { dose_estruturada?: D; posologi
 }
 
 /**
+ * RM-107.1.1-E2.2 — reconfirmação EXPLÍCITA do prescritor: "a estrutura numérica registrada corresponde ao texto atual".
+ * Reabilita o uso do MESMO DTO (nada é recalculado/reconstruído/editado). NÃO promove a avaliação (segue `nao_avaliada`)
+ * e NÃO implica validação clínica. Nova edição posológica posterior torna o DTO desatualizado de novo.
+ * Sem divergência registrada ⇒ devolve o mesmo objeto (nada a reconfirmar).
+ */
+export function reconfirmarDoseEstruturada(reg: PosologiaRegistrada | undefined, em: string = new Date().toISOString()): PosologiaRegistrada | undefined {
+  if (!reg?.dose_divergente) return reg;
+  const { dose_divergente, motivo_sem_dose, ...resto } = reg;
+  void motivo_sem_dose;
+  const dose = structuredClone(dose_divergente.dose_anterior);
+  return {
+    ...resto,
+    dose,
+    edicoes_manuais: [...reg.edicoes_manuais, { campo: 'dose_estruturada', de: 'desatualizada_em_relacao_ao_texto', para: 'reconfirmada_pelo_prescritor', em }],
+    reconfirmacoes_dose: [...(reg.reconfirmacoes_dose ?? []), { em, dose: structuredClone(dose), campos_reconfirmados: [...dose_divergente.campos] }],
+  };
+}
+
+/** `true` quando o DTO legado do item NÃO pode ser usado como a posologia atual (aguarda reconfirmação do prescritor). */
+export function doseEstruturadaDesatualizada(item: { dose_estruturada?: unknown; posologia_registrada?: unknown } | null | undefined): boolean {
+  return leituraDoseEstruturada(item).estado === 'divergente_do_texto';
+}
+
+/**
+ * Último passo ANTES de um item sair do estado local para o store (e, dali, para o backend).
+ * - Remove o registro (só em memória; o backend rejeita campos extras com 400).
+ * - Se o DTO está desatualizado e não foi reconfirmado, REMOVE `dose_estruturada` do item enviado: o gate existente da sincronização
+ *   (`store.tsx`: item sem `dose_estruturada` ⇒ `sem_dose_estruturada`) bloqueia o envio, nunca o DTO antigo. O texto e demais campos
+ *   legados do item são preservados; nada é recalculado, reconstruído ou editado.
+ * - Em todos os outros casos o item sai idêntico ao comportamento anterior (E2).
+ */
+export function prepararItemParaStore<T extends { dose_estruturada?: unknown; posologia_registrada?: unknown }>(item: T): Omit<T, 'posologia_registrada'> {
+  const semRegistro = semRegistroParaPersistir(item) as Omit<T, 'posologia_registrada'> & { dose_estruturada?: unknown };
+  if (!doseEstruturadaDesatualizada(item)) return semRegistro;
+  const { dose_estruturada, ...resto } = semRegistro;
+  void dose_estruturada;
+  return resto as unknown as Omit<T, 'posologia_registrada'>;
+}
+
+/**
  * Inclusão cuja dose foi PRÉ-PREENCHIDA pelo sistema (catálogo/`calcWeightDose`) e pode ou não ter sido editada pelo prescritor:
  * a origem real é indeterminável ⇒ `desconhecida` (nunca "digitada pelo prescritor"). Sempre `nao_avaliada`; sem DTO fabricado.
  */

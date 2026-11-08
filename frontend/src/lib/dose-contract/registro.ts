@@ -89,6 +89,11 @@ export interface PosologiaRegistrada {
    * Nada é recalculado nem reconstruído.
    */
   dose_divergente?: { dose_anterior: DoseEstruturada; campos: string[]; em: string };
+  /**
+   * RM-107.1.1-E2.2: reconfirmações EXPLÍCITAS do prescritor de que o DTO anterior corresponde ao texto atual. Histórico apenas;
+   * reconfirmar reabilita o uso da estrutura numérica, NUNCA promove a avaliação (continua `nao_avaliada`) nem implica validação clínica.
+   */
+  reconfirmacoes_dose?: Array<{ em: string; dose: DoseEstruturada; campos_reconfirmados: string[] }>;
   texto_original?: string;
   origem: OrigemDaPosologia;
   /** OBRIGATÓRIA. */
@@ -311,6 +316,11 @@ export function normalizarRegistro(raw: unknown): PosologiaRegistrada {
   const divergente = dv && typeof dv === 'object' && dtoValido(dv.dose_anterior)
     ? { dose_anterior: clone(dv.dose_anterior), campos: Array.isArray(dv.campos) ? (dv.campos as unknown[]).filter((x): x is string => typeof x === 'string') : [], em: typeof dv.em === 'string' ? dv.em : '' }
     : undefined;
+  const reconfirmacoes = Array.isArray(o.reconfirmacoes_dose)
+    ? (o.reconfirmacoes_dose as Array<{ em?: unknown; dose?: unknown; campos_reconfirmados?: unknown }>)
+      .filter(r => !!r && typeof r === 'object' && dtoValido(r.dose))
+      .map(r => ({ em: typeof r.em === 'string' ? r.em : '', dose: clone(r.dose as DoseEstruturada), campos_reconfirmados: Array.isArray(r.campos_reconfirmados) ? (r.campos_reconfirmados as unknown[]).filter((x): x is string => typeof x === 'string') : [] }))
+    : [];
   // DTO divergente nunca é reaproveitado como dose atual, mesmo que o registro persistido traga `dose` preenchido.
   const dose = !divergente && dtoValido(o.dose) ? clone(o.dose) : null;
   const avaliacao: AvaliacaoPersistida = versaoConhecida ? normalizarAvaliacao(o.avaliacao) : { tipo: 'nao_avaliada', motivo: 'legado_sem_metadata', homologacao_clinica: false, ausencia_de_alerta_indica_seguranca: false };
@@ -318,6 +328,7 @@ export function normalizarRegistro(raw: unknown): PosologiaRegistrada {
   return {
     versao_registro: VERSAO_REGISTRO, dose, ...(dose ? {} : { motivo_sem_dose: typeof o.motivo_sem_dose === 'string' ? o.motivo_sem_dose : 'dose estruturada não disponível' }),
     ...(divergente ? { dose_divergente: divergente } : {}),
+    ...(reconfirmacoes.length > 0 ? { reconfirmacoes_dose: reconfirmacoes } : {}),
     ...(typeof o.texto_original === 'string' ? { texto_original: o.texto_original } : {}), origem, avaliacao,
     campos_padrao: Array.isArray(o.campos_padrao) ? (o.campos_padrao as unknown[]).filter((x): x is string => typeof x === 'string') : [],
     edicoes_manuais: edicoes, criado_em: typeof o.criado_em === 'string' ? o.criado_em : '', ...(typeof o.motor_versao === 'string' ? { motor_versao: o.motor_versao } : {}),
