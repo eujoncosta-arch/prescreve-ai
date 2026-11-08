@@ -22,7 +22,7 @@ import { AlergiasNotice } from '@/components/modules/AlergiasNotice';
 import { normalizarIdade, formatarIdade, type UnidadeIdade } from '@/lib/age-contract';
 import { dadosClinicosPreenchidos } from '@/lib/patient-session';
 import { registroDeFullDoseResult, type PosologiaRegistrada } from '@/lib/dose-contract';
-import { registroDeInclusaoManual, registrarEdicaoPosologica, semRegistroParaPersistir } from '@/lib/prescricao-proveniencia';
+import { registroDeInclusaoComDosePreenchida, registrarEdicaoPosologica, semRegistroParaPersistir } from '@/lib/prescricao-proveniencia';
 import { ROTULO_CAMPO } from '@/lib/safety-context';
 import { PrescriptionPrintPreview } from '@/components/modules/PrescriptionPrintPreview';
 import type { StatusAlergiasInformado, TipoAlergia, GravidadeAlergia, AlergiasInput } from '@/lib/safety-allergy';
@@ -335,8 +335,9 @@ export default function PrescricaoRapida() {
       duracao: '30 dias',
       tipo_receita: selectedDrug.alertas_especiais.some(a => a.includes('RECEITA ESPECIAL')) ? 'especial_branca' : 'simples',
     };
-    // RM-107.1.1-E2 (F3b): inclusão manual ⇒ SEMPRE não avaliada; nenhuma dose estruturada fabricada; valores do item inalterados.
-    item.posologia_registrada = registroDeInclusaoManual({ texto: item.dose, campos_padrao: ['via', 'frequencia', 'duracao'] });
+    // RM-107.1.1-E2.1 (F3b): a dose vem pré-preenchida pelo sistema (catálogo/calcWeightDose) e pode ter sido editada no campo —
+    // a origem não é determinável ⇒ `desconhecida`; SEMPRE não avaliada; nenhuma dose estruturada fabricada; valores do item inalterados.
+    item.posologia_registrada = registroDeInclusaoComDosePreenchida({ texto: item.dose, campos_padrao: ['via', 'frequencia', 'duracao'] });
     setRxItems(prev => [...prev, item]);
     toast.success(`${selectedDrug.molecula} adicionado à prescrição`);
     setSelectedDrug(null);

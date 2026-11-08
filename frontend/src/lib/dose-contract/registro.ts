@@ -83,6 +83,12 @@ export interface PosologiaRegistrada {
   /** DTO numérico (inalterado). `null` quando não havia dose estruturada utilizável (ver `motivo_sem_dose`). */
   dose: DoseEstruturada | null;
   motivo_sem_dose?: string;
+  /**
+   * RM-107.1.1-E2.1: o texto/campos da posologia foram editados DEPOIS de o DTO ser registrado, então o DTO anterior NÃO representa a posologia atual.
+   * `dose` passa a `null`; o DTO anterior fica aqui apenas como histórico e NUNCA deve ser exibido, enviado ou reutilizado como a dose atual.
+   * Nada é recalculado nem reconstruído.
+   */
+  dose_divergente?: { dose_anterior: DoseEstruturada; campos: string[]; em: string };
   texto_original?: string;
   origem: OrigemDaPosologia;
   /** OBRIGATÓRIA. */
@@ -301,11 +307,17 @@ export function normalizarRegistro(raw: unknown): PosologiaRegistrada {
   const o = (raw && typeof raw === 'object' ? raw : {}) as Record<string, unknown>;
   const versaoConhecida = o.versao_registro === VERSAO_REGISTRO;
   const origem: OrigemDaPosologia = ORIGENS_DA_POSOLOGIA.includes(o.origem as OrigemDaPosologia) ? (o.origem as OrigemDaPosologia) : 'desconhecida';
-  const dose = dtoValido(o.dose) ? clone(o.dose) : null;
+  const dv = o.dose_divergente as { dose_anterior?: unknown; campos?: unknown; em?: unknown } | undefined;
+  const divergente = dv && typeof dv === 'object' && dtoValido(dv.dose_anterior)
+    ? { dose_anterior: clone(dv.dose_anterior), campos: Array.isArray(dv.campos) ? (dv.campos as unknown[]).filter((x): x is string => typeof x === 'string') : [], em: typeof dv.em === 'string' ? dv.em : '' }
+    : undefined;
+  // DTO divergente nunca é reaproveitado como dose atual, mesmo que o registro persistido traga `dose` preenchido.
+  const dose = !divergente && dtoValido(o.dose) ? clone(o.dose) : null;
   const avaliacao: AvaliacaoPersistida = versaoConhecida ? normalizarAvaliacao(o.avaliacao) : { tipo: 'nao_avaliada', motivo: 'legado_sem_metadata', homologacao_clinica: false, ausencia_de_alerta_indica_seguranca: false };
   const edicoes = Array.isArray(o.edicoes_manuais) ? (o.edicoes_manuais as unknown[]).filter((e): e is EdicaoManual => !!e && typeof e === 'object' && typeof (e as EdicaoManual).campo === 'string').map(e => ({ campo: e.campo, de: String(e.de), para: String(e.para), em: String(e.em) })) : [];
   return {
     versao_registro: VERSAO_REGISTRO, dose, ...(dose ? {} : { motivo_sem_dose: typeof o.motivo_sem_dose === 'string' ? o.motivo_sem_dose : 'dose estruturada não disponível' }),
+    ...(divergente ? { dose_divergente: divergente } : {}),
     ...(typeof o.texto_original === 'string' ? { texto_original: o.texto_original } : {}), origem, avaliacao,
     campos_padrao: Array.isArray(o.campos_padrao) ? (o.campos_padrao as unknown[]).filter((x): x is string => typeof x === 'string') : [],
     edicoes_manuais: edicoes, criado_em: typeof o.criado_em === 'string' ? o.criado_em : '', ...(typeof o.motor_versao === 'string' ? { motor_versao: o.motor_versao } : {}),

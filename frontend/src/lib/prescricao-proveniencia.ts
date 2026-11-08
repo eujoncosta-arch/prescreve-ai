@@ -54,10 +54,57 @@ export function registrarEdicaoPosologica(
   const d = String(de ?? ''), p = String(para ?? '');
   if (d === p) return reg;
   const edicao = { campo, de: d, para: p, em };
-  if (reg.avaliacao.tipo === 'nao_avaliada') {
-    return { ...reg, edicoes_manuais: [...reg.edicoes_manuais, edicao] };
-  }
-  return comEdicaoManual(reg, edicao);
+  const editado = reg.avaliacao.tipo === 'nao_avaliada'
+    ? { ...reg, edicoes_manuais: [...reg.edicoes_manuais, edicao] }
+    : comEdicaoManual(reg, edicao);
+  return campoDivergeDoDto(campo) ? marcarDtoDivergente(editado, campo, em) : editado;
+}
+
+/**
+ * RM-107.1.1-E2.1 — campos que compõem a dose estruturada (valor, unidade, frequência, via) ou a descrevem em texto.
+ * Editados, o DTO anterior deixa de representar a posologia atual. `duracao`, `quantidade`, `uso_continuo` e `forma_farmaceutica`
+ * invalidam a AVALIAÇÃO (E2), mas não fazem parte do DTO numérico e, portanto, não o tornam divergente.
+ */
+export const CAMPOS_QUE_DIVERGEM_DO_DTO: readonly string[] = ['dose', 'unidade', 'frequencia', 'via', 'posologia', 'concentracao', 'medicamento', 'molecula'];
+export const campoDivergeDoDto = (campo: string): boolean => CAMPOS_QUE_DIVERGEM_DO_DTO.includes(campo);
+
+/**
+ * O DTO registrado deixa de ser a representação atual: `dose` → null, DTO anterior guardado só como histórico.
+ * Não recalcula, não reconstrói, não promove a avaliação. Sem DTO registrado, nada a marcar.
+ */
+function marcarDtoDivergente(reg: PosologiaRegistrada, campo: string, em: string): PosologiaRegistrada {
+  const jaDivergente = reg.dose_divergente;
+  if (!reg.dose && !jaDivergente) return reg;
+  return {
+    ...reg,
+    dose: null,
+    motivo_sem_dose: 'o texto/campos da posologia foram editados após o registro da dose estruturada; a estrutura numérica anterior não representa a posologia atual',
+    dose_divergente: jaDivergente
+      ? { ...jaDivergente, campos: [...new Set([...jaDivergente.campos, campo])] }
+      : { dose_anterior: structuredClone(reg.dose as NonNullable<typeof reg.dose>), campos: [campo], em },
+  };
+}
+
+/**
+ * Leitura SEGURA da dose estruturada legada de um item: nunca devolve um DTO que o registro marcou como divergente do texto atual.
+ * - `consistente`: sem divergência registrada (não implica validação nem segurança).
+ * - `divergente_do_texto`: posologia editada depois do DTO; `dose` = null.
+ * - `sem_registro`: item legado/sem metadata; o DTO é devolvido como estava, sem garantia de proveniência.
+ */
+export function leituraDoseEstruturada<D>(item: { dose_estruturada?: D; posologia_registrada?: unknown } | null | undefined):
+  { dose: D | null; estado: 'consistente' | 'divergente_do_texto' | 'sem_registro' } {
+  const dose = item?.dose_estruturada ?? null;
+  if (!item || item.posologia_registrada == null) return { dose, estado: 'sem_registro' };
+  const reg = normalizarRegistro(item.posologia_registrada);
+  return reg.dose_divergente ? { dose: null, estado: 'divergente_do_texto' } : { dose, estado: 'consistente' };
+}
+
+/**
+ * Inclusão cuja dose foi PRÉ-PREENCHIDA pelo sistema (catálogo/`calcWeightDose`) e pode ou não ter sido editada pelo prescritor:
+ * a origem real é indeterminável ⇒ `desconhecida` (nunca "digitada pelo prescritor"). Sempre `nao_avaliada`; sem DTO fabricado.
+ */
+export function registroDeInclusaoComDosePreenchida(args: { texto?: string; campos_padrao?: string[]; criado_em?: string }): PosologiaRegistrada {
+  return registroNaoAvaliado({ origem: 'desconhecida', motivo: 'origem_desconhecida', texto_original: args.texto, campos_padrao: args.campos_padrao, criado_em: args.criado_em });
 }
 
 /** Remove o registro de um item antes de qualquer persistência (favoritos/store/backend): E2 é só em memória. */

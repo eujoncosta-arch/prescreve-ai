@@ -86,8 +86,10 @@ describe('E2 — F3b: inclusão manual', () => {
     expect(JSON.stringify(r)).not.toMatch(/validad|aprova|fonte_utilizada/);
     if (r.avaliacao.tipo === 'nao_avaliada') expect(r.avaliacao.ausencia_de_alerta_indica_seguranca).toBe(false);
   });
-  it('as duas inclusões manuais (addToRx e addItem) usam registroDeInclusaoManual', () => {
-    expect(PAGE).toMatch(/item\.posologia_registrada = registroDeInclusaoManual\(/); expect(PANEL).toMatch(/posologia_registrada: registroDeInclusaoManual\(/);
+  it('addItem (Panel, item em branco) usa registroDeInclusaoManual; addToRx (page, dose pré-preenchida) usa origem desconhecida (E2.1)', () => {
+    expect(PANEL).toMatch(/posologia_registrada: registroDeInclusaoManual\(/);
+    expect(PAGE).toMatch(/item\.posologia_registrada = registroDeInclusaoComDosePreenchida\(/);
+    expect(PAGE).not.toMatch(/registroDeInclusaoManual\(/);
   });
 });
 
@@ -125,8 +127,8 @@ describe('E2 — F3c: edição', () => {
     for (const c of CAMPOS_ADMINISTRATIVOS) expect(campoAlteraPosologia(c), c).toBe(false);
     expect(campoAlteraPosologia('campo_novo_qualquer')).toBe(true);
   });
-  it('edição não altera dose estruturada nem origem do registro', () => {
-    const base = avaliado(); const ed = registrarEdicaoPosologica(base, 'dose', '1', '2')!;
+  it('edição de campo fora do DTO (duração) não altera dose estruturada nem origem do registro', () => {
+    const base = avaliado(); const ed = registrarEdicaoPosologica(base, 'duracao', '7 dias', '10 dias')!;
     expect(ed.dose).toEqual(base.dose); expect(ed.origem).toBe(base.origem); expect(ed.texto_original).toBe(base.texto_original);
   });
   it('as duas telas roteiam updateItem por registrarEdicaoPosologica, mantendo o valor gravado', () => {
