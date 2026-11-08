@@ -1,0 +1,355 @@
+[pg-conv] initdb em C:\Users\JONATH~1\AppData\Local\Temp\pg-conv-data-EPCHWN …
+Os arquivos deste sistema de banco de dados pertencer�o ao usu�rio "Jonathan Costa".
+Esse usu�rio deve ser o dono do processo do servidor tamb�m.
+
+O agrupamento de banco de dados ser� inicializado com configura��o regional "C".
+A configura��o de busca textual padr�o ser� definida como "english".
+
+Verifica��es de p�ginas de dados est�o desabilitadas.
+
+alterando permiss�es no diret�rio existente C:/Users/JONATH~1/AppData/Local/Temp/pg-conv-data-EPCHWN ... ok
+criando subdiret�rios ... ok
+selecionando implementa��o de mem�ria compartilhada din�mica ... windows
+selecionando max_connections padr�o ... 100
+selecionando shared_buffers padr�o ... 128MB
+selecionando fuso hor�rio padr�o ... America/Bahia
+criando arquivos de configura��o ... ok
+executando script de inicializa��o ... ok
+executando p�s-inicializa��o ... ok
+sincronizando dados no disco ... ok
+
+Sucesso. Voc� pode iniciar o servidor de banco de dados utilizando:
+
+    ^"C^:^\Users^\JONATH^~1^\AppData^\Local^\Temp^\claude^\41a6f71d0e30efc8^\277b4ab5^-69e9^-4f2d^-a809^-dca921b4e9d1^\scratchpad^\pgsrv^\node^_modules^\^@embedded^-postgres^\windows^-x64^\native^\bin^\pg^_ctl^" -D ^"C^:^\Users^\JONATH^~1^\AppData^\Local^\Temp^\pg^-conv^-data^-EPCHWN^" -l arquivolog start
+
+[pg-conv] iniciando servidor PostgreSQL convencional (porta 54340) …
+esperando o servidor iniciar....feito
+servidor iniciado
+[pg-conv] BANCO: PostgreSQL 16.15, compiled by Visual C++ build 1944, 64-bit
+[pg-conv] aplicando migrações reais (prisma migrate deploy) …
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma\schema.prisma.
+Datasource "db": PostgreSQL database "prescreve_ai_e251", schema "public" at "127.0.0.1:54340"
+
+4 migrations found in prisma/migrations
+
+Applying migration `20260727000000_baseline_schema_atual`
+Applying migration `20260728000000_add_risk_score_calculado_audit_type`
+Applying migration `20260728010000_restrict_clinical_cascade_deletes`
+Applying migration `20260808000000_add_prescricao_idempotency_fingerprint`
+
+The following migration(s) have been applied:
+
+migrations/
+  └─ 20260727000000_baseline_schema_atual/
+    └─ migration.sql
+  └─ 20260728000000_add_risk_score_calculado_audit_type/
+    └─ migration.sql
+  └─ 20260728010000_restrict_clinical_cascade_deletes/
+    └─ migration.sql
+  └─ 20260808000000_add_prescricao_idempotency_fingerprint/
+    └─ migration.sql
+
+All migrations have been successfully applied.
+[pg-conv] jest e2e: e2e-spec
+  console.warn
+    [pg-convencional] BANCO: PostgreSQL 16.15, compiled by Visual C++ build 1944, 64-bit | server_version=16.15 | iniciado em 2026-11-08T16:45:18.443Z
+
+      350 |         "select version() as v, current_setting('server_version') as sv, pg_postmaster_start_time() as t",
+      351 |       );
+    > 352 |       console.warn(
+          |               ^
+      353 |         `[pg-convencional] BANCO: ${v.v} | server_version=${v.sv} | iniciado em ${v.t.toISOString()}`,
+      354 |       );
+      355 |       expect(v.v).toMatch(/^PostgreSQL 16/);
+
+
+  console.warn
+    [pg-convencional] processos da aplicação: A=34192 B=32396 teste=34692; conexões ativas no banco: 4
+
+      359 |         'select count(*)::int as c from pg_stat_activity where datname = current_database()',
+      360 |       );
+    > 361 |       console.warn(
+          |               ^
+      362 |         `[pg-convencional] processos da aplicação: A=${procs.A.pid} B=${procs.B.pid} teste=${process.pid}; conexões ativas no banco: ${m[0].c}`,
+      363 |       );
+      364 |     });
+
+
+  console.warn
+    [pg-convencional] 24 idênticas simultâneas — distribuição de status: {"201":24}
+
+      461 |         {},
+      462 |       );
+    > 463 |       console.warn(
+          |               ^
+      464 |         `[pg-convencional] 24 idênticas simultâneas — distribuição de status: ${JSON.stringify(dist)}`,
+      465 |       );
+      466 |       expect(dist).toEqual({ 201: 24 });
+
+
+  console.warn
+    [pg-convencional] 12 conteúdos diferentes, mesma chave — distribuição de status: {"201":1,"409":11}
+
+      486 |         {},
+      487 |       );
+    > 488 |       console.warn(
+          |               ^
+      489 |         `[pg-convencional] 12 conteúdos diferentes, mesma chave — distribuição de status: ${JSON.stringify(dist)}`,
+      490 |       );
+      491 |       const linhas = await q(
+
+
+  console.warn
+    [pg-convencional] reinício fast: primeira requisição pós-reinício → 201; final → 201
+
+      594 |         ).toBe(fpAntes);
+      595 |         const r = await aposReinicio(1, t, corpo(consultaA1, k));
+    > 596 |         console.warn(
+          |                 ^
+      597 |           `[pg-convencional] reinício ${modo}: primeira requisição pós-reinício → ${r.primeira}; final → ${r.final.status} ${r.final.status === 201 ? '' : JSON.stringify(r.final.body)}`,
+      598 |         );
+      599 |         if (r.final.status !== 201)
+
+
+  console.warn
+    [pg-convencional] reinício immediate: primeira requisição pós-reinício → 201; final → 201
+
+      594 |         ).toBe(fpAntes);
+      595 |         const r = await aposReinicio(1, t, corpo(consultaA1, k));
+    > 596 |         console.warn(
+          |                 ^
+      597 |           `[pg-convencional] reinício ${modo}: primeira requisição pós-reinício → ${r.primeira}; final → ${r.final.status} ${r.final.status === 201 ? '' : JSON.stringify(r.final.body)}`,
+      598 |         );
+      599 |         if (r.final.status !== 201)
+
+
+  console.warn
+    [pg-convencional] canonicalização×persistido: 15 linhas conferidas
+
+      797 |       for (const l of linhas)
+      798 |         expect(fingerprintDeRegistroPersistido(l)).toBe(l.fp);
+    > 799 |       console.warn(
+          |               ^
+      800 |         `[pg-convencional] canonicalização×persistido: ${linhas.length} linhas conferidas`,
+      801 |       );
+      802 |     });
+
+
+[Nest] 34692  - 08/11/2026, 13:46:00   ERROR [ExceptionsHandler] Error: Origem não autorizada pelo CORS: https://atacante-qualquer.vercel.app
+[Nest] 34692  - 08/11/2026, 13:46:15   ERROR [ExceptionsHandler] Error: Falha simulada de conexão com o banco
+[Nest] 34692  - 08/11/2026, 13:46:19   ERROR [ExceptionsHandler] Error: ECONNRESET: resposta perdida após gravação
+[Nest] 34692  - 08/11/2026, 13:46:19   ERROR [ExceptionsHandler] Error: falha de auditoria simulada
+  console.warn
+    [idempotencia pg] simultâneas idênticas — distribuição de status: {"201":10}
+
+      514 |     );
+      515 |     const sucesso = rs.filter((r) => r.status === 201);
+    > 516 |     console.warn(
+          |             ^
+      517 |       `[idempotencia pg] simultâneas idênticas — distribuição de status: ${JSON.stringify(rs.reduce((m: Record<string, number>, r) => ({ ...m, [r.status]: (m[r.status] ?? 0) + 1 }), {}))}`,
+      518 |     );
+      519 |     expect(rs.filter((r) => r.status === 409)).toEqual([]); // conteúdo idêntico nunca é conflito
+
+
+  console.warn
+    [idempotencia pg] colisão — distribuição de status: {"201":1,"409":5} linhas=1
+
+      545 |     });
+      546 |     expect(linhas.length).toBeLessThanOrEqual(1);
+    > 547 |     console.warn(
+          |             ^
+      548 |       `[idempotencia pg] colisão — distribuição de status: ${JSON.stringify(rs.reduce((m: Record<string, number>, r) => ({ ...m, [r.status]: (m[r.status] ?? 0) + 1 }), {}))} linhas=${linhas.length}`,
+      549 |     );
+      550 |     if (linhas.length === 1) {
+
+
+[Nest] 34692  - 08/11/2026, 13:46:31   ERROR [ExceptionsHandler] Error: ECONNRESET — simulação de falha transitória
+Test Suites: 13 passed, 13 total
+Tests:       174 passed, 174 total
+Snapshots:   0 total
+Time:        62.201 s, estimated 140 s
+Ran all test suites matching e2e-spec.
+Test results written to: ..\..\..\..\JONATH~1\AppData\Local\Temp\pg-conv-jest-34540.json
+Force exiting Jest: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
+[pg-conv] ✅ suíte(s) passaram contra PostgreSQL convencional.
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 0. IDENTIFICAÇÃO DO BANCO: servidor PostgreSQL convencional (não PGlite), múltiplos processos de aplicação distintos (280 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 1. criação inicial: grava conteúdo e fingerprint canônico; 1 auditoria (115 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 2. repetição idêntica, alternando entre as DUAS instâncias: mesmo registro, nunca 409 (113 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 3. repetição divergente (instância diferente da que criou): 409 explícito; original intacto; resposta sem conteúdo (67 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 4. colisão REAL da constraint única (P2002) de forma determinística, contra o servidor convencional (373 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 5. ≥10 requisições SIMULTÂNEAS idênticas (24) entre DUAS instâncias: todas 201, mesmo id, 1 linha, 1 auditoria — nenhum 401/409/5xx (729 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 6. requisições SIMULTÂNEAS com conteúdos DIFERENTES e mesma chave (12) entre DUAS instâncias: 1 vencedor; todo 201 = conteúdo gravado; demais 409; nenhum 401/5xx (102 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 7. mesma chave criada concorrentemente por instâncias diferentes e depois lida pela terceira (em processo): registro único e fingerprint coerente (22 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 8. reinício da APLICAÇÃO (kill do processo + novo processo): a idempotência continua; divergência continua 409 (5063 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 9. reinício do SERVIDOR PostgreSQL (fast): registros e fingerprints persistem; a repetição devolve o mesmo registro; a divergência continua 409 (2486 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 9. reinício do SERVIDOR PostgreSQL (immediate): registros e fingerprints persistem; a repetição devolve o mesmo registro; a divergência continua 409 (3622 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 10. falha na AUDITORIA ⇒ rollback integral (0 prescrições, 0 auditorias); nova tentativa com a mesma chave cria; 1 auditoria (105 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 11. resposta perdida após commit — (a) falha injetada após o commit e (b) CONEXÃO TCP abortada pelo cliente: a repetição devolve o mesmo registro (43 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 12. isolamento: mesma chave em OUTRA consulta do mesmo médico, em consulta de OUTRO proprietário e na consulta alheia ⇒ 403; nada criado nem vazado (27 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 13. LEGADO no servidor convencional: fingerprint NULL (comparação derivada do conteúdo), sem chave, conteúdo ilegível — comparável ⇒ compara; não comparável ⇒ comportamento legado (43 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 14. CANONICALIZAÇÃO × DADOS PERSISTIDOS: para TODA linha desta execução, o fingerprint gravado é igual ao derivado do conteúdo lido do banco (round-trip jsonb) (11 ms)
+[pg-conv] PASSOU — Ciclo de vida de autenticação (e2e) Login credenciais válidas → 200 com access_token e refresh_token reais (880 ms)
+[pg-conv] PASSOU — Ciclo de vida de autenticação (e2e) Login senha incorreta → 401, nenhum token emitido (603 ms)
+[pg-conv] PASSOU — Ciclo de vida de autenticação (e2e) Refresh token — ciclo completo (rotação, reuso, expiração) refresh válido → 200 com NOVO par de tokens; o token antigo passa a ser inválido (rotação real) (548 ms)
+[pg-conv] PASSOU — Ciclo de vida de autenticação (e2e) Refresh token — ciclo completo (rotação, reuso, expiração) REUSO de um refresh token já rotacionado (apresentado 2x) → 401 na segunda vez — sinal de comprometimento (290 ms)
+[pg-conv] PASSOU — Ciclo de vida de autenticação (e2e) Refresh token — ciclo completo (rotação, reuso, expiração) refresh token EXPIRADO → 401, mesmo sem ter sido usado ainda (287 ms)
+[pg-conv] PASSOU — Ciclo de vida de autenticação (e2e) Refresh token — ciclo completo (rotação, reuso, expiração) refresh com token que nunca existiu → 401 (não 500) (17 ms)
+[pg-conv] PASSOU — Ciclo de vida de autenticação (e2e) Logout logout revoga a sessão — o refresh_token emitido no login deixa de funcionar depois (295 ms)
+[pg-conv] PASSOU — Ciclo de vida de autenticação (e2e) Logout logout sem autenticação → 401 (16 ms)
+[pg-conv] PASSOU — Ciclo de vida de autenticação (e2e) Rate limiting real — MFA, refresh e endpoints gerais POST /auth/mfa/setup tem limite próprio de 5/min — a 6ª requisição no mesmo minuto recebe 429 (303 ms)
+[pg-conv] PASSOU — Ciclo de vida de autenticação (e2e) Rate limiting real — MFA, refresh e endpoints gerais POST /auth/refresh tem limite próprio de 10/min — a 11ª requisição no mesmo minuto recebe 429 (mesmo com tokens inválidos — o limite conta antes da lógica de negócio) (45 ms)
+[pg-conv] PASSOU — Ciclo de vida de autenticação (e2e) Rate limiting real — MFA, refresh e endpoints gerais endpoints SEM @Throttle específico herdam o limite GLOBAL — a (limite+1)-ésima requisição recebe 429 (302 ms)
+[pg-conv] PASSOU — Hardening de infraestrutura (e2e) Startup falha sem JWT_SECRET Test.createTestingModule(...).compile() REJEITA quando JWT_SECRET está ausente — a aplicação nunca chega a subir (45 ms)
+[pg-conv] PASSOU — Hardening de infraestrutura (e2e) CORS — allowlist explícita real (HTTP) origem AUTORIZADA recebe o header Access-Control-Allow-Origin correspondente (13 ms)
+[pg-conv] PASSOU — Hardening de infraestrutura (e2e) CORS — allowlist explícita real (HTTP) origem NÃO AUTORIZADA (ex.: outro subdomínio *.vercel.app, não coberto pela allowlist) NÃO recebe o header — bloqueada pelo navegador (31 ms)
+[pg-conv] PASSOU — Hardening de infraestrutura (e2e) Rate limiting — bloqueio real (ThrottlerGuard aplicado de fato) POST /auth/login tem limite próprio de 10/min — a 11ª requisição no mesmo minuto recebe 429 (3522 ms)
+[pg-conv] PASSOU — Integridade contra PostgreSQL real (e2e) cria uma consulta real e a recupera pelo detalhe — contra o Postgres real, não um fake em memória (278 ms)
+[pg-conv] PASSOU — Integridade contra PostgreSQL real (e2e) idempotency_key: reenviar a MESMA consulta 3x cria apenas 1 registro — a unique constraint REAL do Postgres é o mecanismo, não um Map em memória (80 ms)
+[pg-conv] PASSOU — Integridade contra PostgreSQL real (e2e) toda escrita de consulta grava exatamente 1 registro de auditoria correspondente, na mesma transação (RM41-016/017 contra o banco real) (27 ms)
+[pg-conv] PASSOU — Integridade contra PostgreSQL real (e2e) ownership: outro usuário não recupera a consulta pelo id, mesmo sabendo o id real (filtro usuario_id é aplicado pelo Postgres real) (628 ms)
+[pg-conv] PASSOU — Integridade contra PostgreSQL real (e2e) diagnóstico: persiste e é recuperável pelo detalhe da consulta, com o CID/descrição reais (RM41-023) (64 ms)
+[pg-conv] PASSOU — Integridade contra PostgreSQL real (e2e) risco: persiste (enum NivelRisco REAL do Postgres) e é recuperável pelo detalhe da consulta (RM41-023) (59 ms)
+[pg-conv] PASSOU — Integridade contra PostgreSQL real (e2e) risco: um valor de risco_global FORA do enum real do Postgres é rejeitado com 400 antes de qualquer INSERT (RM41-022/023) (30 ms)
+[pg-conv] PASSOU — Integridade contra PostgreSQL real (e2e) onDelete: Restrict é uma constraint REAL do Postgres — apagar uma Consulta com Diagnostico vinculado falha (RM41-018/019) (261 ms)
+[pg-conv] PASSOU — Privacidade e proteção de identificadores (e2e) Dados sensíveis NUNCA aparecem em log de aplicação POST /auth/register com senha e CRM reais: nenhuma linha de log contém a senha nem o CRM em texto puro (299 ms)
+[pg-conv] PASSOU — Privacidade e proteção de identificadores (e2e) Dados sensíveis NUNCA aparecem em log de aplicação POST /auth/login com senha errada: log de auditoria de falha não vaza a senha tentada (269 ms)
+[pg-conv] PASSOU — Privacidade e proteção de identificadores (e2e) Dados sensíveis NUNCA aparecem em log de aplicação POST /api/consulta com CPF real de paciente: nenhuma linha de log contém o CPF em texto puro (5 ms)
+[pg-conv] PASSOU — Privacidade e proteção de identificadores (e2e) Dados sensíveis NUNCA aparecem em log de aplicação o log HTTP real contém método/rota/status (comportamento esperado) mas nunca o corpo da requisição (6 ms)
+[pg-conv] PASSOU — Privacidade e proteção de identificadores (e2e) Respostas de API NUNCA expõem campos internos sensíveis POST /auth/register nunca retorna senha_hash no corpo da resposta (269 ms)
+[pg-conv] PASSOU — Privacidade e proteção de identificadores (e2e) Respostas de API NUNCA expõem campos internos sensíveis POST /auth/register nunca retorna o crm_hash calculado (o cliente não precisa dele) (268 ms)
+[pg-conv] PASSOU — Privacidade e proteção de identificadores (e2e) Respostas de API NUNCA expõem campos internos sensíveis a resposta de registro contém APENAS os campos de token esperados — nenhum campo extra do Usuario (268 ms)
+[pg-conv] PASSOU — Autorização (e2e) (e) Acesso sem autenticação GET /consulta/:id sem Authorization header retorna 401 (29 ms)
+[pg-conv] PASSOU — Autorização (e2e) (e) Acesso sem autenticação POST /auth/admin/usuarios sem Authorization header retorna 401 (não 403 — nem chega a avaliar role) (24 ms)
+[pg-conv] PASSOU — Autorização (e2e) (e) Acesso sem autenticação token JWT inválido/forjado com secret errado retorna 401 (8 ms)
+[pg-conv] PASSOU — Autorização (e2e) (e) Acesso sem autenticação token estilo "demo-<timestamp>" (formato usado pelo modo demo do frontend) NUNCA é aceito pelo backend — 401 (6 ms)
+[pg-conv] PASSOU — Autorização (e2e) (e) Acesso sem autenticação token vazio/malformado (nem 3 segmentos JWT) retorna 401, não 500 (6 ms)
+[pg-conv] PASSOU — Autorização (e2e) (a) Acesso horizontal indevido MEDICO autenticado NÃO consegue ler a consulta de outro médico apenas por conhecer o id (404 — não vaza existência) (7 ms)
+[pg-conv] PASSOU — Autorização (e2e) (a) Acesso horizontal indevido MEDICO dono da consulta consegue lê-la normalmente (7 ms)
+[pg-conv] PASSOU — Autorização (e2e) (a) Acesso horizontal indevido MEDICO autenticado NÃO consegue gravar risk score na consulta de outro médico (IDOR corrigido — 403) (9 ms)
+[pg-conv] PASSOU — Autorização (e2e) (b) Tentativa de auto-elevação de privilégio no cadastro POST /auth/register com perfil=ADMIN no payload é REJEITADO com 400 (campo não whitelisted) (8 ms)
+[pg-conv] PASSOU — Autorização (e2e) (b) Tentativa de auto-elevação de privilégio no cadastro POST /auth/register sem perfil no payload cria usuário com sucesso, sempre como MEDICO (571 ms)
+[pg-conv] PASSOU — Autorização (e2e) (b) Tentativa de auto-elevação de privilégio no cadastro POST /auth/register com role=ADMIN (nome alternativo de campo) também é REJEITADO com 400 (6 ms)
+[pg-conv] PASSOU — Autorização (e2e) (c) Criação de recurso privilegiado por usuário sem permissão MEDICO autenticado recebe 403 ao tentar criar um usuário ADMIN via fluxo administrativo (7 ms)
+[pg-conv] PASSOU — Autorização (e2e) (c) Criação de recurso privilegiado por usuário sem permissão MEDICO autenticado recebe 403 mesmo tentando criar outro perfil não-ADMIN (AUDITOR/HOSPITAL/LABORATORIO) via fluxo administrativo (6 ms)
+[pg-conv] PASSOU — Autorização (e2e) (d) ADMIN — acesso privilegiado correto, mas não irrestrito ADMIN autenticado CONSEGUE criar um usuário privilegiado via fluxo administrativo (201) (571 ms)
+[pg-conv] PASSOU — Autorização (e2e) (d) ADMIN — acesso privilegiado correto, mas não irrestrito ADMIN autenticado AINDA ASSIM não consegue ler a consulta de um médico que não é seu (RolesGuard não é bypass geral — ownership continua valendo) (7 ms)
+[pg-conv] PASSOU — Autorização (e2e) (d) ADMIN — acesso privilegiado correto, mas não irrestrito ADMIN autenticado recebe 400 ao enviar perfil inválido/inexistente no fluxo administrativo (7 ms)
+[pg-conv] PASSOU — RM-47 — E2E: persistência clínica e isolamento entre usuários Cenário 1 — Persistência entre sessões consulta criada + prescrição gerada sobrevivem a uma nova requisição HTTP independente ("recarregar"), com itens REAIS no detalhe (137 ms)
+[pg-conv] PASSOU — RM-47 — E2E: persistência clínica e isolamento entre usuários Cenário 2 — Nova sessão autenticada do mesmo usuário ("outro dispositivo") uma segunda sessão (segundo login, token DIFERENTE) enxerga o mesmo histórico real — sem dado fictício (48 ms)
+[pg-conv] PASSOU — RM-47 — E2E: persistência clínica e isolamento entre usuários Cenário 3 — Isolamento entre usuários após logout de A e login de B no mesmo "navegador" (mesma app Nest), nenhum dado de A aparece para B, e o histórico de B é carregado separadamente (39 ms)
+[pg-conv] PASSOU — RM-47 — E2E: persistência clínica e isolamento entre usuários Cenário 5 — Paginação primeira página, "carregar mais", sem duplicatas, ordem correta (mais recente primeiro), fim da lista (108 ms)
+[pg-conv] PASSOU — RM-47 — E2E: persistência clínica e isolamento entre usuários Cenário 7 — Erro e recuperação 401: sem token, ou com token inválido, a UI nunca recebe uma resposta de sucesso fabricada (18 ms)
+[pg-conv] PASSOU — RM-47 — E2E: persistência clínica e isolamento entre usuários Cenário 7 — Erro e recuperação 500: uma falha real do servidor durante a criação NUNCA persiste a consulta nem retorna sucesso (44 ms)
+[pg-conv] PASSOU — RM-47 — E2E: persistência clínica e isolamento entre usuários Cenário 7 — Erro e recuperação retry sem duplicação: reenviar a MESMA idempotency_key após sucesso retorna o MESMO registro, nunca cria um segundo (23 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Payload válido POST /api/diagnostico com payload completo e correto é aceito (201) (29 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Payload válido POST /api/prescricao com payload completo e correto é aceito (201) (5 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Payload válido POST /api/risco com payload completo e correto é aceito (200) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Payload incompleto POST /api/diagnostico sem "descricao" (campo obrigatório) é rejeitado (400) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Payload incompleto POST /api/prescricao sem "medicamentos" (array obrigatório) é rejeitado (400) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Payload incompleto POST /api/risco sem "score" (objeto aninhado obrigatório) é rejeitado (400) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Tipo incorreto POST /api/diagnostico com "confianca" como string em vez de número é rejeitado (400) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Tipo incorreto POST /api/prescricao com "medicamentos" como objeto único em vez de array é rejeitado (400) (3 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Tipo incorreto POST /api/risco com "score_global" como string em vez de número é rejeitado (400) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Campo desconhecido POST /api/diagnostico com campo extra não declarado no DTO é rejeitado (400 — nunca aceito silenciosamente) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Campo desconhecido POST /api/prescricao com campo extra dentro de um item de "medicamentos" (objeto aninhado) é rejeitado (400) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) String excessiva POST /api/diagnostico com "descricao" acima do limite (500 caracteres) é rejeitado (400) (3 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) String excessiva POST /api/prescricao com "orientacoes" acima do limite (5000 caracteres) é rejeitado (400) (3 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Array excessivo POST /api/prescricao com mais de 50 medicamentos é rejeitado (400) (12 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Array excessivo POST /api/risco com mais de 20 "recomendacoes_prioritarias" é rejeitado (400) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Enum inválido POST /api/risco com "risco_global" fora do enum NivelRisco é rejeitado (400 — nunca chega ao INSERT do Prisma) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Número fora do intervalo POST /api/risco com "score_global" acima de 100 é rejeitado (400) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Número fora do intervalo POST /api/risco com "score_global" negativo é rejeitado (400) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Número fora do intervalo POST /api/diagnostico com "confianca" fora do intervalo [0,1] é rejeitado (400) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Número fora do intervalo POST /api/prescricao com "validade_dias" acima do limite (365) é rejeitado (400) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) dose como STRING livre (formato antigo) é rejeitada (400) — texto livre nunca é mais a única representação da dose (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) unidade "mg" (permitida) é aceita (201) (3 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) unidade "mcg" (permitida) é aceita (201) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) unidade "g" (permitida) é aceita (201) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) unidade "mL" (permitida) é aceita (201) (3 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) unidade "gotas" (permitida) é aceita (201) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) unidade "UI" (permitida) é aceita (201) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) unidade "comprimido" (permitida) é aceita (201) (3 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) unidade "capsula" (permitida) é aceita (201) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) unidade "sache" (permitida) é aceita (201) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) unidade "ampola" (permitida) é aceita (201) (3 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) unidade "jato" (permitida) é aceita (201) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) unidade "aplicacao" (permitida) é aceita (201) (3 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) unidade desconhecida (ex.: "kg", "unidade_inventada") é rejeitada (400) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) valor zero é rejeitado (400) — dose ausente/zero nunca deve ser representada como um valor calculado (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) valor negativo é rejeitado (400) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) valor impossível (ex.: 999999999 mg) é rejeitado (400) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) frequência "1x/dia" (permitida, sem detalhe exigido) é aceita (201) (3 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) frequência "2x/dia" (permitida, sem detalhe exigido) é aceita (201) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) frequência "3x/dia" (permitida, sem detalhe exigido) é aceita (201) (15 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) frequência "4x/dia" (permitida, sem detalhe exigido) é aceita (201) (3 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) frequência "a_cada_4h" (permitida, sem detalhe exigido) é aceita (201) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) frequência "a_cada_6h" (permitida, sem detalhe exigido) é aceita (201) (3 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) frequência "a_cada_8h" (permitida, sem detalhe exigido) é aceita (201) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) frequência "a_cada_12h" (permitida, sem detalhe exigido) é aceita (201) (3 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) frequência "dose_unica" (permitida, sem detalhe exigido) é aceita (201) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) frequência "uso_continuo" (permitida, sem detalhe exigido) é aceita (201) (3 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) frequência "sos" (permitida, sem detalhe exigido) é aceita (201) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) frequência desconhecida (texto livre não mapeado) é rejeitada (400) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) frequência "outro" SEM frequencia_detalhe é rejeitada (400) — nunca um escape livre sem contexto (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) frequência "outro" COM frequencia_detalhe é aceita (201) — texto livre permitido apenas como complemento, nunca sozinho (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) frequência "nao_diaria" SEM frequencia_detalhe é rejeitada (400) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) dose_por_kg_dia com unidade PONDERÁVEL (mg) é aceita (201) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) dose_por_kg_dia com unidade DISCRETA (comprimido) é rejeitada (400) — incoerência unidade × tipo de dose (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) dose_por_tomada negativo é rejeitado (400) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) campo desconhecido dentro de "dose" (whitelist) é rejeitado (400) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Contrato estruturado de dose (RM-36) persistência: a dose estruturada (não texto livre) é o que chega ao Prisma — prova de integração DTO → service → persistência (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Paginação GET /api/consultas com limite dentro do permitido é aceito (200) (4 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Paginação GET /api/consultas com limite acima do teto (100) é rejeitado (400) (3 ms)
+[pg-conv] PASSOU — Validação de entrada (e2e) Paginação GET /api/consultas com "pagina" não numérico é rejeitado (400 — antes virava NaN e seguia para o Prisma sem checagem) (4 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL real (e2e) 1. primeira criação: grava o conteúdo E o fingerprint canônico na coluna real; auditoria atômica (65 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL real (e2e) 2. repetição idêntica (3x): mesmo registro, 1 linha, nenhuma auditoria extra (48 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL real (e2e) 3. repetição com payload DIFERENTE: 409 explícito, registro original intacto, nada criado (94 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL real (e2e) 3b. equivalências documentadas: ordem das chaves, validade_dias ausente ≡ 30, orientacoes/diagnóstico ausentes ≡ nulos ⇒ mesmo registro (sem 409) (32 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL real (e2e) 3c. a ORDEM dos medicamentos é parte do conteúdo: trocar a ordem com a mesma chave ⇒ 409 (33 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL real (e2e) 5b. colisão REAL de unique constraint, de forma DETERMINÍSTICA: a busca prévia "perde" a corrida, o create colide com a constraint real do PostgreSQL (P2002) e o serviço resolve — mesmo conteúdo ⇒ registro existente; conteúdo diferente ⇒ 409 (238 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL real (e2e) 6. timeout/falha de resposta APÓS gravação: o cliente vê erro, o banco já tem o registro; a nova tentativa (mesma chave) recebe o MESMO registro — sem duplicar (55 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL real (e2e) 7. rollback: falha na auditoria desfaz a prescrição (atomicidade); a nova tentativa com a mesma chave cria normalmente (38 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL real (e2e) 8. reinício do SERVIÇO: nova instância da aplicação sobre o mesmo banco — repetição devolve o mesmo registro e a divergência continua 409 (255 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL real (e2e) 9. isolamento: a mesma chave em OUTRA consulta do mesmo médico ⇒ 403; em consulta de OUTRO proprietário ⇒ 403; nada vaza nem é criado (63 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL real (e2e) 10. COMPATIBILIDADE — registro LEGADO (sem fingerprint, criado por cliente/versão antiga): repetição idêntica devolve o mesmo; diferente ⇒ 409 (fingerprint derivado do conteúdo persistido) (32 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL real (e2e) 11. COMPATIBILIDADE — cliente sem idempotency_key: continua criando (cada envio é uma operação distinta) e não grava fingerprint (34 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL real (e2e) 12. o campo extra do cliente continua rejeitado (400), nenhum contrato de entrada mudou (19 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL real (e2e) 4. requisições SIMULTÂNEAS idênticas (10x): INVARIANTES — no máximo 1 linha, todas as respostas 2xx devolvem o mesmo id, nunca 409 (o conteúdo é idêntico) (579 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL real (e2e) 5. colisão de chave com conteúdos DIFERENTES ao mesmo tempo: INVARIANTES — no máximo 1 linha; toda resposta 201 corresponde ao conteúdo GRAVADO; nenhum conteúdo divergente é aceito (99 ms)
+[pg-conv] PASSOU — MFA (e2e) MFA desativado + login válido → sucesso (200, com tokens) (292 ms)
+[pg-conv] PASSOU — MFA (e2e) MFA ativo + código ausente → falha (401) (270 ms)
+[pg-conv] PASSOU — MFA (e2e) MFA ativo + código inválido → falha (401) (270 ms)
+[pg-conv] PASSOU — MFA (e2e) MFA ativo + código válido → sucesso (200, com tokens) (393 ms)
+[pg-conv] PASSOU — MFA (e2e) senha correta mas MFA ausente NÃO retorna tokens — nenhum bypass silencioso (595 ms)
+[pg-conv] PASSOU — MFA (e2e) segredo MFA nunca é exposto na resposta de login (sucesso ou falha) (574 ms)
+[pg-conv] PASSOU — MFA (e2e) POST /auth/mfa/setup sem autenticação retorna 401 (7 ms)
+[pg-conv] PASSOU — MFA (e2e) POST /auth/mfa/setup autenticado retorna otpauth_url e secret_base32, nunca o valor criptografado armazenado (8 ms)
+[pg-conv] PASSOU — MFA (e2e) Login com código de recuperação (via HTTP real — regressão MFA-01) código de recuperação no formato XXXXX-XXXXX emitido pelo servidor é ACEITO pela validação de entrada e autentica com sucesso (853 ms)
+[pg-conv] PASSOU — MFA (e2e) Login com código de recuperação (via HTTP real — regressão MFA-01) código de recuperação SEM o traço (formato antigo e quebrado) é rejeitado na validação de entrada (400) — nunca confundir com o formato real (6 ms)
+[pg-conv] PASSOU — Ownership de recursos clínicos (e2e) GET /api/consulta/:id — leitura B (dono) lê a própria consulta normalmente (200) (15 ms)
+[pg-conv] PASSOU — Ownership de recursos clínicos (e2e) GET /api/consulta/:id — leitura A NÃO consegue ler a consulta de B só por conhecer o id (404) (4 ms)
+[pg-conv] PASSOU — Ownership de recursos clínicos (e2e) GET /api/consulta/:id — leitura recurso inexistente responde com o MESMO status (404) e mesmo formato que "pertence a outro usuário" — não vaza se o id existe (7 ms)
+[pg-conv] PASSOU — Ownership de recursos clínicos (e2e) GET /api/consulta/:id — leitura ADMIN também NÃO lê a consulta de um médico só por ter perfil privilegiado (404 — RolesGuard não é bypass de ownership) (4 ms)
+[pg-conv] PASSOU — Ownership de recursos clínicos (e2e) POST /api/diagnostico — escrita vinculada a consulta de terceiro A cria diagnóstico na PRÓPRIA consulta normalmente (201) (12 ms)
+[pg-conv] PASSOU — Ownership de recursos clínicos (e2e) POST /api/diagnostico — escrita vinculada a consulta de terceiro A NÃO consegue criar diagnóstico na consulta de B (403) (4 ms)
+[pg-conv] PASSOU — Ownership de recursos clínicos (e2e) POST /api/diagnostico — escrita vinculada a consulta de terceiro ADMIN também NÃO consegue criar diagnóstico na consulta de um médico (403) (3 ms)
+[pg-conv] PASSOU — Ownership de recursos clínicos (e2e) POST /api/prescricao — escrita vinculada a consulta de terceiro A cria prescrição na PRÓPRIA consulta normalmente (201) (5 ms)
+[pg-conv] PASSOU — Ownership de recursos clínicos (e2e) POST /api/prescricao — escrita vinculada a consulta de terceiro A NÃO consegue criar prescrição na consulta de B (403) (5 ms)
+[pg-conv] PASSOU — Ownership de recursos clínicos (e2e) POST /api/prescricao — escrita vinculada a consulta de terceiro A NÃO consegue vincular à própria prescrição um diagnostico_id de OUTRA consulta (403 — regressão OWN-01) (5 ms)
+[pg-conv] PASSOU — Ownership de recursos clínicos (e2e) POST /api/prescricao — escrita vinculada a consulta de terceiro A CONSEGUE vincular um diagnostico_id que realmente pertence à consulta informada (201) (4 ms)
+[pg-conv] PASSOU — Ownership de recursos clínicos (e2e) POST /api/prescricao — escrita vinculada a consulta de terceiro ADMIN também NÃO consegue criar prescrição na consulta de um médico (403) (4 ms)
+[pg-conv] PASSOU — Ownership de recursos clínicos (e2e) POST /api/risco — escrita vinculada a consulta de terceiro A grava risk score na PRÓPRIA consulta normalmente (200) (4 ms)
+[pg-conv] PASSOU — Ownership de recursos clínicos (e2e) POST /api/risco — escrita vinculada a consulta de terceiro A NÃO consegue gravar risk score na consulta de B (403) (4 ms)
+[pg-conv] PASSOU — Ownership de recursos clínicos (e2e) POST /api/risco — escrita vinculada a consulta de terceiro ADMIN também NÃO consegue gravar risk score na consulta de um médico (403) (4 ms)
+[pg-conv] PASSOU — Ownership de recursos clínicos (e2e) GET /api/consultas — listagem A recebe apenas o que o service filtrou por usuario_id (mock retorna vazio; o teste garante que o filtro por usuario_id chega ao Prisma) (4 ms)
+[pg-conv] PASSOU — AppController (e2e) / (GET) (130 ms)
+[pg-conv] PASSOU — Integridade de persistência — idempotência (e2e) reenviar a MESMA prescrição (mesma idempotency_key) 3 vezes seguidas cria APENAS 1 registro — nunca duplica por retry (105 ms)
+[pg-conv] PASSOU — Integridade de persistência — idempotência (e2e) duas prescrições com idempotency_key DIFERENTES são criadas normalmente (idempotência não bloqueia operações distintas) (15 ms)
+[pg-conv] PASSOU — Integridade de persistência — idempotência (e2e) recuperação posterior: falha simulada na 1ª tentativa (create rejeita) seguida de retry com a MESMA chave — a 2ª tentativa cria normalmente e uma 3ª (reenvio pós-sucesso) não duplica (39 ms)
+esperando o servidor desligar....feito
+servidor est� parado
+(node:34540) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+EXIT 0

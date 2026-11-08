@@ -21,18 +21,21 @@ describe('E2.1 — origem do fluxo addToRx', () => {
   it('a dose de addToRx vem do sistema (catálogo/calcWeightDose) e é editável: código-fonte confirma que a origem não é determinável', () => {
     expect(PAGE).toContain('setCustomDose(drug.dose_adulto.habitual);');                  // pré-preenchida pelo catálogo
     expect(PAGE).toContain('setCustomDose(String(result.dose_por_tomada));');             // pré-preenchida por calcWeightDose
-    expect(PAGE).toMatch(/onChange=\{e => setCustomDose\(e\.target\.value\)\}/);          // …e editável pelo prescritor
+    expect(PAGE).toMatch(/onChange=\{e => \{ setCustomDose\(e\.target\.value\); setCustomDoseFonte\('digitada'\); \}\}/);   // …e editável pelo prescritor (E2.3: a edição é registrada como fonte "digitada")
   });
   it('dose pré-preenchida NÃO é classificada como digitada pelo prescritor; origem fica desconhecida', () => {
     const r = registroDeInclusaoComDosePreenchida({ texto: '500 mg', campos_padrao: ['via', 'frequencia', 'duracao'], criado_em: T0 });
     expect(r.origem).toBe('desconhecida'); expect(r.origem).not.toBe('digitada_pelo_prescritor');
     expect(r.avaliacao.tipo).toBe('nao_avaliada'); if (r.avaliacao.tipo === 'nao_avaliada') expect(r.avaliacao.motivo).toBe('origem_desconhecida');
     expect(r.dose).toBeNull(); expect(r.texto_original).toBe('500 mg'); expect(r.campos_padrao).toEqual(['via', 'frequencia', 'duracao']);
-    expect(PAGE).toMatch(/item\.posologia_registrada = registroDeInclusaoComDosePreenchida\(\{ texto: item\.dose, campos_padrao: \['via', 'frequencia', 'duracao'\] \}\)/);
+    /* E2.3: com fonte comprovada usa registroDeInclusaoComFonteDaDose; sem fonte rastreável, permanece desconhecida */
+    expect(PAGE).toMatch(/registroDeInclusaoComFonteDaDose\(\{ fonte: customDoseFonte, texto: item\.dose/);
+    expect(PAGE).toMatch(/: registroDeInclusaoComDosePreenchida\(\{ texto: item\.dose, campos_padrao: \['via', 'frequencia', 'duracao'\] \}\)/);
     expect(PAGE).not.toMatch(/registroDeInclusaoManual/);
   });
-  it('nenhuma nova categoria de origem foi criada (não há evidência técnica para distinguir)', () => {
-    expect(ORIGENS_DA_POSOLOGIA).toEqual(['contrato_dose', 'dose_calculator', 'recomendacao_texto', 'digitada_pelo_prescritor', 'protocolo_texto', 'backend_legado', 'importacao_localstorage', 'desconhecida']);
+  it('as 8 categorias originais permanecem; a única adição (E2.3) é pre_preenchida_pelo_sistema, com fonte comprovada', () => {
+    expect(ORIGENS_DA_POSOLOGIA.slice(0, 8)).toEqual(['contrato_dose', 'dose_calculator', 'recomendacao_texto', 'digitada_pelo_prescritor', 'protocolo_texto', 'backend_legado', 'importacao_localstorage', 'desconhecida']);
+    expect(ORIGENS_DA_POSOLOGIA).toHaveLength(9);
   });
   it('origem desconhecida permanece desconhecida: edição, normalização e serialização não a "promovem"', () => {
     const r = registroDeInclusaoComDosePreenchida({ texto: '1 mg', criado_em: T0 });

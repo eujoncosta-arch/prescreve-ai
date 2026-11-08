@@ -7,6 +7,7 @@ import { AnamneseForm } from '@/components/modules/AnamneseForm';
 import { DiagnosticPanel } from '@/components/modules/DiagnosticPanel';
 import { TherapeuticPanel } from '@/components/modules/TherapeuticPanel';
 import { PrescriptionPanel } from '@/components/modules/PrescriptionPanel';
+import { StatusRegistroPrescricao } from '@/components/modules/StatusRegistroPrescricao';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -1038,9 +1039,7 @@ export default function NovaConsulta() {
                 <CheckCircle2 className="w-8 h-8 text-green-600" />
               </div>
               <h2 className="text-xl font-bold text-slate-900">Consulta Concluída!</h2>
-              <p className="text-slate-500">
-                A prescrição de <strong>{state.activeConsultation?.paciente_nome}</strong> foi emitida com sucesso.
-              </p>
+              <StatusRegistroPrescricao />   {/* RM-107.1.1-E2.3: finalizada localmente ≠ registrada no servidor */}
               <div className="grid grid-cols-3 gap-2 mt-4 text-center">
                 <div className="bg-blue-50 rounded-lg p-2 border border-blue-100">
                   <p className="text-xs font-bold text-blue-700">Auditada</p>

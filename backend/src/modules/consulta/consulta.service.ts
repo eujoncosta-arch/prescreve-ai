@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
+  ConflictException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Prisma } from '@prisma/client';
@@ -16,6 +17,10 @@ import {
 } from './dto/consulta.dto';
 import { hmacIdentifier } from '../../common/crypto/identifier-hash.util';
 import * as crypto from 'crypto';
+import {
+  fingerprintPrescricao,
+  fingerprintDeRegistroPersistido,
+} from './prescricao-fingerprint.util';
 
 function hashIntegridade(obj: unknown): string {
   return crypto.createHash('sha256').update(JSON.stringify(obj)).digest('hex');
@@ -276,6 +281,8 @@ export class ConsultaService {
     criar: (tx: Prisma.TransactionClient) => Promise<T>,
     montarAuditoria: (registro: T) => AuditoriaInput,
     buscarExistenteAposColisao: () => Promise<T | null>,
+    /** RM-107.1.1-E2.5: validação do registro que venceu a corrida (ex.: fingerprint do conteúdo). Lança para recusar a repetição. */
+    validarExistenteAposColisao?: (existente: T) => void,
   ): Promise<T> {
     try {
       return await this.prisma.$transaction(async (tx) => {
@@ -289,9 +296,38 @@ export class ConsultaService {
         e.code === 'P2002'
       ) {
         const existente = await buscarExistenteAposColisao();
-        if (existente) return existente;
+        if (existente) {
+          validarExistenteAposColisao?.(existente);
+          return existente;
+        }
       }
       throw e;
+    }
+  }
+
+  /**
+   * RM-107.1.1-E2.5 — mesma `idempotency_key` com CONTEÚDO DIFERENTE é conflito explícito (409), nunca "sucesso" com o registro antigo.
+   * Registro com fingerprint gravado ⇒ compara com ele; registro legado (coluna NULL) ⇒ deriva do conteúdo persistido; sem conteúdo comparável ⇒
+   * comportamento anterior (devolve o existente). A mensagem NÃO ecoa o conteúdo.
+   */
+  private exigirMesmoConteudoDaPrescricao(
+    existente: {
+      consulta_id?: string;
+      diagnostico_id?: string | null;
+      medicamentos?: unknown;
+      orientacoes?: string | null;
+      validade_dias?: number | null;
+      idempotency_fingerprint?: string | null;
+    },
+    fingerprintDaRequisicao: string,
+  ): void {
+    const original =
+      existente.idempotency_fingerprint ??
+      fingerprintDeRegistroPersistido(existente);
+    if (original !== null && original !== fingerprintDaRequisicao) {
+      throw new ConflictException(
+        'Chave de idempotência já utilizada com conteúdo diferente: use uma nova chave para uma prescrição diferente.',
+      );
     }
   }
 
@@ -452,13 +488,25 @@ export class ConsultaService {
     // do frontend, duplo clique). idempotency_key é gerada uma única vez no
     // cliente no momento em que o médico finaliza a prescrição e reutilizada
     // em toda tentativa subsequente da MESMA operação.
+    // RM-107.1.1-E2.5: fingerprint canônico do conteúdo desta requisição (ver prescricao-fingerprint.util.ts).
+    const fingerprint = fingerprintPrescricao({
+      consulta_id: dto.consulta_id,
+      diagnostico_id: dto.diagnostico_id,
+      medicamentos: dto.medicamentos,
+      orientacoes: dto.orientacoes,
+      validade_dias: dto.validade_dias,
+    });
+
     const existente = await this.buscarPorIdempotencyKey(
       (key) =>
         this.prisma.prescricao.findUnique({ where: { idempotency_key: key } }),
       dto.idempotency_key,
       (p) => p.consulta_id === dto.consulta_id,
     );
-    if (existente) return existente;
+    if (existente) {
+      this.exigirMesmoConteudoDaPrescricao(existente, fingerprint);
+      return existente;
+    }
 
     // Correção de vulnerabilidade (auditoria de segurança final, OWN-01):
     // `dto.diagnostico_id` é opcional e vinha do cliente sem NENHUMA
@@ -504,6 +552,10 @@ export class ConsultaService {
             validade_dias: dto.validade_dias ?? 30,
             hash_integridade: hash,
             idempotency_key: dto.idempotency_key,
+            // Só faz sentido (e só é gravado) quando há chave de idempotência.
+            idempotency_fingerprint: dto.idempotency_key
+              ? fingerprint
+              : undefined,
           },
         }),
       (prescricao) => ({
@@ -519,6 +571,8 @@ export class ConsultaService {
               where: { idempotency_key: dto.idempotency_key },
             })
           : Promise.resolve(null),
+      (vencedora) =>
+        this.exigirMesmoConteudoDaPrescricao(vencedora, fingerprint),
     );
   }
 

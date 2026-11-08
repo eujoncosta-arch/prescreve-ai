@@ -53,13 +53,15 @@ describe('E2.2 — texto alterado e DTO antigo: DTO não enviado', () => {
     expect(doseEstruturadaDesatualizada(editado)).toBe(true);
     expect(leituraDoseEstruturada(editado)).toEqual({ dose: null, estado: 'divergente_do_texto' });
     const { resultado, criarPrescricao } = await sincronizar([editado]);
-    expect(resultado.prescricao).toBe('sem_dose_estruturada');
+    expect(resultado.prescricao).toBe('dose_estruturada_bloqueada');   // E2.3: bloqueio explícito (a dose estruturada é preservada, não omitida)
     expect(criarPrescricao).not.toHaveBeenCalled();                  // nada (nem o DTO antigo) vai ao backend
   });
   it.each(['dose', 'unidade', 'frequencia', 'via', 'concentracao', 'medicamento', 'molecula'] as const)('edição do campo %s também bloqueia o DTO antigo', (campo) => {
     const editado = editar(itemF2(), campo, 'novo');
     expect(doseEstruturadaDesatualizada(editado)).toBe(true);
-    expect('dose_estruturada' in prepararItemParaStore(editado)).toBe(false);
+    const pronto = prepararItemParaStore(editado);
+    expect(pronto.bloqueio_dto?.estado).toBe('divergente');   // E2.3: marcado como bloqueado…
+    expect((pronto as { dose_estruturada?: unknown }).dose_estruturada).toEqual(DTO);   // …e PRESERVADO (nenhuma perda silenciosa)
   });
   it('invalida a avaliação anterior, preserva texto original e histórico, e não recalcula/reconstrói o DTO', () => {
     const editado = editar(itemF2(), 'posologia', 'novo texto');
@@ -70,10 +72,10 @@ describe('E2.2 — texto alterado e DTO antigo: DTO não enviado', () => {
     expect(editado.dose_estruturada).toEqual(DTO);                   // local: o DTO não foi alterado nem recalculado
     expect(editado.posologia).toBe('novo texto');
   });
-  it('o item enviado ao store preserva TODOS os dados legados (texto, quantidade, duração, instruções), exceto o DTO desatualizado', () => {
+  it('o item enviado ao store preserva TODOS os dados legados (texto, quantidade, duração, instruções E a dose estruturada); só acrescenta o marcador de bloqueio', () => {
     const editado = editar(itemF2(), 'posologia', 'novo texto');
-    const { dose_estruturada, posologia_registrada, ...esperado } = editado; void dose_estruturada; void posologia_registrada;
-    expect(prepararItemParaStore(editado)).toEqual(esperado);
+    const { posologia_registrada, ...esperado } = editado; void posologia_registrada;
+    expect(prepararItemParaStore(editado)).toEqual({ ...esperado, bloqueio_dto: { estado: 'divergente', motivo: expect.stringContaining('posologia') }, proveniencia: expect.objectContaining({ v: 'prov-1', estrutura_dose: 'divergente' }) });   // E2.5: + envelope mínimo de proveniência (nada mais)
     expect(prepararItemParaStore(editado).posologia).toBe('novo texto');
   });
 });
@@ -82,7 +84,7 @@ describe('E2.2 — texto inalterado e DTO consistente: comportamento anterior pr
   it('sem edição o item sai idêntico e o DTO é enviado com o contrato de sempre', async () => {
     const item = itemF2(); const { dose_estruturada, posologia_registrada, ...esperado } = item; void posologia_registrada;
     expect(doseEstruturadaDesatualizada(item)).toBe(false);
-    expect(prepararItemParaStore(item)).toEqual({ ...esperado, dose_estruturada });
+    expect(prepararItemParaStore(item)).toEqual({ ...esperado, dose_estruturada, proveniencia: expect.objectContaining({ v: 'prov-1', estrutura_dose: 'consistente_conforme_origem' }) });   // E2.5: + envelope mínimo de proveniência (nada mais)
     const { resultado, criarPrescricao } = await sincronizar([item]);
     expect(resultado.prescricao).toBe('synced');
     const payload = criarPrescricao.mock.calls[0][0] as { medicamentos: Array<Record<string, unknown>> };
@@ -147,7 +149,7 @@ describe('E2.2 — dados legados e compatibilidade com o backend', () => {
   it('um item desatualizado não impede os demais itens de seguirem o fluxo normal; a prescrição fica bloqueada como um todo (nunca parcial)', async () => {
     const ok = itemF2(); const ruim = { ...editar({ ...itemF2(), id: 'i2' }, 'posologia', 'x') };
     const { resultado, criarPrescricao } = await sincronizar([ok, ruim]);
-    expect(resultado.prescricao).toBe('sem_dose_estruturada'); expect(criarPrescricao).not.toHaveBeenCalled();
+    expect(resultado.prescricao).toBe('dose_estruturada_bloqueada'); expect(criarPrescricao).not.toHaveBeenCalled();
   });
   it('contrato do backend intacto: payload montado campo a campo, nenhum campo novo enviado', () => {
     expect(STORE).toMatch(/molecula: i\.medicamento,\s*dose: i\.dose_estruturada!,\s*duracao: i\.duracao,\s*observacoes: i\.instrucoes_especiais,/);
@@ -161,12 +163,12 @@ describe('E2.2 — dados legados e compatibilidade com o backend', () => {
     expect(PANEL).toMatch(/\[field\]: value, posologia_registrada: registrarEdicaoPosologica\(item\.posologia_registrada, field/);
     expect(PANEL).toContain('itens: prescricao.itens.map(prepararItemParaStore)');
     expect(PANEL).toMatch(/posologia_registrada: reconfirmarDoseEstruturada\(item\.posologia_registrada\)/);
-    expect(PANEL).toContain('Reconfirmar dose estruturada anterior');
+    expect(PANEL).toContain('Reutilizar a dose estruturada anterior');
     expect(PANEL).not.toMatch(/dose_estruturada:\s*(undefined|null)/);   // o Panel nunca apaga/zera o DTO local
   });
   it('o aviso ao prescritor é explícito e não promete validação', () => {
-    expect(PANEL).toContain('não será enviada ao servidor</strong> até você reconfirmar');
-    expect(PANEL).toContain('A reconfirmação não valida clinicamente a dose.');
+    expect(PANEL).toContain('não será enviada ao servidor</strong> enquanto você não decidir reutilizá-la');
+    expect(PANEL).toContain('não equivale a validar clinicamente a dose');
     expect(PANEL).not.toMatch(/reconfirm[^\n]*(validada|segura|aprovada)/i);
   });
   it('normalização: registro persistido com reconfirmação inválida é descartado; idempotente', () => {

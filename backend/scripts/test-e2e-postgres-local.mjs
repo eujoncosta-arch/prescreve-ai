@@ -67,7 +67,8 @@ async function main() {
     run('npx', ['prisma', 'migrate', 'deploy'], { env: { ...process.env, DATABASE_URL } });
 
     console.log('[rm53] Rodando a suíte e2e completa contra Postgres real (0 suítes puladas)...');
-    run('npx', ['jest', '--config', './test/jest-e2e.json'], {
+    // PG_LOCAL_JEST_ARGS (opcional, ex.: "idempotencia-fingerprint") restringe a execução a specs específicas contra o MESMO Postgres real.
+    run('npx', ['jest', '--config', './test/jest-e2e.json', ...(process.env.PG_LOCAL_JEST_ARGS ?? '').split(' ').filter(Boolean)], {
       env: {
         ...process.env,
         DATABASE_URL,

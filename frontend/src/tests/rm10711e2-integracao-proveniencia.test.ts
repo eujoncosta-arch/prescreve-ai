@@ -72,7 +72,7 @@ describe('E2 — F3: motor C', () => {
   });
   it('a tela aplica o registro do motor C SEM alterar os campos legados do item', () => {
     const trecho = PAGE.slice(PAGE.indexOf('const applyDoseCalc'), PAGE.indexOf('// ── Remove item'));
-    expect(trecho).toMatch(/item\.posologia_registrada = registroDeFullDoseResult\(result, \{ via: selectedDrug\.dose_adulto\.via \}/);
+    expect(trecho).toMatch(/item\.posologia_registrada = registroDeResultadoMotorC\(result, \{ via: selectedDrug\.dose_adulto\.via \}/);
     // nenhuma leitura do registro altera dose/frequência/via/duração do item
     expect(trecho).not.toMatch(/posologia_registrada\.(dose|avaliacao)/);
     expect(trecho).toContain('dose: doseTexto,');
@@ -88,7 +88,7 @@ describe('E2 — F3b: inclusão manual', () => {
   });
   it('addItem (Panel, item em branco) usa registroDeInclusaoManual; addToRx (page, dose pré-preenchida) usa origem desconhecida (E2.1)', () => {
     expect(PANEL).toMatch(/posologia_registrada: registroDeInclusaoManual\(/);
-    expect(PAGE).toMatch(/item\.posologia_registrada = registroDeInclusaoComDosePreenchida\(/);
+    expect(PAGE).toMatch(/registroDeInclusaoComFonteDaDose\(/); expect(PAGE).toMatch(/registroDeInclusaoComDosePreenchida\(/);   /* E2.3: fonte comprovada; sem fonte ⇒ desconhecida */
     expect(PAGE).not.toMatch(/registroDeInclusaoManual\(/);
   });
 });

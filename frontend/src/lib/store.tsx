@@ -7,6 +7,7 @@ import { MOCK_CONSULTATIONS } from './mock-data';
 import { authApi, consultaApi, getCurrentUser, useRealBackend, type CurrentUser } from './api-client';
 import { syncResource, newIdempotencyKey, isDemoConsultationId } from './sync-engine';
 import { APP_MODE, IS_DEMO_MODE } from './app-mode';
+import { registrarEventoSessao, limparTrilhaDaSessao } from './trilha-sessao-posologia';
 
 const DEFAULT_SETTINGS: AppSettings = {
   medico: { nome: 'Dr. João Silva', crm: 'CRM-SP 123456', especialidade: 'Clínica Médica' },
@@ -112,7 +113,9 @@ export type Action =
       payload: { hidratadas: Consultation[]; pagina: number; limite: number; total: number };
     }
   | { type: 'RESET_PAGINATION' }
-  | { type: 'RESTORE_PENDING_CONSULTATIONS'; payload: Consultation[] };
+  | { type: 'RESTORE_PENDING_CONSULTATIONS'; payload: Consultation[] }
+  /** RM-107.1.1-E2.4: revisão da prescrição de uma consulta ESPECÍFICA (por id), sem depender de ser a consulta ativa nem do Panel original. */
+  | { type: 'REVIEW_PRESCRIPTION'; payload: { consultaId: string; prescricao: Prescription } };
 
 // ============================================================
 // RM-42: hidratação da lista de consultas a partir do backend real
@@ -476,6 +479,23 @@ export function reducer(state: AppState, action: Action): AppState {
     case 'RESET_PAGINATION':
       return { ...state, consultationsPagination: INITIAL_PAGINATION };
 
+    case 'REVIEW_PRESCRIPTION': {
+      const { consultaId, prescricao } = action.payload;
+      const aplicar = (c: Consultation): Consultation => {
+        if (c.id !== consultaId) return c;
+        const p = c.sync?.prescricao;
+        // Bloqueio de integridade anterior deixa de valer como "estado de sync" (o bloqueio real vive nos itens: `bloqueio_dto`).
+        // Qualquer outro estado (falha de rede etc., com sua idempotency_key) é preservado.
+        const sync = p?.error_kind === 'integridade' ? { ...c.sync, prescricao: { status: 'local' as const, attempts: 0 } } : c.sync;
+        return { ...c, prescricao, sync };
+      };
+      return {
+        ...state,
+        consultations: state.consultations.map(aplicar),
+        activeConsultation: state.activeConsultation ? aplicar(state.activeConsultation) : state.activeConsultation,
+      };
+    }
+
     case 'RESTORE_PENDING_CONSULTATIONS': {
       // Restaura consultas pendentes de uma sessão anterior da MESMA aba
       // (reload/crash) — nunca duplica se, por algum motivo, o id já
@@ -785,7 +805,13 @@ export async function executarCarregarMaisConsultas(
 export function podeSincronizar(c: Consultation, emAndamento: ReadonlySet<string>): boolean {
   if (emAndamento.has(c.id)) return false;
   const status = c.sync?.consulta?.status;
-  if (status === 'synced' || status === 'syncing') return false;
+  if (status === 'syncing') return false;
+  if (status === 'synced') {
+    // RM-107.1.1-E2.4: consulta já confirmada, MAS com prescrição local ainda não confirmada (bloqueada/falha) — o reenvio da prescrição
+    // precisa continuar possível (antes ficava irrecuperável). Prescrição ausente, em voo ou já confirmada ⇒ nada a reenviar.
+    const p = c.sync?.prescricao;
+    return !!c.prescricao && !!p && (p.status === 'failed' || p.status === 'local');
+  }
   return true;
 }
 
@@ -833,7 +859,7 @@ export interface ResultadoSincronizacaoConsulta {
   diagnostico?: 'synced' | 'failed' | 'nao_tentado';
   /** RM-53 (RM41-023): `'nao_tentado'` quando não há `risco_calculado` para sincronizar (nunca fabricado). */
   risco?: 'synced' | 'failed' | 'nao_tentado';
-  prescricao?: 'synced' | 'failed' | 'sem_dose_estruturada' | 'nao_tentada';
+  prescricao?: 'synced' | 'failed' | 'sem_dose_estruturada' | 'dose_estruturada_bloqueada' | 'nao_tentada';
 }
 
 /**
@@ -860,7 +886,11 @@ export async function executarSincronizacaoConsulta(
 
   const consultaKey = c.sync?.consulta?.idempotency_key ?? newIdempotencyKey();
 
-  const consultaResultado = await syncResource({
+  // RM-107.1.1-E2.4: consulta já confirmada pelo servidor (backend_id conhecido): não é recriada — só a prescrição pendente é reenviada.
+  const backendIdJaConfirmado = c.sync?.consulta?.status === 'synced' ? c.sync.consulta.backend_id : undefined;
+  const consultaResultado = backendIdJaConfirmado
+    ? { ok: true as const, data: { id: backendIdJaConfirmado } as { id?: string } | null, state: { status: 'synced' as const, attempts: c.sync?.consulta?.attempts ?? 0 } }
+    : await syncResource({
     attemptFn: () => deps.criar({ anamnese: c.anamnese ?? undefined, idempotency_key: consultaKey }),
     onStatusChange: (s) => {
       if (!deps.sessaoValida()) return;
@@ -980,6 +1010,26 @@ export async function executarSincronizacaoConsulta(
   }
 
   const itens = c.prescricao.itens ?? [];
+  // RM-107.1.1-E2.3: dose estruturada DIVERGENTE do texto editado e não reconfirmada — preservada localmente, NUNCA transmitida.
+  const itemComDtoBloqueado = itens.find((i) => i.bloqueio_dto);
+  if (itemComDtoBloqueado) {
+    if (deps.sessaoValida()) {
+      deps.dispatch({
+        type: 'SET_SYNC_STATE',
+        payload: {
+          consultaId: c.id,
+          resource: 'prescricao',
+          state: {
+            status: 'failed',
+            attempts: 0,
+            error_kind: 'integridade',
+            error: `Medicamento "${itemComDtoBloqueado.medicamento || '(sem nome)'}": a dose estruturada anterior não corresponde ao texto editado e não foi reconfirmada — NADA da prescrição foi enviado ao servidor. Os dados continuam salvos neste dispositivo.`,
+          },
+        },
+      });
+    }
+    return { consulta: 'synced', diagnostico: diagnosticoStatus, risco: riscoStatus, prescricao: 'dose_estruturada_bloqueada' };
+  }
   const itemSemDoseEstruturada = itens.find((i) => !i.dose_estruturada);
   if (itemSemDoseEstruturada) {
     if (deps.sessaoValida()) {
@@ -991,6 +1041,7 @@ export async function executarSincronizacaoConsulta(
           state: {
             status: 'failed',
             attempts: 0,
+            error_kind: 'integridade',
             error: `Medicamento "${itemSemDoseEstruturada.medicamento || '(sem nome)'}" está sem dose estruturada (valor/unidade/frequência) — confirme a dose manualmente antes de sincronizar.`,
           },
         },
@@ -1087,12 +1138,21 @@ export async function executarSincronizacaoConsulta(
 
 const KEY_CONSULTAS_PENDENTES = 'prescreve_ai_consultas_pendentes';
 
+/**
+ * Consulta com algo ainda NÃO confirmado pelo servidor que só existe neste dispositivo.
+ * RM-107.1.1-E2.4: inclui a consulta JÁ sincronizada cuja PRESCRIÇÃO local ficou pendente/bloqueada/falha — antes ela não era persistida
+ * e se perdia no reload (perda silenciosa). Consultas hidratadas do backend não têm `prescricao` local e continuam fora.
+ */
+export function consultaTemPendenciaLocal(c: Consultation): boolean {
+  const status = c.sync?.consulta?.status;
+  if (status && status !== 'synced') return true;
+  const p = c.sync?.prescricao;
+  return !!c.prescricao?.itens?.length && !!p && p.status !== 'synced';
+}
+
 export function persistirConsultasPendentes(consultations: Consultation[]): void {
   if (typeof window === 'undefined') return;
-  const pendentes = consultations.filter((c) => {
-    const status = c.sync?.consulta?.status;
-    return status && status !== 'synced';
-  });
+  const pendentes = consultations.filter(consultaTemPendenciaLocal);
   try {
     if (pendentes.length === 0) {
       localStorage.removeItem(KEY_CONSULTAS_PENDENTES);
@@ -1121,15 +1181,17 @@ export function restaurarConsultasPendentes(): Consultation[] {
     if (!raw) return [];
     const parsed = JSON.parse(raw) as unknown;
     if (!Array.isArray(parsed)) return [];
-    return (parsed as Consultation[]).map((c) => {
-      if (c.sync?.consulta?.status !== 'syncing') return c;
-      return {
-        ...c,
-        sync: {
-          ...c.sync,
-          consulta: { ...c.sync.consulta, status: 'failed', error: 'Sincronização interrompida (recarregamento da página) — tentando novamente' },
-        },
-      };
+    // Estrutura ilegível numa entrada NÃO descarta as demais (e nada é apagado do que é legível — inclusive `bloqueio_dto`).
+    return (parsed as unknown[]).filter((c): c is Consultation => !!c && typeof c === 'object' && typeof (c as { id?: unknown }).id === 'string').map((c) => {
+      let r = c;
+      if (r.sync?.consulta?.status === 'syncing') {
+        r = { ...r, sync: { ...r.sync, consulta: { ...r.sync.consulta, status: 'failed', error: 'Sincronização interrompida (recarregamento da página) — tentando novamente' } } };
+      }
+      // RM-107.1.1-E2.4: um "syncing" persistido da prescrição seria uma mentira após o reload (não há requisição em voo).
+      if (r.sync?.prescricao?.status === 'syncing') {
+        r = { ...r, sync: { ...r.sync, prescricao: { ...r.sync.prescricao, status: 'failed', error_kind: 'interrompida', error: 'Envio da prescrição interrompido (recarregamento da página) — não confirmado pelo servidor' } } };
+      }
+      return r;
     });
   } catch {
     return [];
@@ -1311,6 +1373,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     // requisição de paginação/detalhe ainda em voo desta sessão.
     hidratadoParaUsuario.current = null;
     sessaoEpochRef.current += 1;
+    limparTrilhaDaSessao();
     dispatch({ type: 'SET_USER', payload: null });
     dispatch({ type: 'RESET_SESSION_DATA' });
   }, []);
@@ -1324,6 +1387,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (!podeSincronizar(c, emSincronizacaoRef.current)) return;
     emSincronizacaoRef.current.add(c.id);
     const epoch = sessaoEpochRef.current;
+    registrarEventoSessao({ tipo: 'tentativa_sync', consulta_id: c.id });
 
     try {
       const resultado = await executarSincronizacaoConsulta(c, {
@@ -1337,8 +1401,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
         isAuthenticated: () => authApi.isAuthenticated(),
       });
 
+      registrarEventoSessao({ tipo: 'resultado_sync', consulta_id: c.id, detalhe: `consulta=${resultado.consulta};prescricao=${resultado.prescricao ?? 'n/a'}` });
       if (resultado.consulta === 'failed') {
         toast.error('Falha ao sincronizar a consulta com o servidor. Os dados continuam salvos apenas neste dispositivo — tentaremos novamente.', { duration: 6000 });
+      } else if (resultado.prescricao === 'dose_estruturada_bloqueada') {
+        toast.error('A prescrição NÃO foi enviada ao servidor: há medicamento cuja dose estruturada anterior não corresponde ao texto editado e não foi reconfirmada. Ela existe apenas neste dispositivo.', { duration: 10000 });
       } else if (resultado.prescricao === 'sem_dose_estruturada') {
         toast.error('A prescrição tem ao menos um medicamento sem dose estruturada confirmada — a sincronização com o servidor foi bloqueada até a dose ser preenchida corretamente.', { duration: 8000 });
       } else if (resultado.prescricao === 'failed') {

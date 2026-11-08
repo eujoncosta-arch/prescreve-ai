@@ -274,6 +274,9 @@ model Prescricao {
   /// Chave de idempotência gerada pelo cliente — nunca duplicar uma prescrição
   /// por reenvio (retry de rede, duplo clique, fila de sincronização).
   idempotency_key String?          @unique
+  /// RM-107.1.1-E2.5: fingerprint canônico (sha256 de "v1" + quebra de linha + JSON canônico) do conteúdo associado à chave. NULL em registros legados — nesse caso o servidor
+  /// deriva o fingerprint do conteúdo persistido. Mesma chave + conteúdo diferente ⇒ HTTP 409.
+  idempotency_fingerprint String?
   versao          Int              @default(1)
   criado_em       DateTime         @default(now())
   atualizado_em   DateTime         @updatedAt

@@ -1,0 +1,168 @@
+[pg-conv] initdb em C:\Users\JONATH~1\AppData\Local\Temp\pg-conv-data-QqIBHt …
+Os arquivos deste sistema de banco de dados pertencer�o ao usu�rio "Jonathan Costa".
+Esse usu�rio deve ser o dono do processo do servidor tamb�m.
+
+O agrupamento de banco de dados ser� inicializado com configura��o regional "C".
+A configura��o de busca textual padr�o ser� definida como "english".
+
+Verifica��es de p�ginas de dados est�o desabilitadas.
+
+alterando permiss�es no diret�rio existente C:/Users/JONATH~1/AppData/Local/Temp/pg-conv-data-QqIBHt ... ok
+criando subdiret�rios ... ok
+selecionando implementa��o de mem�ria compartilhada din�mica ... windows
+selecionando max_connections padr�o ... 100
+selecionando shared_buffers padr�o ... 128MB
+selecionando fuso hor�rio padr�o ... America/Bahia
+criando arquivos de configura��o ... ok
+executando script de inicializa��o ... ok
+executando p�s-inicializa��o ... ok
+sincronizando dados no disco ... ok
+
+Sucesso. Voc� pode iniciar o servidor de banco de dados utilizando:
+
+    ^"C^:^\Users^\JONATH^~1^\AppData^\Local^\Temp^\claude^\41a6f71d0e30efc8^\277b4ab5^-69e9^-4f2d^-a809^-dca921b4e9d1^\scratchpad^\pgsrv^\node^_modules^\^@embedded^-postgres^\windows^-x64^\native^\bin^\pg^_ctl^" -D ^"C^:^\Users^\JONATH^~1^\AppData^\Local^\Temp^\pg^-conv^-data^-QqIBHt^" -l arquivolog start
+
+[pg-conv] iniciando servidor PostgreSQL convencional (porta 54876) …
+esperando o servidor iniciar....feito
+servidor iniciado
+[pg-conv] BANCO: PostgreSQL 16.15, compiled by Visual C++ build 1944, 64-bit
+[pg-conv] aplicando migrações reais (prisma migrate deploy) …
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma\schema.prisma.
+Datasource "db": PostgreSQL database "prescreve_ai_e251", schema "public" at "127.0.0.1:54876"
+
+4 migrations found in prisma/migrations
+
+Applying migration `20260727000000_baseline_schema_atual`
+Applying migration `20260728000000_add_risk_score_calculado_audit_type`
+Applying migration `20260728010000_restrict_clinical_cascade_deletes`
+Applying migration `20260808000000_add_prescricao_idempotency_fingerprint`
+
+The following migration(s) have been applied:
+
+migrations/
+  └─ 20260727000000_baseline_schema_atual/
+    └─ migration.sql
+  └─ 20260728000000_add_risk_score_calculado_audit_type/
+    └─ migration.sql
+  └─ 20260728010000_restrict_clinical_cascade_deletes/
+    └─ migration.sql
+  └─ 20260808000000_add_prescricao_idempotency_fingerprint/
+    └─ migration.sql
+
+All migrations have been successfully applied.
+[pg-conv] jest e2e: idempotencia-fingerprint-postgres-convencional
+  console.warn
+    [pg-convencional] BANCO: PostgreSQL 16.15, compiled by Visual C++ build 1944, 64-bit | server_version=16.15 | iniciado em 2026-11-08T16:44:12.199Z
+
+      350 |         "select version() as v, current_setting('server_version') as sv, pg_postmaster_start_time() as t",
+      351 |       );
+    > 352 |       console.warn(
+          |               ^
+      353 |         `[pg-convencional] BANCO: ${v.v} | server_version=${v.sv} | iniciado em ${v.t.toISOString()}`,
+      354 |       );
+      355 |       expect(v.v).toMatch(/^PostgreSQL 16/);
+
+
+  console.warn
+    [pg-convencional] processos da aplicação: A=32408 B=31596 teste=24588; conexões ativas no banco: 4
+
+      359 |         'select count(*)::int as c from pg_stat_activity where datname = current_database()',
+      360 |       );
+    > 361 |       console.warn(
+          |               ^
+      362 |         `[pg-convencional] processos da aplicação: A=${procs.A.pid} B=${procs.B.pid} teste=${process.pid}; conexões ativas no banco: ${m[0].c}`,
+      363 |       );
+      364 |     });
+
+
+  console.warn
+    [pg-convencional] 24 idênticas simultâneas — distribuição de status: {"201":24}
+
+      461 |         {},
+      462 |       );
+    > 463 |       console.warn(
+          |               ^
+      464 |         `[pg-convencional] 24 idênticas simultâneas — distribuição de status: ${JSON.stringify(dist)}`,
+      465 |       );
+      466 |       expect(dist).toEqual({ 201: 24 });
+
+
+  console.warn
+    [pg-convencional] 12 conteúdos diferentes, mesma chave — distribuição de status: {"201":1,"409":11}
+
+      486 |         {},
+      487 |       );
+    > 488 |       console.warn(
+          |               ^
+      489 |         `[pg-convencional] 12 conteúdos diferentes, mesma chave — distribuição de status: ${JSON.stringify(dist)}`,
+      490 |       );
+      491 |       const linhas = await q(
+
+
+  console.warn
+    [pg-convencional] reinício fast: primeira requisição pós-reinício → 201; final → 201
+
+      594 |         ).toBe(fpAntes);
+      595 |         const r = await aposReinicio(1, t, corpo(consultaA1, k));
+    > 596 |         console.warn(
+          |                 ^
+      597 |           `[pg-convencional] reinício ${modo}: primeira requisição pós-reinício → ${r.primeira}; final → ${r.final.status} ${r.final.status === 201 ? '' : JSON.stringify(r.final.body)}`,
+      598 |         );
+      599 |         if (r.final.status !== 201)
+
+
+  console.warn
+    [pg-convencional] reinício immediate: primeira requisição pós-reinício → 201; final → 201
+
+      594 |         ).toBe(fpAntes);
+      595 |         const r = await aposReinicio(1, t, corpo(consultaA1, k));
+    > 596 |         console.warn(
+          |                 ^
+      597 |           `[pg-convencional] reinício ${modo}: primeira requisição pós-reinício → ${r.primeira}; final → ${r.final.status} ${r.final.status === 201 ? '' : JSON.stringify(r.final.body)}`,
+      598 |         );
+      599 |         if (r.final.status !== 201)
+
+
+  console.warn
+    [pg-convencional] canonicalização×persistido: 15 linhas conferidas
+
+      797 |       for (const l of linhas)
+      798 |         expect(fingerprintDeRegistroPersistido(l)).toBe(l.fp);
+    > 799 |       console.warn(
+          |               ^
+      800 |         `[pg-convencional] canonicalização×persistido: ${linhas.length} linhas conferidas`,
+      801 |       );
+      802 |     });
+
+
+Test Suites: 1 passed, 1 total
+Tests:       16 passed, 16 total
+Snapshots:   0 total
+Time:        23.481 s, estimated 24 s
+Ran all test suites matching idempotencia-fingerprint-postgres-convencional.
+Test results written to: ..\..\..\..\JONATH~1\AppData\Local\Temp\pg-conv-jest-21576.json
+Force exiting Jest: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
+[pg-conv] ✅ suíte(s) passaram contra PostgreSQL convencional.
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 0. IDENTIFICAÇÃO DO BANCO: servidor PostgreSQL convencional (não PGlite), múltiplos processos de aplicação distintos (112 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 1. criação inicial: grava conteúdo e fingerprint canônico; 1 auditoria (57 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 2. repetição idêntica, alternando entre as DUAS instâncias: mesmo registro, nunca 409 (55 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 3. repetição divergente (instância diferente da que criou): 409 explícito; original intacto; resposta sem conteúdo (35 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 4. colisão REAL da constraint única (P2002) de forma determinística, contra o servidor convencional (162 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 5. ≥10 requisições SIMULTÂNEAS idênticas (24) entre DUAS instâncias: todas 201, mesmo id, 1 linha, 1 auditoria — nenhum 401/409/5xx (526 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 6. requisições SIMULTÂNEAS com conteúdos DIFERENTES e mesma chave (12) entre DUAS instâncias: 1 vencedor; todo 201 = conteúdo gravado; demais 409; nenhum 401/5xx (101 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 7. mesma chave criada concorrentemente por instâncias diferentes e depois lida pela terceira (em processo): registro único e fingerprint coerente (22 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 8. reinício da APLICAÇÃO (kill do processo + novo processo): a idempotência continua; divergência continua 409 (5104 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 9. reinício do SERVIDOR PostgreSQL (fast): registros e fingerprints persistem; a repetição devolve o mesmo registro; a divergência continua 409 (3261 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 9. reinício do SERVIDOR PostgreSQL (immediate): registros e fingerprints persistem; a repetição devolve o mesmo registro; a divergência continua 409 (2696 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 10. falha na AUDITORIA ⇒ rollback integral (0 prescrições, 0 auditorias); nova tentativa com a mesma chave cria; 1 auditoria (106 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 11. resposta perdida após commit — (a) falha injetada após o commit e (b) CONEXÃO TCP abortada pelo cliente: a repetição devolve o mesmo registro (40 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 12. isolamento: mesma chave em OUTRA consulta do mesmo médico, em consulta de OUTRO proprietário e na consulta alheia ⇒ 403; nada criado nem vazado (28 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 13. LEGADO no servidor convencional: fingerprint NULL (comparação derivada do conteúdo), sem chave, conteúdo ilegível — comparável ⇒ compara; não comparável ⇒ comportamento legado (46 ms)
+[pg-conv] PASSOU — Idempotência com fingerprint — PostgreSQL CONVENCIONAL, multiprocesso (e2e) 14. CANONICALIZAÇÃO × DADOS PERSISTIDOS: para TODA linha desta execução, o fingerprint gravado é igual ao derivado do conteúdo lido do banco (round-trip jsonb) (13 ms)
+esperando o servidor desligar....feito
+servidor est� parado
+(node:21576) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+EXIT 0

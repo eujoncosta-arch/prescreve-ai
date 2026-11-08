@@ -41,7 +41,7 @@ const adultoNormal = () => todos.find(x => !x.dose_pediatrica && !calc(x, 40, 70
 
 describe('E1 — origens permitidas e registro não avaliado (legado)', () => {
   it('cada origem declarada é aceita; origem ou motivo inválidos são recusados (erro de programação)', () => {
-    expect(ORIGENS_DA_POSOLOGIA).toEqual(['contrato_dose', 'dose_calculator', 'recomendacao_texto', 'digitada_pelo_prescritor', 'protocolo_texto', 'backend_legado', 'importacao_localstorage', 'desconhecida']);
+    expect(ORIGENS_DA_POSOLOGIA).toEqual(['contrato_dose', 'dose_calculator', 'recomendacao_texto', 'digitada_pelo_prescritor', 'protocolo_texto', 'backend_legado', 'importacao_localstorage', 'desconhecida', 'pre_preenchida_pelo_sistema']);
     for (const origem of ORIGENS_DA_POSOLOGIA) { const r = registroNaoAvaliado({ origem, motivo: 'legado_sem_metadata', criado_em: CRIADO }); expect(r.origem).toBe(origem); }
     expect(() => registroNaoAvaliado({ origem: 'inventada' as never, motivo: 'texto_livre' })).toThrow(TypeError);
     expect(() => registroNaoAvaliado({ origem: 'protocolo_texto', motivo: 'qualquer' as never })).toThrow(TypeError);

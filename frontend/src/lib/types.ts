@@ -303,6 +303,17 @@ export interface PrescriptionItem {
    * Ausente ⇒ interpretado como `nao_avaliada`.
    */
   posologia_registrada?: import('./dose-contract/registro').PosologiaRegistrada;
+  /**
+   * RM-107.1.1-E2.3: presente quando a política de integridade (`posologia-consistencia`) classificou a dose estruturada como DIVERGENTE do
+   * texto editado e o prescritor NÃO reconfirmou. A `dose_estruturada` é PRESERVADA (sem perda silenciosa), mas a sincronização a recusa:
+   * nunca é transmitida ao backend enquanto este marcador existir. Não faz parte do payload do backend.
+   */
+  bloqueio_dto?: { estado: 'divergente'; motivo: string };
+  /**
+   * RM-107.1.1-E2.5: envelope MÍNIMO e versionado de proveniência (enums, nomes de campo, carimbos e contagens — nunca valores/texto/pessoais).
+   * Persistido junto do item pendente; NUNCA enviado ao backend. Ausente em itens legados (⇒ proveniência original não conhecida).
+   */
+  proveniencia?: import('./proveniencia-persistida').ProvenienciaPersistida;
 }
 
 export interface Prescription {
@@ -335,10 +346,14 @@ export interface Prescription {
  * é gerada uma única vez e reutilizada em todo retry da MESMA operação
  * (nunca duplica um registro clínico por reenvio).
  */
+/** RM-107.1.1-E2.4: natureza da falha de sincronização (nunca confunde bloqueio de integridade com falha de rede). Opcional: estados antigos não a têm ⇒ "não classificada". */
+export type ErroSincronizacaoTipo = 'integridade' | 'rede' | 'timeout' | 'servidor' | 'rejeitado' | 'interrompida';
+
 export interface ResourceSyncState {
   status: 'local' | 'syncing' | 'synced' | 'failed';
   attempts: number;
   error?: string;
+  error_kind?: ErroSincronizacaoTipo;
   backend_id?: string;
   idempotency_key?: string;
   last_attempt_at?: string;

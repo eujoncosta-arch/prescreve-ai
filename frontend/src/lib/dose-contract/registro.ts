@@ -27,11 +27,22 @@ export const VERSAO_REGISTRO = 'posologia-1' as const;
 /** De onde a posologia veio. `desconhecida` só é produzida na normalização de dados que não declaram origem. */
 export type OrigemDaPosologia =
   | 'contrato_dose' | 'dose_calculator' | 'recomendacao_texto' | 'digitada_pelo_prescritor'
-  | 'protocolo_texto' | 'backend_legado' | 'importacao_localstorage' | 'desconhecida';
+  | 'protocolo_texto' | 'backend_legado' | 'importacao_localstorage' | 'desconhecida'
+  /** RM-107.1.1-E2.3: valor PRÉ-PREENCHIDO pelo sistema (ver `origem_detalhe`) e comprovadamente não digitado pelo prescritor. Não é confirmação, cálculo avaliado nem validação. */
+  | 'pre_preenchida_pelo_sistema';
 
 export const ORIGENS_DA_POSOLOGIA: readonly OrigemDaPosologia[] = Object.freeze([
-  'contrato_dose', 'dose_calculator', 'recomendacao_texto', 'digitada_pelo_prescritor', 'protocolo_texto', 'backend_legado', 'importacao_localstorage', 'desconhecida',
+  'contrato_dose', 'dose_calculator', 'recomendacao_texto', 'digitada_pelo_prescritor', 'protocolo_texto', 'backend_legado', 'importacao_localstorage', 'desconhecida', 'pre_preenchida_pelo_sistema',
 ]);
+
+/** Fonte técnica comprovada de uma dose pré-preenchida (só com origem `pre_preenchida_pelo_sistema`). */
+export type OrigemDetalhe = 'catalogo_dose_habitual' | 'calculo_peso_simples' | 'sincronizada_com_concentracao';
+export const ORIGENS_DETALHE: readonly OrigemDetalhe[] = Object.freeze(['catalogo_dose_habitual', 'calculo_peso_simples', 'sincronizada_com_concentracao']);
+
+/** RM-107.1.1-E2.3: evento da trilha do registro (em memória). NÃO é auditoria institucional nem assinatura eletrônica; sem dados pessoais. */
+export type TipoEventoPosologia = 'criacao' | 'recuperacao' | 'edicao' | 'dto_invalidado' | 'dto_indisponivel' | 'reconfirmacao' | 'reconfirmacao_invalidada' | 'finalizacao_local';
+export interface EventoPosologia { tipo: TipoEventoPosologia; em: string; campo?: string; detalhe?: string }
+const TIPOS_EVENTO: readonly TipoEventoPosologia[] = ['criacao', 'recuperacao', 'edicao', 'dto_invalidado', 'dto_indisponivel', 'reconfirmacao', 'reconfirmacao_invalidada', 'finalizacao_local'];
 
 export type MotivoNaoAvaliada = 'texto_livre' | 'legado_sem_metadata' | 'editada_apos_calculo' | 'origem_desconhecida';
 export const MOTIVOS_NAO_AVALIADA: readonly MotivoNaoAvaliada[] = Object.freeze(['texto_livre', 'legado_sem_metadata', 'editada_apos_calculo', 'origem_desconhecida']);
@@ -96,6 +107,10 @@ export interface PosologiaRegistrada {
   reconfirmacoes_dose?: Array<{ em: string; dose: DoseEstruturada; campos_reconfirmados: string[] }>;
   texto_original?: string;
   origem: OrigemDaPosologia;
+  /** Só com `pre_preenchida_pelo_sistema`. */
+  origem_detalhe?: OrigemDetalhe;
+  /** Trilha distinguível por tipo (criação, edição, invalidação, reconfirmação…). Em memória. */
+  trilha?: EventoPosologia[];
   /** OBRIGATÓRIA. */
   avaliacao: AvaliacaoPersistida;
   /** Campos preenchidos por valor padrão (não por informação do prescritor/regra). */
@@ -321,6 +336,11 @@ export function normalizarRegistro(raw: unknown): PosologiaRegistrada {
       .filter(r => !!r && typeof r === 'object' && dtoValido(r.dose))
       .map(r => ({ em: typeof r.em === 'string' ? r.em : '', dose: clone(r.dose as DoseEstruturada), campos_reconfirmados: Array.isArray(r.campos_reconfirmados) ? (r.campos_reconfirmados as unknown[]).filter((x): x is string => typeof x === 'string') : [] }))
     : [];
+  const trilha: EventoPosologia[] = Array.isArray(o.trilha)
+    ? (o.trilha as Array<Record<string, unknown>>)
+      .filter(e => !!e && typeof e === 'object' && TIPOS_EVENTO.includes(e.tipo as TipoEventoPosologia))
+      .map(e => ({ tipo: e.tipo as TipoEventoPosologia, em: typeof e.em === 'string' ? e.em : '', ...(typeof e.campo === 'string' ? { campo: e.campo } : {}), ...(typeof e.detalhe === 'string' ? { detalhe: e.detalhe } : {}) }))
+    : [];
   // DTO divergente nunca é reaproveitado como dose atual, mesmo que o registro persistido traga `dose` preenchido.
   const dose = !divergente && dtoValido(o.dose) ? clone(o.dose) : null;
   const avaliacao: AvaliacaoPersistida = versaoConhecida ? normalizarAvaliacao(o.avaliacao) : { tipo: 'nao_avaliada', motivo: 'legado_sem_metadata', homologacao_clinica: false, ausencia_de_alerta_indica_seguranca: false };
@@ -329,6 +349,8 @@ export function normalizarRegistro(raw: unknown): PosologiaRegistrada {
     versao_registro: VERSAO_REGISTRO, dose, ...(dose ? {} : { motivo_sem_dose: typeof o.motivo_sem_dose === 'string' ? o.motivo_sem_dose : 'dose estruturada não disponível' }),
     ...(divergente ? { dose_divergente: divergente } : {}),
     ...(reconfirmacoes.length > 0 ? { reconfirmacoes_dose: reconfirmacoes } : {}),
+    ...(origem === 'pre_preenchida_pelo_sistema' && ORIGENS_DETALHE.includes(o.origem_detalhe as OrigemDetalhe) ? { origem_detalhe: o.origem_detalhe as OrigemDetalhe } : {}),
+    ...(trilha.length > 0 ? { trilha } : {}),
     ...(typeof o.texto_original === 'string' ? { texto_original: o.texto_original } : {}), origem, avaliacao,
     campos_padrao: Array.isArray(o.campos_padrao) ? (o.campos_padrao as unknown[]).filter((x): x is string => typeof x === 'string') : [],
     edicoes_manuais: edicoes, criado_em: typeof o.criado_em === 'string' ? o.criado_em : '', ...(typeof o.motor_versao === 'string' ? { motor_versao: o.motor_versao } : {}),

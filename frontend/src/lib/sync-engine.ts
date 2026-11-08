@@ -26,6 +26,8 @@ export interface SyncState {
   status: PersistenceStatus;
   attempts: number;
   error?: string;
+  /** RM-107.1.1-E2.4: natureza da falha (rede/timeout/servidor 5xx/rejeitado 4xx). Ausente quando não há falha. */
+  error_kind?: 'rede' | 'timeout' | 'servidor' | 'rejeitado';
   backend_id?: string;
   last_attempt_at?: string;
 }
@@ -79,6 +81,14 @@ export function isRetryable(err: unknown): boolean {
     return true; // 5xx
   }
   return true; // erro de rede sem status (fetch rejeitado, DNS, CORS, etc.)
+}
+
+/** RM-107.1.1-E2.4: classifica a falha sem inferir nada além do que o erro informa (status HTTP / timeout / ausência de status ⇒ rede). */
+export function classificarErroDeSincronizacao(err: unknown): 'rede' | 'timeout' | 'servidor' | 'rejeitado' {
+  if (err instanceof TimeoutError) return 'timeout';
+  const status = (err as { status?: unknown } | null)?.status;
+  if (typeof status === 'number') return status >= 500 ? 'servidor' : 'rejeitado';
+  return 'rede';
 }
 
 // ── Idempotência ───────────────────────────────────────────────────
@@ -208,6 +218,7 @@ export async function syncResource<T>(
       status: 'failed',
       attempts,
       error: err instanceof Error ? err.message : 'Erro desconhecido ao sincronizar',
+      error_kind: classificarErroDeSincronizacao(err),
       last_attempt_at: new Date().toISOString(),
     };
     emit(state);

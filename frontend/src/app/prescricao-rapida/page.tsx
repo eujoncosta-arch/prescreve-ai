@@ -21,8 +21,8 @@ import { SafetyCoverageNotice } from '@/components/modules/SafetyCoverageNotice'
 import { AlergiasNotice } from '@/components/modules/AlergiasNotice';
 import { normalizarIdade, formatarIdade, type UnidadeIdade } from '@/lib/age-contract';
 import { dadosClinicosPreenchidos } from '@/lib/patient-session';
-import { registroDeFullDoseResult, type PosologiaRegistrada } from '@/lib/dose-contract';
-import { registroDeInclusaoComDosePreenchida, registrarEdicaoPosologica, semRegistroParaPersistir } from '@/lib/prescricao-proveniencia';
+import { type PosologiaRegistrada, type OrigemDetalhe } from '@/lib/dose-contract';
+import { registroDeResultadoMotorC, registroDeInclusaoComDosePreenchida, registroDeInclusaoComFonteDaDose, registrarEdicaoPosologica, semRegistroParaPersistir } from '@/lib/prescricao-proveniencia';
 import { ROTULO_CAMPO } from '@/lib/safety-context';
 import { PrescriptionPrintPreview } from '@/components/modules/PrescriptionPrintPreview';
 import type { StatusAlergiasInformado, TipoAlergia, GravidadeAlergia, AlergiasInput } from '@/lib/safety-allergy';
@@ -181,6 +181,8 @@ export default function PrescricaoRapida() {
   const [selectedBrand, setSelectedBrand] = useState<QuickBrand | null>(null);
   const [selectedConcentration, setSelectedConcentration] = useState('');
   const [customDose, setCustomDose] = useState('');
+  // RM-107.1.1-E2.3: fonte TECNICAMENTE comprovada do valor atual do campo de dose (preenchido pelo sistema × alterado no campo pelo prescritor).
+  const [customDoseFonte, setCustomDoseFonte] = useState<OrigemDetalhe | 'digitada' | null>(null);
   const [rxItems, setRxItems] = useState<RxItem[]>([]);
   // RM-104: guarda o RESULTADO com cobertura (não só a lista de alertas): lista vazia ≠ "seguro".
   const [safetyResult, setSafetyResult] = useState<SafetyCheckResult | null>(null);
@@ -298,6 +300,7 @@ export default function PrescricaoRapida() {
       : drug.dose_adulto.habitual + ' ' + drug.dose_adulto.unidade;
     setSelectedConcentration(defaultConc);
     setCustomDose(drug.dose_adulto.habitual);
+    setCustomDoseFonte('catalogo_dose_habitual');
 
     // Auto-calc se peso disponível e tem dose pediátrica
     if (patient.peso && drug.dose_pediatrica && drug.dose_pediatrica.dose_por_kg > 0) {
@@ -310,6 +313,7 @@ export default function PrescricaoRapida() {
       );
       setCalcResult(result.passo_a_passo);
       setCustomDose(String(result.dose_por_tomada));
+      setCustomDoseFonte('calculo_peso_simples');
     }
   }, [labPref, patient.peso, idadeAnos]);
 
@@ -337,14 +341,17 @@ export default function PrescricaoRapida() {
     };
     // RM-107.1.1-E2.1 (F3b): a dose vem pré-preenchida pelo sistema (catálogo/calcWeightDose) e pode ter sido editada no campo —
     // a origem não é determinável ⇒ `desconhecida`; SEMPRE não avaliada; nenhuma dose estruturada fabricada; valores do item inalterados.
-    item.posologia_registrada = registroDeInclusaoComDosePreenchida({ texto: item.dose, campos_padrao: ['via', 'frequencia', 'duracao'] });
+    item.posologia_registrada = customDoseFonte
+      ? registroDeInclusaoComFonteDaDose({ fonte: customDoseFonte, texto: item.dose, campos_padrao: ['via', 'frequencia', 'duracao'] })
+      : registroDeInclusaoComDosePreenchida({ texto: item.dose, campos_padrao: ['via', 'frequencia', 'duracao'] });
     setRxItems(prev => [...prev, item]);
     toast.success(`${selectedDrug.molecula} adicionado à prescrição`);
     setSelectedDrug(null);
     setSearchQuery('');
     setCustomDose('');
+    setCustomDoseFonte(null);
     setCalcResult([]);
-  }, [selectedDrug, selectedBrand, selectedConcentration, customDose]);
+  }, [selectedDrug, selectedBrand, selectedConcentration, customDose, customDoseFonte]);
 
   // ── Apply dose calc result → add to Rx ───────────────────
   const applyDoseCalc = useCallback((result: FullDoseResult, duracao?: string) => {
@@ -379,7 +386,7 @@ export default function PrescricaoRapida() {
       tipo_receita: selectedDrug.alertas_especiais.some(a => a.includes('RECEITA ESPECIAL')) ? 'especial_branca' : 'simples',
     };
     // RM-107.1.1-E2 (F3): proveniência do motor C. Os campos legados acima permanecem exatamente como antes.
-    item.posologia_registrada = registroDeFullDoseResult(result, { via: selectedDrug.dose_adulto.via }, {
+    item.posologia_registrada = registroDeResultadoMotorC(result, { via: selectedDrug.dose_adulto.via }, {
       campos_padrao: [
         'via',
         ...(brand?.formas?.[0] ? [] : ['forma_farmaceutica']),
@@ -391,6 +398,7 @@ export default function PrescricaoRapida() {
     setSelectedDrug(null);
     setSearchQuery('');
     setCustomDose('');
+    setCustomDoseFonte(null);
     setCalcResult([]);
   }, [selectedDrug, selectedBrand, selectedConcentration]);
 
@@ -868,7 +876,7 @@ export default function PrescricaoRapida() {
                           <button key={c} onClick={() => {
                             const doseAindaAuto = customDose === stripUnit(selectedConcentration);
                             setSelectedConcentration(c);
-                            if (doseAindaAuto) setCustomDose(stripUnit(c));
+                            if (doseAindaAuto) { setCustomDose(stripUnit(c)); setCustomDoseFonte('sincronizada_com_concentracao'); }
                           }}
                             className={`text-xs px-2.5 py-1 rounded border transition-all ${
                               selectedConcentration === c
@@ -887,7 +895,7 @@ export default function PrescricaoRapida() {
                       <p className="text-xs font-semibold text-slate-700 mb-1">Dose</p>
                       <div className="flex items-center gap-1">
                         <Input className="h-8 text-sm" value={customDose}
-                          onChange={e => setCustomDose(e.target.value)} placeholder="dose" />
+                          onChange={e => { setCustomDose(e.target.value); setCustomDoseFonte('digitada'); }} placeholder="dose" />
                         <span className="text-xs text-slate-500 flex-shrink-0">{selectedDrug.dose_adulto.unidade}</span>
                       </div>
                       <p className="text-[10px] text-slate-400 mt-0.5">

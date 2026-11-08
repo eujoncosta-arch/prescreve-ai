@@ -1,0 +1,246 @@
+[rm53] Subindo servidor Postgres local via "prisma dev" (rm53-local-18932, porta 52433)...
+(node:18932) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Loaded Prisma config from prisma.config.ts.
+
+-  Starting _prisma dev_ server rm53-local-18932...
+
+
+
+
+
+
+[rm53] Aplicando migrations reais no Postgres local...
+√  Your local Prisma Postgres server rm53-local-18932 is now running 👍
+
+🔌 To connect with Prisma ORM use the following connection strings:
+
+   DATABASE_URL="postgres://postgres:postgres@localhost:52433/template1?sslmode=disable&connection_limit=10&connect_timeout=0&max_idle_connection_lifetime=0&pool_timeout=0&socket_timeout=0"
+   SHADOW_DATABASE_URL="postgres://postgres:postgres@localhost:51215/template1?sslmode=disable&connection_limit=10&connect_timeout=0&max_idle_connection_lifetime=0&pool_timeout=0&socket_timeout=0"
+
+🐘 You can also use the DATABASE_URL with the pg or postgres.js JavaScript drivers as well as your favorite DB gui.
+
+   For the best experience, set the maximum number of connections to 10, connect timeout to 0 and
+   idle timeout to the smallest positive value supported.
+
+🌊 Prisma Streams is available at:
+
+   PRISMA_STREAM_URL="http://127.0.0.1:51216/v1/stream/prisma-wal"
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma\schema.prisma.
+Datasource "db": PostgreSQL database "template1", schema "public" at "localhost:52433"
+
+4 migrations found in prisma/migrations
+
+Applying migration `20260727000000_baseline_schema_atual`
+Applying migration `20260728000000_add_risk_score_calculado_audit_type`
+Applying migration `20260728010000_restrict_clinical_cascade_deletes`
+Applying migration `20260808000000_add_prescricao_idempotency_fingerprint`
+
+The following migration(s) have been applied:
+
+migrations/
+  └─ 20260727000000_baseline_schema_atual/
+    └─ migration.sql
+  └─ 20260728000000_add_risk_score_calculado_audit_type/
+    └─ migration.sql
+  └─ 20260728010000_restrict_clinical_cascade_deletes/
+    └─ migration.sql
+  └─ 20260808000000_add_prescricao_idempotency_fingerprint/
+    └─ migration.sql
+
+All migrations have been successfully applied.
+[rm53] Rodando a suíte e2e completa contra Postgres real (0 suítes puladas)...
+[Nest] 11612  - 08/11/2026, 12:25:55   ERROR [ExceptionsHandler] Error: Origem não autorizada pelo CORS: https://atacante-qualquer.vercel.app
+[Nest] 28580  - 08/11/2026, 12:25:57   ERROR [ExceptionsHandler] Error: Falha simulada de conexão com o banco
+[Nest] 32012  - 08/11/2026, 12:26:05   ERROR [ExceptionsHandler] Error: ECONNRESET — simulação de falha transitória
+[Nest] 28580  - 08/11/2026, 12:26:05   ERROR [ExceptionsHandler] Error: ECONNRESET: resposta perdida após gravação
+[Nest] 28580  - 08/11/2026, 12:26:05   ERROR [ExceptionsHandler] Error: falha de auditoria simulada
+[Nest] 28580  - 08/11/2026, 12:26:06   ERROR [ExceptionsHandler] PrismaClientKnownRequestError: 
+Invalid `this.prisma.usuario.findUnique()` invocation in
+C:\Users\Jonathan Costa\Desktop\Prescreve-AI\backend\src\auth\jwt.strategy.ts:36:44
+
+  33 }
+  34 
+  35 async validate(payload: JwtPayload) {
+→ 36   const user = await this.prisma.usuario.findUnique(
+Server has closed the connection.
+  code: 'P1017',
+  meta: {
+    modelName: 'Usuario',
+    driverAdapterError: DriverAdapterError: ConnectionClosed
+      cause: {
+        kind: 'ConnectionClosed'
+      }
+    }
+  },
+  clientVersion: '7.8.0'
+}
+[Nest] 28580  - 08/11/2026, 12:26:06   ERROR [ExceptionsHandler] PrismaClientKnownRequestError: 
+Invalid `this.prisma.usuario.findUnique()` invocation in
+C:\Users\Jonathan Costa\Desktop\Prescreve-AI\backend\src\auth\jwt.strategy.ts:36:44
+
+  33 }
+  34 
+  35 async validate(payload: JwtPayload) {
+→ 36   const user = await this.prisma.usuario.findUnique(
+Server has closed the connection.
+  code: 'P1017',
+  meta: {
+    modelName: 'Usuario',
+    driverAdapterError: DriverAdapterError: ConnectionClosed
+      cause: {
+        kind: 'ConnectionClosed'
+      }
+    }
+  },
+  clientVersion: '7.8.0'
+}
+[Nest] 28580  - 08/11/2026, 12:26:06   ERROR [ExceptionsHandler] PrismaClientKnownRequestError: 
+Invalid `this.prisma.usuario.findUnique()` invocation in
+C:\Users\Jonathan Costa\Desktop\Prescreve-AI\backend\src\auth\jwt.strategy.ts:36:44
+
+  33 }
+  34 
+  35 async validate(payload: JwtPayload) {
+→ 36   const user = await this.prisma.usuario.findUnique(
+Server has closed the connection.
+  code: 'P1017',
+  meta: {
+    modelName: 'Usuario',
+    driverAdapterError: DriverAdapterError: ConnectionClosed
+      cause: {
+        kind: 'ConnectionClosed'
+      }
+    }
+  },
+  clientVersion: '7.8.0'
+}
+[Nest] 28580  - 08/11/2026, 12:26:06   ERROR [ExceptionsHandler] PrismaClientKnownRequestError: 
+Invalid `this.prisma.usuario.findUnique()` invocation in
+C:\Users\Jonathan Costa\Desktop\Prescreve-AI\backend\src\auth\jwt.strategy.ts:36:44
+
+  33 }
+  34 
+  35 async validate(payload: JwtPayload) {
+→ 36   const user = await this.prisma.usuario.findUnique(
+Server has closed the connection.
+  code: 'P1017',
+  meta: {
+    modelName: 'Usuario',
+    driverAdapterError: DriverAdapterError: ConnectionClosed
+      cause: {
+        kind: 'ConnectionClosed'
+      }
+    }
+  },
+  clientVersion: '7.8.0'
+}
+[Nest] 28580  - 08/11/2026, 12:26:06   ERROR [ExceptionsHandler] PrismaClientKnownRequestError: 
+Invalid `tx.prescricao.create()` invocation in
+C:\Users\Jonathan Costa\Desktop\Prescreve-AI\backend\src\modules\consulta\consulta.service.ts:539:23
+
+  536 
+  537 return this.escreverComAuditoriaAtomica(
+  538   (tx) =>
+→ 539     tx.prescricao.create(
+Unique constraint failed on the fields: (`idempotency_key`)
+  code: 'P2002',
+  meta: {
+    modelName: 'Prescricao',
+    driverAdapterError: DriverAdapterError: UniqueConstraintViolation
+      cause: {
+        originalCode: '23505',
+        originalMessage: 'duplicate key value violates unique constraint "prescricoes_idempotency_key_key"',
+        kind: 'UniqueConstraintViolation',
+        constraint: {
+          fields: [
+            'idempotency_key'
+          ]
+        }
+      }
+    }
+  },
+  clientVersion: '7.8.0'
+}
+[Nest] 28580  - 08/11/2026, 12:26:06   ERROR [ExceptionsHandler] PrismaClientKnownRequestError: 
+Invalid `tx.prescricao.create()` invocation in
+C:\Users\Jonathan Costa\Desktop\Prescreve-AI\backend\src\modules\consulta\consulta.service.ts:539:23
+
+  536 
+  537 return this.escreverComAuditoriaAtomica(
+  538   (tx) =>
+→ 539     tx.prescricao.create(
+Unique constraint failed on the fields: (`idempotency_key`)
+  code: 'P2002',
+  meta: {
+    modelName: 'Prescricao',
+    driverAdapterError: DriverAdapterError: UniqueConstraintViolation
+      cause: {
+        originalCode: '23505',
+        originalMessage: 'duplicate key value violates unique constraint "prescricoes_idempotency_key_key"',
+        kind: 'UniqueConstraintViolation',
+        constraint: {
+          fields: [
+            'idempotency_key'
+          ]
+        }
+      }
+    }
+  },
+  clientVersion: '7.8.0'
+}
+[Nest] 28580  - 08/11/2026, 12:26:06   ERROR [ExceptionsHandler] PrismaClientKnownRequestError: 
+Invalid `tx.prescricao.create()` invocation in
+C:\Users\Jonathan Costa\Desktop\Prescreve-AI\backend\src\modules\consulta\consulta.service.ts:539:23
+
+  536 
+  537 return this.escreverComAuditoriaAtomica(
+  538   (tx) =>
+→ 539     tx.prescricao.create(
+Unique constraint failed on the fields: (`idempotency_key`)
+  code: 'P2002',
+  meta: {
+    modelName: 'Prescricao',
+    driverAdapterError: DriverAdapterError: UniqueConstraintViolation
+      cause: {
+        originalCode: '23505',
+        originalMessage: 'duplicate key value violates unique constraint "prescricoes_idempotency_key_key"',
+        kind: 'UniqueConstraintViolation',
+        constraint: {
+          fields: [
+            'idempotency_key'
+          ]
+        }
+      }
+    }
+  },
+  clientVersion: '7.8.0'
+}
+A worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure that .unref() was called on them.
+
+Test Suites: 12 passed, 12 total
+Tests:       158 passed, 158 total
+Snapshots:   0 total
+Time:        21.236 s, estimated 22 s
+Ran all test suites.
+[rm53] ✅ Suíte e2e completa passou contra Postgres real (local, sem Docker).
+[rm53] Encerrando o servidor Postgres local...
+Loaded Prisma config from prisma.config.ts.
+
+⚰️  Stopping the following _prisma dev_ servers:
+
+   - rm53-local-18932
+💀 Stopped _prisma dev_ server rm53-local-18932.
+
+
+Loaded Prisma config from prisma.config.ts.
+
+🗑️  Removing the following _prisma dev_ servers:
+
+   - rm53-local-18932
+🧹 Removed _prisma dev_ server rm53-local-18932.
+
+
+EXIT 0

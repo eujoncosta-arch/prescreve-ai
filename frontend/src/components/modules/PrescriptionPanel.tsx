@@ -5,6 +5,8 @@ import { useApp } from '@/lib/store';
 import type { Prescription, PrescriptionItem } from '@/lib/types';
 import { mapFrequenciaParaContrato, mapUnidadeParaContrato } from '@/lib/dose-calculator';
 import { registroDeRecomendacaoTexto, registroDeInclusaoManual, registrarEdicaoPosologica, prepararItemParaStore, reconfirmarDoseEstruturada, doseEstruturadaDesatualizada } from '@/lib/prescricao-proveniencia';
+import { avaliarIntegridadeDto } from '@/lib/posologia-consistencia';
+import { registrarEventoSessao } from '@/lib/trilha-sessao-posologia';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -97,6 +99,7 @@ export function PrescriptionPanel({ onComplete }: PrescriptionPanelProps) {
   const printRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
   const [, setPrinted] = useState(false);
+  const [confirmandoLocal, setConfirmandoLocal] = useState(false);
 
   const [prescricao, setPrescricao] = useState<Prescription>(() => {
     const itens: PrescriptionItem[] = (plano?.farmacologico ?? []).map(m => {
@@ -155,6 +158,7 @@ export function PrescriptionPanel({ onComplete }: PrescriptionPanelProps) {
 
   const updateItem = (id: string, field: string, value: string | boolean | null) => {
     if (value === null) return;
+    setConfirmandoLocal(false);   // qualquer alteração invalida uma decisão de finalização local pendente
     setPrescricao(prev => ({
       ...prev,
       // RM-107.1.1-E2 (F3c): valor gravado idêntico ao anterior; a proveniência é invalidada só se a posologia mudou.
@@ -166,6 +170,7 @@ export function PrescriptionPanel({ onComplete }: PrescriptionPanelProps) {
 
   // RM-107.1.1-E2.2: reconfirmação explícita (ação do prescritor). Não recalcula nem edita o DTO e não promove a avaliação.
   const reconfirmarDose = (id: string) => {
+    setConfirmandoLocal(false);
     setPrescricao(prev => ({
       ...prev,
       itens: prev.itens.map(item => item.id === id ? { ...item, posologia_registrada: reconfirmarDoseEstruturada(item.posologia_registrada) } : item),
@@ -203,24 +208,42 @@ export function PrescriptionPanel({ onComplete }: PrescriptionPanelProps) {
     setPrinted(true);
   };
 
-  const handleFinalize = async () => {
+  // RM-107.1.1-E2.3: itens cuja dose estruturada é DIVERGENTE do texto editado e não foi reconfirmada (política central de integridade).
+  const itensDivergentes = prescricao.itens.filter(doseEstruturadaDesatualizada);
+
+  // Finaliza de fato. "somenteLocal" só é true após a decisão EXPLÍCITA do prescritor de finalizar sem enviar o DTO divergente.
+  const finalizar = async (somenteLocal: boolean) => {
     setLoading(true);
     await new Promise(r => setTimeout(r, 800));
-    // RM-107.1.1-E2.2: o registro nunca sai do estado local; DTO desatualizado e NÃO reconfirmado não segue como a posologia atual
-    // (o gate existente de sincronização bloqueia o item sem `dose_estruturada`). Texto e demais campos legados seguem inalterados.
-    const itensDesatualizados = prescricao.itens.filter(doseEstruturadaDesatualizada);
-    dispatch({ type: 'UPDATE_PRESCRIPTION', payload: { ...prescricao, itens: prescricao.itens.map(prepararItemParaStore), id: Date.now().toString() } });
-    if (itensDesatualizados.length > 0) {
-      toast.warning(`${itensDesatualizados.length} medicamento(s) com a dose estruturada desatualizada em relação ao texto editado: a dose estruturada anterior NÃO será enviada ao servidor sem reconfirmação.`, { duration: 8000 });
+    const consultaId = state.activeConsultation?.id;
+    // O registro nunca sai do estado local. Item com DTO divergente segue com a dose estruturada PRESERVADA e marcada (bloqueio_dto):
+    // a sincronização a recusa. Texto e demais campos legados seguem inalterados.
+    for (const item of prescricao.itens) {
+      const bloqueado = doseEstruturadaDesatualizada(item);
+      registrarEventoSessao({ tipo: 'finalizacao_local', consulta_id: consultaId, item_id: item.id, detalhe: bloqueado ? 'dto_divergente_nao_reconfirmado' : 'sem_bloqueio_de_dto' });
+      if (bloqueado) registrarEventoSessao({ tipo: 'bloqueio_dto', consulta_id: consultaId, item_id: item.id, detalhe: avaliarIntegridadeDto(item).motivo });
     }
+    dispatch({ type: 'UPDATE_PRESCRIPTION', payload: { ...prescricao, itens: prescricao.itens.map(prepararItemParaStore), id: Date.now().toString() } });
     setLoading(false);
-    // Honesto quanto ao estado real: o dado só está confirmado localmente
-    // neste momento. A sincronização com o backend acontece em seguida
-    // (ver AppProvider.sincronizarConsulta) — o resultado real (sucesso ou
-    // falha) é refletido pelo <PrescriptionSyncBadge> acima, nunca por este
-    // toast, que não pode prometer persistência no servidor.
-    toast.success('Prescrição registrada. Sincronizando com o servidor...');
+    setConfirmandoLocal(false);
+    if (somenteLocal) {
+      // Distinção explícita: finalizada LOCALMENTE ≠ registrada no servidor. Não afirma registro nem sincronização.
+      toast.warning('Prescrição finalizada SOMENTE neste dispositivo. Ela NÃO será enviada ao servidor enquanto a dose estruturada divergente do texto não for reconfirmada.', { duration: 10000 });
+    } else {
+      // Honesto quanto ao estado real: o dado só está confirmado localmente neste momento. A sincronização com o backend acontece em
+      // seguida (ver AppProvider.sincronizarConsulta) — o resultado real é refletido pelo <PrescriptionSyncBadge>, nunca por este toast.
+      toast.success('Prescrição registrada. Sincronizando com o servidor...');
+    }
     onComplete();
+  };
+
+  const handleFinalize = async () => {
+    if (itensDivergentes.length > 0) {
+      // Nada é despachado: o estado local fica preservado no painel e o prescritor decide (reutilizar a estrutura anterior ou finalizar só localmente).
+      setConfirmandoLocal(true);
+      return;
+    }
+    await finalizar(false);
   };
 
   return (
@@ -406,15 +429,24 @@ export function PrescriptionPanel({ onComplete }: PrescriptionPanelProps) {
                       />
                     </div>
                     {doseEstruturadaDesatualizada(item) && item.dose_estruturada && (
-                      <div className="rounded-md border border-amber-300 bg-amber-50 p-2 text-xs text-amber-900 space-y-1.5" role="alert">
+                      <div className="rounded-md border border-amber-300 bg-amber-50 p-2 text-xs text-amber-900 space-y-1.5" role="alert" data-testid="aviso-dto-divergente">
+                        <p className="font-semibold">A posologia foi editada depois de a dose estruturada ser registrada.</p>
+                        <dl className="grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-x-2 gap-y-0.5">
+                          <dt className="font-medium">Texto atual da posologia:</dt>
+                          <dd data-testid="dto-texto-atual" className="break-words">{item.posologia || '(vazio)'}</dd>
+                          <dt className="font-medium">Dose estruturada anterior (seria reutilizada):</dt>
+                          <dd data-testid="dto-anterior" className="break-words">
+                            {item.dose_estruturada.valor} {item.dose_estruturada.unidade} · {item.dose_estruturada.frequencia}
+                            {item.dose_estruturada.frequencia_detalhe ? ` (${item.dose_estruturada.frequencia_detalhe})` : ''} · via {item.dose_estruturada.via}
+                          </dd>
+                        </dl>
                         <p>
-                          O texto/campos da posologia foram editados. A dose estruturada registrada anteriormente
-                          ({item.dose_estruturada.valor} {item.dose_estruturada.unidade} · {item.dose_estruturada.frequencia} · {item.dose_estruturada.via})
-                          pode não corresponder ao texto atual e <strong>não será enviada ao servidor</strong> até você reconfirmar.
-                          A reconfirmação não valida clinicamente a dose.
+                          O sistema <strong>não verificou</strong> se o texto atual e essa dose estruturada correspondem. Ela
+                          <strong> não será enviada ao servidor</strong> enquanto você não decidir reutilizá-la.
+                          Reutilizar é uma decisão sua e não equivale a validar clinicamente a dose.
                         </p>
-                        <Button type="button" variant="outline" size="sm" className="h-7 text-xs" onClick={() => reconfirmarDose(item.id)}>
-                          Reconfirmar dose estruturada anterior
+                        <Button type="button" variant="outline" size="sm" className="h-auto min-h-7 whitespace-normal text-left text-xs" onClick={() => reconfirmarDose(item.id)}>
+                          Reutilizar a dose estruturada anterior
                         </Button>
                       </div>
                     )}
@@ -478,6 +510,25 @@ export function PrescriptionPanel({ onComplete }: PrescriptionPanelProps) {
 
       {/* Estado real de persistência no backend — nunca inferido do estado local */}
       <PrescriptionSyncBadge />
+
+      {/* RM-107.1.1-E2.3: decisão explícita quando há dose estruturada divergente do texto e não reutilizada. Nada foi despachado ainda. */}
+      {confirmandoLocal && itensDivergentes.length > 0 && (
+        <div className="rounded-md border border-red-300 bg-red-50 p-3 text-sm text-red-900 space-y-2" role="alertdialog" aria-label="Dose estruturada divergente" data-testid="confirmacao-finalizacao-local">
+          <p className="font-semibold">
+            {itensDivergentes.length} medicamento(s) com dose estruturada divergente do texto editado.
+          </p>
+          <p>
+            Se você finalizar agora, a prescrição ficará finalizada <strong>somente neste dispositivo</strong> e <strong>não será enviada ao servidor</strong>.
+            Seus dados continuam preservados. Para enviá-la, volte e use &quot;Reutilizar a dose estruturada anterior&quot; em cada item indicado.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <Button type="button" variant="outline" size="sm" onClick={() => setConfirmandoLocal(false)}>Voltar e revisar</Button>
+            <Button type="button" size="sm" className="bg-red-700 hover:bg-red-800 text-white" disabled={loading} onClick={() => void finalizar(true)}>
+              Finalizar somente neste dispositivo
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* Finalizar */}
       <div className="flex items-center justify-between pt-2">

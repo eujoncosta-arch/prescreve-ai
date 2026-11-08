@@ -5,6 +5,7 @@ import { useApp } from '@/lib/store';
 import { ClientDate } from '@/components/ui/client-date';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { PrescricoesLocaisPendentes } from '@/components/modules/PrescricoesLocaisPendentes';
 import { FileText, Printer, Download, FilePlus2, Clock, RotateCw } from 'lucide-react';
 import Link from 'next/link';
 import type { Consultation, DoseEstruturada } from '@/lib/types';
@@ -111,6 +112,9 @@ export default function Prescricoes() {
             </Button>
           </Link>
         </div>
+
+        {/* RM-107.1.1-E2.4: prescrições finalizadas somente neste dispositivo (bloqueadas/falha/não confirmadas) — recuperação e revisão */}
+        <PrescricoesLocaisPendentes />
 
         <div className="space-y-3">
           {comPrescricao.map(c => c.prescricao ? (
