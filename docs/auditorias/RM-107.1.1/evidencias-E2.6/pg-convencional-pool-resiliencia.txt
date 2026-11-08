@@ -1,0 +1,298 @@
+[pg-conv] initdb em C:\Users\JONATH~1\AppData\Local\Temp\pg-conv-data-qsBTul …
+Os arquivos deste sistema de banco de dados pertencer�o ao usu�rio "Jonathan Costa".
+Esse usu�rio deve ser o dono do processo do servidor tamb�m.
+
+O agrupamento de banco de dados ser� inicializado com configura��o regional "C".
+A configura��o de busca textual padr�o ser� definida como "english".
+
+Verifica��es de p�ginas de dados est�o desabilitadas.
+
+alterando permiss�es no diret�rio existente C:/Users/JONATH~1/AppData/Local/Temp/pg-conv-data-qsBTul ... ok
+criando subdiret�rios ... ok
+selecionando implementa��o de mem�ria compartilhada din�mica ... windows
+selecionando max_connections padr�o ... 100
+selecionando shared_buffers padr�o ... 128MB
+selecionando fuso hor�rio padr�o ... America/Bahia
+criando arquivos de configura��o ... ok
+executando script de inicializa��o ... ok
+executando p�s-inicializa��o ... ok
+sincronizando dados no disco ... ok
+
+Sucesso. Voc� pode iniciar o servidor de banco de dados utilizando:
+
+    ^"C^:^\Users^\JONATH^~1^\AppData^\Local^\Temp^\claude^\41a6f71d0e30efc8^\277b4ab5^-69e9^-4f2d^-a809^-dca921b4e9d1^\scratchpad^\pgsrv^\node^_modules^\^@embedded^-postgres^\windows^-x64^\native^\bin^\pg^_ctl^" -D ^"C^:^\Users^\JONATH^~1^\AppData^\Local^\Temp^\pg^-conv^-data^-qsBTul^" -l arquivolog start
+
+[pg-conv] iniciando servidor PostgreSQL convencional (porta 54512) …
+esperando o servidor iniciar....feito
+servidor iniciado
+[pg-conv] BANCO: PostgreSQL 16.15, compiled by Visual C++ build 1944, 64-bit
+[pg-conv] aplicando migrações reais (prisma migrate deploy) …
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma\schema.prisma.
+Datasource "db": PostgreSQL database "prescreve_ai_e251", schema "public" at "127.0.0.1:54512"
+
+4 migrations found in prisma/migrations
+
+Applying migration `20260727000000_baseline_schema_atual`
+Applying migration `20260728000000_add_risk_score_calculado_audit_type`
+Applying migration `20260728010000_restrict_clinical_cascade_deletes`
+Applying migration `20260808000000_add_prescricao_idempotency_fingerprint`
+
+The following migration(s) have been applied:
+
+migrations/
+  └─ 20260727000000_baseline_schema_atual/
+    └─ migration.sql
+  └─ 20260728000000_add_risk_score_calculado_audit_type/
+    └─ migration.sql
+  └─ 20260728010000_restrict_clinical_cascade_deletes/
+    └─ migration.sql
+  └─ 20260808000000_add_prescricao_idempotency_fingerprint/
+    └─ migration.sql
+
+All migrations have been successfully applied.
+[pg-conv] jest e2e: pool-resiliencia-postgres-convencional
+  console.warn
+    [pool] 1: 201 em 35 ms; conexões aceitas pelo proxy: 1
+
+      350 |       expect(r.status).toBe(201);
+      351 |       semErrosFatais('A');
+    > 352 |       console.warn(
+          |               ^
+      353 |         `[pool] 1: 201 em ${r.ms} ms; conexões aceitas pelo proxy: ${proxy.aceitas()}`,
+      354 |       );
+      355 |     });
+
+
+  console.warn
+    [pool] 11a: listenerCount(error) = 0 antes de $connect; ≥1 depois (adaptador @prisma/adapter-pg 7.8.0)
+
+      364 |       await prisma.$disconnect();
+      365 |       await p.end().catch(() => undefined);
+    > 366 |       console.warn(
+          |               ^
+      367 |         '[pool] 11a: listenerCount(error) = 0 antes de $connect; ≥1 depois (adaptador @prisma/adapter-pg 7.8.0)',
+      368 |       );
+      369 |     });
+
+
+  console.warn
+    [pool] reinício fast (ociosas): sequência pós-recuperação = [201]
+
+      375 |       await aguardarPg();
+      376 |       const rec = await recuperacao();
+    > 377 |       console.warn(
+          |               ^
+      378 |         `[pool] reinício fast (ociosas): sequência pós-recuperação = ${JSON.stringify(rec.sequencia)}`,
+      379 |       );
+      380 |       semErrosFatais('A');
+
+
+  console.warn
+    [pool] encerramento abrupto (ociosas): sequência pós-recuperação = [201]
+
+      392 |       await aguardarPg();
+      393 |       const rec = await recuperacao();
+    > 394 |       console.warn(
+          |               ^
+      395 |         `[pool] encerramento abrupto (ociosas): sequência pós-recuperação = ${JSON.stringify(rec.sequencia)}`,
+      396 |       );
+      397 |       semErrosFatais('A');
+
+
+  console.warn
+    [pool] burst durante queda: distribuição de status = {"500":40}
+
+      418 |         {},
+      419 |       );
+    > 420 |       console.warn(
+          |               ^
+      421 |         `[pool] burst durante queda: distribuição de status = ${JSON.stringify(dist)}`,
+      422 |       );
+      423 |       let gravadoSemResposta = 0;
+
+
+  console.warn
+    [pool] burst: gravados sem resposta de sucesso ao cliente = 0
+
+      433 |         ).toBe(true); // falha de conexão NUNCA vira sucesso nem 4xx
+      434 |       }
+    > 435 |       console.warn(
+          |               ^
+      436 |         `[pool] burst: gravados sem resposta de sucesso ao cliente = ${gravadoSemResposta}`,
+      437 |       );
+      438 |       semErrosFatais('A');
+
+
+  console.warn
+    [pool] indisponibilidade persistente: status = [500,500,500,500]; tempos = [14,8,9,16] ms
+
+      466 |       }
+      467 |       const duracao = Date.now() - t0;
+    > 468 |       console.warn(
+          |               ^
+      469 |         `[pool] indisponibilidade persistente: status = ${JSON.stringify(rs.map((r) => r.status))}; tempos = ${JSON.stringify(rs.map((r) => r.ms))} ms`,
+      470 |       );
+      471 |       for (const r of rs) {
+
+
+  console.warn
+    [pool] reset TCP: sequência pós-reset = [201]
+
+      487 |       proxy.derrubarConexoes();
+      488 |       const rec = await recuperacao();
+    > 489 |       console.warn(
+          |               ^
+      490 |         `[pool] reset TCP: sequência pós-reset = ${JSON.stringify(rec.sequencia)}`,
+      491 |       );
+      492 |       semErrosFatais('A');
+
+
+  console.warn
+    [pool] BLACKHOLE: requisição terminou com status -1 após 12015 ms (limite do cliente: 12000 ms)
+
+      505 |       proxy.modo('blackhole');
+      506 |       const r = await postar(chave('bh'), 500, 12_000);
+    > 507 |       console.warn(
+          |               ^
+      508 |         `[pool] BLACKHOLE: requisição terminou com status ${r.status} após ${r.ms} ms (limite do cliente: 12000 ms)`,
+      509 |       );
+      510 |       proxy.derrubarConexoes();
+
+
+  console.warn
+    [pool] pós-blackhole: sequência = [201]
+
+      511 |       proxy.modo('forward');
+      512 |       const rec = await recuperacao();
+    > 513 |       console.warn(
+          |               ^
+      514 |         `[pool] pós-blackhole: sequência = ${JSON.stringify(rec.sequencia)}`,
+      515 |       );
+      516 |       semErrosFatais('A');
+
+
+  console.warn
+    [pool] encerramento gracioso: conexões no banco antes=7 depois=1
+
+      536 |       await sleep(800);
+      537 |       const depois = await conexoesDoBanco();
+    > 538 |       console.warn(
+          |               ^
+      539 |         `[pool] encerramento gracioso: conexões no banco antes=${antes} depois=${depois}`,
+      540 |       );
+      541 |       expect(depois).toBeLessThan(antes);
+
+
+  console.warn
+    [pool] kill forçado: conexões no banco antes=1 depois=0
+
+      557 |         await sleep(500);
+      558 |       }
+    > 559 |       console.warn(
+          |               ^
+      560 |         `[pool] kill forçado: conexões no banco antes=${antes} depois=${depois}`,
+      561 |       );
+      562 |       expect(depois).toBeLessThan(antes);
+
+
+  console.warn
+    [pool] EXPERIMENTO baseline (config atual, sem timeouts): {"durante":"PENDURADO >15 s","msDurante":15008,"depois":"ok","msDepois":133}
+
+      610 |     it('12. EXPERIMENTO (diagnóstico): comportamento do pool sob BLACKHOLE — baseline (sem timeouts) × candidata (query_timeout + keepAlive)', async () => {
+      611 |       const base = await experimento({});
+    > 612 |       console.warn(
+          |               ^
+      613 |         `[pool] EXPERIMENTO baseline (config atual, sem timeouts): ${JSON.stringify(base)}`,
+      614 |       );
+      615 |       const cand = await experimento({
+
+
+  console.warn
+    [pool] EXPERIMENTO candidata (query_timeout=3000, connectionTimeoutMillis=5000, keepAlive): {"durante":"erro: Query read timeout","msDurante":3013,"depois":"ok","msDepois":64}
+
+      619 |         keepAliveInitialDelayMillis: 10_000,
+      620 |       });
+    > 621 |       console.warn(
+          |               ^
+      622 |         `[pool] EXPERIMENTO candidata (query_timeout=3000, connectionTimeoutMillis=5000, keepAlive): ${JSON.stringify(cand)}`,
+      623 |       );
+      624 |       proxy.modo('forward');
+
+
+  console.warn
+    [pool] CORREÇÃO blackhole: status 500 após 3047 ms (query_timeout=3000)
+
+      637 |       const k = chave('t-blackhole');
+      638 |       const r = await pT(k);
+    > 639 |       console.warn(
+          |               ^
+      640 |         `[pool] CORREÇÃO blackhole: status ${r.status} após ${r.ms} ms (query_timeout=3000)`,
+      641 |       );
+      642 |       expect(r.status).toBeGreaterThanOrEqual(500); // falha explícita, nunca sucesso
+
+
+  console.warn
+    [pool] CORREÇÃO pós-blackhole: sequenciais=[201,201,201,201,201,201,201,201] concorrentes=[201,201,201,201,201,201,201,201,201,201]
+
+      649 |         Array.from({ length: 10 }, () => pT(chave('t2'), 8000)),
+      650 |       );
+    > 651 |       console.warn(
+          |               ^
+      652 |         `[pool] CORREÇÃO pós-blackhole: sequenciais=${JSON.stringify(seq)} concorrentes=${JSON.stringify(conc.map((x) => x.status))}`,
+      653 |       );
+      654 |       expect(seq).toEqual(Array(8).fill(201));
+
+
+  console.warn
+    [pool] OBSERVABILIDADE: avisos do PrismaService = ["Erro em conexão ociosa do pool PostgreSQL (a conexão é descartada): Connection terminated unexpectedly"]
+
+      677 |       await aguardarPg();
+      678 |       await sleep(1500);
+    > 679 |       console.warn(
+          |               ^
+      680 |         `[pool] OBSERVABILIDADE: avisos do PrismaService = ${JSON.stringify(avisos)}`,
+      681 |       );
+      682 |       expect(
+
+
+  console.warn
+    [pool] ENCERRAMENTO do PrismaService em processo (sem process.exit): conexões abertas pelo proxy antes=1 depois=0
+
+      688 |       await sleep(800);
+      689 |       const abertasDepois = proxy.abertas();
+    > 690 |       console.warn(
+          |               ^
+      691 |         `[pool] ENCERRAMENTO do PrismaService em processo (sem process.exit): conexões abertas pelo proxy antes=${abertasAntes} depois=${abertasDepois}`,
+      692 |       );
+      693 |       expect(abertasDepois).toBeLessThan(abertasAntes); // as conexões do pool foram ENCERRADAS pelo próprio serviço
+
+
+Test Suites: 1 passed, 1 total
+Tests:       14 passed, 14 total
+Snapshots:   0 total
+Time:        89.203 s, estimated 92 s
+Ran all test suites matching pool-resiliencia-postgres-convencional.
+Test results written to: ..\..\..\..\JONATH~1\AppData\Local\Temp\pg-conv-jest-32012.json
+Force exiting Jest: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
+[pg-conv] ✅ suíte(s) passaram contra PostgreSQL convencional.
+[pg-conv] PASSOU — Pool PostgreSQL — resiliência (Prisma + pg.Pool) contra servidor convencional (e2e) 1. aplicação iniciada com banco disponível: serve requisições (201) pelo pool; o processo não registra erros (81 ms)
+[pg-conv] PASSOU — Pool PostgreSQL — resiliência (Prisma + pg.Pool) contra servidor convencional (e2e) 11a. LISTENER DE ERRO: o adaptador Prisma anexa listener de erro ao pool EXTERNO em $connect(); antes de $connect o pool não tem listener (janela) — e o PrismaService conecta em onModuleInit (97 ms)
+[pg-conv] PASSOU — Pool PostgreSQL — resiliência (Prisma + pg.Pool) contra servidor convencional (e2e) 3/5/7/8. reinício NORMAL (fast) com conexões OCIOSAS: o processo sobrevive sem erro fatal; sequência de status até a recuperação registrada; depois 20 requisições simultâneas = 20×201 (3553 ms)
+[pg-conv] PASSOU — Pool PostgreSQL — resiliência (Prisma + pg.Pool) contra servidor convencional (e2e) 4/5. encerramento ABRUPTO (immediate ⇒ recuperação por WAL) com conexões ociosas: sobrevive sem erro fatal; recupera; 20×201 (3415 ms)
+[pg-conv] PASSOU — Pool PostgreSQL — resiliência (Prisma + pg.Pool) contra servidor convencional (e2e) 2/6/12. banco derrubado DURANTE requisições ativas (burst de 40 escritas): nenhum sucesso sem registro; nenhuma duplicação; repetição com a MESMA chave e conteúdo converge para 1 registro por chave (4992 ms)
+[pg-conv] PASSOU — Pool PostgreSQL — resiliência (Prisma + pg.Pool) contra servidor convencional (e2e) indisponibilidade PERSISTENTE (banco parado por ~8 s): toda requisição falha com 5xx RÁPIDO (sem hang, sem sucesso); nada é gravado; após o retorno, converge (8559 ms)
+[pg-conv] PASSOU — Pool PostgreSQL — resiliência (Prisma + pg.Pool) contra servidor convencional (e2e) conexões TCP INTERROMPIDAS (reset de todas as conexões do pool, banco no ar): sobrevive sem erro fatal; recupera (455 ms)
+[pg-conv] PASSOU — Pool PostgreSQL — resiliência (Prisma + pg.Pool) contra servidor convencional (e2e) BLACKHOLE TCP (pacotes descartados, conexões abertas — o banco "some" sem fechar): MEDE se a requisição pendura; depois do reset, a aplicação recupera (12144 ms)
+[pg-conv] PASSOU — Pool PostgreSQL — resiliência (Prisma + pg.Pool) contra servidor convencional (e2e) 9. encerramento GRACIOSO: "close" ⇒ app.close() ⇒ $disconnect; sai com código 0 e as conexões do pool desse processo são liberadas no servidor (6218 ms)
+[pg-conv] PASSOU — Pool PostgreSQL — resiliência (Prisma + pg.Pool) contra servidor convencional (e2e) 10. encerramento FORÇADO (kill): o servidor libera as conexões (socket fechado); nenhuma prescrição é duplicada; novo processo opera normalmente (9472 ms)
+[pg-conv] PASSOU — Pool PostgreSQL — resiliência (Prisma + pg.Pool) contra servidor convencional (e2e) 11b. nenhum erro fatal/não tratado no processo A em TODO o ciclo (stderr/stdout) e o processo continua vivo (1 ms)
+[pg-conv] PASSOU — Pool PostgreSQL — resiliência (Prisma + pg.Pool) contra servidor convencional (e2e) 12. EXPERIMENTO (diagnóstico): comportamento do pool sob BLACKHOLE — baseline (sem timeouts) × candidata (query_timeout + keepAlive) (18881 ms)
+[pg-conv] PASSOU — Pool PostgreSQL — resiliência (Prisma + pg.Pool) contra servidor convencional (e2e) 13. CORREÇÃO (query_timeout de produção): sob BLACKHOLE a requisição FALHA em tempo limitado (5xx), o pool continua utilizável SEM derrubar as conexões antigas e nada é duplicado; o processo não registra erro fatal (7094 ms)
+[pg-conv] PASSOU — Pool PostgreSQL — resiliência (Prisma + pg.Pool) contra servidor convencional (e2e) 14. OBSERVABILIDADE: o erro de conexão ociosa encerrada pelo servidor deixa de ser silencioso — PrismaService real, em processo, registra o aviso (o app de teste usa TestingLogger, que oculta avisos) (5822 ms)
+esperando o servidor desligar....feito
+servidor est� parado
+(node:32012) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+EXIT 0

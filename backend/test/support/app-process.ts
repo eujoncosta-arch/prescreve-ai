@@ -1,6 +1,7 @@
-// RM-107.1.1-E2.5.1 — processo INDEPENDENTE da aplicação (mesmos módulos e pipes dos e2e reais) para provar concorrência entre processos.
+// RM-107.1.1-E2.5.1/E2.6 — processo INDEPENDENTE da aplicação (mesmos módulos e pipes dos e2e reais) para provar concorrência entre processos.
 // Uso: node -r ts-node/register/transpile-only test/support/app-process.ts <porta>
 // Requer DATABASE_URL e os segredos de teste no ambiente. Imprime "READY <pid> <porta>" quando pronto.
+// E2.6: a linha "close" no stdin encerra a aplicação de forma GRACIOSA (`app.close()` ⇒ `PrismaService.onModuleDestroy` ⇒ `$disconnect`) e sai com código 0.
 import { Test } from '@nestjs/testing';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -34,6 +35,21 @@ async function main() {
   );
   await app.init();
   await app.listen(porta, '127.0.0.1');
+  process.stdin.setEncoding('utf8');
+  process.stdin.on('data', (d: string) => {
+    if (d.includes('close')) {
+      app.close().then(
+        () => {
+          process.stdout.write('CLOSED\n');
+          process.exit(0);
+        },
+        (e) => {
+          process.stderr.write(`FALHA_AO_FECHAR ${String(e)}\n`);
+          process.exit(3);
+        },
+      );
+    }
+  });
   process.stdout.write(`READY ${process.pid} ${porta}\n`);
 }
 main().catch((e) => {
